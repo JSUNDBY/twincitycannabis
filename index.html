@@ -16,7 +16,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
 
     <!-- Leaflet (map) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
@@ -164,16 +164,82 @@
         </div>
     </section>
 
+    <!-- Alert Signup -->
+    <section class="section" style="background:radial-gradient(ellipse at 50% 50%, rgba(34,197,94,0.06) 0%, transparent 60%)">
+        <div class="container" style="text-align:center">
+            <div class="section-label fade-in">&#128276; Price Alerts</div>
+            <h2 class="section-title fade-in" style="max-width:600px;margin:0 auto 0.5rem">Never miss a deal again</h2>
+            <p class="section-desc fade-in" style="max-width:500px;margin:0 auto 1.5rem">Get notified when prices drop on your favorite products and strains. Free forever.</p>
+            <form class="fade-in" id="alert-form" style="max-width:480px;margin:0 auto;display:flex;gap:0.5rem">
+                <input class="input input-lg" type="email" placeholder="Enter your email for alerts" required style="flex:1">
+                <button type="submit" class="btn btn-primary btn-lg">Get Alerts</button>
+            </form>
+            <p class="text-xs text-muted fade-in" style="margin-top:0.6rem">No spam. Unsubscribe anytime.</p>
+            <p class="text-sm text-green font-semibold" id="alert-success" style="display:none;margin-top:0.8rem">You're signed up for alerts!</p>
+        </div>
+    </section>
+
+    <!-- For Dispensaries CTA -->
+    <section class="section section-dark">
+        <div class="container">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center" class="fade-in">
+                <div>
+                    <div class="section-label">For Dispensaries</div>
+                    <h2 class="section-title">Own your listing. Reach more customers.</h2>
+                    <p class="section-desc" style="margin-bottom:1.5rem">Claim your dispensary profile for free. Upgrade to Featured or Premium for priority placement, deal spotlights, and analytics.</p>
+                    <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem">
+                        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--text-secondary)">
+                            <span class="text-green">&#10003;</span> Free listing with TCC Score and reviews
+                        </div>
+                        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--text-secondary)">
+                            <span class="text-green">&#10003;</span> Featured tier: priority ranking + deal spotlight
+                        </div>
+                        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--text-secondary)">
+                            <span class="text-green">&#10003;</span> Premium: homepage placement + push alerts + analytics
+                        </div>
+                        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--text-secondary)">
+                            <span class="text-amber">&#9733;</span> Platinum: exclusive category ownership + account manager
+                        </div>
+                    </div>
+                    <a href="mailto:hello@twincitycannabis.com?subject=Dispensary%20Partnership" class="btn btn-primary">Claim Your Dispensary</a>
+                    <span class="text-xs text-muted" style="margin-left:0.8rem">or email hello@twincitycannabis.com</span>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                    <div class="card" style="text-align:center;padding:1.5rem">
+                        <div class="font-display font-bold text-xl" style="color:var(--green)">Free</div>
+                        <div class="text-xs text-muted" style="margin:0.3rem 0">Basic profile</div>
+                        <div class="font-display font-bold text-2xl">$0</div>
+                    </div>
+                    <div class="card" style="text-align:center;padding:1.5rem;border-color:var(--green)">
+                        <div class="font-display font-bold text-xl" style="color:var(--green)">Featured</div>
+                        <div class="text-xs text-muted" style="margin:0.3rem 0">Priority ranking</div>
+                        <div class="font-display font-bold text-2xl">$299<span class="text-sm text-muted">/mo</span></div>
+                    </div>
+                    <div class="card" style="text-align:center;padding:1.5rem;border-color:var(--purple)">
+                        <div class="font-display font-bold text-xl" style="color:var(--purple)">Premium</div>
+                        <div class="text-xs text-muted" style="margin:0.3rem 0">Homepage + alerts</div>
+                        <div class="font-display font-bold text-2xl">$599<span class="text-sm text-muted">/mo</span></div>
+                    </div>
+                    <div class="card" style="text-align:center;padding:1.5rem;border-color:var(--amber)">
+                        <div class="font-display font-bold text-xl" style="color:var(--amber)">Platinum</div>
+                        <div class="text-xs text-muted" style="margin:0.3rem 0">Full partnership</div>
+                        <div class="font-display font-bold text-2xl">$999<span class="text-sm text-muted">/mo</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Stats Bar -->
     <section class="section">
         <div class="container">
             <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center" class="fade-in">
                 <div>
-                    <div class="font-display font-bold text-3xl text-green">12</div>
+                    <div class="font-display font-bold text-3xl text-green">14</div>
                     <div class="text-sm text-secondary">Dispensaries</div>
                 </div>
                 <div>
-                    <div class="font-display font-bold text-3xl text-green">30</div>
+                    <div class="font-display font-bold text-3xl text-green">26</div>
                     <div class="text-sm text-secondary">Products Tracked</div>
                 </div>
                 <div>
@@ -224,11 +290,10 @@
                     <option value="all">All Cities</option>
                     <option value="Minneapolis">Minneapolis</option>
                     <option value="St. Paul">St. Paul</option>
-                    <option value="Bloomington">Bloomington</option>
-                    <option value="Eden Prairie">Eden Prairie</option>
-                    <option value="Roseville">Roseville</option>
+                    <option value="West St. Paul">West St. Paul</option>
+                    <option value="Edina">Edina</option>
                     <option value="Woodbury">Woodbury</option>
-                    <option value="Eagan">Eagan</option>
+                    <option value="Stillwater">Stillwater</option>
                 </select>
                 <select class="select" id="disp-sort">
                     <option value="score">Sort: TCC Score</option>

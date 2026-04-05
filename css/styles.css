@@ -39,8 +39,8 @@
     --transition-fast: 0.15s ease;
     --transition-med: 0.25s ease;
     --transition-slow: 0.4s ease;
-    --font-display: 'Space Grotesk', -apple-system, sans-serif;
-    --font-body: 'Inter', -apple-system, sans-serif;
+    --font-display: 'Outfit', -apple-system, sans-serif;
+    --font-body: 'DM Sans', -apple-system, sans-serif;
     --nav-height: 64px;
 }
 
@@ -1179,6 +1179,11 @@ ul, ol { list-style: none; }
     border-radius: var(--radius-lg);
     padding: 1.5rem;
     margin-top: 1rem;
+    max-height: 350px;
+}
+
+.price-chart-container canvas {
+    max-height: 220px !important;
 }
 
 .price-chart-header {

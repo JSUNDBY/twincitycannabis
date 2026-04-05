@@ -41,7 +41,7 @@
         globe: '&#127760;',
     };
 
-    const catIcons = { flower: Icons.leaf, 'pre-roll': Icons.joint, cartridge: Icons.cart, edible: Icons.cookie, concentrate: Icons.diamond, topical: Icons.drop, tincture: Icons.bottle };
+    const catIcons = { flower: Icons.leaf, 'pre-roll': Icons.joint, cartridge: Icons.cart, edible: Icons.cookie, concentrate: Icons.diamond, topical: Icons.drop, tincture: Icons.bottle, beverage: '&#127864;' };
 
     // ---- ROUTING ----
     function route() {
@@ -78,6 +78,15 @@
         window.scrollTo(0, 0);
         closeSearchDropdown();
         closeMobileMenu();
+
+        // Fix map: invalidate size when dispensaries page becomes visible
+        if ((page === 'dispensaries') && App.mapInstance) {
+            setTimeout(() => App.mapInstance.invalidateSize(), 100);
+        }
+        // Re-render map on first visit to dispensaries
+        if (page === 'dispensaries' && !App.mapInstance) {
+            setTimeout(() => renderDispensaries(), 50);
+        }
     }
 
     function showPage(id) {
@@ -226,7 +235,7 @@
         document.getElementById('detail-name').textContent = d.name;
         document.getElementById('detail-tagline').textContent = d.tagline;
         document.getElementById('detail-address').innerHTML = `${Icons.pin} ${d.address}`;
-        document.getElementById('detail-hours').innerHTML = `${Icons.clock} ${d.hours.open} - ${d.hours.close} ${d.hours.days}`;
+        document.getElementById('detail-hours').innerHTML = `${Icons.clock} ${d.hours.note || d.hours.weekday}`;
         document.getElementById('detail-phone').innerHTML = `${Icons.phone} ${d.phone}`;
 
         // Score
@@ -503,7 +512,7 @@
                     <span class="price-chart-title">Price History (8 weeks)</span>
                     <span class="tag tag-sm tag-green">${Icons.trending} Trending down</span>
                 </div>
-                <canvas id="price-chart" height="200"></canvas>
+                <div style="position:relative;height:220px"><canvas id="price-chart"></canvas></div>
             </div>
 
             <div style="margin-top:2rem">
@@ -594,7 +603,7 @@
                 <div class="dispensary-card-loc">${d.neighborhood} &bull; ${d.city}</div>
                 <div class="dispensary-card-meta">
                     <span>${Icons.star} ${d.review_count} reviews</span>
-                    <span>${Icons.clock} ${d.hours.open}-${d.hours.close}</span>
+                    <span>${Icons.clock} ${d.hours.weekday}</span>
                     ${d.verified ? `<span>${Icons.verified} Verified</span>` : ''}
                 </div>
             </div>
@@ -825,6 +834,20 @@
         document.querySelectorAll('.detail-tab').forEach(tab => {
             tab.addEventListener('click', () => switchDetailTab(tab.dataset.tab));
         });
+
+        // Alert form
+        const alertForm = document.getElementById('alert-form');
+        if (alertForm) {
+            alertForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = alertForm.querySelector('input').value;
+                const signups = JSON.parse(localStorage.getItem('tcc-alerts') || '[]');
+                signups.push({ email, timestamp: new Date().toISOString(), type: 'alert' });
+                localStorage.setItem('tcc-alerts', JSON.stringify(signups));
+                alertForm.style.display = 'none';
+                document.getElementById('alert-success').style.display = 'block';
+            });
+        }
 
         // Intersection observer for animations
         const observer = new IntersectionObserver((entries) => {
