@@ -26,8 +26,8 @@ APIFY_TOKEN = os.environ.get("APIFY_TOKEN", "")
 APIFY_BASE = "https://api.apify.com/v2"
 
 # Weedmaps scraper actor ID (from Apify store)
-# kinaesthetic_millionaire's actor pulls full product/menu data with prices
-WM_SCRAPER_ACTOR = "kinaesthetic_millionaire~weedmaps-dispensaries-products"
+# shahidirfan's actor is free and pulls full menu data with prices
+WM_SCRAPER_ACTOR = "shahidirfan~weedmaps-dispensary-scraper"
 
 # Twin Cities dispensary Weedmaps URLs
 TC_DISPENSARIES = [
@@ -60,59 +60,69 @@ TC_DISPENSARIES = [
 
 
 def run_apify_scraper(dispensary_urls, max_items=200):
-    """Run the Weedmaps scraper on Apify and return results."""
+    """Run the Weedmaps scraper on Apify for each dispensary.
+    shahidirfan's actor takes one URL at a time via 'startUrl'."""
     print(f"Starting Apify scraper for {len(dispensary_urls)} dispensaries...")
+    all_results = []
 
-    # Build input for the actor
-    actor_input = {
-        "startUrls": [{"url": d["url"]} for d in dispensary_urls],
-        "maxItems": max_items,
-        "proxy": {
-            "useApifyProxy": True,
-        },
-    }
+    for disp in dispensary_urls:
+        url = disp["url"]
+        disp_id = disp["id"]
+        print(f"\n  Scraping {disp_id}...")
 
-    # Start the actor run
-    run_url = f"{APIFY_BASE}/acts/{WM_SCRAPER_ACTOR}/runs"
-    resp = requests.post(
-        run_url,
-        params={"token": APIFY_TOKEN},
-        json=actor_input,
-        timeout=30,
-    )
-    resp.raise_for_status()
-    run_data = resp.json()["data"]
-    run_id = run_data["id"]
-    print(f"Run started: {run_id}")
+        try:
+            # Start run
+            resp = requests.post(
+                f"{APIFY_BASE}/acts/{WM_SCRAPER_ACTOR}/runs",
+                params={"token": APIFY_TOKEN},
+                json={"startUrl": url},
+                timeout=30,
+            )
+            if resp.status_code == 402:
+                print(f"    PAID ACTOR - skipping")
+                continue
+            resp.raise_for_status()
 
-    # Poll for completion
-    status_url = f"{APIFY_BASE}/actor-runs/{run_id}"
-    while True:
-        time.sleep(10)
-        resp = requests.get(status_url, params={"token": APIFY_TOKEN}, timeout=15)
-        status = resp.json()["data"]["status"]
-        print(f"  Status: {status}")
+            run_id = resp.json()["data"]["id"]
 
-        if status in ("SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT"):
-            break
+            # Poll for completion
+            for _ in range(30):  # max 5 min per dispensary
+                time.sleep(10)
+                r = requests.get(f"{APIFY_BASE}/actor-runs/{run_id}", params={"token": APIFY_TOKEN}, timeout=10)
+                status = r.json()["data"]["status"]
+                if status in ("SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT"):
+                    break
 
-    if status != "SUCCEEDED":
-        print(f"Run failed with status: {status}")
-        return []
+            if status != "SUCCEEDED":
+                print(f"    Failed: {status}")
+                continue
 
-    # Fetch results from the default dataset
-    dataset_id = resp.json()["data"]["defaultDatasetId"]
-    results_url = f"{APIFY_BASE}/datasets/{dataset_id}/items"
-    resp = requests.get(
-        results_url,
-        params={"token": APIFY_TOKEN, "format": "json"},
-        timeout=30,
-    )
-    resp.raise_for_status()
-    results = resp.json()
+            # Fetch results
+            dataset_id = r.json()["data"]["defaultDatasetId"]
+            r2 = requests.get(
+                f"{APIFY_BASE}/datasets/{dataset_id}/items",
+                params={"token": APIFY_TOKEN, "format": "json"},
+                timeout=30,
+            )
+            items = r2.json()
+            if isinstance(items, list):
+                # Tag each item with our dispensary ID
+                for item in items:
+                    if isinstance(item, dict):
+                        item["_tcc_dispensary_id"] = disp_id
+                all_results.extend(items)
+                print(f"    Got {len(items)} products")
+            else:
+                print(f"    Unexpected response type: {type(items)}")
 
-    print(f"Got {len(results)} results from Apify")
-    return results
+        except Exception as e:
+            print(f"    Error: {e}")
+            continue
+
+        time.sleep(2)  # rate limit between dispensaries
+
+    print(f"\nTotal: {len(all_results)} products from {len(dispensary_urls)} dispensaries")
+    return all_results
 
 
 def run_single_dispensary(url, dispensary_id):
@@ -125,131 +135,97 @@ def run_single_dispensary(url, dispensary_id):
 def parse_apify_results(results, dispensary_map):
     """Parse Apify results into our product format.
 
-    Apify returns items like:
-    {
-        "url": "https://weedmaps.com/dispensaries/sweet-leaves/menu/dark-rainbow",
-        "title": "Dark Rainbow",
-        "price": "$58.00",
-        "thcPercentage": "26.8%",
-        "description": "...",
-        "weight": "",
-        "strains": [],
-        "rating": 0
-    }
+    shahidirfan's scraper returns rich Weedmaps data with fields like:
+    - name, price_price, category_name, listing_slug
+    - metrics_aggregates_thc, avatar_image_large_url
+    - brand_endorsement_brand_name
     """
     products = []
 
     for item in results:
-        # Map the result back to our dispensary ID via URL
-        source_url = item.get("url", "")
-        dispensary_id = None
+        if not isinstance(item, dict):
+            continue
 
-        for d in dispensary_map:
-            # Extract slug from our stored URL and check if it appears in the product URL
-            slug = d["url"].split("/dispensaries/")[-1] if "/dispensaries/" in d["url"] else ""
-            if slug and slug in source_url:
-                dispensary_id = d["id"]
-                break
+        # Skip non-menu-item records (first item is sometimes the dispensary itself)
+        if item.get("record_type") and item["record_type"] != "menu_item":
+            continue
 
+        # Get dispensary ID - tagged by us, or from listing_slug
+        dispensary_id = item.get("_tcc_dispensary_id", "")
         if not dispensary_id:
-            # Try to match from URL path
-            import re
-            match = re.search(r'/dispensaries/([^/]+)/', source_url)
-            if match:
-                url_slug = match.group(1)
-                for d in dispensary_map:
-                    if url_slug in d["url"]:
-                        dispensary_id = d["id"]
-                        break
-
+            listing_slug = item.get("listing_slug", "")
+            for d in dispensary_map:
+                if listing_slug and listing_slug in d["url"]:
+                    dispensary_id = d["id"]
+                    break
         if not dispensary_id:
-            dispensary_id = "unknown"
+            dispensary_id = item.get("listing_slug", "unknown")
 
-        # Parse the product directly (each Apify result IS a product)
         product = parse_menu_item(item, dispensary_id)
-        if product and product.get("name"):
+        if product and product.get("name") and product.get("price", 0) > 0:
             products.append(product)
 
     return products
 
 
 def parse_menu_item(item, dispensary_id):
-    """Parse a single menu item from Apify results.
+    """Parse a Weedmaps menu item from shahidirfan's Apify scraper.
 
-    Handles the format: title, price ("$58.00"), thcPercentage, url, description, weight
+    Key fields in the data:
+    - name: product name
+    - price_price: actual price as number
+    - category_name: Indica/Sativa/Hybrid/Edible/etc
+    - edge_category_name: Flower/Gummies/Cartridges/etc
+    - metrics_aggregates_thc + _unit: THC value
+    - avatar_image_large_url: product image
+    - brand_endorsement_brand_name: brand
+    - genetics_tag_name: strain type
+    - listing_slug: dispensary slug
     """
-    import re
-
-    name = item.get("title", "") or item.get("name", "") or item.get("productName", "")
+    name = item.get("name", "")
     if not name:
         return None
 
-    # Extract price - handle string format "$58.00" and numeric
-    price = 0
-    price_raw = item.get("price", 0)
-    if isinstance(price_raw, str):
-        nums = re.findall(r'\d+\.?\d*', price_raw)
-        if nums:
-            price = float(nums[0])
-    elif isinstance(price_raw, (int, float)):
-        price = float(price_raw)
+    # Price - use price_price (numeric)
+    price = item.get("price_price", 0) or 0
 
-    # If still no price, check other fields
-    if not price:
-        for field in ["basePrice", "lowestPrice", "priceFrom"]:
-            val = item.get(field)
-            if val:
-                if isinstance(val, str):
-                    nums = re.findall(r'\d+\.?\d*', val)
-                    if nums:
-                        price = float(nums[0])
-                        break
-                elif isinstance(val, (int, float)) and val > 0:
-                    price = float(val)
-                    break
-
-    # Guess category from URL path or description
-    cat_raw = item.get("category", "") or item.get("type", "") or item.get("productType", "")
-    if not cat_raw:
-        url = item.get("url", "").lower()
-        desc = (item.get("description", "") or "").lower()
-        if "/edible" in url or "gumm" in desc or "chocolate" in desc:
-            cat_raw = "edible"
-        elif "/vape" in url or "cart" in desc or "vape" in desc:
-            cat_raw = "cartridge"
-        elif "/pre-roll" in url or "pre-roll" in desc or "preroll" in desc:
-            cat_raw = "pre-roll"
-        elif "/concentrate" in url or "wax" in desc or "resin" in desc or "rosin" in desc:
-            cat_raw = "concentrate"
-        elif "/tincture" in url or "tincture" in desc:
-            cat_raw = "tincture"
-        elif "/beverage" in url or "seltzer" in desc or "tonic" in desc:
-            cat_raw = "beverage"
-        elif "/topical" in url or "balm" in desc or "lotion" in desc:
-            cat_raw = "topical"
-        else:
-            cat_raw = "flower"
-
+    # Category - prefer edge_category_name (Flower, Gummies, etc)
+    cat_raw = item.get("edge_category_name", "") or item.get("category_name", "")
     category = normalize_category(cat_raw)
 
-    # Strain type from strains array or description
-    strain_type = ""
-    strains = item.get("strains", [])
-    if strains and isinstance(strains, list) and strains:
-        strain_type = str(strains[0]).lower() if strains[0] else ""
+    # THC
+    thc_val = item.get("metrics_aggregates_thc", "")
+    thc_unit = item.get("metrics_aggregates_thc_unit", "%")
+    thc = f"{thc_val}{thc_unit}" if thc_val else ""
+
+    # CBD
+    cbd_val = item.get("metrics_aggregates_cbd", "")
+    cbd_unit = item.get("metrics_aggregates_cbd_unit", "%")
+    cbd = f"{cbd_val}{cbd_unit}" if cbd_val and cbd_val > 0 else ""
+
+    # Brand
+    brand = item.get("brand_endorsement_brand_name", "") or "Unknown"
+
+    # Image
+    image = item.get("avatar_image_large_url", "") or item.get("avatar_image_original_url", "") or ""
+
+    # Weight/size
+    weight = item.get("price_label", "") or ""
+
+    # Strain type
+    strain_type = (item.get("genetics_tag_name", "") or "").lower()
 
     return {
         "dispensary_id": dispensary_id,
         "name": name.strip(),
-        "brand": item.get("brand", "") or item.get("brandName", "") or "Unknown",
+        "brand": brand,
         "category": category,
         "strain_type": strain_type,
-        "thc": str(item.get("thcPercentage", "") or item.get("thc", "") or ""),
-        "cbd": str(item.get("cbdPercentage", "") or item.get("cbd", "") or ""),
+        "thc": thc,
+        "cbd": cbd,
         "price": price,
-        "weight": item.get("weight", "") or "",
-        "image": item.get("image", "") or item.get("imageUrl", "") or "",
-        "description": (item.get("description", "") or "")[:200],
+        "weight": weight,
+        "image": image,
         "scraped_at": datetime.now().isoformat(),
     }
 
