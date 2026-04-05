@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0a0a"/>
+      <stop offset="100%" stop-color="#111111"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="400" rx="24" fill="url(#bg)"/>
+  <rect x="2" y="2" width="396" height="396" rx="22" fill="none" stroke="#22c55e" stroke-width="2" opacity="0.3"/>
+
+  <!-- Logo Mark -->
+  <rect x="155" y="40" width="90" height="90" rx="20" fill="url(#green)"/>
+  <text x="200" y="100" font-family="Arial, sans-serif" font-weight="800" font-size="36" fill="#0a0a0a" text-anchor="middle">TC</text>
+
+  <!-- Brand Name -->
+  <text x="200" y="165" font-family="Arial, sans-serif" font-weight="700" font-size="22" fill="#f0f0f0" text-anchor="middle" letter-spacing="-0.5">Twin City</text>
+  <text x="200" y="192" font-family="Arial, sans-serif" font-weight="700" font-size="22" fill="#22c55e" text-anchor="middle" letter-spacing="-0.5">Cannabis</text>
+
+  <!-- Divider -->
+  <line x1="120" y1="212" x2="280" y2="212" stroke="#333" stroke-width="1"/>
+
+  <!-- Top Rated Badge -->
+  <text x="200" y="248" font-family="Arial, sans-serif" font-weight="800" font-size="16" fill="#f59e0b" text-anchor="middle" letter-spacing="3">&#9733; TOP RATED &#9733;</text>
+
+  <!-- QR Code placeholder area -->
+  <rect x="140" y="268" width="120" height="120" rx="8" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+  <text x="200" y="320" font-family="Arial, sans-serif" font-size="10" fill="#555" text-anchor="middle">QR CODE</text>
+  <text x="200" y="335" font-family="Arial, sans-serif" font-size="8" fill="#555" text-anchor="middle">Scan to find us</text>
+
+  <!-- URL -->
+  <text x="200" y="397" font-family="Arial, sans-serif" font-weight="500" font-size="11" fill="#888" text-anchor="middle" letter-spacing="0.5">twincitycannabis.com</text>
+</svg>

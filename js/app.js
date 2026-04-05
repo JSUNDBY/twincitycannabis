@@ -66,6 +66,10 @@
                 showPage('strain-detail');
                 renderStrainDetail(param);
                 break;
+            case 'dashboard':
+                showPage('dashboard');
+                renderDashboard(param);
+                break;
             default:
                 showPage(page);
                 if (navMap[page]) {
@@ -329,6 +333,9 @@
             `<span class="tag tag-sm">${Icons.check} ${f}</span>`
         ).join('');
 
+        // Dashboard link
+        document.getElementById('detail-dashboard-link').href = `#dashboard/${d.id}`;
+
         // Score bars
         const scoreColors = { pricing: 'var(--green)', selection: 'var(--purple)', service: 'var(--amber)', lab_testing: 'var(--blue)' };
         const scoreLabels = { pricing: 'Pricing', selection: 'Selection', service: 'Service', lab_testing: 'Lab Testing' };
@@ -475,6 +482,121 @@
     }
 
     // ---- RENDER: COMPARE ----
+    // ---- RENDER: DASHBOARD ----
+    function renderDashboard(dispensaryId) {
+        const d = dispensaryId ? TCC.getDispensary(dispensaryId) : TCC.dispensaries[0];
+        if (!d) { navigate('dispensaries'); return; }
+
+        // Header
+        document.getElementById('dash-name').textContent = d.name;
+        document.getElementById('dash-address').textContent = d.address;
+
+        // Tier badge
+        const tierBadge = document.getElementById('dash-tier-badge');
+        if (d.tier !== 'free') {
+            tierBadge.textContent = TCC.getTierLabel(d.tier);
+            tierBadge.style.background = TCC.getTierColor(d.tier);
+            tierBadge.style.color = d.tier === 'platinum' ? '#0a0a0a' : '#fff';
+            tierBadge.style.borderColor = TCC.getTierColor(d.tier);
+        } else {
+            tierBadge.textContent = 'Free Tier';
+        }
+
+        // Simulated analytics (based on score and reviews for demo)
+        const baseViews = d.review_count * 12 + d.tcc_score * 3;
+        const baseClicks = Math.floor(baseViews * 0.18);
+        document.getElementById('dash-views').textContent = baseViews.toLocaleString();
+        document.getElementById('dash-clicks').textContent = baseClicks.toLocaleString();
+
+        // Score
+        const scoreEl = document.getElementById('dash-score');
+        scoreEl.textContent = d.tcc_score;
+        scoreEl.style.color = TCC.getScoreColor(d.tcc_score);
+        document.getElementById('dash-score-label').textContent = TCC.getScoreLabel(d.tcc_score);
+
+        // Rank
+        const sorted = [...TCC.dispensaries].sort((a, b) => b.tcc_score - a.tcc_score);
+        const rank = sorted.findIndex(x => x.id === d.id) + 1;
+        document.getElementById('dash-rank').textContent = '#' + rank;
+
+        // Score bars
+        const scoreColors = { pricing: 'var(--green)', selection: 'var(--purple)', service: 'var(--amber)', lab_testing: 'var(--blue)' };
+        const scoreLabels = { pricing: 'Pricing', selection: 'Selection', service: 'Service', lab_testing: 'Lab Testing' };
+        document.getElementById('dash-score-bars').innerHTML = Object.entries(d.scores).map(([key, val]) =>
+            `<div class="score-bar-item">
+                <span class="score-bar-label">${scoreLabels[key]}</span>
+                <div class="score-bar-track"><div class="score-bar-fill" style="width:${val}%;background:${scoreColors[key]}"></div></div>
+                <span class="score-bar-value">${val}</span>
+            </div>`
+        ).join('');
+
+        // Score improvement tip
+        const lowest = Object.entries(d.scores).sort((a, b) => a[1] - b[1])[0];
+        const tips = {
+            pricing: 'Competitive pricing boosts your score. Consider price-matching popular products or running weekly specials.',
+            selection: 'Expanding your product variety helps. Add more categories like edibles, beverages, or concentrates.',
+            service: 'Customer service matters. Respond to reviews, offer curbside pickup, and train staff on product knowledge.',
+            lab_testing: 'Transparency builds trust. Display lab results prominently and ensure all products have COAs available.',
+        };
+        document.getElementById('dash-score-tip').textContent = tips[lowest[0]] || 'Keep up the great work!';
+
+        // Reviews
+        const reviews = TCC.getReviewsForDispensary(d.id);
+        document.getElementById('dash-review-count').textContent = `${d.review_count} total reviews`;
+        document.getElementById('dash-reviews').innerHTML = reviews.length ? reviews.map(r => `
+            <div class="review-item">
+                <div class="review-header">
+                    <span class="review-author">${r.author}</span>
+                    <span class="review-date">${r.date}</span>
+                </div>
+                <div class="review-stars">${'&#9733;'.repeat(r.rating)}${'&#9734;'.repeat(5 - r.rating)}</div>
+                <div class="review-text">${r.text}</div>
+            </div>
+        `).join('') : '<p class="text-secondary text-sm">No reviews on TCC yet. Share your profile link to start collecting reviews.</p>';
+
+        // Claim section (show for unverified dispensaries)
+        const claimSection = document.getElementById('dash-claim-section');
+        if (!d.verified) {
+            claimSection.style.display = 'block';
+        } else {
+            claimSection.style.display = 'none';
+        }
+
+        // Traffic chart (simulated data for demo)
+        setTimeout(() => {
+            const canvas = document.getElementById('dash-traffic-chart');
+            if (!canvas || typeof Chart === 'undefined') return;
+            if (App.chartInstance) App.chartInstance.destroy();
+
+            const days = Array.from({length: 30}, (_, i) => `${i + 1}`);
+            const viewData = days.map(() => Math.floor(baseViews / 30 * (0.7 + Math.random() * 0.6)));
+
+            App.chartInstance = new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    labels: days,
+                    datasets: [{
+                        label: 'Profile Views',
+                        data: viewData,
+                        backgroundColor: 'rgba(34, 197, 94, 0.3)',
+                        borderColor: '#22c55e',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#555', font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 10 } },
+                        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#555', font: { size: 10 } }, beginAtZero: true }
+                    }
+                }
+            });
+        }, 100);
+    }
+
     function renderCompare(productId) {
         const container = document.getElementById('compare-content');
 

@@ -397,6 +397,9 @@
                         <span id="detail-phone"></span>
                     </div>
                     <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.8rem" id="detail-features"></div>
+                    <div style="margin-top:1rem">
+                        <a class="btn btn-sm btn-secondary" id="detail-dashboard-link" href="#">Own this dispensary? View Dashboard &rarr;</a>
+                    </div>
                 </div>
 
                 <div class="detail-score-box">
@@ -598,6 +601,189 @@
             <p class="section-desc" style="margin-bottom:2rem">Select any product to see who has it and at what price.</p>
 
             <div id="compare-content"></div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+
+<!-- ================================================================ -->
+<!-- PAGE: DISPENSARY DASHBOARD (for dispensary owners)                 -->
+<!-- ================================================================ -->
+<div class="page" id="page-dashboard">
+    <section class="section" style="padding-top:2rem">
+        <div class="container">
+            <div style="margin-bottom:1.5rem">
+                <a href="#dispensaries" style="color:var(--text-secondary);font-size:0.85rem">&larr; Back to directory</a>
+            </div>
+
+            <!-- Dashboard Header -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1.5rem;margin-bottom:2rem">
+                <div>
+                    <div class="section-label">Dispensary Dashboard</div>
+                    <h1 class="section-title" id="dash-name">Your Dispensary</h1>
+                    <p class="text-secondary" id="dash-address"></p>
+                </div>
+                <div style="display:flex;gap:0.8rem;align-items:center">
+                    <span class="tag tag-green" id="dash-tier-badge">Free Tier</span>
+                    <a href="mailto:hello@twincitycannabis.com?subject=Upgrade%20My%20Listing" class="btn btn-primary">Upgrade Tier</a>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem" id="dash-stats">
+                <div class="card">
+                    <div class="card-body-sm" style="text-align:center">
+                        <div class="text-xs text-muted uppercase" style="letter-spacing:1px">Profile Views</div>
+                        <div class="font-display font-bold text-2xl text-green" id="dash-views">--</div>
+                        <div class="text-xs text-secondary">This month</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body-sm" style="text-align:center">
+                        <div class="text-xs text-muted uppercase" style="letter-spacing:1px">Website Clicks</div>
+                        <div class="font-display font-bold text-2xl text-green" id="dash-clicks">--</div>
+                        <div class="text-xs text-secondary">This month</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body-sm" style="text-align:center">
+                        <div class="text-xs text-muted uppercase" style="letter-spacing:1px">TCC Score</div>
+                        <div class="font-display font-bold text-2xl" id="dash-score">--</div>
+                        <div class="text-xs text-secondary" id="dash-score-label"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body-sm" style="text-align:center">
+                        <div class="text-xs text-muted uppercase" style="letter-spacing:1px">Search Rank</div>
+                        <div class="font-display font-bold text-2xl" id="dash-rank">#--</div>
+                        <div class="text-xs text-secondary">In your area</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two Column: Score Breakdown + Competitor Intel -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem">
+                <!-- Score Breakdown -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="font-display font-semibold" style="margin-bottom:1rem">TCC Score Breakdown</div>
+                        <div class="score-bars" id="dash-score-bars"></div>
+                        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)">
+                            <div class="text-xs text-muted">How to improve your score:</div>
+                            <div class="text-sm text-secondary" style="margin-top:0.3rem" id="dash-score-tip"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Competitor Intel -->
+                <div class="card">
+                    <div class="card-body">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                            <div class="font-display font-semibold">Competitor Intel</div>
+                            <span class="tag tag-sm tag-purple">Premium Feature</span>
+                        </div>
+                        <div id="dash-competitors">
+                            <div style="filter:blur(3px);pointer-events:none">
+                                <div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border)">
+                                    <span class="text-sm">Nearby Dispensary A</span>
+                                    <span class="text-sm text-green">$38 avg flower</span>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border)">
+                                    <span class="text-sm">Nearby Dispensary B</span>
+                                    <span class="text-sm text-amber">$42 avg flower</span>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;padding:0.5rem 0">
+                                    <span class="text-sm">Nearby Dispensary C</span>
+                                    <span class="text-sm text-red">$48 avg flower</span>
+                                </div>
+                            </div>
+                            <div style="text-align:center;margin-top:1rem">
+                                <p class="text-sm text-secondary">See what competitors charge for the same products</p>
+                                <a href="mailto:hello@twincitycannabis.com?subject=Upgrade%20to%20Premium" class="btn btn-sm btn-primary" style="margin-top:0.5rem">Unlock Competitor Intel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Traffic Chart -->
+            <div class="card" style="margin-bottom:2rem">
+                <div class="card-body">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                        <div class="font-display font-semibold">Profile Views (30 days)</div>
+                        <span class="tag tag-sm tag-green">&#8593; 23% vs last month</span>
+                    </div>
+                    <div style="height:200px;position:relative">
+                        <canvas id="dash-traffic-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <div class="card" style="margin-bottom:2rem">
+                <div class="card-body">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                        <div class="font-display font-semibold">Recent Reviews</div>
+                        <span class="text-sm text-secondary" id="dash-review-count"></span>
+                    </div>
+                    <div id="dash-reviews"></div>
+                </div>
+            </div>
+
+            <!-- Upgrade CTA -->
+            <div class="card" style="border-color:var(--green);margin-bottom:2rem">
+                <div class="card-body" style="text-align:center;padding:2.5rem">
+                    <div class="font-display font-bold text-xl" style="margin-bottom:0.5rem">Get more customers with a Featured listing</div>
+                    <p class="text-secondary" style="max-width:500px;margin:0 auto 1.5rem">Featured dispensaries get 4x more profile views and priority placement in search results.</p>
+                    <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap">
+                        <div class="card" style="padding:1.5rem;min-width:180px;text-align:center">
+                            <div class="font-display font-bold text-green">Featured</div>
+                            <div class="font-display font-bold text-2xl" style="margin:0.3rem 0">$299<span class="text-sm text-muted">/mo</span></div>
+                            <div class="text-xs text-secondary">Priority ranking</div>
+                            <div class="text-xs text-secondary">Deal spotlight</div>
+                            <div class="text-xs text-secondary">Analytics dashboard</div>
+                            <a href="mailto:hello@twincitycannabis.com?subject=Featured%20Listing" class="btn btn-sm btn-primary" style="margin-top:0.8rem;width:100%">Get Started</a>
+                        </div>
+                        <div class="card" style="padding:1.5rem;min-width:180px;text-align:center;border-color:var(--purple)">
+                            <div class="font-display font-bold text-purple">Premium</div>
+                            <div class="font-display font-bold text-2xl" style="margin:0.3rem 0">$599<span class="text-sm text-muted">/mo</span></div>
+                            <div class="text-xs text-secondary">Homepage placement</div>
+                            <div class="text-xs text-secondary">Push alerts to users</div>
+                            <div class="text-xs text-secondary">Competitor intel</div>
+                            <a href="mailto:hello@twincitycannabis.com?subject=Premium%20Listing" class="btn btn-sm btn-secondary" style="margin-top:0.8rem;width:100%;border-color:var(--purple);color:var(--purple)">Get Started</a>
+                        </div>
+                        <div class="card" style="padding:1.5rem;min-width:180px;text-align:center;border-color:var(--amber)">
+                            <div class="font-display font-bold text-amber">Platinum</div>
+                            <div class="font-display font-bold text-2xl" style="margin:0.3rem 0">$999<span class="text-sm text-muted">/mo</span></div>
+                            <div class="text-xs text-secondary">Category ownership</div>
+                            <div class="text-xs text-secondary">Banner ads</div>
+                            <div class="text-xs text-secondary">Account manager</div>
+                            <a href="mailto:hello@twincitycannabis.com?subject=Platinum%20Partnership" class="btn btn-sm btn-secondary" style="margin-top:0.8rem;width:100%;border-color:var(--amber);color:var(--amber)">Contact Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Claim Profile CTA for unclaimed -->
+            <div class="card" id="dash-claim-section" style="display:none;margin-bottom:2rem">
+                <div class="card-body" style="text-align:center;padding:2rem">
+                    <div class="font-display font-bold text-xl" style="margin-bottom:0.5rem">Is this your dispensary?</div>
+                    <p class="text-secondary" style="margin-bottom:1rem">Claim your profile to update hours, respond to reviews, and access your analytics dashboard.</p>
+                    <a href="mailto:hello@twincitycannabis.com?subject=Claim%20My%20Dispensary%20Profile" class="btn btn-primary btn-lg">Claim This Profile</a>
+                    <p class="text-xs text-muted" style="margin-top:0.5rem">Free forever. No credit card required.</p>
+                </div>
+            </div>
         </div>
     </section>
 
