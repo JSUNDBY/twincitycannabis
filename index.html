@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twin City Cannabis — Compare Prices, Find Deals, Rate Dispensaries</title>
+    <meta name="description" content="The smartest way to shop cannabis in the Twin Cities. Compare prices across every dispensary, track deals, read real ratings, and find exactly what you need.">
+    <meta name="keywords" content="twin cities cannabis, minneapolis dispensary, st paul dispensary, cannabis prices, weed deals, dispensary ratings, minnesota cannabis">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Twin City Cannabis — Compare. Save. Discover.">
+    <meta property="og:description" content="Compare prices across every Twin Cities dispensary. Real ratings. Real deals. Real savings.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://twincitycannabis.com">
+    <meta property="og:image" content="og-image.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Twin City Cannabis — Compare. Save. Discover.">
+    <meta name="twitter:description" content="Compare prices across every Twin Cities dispensary.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: #161616;
+            --bg-card-hover: #1a1a1a;
+            --border: #222222;
+            --border-light: #2a2a2a;
+            --text-primary: #f0f0f0;
+            --text-secondary: #888888;
+            --text-muted: #555555;
+            --accent-green: #22c55e;
+            --accent-green-dim: #16a34a;
+            --accent-green-glow: rgba(34, 197, 94, 0.15);
+            --accent-purple: #a855f7;
+            --accent-purple-dim: #9333ea;
+            --accent-amber: #f59e0b;
+            --accent-blue: #3b82f6;
+            --gradient-green: linear-gradient(135deg, #22c55e, #16a34a);
+            --gradient-purple: linear-gradient(135deg, #a855f7, #7c3aed);
+            --gradient-hero: radial-gradient(ellipse at 50% 0%, rgba(34, 197, 94, 0.08) 0%, transparent 60%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ============ NAV ============ */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-green);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .logo-text span {
+            color: var(--accent-green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-cta {
+            background: var(--gradient-green) !important;
+            color: var(--bg-primary) !important;
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600 !important;
+            transition: transform 0.2s, box-shadow 0.2s !important;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
+        }
+
+        /* ============ HERO ============ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            background: var(--gradient-hero);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(34, 197, 94, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(168, 85, 247, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            max-width: 900px;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 .highlight {
+            background: var(--gradient-green);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 550px;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============ EMAIL FORM ============ */
+        .email-form {
+            display: flex;
+            gap: 0.5rem;
+            max-width: 480px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .email-form input {
+            flex: 1;
+            padding: 0.9rem 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .email-form input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .email-form input:focus {
+            border-color: var(--accent-green);
+        }
+
+        .email-form button {
+            padding: 0.9rem 1.8rem;
+            background: var(--gradient-green);
+            border: none;
+            border-radius: 10px;
+            color: var(--bg-primary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .email-form button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 24px rgba(34, 197, 94, 0.35);
+        }
+
+        .form-note {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.8rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-success {
+            display: none;
+            color: var(--accent-green);
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============ LIVE TICKER ============ */
+        .ticker-section {
+            padding: 0 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ticker-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .ticker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ticker-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .ticker-live {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            color: var(--accent-green);
+            font-weight: 500;
+        }
+
+        .ticker-live .dot {
+            width: 5px;
+            height: 5px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse-dot 1.5s infinite;
+        }
+
+        .ticker-body {
+            padding: 0;
+        }
+
+        .ticker-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 80px;
+            padding: 0.8rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+            align-items: center;
+            transition: background 0.15s;
+        }
+
+        .ticker-row:last-child {
+            border-bottom: none;
+        }
+
+        .ticker-row:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .ticker-product {
+            font-weight: 500;
+        }
+
+        .ticker-dispensary {
+            color: var(--text-secondary);
+        }
+
+        .ticker-price {
+            color: var(--accent-green);
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .ticker-change {
+            text-align: right;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .ticker-change.down {
+            color: var(--accent-green);
+        }
+
+        .ticker-change.up {
+            color: #ef4444;
+        }
+
+        /* ============ FEATURES ============ */
+        .features {
+            padding: 6rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-bottom: 4rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: border-color 0.3s, transform 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--border-light);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .feature-icon.green { background: rgba(34, 197, 94, 0.1); }
+        .feature-icon.purple { background: rgba(168, 85, 247, 0.1); }
+        .feature-icon.amber { background: rgba(245, 158, 11, 0.1); }
+        .feature-icon.blue { background: rgba(59, 130, 246, 0.1); }
+
+        .feature-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* ============ HOW IT WORKS ============ */
+        .how-it-works {
+            padding: 6rem 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .how-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            position: relative;
+            padding: 2rem;
+        }
+
+        .step-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--border-light);
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+
+        .step h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .step p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* ============ RATING SYSTEM ============ */
+        .rating-section {
+            padding: 6rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .rating-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .rating-demo {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .rating-demo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .rating-dispensary-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .rating-dispensary-loc {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-top: 0.2rem;
+        }
+
+        .rating-score {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            line-height: 1;
+        }
+
+        .rating-score-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-align: right;
+        }
+
+        .rating-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .rating-bar-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .rating-bar-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .rating-bar-track {
+            flex: 1;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .rating-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        .rating-bar-fill.green { background: var(--accent-green); }
+        .rating-bar-fill.purple { background: var(--accent-purple); }
+        .rating-bar-fill.amber { background: var(--accent-amber); }
+        .rating-bar-fill.blue { background: var(--accent-blue); }
+
+        .rating-bar-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            width: 30px;
+            text-align: right;
+        }
+
+        .rating-info h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .rating-info p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .rating-factors {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-top: 1.5rem;
+        }
+
+        .rating-factors li {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .rating-factors li .check {
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        /* ============ FOR DISPENSARIES ============ */
+        .for-dispensaries {
+            padding: 6rem 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .disp-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .tiers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .tier-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: border-color 0.3s, transform 0.2s;
+        }
+
+        .tier-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .tier-card.featured {
+            border-color: var(--accent-green);
+            position: relative;
+        }
+
+        .tier-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-green);
+            color: var(--bg-primary);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.2rem 0.8rem;
+            border-radius: 100px;
+            letter-spacing: 1px;
+        }
+
+        .tier-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .tier-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.8rem 0;
+        }
+
+        .tier-price span {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        .tier-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1.2rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .tier-features li {
+            padding: 0.3rem 0;
+        }
+
+        /* ============ STATS ============ */
+        .stats {
+            padding: 4rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.3rem;
+        }
+
+        /* ============ CTA ============ */
+        .final-cta {
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(ellipse at 50% 100%, rgba(34, 197, 94, 0.06) 0%, transparent 60%);
+        }
+
+        .final-cta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+        }
+
+        .final-cta p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+        }
+
+        .final-cta .email-form {
+            margin: 0 auto;
+        }
+
+        /* ============ FOOTER ============ */
+        footer {
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-secondary);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0.8rem 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 7rem 1.5rem 3rem;
+            }
+
+            .email-form {
+                flex-direction: column;
+            }
+
+            .email-form button {
+                padding: 1rem;
+            }
+
+            .ticker-row {
+                grid-template-columns: 1.5fr 1fr 80px;
+                font-size: 0.8rem;
+                padding: 0.6rem 1rem;
+            }
+
+            .ticker-dispensary {
+                display: none;
+            }
+
+            .rating-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .tiers {
+                grid-template-columns: 1fr;
+                max-width: 350px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        /* ============ ANIMATIONS ============ */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">TC</div>
+            <div class="logo-text">Twin City <span>Cannabis</span></div>
+        </div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#ratings">Ratings</a>
+            <a href="#dispensaries">For Dispensaries</a>
+            <a href="#signup" class="nav-cta">Get Early Access</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Launching Summer 2026 in Minneapolis-St. Paul
+        </div>
+
+        <h1>
+            Every dispensary.<br>
+            Every price.<br>
+            <span class="highlight">One search.</span>
+        </h1>
+
+        <p>
+            Compare real-time prices, track deals, and read honest ratings across
+            every dispensary in the Twin Cities. Stop overpaying.
+        </p>
+
+        <form class="email-form" id="hero-form">
+            <input type="email" placeholder="Enter your email" required>
+            <button type="submit">Get Early Access</button>
+        </form>
+        <p class="form-note">Free forever for consumers. No spam, ever.</p>
+        <p class="form-success" id="hero-success">You're on the list. We'll be in touch.</p>
+    </section>
+
+    <!-- LIVE PRICE TICKER -->
+    <section class="ticker-section">
+        <div class="ticker-container fade-up">
+            <div class="ticker-header">
+                <span class="ticker-title">Live Price Tracker</span>
+                <span class="ticker-live"><span class="dot"></span> Preview</span>
+            </div>
+            <div class="ticker-body">
+                <div class="ticker-row">
+                    <span class="ticker-product">Blue Dream 3.5g</span>
+                    <span class="ticker-dispensary">Green Goods MPLS</span>
+                    <span class="ticker-price">$38</span>
+                    <span class="ticker-change down">-$7</span>
+                </div>
+                <div class="ticker-row">
+                    <span class="ticker-product">Northern Lights Cart 1g</span>
+                    <span class="ticker-dispensary">Rise St. Paul</span>
+                    <span class="ticker-price">$42</span>
+                    <span class="ticker-change down">-$3</span>
+                </div>
+                <div class="ticker-row">
+                    <span class="ticker-product">Sour Diesel Pre-Roll 5pk</span>
+                    <span class="ticker-dispensary">Beyond Hello</span>
+                    <span class="ticker-price">$29</span>
+                    <span class="ticker-change down">-$11</span>
+                </div>
+                <div class="ticker-row">
+                    <span class="ticker-product">GSC Gummies 100mg</span>
+                    <span class="ticker-dispensary">Verilife Mpls</span>
+                    <span class="ticker-price">$24</span>
+                    <span class="ticker-change up">+$2</span>
+                </div>
+                <div class="ticker-row">
+                    <span class="ticker-product">Wedding Cake 3.5g</span>
+                    <span class="ticker-dispensary">Minnesota Green</span>
+                    <span class="ticker-price">$35</span>
+                    <span class="ticker-change down">-$10</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" id="features">
+        <div class="section-label fade-up">What we're building</div>
+        <h2 class="section-title fade-up">Weedmaps shows you menus.<br>We show you the <span class="highlight">best deal.</span></h2>
+        <p class="section-desc fade-up">
+            We scrape, compare, and rank every product at every dispensary in the Twin Cities,
+            so you always know who has what you want, at the best price.
+        </p>
+
+        <div class="features-grid">
+            <div class="feature-card fade-up">
+                <div class="feature-icon green">$</div>
+                <h3>Real-Time Price Comparison</h3>
+                <p>See what every dispensary charges for the same product. Sorted by price, distance, or rating. Updated daily.</p>
+            </div>
+            <div class="feature-card fade-up">
+                <div class="feature-icon purple">&#9733;</div>
+                <h3>TCC Rating System</h3>
+                <p>Our proprietary scoring algorithm factors in price, selection, lab testing, customer service, and community reviews.</p>
+            </div>
+            <div class="feature-card fade-up">
+                <div class="feature-icon amber">&#128276;</div>
+                <h3>Deal Alerts</h3>
+                <p>Set alerts for your favorite strains and products. Get notified when prices drop or new inventory hits shelves.</p>
+            </div>
+            <div class="feature-card fade-up">
+                <div class="feature-icon blue">&#128200;</div>
+                <h3>Price History Graphs</h3>
+                <p>Track price trends over time. Know if that "sale" is actually a deal, or if the price was always that low.</p>
+            </div>
+            <div class="feature-card fade-up">
+                <div class="feature-icon green">&#128205;</div>
+                <h3>Strain Finder</h3>
+                <p>Looking for a specific strain? Search once, see every dispensary that carries it, sorted by price and proximity.</p>
+            </div>
+            <div class="feature-card fade-up">
+                <div class="feature-icon purple">&#128172;</div>
+                <h3>Community Reviews</h3>
+                <p>Real reviews from real Twin Cities consumers. No fake accounts, no pay-to-play ratings. Verified purchase reviews.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-it-works">
+        <div class="how-inner">
+            <div class="section-label fade-up">How it works</div>
+            <h2 class="section-title fade-up">Find your flower in three steps</h2>
+
+            <div class="steps">
+                <div class="step fade-up">
+                    <div class="step-number">01</div>
+                    <h3>Search or Browse</h3>
+                    <p>Search for a strain, product type, or dispensary. Or browse today's best deals across the entire Twin Cities market.</p>
+                </div>
+                <div class="step fade-up">
+                    <div class="step-number">02</div>
+                    <h3>Compare Everything</h3>
+                    <p>See real-time prices, TCC ratings, distance, reviews, and lab test data side by side. All dispensaries, one screen.</p>
+                </div>
+                <div class="step fade-up">
+                    <div class="step-number">03</div>
+                    <h3>Save and Go</h3>
+                    <p>Found the best deal? Get directions, call ahead, or save it to your watchlist for next time. It's that simple.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RATING SYSTEM -->
+    <section class="rating-section" id="ratings">
+        <div class="section-label fade-up">The TCC Score</div>
+        <h2 class="section-title fade-up">Ratings you can actually trust</h2>
+        <p class="section-desc fade-up">
+            Most dispensary ratings are gamed. Ours aren't. The TCC Score is a weighted,
+            multi-factor rating that considers everything that matters.
+        </p>
+
+        <div class="rating-grid">
+            <div class="rating-demo fade-up">
+                <div class="rating-demo-header">
+                    <div>
+                        <div class="rating-dispensary-name">Green Goods Minneapolis</div>
+                        <div class="rating-dispensary-loc">Downtown MPLS &bull; 0.8 mi</div>
+                    </div>
+                    <div>
+                        <div class="rating-score">92</div>
+                        <div class="rating-score-label">TCC Score</div>
+                    </div>
+                </div>
+                <div class="rating-bars">
+                    <div class="rating-bar-item">
+                        <span class="rating-bar-label">Pricing</span>
+                        <div class="rating-bar-track">
+                            <div class="rating-bar-fill green" style="width: 88%"></div>
+                        </div>
+                        <span class="rating-bar-value">88</span>
+                    </div>
+                    <div class="rating-bar-item">
+                        <span class="rating-bar-label">Selection</span>
+                        <div class="rating-bar-track">
+                            <div class="rating-bar-fill purple" style="width: 95%"></div>
+                        </div>
+                        <span class="rating-bar-value">95</span>
+                    </div>
+                    <div class="rating-bar-item">
+                        <span class="rating-bar-label">Service</span>
+                        <div class="rating-bar-track">
+                            <div class="rating-bar-fill amber" style="width: 90%"></div>
+                        </div>
+                        <span class="rating-bar-value">90</span>
+                    </div>
+                    <div class="rating-bar-item">
+                        <span class="rating-bar-label">Lab Testing</span>
+                        <div class="rating-bar-track">
+                            <div class="rating-bar-fill blue" style="width: 96%"></div>
+                        </div>
+                        <span class="rating-bar-value">96</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rating-info fade-up">
+                <h3>Not just stars. Science.</h3>
+                <p>
+                    The TCC Score combines hard data with community sentiment to give you
+                    a single number you can trust. Every dispensary gets rated on the
+                    same transparent criteria.
+                </p>
+                <ul class="rating-factors">
+                    <li><span class="check">&#10003;</span> Price competitiveness vs. market average</li>
+                    <li><span class="check">&#10003;</span> Product variety and strain availability</li>
+                    <li><span class="check">&#10003;</span> Third-party lab testing transparency</li>
+                    <li><span class="check">&#10003;</span> Customer service ratings (verified reviews)</li>
+                    <li><span class="check">&#10003;</span> Consistency of inventory and pricing</li>
+                    <li><span class="check">&#10003;</span> Community engagement and loyalty programs</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOR DISPENSARIES -->
+    <section class="for-dispensaries" id="dispensaries">
+        <div class="disp-inner">
+            <div class="section-label fade-up">For dispensaries</div>
+            <h2 class="section-title fade-up">Get in front of every cannabis<br>shopper in the Twin Cities</h2>
+            <p class="section-desc fade-up">
+                Thousands of consumers will use TCC to decide where to shop.
+                Featured dispensaries get premium placement, boosted visibility,
+                and direct customer engagement tools.
+            </p>
+
+            <div class="tiers">
+                <div class="tier-card fade-up">
+                    <div class="tier-name">Free Listing</div>
+                    <div class="tier-price">$0</div>
+                    <ul class="tier-features">
+                        <li>Basic dispensary profile</li>
+                        <li>Product listings</li>
+                        <li>Community reviews</li>
+                        <li>TCC Score</li>
+                    </ul>
+                </div>
+                <div class="tier-card fade-up">
+                    <div class="tier-name">Featured</div>
+                    <div class="tier-price">$299 <span>/mo</span></div>
+                    <ul class="tier-features">
+                        <li>Everything in Free</li>
+                        <li>Priority search ranking</li>
+                        <li>Featured badge</li>
+                        <li>Deal spotlight placement</li>
+                        <li>Analytics dashboard</li>
+                    </ul>
+                </div>
+                <div class="tier-card featured fade-up">
+                    <div class="tier-name">Premium</div>
+                    <div class="tier-price">$599 <span>/mo</span></div>
+                    <ul class="tier-features">
+                        <li>Everything in Featured</li>
+                        <li>Top placement in searches</li>
+                        <li>Homepage spotlight</li>
+                        <li>Push notifications to users</li>
+                        <li>Custom branded profile</li>
+                        <li>Competitor price intel</li>
+                    </ul>
+                </div>
+                <div class="tier-card fade-up">
+                    <div class="tier-name">Platinum</div>
+                    <div class="tier-price">$999 <span>/mo</span></div>
+                    <ul class="tier-features">
+                        <li>Everything in Premium</li>
+                        <li>Exclusive category ownership</li>
+                        <li>Banner ad placements</li>
+                        <li>Monthly strategy call</li>
+                        <li>First access to new features</li>
+                        <li>Dedicated account manager</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats">
+        <div class="stats-grid fade-up">
+            <div>
+                <div class="stat-number" data-target="47">0</div>
+                <div class="stat-label">Dispensaries Tracked</div>
+            </div>
+            <div>
+                <div class="stat-number" data-target="2400">0</div>
+                <div class="stat-label">Products Indexed</div>
+            </div>
+            <div>
+                <div class="stat-number" data-target="18">0</div>
+                <div class="stat-label">Price Checks / Day</div>
+            </div>
+            <div>
+                <div class="stat-number" data-target="340">0</div>
+                <div class="stat-label">Early Signups</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final-cta" id="signup">
+        <h2 class="fade-up">Stop guessing. Start saving.</h2>
+        <p class="fade-up">Join the waitlist and be first to search the Twin Cities cannabis market.</p>
+        <form class="email-form fade-up" id="footer-form">
+            <input type="email" placeholder="Enter your email" required>
+            <button type="submit">Join the Waitlist</button>
+        </form>
+        <p class="form-note fade-up">Be among the first to access TCC when we launch.</p>
+        <p class="form-success" id="footer-success">You're on the list. We'll be in touch.</p>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Contact</a>
+                <a href="#">Dispensary Partnerships</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ============ INTERSECTION OBSERVER (fade-up) ============
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // ============ COUNTER ANIMATION ============
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = parseInt(el.dataset.target);
+                    const suffix = target >= 1000 ? '+' : '+';
+                    let current = 0;
+                    const increment = target / 60;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            el.textContent = target.toLocaleString() + suffix;
+                            clearInterval(timer);
+                        } else {
+                            el.textContent = Math.floor(current).toLocaleString();
+                        }
+                    }, 16);
+                    counterObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.stat-number').forEach(el => counterObserver.observe(el));
+
+        // ============ EMAIL FORMS ============
+        document.querySelectorAll('.email-form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = form.querySelector('input').value;
+
+                // Store in localStorage for now (replace with real backend later)
+                const signups = JSON.parse(localStorage.getItem('tcc-signups') || '[]');
+                signups.push({ email, timestamp: new Date().toISOString() });
+                localStorage.setItem('tcc-signups', JSON.stringify(signups));
+
+                // Show success
+                form.style.display = 'none';
+                const note = form.nextElementSibling;
+                if (note && note.classList.contains('form-note')) note.style.display = 'none';
+                const success = note ? note.nextElementSibling : null;
+                if (success && success.classList.contains('form-success')) {
+                    success.style.display = 'block';
+                }
+            });
+        });
+
+        // ============ PRICE TICKER ANIMATION ============
+        const tickerData = [
+            { product: 'Blue Dream 3.5g', dispensary: 'Green Goods MPLS', price: '$38', change: '-$7', dir: 'down' },
+            { product: 'Northern Lights Cart 1g', dispensary: 'Rise St. Paul', price: '$42', change: '-$3', dir: 'down' },
+            { product: 'Sour Diesel Pre-Roll 5pk', dispensary: 'Beyond Hello', price: '$29', change: '-$11', dir: 'down' },
+            { product: 'GSC Gummies 100mg', dispensary: 'Verilife Mpls', price: '$24', change: '+$2', dir: 'up' },
+            { product: 'Wedding Cake 3.5g', dispensary: 'Minnesota Green', price: '$35', change: '-$10', dir: 'down' },
+            { product: 'OG Kush 3.5g', dispensary: 'Greenleaf Eagan', price: '$41', change: '-$4', dir: 'down' },
+            { product: 'Gelato Cart 0.5g', dispensary: 'Rise Bloomington', price: '$28', change: '-$6', dir: 'down' },
+            { product: 'Purple Haze Gummies', dispensary: 'MN Nice Cannabis', price: '$19', change: '-$5', dir: 'down' },
+        ];
+
+        let tickerIndex = 5;
+        setInterval(() => {
+            const rows = document.querySelectorAll('.ticker-row');
+            if (rows.length > 0) {
+                const firstRow = rows[0];
+                firstRow.style.opacity = '0';
+                firstRow.style.transform = 'translateY(-10px)';
+                firstRow.style.transition = 'all 0.3s ease';
+
+                setTimeout(() => {
+                    const data = tickerData[tickerIndex % tickerData.length];
+                    firstRow.parentElement.appendChild(firstRow);
+                    firstRow.querySelector('.ticker-product').textContent = data.product;
+                    firstRow.querySelector('.ticker-dispensary').textContent = data.dispensary;
+                    firstRow.querySelector('.ticker-price').textContent = data.price;
+                    const changeEl = firstRow.querySelector('.ticker-change');
+                    changeEl.textContent = data.change;
+                    changeEl.className = 'ticker-change ' + data.dir;
+
+                    requestAnimationFrame(() => {
+                        firstRow.style.opacity = '1';
+                        firstRow.style.transform = 'translateY(0)';
+                    });
+
+                    tickerIndex++;
+                }, 300);
+            }
+        }, 3000);
+    </script>
+
+</body>
+</html>
