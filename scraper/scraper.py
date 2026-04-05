@@ -86,6 +86,12 @@ def parse_dispensary(listing):
         features.append("Curbside pickup")
     if listing.get("has_delivery"):
         features.append("Delivery")
+    if listing.get("accepts_credit_cards"):
+        features.append("Credit cards accepted")
+    if listing.get("accepts_debit_cards"):
+        features.append("Debit cards accepted")
+    if listing.get("menu_items_count", 0) > 100:
+        features.append("Large menu")
     features = list(set(features))  # dedupe
 
     # Rating to TCC score (scale 1-5 to 65-95)
@@ -155,11 +161,12 @@ def parse_dispensary(listing):
 
 def parse_hours(listing):
     """Parse hours from Weedmaps listing."""
-    # Weedmaps doesn't always return structured hours in the API
+    todays = listing.get("todays_hours_str", "")
+    open_now = listing.get("open_now", False)
     return {
-        "weekday": "10am-8pm",
-        "weekend": "10am-6pm",
-        "note": "Hours vary, check website",
+        "weekday": todays if todays and todays != "Closed" else "Hours vary",
+        "weekend": todays if todays and todays != "Closed" else "Hours vary",
+        "note": todays if todays else "Check website for hours",
     }
 
 
