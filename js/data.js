@@ -531,4 +531,38 @@ TCC.getScoreColor = (score) => score >= 90 ? '#22c55e' : score >= 80 ? '#f59e0b'
 TCC.getScoreLabel = (score) => score >= 90 ? 'Excellent' : score >= 80 ? 'Great' : score >= 70 ? 'Good' : 'Fair';
 TCC.priceHistoryLabels = ['8w ago', '7w ago', '6w ago', '5w ago', '4w ago', '3w ago', '2w ago', 'Now'];
 
+// ---- MINNESOTA-GROWN BRANDS ----
+TCC.mnBrands = [
+    { name: 'Roots & Resin Farms', location: 'Lindstrom, MN', type: 'Cultivator', specialty: 'Solventless rosin extracts', desc: 'One of Minnesota\'s first licensed recreational cultivators, focused on premium solventless concentrates.' },
+    { name: 'Concentrate Labs', location: 'Lindstrom, MN', type: 'Cultivator', specialty: 'Craft flower & concentrates', desc: 'Minnesota\'s second licensed cultivator. Seeds in the ground since day one.' },
+    { name: 'M.N. Technology', location: 'Cohasset, MN', type: 'Cultivator & Processor', specialty: 'Wholesale distribution', desc: 'Produces and packages cannabis for wholesale distribution throughout Minnesota.' },
+    { name: 'CANN', location: 'National (sold in MN)', type: 'Beverage', specialty: 'Social tonics', desc: 'Low-dose cannabis beverages. Available at Sweetleaves and other premium dispensaries.' },
+    { name: 'Nowadays', location: 'National (sold in MN)', type: 'Beverage', specialty: 'THC sparkling water', desc: 'Sessionable THC beverages available across Twin Cities dispensaries.' },
+    { name: 'Gigli', location: 'MN brand', type: 'Edibles', specialty: 'Premium gummies', desc: 'Craft cannabis gummies available at select Twin Cities locations.' },
+    { name: 'Mary & Jane', location: 'MN brand', type: 'Edibles & Flower', specialty: 'Full spectrum products', desc: 'Minnesota-made cannabis products with full spectrum formulations.' },
+];
+
+// ---- COMING SOON DISPENSARIES ----
+TCC.comingSoon = [
+    { name: 'Anoka Cannabis Company', location: 'Anoka, MN', type: 'Municipal', status: 'Opening 2026', desc: 'Minnesota\'s first government-run cannabis dispensary. City-owned and operated.', notable: 'First municipal dispensary in the US' },
+    { name: 'Osseo Municipal Dispensary', location: 'Osseo, MN', type: 'Municipal', status: 'Mid-2026', desc: 'Osseo\'s publicly run dispensary, currently in renovation and licensing phase.', notable: 'City-operated' },
+    { name: 'RISE Brooklyn Park', location: 'Brooklyn Park, MN', type: 'Retail', status: 'Expanding', desc: 'RISE dispensary expanding adult-use sales at their Brooklyn Park location.', notable: 'Part of Green Thumb Industries' },
+    { name: 'Green Goods Bloomington', location: 'Bloomington, MN', type: 'Retail', status: 'Adult-use expansion', desc: 'Green Goods adding full adult-use menu at their Bloomington location.', notable: 'Medical to recreational transition' },
+    { name: 'RISE Eagan', location: 'Eagan, MN', type: 'Retail', status: 'Expanding', desc: 'RISE dispensary expanding adult-use product line in Eagan.', notable: 'South metro location' },
+];
+
+// ---- TCC SHOP MERCH ----
+TCC.shopItems = [
+    { name: 'TCC Snapback Hat', price: 34, category: 'headwear', img: null, status: 'coming-soon', desc: 'Embroidered logo, structured fit. Black/green.' },
+    { name: 'TCC Heavyweight Hoodie', price: 68, category: 'apparel', img: null, status: 'coming-soon', desc: 'Oversized cut, puff print logo. Premium heavyweight fleece.' },
+    { name: 'TCC Graphic Tee', price: 32, category: 'apparel', img: null, status: 'coming-soon', desc: 'Comfort Colors blank, subtle chest logo. Multiple colorways.' },
+    { name: 'UV Stash Jar', price: 24, category: 'accessories', img: null, status: 'coming-soon', desc: 'Matte black UV glass with TCC logo. Keeps it fresh.' },
+    { name: 'Metal Rolling Tray', price: 28, category: 'accessories', img: null, status: 'coming-soon', desc: 'Custom TCC art. Twin Cities skyline design.' },
+    { name: 'Enamel Pin Set', price: 16, category: 'accessories', img: null, status: 'coming-soon', desc: 'Collectible 3-pack. Minneapolis landmarks + leaf motifs.' },
+    { name: 'Die-Cut Sticker Pack', price: 12, category: 'accessories', img: null, status: 'available', desc: '6-pack of premium vinyl stickers. Weather-resistant.' },
+    { name: 'Heavyweight Tote', price: 22, category: 'accessories', img: null, status: 'coming-soon', desc: 'Canvas tote, screenprinted. Your dispensary run bag.' },
+    { name: 'Strain Journal', price: 18, category: 'accessories', img: null, status: 'coming-soon', desc: 'Moleskin-style notebook. Log strains, effects, ratings.' },
+    { name: 'TCC Lighter Sleeve', price: 8, category: 'accessories', img: null, status: 'coming-soon', desc: 'Leather sleeve, fits standard Bic. Embossed logo.' },
+];
+
 window.TCC = TCC;

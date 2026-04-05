@@ -104,6 +104,9 @@
         renderTodaysDeals();
         renderTrendingProducts();
         renderPopularStrains();
+        renderMNBrands();
+        renderComingSoon();
+        renderShop();
     }
 
     function renderFeaturedDispensaries() {
@@ -138,6 +141,67 @@
         const container = document.getElementById('popular-strains');
         const popular = TCC.strains.slice(0, 8);
         container.innerHTML = popular.map(s => strainCard(s)).join('');
+    }
+
+    function renderMNBrands() {
+        const container = document.getElementById('mn-brands');
+        if (!container || !TCC.mnBrands) return;
+        container.innerHTML = TCC.mnBrands.map(b => `
+            <div class="card">
+                <div class="card-body-sm">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem">
+                        <div>
+                            <div class="font-display font-semibold" style="font-size:0.95rem">${b.name}</div>
+                            <div class="text-xs text-secondary">${b.location}</div>
+                        </div>
+                        <span class="tag tag-sm tag-green">${b.type}</span>
+                    </div>
+                    <div class="text-sm text-secondary" style="line-height:1.5;margin-bottom:0.5rem">${b.desc}</div>
+                    <span class="tag tag-sm">${b.specialty}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderComingSoon() {
+        const container = document.getElementById('coming-soon-dispensaries');
+        if (!container || !TCC.comingSoon) return;
+        container.innerHTML = TCC.comingSoon.map(d => `
+            <div class="card">
+                <div class="card-body-sm">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem">
+                        <div>
+                            <div class="font-display font-semibold" style="font-size:0.95rem">${d.name}</div>
+                            <div class="text-xs text-secondary">${d.location}</div>
+                        </div>
+                        <span class="tag tag-sm tag-amber">${d.status}</span>
+                    </div>
+                    <div class="text-sm text-secondary" style="line-height:1.5;margin-bottom:0.5rem">${d.desc}</div>
+                    ${d.notable ? `<span class="tag tag-sm tag-purple">${d.notable}</span>` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderShop() {
+        const container = document.getElementById('tcc-shop');
+        if (!container || !TCC.shopItems) return;
+        container.innerHTML = TCC.shopItems.map(item => `
+            <div class="card" style="cursor:default">
+                <div class="card-body-sm">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem">
+                        <div>
+                            <div class="font-display font-semibold" style="font-size:0.95rem">${item.name}</div>
+                            <div class="text-xs text-secondary">${item.desc}</div>
+                        </div>
+                        <div style="text-align:right">
+                            <div class="font-display font-bold text-green">$${item.price}</div>
+                            <span class="tag tag-sm ${item.status === 'available' ? 'tag-green' : 'tag-amber'}" style="margin-top:0.2rem">${item.status === 'available' ? 'Available' : 'Coming Soon'}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
     }
 
     // ---- RENDER: DISPENSARIES ----
@@ -835,15 +899,35 @@
             tab.addEventListener('click', () => switchDetailTab(tab.dataset.tab));
         });
 
-        // Alert form
+        // Alert form — submits to Kit (ConvertKit) or falls back to localStorage
         const alertForm = document.getElementById('alert-form');
         if (alertForm) {
-            alertForm.addEventListener('submit', (e) => {
+            alertForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const email = alertForm.querySelector('input').value;
+                const email = alertForm.querySelector('input[name="email_address"]').value;
+                const formId = alertForm.dataset.svForm;
+                const btn = alertForm.querySelector('button');
+                btn.textContent = 'Signing up...';
+                btn.disabled = true;
+
+                // Try Kit API first
+                if (formId && formId !== 'YOUR_FORM_ID') {
+                    try {
+                        await fetch(`https://api.kit.com/forms/${formId}/subscribe`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email_address: email }),
+                        });
+                    } catch (err) {
+                        console.log('Kit API fallback to localStorage', err);
+                    }
+                }
+
+                // Always save locally as backup
                 const signups = JSON.parse(localStorage.getItem('tcc-alerts') || '[]');
                 signups.push({ email, timestamp: new Date().toISOString(), type: 'alert' });
                 localStorage.setItem('tcc-alerts', JSON.stringify(signups));
+
                 alertForm.style.display = 'none';
                 document.getElementById('alert-success').style.display = 'block';
             });

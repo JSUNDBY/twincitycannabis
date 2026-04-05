@@ -164,14 +164,39 @@
         </div>
     </section>
 
+    <!-- Minnesota Grown -->
+    <section class="section">
+        <div class="container">
+            <div class="section-label fade-in">&#127470;&#127480; Minnesota Grown</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
+                <div>
+                    <h2 class="section-title fade-in">Support local cultivators</h2>
+                    <p class="section-desc fade-in">Minnesota-licensed growers and craft brands making cannabis right here.</p>
+                </div>
+            </div>
+            <div class="home-grid-2 stagger" id="mn-brands"></div>
+        </div>
+    </section>
+
+    <!-- Coming Soon Dispensaries -->
+    <section class="section section-dark">
+        <div class="container">
+            <div class="section-label fade-in">&#128640; Coming Soon</div>
+            <h2 class="section-title fade-in">New dispensaries opening in 2026</h2>
+            <p class="section-desc fade-in" style="margin-bottom:1.5rem">Including Minnesota's first government-run cannabis stores.</p>
+            <div class="home-grid-2 stagger" id="coming-soon-dispensaries"></div>
+        </div>
+    </section>
+
     <!-- Alert Signup -->
     <section class="section" style="background:radial-gradient(ellipse at 50% 50%, rgba(34,197,94,0.06) 0%, transparent 60%)">
         <div class="container" style="text-align:center">
             <div class="section-label fade-in">&#128276; Price Alerts</div>
             <h2 class="section-title fade-in" style="max-width:600px;margin:0 auto 0.5rem">Never miss a deal again</h2>
             <p class="section-desc fade-in" style="max-width:500px;margin:0 auto 1.5rem">Get notified when prices drop on your favorite products and strains. Free forever.</p>
-            <form class="fade-in" id="alert-form" style="max-width:480px;margin:0 auto;display:flex;gap:0.5rem">
-                <input class="input input-lg" type="email" placeholder="Enter your email for alerts" required style="flex:1">
+            <form class="fade-in" id="alert-form" style="max-width:480px;margin:0 auto;display:flex;gap:0.5rem"
+                  action="https://app.kit.com/forms/YOUR_FORM_ID/subscriptions" method="post" data-sv-form="YOUR_FORM_ID">
+                <input class="input input-lg" type="email" name="email_address" placeholder="Enter your email for alerts" required style="flex:1">
                 <button type="submit" class="btn btn-primary btn-lg">Get Alerts</button>
             </form>
             <p class="text-xs text-muted fade-in" style="margin-top:0.6rem">No spam. Unsubscribe anytime.</p>
@@ -230,8 +255,22 @@
         </div>
     </section>
 
-    <!-- Stats Bar -->
+    <!-- TCC Shop -->
     <section class="section">
+        <div class="container">
+            <div class="section-label fade-in">&#128717; TCC Shop</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
+                <div>
+                    <h2 class="section-title fade-in">Rep the Twin Cities</h2>
+                    <p class="section-desc fade-in">Premium cannabis lifestyle gear. No stoner cliches, just clean design.</p>
+                </div>
+            </div>
+            <div class="home-grid-2 stagger" id="tcc-shop"></div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="section section-dark">
         <div class="container">
             <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center" class="fade-in">
                 <div>
