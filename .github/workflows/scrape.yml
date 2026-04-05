@@ -2,9 +2,9 @@ name: Scrape Dispensary Data
 
 on:
   schedule:
-    # Run every day at 7am and 5pm Central (12:00 and 22:00 UTC)
-    - cron: '0 12 * * *'
-    - cron: '0 22 * * *'
+    # Run every 4 hours for near-real-time data
+    # 6am, 10am, 2pm, 6pm, 10pm Central
+    - cron: '0 11,15,19,23,3 * * *'
   workflow_dispatch: # Manual trigger from GitHub UI
 
 jobs:
