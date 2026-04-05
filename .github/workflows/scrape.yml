@@ -24,23 +24,28 @@ jobs:
       - name: Install dependencies
         run: pip install -r scraper/requirements.txt
 
-      - name: Run scraper
-        run: python scraper/scraper.py
-
-      - name: Export to site data
+      - name: Scrape dispensary listings (Weedmaps API)
         run: python scraper/scraper.py --export
 
-      - name: Update data.js with fresh prices
+      - name: Update dispensaries in data.js
         run: python scraper/update_site.py
+
+      - name: Scrape menus via Apify (real prices & products)
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+        run: python scraper/apify_scrape.py --update-site
+        continue-on-error: true  # Don't fail the whole job if Apify is down
 
       - name: Commit and push if changed
         run: |
           git config user.name "TCC Scraper Bot"
           git config user.email "bot@twincitycannabis.com"
           git add -A
+          # Don't commit the raw scraper dumps, only the processed data
+          git reset -- scraper/data/raw_* scraper/data/apify_raw_*
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Auto-update: fresh dispensary prices $(date -u +%Y-%m-%d)"
+            git commit -m "Auto-update: dispensary data $(date -u +%Y-%m-%d\ %H:%M)"
             git push
           fi
