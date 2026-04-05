@@ -315,24 +315,30 @@
         <div class="container">
             <div class="section-label">Dispensary Directory</div>
             <h1 class="section-title">Every dispensary in the Twin Cities</h1>
-            <p class="section-desc" style="margin-bottom:1.5rem">Browse, compare, and find your perfect dispensary. Sorted by TCC Score and tier.</p>
+            <p class="section-desc" style="margin-bottom:1rem">Browse, compare, and find your perfect dispensary.</p>
 
-            <!-- Filters -->
-            <div class="filter-bar">
+            <!-- Search -->
+            <div class="filter-bar" style="margin-bottom:0.8rem">
                 <div class="search-box" style="flex:1;min-width:200px">
                     <span class="search-icon">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                     </span>
-                    <input class="input" id="disp-search" type="text" placeholder="Search dispensaries...">
+                    <input class="input" id="disp-search" type="text" placeholder="Search dispensaries, neighborhoods...">
                 </div>
                 <select class="select" id="disp-city">
                     <option value="all">All Cities</option>
                     <option value="Minneapolis">Minneapolis</option>
-                    <option value="St. Paul">St. Paul</option>
-                    <option value="West St. Paul">West St. Paul</option>
+                    <option value="Saint Paul">Saint Paul</option>
+                    <option value="Bloomington">Bloomington</option>
                     <option value="Edina">Edina</option>
                     <option value="Woodbury">Woodbury</option>
-                    <option value="Stillwater">Stillwater</option>
+                    <option value="Brooklyn Park">Brooklyn Park</option>
+                    <option value="Blaine">Blaine</option>
+                    <option value="Eagan">Eagan</option>
+                    <option value="Burnsville">Burnsville</option>
+                    <option value="Roseville">Roseville</option>
+                    <option value="Hopkins">Hopkins</option>
+                    <option value="Anoka">Anoka</option>
                 </select>
                 <select class="select" id="disp-sort">
                     <option value="score">Sort: TCC Score</option>
@@ -341,13 +347,26 @@
                 </select>
             </div>
 
-            <!-- Map -->
-            <div class="map-container fade-in">
-                <div id="dispensary-map"></div>
+            <!-- Filter Toggles -->
+            <div class="filter-toggles" id="disp-toggles">
+                <button class="filter-toggle active" data-filter="all">All</button>
+                <button class="filter-toggle" data-filter="open">Open Now</button>
+                <button class="filter-toggle" data-filter="delivery">Delivery</button>
+                <button class="filter-toggle" data-filter="curbside">Curbside Pickup</button>
+                <button class="filter-toggle" data-filter="deals">Has Deals</button>
+                <button class="filter-toggle" data-filter="verified">Verified</button>
             </div>
 
-            <!-- Grid -->
-            <div class="dispensary-grid stagger" id="dispensary-list"></div>
+            <!-- Result count -->
+            <div class="dispensary-list-count" id="disp-count">Showing 32 dispensaries</div>
+
+            <!-- Split layout: list + map -->
+            <div class="split-layout">
+                <div class="dispensary-list-view" id="dispensary-list"></div>
+                <div class="map-container">
+                    <div id="dispensary-map"></div>
+                </div>
+            </div>
         </div>
     </section>
 

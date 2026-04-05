@@ -219,6 +219,29 @@
         if (filters.city && filters.city !== 'all') {
             results = results.filter(d => d.city === filters.city);
         }
+
+        // Toggle filters
+        if (filters.toggle && filters.toggle !== 'all') {
+            const hour = new Date().getHours();
+            switch (filters.toggle) {
+                case 'open':
+                    results = results.filter(d => hour >= 10 && hour < 20); // approximate
+                    break;
+                case 'delivery':
+                    results = results.filter(d => (d.features || []).some(f => f.toLowerCase().includes('delivery')));
+                    break;
+                case 'curbside':
+                    results = results.filter(d => (d.features || []).some(f => f.toLowerCase().includes('curbside')));
+                    break;
+                case 'deals':
+                    results = results.filter(d => TCC.getDealsForDispensary && TCC.getDealsForDispensary(d.id).length > 0);
+                    break;
+                case 'verified':
+                    results = results.filter(d => d.verified);
+                    break;
+            }
+        }
+
         if (filters.sort) {
             switch (filters.sort) {
                 case 'score': results.sort((a, b) => b.tcc_score - a.tcc_score); break;
@@ -226,14 +249,17 @@
                 case 'reviews': results.sort((a, b) => b.review_count - a.review_count); break;
             }
         } else {
-            // Default: tier priority then score
             const tierOrder = { platinum: 0, premium: 1, featured: 2, free: 3 };
             results.sort((a, b) => (tierOrder[a.tier] || 3) - (tierOrder[b.tier] || 3) || b.tcc_score - a.tcc_score);
         }
 
+        // Update count
+        const countEl = document.getElementById('disp-count');
+        if (countEl) countEl.textContent = `Showing ${results.length} dispensar${results.length === 1 ? 'y' : 'ies'}`;
+
         if (results.length === 0) {
             container.innerHTML = `
-                <div class="empty-state" style="grid-column: 1/-1">
+                <div class="empty-state">
                     <div class="empty-state-icon">${Icons.search}</div>
                     <div class="empty-state-title">No dispensaries found</div>
                     <div class="empty-state-desc">Try adjusting your search or filters</div>
@@ -772,25 +798,76 @@
     }
 
     // ---- CARD TEMPLATES ----
-    function dispensaryCard(d) {
+    function dispensaryCard(d, variant) {
+        const scoreColor = TCC.getScoreColor(d.tcc_score);
         const tierBadge = d.tier !== 'free'
             ? `<span class="dispensary-card-tier" style="background:${TCC.getTierColor(d.tier)};color:${d.tier === 'platinum' ? '#0a0a0a' : '#fff'}">${TCC.getTierLabel(d.tier)}</span>`
             : '';
-        const scoreColor = TCC.getScoreColor(d.tcc_score);
 
-        return `<div class="card dispensary-card" onclick="window.location.hash='dispensary/${d.id}'">
-            <div class="dispensary-card-banner" style="background:${d.gradient}">
-                <span class="dispensary-card-initial">${d.initial}</span>
-                ${tierBadge}
-            </div>
-            <div class="card-body" style="position:relative">
-                <div class="dispensary-card-score" style="background:${scoreColor}">${d.tcc_score}</div>
-                <div class="dispensary-card-name">${d.name}</div>
-                <div class="dispensary-card-loc">${d.neighborhood} &bull; ${d.city}</div>
-                <div class="dispensary-card-meta">
-                    <span>${Icons.star} ${d.review_count} reviews</span>
-                    <span>${Icons.clock} ${d.hours.weekday}</span>
-                    ${d.verified ? `<span>${Icons.verified} Verified</span>` : ''}
+        // Rating stars
+        const rating = d.weedmaps_rating || (d.tcc_score / 20);
+        const fullStars = Math.floor(rating);
+        const stars = '&#9733;'.repeat(fullStars) + '&#9734;'.repeat(5 - fullStars);
+
+        // Open/closed (approximate based on current hour)
+        const hour = new Date().getHours();
+        const isOpen = hour >= 10 && hour < 20;
+        const statusBadge = isOpen
+            ? '<span class="dispensary-card-status open">&#9679; Open</span>'
+            : '<span class="dispensary-card-status closed">&#9679; Closed</span>';
+
+        // Avatar (real image or gradient fallback)
+        const hasImage = d.img && d.img.length > 10 && !d.img.includes('placeholder');
+        const avatar = hasImage
+            ? `<img src="${d.img}" alt="${d.name}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'dispensary-card-avatar-fallback\\' style=\\'background:${d.gradient}\\'>${d.initial}</div>'">`
+            : `<div class="dispensary-card-avatar-fallback" style="background:${d.gradient}">${d.initial}</div>`;
+
+        // Deals for this dispensary
+        const deals = TCC.getDealsForDispensary ? TCC.getDealsForDispensary(d.id) : [];
+        const dealHtml = deals.length > 0
+            ? `<div style="margin-top:0.4rem"><span class="tag tag-sm tag-green">${Icons.tag} ${deals.length} deal${deals.length > 1 ? 's' : ''}</span></div>`
+            : '';
+
+        // Product count
+        const products = TCC.getProductsForDispensary ? TCC.getProductsForDispensary(d.id) : [];
+        const productCount = products.length;
+
+        // Features badges
+        const featureBadges = (d.features || []).slice(0, 3).map(f =>
+            `<span class="tag tag-sm">${f}</span>`
+        ).join('');
+
+        return `<div class="card dispensary-card ${variant === 'grid' ? 'dispensary-card-grid' : ''}" onclick="window.location.hash='dispensary/${d.id}'">
+            <div class="card-body">
+                <div class="dispensary-card-avatar">
+                    ${avatar}
+                </div>
+                <div class="dispensary-card-info">
+                    <div class="dispensary-card-header">
+                        <div style="min-width:0">
+                            <div class="dispensary-card-name">${d.name}</div>
+                            <div class="dispensary-card-loc">${Icons.pin} ${d.neighborhood || d.city}${d.neighborhood && d.neighborhood !== d.city ? ' &bull; ' + d.city : ''}</div>
+                        </div>
+                        <div class="dispensary-card-score">
+                            <span class="dispensary-card-score-num" style="background:${scoreColor}">${d.tcc_score}</span>
+                        </div>
+                    </div>
+                    <div class="dispensary-card-rating">
+                        <span class="stars">${stars}</span>
+                        <span class="count">${d.review_count} reviews</span>
+                        ${statusBadge}
+                        ${tierBadge}
+                    </div>
+                    <div class="dispensary-card-meta">
+                        <span>${Icons.clock} ${d.hours?.note || d.hours?.weekday || 'Check hours'}</span>
+                        ${productCount > 0 ? `<span>${Icons.leaf} ${productCount} products</span>` : ''}
+                        ${d.verified ? `<span>${Icons.verified} Verified</span>` : ''}
+                    </div>
+                    ${dealHtml}
+                    <div class="dispensary-card-actions">
+                        <span class="btn btn-sm btn-primary">View Menu</span>
+                        ${d.website ? `<span class="btn btn-sm btn-secondary" onclick="event.stopPropagation();window.open('${d.website}','_blank')">Website</span>` : ''}
+                    </div>
                 </div>
             </div>
         </div>`;
@@ -1001,6 +1078,15 @@
         if (dispCity) dispCity.addEventListener('change', () => applyDispFilters());
         if (dispSort) dispSort.addEventListener('change', () => applyDispFilters());
 
+        // Dispensary filter toggles
+        document.querySelectorAll('#disp-toggles .filter-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('#disp-toggles .filter-toggle').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                applyDispFilters();
+            });
+        });
+
         // Deal filter tabs
         document.querySelectorAll('.deal-filter-tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -1069,7 +1155,9 @@
         const search = document.getElementById('disp-search')?.value || '';
         const city = document.getElementById('disp-city')?.value || 'all';
         const sort = document.getElementById('disp-sort')?.value || 'score';
-        renderDispensaries({ search, city, sort });
+        const activeToggle = document.querySelector('#disp-toggles .filter-toggle.active');
+        const toggle = activeToggle ? activeToggle.dataset.filter : 'all';
+        renderDispensaries({ search, city, sort, toggle });
     }
 
     function applyStrainFilters() {
