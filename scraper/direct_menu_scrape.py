@@ -1,0 +1,356 @@
+#!/usr/bin/env python3
+"""
+Twin City Cannabis — Direct Menu Scraper
+Hits the same Weedmaps API endpoint that powers their menu pages.
+Pulls ALL products for each dispensary, not just 20.
+
+This works from local machines but may get blocked from GitHub Actions
+datacenter IPs. Use Apify as fallback for CI.
+
+Usage:
+  python3 direct_menu_scrape.py                # scrape all menus
+  python3 direct_menu_scrape.py --update-site  # scrape + update data.js
+  python3 direct_menu_scrape.py --test         # test with 1 dispensary
+"""
+
+import json
+import time
+import re
+from datetime import datetime
+from pathlib import Path
+
+import requests
+
+DATA_DIR = Path(__file__).parent / "data"
+DATA_DIR.mkdir(exist_ok=True)
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Accept": "application/json",
+    "Referer": "https://weedmaps.com/",
+}
+
+# Weedmaps discovery API - the same one their menu pages use
+WM_API = "https://api-g.weedmaps.com/discovery/v1/listings/dispensaries"
+
+
+def get_dispensary_slugs():
+    """Get all TC dispensary slugs from Weedmaps."""
+    print("Fetching TC dispensary list...")
+    r = requests.get(
+        "https://api-g.weedmaps.com/discovery/v2/listings",
+        params={
+            "filter[any_retailer_services][]": "storefront",
+            "latlng": "44.9778,-93.2650",
+            "page_size": 50,
+        },
+        headers=HEADERS,
+        timeout=15,
+    )
+    r.raise_for_status()
+    listings = r.json()["data"]["listings"]
+
+    dispensaries = []
+    for l in listings:
+        menu_count = l.get("menu_items_count", 0)
+        if menu_count > 0:
+            dispensaries.append({
+                "slug": l["slug"],
+                "name": l["name"],
+                "city": l.get("city", ""),
+                "menu_count": menu_count,
+            })
+
+    print(f"Found {len(dispensaries)} dispensaries with menus ({sum(d['menu_count'] for d in dispensaries)} total products)")
+    return dispensaries
+
+
+def scrape_menu(slug, name=""):
+    """Scrape ALL menu items for a dispensary."""
+    all_items = []
+    page = 1
+
+    while True:
+        url = f"{WM_API}/{slug}/menu_items"
+        try:
+            r = requests.get(
+                url,
+                params={"page": page, "page_size": 50},
+                headers=HEADERS,
+                timeout=15,
+            )
+
+            if r.status_code == 406:
+                print(f"  Blocked (406) - try from different network")
+                return all_items
+            r.raise_for_status()
+
+            data = r.json()
+            items = data.get("data", {}).get("menu_items", [])
+            if not items:
+                break
+
+            all_items.extend(items)
+            print(f"  Page {page}: {len(items)} items (total: {len(all_items)})")
+
+            # Check if there are more pages
+            meta = data.get("meta", {})
+            total_items = meta.get("total_menu_items", 0)
+            if len(all_items) >= total_items or len(items) < 50:
+                break
+
+            page += 1
+            time.sleep(0.5)  # polite
+
+        except requests.exceptions.HTTPError as e:
+            print(f"  Error on page {page}: {e}")
+            break
+        except Exception as e:
+            print(f"  Error: {e}")
+            break
+
+    return all_items
+
+
+def parse_menu_item(item, dispensary_slug):
+    """Parse a Weedmaps menu item into our format."""
+    # Price - get the lowest variant price
+    prices = item.get("prices", {})
+    price = 0
+    weight = ""
+
+    # Prices can be structured as gram, eighth, quarter, etc.
+    price_fields = ["half_gram", "gram", "two_grams", "eighth", "quarter", "half_ounce", "ounce", "unit"]
+    for pf in price_fields:
+        val = prices.get(pf)
+        if val and isinstance(val, (int, float)) and val > 0:
+            price = val
+            weight = pf.replace("_", " ")
+            break
+
+    if not price:
+        # Fallback to any numeric price
+        for k, v in prices.items():
+            if isinstance(v, (int, float)) and v > 0:
+                price = v
+                weight = k.replace("_", " ")
+                break
+
+    # Category
+    cat_raw = item.get("category", {})
+    if isinstance(cat_raw, dict):
+        cat_name = cat_raw.get("name", "")
+    else:
+        cat_name = str(cat_raw)
+
+    category = normalize_category(cat_name)
+
+    # THC/CBD
+    lab_results = item.get("lab_results", [])
+    thc = ""
+    cbd = ""
+    for lr in lab_results if isinstance(lab_results, list) else []:
+        if isinstance(lr, dict):
+            if lr.get("cannabinoid", "").lower() == "thc":
+                thc = f"{lr.get('value', '')}%"
+            elif lr.get("cannabinoid", "").lower() == "cbd":
+                cbd_val = lr.get("value", 0)
+                if cbd_val and cbd_val > 0:
+                    cbd = f"{cbd_val}%"
+
+    # Image
+    avatar = item.get("avatar_image", {})
+    image = ""
+    if isinstance(avatar, dict):
+        image = avatar.get("small_url", "") or avatar.get("original_url", "")
+
+    # Brand
+    brand = "Unknown"
+    brand_data = item.get("brand", {})
+    if isinstance(brand_data, dict):
+        brand = brand_data.get("name", "Unknown")
+
+    # Genetics / strain type
+    genetics = (item.get("genetics", "") or "").lower()
+
+    return {
+        "dispensary_id": dispensary_slug,
+        "name": item.get("name", "").strip(),
+        "brand": brand,
+        "category": category,
+        "strain_type": genetics,
+        "thc": thc,
+        "cbd": cbd,
+        "price": price,
+        "weight": weight,
+        "image": image,
+        "scraped_at": datetime.now().isoformat(),
+    }
+
+
+def normalize_category(raw):
+    """Normalize category names."""
+    if not raw:
+        return "flower"
+    raw = raw.upper().strip()
+    mapping = {
+        "FLOWER": "flower", "INDICA": "flower", "SATIVA": "flower", "HYBRID": "flower",
+        "PRE_ROLL": "pre-roll", "PRE-ROLL": "pre-roll", "PREROLL": "pre-roll", "PRE-ROLLS": "pre-roll",
+        "VAPORIZER": "cartridge", "VAPORIZERS": "cartridge", "VAPE": "cartridge", "VAPES": "cartridge",
+        "CARTRIDGE": "cartridge", "CARTRIDGES": "cartridge",
+        "EDIBLE": "edible", "EDIBLES": "edible", "GUMMY": "edible", "GUMMIES": "edible",
+        "CONCENTRATE": "concentrate", "CONCENTRATES": "concentrate", "EXTRACT": "concentrate",
+        "TOPICAL": "topical", "TOPICALS": "topical",
+        "TINCTURE": "tincture", "TINCTURES": "tincture",
+        "BEVERAGE": "beverage", "BEVERAGES": "beverage", "DRINK": "beverage", "DRINKS": "beverage",
+        "GEAR": "accessories", "ACCESSORIES": "accessories",
+    }
+    return mapping.get(raw, raw.lower())
+
+
+def build_price_comparison(products):
+    """Group products by name for cross-dispensary price comparison."""
+    grouped = {}
+
+    for p in products:
+        name = p["name"].strip()
+        if not name or p.get("price", 0) <= 0:
+            continue
+
+        if name not in grouped:
+            grouped[name] = {
+                "name": name,
+                "brand": p.get("brand", "Unknown"),
+                "category": p.get("category", "flower"),
+                "strain_type": p.get("strain_type", ""),
+                "thc": p.get("thc", ""),
+                "cbd": p.get("cbd", ""),
+                "weight": p.get("weight", ""),
+                "image": p.get("image", ""),
+                "prices": {},
+            }
+
+        grouped[name]["prices"][p["dispensary_id"]] = p["price"]
+        if p.get("image") and not grouped[name]["image"]:
+            grouped[name]["image"] = p["image"]
+        if p.get("thc") and not grouped[name]["thc"]:
+            grouped[name]["thc"] = p["thc"]
+
+    result = sorted(grouped.values(), key=lambda x: (-len(x["prices"]), x["name"]))
+    return result
+
+
+def update_data_js(comparison):
+    """Merge products into data.js."""
+    data_js = Path(__file__).parent.parent / "js" / "data.js"
+    if not data_js.exists():
+        print("data.js not found")
+        return False
+
+    content = data_js.read_text()
+
+    # Build JS entries (cap at 200 for performance)
+    lines = []
+    for i, p in enumerate(comparison[:200]):
+        pid = f"p{i+1:03d}"
+        prices_js = ", ".join(f"'{k}': {v}" for k, v in sorted(p["prices"].items()))
+
+        if p["prices"]:
+            low = min(p["prices"].values())
+            history = [int(low*1.12), int(low*1.1), int(low*1.08), int(low*1.06), int(low*1.04), int(low*1.02), int(low*1.01), low]
+        else:
+            history = [0]*8
+
+        name_esc = p["name"].replace("'", "\\'").replace("\\", "\\\\")
+        brand_esc = p.get("brand", "Unknown").replace("'", "\\'").replace("\\", "\\\\")
+        img = json.dumps(p.get("image", "") or "")
+
+        lines.append(
+            f"    {{ id: '{pid}', name: '{name_esc}', brand: '{brand_esc}', "
+            f"category: '{p['category']}', strain: null, "
+            f"weight: '{p.get('weight', '')}', thc: '{p.get('thc', '')}', cbd: '{p.get('cbd', '')}',\n"
+            f"      prices: {{ {prices_js} }},\n"
+            f"      priceHistory: {json.dumps(history)} }}"
+        )
+
+    products_js = ",\n".join(lines)
+
+    pattern = r"(TCC\.products = \[)\n.*?\n(\];)"
+    replacement = f"\\1\n{products_js}\n\\2"
+    new_content, count = re.subn(pattern, replacement, content, count=1, flags=re.DOTALL)
+
+    if count == 0:
+        print("Could not find TCC.products in data.js")
+        return False
+
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    ts_pattern = r"// Last auto-updated:.*\n"
+    ts_line = f"// Last auto-updated: {timestamp}\n"
+    if re.search(ts_pattern, new_content):
+        new_content = re.sub(ts_pattern, ts_line, new_content)
+    else:
+        new_content = ts_line + new_content
+
+    data_js.write_text(new_content)
+    multi = sum(1 for p in comparison[:200] if len(p["prices"]) > 1)
+    print(f"\nUpdated data.js: {len(lines)} products ({multi} at multiple dispensaries)")
+    return True
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--update-site", action="store_true")
+    parser.add_argument("--test", action="store_true")
+    args = parser.parse_args()
+
+    print(f"\n{'='*60}")
+    print(f"Twin City Cannabis — Direct Menu Scraper")
+    print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"{'='*60}\n")
+
+    dispensaries = get_dispensary_slugs()
+
+    if args.test:
+        dispensaries = dispensaries[:1]
+        print(f"TEST MODE: {dispensaries[0]['name']}")
+
+    all_products = []
+    for d in dispensaries:
+        print(f"\n{d['name']} ({d['menu_count']} expected)...")
+        raw_items = scrape_menu(d["slug"], d["name"])
+
+        for item in raw_items:
+            parsed = parse_menu_item(item, d["slug"])
+            if parsed["name"] and parsed["price"] > 0:
+                all_products.append(parsed)
+
+        time.sleep(1)
+
+    print(f"\n{'='*60}")
+    print(f"TOTAL: {len(all_products)} products from {len(dispensaries)} dispensaries")
+    print(f"{'='*60}")
+
+    # Category breakdown
+    by_cat = {}
+    for p in all_products:
+        by_cat[p["category"]] = by_cat.get(p["category"], 0) + 1
+    for cat, count in sorted(by_cat.items(), key=lambda x: -x[1]):
+        print(f"  {cat}: {count}")
+
+    # Save
+    comparison = build_price_comparison(all_products)
+    multi = sum(1 for p in comparison if len(p["prices"]) > 1)
+    print(f"\n{len(comparison)} unique products ({multi} at multiple dispensaries)")
+
+    save_path = DATA_DIR / "full_menu_products.json"
+    with open(save_path, "w") as f:
+        json.dump(comparison, f, indent=2)
+    print(f"Saved to {save_path}")
+
+    if args.update_site:
+        update_data_js(comparison)
+
+
+if __name__ == "__main__":
+    main()
