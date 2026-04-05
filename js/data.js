@@ -1,4 +1,4 @@
-// Last auto-updated: 2026-04-05 03:28
+// Last auto-updated: 2026-04-05 09:04
 // ============================================================
 // Twin City Cannabis — Data Layer
 // Real Twin Cities dispensary data + products + strains
@@ -748,97 +748,21 @@ TCC.categories = [
 
 // ---- PRODUCTS ----
 TCC.products = [
-    // FLOWER
-    { id: 'p001', name: 'Blue Dream 3.5g', brand: 'Locally Grown', category: 'flower', strain: 'blue-dream', weight: '3.5g', thc: '22%', cbd: '<1%',
-      prices: { 'green-goods-mpls': 38, 'sweetleaves-north-loop': 42, 'legacy-cannabis-mpls': 36, 'budtales-mpls': 37, 'zaza-st-paul': 40, 'edina-canna': 41, 'nativecare-wsp': 35 },
-      priceHistory: [45, 44, 42, 40, 38, 38, 37, 35] },
-    { id: 'p002', name: 'Northern Lights 3.5g', brand: 'North Country', category: 'flower', strain: 'northern-lights', weight: '3.5g', thc: '20%', cbd: '<1%',
-      prices: { 'green-goods-mpls': 40, 'sweetleaves-north-loop': 44, 'budtales-mpls': 39, 'zaza-mpls': 43, 'nativecare-wsp': 37, 'edina-canna': 42 },
-      priceHistory: [46, 44, 43, 42, 40, 39, 38, 37] },
-    { id: 'p003', name: 'Sour Diesel 3.5g', brand: 'Prairie Farms', category: 'flower', strain: 'sour-diesel', weight: '3.5g', thc: '23%', cbd: '<1%',
-      prices: { 'sweetleaves-north-loop': 45, 'legacy-cannabis-mpls': 41, 'budtales-mpls': 40, 'zaza-st-paul': 43, 'legacy-cannabis-woodbury': 42, 'minnesota-dispensary-sp': 39 },
-      priceHistory: [48, 46, 45, 44, 42, 41, 40, 39] },
-    { id: 'p004', name: 'Wedding Cake 3.5g', brand: 'Frost Works', category: 'flower', strain: 'wedding-cake', weight: '3.5g', thc: '26%', cbd: '<1%',
-      prices: { 'green-goods-mpls': 45, 'sweetleaves-north-loop': 50, 'legacy-cannabis-mpls': 43, 'budtales-mpls': 44, 'edina-canna': 48, 'minnesota-dispensary-sp': 42 },
-      priceHistory: [52, 50, 48, 47, 46, 45, 44, 42] },
-    { id: 'p005', name: 'OG Kush 3.5g', brand: 'Locally Grown', category: 'flower', strain: 'og-kush', weight: '3.5g', thc: '22%', cbd: '<1%',
-      prices: { 'green-goods-mpls': 41, 'sweetleaves-north-loop': 44, 'zaza-mpls': 43, 'nativecare-wsp': 38, 'clouds-mn': 40 },
-      priceHistory: [47, 46, 45, 43, 42, 41, 39, 38] },
-    { id: 'p006', name: 'Gelato 3.5g', brand: 'Frost Works', category: 'flower', strain: 'gelato', weight: '3.5g', thc: '24%', cbd: '<1%',
-      prices: { 'sweetleaves-north-loop': 48, 'legacy-cannabis-mpls': 44, 'budtales-mpls': 43, 'edina-canna': 47, 'legacy-cannabis-woodbury': 45 },
-      priceHistory: [50, 49, 48, 47, 46, 45, 44, 43] },
-    { id: 'p007', name: 'Girl Scout Cookies 3.5g', brand: 'North Country', category: 'flower', strain: 'girl-scout-cookies', weight: '3.5g', thc: '27%', cbd: '<1%',
-      prices: { 'green-goods-mpls': 48, 'sweetleaves-north-loop': 52, 'budtales-mpls': 46, 'edina-canna': 50, 'minnesota-dispensary-sp': 45 },
-      priceHistory: [55, 53, 52, 50, 49, 48, 46, 45] },
-    { id: 'p008', name: 'Gorilla Glue #4 3.5g', brand: 'Frost Works', category: 'flower', strain: 'gorilla-glue', weight: '3.5g', thc: '28%', cbd: '<1%',
-      prices: { 'sweetleaves-north-loop': 50, 'legacy-cannabis-mpls': 46, 'budtales-mpls': 45, 'legacy-cannabis-woodbury': 47 },
-      priceHistory: [54, 52, 51, 49, 48, 47, 46, 45] },
-    { id: 'p009', name: 'Runtz 3.5g', brand: 'Prairie Farms', category: 'flower', strain: 'runtz', weight: '3.5g', thc: '27%', cbd: '<1%',
-      prices: { 'sweetleaves-north-loop': 52, 'budtales-mpls': 48, 'edina-canna': 50, 'minnesota-dispensary-sp': 47 },
-      priceHistory: [58, 55, 53, 52, 50, 49, 48, 47] },
-    { id: 'p010', name: 'Granddaddy Purple 3.5g', brand: 'North Country', category: 'flower', strain: 'granddaddy-purple', weight: '3.5g', thc: '21%', cbd: '<1%',
-      prices: { 'green-goods-mpls': 39, 'zaza-st-paul': 41, 'zaza-mpls': 42, 'nativecare-wsp': 37, 'nothing-but-hemp-sp': 40 },
-      priceHistory: [45, 44, 43, 42, 41, 40, 39, 37] },
-
-    // PRE-ROLLS
-    { id: 'p011', name: 'Sour Diesel Pre-Roll 5pk', brand: 'Prairie Farms', category: 'pre-roll', strain: 'sour-diesel', weight: '3.5g total', thc: '22%', cbd: '<1%',
-      prices: { 'green-goods-mpls': 32, 'sweetleaves-north-loop': 35, 'legacy-cannabis-mpls': 29, 'budtales-mpls': 30, 'nativecare-wsp': 28, 'minnesota-dispensary-sp': 31 },
-      priceHistory: [40, 38, 36, 35, 33, 31, 29, 28] },
-    { id: 'p012', name: 'Blue Dream Pre-Roll 3pk', brand: 'Locally Grown', category: 'pre-roll', strain: 'blue-dream', weight: '2.1g total', thc: '21%', cbd: '<1%',
-      prices: { 'green-goods-mpls': 22, 'sweetleaves-north-loop': 25, 'budtales-mpls': 20, 'zaza-mpls': 23, 'edina-canna': 24, 'nativecare-wsp': 19 },
-      priceHistory: [28, 26, 25, 24, 23, 22, 20, 19] },
-    { id: 'p013', name: 'Jack Herer Pre-Roll 1g', brand: 'North Country', category: 'pre-roll', strain: 'jack-herer', weight: '1g', thc: '20%', cbd: '<1%',
-      prices: { 'sweetleaves-north-loop': 12, 'legacy-cannabis-mpls': 9, 'budtales-mpls': 9, 'nativecare-wsp': 8, 'clouds-mn': 10 },
-      priceHistory: [14, 13, 12, 11, 10, 10, 9, 8] },
-
-    // CARTRIDGES
-    { id: 'p014', name: 'Northern Lights Cart 1g', brand: 'North Country', category: 'cartridge', strain: 'northern-lights', weight: '1g', thc: '85%', cbd: '<1%',
-      prices: { 'green-goods-mpls': 45, 'sweetleaves-north-loop': 48, 'budtales-mpls': 43, 'legacy-cannabis-woodbury': 46, 'minnesota-dispensary-sp': 42 },
-      priceHistory: [52, 50, 49, 48, 46, 45, 43, 42] },
-    { id: 'p015', name: 'Gelato Cart 0.5g', brand: 'Frost Works', category: 'cartridge', strain: 'gelato', weight: '0.5g', thc: '88%', cbd: '<1%',
-      prices: { 'sweetleaves-north-loop': 32, 'legacy-cannabis-mpls': 28, 'budtales-mpls': 27, 'edina-canna': 31, 'clouds-mn': 29 },
-      priceHistory: [35, 34, 33, 32, 30, 29, 28, 27] },
-    { id: 'p016', name: 'Pineapple Express Cart 0.5g', brand: 'Prairie Farms', category: 'cartridge', strain: 'pineapple-express', weight: '0.5g', thc: '86%', cbd: '<1%',
-      prices: { 'sweetleaves-north-loop': 30, 'legacy-cannabis-mpls': 27, 'budtales-mpls': 26, 'legacy-cannabis-woodbury': 28, 'minnesota-dispensary-sp': 25 },
-      priceHistory: [32, 31, 30, 29, 28, 27, 26, 25] },
-
-    // EDIBLES
-    { id: 'p017', name: 'GSC Gummies 100mg', brand: 'North Country', category: 'edible', strain: 'girl-scout-cookies', weight: '10pk', thc: '100mg', cbd: '<5mg',
-      prices: { 'green-goods-mpls': 24, 'sweetleaves-north-loop': 26, 'budtales-mpls': 23, 'zaza-st-paul': 25, 'zaza-mpls': 27, 'nativecare-wsp': 22, 'nothing-but-hemp-sp': 28, 'minnesota-dispensary-sp': 24 },
-      priceHistory: [30, 29, 28, 27, 26, 25, 23, 22] },
-    { id: 'p018', name: 'Purple Haze Gummies 50mg', brand: 'Frost Works', category: 'edible', strain: 'purple-haze', weight: '10pk', thc: '50mg', cbd: '<5mg',
-      prices: { 'sweetleaves-north-loop': 18, 'zaza-mpls': 19, 'nativecare-wsp': 15, 'nothing-but-hemp-sp': 17, 'edina-canna': 18 },
-      priceHistory: [24, 22, 21, 20, 19, 18, 16, 15] },
-    { id: 'p019', name: 'Blue Dream Chocolate 100mg', brand: 'North Country', category: 'edible', strain: 'blue-dream', weight: '1 bar', thc: '100mg', cbd: '<5mg',
-      prices: { 'green-goods-mpls': 28, 'sweetleaves-north-loop': 30, 'budtales-mpls': 26, 'legacy-cannabis-woodbury': 29, 'minnesota-dispensary-sp': 25 },
-      priceHistory: [34, 32, 31, 30, 28, 27, 26, 25] },
-    { id: 'p020', name: 'Sativa Energy Mints 100mg', brand: 'Prairie Farms', category: 'edible', strain: 'green-crack', weight: '20pk', thc: '100mg', cbd: '<5mg',
-      prices: { 'sweetleaves-north-loop': 22, 'legacy-cannabis-mpls': 20, 'budtales-mpls': 19, 'edina-canna': 23, 'minnesota-dispensary-sp': 21 },
-      priceHistory: [26, 25, 24, 23, 22, 21, 20, 19] },
-
-    // BEVERAGES
-    { id: 'p021', name: 'CANN Social Tonic 6pk', brand: 'CANN', category: 'beverage', strain: null, weight: '6pk', thc: '12mg total', cbd: '24mg',
-      prices: { 'sweetleaves-north-loop': 24, 'green-goods-mpls': 26, 'budtales-mpls': 23, 'edina-canna': 25 },
-      priceHistory: [28, 27, 26, 25, 25, 24, 24, 23] },
-    { id: 'p022', name: 'Nowadays Sparkling 4pk', brand: 'Nowadays', category: 'beverage', strain: null, weight: '4pk', thc: '20mg total', cbd: '<5mg',
-      prices: { 'sweetleaves-north-loop': 18, 'budtales-mpls': 16, 'edina-canna': 19, 'nothing-but-hemp-sp': 17 },
-      priceHistory: [22, 21, 20, 19, 18, 18, 17, 16] },
-
-    // CONCENTRATES
-    { id: 'p023', name: 'Gorilla Glue Live Resin 1g', brand: 'Frost Works', category: 'concentrate', strain: 'gorilla-glue', weight: '1g', thc: '78%', cbd: '<1%',
-      prices: { 'sweetleaves-north-loop': 55, 'legacy-cannabis-mpls': 50, 'budtales-mpls': 52, 'minnesota-dispensary-sp': 48 },
-      priceHistory: [62, 60, 58, 56, 55, 53, 52, 48] },
-    { id: 'p024', name: 'Wedding Cake Wax 1g', brand: 'North Country', category: 'concentrate', strain: 'wedding-cake', weight: '1g', thc: '72%', cbd: '<1%',
-      prices: { 'green-goods-mpls': 48, 'sweetleaves-north-loop': 52, 'budtales-mpls': 45, 'legacy-cannabis-woodbury': 49, 'minnesota-dispensary-sp': 44 },
-      priceHistory: [55, 53, 52, 50, 49, 47, 46, 44] },
-
-    // TINCTURES
-    { id: 'p025', name: 'Full Spectrum Tincture 1000mg', brand: 'North Country', category: 'tincture', strain: null, weight: '30ml', thc: '1000mg', cbd: '50mg',
-      prices: { 'green-goods-mpls': 55, 'sweetleaves-north-loop': 60, 'budtales-mpls': 52, 'edina-canna': 58, 'minnesota-dispensary-sp': 50 },
-      priceHistory: [65, 62, 60, 58, 56, 55, 52, 50] },
-    { id: 'p026', name: 'Sleep Tincture 500mg', brand: 'Locally Grown', category: 'tincture', strain: 'northern-lights', weight: '30ml', thc: '250mg', cbd: '250mg',
-      prices: { 'sweetleaves-north-loop': 42, 'zaza-st-paul': 40, 'budtales-mpls': 38, 'nativecare-wsp': 36, 'minnesota-dispensary-sp': 39 },
-      priceHistory: [48, 46, 45, 43, 42, 40, 39, 36] },
+    { id: 'p001', name: 'Campfire Cannabis - 4g Flower - Grape Cream Cake (I/H)', brand: 'Unknown', category: 'flower', strain: null, weight: '', thc: '', cbd: '',
+      prices: { 'legacy-cannabis-mpls': 48.0 },
+      priceHistory: [53, 52, 51, 50, 49, 48, 48, 48.0] },
+    { id: 'p002', name: 'Dark Rainbow', brand: 'Unknown', category: 'flower', strain: null, weight: '', thc: '26.8%', cbd: '',
+      prices: { 'sweetleaves-north-loop': 58.0 },
+      priceHistory: [64, 63, 62, 61, 60, 59, 58, 58.0] },
+    { id: 'p003', name: 'Gary Payton (Limited Edition) - 28g', brand: 'Unknown', category: 'flower', strain: null, weight: '', thc: '20.4%', cbd: '',
+      prices: { 'legacy-cannabis-mpls': 300.0 },
+      priceHistory: [336, 330, 324, 318, 312, 306, 303, 300.0] },
+    { id: 'p004', name: 'Hawaiian Fanta', brand: 'Unknown', category: 'flower', strain: null, weight: '', thc: '26.5%', cbd: '',
+      prices: { 'sweetleaves-north-loop': 58.0 },
+      priceHistory: [64, 63, 62, 61, 60, 59, 58, 58.0] },
+    { id: 'p005', name: 'Super Boof', brand: 'Unknown', category: 'flower', strain: null, weight: '', thc: '', cbd: '',
+      prices: { 'sweetleaves-north-loop': 62.0 },
+      priceHistory: [69, 68, 66, 65, 64, 63, 62, 62.0] }
 ];
 
 // ---- DEALS ----
