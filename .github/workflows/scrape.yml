@@ -26,9 +26,11 @@ jobs:
 
       - name: Scrape dispensary listings (Weedmaps API)
         run: python scraper/scraper.py --export
+        continue-on-error: true  # Weedmaps blocks datacenter IPs sometimes
 
       - name: Update dispensaries in data.js
         run: python scraper/update_site.py
+        continue-on-error: true  # OK if dispensary scrape failed
 
       - name: Scrape menus via Apify (real prices & products)
         env:
@@ -41,8 +43,8 @@ jobs:
           git config user.name "TCC Scraper Bot"
           git config user.email "bot@twincitycannabis.com"
           git add -A
-          # Don't commit the raw scraper dumps, only the processed data
-          git reset -- scraper/data/raw_* scraper/data/apify_raw_*
+          # Don't commit the raw scraper dumps
+          git reset -- scraper/data/raw_* scraper/data/apify_raw_* 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
