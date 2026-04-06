@@ -34,11 +34,8 @@ def main():
 
     products_block = products_match.group(2)
 
-    # Each product is a single { ... } object - they're written one per line by direct_menu_scrape
-    # Match each product entry as a balanced object (split by lines starting with "    {")
-    # Products may span multiple lines (image url, prices, history)
-    # We split on the pattern: "    { id: 'pNNNN'"
-    product_lines = re.split(r'(?=^    \{ id: \')', products_block, flags=re.MULTILINE)
+    # Split product entries on the boundary `{ id: 'pNNNN'`
+    product_lines = re.split(r"(?=\{\s*id:\s*'p\d+)", products_block)
     product_lines = [p.strip() for p in product_lines if p.strip()]
     print(f"Parsed {len(product_lines)} product entries")
 

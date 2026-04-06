@@ -40,26 +40,32 @@ _PATTERNS = {
     # Vape cartridges, disposables, pods, vape pens
     # Note: must come AFTER accessories check so "vape battery" alone is accessory
     'CARTRIDGE': re.compile(
-        r'\b(cartridge|cartridges|vaporizer|vaporizers|disposable|disposables|all[\s\-]?in[\s\-]?one|aio\s*vape|ccell|stiiizy|live\s*resin\s*cart|distillate\s*cart|prefilled.*vaporizer|prefilled.*cartridge|\d+\s*pack\s*pods?|cart\s*pack)\b',
+        r'\b(cartridge|cartridges|vaporizer|vaporizers|disposable|disposables|all[\s\-]?in[\s\-]?one|aio\s*vape|ccell|stiiizy|live\s*resin\s*cart|live\s*resin\s*vape|distillate\s*cart|prefilled.*vaporizer|prefilled.*cartridge|\d+\s*pack\s*pods?|cart\s*pack|wax\s*pen|dab\s*pen|vape[\s\-]?ix|live\s*rosin\s*vape|live\s*resin\s*disposable|live\s*rosin\s*disposable|distillate\s*vape|hash\s*vape)\b',
         re.IGNORECASE
     ),
 
     # Edible formats — explicit food formats. Checked EARLY so "Live Rosin
     # Gummies" or "Lemonade Gummies" don't get caught by concentrate or beverage.
     'EDIBLE_FORMAT': re.compile(
-        r'\b(gummy|gummies|gummi|chocolate|chocolates|cookie|cookies|brownie|brownies|truffle|truffles|caramel|caramels|hard\s*candy|gumdrop|chew|chews|fruit\s*chew|fruit\s*snack|lozenge|lozenges|taffy|honey\s*stick|chocolate\s*bar|baked\s*good|cake\s*pop|protein\s*bar|granola\s*bar|fudge|marshmallow|popcorn\s*ball)\b',
+        r'\b(gummy|gummies|gummi|chocolate|chocolates|cookie|cookies|brownie|brownies|truffle|truffles|caramel|caramels|hard\s*candy|gumdrop|gumdrops|gummy\s*ring|gummy\s*rings|peach\s*ring|peach\s*rings|sour\s*ring|chew|chews|fruit\s*chew|fruit\s*snack|lozenge|lozenges|taffy|honey\s*stick|honey\s*sticks|chocolate\s*bar|baked\s*good|cake\s*pop|protein\s*bar|granola\s*bar|fudge|marshmallow|popcorn\s*ball|moon\s*rock\s*candies|smokehouse\s*almonds|roasted.*almonds|trail\s*mix|nut\s*mix|infused\s*almonds|cannabis\s*almond|edible|edibles|candy|candies)\b',
         re.IGNORECASE
     ),
 
-    # Beverages — strict keyword match, no size-based detection (avoids 1/8oz collision)
+    # Beverages — keywords that signal a drink. Includes "infusion(s)" and
+    # "spirits" since cannabis brands like BLNCD use those for liquid products.
     'BEVERAGE': re.compile(
-        r'\b(seltzer|soda|sparkling\s*water|drink|beverage|cocktail|mocktail|elixir|tonic|kombucha|iced\s*tea|cold\s*brew|lemonade|punch|infusion\s*vial|thc\s*shot|thc\s*shots|cannabis\s*shot|liquid\s*shot|fl\s*oz|fluid\s*ounce|sparkling\s*tonic|sparkling\s*beverage|oral\s*shot)\b',
+        r'\b(seltzer|soda|sparkling\s*water|sparkling\s*beverage|sparkling\s*tonic|drink|beverage|cocktail|mocktail|elixir|tonic|tonics|kombucha|iced\s*tea|cold\s*brew|lemonade|punch|fruit\s*tonic|infusion|infusions|infusion\s*vial|thc\s*shot|thc\s*shots|cannabis\s*shot|liquid\s*shot|oral\s*shot|fl\s*oz|fluid\s*ounce|fizz|fizzy|spirits|non[\s\-]?alcoholic|16\.9oz|nano\s*shot|microdose\s*shot)\b',
+        re.IGNORECASE
+    ),
+    # Bottle-size beverage indicator. Negative lookbehind avoids matching "1/8oz" etc.
+    'BEVERAGE_SIZE': re.compile(
+        r'(?<![/\d])(?<!\d\.)(?:8\s*oz|12\s*oz|16\s*oz|20\s*oz|2\s*oz|6\s*oz)\b',
         re.IGNORECASE
     ),
 
     # Tinctures — sublingual oils, oral sprays/solutions, dropper bottles, capsules
     'TINCTURE': re.compile(
-        r'\b(tincture|tinctures|oral\s*spray|oral\s*solution|sublingual|dropper|oil\s*drops|cbd\s*drops|thc\s*drops|capsule|capsules|softgel|softgels|tablet|tablets|pill|pills|spray\s*bottle)\b',
+        r'\b(tincture|tinctures|oral\s*spray|oral\s*solution|sublingual|dropper|oil\s*drops|cbd\s*drops|thc\s*drops|capsule|capsules|softgel|softgels|tablet|tablets|pill|pills|spray\s*bottle|cbd\s*oil\s*isolate|thc\s*oil\s*isolate|oil\s*isolate|cbd\s*oil\b|thc\s*oil\b|hemp\s*oil|carpe\s*diem)\b',
         re.IGNORECASE
     ),
 
@@ -70,17 +76,24 @@ _PATTERNS = {
         re.IGNORECASE
     ),
 
-    # Topicals — applied to skin. Tightened to specific topical formats.
-    # "cream" alone is ambiguous (could be ice cream, cream soda, brownie cream)
-    # so we require body-context or specific topical product names.
+    # Topicals — applied to skin. Includes skincare, masks, mists.
     'TOPICAL': re.compile(
-        r'\b(lotion|balm|salve|ointment|massage\s*oil|body\s*oil|bath\s*bomb|bath\s*salt|cannabis\s*soap|cbd\s*soap|patch|patches|transdermal|hand\s*cream|foot\s*cream|muscle\s*rub|topical|topicals|hemp\s*cream|cbd\s*cream|cbd\s*lotion|relief\s*cream|relief\s*gel|warming\s*gel|cooling\s*gel|pain\s*gel|roll[\s\-]?on\s*(?:relief|stick|gel))\b',
+        r'\b(lotion|balm|salve|ointment|massage\s*oil|body\s*oil|bath\s*bomb|bath\s*salt|cannabis\s*soap|cbd\s*soap|patch|patches|transdermal|hand\s*cream|foot\s*cream|muscle\s*rub|topical|topicals|hemp\s*cream|cbd\s*cream|cbd\s*lotion|relief\s*cream|relief\s*gel|warming\s*gel|cooling\s*gel|pain\s*gel|roll[\s\-]?on\s*(?:relief|stick|gel)|skincare|skin\s*care|face\s*mist|face\s*mask|body\s*mist|body\s*mask|cbg\s*face|cbd\s*face|hemp\s*lotion|hemp\s*balm)\b',
         re.IGNORECASE
     ),
 
-    # Concentrates — extracts, dabs, hash, kief, rosin, etc.
-    'CONCENTRATE': re.compile(
-        r'\b(wax|shatter|rosin|live\s*rosin|live\s*resin|hash|hashish|kief|crumble|budder|badder|terp\s*sauce|diamond\b|diamonds|sugar\s*wax|crystalline|isolate|distillate|ho?nyc?omb|cured\s*resin|hte|fse|full\s*spectrum\s*extract|moonrock|moon\s*rock|cold\s*cure|temple\s*ball|bubble\s*hash|ice\s*water\s*hash|dry\s*sift|6\s*star|f1\s*hash|live\s*hash|frozen\s*flower\s*hash)\b',
+    # Concentrates — STRONG signals: explicit extract format words. These are
+    # never used for anything other than concentrates.
+    'CONCENTRATE_STRONG': re.compile(
+        r'\b(shatter|crumble|budder|badder|terp\s*sauce|sugar\s*wax|crystalline|distillate\s*syringe|ho?nyc?omb|moonrock|moon\s*rock|cold\s*cure|temple\s*ball|bubble\s*hash|ice\s*water\s*hash|dry\s*sift|6\s*star|f1\s*hash|kief|hashish|hash\s*split|hash\s*splits|hash\s*rosin|cured\s*resin|hte|fse|full\s*spectrum\s*extract|diamond\s*sauce|diamonds\s*and\s*sauce|live\s*hash|frozen\s*flower\s*hash|dab\b|dabs|wax\s*concentrate|shatter\s*concentrate)\b',
+        re.IGNORECASE
+    ),
+
+    # Concentrates — WEAK signals: just "live rosin/resin" or "hash" alone.
+    # These appear in beverages and edibles too ("live rosin gummies", "fruit
+    # tonic - live resin infused"), so we check them AFTER beverage/edible.
+    'CONCENTRATE_WEAK': re.compile(
+        r'\b(live\s*rosin|live\s*resin|rosin|hash)\b',
         re.IGNORECASE
     ),
 
@@ -90,9 +103,9 @@ _PATTERNS = {
         r'\b(flower|flwr|bud|nug|nugs|smalls|mixed\s*bud|popcorn\s*bud|popcorn\s*nug|whole\s*flower)\b',
         re.IGNORECASE
     ),
-    # Weights exclusively used for raw flower (no edible/beverage uses these)
+    # Weights exclusively used for raw flower (4g is half-eighth)
     'FLOWER_ONLY_WEIGHT': re.compile(
-        r'(\b(?:3\.5g|3\.5\s*g|7g|7\s*g|14g|14\s*g|28g|28\s*g)\b|1/8\s*oz|1/4\s*oz|1/2\s*oz|eighth|quarter\s*oz|half\s*oz|\bounce\b)',
+        r'(\b(?:3\.5g|3\.5\s*g|4g|4\s*g|7g|7\s*g|14g|14\s*g|28g|28\s*g)\b|1/8\s*oz|1/4\s*oz|1/2\s*oz|eighth|quarter\s*oz|half\s*oz|\bounce\b)',
         re.IGNORECASE
     ),
     # Ambiguous small weights — could be concentrate, cartridge, or small flower
@@ -105,7 +118,7 @@ _PATTERNS = {
     # words so "Vape Battery" doesn't become a cartridge and "Nug Plushie" doesn't
     # become flower. Includes 510-thread batteries, vape kits, plushies, glassware.
     'ACCESSORIES_EARLY': re.compile(
-        r'\b(grinder|lighter|rolling\s*papers?|hemp\s*wraps?|blunt\s*wraps?|leaf\s*cones?|filter\s*tips?|stash\s*jar|pipe|bong|water\s*pipe|dab\s*rig|dab\s*nail|dab\s*tool|banger|torch|510\s*battery|510\s*thread\s*battery|vape\s*battery|battery\s*pack|thread\s*battery|variable\s*voltage.*battery|charger|carrying\s*case|carry\s*case|t[\s\-]?shirt|tee\s*shirt|hoodie|stickers?|keychain|key\s*chain|magnet|sunglasses|isopropyl|alcohol\s*swab|carb\s*cap|terp\s*pearl|chillum|one[\s\-]?hitter|dugout|grinder\s*card|herb\s*grinder|pre[\s\-]?roll\s*tubes?|kief\s*box|joint\s*tubes?|plushies?|plush\s*toy|vape\s*kit|cleaning\s*kit|odor\s*spray|smell\s*proof|silicone\s*container|dab\s*mat|rolling\s*trays?|ash\s*trays?|ashtrays?|debowler|punch\s*card|membership\s*card|cone\s*pack|empty\s*cones?|nug\s*plush|tea\s*leaf\s*cones?|glass\s*cleaner|bowl\s*cleaner|pipe\s*cleaner|grinder\s*kit|sluggers?\s*battery)\b',
+        r'\b(grinder|lighter|rolling\s*papers?|hemp\s*wraps?|blunt\s*wraps?|leaf\s*cones?|filter\s*tips?|stash\s*jar|pipe|bong|water\s*pipe|dab\s*rig|dab\s*nail|dab\s*tool|banger|torch|510\s*battery|510\s*thread\s*battery|vape\s*battery|battery\s*pack|thread\s*battery|variable\s*voltage.*battery|wax\s*coil|wax\s*coil\s*battery|wax\s*atomizer|atomizer|coil\s*battery|charger|carrying\s*case|carry\s*case|t[\s\-]?shirt|tee\s*shirt|hoodie|stickers?|keychain|key\s*chain|magnet|sunglasses|isopropyl|alcohol\s*swab|carb\s*cap|terp\s*pearl|chillum|one[\s\-]?hitter|dugout|grinder\s*card|herb\s*grinder|pre[\s\-]?roll\s*tubes?|kief\s*box|joint\s*tubes?|plushies?|plush\s*toy|vape\s*kit|cleaning\s*kit|odor\s*spray|smell\s*proof|silicone\s*container|dab\s*mat|rolling\s*trays?|ash\s*trays?|ashtrays?|debowler|punch\s*card|membership\s*card|cone\s*pack|empty\s*cones?|nug\s*plush|tea\s*leaf\s*cones?|glass\s*cleaner|bowl\s*cleaner|pipe\s*cleaner|grinder\s*kit|sluggers?\s*battery|wax\s*melt|wax\s*melts|scented\s*wax|fragrance\s*wax|essential\s*oil\s*diffuser|incense)\b',
         re.IGNORECASE
     ),
 
@@ -159,51 +172,59 @@ def categorize_by_name(name, brand='', original_category=''):
     if _PATTERNS['CARTRIDGE'].search(text):
         return 'cartridge'
 
-    # 5) Flower by exclusive flower weight — 3.5g/7g/14g/28g/eighth/quarter/half oz
-    # These weights are used by flower ONLY (never edibles, beverages, or concentrates),
-    # so they reliably indicate flower even when the strain name sounds like food.
+    # 5) Flower by exclusive flower weight — 3.5g/4g/7g/14g/28g/eighth/quarter/half oz
     if _PATTERNS['FLOWER_ONLY_WEIGHT'].search(text):
         return 'flower'
 
-    # 6) Edible formats — gummy, chocolate, cookie etc.
-    # Checked BEFORE concentrate/beverage so "Live Rosin Gummies" → edible
-    # and "Lemonade Gummies" → edible
+    # 5.5) Beverage bottle size — 12oz/16oz/20oz/2oz indicates a drink. Concentrates
+    # don't come in bottle sizes, so this beats CONCENTRATE_STRONG (avoids
+    # "Apple Cinnamon Crumble - 12oz" matching crumble→concentrate).
+    if _PATTERNS['BEVERAGE_SIZE'].search(text):
+        return 'beverage'
+
+    # 6) Edible formats — gummy, chocolate, cookie, peach rings, almonds, etc.
+    # Beats CONCENTRATE_STRONG so "Live Rosin Gummies" → edible.
     if _PATTERNS['EDIBLE_FORMAT'].search(text):
         return 'edible'
 
-    # 6) Tinctures — oral sprays, droppers, capsules
+    # 7) Concentrate STRONG — explicit extract format (shatter, wax, badder, hash split)
+    if _PATTERNS['CONCENTRATE_STRONG'].search(text):
+        return 'concentrate'
+
+    # 8) Tinctures — oral sprays, droppers, capsules, tablets
     if _PATTERNS['TINCTURE'].search(text):
         return 'tincture'
 
-    # 7) Concentrates — extracts (specific keywords only)
-    if _PATTERNS['CONCENTRATE'].search(text):
-        return 'concentrate'
-
-    # 8) Beverages — drinks (keyword-based, no size matching)
-    if _PATTERNS['BEVERAGE'].search(text):
-        return 'beverage'
-
-    # 9) Topicals — body products
+    # 9) Topicals — body products including skincare and face mists
     if _PATTERNS['TOPICAL'].search(text):
         return 'topical'
 
-    # 11) Explicit "Flower" / "Bud" keyword
+    # 10) Beverages — drinks. Beats CONCENTRATE_WEAK so "Live Rosin Tonic" → beverage.
+    if _PATTERNS['BEVERAGE'].search(text):
+        return 'beverage'
+    # Also catch by bottle-size indicator (12oz, 16oz, etc.)
+    if _PATTERNS['BEVERAGE_SIZE'].search(text):
+        return 'beverage'
+
+    # 11) Concentrate WEAK — just "live rosin" / "rosin" / "hash" without
+    # a beverage/edible context. Probably an actual extract.
+    if _PATTERNS['CONCENTRATE_WEAK'].search(text):
+        return 'concentrate'
+
+    # 12) Explicit "Flower" / "Bud" keyword
     if _PATTERNS['FLOWER_KEYWORD'].search(text):
         return 'flower'
 
-    # 12) Edible catch-all — broader edible keywords (honey, etc.)
+    # 13) Edible catch-all — broader edible keywords (honey, candy, etc.)
     if _PATTERNS['EDIBLE'].search(text):
         return 'edible'
 
-    # 13) Accessories catch-all
+    # 14) Accessories catch-all
     if _PATTERNS['ACCESSORIES'].search(text):
         return 'EXCLUDE'
 
-    # 14) Fallback: use original category if it's a valid cannabis category
-    if original_category in CANNABIS_CATEGORIES:
-        return original_category
-
-    # Last resort: exclude
+    # NO fallback to original category — it's unreliable. Drop unrecognized
+    # products. Accuracy > completeness.
     return 'EXCLUDE'
 
 
@@ -240,6 +261,36 @@ if __name__ == '__main__':
         ("Blazy Honey Lemon Tea Leaf Cones", 'accessories', 'EXCLUDE'),  # leaf cones is accessory
         ("Campfire Cannabis | Donny Burger | 1/8oz Flower", 'flower', 'flower'),  # 1/8oz must not match 8oz beverage
         ("Campfire Cannabis | GG4 | 1g Rolled Joint", 'pre-roll', 'pre-roll'),  # joint is preroll
+        # Round 2 edge cases — found in production
+        ("BLNCD Infusion Spirits - Levitate - 16.9oz", 'flower', 'beverage'),
+        ("BLNCD Infusions 10mg - Fuse10 - 1ct", 'flower', 'beverage'),
+        ("BLNCD Infusions 5mg - Fuse - 5ct", 'flower', 'beverage'),
+        ("BLNCD CBD Skincare - Vital CBG Face Mist - 100ml", 'flower', 'topical'),
+        ("Donny Burger - 4g", 'flower', 'flower'),  # 4g flower
+        ("Pine Soul - 4g", 'flower', 'flower'),
+        ("Granny's - Fruit Tonic - 10mg THC - Live Resin Infused - Kitty Cocktail", 'concentrate', 'beverage'),
+        ("Granny's - Fruit Tonic - Blast Off - ROSIN 10mg", 'concentrate', 'beverage'),
+        ("Active | Live Rosin | Lemon", 'concentrate', 'concentrate'),  # ambiguous, accept concentrate
+        ("Peach Rings", 'concentrate', 'edible'),  # gummy candy
+        ("Blue Diamond | Smokehouse Almonds", 'concentrate', 'edible'),
+        ("Blue Raspberry Moon Rock Candies", 'concentrate', 'edible'),
+        ("Cantaloupe Crush", 'concentrate', 'EXCLUDE'),  # no clear signal, exclude
+        ("Vireo | CBG | Tablets | 30pk", 'flower', 'tincture'),
+        ("Cornell Blu Ox Peach Rosin Hash Splits (Indica) - Regular", 'concentrate', 'concentrate'),
+        # Round 3 — vape pens, beverage sizes
+        ("MN Legit | Legit Hit Wax Pen | Silver", 'concentrate', 'cartridge'),
+        ("Tanker Live Resin Vape - Royal Butter x High Noon", 'concentrate', 'cartridge'),
+        ("Oliphant 10mg - Apple Cinnamon Crumble - 12oz", 'concentrate', 'beverage'),
+        ("Grasslandz Disposable Vape Pen - Super Lemon Haze - 1g - 1 ct", 'cartridge', 'cartridge'),
+        ("Cartridge Vape-IX | Grasslandz | OG Kush | 1g | 1 ct", 'cartridge', 'cartridge'),
+        # 1/8oz must NOT match beverage size
+        ("Sample Strain - 1/8oz", 'flower', 'flower'),
+        # Round 4 — wax melts (home fragrance), CBD oils
+        ("Wax melt - Coffee Shop", 'concentrate', 'EXCLUDE'),
+        ("Wax melt - Linen Breeze", 'concentrate', 'EXCLUDE'),
+        ("Carpe Diem THC-Free CBD Oil Isolate 5000mg Ginger/Peach", 'concentrate', 'tincture'),
+        ("Starship Triple Vape Cart/Wax Coil Battery", 'concentrate', 'EXCLUDE'),
+        ("Utillian 5 | Wax Atomizer", 'concentrate', 'EXCLUDE'),
     ]
 
     passed = failed = 0
