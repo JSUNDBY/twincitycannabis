@@ -93,8 +93,25 @@
     function route() {
         const hash = window.location.hash.slice(1) || 'home';
         const parts = hash.split('/');
-        const page = parts[0];
+        let page = parts[0];
         const param = parts[1] || null;
+
+        // Anchor handling: if hash isn't a known page but matches an element ID,
+        // find the page that contains it, navigate there, then scroll to the anchor.
+        // (This makes #for-dispensaries-claim work — the form lives inside the
+        // for-dispensaries page.)
+        const knownPages = new Set(['home','dispensaries','dispensary','dispensary-detail','deals','strains','strain','strain-detail','compare','learn','for-dispensaries','dashboard']);
+        let anchorId = null;
+        if (!knownPages.has(page)) {
+            const anchorEl = document.getElementById(hash);
+            if (anchorEl) {
+                const parentPage = anchorEl.closest('.page');
+                if (parentPage) {
+                    page = parentPage.id.replace(/^page-/, '');
+                    anchorId = hash;
+                }
+            }
+        }
 
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -125,7 +142,17 @@
         }
 
         App.currentPage = page;
-        window.scrollTo(0, 0);
+
+        // Scroll to anchor if one was specified, otherwise to top
+        if (anchorId) {
+            setTimeout(() => {
+                const el = document.getElementById(anchorId);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        } else {
+            window.scrollTo(0, 0);
+        }
+
         closeSearchDropdown();
         closeMobileMenu();
 
@@ -1478,34 +1505,38 @@
             tab.addEventListener('click', () => switchDetailTab(tab.dataset.tab));
         });
 
-        // Alert form — submits to Kit (ConvertKit) or falls back to localStorage
+        // Alert form (consumer email signup) — submits to Kit via the public
+        // forms endpoint (no API key needed). Uses no-cors so we can't read the
+        // response but the request still gets through.
         const alertForm = document.getElementById('alert-form');
         if (alertForm) {
             alertForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const email = alertForm.querySelector('input[name="email_address"]').value;
-                const formId = alertForm.dataset.svForm;
+                const formId = alertForm.dataset.svForm || '9289780';
                 const btn = alertForm.querySelector('button');
                 btn.textContent = 'Signing up...';
                 btn.disabled = true;
 
-                // Try Kit API first
-                if (formId && formId !== 'YOUR_FORM_ID') {
-                    try {
-                        await fetch(`https://api.kit.com/forms/${formId}/subscribe`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ email_address: email }),
-                        });
-                    } catch (err) {
-                        console.log('Kit API fallback to localStorage', err);
-                    }
+                // Submit to Kit
+                try {
+                    const fd = new FormData();
+                    fd.append('email_address', email);
+                    await fetch(`https://app.kit.com/forms/${formId}/subscriptions`, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        body: fd,
+                    });
+                } catch (err) {
+                    console.log('Kit submit fallback', err);
                 }
 
-                // Always save locally as backup
-                const signups = JSON.parse(localStorage.getItem('tcc-alerts') || '[]');
-                signups.push({ email, timestamp: new Date().toISOString(), type: 'alert' });
-                localStorage.setItem('tcc-alerts', JSON.stringify(signups));
+                // Save locally as backup
+                try {
+                    const signups = JSON.parse(localStorage.getItem('tcc-alerts') || '[]');
+                    signups.push({ email, timestamp: new Date().toISOString(), type: 'alert' });
+                    localStorage.setItem('tcc-alerts', JSON.stringify(signups));
+                } catch (err) {}
 
                 // Conversion tracking
                 if (typeof gtag === 'function') gtag('event', 'generate_lead', { event_category: 'engagement', event_label: 'price_alert_signup' });
@@ -1516,50 +1547,80 @@
             });
         }
 
-        // Dispensary signup form (submits to Kit + tracks conversion)
+        // Dispensary signup form
+        // Strategy: (1) add their email to Kit so they get the welcome sequence,
+        // (2) open a mailto: with all form fields prefilled so the user can
+        // send the full details directly to hello@twincitycannabis.com,
+        // (3) save locally as a backup so nothing is ever lost.
         const dispSignupForm = document.getElementById('dispensary-signup-form');
         if (dispSignupForm) {
             dispSignupForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const formData = new FormData(dispSignupForm);
-                const btn = dispSignupForm.querySelector('button[type="submit"]');
-                btn.textContent = 'Submitting...';
-                btn.disabled = true;
+                const data = Object.fromEntries(formData);
 
-                // Submit to Kit
-                try {
-                    await fetch('https://api.kit.com/forms/9289780/subscribe', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            email_address: formData.get('email_address'),
-                            first_name: formData.get('fields[first_name]'),
-                            fields: {
-                                company: formData.get('fields[company]'),
-                                phone: formData.get('fields[phone]'),
-                                interest: formData.get('fields[interest]'),
-                                message: formData.get('fields[message]'),
-                            },
-                            tags: ['dispensary-owner'],
-                        }),
-                    });
-                } catch (err) {
-                    console.log('Kit API error, saving locally', err);
+                // Basic validation
+                if (!data.name || !data.dispensary || !data.email) {
+                    alert('Please fill in your name, dispensary, and email.');
+                    return;
                 }
 
-                // Save locally
-                const data = Object.fromEntries(formData);
-                data.timestamp = new Date().toISOString();
-                const signups = JSON.parse(localStorage.getItem('tcc-dispensary-signups') || '[]');
-                signups.push(data);
-                localStorage.setItem('tcc-dispensary-signups', JSON.stringify(signups));
+                const btn = dispSignupForm.querySelector('button[type="submit"]');
+                btn.textContent = 'Sending...';
+                btn.disabled = true;
 
-                // Track conversion
+                // 1. Subscribe to Kit (public form endpoint, no API key needed).
+                //    no-cors means we can't read the response but the request goes through.
+                try {
+                    const kitFormData = new FormData();
+                    kitFormData.append('email_address', data.email);
+                    kitFormData.append('fields[first_name]', data.name);
+                    await fetch('https://app.kit.com/forms/9289780/subscriptions', {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        body: kitFormData,
+                    });
+                } catch (err) {
+                    console.log('Kit submit fallback', err);
+                }
+
+                // 2. Save locally as backup so nothing is ever lost
+                data.timestamp = new Date().toISOString();
+                try {
+                    const signups = JSON.parse(localStorage.getItem('tcc-dispensary-signups') || '[]');
+                    signups.push(data);
+                    localStorage.setItem('tcc-dispensary-signups', JSON.stringify(signups));
+                } catch (err) {}
+
+                // 3. Track conversion
                 if (typeof gtag === 'function') gtag('event', 'generate_lead', { event_category: 'dispensary', event_label: 'dispensary_signup', value: 299 });
                 if (typeof fbq === 'function') fbq('track', 'Lead', { content_name: 'Dispensary Signup', value: 299, currency: 'USD' });
 
-                dispSignupForm.style.display = 'none';
-                document.getElementById('dispensary-signup-success').style.display = 'block';
+                // 4. Open a mailto: with the full message so it lands in hello@twincitycannabis.com
+                const subject = `[TCC] ${data.interest || 'Inquiry'} — ${data.dispensary}`;
+                const body = [
+                    `New dispensary inquiry from twincitycannabis.com`,
+                    ``,
+                    `Name: ${data.name}`,
+                    `Dispensary: ${data.dispensary}`,
+                    `Email: ${data.email}`,
+                    `Phone: ${data.phone || '(not provided)'}`,
+                    `Interest: ${data.interest || '(not specified)'}`,
+                    ``,
+                    `Message:`,
+                    data.message || '(none)',
+                    ``,
+                    `---`,
+                    `Submitted: ${new Date().toLocaleString()}`,
+                ].join('\n');
+                const mailto = `mailto:hello@twincitycannabis.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.location.href = mailto;
+
+                // Show success message + reset
+                setTimeout(() => {
+                    dispSignupForm.style.display = 'none';
+                    document.getElementById('dispensary-signup-success').style.display = 'block';
+                }, 300);
             });
         }
 
