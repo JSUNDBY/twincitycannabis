@@ -167,30 +167,70 @@ def parse_menu_item(item, dispensary_slug):
 
     category = normalize_category(cat_name)
 
-    # THC/CBD
-    lab_results = item.get("lab_results", [])
+    # THC/CBD from metrics.cannabinoids
     thc = ""
     cbd = ""
-    for lr in lab_results if isinstance(lab_results, list) else []:
-        if isinstance(lr, dict):
-            if lr.get("cannabinoid", "").lower() == "thc":
-                thc = f"{lr.get('value', '')}%"
-            elif lr.get("cannabinoid", "").lower() == "cbd":
-                cbd_val = lr.get("value", 0)
-                if cbd_val and cbd_val > 0:
-                    cbd = f"{cbd_val}%"
+    metrics = item.get("metrics", {})
+    if isinstance(metrics, dict):
+        cannabinoids = metrics.get("cannabinoids", [])
+        for c in cannabinoids if isinstance(cannabinoids, list) else []:
+            if isinstance(c, dict):
+                code = c.get("code", "").lower()
+                value = c.get("value", 0)
+                unit = c.get("unit", "%")
+                if code == "thc" and value:
+                    thc = f"{value}{unit}"
+                elif code == "cbd" and value and value > 0:
+                    cbd = f"{value}{unit}"
 
-    # Image
+    # Fallback: lab_results
+    if not thc:
+        lab_results = item.get("lab_results", [])
+        for lr in lab_results if isinstance(lab_results, list) else []:
+            if isinstance(lr, dict):
+                if lr.get("cannabinoid", "").lower() == "thc":
+                    thc = f"{lr.get('value', '')}%"
+                elif lr.get("cannabinoid", "").lower() == "cbd":
+                    cbd_val = lr.get("value", 0)
+                    if cbd_val and cbd_val > 0:
+                        cbd = f"{cbd_val}%"
+
+    # Image - prefer large_url
     avatar = item.get("avatar_image", {})
     image = ""
     if isinstance(avatar, dict):
-        image = avatar.get("small_url", "") or avatar.get("original_url", "")
+        image = avatar.get("large_url", "") or avatar.get("small_url", "") or avatar.get("original_url", "")
+    # Skip placeholder images
+    if image and "placeholder" in image:
+        image = ""
 
-    # Brand
-    brand = "Unknown"
-    brand_data = item.get("brand", {})
-    if isinstance(brand_data, dict):
-        brand = brand_data.get("name", "Unknown")
+    # Brand - check multiple sources
+    brand = ""
+
+    # 1. brand_endorsement (most reliable)
+    endorsement = item.get("brand_endorsement", {})
+    if isinstance(endorsement, dict):
+        brand = endorsement.get("brand_name", "")
+
+    # 2. brand object
+    if not brand:
+        brand_data = item.get("brand", {})
+        if isinstance(brand_data, dict):
+            brand = brand_data.get("name", "")
+
+    # 3. Extract from product name (e.g. "Vireo | Cherry Bomb | Cartridge")
+    if not brand:
+        name = item.get("name", "")
+        if "|" in name:
+            brand = name.split("|")[0].strip()
+        elif " - " in name and not name.startswith("$"):
+            parts = name.split(" - ")
+            # Only use first part as brand if it looks like a brand (short, capitalized)
+            if len(parts[0]) < 25 and parts[0][0].isupper():
+                brand = parts[0].strip()
+
+    if not brand:
+        brand = "House"
 
     # Genetics / strain type
     genetics = (item.get("genetics", "") or "").lower()
