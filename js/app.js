@@ -684,20 +684,26 @@
             <div style="margin-bottom:2rem">
                 <a href="#compare" style="color:var(--text-secondary);font-size:0.85rem">&larr; All products</a>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:2rem">
-                <div>
+            <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;margin-bottom:2rem">
+                ${product.image ? `<div style="width:140px;height:140px;border-radius:var(--radius-lg);overflow:hidden;background:var(--bg-card);border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:8px">
+                    <img src="${product.image}" alt="${product.name}" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:var(--radius-sm)" onerror="this.parentElement.style.display='none'">
+                </div>` : ''}
+                <div style="flex:1;min-width:200px">
                     <h2 class="font-display font-bold text-2xl tracking-tight">${product.name}</h2>
-                    <div class="text-secondary text-sm" style="margin-top:0.3rem">${product.brand} ${strain ? '&bull; ' + strain.name : ''}</div>
-                    <div style="display:flex;gap:0.4rem;margin-top:0.6rem">
+                    <div class="text-secondary text-sm" style="margin-top:0.3rem">${product.brand}${product.weight ? ' &middot; ' + product.weight : ''} ${strain ? '&bull; ' + strain.name : ''}</div>
+                    <div style="display:flex;gap:0.4rem;margin-top:0.6rem;flex-wrap:wrap">
                         <span class="tag">${product.category}</span>
-                        <span class="tag">THC ${product.thc}</span>
+                        ${product.thc ? `<span class="tag">THC ${product.thc}</span>` : ''}
+                        ${product.cbd ? `<span class="tag">CBD ${product.cbd}</span>` : ''}
                         ${strain ? `<span class="tag strain-tag-${strain.type}">${strain.type}</span>` : ''}
+                        <span class="tag tag-blue">${entries.length} dispensar${entries.length === 1 ? 'y' : 'ies'}</span>
                     </div>
                 </div>
-                <div style="text-align:right">
+                <div style="text-align:right;flex-shrink:0">
                     <div class="text-sm text-muted">Best price</div>
                     <div class="font-display font-bold text-3xl text-green">${TCC.formatPrice(lowest.price)}</div>
-                    <div class="text-xs text-secondary">at ${TCC.getDispensary(lowest.dispensaryId).name}</div>
+                    <div class="text-xs text-secondary">at ${TCC.getDispensary(lowest.dispensaryId)?.name || 'Unknown'}</div>
+                    ${highest.price - lowest.price > 1 ? `<div class="tag tag-sm tag-green" style="margin-top:0.4rem">Save $${(highest.price - lowest.price).toFixed(0)} vs highest</div>` : ''}
                 </div>
             </div>
 
