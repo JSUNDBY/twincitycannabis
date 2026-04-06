@@ -283,6 +283,7 @@ def update_data_js(comparison):
             f"    {{ id: '{pid}', name: '{name_esc}', brand: '{brand_esc}', "
             f"category: '{p['category']}', strain: null, "
             f"weight: '{p.get('weight', '')}', thc: '{p.get('thc', '')}', cbd: '{p.get('cbd', '')}',\n"
+            f"      image: {img},\n"
             f"      prices: {{ {prices_js} }},\n"
             f"      priceHistory: {json.dumps(history)} }}"
         )

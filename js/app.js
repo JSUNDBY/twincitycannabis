@@ -321,9 +321,16 @@
             return;
         }
 
-        // Banner
-        document.getElementById('detail-banner').style.background = d.gradient;
-        document.getElementById('detail-banner-initial').textContent = d.initial;
+        // Banner - show logo image if available
+        const bannerEl = document.getElementById('detail-banner');
+        bannerEl.style.background = d.gradient;
+        const initialEl = document.getElementById('detail-banner-initial');
+        const hasImg = d.img && d.img.length > 10 && !d.img.includes('placeholder');
+        if (hasImg) {
+            initialEl.innerHTML = `<img src="${d.img}" alt="${d.name}" style="max-height:120px;max-width:280px;object-fit:contain;border-radius:12px">`;
+        } else {
+            initialEl.textContent = d.initial;
+        }
 
         // Info
         document.getElementById('detail-name').textContent = d.name;
@@ -877,23 +884,36 @@
         const range = TCC.getPriceRange(p);
         const strain = p.strain ? TCC.getStrain(p.strain) : null;
         const strainTag = strain ? `<span class="tag tag-sm strain-tag-${strain.type}">${strain.type}</span>` : '';
+        const numDisps = Object.keys(p.prices).length;
+        const savings = range.high && range.low ? range.high - range.low : 0;
+
+        // Product image
+        const hasImg = p.image && p.image.length > 10;
+        const imgHtml = hasImg
+            ? `<div class="product-card-img"><img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`
+            : '';
 
         return `<div class="card product-card" onclick="window.location.hash='compare/${p.id}'">
-            <div class="card-body-sm">
-                <div class="product-card-header">
-                    <div>
-                        <div class="product-card-name">${p.name}</div>
-                        <div class="product-card-brand">${p.brand}</div>
+            <div class="card-body-sm" style="display:flex;gap:0.8rem;align-items:flex-start">
+                ${imgHtml}
+                <div style="flex:1;min-width:0">
+                    <div class="product-card-header">
+                        <div style="min-width:0">
+                            <div class="product-card-name">${p.name}</div>
+                            <div class="product-card-brand">${p.brand}${p.weight ? ' &middot; ' + p.weight : ''}</div>
+                        </div>
+                        <div class="product-card-prices">
+                            <div class="product-card-price-low">${TCC.formatPrice(range.low)}</div>
+                            ${range.low !== range.high ? `<div class="product-card-price-range">to ${TCC.formatPrice(range.high)}</div>` : ''}
+                        </div>
                     </div>
-                    <div class="product-card-prices">
-                        <div class="product-card-price-low">${TCC.formatPrice(range.low)}</div>
-                        ${range.low !== range.high ? `<div class="product-card-price-range">to ${TCC.formatPrice(range.high)}</div>` : ''}
+                    <div class="product-card-meta">
+                        <span class="tag tag-sm">${catIcons[p.category] || ''} ${p.category}</span>
+                        ${p.thc ? `<span class="tag tag-sm">THC ${p.thc}</span>` : ''}
+                        ${strainTag}
+                        ${numDisps > 1 ? `<span class="tag tag-sm tag-blue">${numDisps} dispensaries</span>` : ''}
+                        ${savings > 3 ? `<span class="tag tag-sm tag-green">Save $${savings.toFixed(0)}</span>` : ''}
                     </div>
-                </div>
-                <div class="product-card-meta">
-                    <span class="tag tag-sm">${catIcons[p.category] || ''} ${p.category}</span>
-                    <span class="tag tag-sm">THC ${p.thc}</span>
-                    ${strainTag}
                 </div>
             </div>
         </div>`;
