@@ -53,7 +53,7 @@
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
 
-        const navMap = { home: 'nav-home', dispensaries: 'nav-dispensaries', deals: 'nav-deals', strains: 'nav-strains', compare: 'nav-compare' };
+        const navMap = { home: 'nav-home', dispensaries: 'nav-dispensaries', deals: 'nav-deals', strains: 'nav-strains', compare: 'nav-compare', 'for-dispensaries': 'nav-for-dispensaries' };
 
         switch (page) {
             case 'dispensary':
@@ -1285,6 +1285,53 @@
 
                 alertForm.style.display = 'none';
                 document.getElementById('alert-success').style.display = 'block';
+            });
+        }
+
+        // Dispensary signup form (submits to Kit + tracks conversion)
+        const dispSignupForm = document.getElementById('dispensary-signup-form');
+        if (dispSignupForm) {
+            dispSignupForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(dispSignupForm);
+                const btn = dispSignupForm.querySelector('button[type="submit"]');
+                btn.textContent = 'Submitting...';
+                btn.disabled = true;
+
+                // Submit to Kit
+                try {
+                    await fetch('https://api.kit.com/forms/9289780/subscribe', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            email_address: formData.get('email_address'),
+                            first_name: formData.get('fields[first_name]'),
+                            fields: {
+                                company: formData.get('fields[company]'),
+                                phone: formData.get('fields[phone]'),
+                                interest: formData.get('fields[interest]'),
+                                message: formData.get('fields[message]'),
+                            },
+                            tags: ['dispensary-owner'],
+                        }),
+                    });
+                } catch (err) {
+                    console.log('Kit API error, saving locally', err);
+                }
+
+                // Save locally
+                const data = Object.fromEntries(formData);
+                data.timestamp = new Date().toISOString();
+                const signups = JSON.parse(localStorage.getItem('tcc-dispensary-signups') || '[]');
+                signups.push(data);
+                localStorage.setItem('tcc-dispensary-signups', JSON.stringify(signups));
+
+                // Track conversion
+                if (typeof gtag === 'function') gtag('event', 'generate_lead', { event_category: 'dispensary', event_label: 'dispensary_signup', value: 299 });
+                if (typeof fbq === 'function') fbq('track', 'Lead', { content_name: 'Dispensary Signup', value: 299, currency: 'USD' });
+
+                dispSignupForm.style.display = 'none';
+                document.getElementById('dispensary-signup-success').style.display = 'block';
             });
         }
 
