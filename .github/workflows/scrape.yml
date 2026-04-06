@@ -2,9 +2,8 @@ name: Scrape Dispensary Data
 
 on:
   schedule:
-    # Run every 4 hours for near-real-time data
-    # 6am, 10am, 2pm, 6pm, 10pm Central
-    - cron: '0 11,15,19,23,3 * * *'
+    # Run 2x daily: 7am and 7pm Central (12:00 and 00:00 UTC)
+    - cron: '0 12,0 * * *'
   workflow_dispatch: # Manual trigger from GitHub UI
 
 jobs:
@@ -24,30 +23,36 @@ jobs:
       - name: Install dependencies
         run: pip install -r scraper/requirements.txt
 
-      - name: Scrape dispensary listings (Weedmaps API)
+      - name: Scrape dispensary listings
+        env:
+          PROXY_URL: ${{ secrets.PROXY_URL }}
         run: python scraper/scraper.py --export
-        continue-on-error: true  # Weedmaps blocks datacenter IPs sometimes
+        continue-on-error: true
 
       - name: Update dispensaries in data.js
         run: python scraper/update_site.py
-        continue-on-error: true  # OK if dispensary scrape failed
+        continue-on-error: true
 
-      - name: Scrape menus via Apify (real prices & products)
+      - name: Scrape ALL menus (full product data)
         env:
-          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
-        run: python scraper/apify_scrape.py --update-site
-        continue-on-error: true  # Don't fail the whole job if Apify is down
+          PROXY_URL: ${{ secrets.PROXY_URL }}
+        run: python scraper/direct_menu_scrape.py --update-site
+        continue-on-error: true
+
+      - name: Record price history
+        run: |
+          python scraper/price_tracker.py record || true
+          python scraper/price_tracker.py export || true
+        continue-on-error: true
 
       - name: Commit and push if changed
         run: |
           git config user.name "TCC Scraper Bot"
           git config user.email "bot@twincitycannabis.com"
-          git add -A
-          # Don't commit the raw scraper dumps
-          git reset -- scraper/data/raw_* scraper/data/apify_raw_* 2>/dev/null || true
+          git add js/data.js scraper/data/price_history.json scraper/data/price_history_export.json scraper/data/dispensaries.json scraper/data/full_menu_products.json 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Auto-update: dispensary data $(date -u +%Y-%m-%d\ %H:%M)"
+            git commit -m "Auto-update: $(date -u +%Y-%m-%d\ %H:%M) - fresh prices & menus"
             git push
           fi

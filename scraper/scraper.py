@@ -18,6 +18,7 @@ Usage:
 """
 
 import json
+import os
 import time
 import re
 from datetime import datetime
@@ -28,6 +29,9 @@ from bs4 import BeautifulSoup
 
 DATA_DIR = Path(__file__).parent / "data"
 DATA_DIR.mkdir(exist_ok=True)
+
+PROXY_URL = os.environ.get("PROXY_URL", "")
+PROXIES = {"http": PROXY_URL, "https": PROXY_URL} if PROXY_URL else None
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
@@ -54,7 +58,8 @@ def fetch_dispensaries(lat=MPLS_LAT, lng=MPLS_LNG, radius_pages=2):
                 "page": page,
             },
             headers=HEADERS,
-            timeout=15,
+            proxies=PROXIES,
+            timeout=30,
         )
         r.raise_for_status()
         listings = r.json()["data"]["listings"]

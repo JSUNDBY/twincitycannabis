@@ -14,6 +14,7 @@ Usage:
 """
 
 import json
+import os
 import time
 import re
 from datetime import datetime
@@ -30,6 +31,11 @@ HEADERS = {
     "Referer": "https://weedmaps.com/",
 }
 
+# Residential proxy support (IPRoyal or any SOCKS5/HTTP proxy)
+# Set via environment variable: PROXY_URL=http://user:pass@proxy.iproyal.com:12321
+PROXY_URL = os.environ.get("PROXY_URL", "")
+PROXIES = {"http": PROXY_URL, "https": PROXY_URL} if PROXY_URL else None
+
 # Weedmaps discovery API - the same one their menu pages use
 WM_API = "https://api-g.weedmaps.com/discovery/v1/listings/dispensaries"
 
@@ -45,6 +51,7 @@ def get_dispensary_slugs():
             "page_size": 50,
         },
         headers=HEADERS,
+        proxies=PROXIES,
         timeout=15,
     )
     r.raise_for_status()
@@ -77,7 +84,8 @@ def scrape_menu(slug, name=""):
                 url,
                 params={"page": page, "page_size": 50},
                 headers=HEADERS,
-                timeout=15,
+                proxies=PROXIES,
+                timeout=30,
             )
 
             if r.status_code == 406:
