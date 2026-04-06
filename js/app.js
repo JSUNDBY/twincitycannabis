@@ -380,31 +380,66 @@
             </div>`
         ).join('');
 
-        // Products
-        const products = TCC.getProductsForDispensary(id);
-        document.getElementById('detail-products').innerHTML = products.length ? products.map(p => {
-            const price = p.prices[id];
-            const lowest = TCC.getLowestPrice(p);
-            const isLowest = lowest.dispensaryId === id;
-            return `<div class="card product-card" onclick="window.location.hash='compare/${p.id}'">
-                <div class="card-body-sm">
-                    <div class="product-card-header">
-                        <div>
-                            <div class="product-card-name">${p.name}</div>
-                            <div class="product-card-brand">${p.brand}</div>
-                        </div>
-                        <div class="product-card-prices">
-                            <div class="product-card-price-low">${TCC.formatPrice(price)}</div>
-                            ${isLowest ? '<div style="font-size:0.65rem;color:var(--green)">Lowest price</div>' : ''}
+        // Products with category filtering
+        const allProducts = TCC.getProductsForDispensary(id);
+        App._detailProducts = allProducts;
+        App._detailDispId = id;
+
+        // Build category tabs
+        const cats = {};
+        allProducts.forEach(p => { cats[p.category] = (cats[p.category] || 0) + 1; });
+        const catEntries = Object.entries(cats).sort((a, b) => b[1] - a[1]);
+        const catContainer = document.getElementById('detail-product-cats');
+        if (catEntries.length > 1) {
+            catContainer.innerHTML = `<button class="filter-toggle active" data-cat="all">All (${allProducts.length})</button>` +
+                catEntries.map(([cat, count]) =>
+                    `<button class="filter-toggle" data-cat="${cat}">${catIcons[cat] || ''} ${cat} (${count})</button>`
+                ).join('');
+            catContainer.querySelectorAll('.filter-toggle').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    catContainer.querySelectorAll('.filter-toggle').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    renderDetailProducts(btn.dataset.cat);
+                });
+            });
+        } else {
+            catContainer.innerHTML = '';
+        }
+        renderDetailProducts('all');
+
+        function renderDetailProducts(catFilter) {
+            const filtered = catFilter === 'all' ? allProducts : allProducts.filter(p => p.category === catFilter);
+            const countEl = document.getElementById('detail-product-count');
+            countEl.textContent = `${filtered.length} product${filtered.length !== 1 ? 's' : ''}`;
+
+            document.getElementById('detail-products').innerHTML = filtered.length ? filtered.map(p => {
+                const price = p.prices[id];
+                const lowest = TCC.getLowestPrice(p);
+                const isLowest = lowest && lowest.dispensaryId === id;
+                const hasImg = p.image && p.image.length > 10;
+                return `<div class="card product-card" onclick="window.location.hash='compare/${p.id}'">
+                    <div class="card-body-sm" style="display:flex;gap:0.8rem;align-items:flex-start">
+                        ${hasImg ? `<div class="product-card-img"><img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` : ''}
+                        <div style="flex:1;min-width:0">
+                            <div class="product-card-header">
+                                <div style="min-width:0">
+                                    <div class="product-card-name">${p.name}</div>
+                                    <div class="product-card-brand">${p.brand}${p.weight ? ' &middot; ' + p.weight : ''}</div>
+                                </div>
+                                <div class="product-card-prices">
+                                    <div class="product-card-price-low">${TCC.formatPrice(price)}</div>
+                                    ${isLowest ? '<div style="font-size:0.65rem;color:var(--green)">Best price</div>' : ''}
+                                </div>
+                            </div>
+                            <div class="product-card-meta">
+                                <span class="tag tag-sm">${catIcons[p.category] || ''} ${p.category}</span>
+                                ${p.thc ? `<span class="tag tag-sm">THC ${p.thc}</span>` : ''}
+                            </div>
                         </div>
                     </div>
-                    <div class="product-card-meta">
-                        <span class="tag tag-sm">${p.category}</span>
-                        <span class="tag tag-sm">THC ${p.thc}</span>
-                    </div>
-                </div>
-            </div>`;
-        }).join('') : '<div class="empty-state"><div class="empty-state-desc">No products listed yet</div></div>';
+                </div>`;
+            }).join('') : '<div class="empty-state"><div class="empty-state-desc">No products in this category</div></div>';
+        }
 
         // Reviews
         const reviews = TCC.getReviewsForDispensary(id);
@@ -587,15 +622,83 @@
             </div>
         `).join('') : '<p class="text-secondary text-sm">No reviews on TCC yet. Share your profile link to start collecting reviews.</p>';
 
-        // Claim section (show for unverified dispensaries)
-        const claimSection = document.getElementById('dash-claim-section');
-        if (!d.verified) {
-            claimSection.style.display = 'block';
-        } else {
-            claimSection.style.display = 'none';
+        // Competitor Intel (real data, blurred for demo)
+        const compContainer = document.getElementById('dash-competitors');
+        if (compContainer) {
+            // Find dispensaries in the same city with overlapping products
+            const myProducts = TCC.getProductsForDispensary(d.id);
+            const myCats = new Set(myProducts.map(p => p.category));
+            const nearby = TCC.dispensaries.filter(nd =>
+                nd.id !== d.id && nd.city === d.city
+            ).slice(0, 5);
+
+            if (nearby.length > 0) {
+                // Calculate average prices for shared products
+                const compRows = nearby.map(nd => {
+                    const shared = myProducts.filter(p => p.prices[nd.id] !== undefined);
+                    if (shared.length === 0) return null;
+                    const myAvg = shared.reduce((s, p) => s + p.prices[d.id], 0) / shared.length;
+                    const theirAvg = shared.reduce((s, p) => s + p.prices[nd.id], 0) / shared.length;
+                    const diff = theirAvg - myAvg;
+                    return { name: nd.name, shared: shared.length, theirAvg, diff };
+                }).filter(Boolean);
+
+                compContainer.innerHTML = `
+                    <div style="filter:blur(4px);pointer-events:none;user-select:none">
+                        ${compRows.map(c => `
+                            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--border)">
+                                <div>
+                                    <div class="text-sm font-semibold">${c.name}</div>
+                                    <div class="text-xs text-muted">${c.shared} shared products</div>
+                                </div>
+                                <div style="text-align:right">
+                                    <div class="text-sm" style="color:${c.diff > 0 ? 'var(--green)' : c.diff < 0 ? 'var(--red)' : 'var(--text-secondary)'}">
+                                        ${c.diff > 0 ? 'You\'re $' + c.diff.toFixed(0) + ' cheaper' : c.diff < 0 ? 'They\'re $' + Math.abs(c.diff).toFixed(0) + ' cheaper' : 'Same pricing'}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div style="text-align:center;margin-top:1rem">
+                        <p class="text-sm text-secondary">See full competitor breakdown: product-by-product pricing, market position, and weekly trends.</p>
+                        <a href="mailto:hello@twincitycannabis.com?subject=Premium%20Inquiry%20-%20Competitor%20Intel" class="btn btn-sm btn-primary" style="margin-top:0.5rem">Unlock with Premium ($599/mo)</a>
+                    </div>
+                `;
+            } else {
+                compContainer.innerHTML = '<p class="text-sm text-muted">No nearby competitors found with overlapping products.</p>';
+            }
         }
 
-        // Traffic chart (simulated data for demo)
+        // Contact form handler
+        const contactForm = document.getElementById('dash-contact-form');
+        if (contactForm) {
+            contactForm.onsubmit = (e) => {
+                e.preventDefault();
+                const formData = new FormData(contactForm);
+                const data = Object.fromEntries(formData);
+                data.dispensary = d.name;
+                data.dispensary_id = d.id;
+                data.timestamp = new Date().toISOString();
+
+                // Save locally + fire tracking
+                const claims = JSON.parse(localStorage.getItem('tcc-claims') || '[]');
+                claims.push(data);
+                localStorage.setItem('tcc-claims', JSON.stringify(claims));
+
+                if (typeof gtag === 'function') gtag('event', 'generate_lead', { event_category: 'dispensary', event_label: 'claim_form' });
+                if (typeof fbq === 'function') fbq('track', 'Lead', { content_name: 'Dispensary Claim: ' + d.name });
+
+                contactForm.style.display = 'none';
+                document.getElementById('dash-contact-success').style.display = 'block';
+
+                // Also send via mailto as backup
+                const subject = encodeURIComponent('Dispensary Claim: ' + d.name);
+                const body = encodeURIComponent(`Name: ${data.name}\nRole: ${data.role}\nEmail: ${data.email}\nPhone: ${data.phone || 'N/A'}\nDispensary: ${d.name}\nMessage: ${data.message || 'N/A'}`);
+                window.open(`mailto:hello@twincitycannabis.com?subject=${subject}&body=${body}`, '_blank');
+            };
+        }
+
+        // Traffic chart
         setTimeout(() => {
             const canvas = document.getElementById('dash-traffic-chart');
             if (!canvas || typeof Chart === 'undefined') return;
