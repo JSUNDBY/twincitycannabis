@@ -673,6 +673,13 @@
         const highest = TCC.getHighestPrice(product);
         const entries = Object.entries(product.prices).sort((a, b) => a[1] - b[1]);
 
+        // Detect real price history (not just flat line)
+        const ph = product.priceHistory || [];
+        const hasRealHistory = ph.length >= 2 && new Set(ph).size > 1;
+        const trendLabel = hasRealHistory
+            ? (ph[ph.length-1] < ph[0] ? 'Trending down' : ph[ph.length-1] > ph[0] ? 'Trending up' : 'Stable')
+            : '';
+
         container.innerHTML = `
             <div style="margin-bottom:2rem">
                 <a href="#compare" style="color:var(--text-secondary);font-size:0.85rem">&larr; All products</a>
@@ -728,10 +735,17 @@
 
             <div class="price-chart-container">
                 <div class="price-chart-header">
-                    <span class="price-chart-title">Price History (8 weeks)</span>
-                    <span class="tag tag-sm tag-green">${Icons.trending} Trending down</span>
+                    <span class="price-chart-title">Price History</span>
+                    ${hasRealHistory ? `<span class="tag tag-sm tag-green">${Icons.trending} ${trendLabel}</span>` : '<span class="tag tag-sm">Tracking started - updates daily</span>'}
                 </div>
-                <div style="position:relative;height:220px"><canvas id="price-chart"></canvas></div>
+                ${hasRealHistory
+                    ? '<div style="position:relative;height:220px"><canvas id="price-chart"></canvas></div>'
+                    : `<div style="text-align:center;padding:2rem;color:var(--text-muted)">
+                        <div style="font-size:1.5rem;margin-bottom:0.5rem">&#128200;</div>
+                        <div style="font-size:0.9rem">Price tracking just started. Check back in a few days for real trend data.</div>
+                        <div style="font-size:0.8rem;margin-top:0.3rem;color:var(--text-muted)">Current lowest: ${TCC.formatPrice(lowest.price)}</div>
+                       </div>`
+                }
             </div>
 
             <div style="margin-top:2rem">

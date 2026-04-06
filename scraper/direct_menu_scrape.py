@@ -254,6 +254,22 @@ def build_price_comparison(products):
     return result
 
 
+def get_real_history(product_name):
+    """Get real price history from price_tracker if available."""
+    history_file = DATA_DIR / "price_history_export.json"
+    if not hasattr(get_real_history, '_cache'):
+        if history_file.exists():
+            with open(history_file) as f:
+                get_real_history._cache = json.load(f)
+        else:
+            get_real_history._cache = {}
+    key = product_name.strip().lower()
+    history = get_real_history._cache.get(key)
+    if history and len(set(history)) > 1:  # only use if there's actual variation
+        return history
+    return None
+
+
 def update_data_js(comparison):
     """Merge ALL products into data.js.
     Includes every product from every dispensary so detail pages show full menus.
@@ -269,16 +285,21 @@ def update_data_js(comparison):
     # Sort: multi-dispensary first, then by name
     sorted_products = sorted(comparison, key=lambda x: (-len(x["prices"]), x["name"]))
 
-    # Include ALL products (the JS is big but browsers handle it fine)
-    # Cap at 2000 to keep the file reasonable
+    # Include ALL products - every dispensary should show its full menu
     lines = []
-    for i, p in enumerate(sorted_products[:2000]):
+    for i, p in enumerate(sorted_products):
         pid = f"p{i+1:04d}"
         prices_js = ", ".join(f"'{k}': {v}" for k, v in sorted(p["prices"].items()))
 
         if p["prices"]:
             low = min(p["prices"].values())
-            history = [int(low*1.12), int(low*1.1), int(low*1.08), int(low*1.06), int(low*1.04), int(low*1.02), int(low*1.01), low]
+            # Use real price history if available
+            real_history = get_real_history(p["name"])
+            if real_history:
+                history = real_history
+            else:
+                # No history yet - just show flat (honest)
+                history = [low] * 8
         else:
             history = [0]*8
 
