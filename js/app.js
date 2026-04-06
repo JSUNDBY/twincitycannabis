@@ -1176,6 +1176,10 @@
                 signups.push({ email, timestamp: new Date().toISOString(), type: 'alert' });
                 localStorage.setItem('tcc-alerts', JSON.stringify(signups));
 
+                // Conversion tracking
+                if (typeof gtag === 'function') gtag('event', 'generate_lead', { event_category: 'engagement', event_label: 'price_alert_signup' });
+                if (typeof fbq === 'function') fbq('track', 'Lead', { content_name: 'TCC Price Alerts' });
+
                 alertForm.style.display = 'none';
                 document.getElementById('alert-success').style.display = 'block';
             });
