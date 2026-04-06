@@ -255,7 +255,10 @@ def build_price_comparison(products):
 
 
 def update_data_js(comparison):
-    """Merge products into data.js."""
+    """Merge ALL products into data.js.
+    Includes every product from every dispensary so detail pages show full menus.
+    Products at multiple dispensaries are prioritized (shown first for Compare page).
+    """
     data_js = Path(__file__).parent.parent / "js" / "data.js"
     if not data_js.exists():
         print("data.js not found")
@@ -263,10 +266,14 @@ def update_data_js(comparison):
 
     content = data_js.read_text()
 
-    # Build JS entries (cap at 200 for performance)
+    # Sort: multi-dispensary first, then by name
+    sorted_products = sorted(comparison, key=lambda x: (-len(x["prices"]), x["name"]))
+
+    # Include ALL products (the JS is big but browsers handle it fine)
+    # Cap at 2000 to keep the file reasonable
     lines = []
-    for i, p in enumerate(comparison[:200]):
-        pid = f"p{i+1:03d}"
+    for i, p in enumerate(sorted_products[:2000]):
+        pid = f"p{i+1:04d}"
         prices_js = ", ".join(f"'{k}': {v}" for k, v in sorted(p["prices"].items()))
 
         if p["prices"]:
@@ -275,8 +282,8 @@ def update_data_js(comparison):
         else:
             history = [0]*8
 
-        name_esc = p["name"].replace("'", "\\'").replace("\\", "\\\\")
-        brand_esc = p.get("brand", "Unknown").replace("'", "\\'").replace("\\", "\\\\")
+        name_esc = p["name"].replace("\\", "\\\\").replace("'", "\\'")
+        brand_esc = p.get("brand", "Unknown").replace("\\", "\\\\").replace("'", "\\'")
         img = json.dumps(p.get("image", "") or "")
 
         lines.append(
@@ -307,8 +314,9 @@ def update_data_js(comparison):
         new_content = ts_line + new_content
 
     data_js.write_text(new_content)
-    multi = sum(1 for p in comparison[:200] if len(p["prices"]) > 1)
-    print(f"\nUpdated data.js: {len(lines)} products ({multi} at multiple dispensaries)")
+    multi = sum(1 for p in sorted_products[:2000] if len(p["prices"]) > 1)
+    total = len(lines)
+    print(f"\nUpdated data.js: {total} products ({multi} at multiple dispensaries)")
     return True
 
 
