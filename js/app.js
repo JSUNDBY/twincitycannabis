@@ -16,32 +16,47 @@
     };
 
     // ---- ICONS (inline SVG paths) ----
+    // Custom SVG icon system - all icons inherit currentColor for theming
+    const svgIcon = (size, body) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
     const Icons = {
-        search: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>',
-        pin: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
-        clock: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+        search: svgIcon(16, '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>'),
+        pin: svgIcon(14, '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>'),
+        clock: svgIcon(14, '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>'),
         star: '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
-        phone: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
-        check: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>',
-        arrow: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>',
-        trending: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
-        tag: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>',
+        phone: svgIcon(14, '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>'),
+        check: svgIcon(14, '<path d="M20 6L9 17l-5-5"/>'),
+        arrow: svgIcon(14, '<path d="M5 12h14M12 5l7 7-7 7"/>'),
+        trending: svgIcon(14, '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>'),
+        tag: svgIcon(14, '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>'),
         verified: '<svg width="14" height="14" viewBox="0 0 24 24" fill="var(--blue)" stroke="white" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>',
-        leaf: '&#127807;',
-        joint: '&#128684;',
-        cart: '&#128267;',
-        cookie: '&#127850;',
-        diamond: '&#128142;',
-        drop: '&#128167;',
-        bottle: '&#129514;',
-        fire: '&#128293;',
-        sparkle: '&#10024;',
-        deal: '&#127381;',
-        chart: '&#128200;',
-        globe: '&#127760;',
+
+        // ===== CUSTOM CATEGORY ICONS =====
+        // Cannabis leaf — symmetric 7-leaflet design
+        leaf: svgIcon(16, '<path d="M12 2c-.5 2.5-1.5 4.5-3 6 1.5.5 2.5 1.5 3 3 .5-1.5 1.5-2.5 3-3-1.5-1.5-2.5-3.5-3-6z"/><path d="M12 11c-2-1.5-4-2-6.5-2 1 2 2.5 3.5 4.5 4.5-2 .5-4 .5-6 0 2 2 4.5 3 7 3-1 1.5-2 2.5-3.5 3 2 .5 4 0 5.5-1.5"/><path d="M12 11c2-1.5 4-2 6.5-2-1 2-2.5 3.5-4.5 4.5 2 .5 4 .5 6 0-2 2-4.5 3-7 3 1 1.5 2 2.5 3.5 3-2 .5-4 0-5.5-1.5"/><line x1="12" y1="14" x2="12" y2="22"/>'),
+        // Pre-roll — joint with smoke wisp
+        joint: svgIcon(16, '<path d="M3 14l13-3 4 1.5-1 2.5-4 1L3 16z"/><line x1="14" y1="11.5" x2="15" y2="15.5"/><path d="M19 6c-1 1.5-1 3 0 4.5M21 4c-1.5 2-1.5 4 0 6"/>'),
+        // Cartridge — vape pen
+        cart: svgIcon(16, '<rect x="9" y="2" width="6" height="10" rx="1"/><path d="M11 12v3h2v-3"/><rect x="8" y="15" width="8" height="7" rx="1.5"/><line x1="10" y1="18" x2="14" y2="18"/>'),
+        // Edible — gummy bear silhouette
+        cookie: svgIcon(16, '<path d="M8 6a2 2 0 1 1 4 0M12 6a2 2 0 1 1 4 0"/><path d="M6 13c0-3 1.5-5 6-5s6 2 6 5v3c0 2-1.5 3-3 3h-1v-2h-4v2H9c-1.5 0-3-1-3-3z"/><circle cx="10" cy="13" r=".7" fill="currentColor"/><circle cx="14" cy="13" r=".7" fill="currentColor"/>'),
+        // Concentrate — diamond/crystal
+        diamond: svgIcon(16, '<path d="M6 9l6-6 6 6-6 12z"/><path d="M6 9h12M12 3l-3 6 3 12 3-12z"/>'),
+        // Topical — tube of cream
+        drop: svgIcon(16, '<path d="M8 4h8l-1 2h-6z"/><rect x="7" y="6" width="10" height="14" rx="2"/><path d="M10 11h4M10 14h4"/>'),
+        // Tincture — dropper bottle
+        bottle: svgIcon(16, '<rect x="9" y="2" width="6" height="3" rx="0.5"/><path d="M8 5h8l-1 2v12a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V7z"/><line x1="10" y1="11" x2="14" y2="11"/>'),
+        // Beverage — can with tab
+        beverage: svgIcon(16, '<rect x="7" y="4" width="10" height="17" rx="1.5"/><path d="M10 4V3h4v1"/><line x1="9" y1="8" x2="15" y2="8"/>'),
+
+        fire: svgIcon(14, '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>'),
+        sparkle: svgIcon(14, '<path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>'),
+        deal: svgIcon(14, '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.5"/>'),
+        chart: svgIcon(14, '<polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/>'),
+        globe: svgIcon(14, '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>'),
+        leafLine: svgIcon(48, '<path d="M12 2c-.5 2.5-1.5 4.5-3 6 1.5.5 2.5 1.5 3 3 .5-1.5 1.5-2.5 3-3-1.5-1.5-2.5-3.5-3-6z"/><path d="M12 11c-2-1.5-4-2-6.5-2 1 2 2.5 3.5 4.5 4.5-2 .5-4 .5-6 0 2 2 4.5 3 7 3-1 1.5-2 2.5-3.5 3 2 .5 4 0 5.5-1.5"/><path d="M12 11c2-1.5 4-2 6.5-2-1 2-2.5 3.5-4.5 4.5 2 .5 4 .5 6 0-2 2-4.5 3-7 3 1 1.5 2 2.5 3.5 3-2 .5-4 0-5.5-1.5"/><line x1="12" y1="14" x2="12" y2="22"/>'),
     };
 
-    const catIcons = { flower: Icons.leaf, 'pre-roll': Icons.joint, cartridge: Icons.cart, edible: Icons.cookie, concentrate: Icons.diamond, topical: Icons.drop, tincture: Icons.bottle, beverage: '&#127864;' };
+    const catIcons = { flower: Icons.leaf, 'pre-roll': Icons.joint, cartridge: Icons.cart, edible: Icons.cookie, concentrate: Icons.diamond, topical: Icons.drop, tincture: Icons.bottle, beverage: Icons.beverage };
 
     // ---- ROUTING ----
     function route() {
@@ -53,7 +68,7 @@
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
 
-        const navMap = { home: 'nav-home', dispensaries: 'nav-dispensaries', deals: 'nav-deals', strains: 'nav-strains', compare: 'nav-compare', 'for-dispensaries': 'nav-for-dispensaries' };
+        const navMap = { home: 'nav-home', dispensaries: 'nav-dispensaries', deals: 'nav-deals', strains: 'nav-strains', compare: 'nav-compare', learn: 'nav-learn', 'for-dispensaries': 'nav-for-dispensaries' };
 
         switch (page) {
             case 'dispensary':
@@ -385,11 +400,32 @@
         App._detailProducts = allProducts;
         App._detailDispId = id;
 
+        // If no products at all, show a friendly empty-menu state
+        const productsContainer = document.getElementById('detail-products');
+        const countEl = document.getElementById('detail-product-count');
+        const catContainer = document.getElementById('detail-product-cats');
+
+        if (allProducts.length === 0) {
+            countEl.textContent = 'Menu coming soon';
+            catContainer.innerHTML = '';
+            productsContainer.innerHTML = `
+                <div class="empty-menu-state">
+                    <div class="empty-menu-icon">${Icons.leafLine}</div>
+                    <div class="empty-menu-title">Menu data not yet available</div>
+                    <div class="empty-menu-desc">We're working on getting ${d.name}'s full menu into TCC. In the meantime, you can visit their site or call ahead.</div>
+                    <div class="empty-menu-actions">
+                        ${d.website ? `<a href="${d.website}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Visit Menu &rarr;</a>` : ''}
+                        <a href="tel:${(d.phone||'').replace(/[^0-9+]/g,'')}" class="btn btn-secondary btn-sm">${Icons.phone} Call</a>
+                    </div>
+                </div>`;
+            // Skip the rest of product rendering
+            // (still continue to reviews/deals below)
+        } else {
+
         // Build category tabs
         const cats = {};
         allProducts.forEach(p => { cats[p.category] = (cats[p.category] || 0) + 1; });
         const catEntries = Object.entries(cats).sort((a, b) => b[1] - a[1]);
-        const catContainer = document.getElementById('detail-product-cats');
         if (catEntries.length > 1) {
             catContainer.innerHTML = `<button class="filter-toggle active" data-cat="all">All (${allProducts.length})</button>` +
                 catEntries.map(([cat, count]) =>
@@ -409,8 +445,8 @@
 
         function renderDetailProducts(catFilter) {
             const filtered = catFilter === 'all' ? allProducts : allProducts.filter(p => p.category === catFilter);
-            const countEl = document.getElementById('detail-product-count');
-            countEl.textContent = `${filtered.length} product${filtered.length !== 1 ? 's' : ''}`;
+            const countElInner = document.getElementById('detail-product-count');
+            countElInner.textContent = `${filtered.length} product${filtered.length !== 1 ? 's' : ''}`;
 
             document.getElementById('detail-products').innerHTML = filtered.length ? filtered.map(p => {
                 const price = p.prices[id];
@@ -440,6 +476,7 @@
                 </div>`;
             }).join('') : '<div class="empty-state"><div class="empty-state-desc">No products in this category</div></div>';
         }
+        } // end else (allProducts.length > 0)
 
         // Reviews
         const reviews = TCC.getReviewsForDispensary(id);
@@ -745,28 +782,152 @@
         }
     }
 
+    // Browse page state
+    const Browse = {
+        category: 'all',
+        sort: 'popular',
+        query: '',
+        page: 1,
+        perPage: 24,
+    };
+
+    // Categories shown in the browse UI (excludes accessories/apparel/seeds/etc.)
+    const BROWSE_CATEGORIES = ['flower', 'edible', 'cartridge', 'pre-roll', 'beverage', 'tincture', 'topical', 'concentrate'];
+
+    function getBrowseFiltered() {
+        let list = TCC.products.filter(p => BROWSE_CATEGORIES.includes(p.category));
+
+        if (Browse.category !== 'all') {
+            list = list.filter(p => p.category === Browse.category);
+        }
+
+        if (Browse.query.trim()) {
+            const q = Browse.query.trim().toLowerCase();
+            list = list.filter(p => {
+                const hay = `${p.name} ${p.brand || ''} ${p.strain || ''}`.toLowerCase();
+                return hay.includes(q);
+            });
+        }
+
+        // Sort
+        switch (Browse.sort) {
+            case 'price-asc':
+                list.sort((a, b) => (TCC.getLowestPrice(a)?.price || 9e9) - (TCC.getLowestPrice(b)?.price || 9e9));
+                break;
+            case 'price-desc':
+                list.sort((a, b) => (TCC.getLowestPrice(b)?.price || 0) - (TCC.getLowestPrice(a)?.price || 0));
+                break;
+            case 'name':
+                list.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+            case 'popular':
+            default:
+                // Popular = most dispensaries carrying it
+                list.sort((a, b) => Object.keys(b.prices || {}).length - Object.keys(a.prices || {}).length);
+        }
+
+        return list;
+    }
+
     function renderCompareDefault() {
         const container = document.getElementById('compare-content');
-        // Show a product selector
-        const categories = [...new Set(TCC.products.map(p => p.category))];
+        const filtered = getBrowseFiltered();
+        const total = filtered.length;
+        const visible = filtered.slice(0, Browse.page * Browse.perPage);
+        const hasMore = visible.length < total;
+
+        // Render quick category pills (above grid)
+        renderBrowsePills();
 
         container.innerHTML = `
-            <div style="margin-bottom:2rem">
-                <p class="section-desc">Select a product to compare prices across all dispensaries.</p>
+            <div class="browse-result-meta">
+                <span><strong>${total.toLocaleString()}</strong> ${total === 1 ? 'product' : 'products'}${Browse.query ? ` matching "${Browse.query}"` : ''}</span>
+                ${total > 0 ? `<span class="text-muted">Showing ${visible.length} of ${total}</span>` : ''}
             </div>
-            ${categories.map(cat => {
-                const products = TCC.getProductsByCategory(cat);
-                const catObj = TCC.categories.find(c => c.id === cat);
-                return `
-                    <div style="margin-bottom:2rem">
-                        <h3 class="font-display font-semibold" style="margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem">
-                            <span>${catIcons[cat] || ''}</span> ${catObj ? catObj.name : cat}
-                        </h3>
-                        <div class="home-grid-2">
-                            ${products.map(p => productCard(p)).join('')}
-                        </div>
-                    </div>`;
-            }).join('')}`;
+            ${total === 0 ? `
+                <div class="empty-state" style="padding:3rem 1rem;text-align:center">
+                    <div class="empty-state-title">No products found</div>
+                    <div class="empty-state-desc">Try a different category or search term.</div>
+                </div>
+            ` : `
+                <div class="home-grid-2" id="browse-grid">
+                    ${visible.map(p => productCard(p)).join('')}
+                </div>
+                ${hasMore ? `
+                    <div style="text-align:center;margin-top:2rem">
+                        <button class="btn btn-secondary btn-lg" id="browse-load-more">
+                            Load ${Math.min(Browse.perPage, total - visible.length)} more
+                        </button>
+                    </div>
+                ` : ''}
+            `}
+        `;
+
+        // Wire up Load More
+        const loadMoreBtn = document.getElementById('browse-load-more');
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', () => {
+                Browse.page++;
+                renderCompareDefault();
+                // Smooth-scroll the newly loaded section into view
+                setTimeout(() => {
+                    const grid = document.getElementById('browse-grid');
+                    if (grid && grid.children.length) {
+                        grid.children[(Browse.page - 1) * Browse.perPage]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 50);
+            });
+        }
+    }
+
+    function renderBrowsePills() {
+        const pillsContainer = document.getElementById('browse-pills');
+        if (!pillsContainer) return;
+        const cats = [{ id: 'all', name: 'All' }, ...BROWSE_CATEGORIES.map(id => ({
+            id,
+            name: TCC.categories?.find(c => c.id === id)?.name || id
+        }))];
+        pillsContainer.innerHTML = cats.map(c =>
+            `<button class="browse-pill ${Browse.category === c.id ? 'active' : ''}" data-cat="${c.id}">${c.name}</button>`
+        ).join('');
+        pillsContainer.querySelectorAll('.browse-pill').forEach(btn => {
+            btn.addEventListener('click', () => {
+                Browse.category = btn.dataset.cat;
+                Browse.page = 1;
+                const sel = document.getElementById('browse-category');
+                if (sel) sel.value = Browse.category;
+                renderCompareDefault();
+            });
+        });
+    }
+
+    function bindBrowseControls() {
+        const searchInput = document.getElementById('browse-search-input');
+        const catSelect = document.getElementById('browse-category');
+        const sortSelect = document.getElementById('browse-sort');
+        if (!searchInput) return;
+
+        let searchTimer;
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+                Browse.query = e.target.value;
+                Browse.page = 1;
+                renderCompareDefault();
+            }, 200);
+        });
+
+        catSelect.addEventListener('change', (e) => {
+            Browse.category = e.target.value;
+            Browse.page = 1;
+            renderCompareDefault();
+        });
+
+        sortSelect.addEventListener('change', (e) => {
+            Browse.sort = e.target.value;
+            Browse.page = 1;
+            renderCompareDefault();
+        });
     }
 
     function renderCompareProduct(product) {
@@ -1379,12 +1540,44 @@
         if (e.key === 'Escape') document.getElementById('lightbox')?.classList.remove('open');
     });
 
+    // Inject custom SVG icons into any element with [data-icon="iconName"]
+    function injectDataIcons() {
+        document.querySelectorAll('[data-icon]').forEach(el => {
+            const name = el.getAttribute('data-icon');
+            if (Icons[name] && !el.innerHTML.trim()) {
+                // Render at element's intended size
+                el.innerHTML = Icons[name];
+                const svg = el.querySelector('svg');
+                if (svg) {
+                    svg.setAttribute('width', '100%');
+                    svg.setAttribute('height', '100%');
+                }
+            }
+        });
+    }
+
+    function updateHeroCounts() {
+        const pc = TCC.products ? TCC.products.length.toLocaleString() + '+' : '5,700+';
+        const dc = TCC.dispensaries ? TCC.dispensaries.length.toString() : '44';
+        ['hero-stat-products', 'announce-product-count'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = pc;
+        });
+        ['hero-stat-dispensaries', 'announce-disp-count'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = dc;
+        });
+    }
+
     function init() {
+        updateHeroCounts();
+        injectDataIcons();
         renderHome();
         renderDispensaries();
         renderDeals();
         renderStrains();
         renderCompare();
+        bindBrowseControls();
         bindEvents();
         route();
     }

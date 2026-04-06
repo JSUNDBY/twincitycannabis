@@ -16,6 +16,7 @@
     <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="Twin City Cannabis">
     <meta property="og:locale" content="en_US">
+    <meta property="fb:app_id" content="966242223397117">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
@@ -27,6 +28,9 @@
     <link rel="canonical" href="https://twincitycannabis.com">
 
     <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="img/twin-city-cannabis-logo-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="img/twin-city-cannabis-logo-192.png">
+    <link rel="apple-touch-icon" href="img/twin-city-cannabis-logo-192.png">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
     <!-- GA4 -->
@@ -61,6 +65,17 @@
       "name": "Twin City Cannabis",
       "url": "https://twincitycannabis.com",
       "description": "Compare cannabis prices across every dispensary in the Twin Cities. Real prices, real ratings, real savings.",
+      "image": "https://twincitycannabis.com/img/twin-city-cannabis-logo-512.png",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Twin City Cannabis",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://twincitycannabis.com/img/twin-city-cannabis-logo-512.png",
+          "width": 512,
+          "height": 512
+        }
+      },
       "potentialAction": {
         "@type": "SearchAction",
         "target": "https://twincitycannabis.com/#compare/{search_term_string}",
@@ -165,21 +180,17 @@
 
 <!-- ============ NAVIGATION ============ -->
 <nav class="nav">
-    <div class="nav-logo">
-        <div class="nav-logo-mark">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C12 2 9.5 6 9.5 9C9.5 9 7 7.5 4 8C4 8 6 10.5 8 11.5C8 11.5 5 11 2 12C2 12 5.5 13.5 8.5 12.5C8.5 12.5 6.5 14.5 6 18C6 18 9 15.5 10.5 13.5C10.5 13.5 10 16 11 19C11 19 12 16 12 14C12 14 13 16 13 19C13 19 14 16 13.5 13.5C13.5 13.5 15 15.5 18 18C18 18 17.5 14.5 15.5 12.5C15.5 12.5 18.5 13.5 22 12C22 12 19 11 16 11.5C16 11.5 18 10.5 20 8C20 8 17 7.5 14.5 9C14.5 9 14.5 6 12 2Z" fill="#0a0a0a"/>
-            </svg>
-        </div>
+    <a class="nav-logo" href="#home" aria-label="Twin City Cannabis home">
+        <img src="img/twin-city-cannabis-logo-128.png" alt="Twin City Cannabis logo" width="56" height="56" class="nav-logo-mark-img">
         <div class="nav-logo-text">Twin City <span>Cannabis</span></div>
-    </div>
+    </a>
 
     <div class="nav-menu">
         <a class="nav-link active" id="nav-home" href="#home">Home</a>
+        <a class="nav-link" id="nav-compare" href="#compare">Browse</a>
         <a class="nav-link" id="nav-dispensaries" href="#dispensaries">Dispensaries</a>
         <a class="nav-link" id="nav-deals" href="#deals">Deals</a>
-        <a class="nav-link" id="nav-strains" href="#strains">Strains</a>
-        <a class="nav-link" id="nav-compare" href="#compare">Compare</a>
+        <a class="nav-link" id="nav-learn" href="#learn">Learn</a>
         <a class="nav-link" id="nav-for-dispensaries" href="#for-dispensaries" style="color:var(--amber)">For Dispensaries</a>
         <a class="nav-cta-btn" href="#dispensaries">Find a Dispensary</a>
     </div>
@@ -192,11 +203,7 @@
 <!-- Announcement bar -->
 <div class="announce-bar">
     <div class="container" style="display:flex;justify-content:center;align-items:center;gap:1.5rem;flex-wrap:wrap">
-        <span>&#127807; Compare real cannabis prices across <strong>44 dispensaries</strong> in Minneapolis-St. Paul</span>
-        <span style="color:var(--text-muted)">|</span>
-        <a href="#dispensaries" style="color:var(--green);font-weight:600">Find a Dispensary</a>
-        <span style="color:var(--text-muted)">|</span>
-        <a href="mailto:hello@twincitycannabis.com?subject=Claim%20My%20Dispensary" style="color:var(--amber);font-weight:600">Dispensary Owner? Claim Your Listing</a>
+        <span><span class="live-dot"></span> <strong id="announce-product-count">5,700+</strong> products. <strong id="announce-disp-count">44</strong> dispensaries. One search. All free.</span>
     </div>
 </div>
 
@@ -209,11 +216,12 @@
     <!-- Hero Search -->
     <section class="hero-search">
         <div class="container">
+            <p class="hero-eyebrow">Minneapolis-St. Paul cannabis, all in one place</p>
             <h1>
-                Every dispensary. Every price.<br>
-                <span class="highlight">One search.</span>
+                Every menu in the Twin Cities.<br>
+                <span class="highlight">One page.</span>
             </h1>
-            <p class="hero-search-subtitle">Compare real-time prices across every dispensary in Minneapolis-St. Paul</p>
+            <p class="hero-search-subtitle">Search every dispensary, compare real prices, find what's good near you. Updated daily. Completely free. Bookmark it.</p>
 
             <div class="hero-search-bar">
                 <span class="search-icon">
@@ -230,6 +238,23 @@
                 <span class="tag search-suggestion" data-query="North Star">North Star Cannabis</span>
                 <span class="tag search-suggestion" data-query="pre-roll">Pre-Rolls</span>
             </div>
+
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-number" id="hero-stat-products">5,700+</span>
+                    <span class="hero-stat-label">Products</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number" id="hero-stat-dispensaries">44</span>
+                    <span class="hero-stat-label">Dispensaries</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">100%</span>
+                    <span class="hero-stat-label">Free</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -238,31 +263,31 @@
         <div class="container">
             <div class="quick-cats">
                 <div class="quick-cat" data-category="flower" onclick="window.location.hash='compare'">
-                    <div class="quick-cat-icon">&#127807;</div>
+                    <div class="quick-cat-icon" data-icon="leaf"></div>
                     <span class="quick-cat-label">Flower</span>
                 </div>
                 <div class="quick-cat" data-category="pre-roll" onclick="window.location.hash='compare'">
-                    <div class="quick-cat-icon">&#128684;</div>
+                    <div class="quick-cat-icon" data-icon="joint"></div>
                     <span class="quick-cat-label">Pre-Rolls</span>
                 </div>
                 <div class="quick-cat" data-category="cartridge" onclick="window.location.hash='compare'">
-                    <div class="quick-cat-icon">&#128267;</div>
+                    <div class="quick-cat-icon" data-icon="cart"></div>
                     <span class="quick-cat-label">Carts</span>
                 </div>
                 <div class="quick-cat" data-category="edible" onclick="window.location.hash='compare'">
-                    <div class="quick-cat-icon">&#127850;</div>
+                    <div class="quick-cat-icon" data-icon="cookie"></div>
                     <span class="quick-cat-label">Edibles</span>
                 </div>
                 <div class="quick-cat" data-category="concentrate" onclick="window.location.hash='compare'">
-                    <div class="quick-cat-icon">&#128142;</div>
+                    <div class="quick-cat-icon" data-icon="diamond"></div>
                     <span class="quick-cat-label">Concentrates</span>
                 </div>
                 <div class="quick-cat" data-category="topical" onclick="window.location.hash='compare'">
-                    <div class="quick-cat-icon">&#128167;</div>
+                    <div class="quick-cat-icon" data-icon="drop"></div>
                     <span class="quick-cat-label">Topicals</span>
                 </div>
                 <div class="quick-cat" data-category="tincture" onclick="window.location.hash='compare'">
-                    <div class="quick-cat-icon">&#129514;</div>
+                    <div class="quick-cat-icon" data-icon="bottle"></div>
                     <span class="quick-cat-label">Tinctures</span>
                 </div>
             </div>
@@ -770,11 +795,280 @@
 <div class="page" id="page-compare">
     <section class="section" style="padding-top:2rem">
         <div class="container">
-            <div class="section-label">&#128200; Price Compare</div>
-            <h1 class="section-title">Compare prices across dispensaries</h1>
-            <p class="section-desc" style="margin-bottom:2rem">Select any product to see who has it and at what price.</p>
+            <div class="section-label">Browse &amp; Compare</div>
+            <h1 class="section-title">Find your product. Compare every price.</h1>
+            <p class="section-desc" style="margin-bottom:2rem">Filter by category, search by name, sort by price. Tap any product to see who's selling it and for how much.</p>
+
+            <!-- Filter / sort toolbar -->
+            <div class="browse-toolbar" id="browse-toolbar">
+                <div class="browse-search">
+                    <span class="search-icon" data-icon="search"></span>
+                    <input type="text" id="browse-search-input" class="input" placeholder="Search by name, brand, or strain...">
+                </div>
+                <select id="browse-category" class="select">
+                    <option value="all">All categories</option>
+                    <option value="flower">Flower</option>
+                    <option value="edible">Edibles</option>
+                    <option value="cartridge">Cartridges</option>
+                    <option value="pre-roll">Pre-Rolls</option>
+                    <option value="beverage">Beverages</option>
+                    <option value="tincture">Tinctures</option>
+                    <option value="topical">Topicals</option>
+                    <option value="concentrate">Concentrates</option>
+                </select>
+                <select id="browse-sort" class="select">
+                    <option value="popular">Most popular</option>
+                    <option value="price-asc">Price: low to high</option>
+                    <option value="price-desc">Price: high to low</option>
+                    <option value="name">Name (A-Z)</option>
+                </select>
+            </div>
+
+            <!-- Quick category pills -->
+            <div class="browse-pills" id="browse-pills"></div>
 
             <div id="compare-content"></div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+
+<!-- ================================================================ -->
+<!-- PAGE: LEARN (consumption methods)                                  -->
+<!-- ================================================================ -->
+<div class="page" id="page-learn">
+
+    <!-- Hero -->
+    <section style="padding:4rem 0 2rem;text-align:center;background:radial-gradient(ellipse at 50% 0%, rgba(34,197,94,0.05) 0%, transparent 60%)">
+        <div class="container" style="max-width:720px">
+            <div class="section-label" style="text-align:center">Cannabis 101</div>
+            <h1 class="font-display" style="font-size:clamp(2rem,5vw,3rem);font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:1rem">
+                New to cannabis? <span class="text-green">Start here.</span>
+            </h1>
+            <p style="font-size:1.05rem;color:var(--text-secondary);line-height:1.6">
+                There are a lot of ways to consume cannabis, and they all feel pretty different. Here's a plain-language guide to help you pick what's right for you.
+            </p>
+        </div>
+    </section>
+
+    <!-- Beginner-friendly note -->
+    <section class="section" style="padding-top:1rem;padding-bottom:1rem">
+        <div class="container" style="max-width:720px">
+            <div class="card" style="border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.04)">
+                <div class="card-body">
+                    <div style="display:flex;gap:1rem;align-items:flex-start">
+                        <div style="font-size:1.5rem;flex-shrink:0">&#128161;</div>
+                        <div>
+                            <div class="font-display font-semibold" style="margin-bottom:0.3rem">First time? Read this.</div>
+                            <div class="text-sm text-secondary" style="line-height:1.6">
+                                Start low and go slow. Whatever method you choose, take the smallest reasonable amount and wait at least an hour before taking more (longer for edibles). You can always have more, but you can't have less. Everyone's body responds differently.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methods Grid -->
+    <section class="section" style="padding-top:1.5rem">
+        <div class="container" style="max-width:1100px">
+            <div class="learn-grid">
+
+                <!-- Flower -->
+                <div class="learn-card">
+                    <div class="learn-card-icon" data-icon="leaf"></div>
+                    <div class="learn-card-tag">The classic</div>
+                    <h3 class="learn-card-title">Flower</h3>
+                    <div class="learn-card-meta">
+                        <span><strong>Onset:</strong> Seconds to minutes</span>
+                        <span><strong>Duration:</strong> 1-3 hours</span>
+                    </div>
+                    <p>The dried bud of the cannabis plant. You smoke it in a pipe, bong, or rolled in paper. Old school for a reason: the effects come on fast, you can feel exactly how much you've had, and stopping is easy. Most flexible option for finding your dose.</p>
+                    <div class="learn-card-pros">
+                        <div class="learn-card-pro">Fast onset, easy to control</div>
+                        <div class="learn-card-pro">Wide variety of strains</div>
+                        <div class="learn-card-pro">Most affordable per dose</div>
+                    </div>
+                </div>
+
+                <!-- Pre-Rolls -->
+                <div class="learn-card">
+                    <div class="learn-card-icon" data-icon="joint"></div>
+                    <div class="learn-card-tag">No prep needed</div>
+                    <h3 class="learn-card-title">Pre-Rolls</h3>
+                    <div class="learn-card-meta">
+                        <span><strong>Onset:</strong> Seconds to minutes</span>
+                        <span><strong>Duration:</strong> 1-3 hours</span>
+                    </div>
+                    <p>Flower already rolled into a joint, ready to smoke. Same experience as flower but without needing to grind, roll, or own anything. A good way to try a new strain without buying a whole eighth.</p>
+                    <div class="learn-card-pros">
+                        <div class="learn-card-pro">Zero setup or accessories</div>
+                        <div class="learn-card-pro">Great for sampling strains</div>
+                        <div class="learn-card-pro">Discreet and portable</div>
+                    </div>
+                </div>
+
+                <!-- Edibles -->
+                <div class="learn-card learn-card-featured">
+                    <div class="learn-card-icon" data-icon="cookie"></div>
+                    <div class="learn-card-tag">Beginner-friendly</div>
+                    <h3 class="learn-card-title">Edibles</h3>
+                    <div class="learn-card-meta">
+                        <span><strong>Onset:</strong> 30-90 minutes</span>
+                        <span><strong>Duration:</strong> 4-8 hours</span>
+                    </div>
+                    <p>Gummies, chocolates, mints, baked goods. Cannabis infused into food. Often the easiest entry point for new users since there's no smoke, no equipment, and the dose per piece is clearly labeled. The catch: it takes a while to kick in, and the effects last much longer than smoking.</p>
+                    <div class="learn-card-pros">
+                        <div class="learn-card-pro">No smoke, totally discreet</div>
+                        <div class="learn-card-pro">Precise, clearly-labeled dosing</div>
+                        <div class="learn-card-pro">Long-lasting effects</div>
+                    </div>
+                    <div class="learn-card-warn">
+                        <strong>Heads up:</strong> Effects take 30-90 minutes. Don't take more because you "don't feel it yet." Start with 2.5-5mg if you're new.
+                    </div>
+                </div>
+
+                <!-- Vapes / Cartridges -->
+                <div class="learn-card">
+                    <div class="learn-card-icon" data-icon="cart"></div>
+                    <div class="learn-card-tag">Discreet &amp; clean</div>
+                    <h3 class="learn-card-title">Vape Cartridges</h3>
+                    <div class="learn-card-meta">
+                        <span><strong>Onset:</strong> Seconds to minutes</span>
+                        <span><strong>Duration:</strong> 1-3 hours</span>
+                    </div>
+                    <p>Concentrated cannabis oil in a small cartridge that screws onto a battery. You inhale a vapor, not smoke, so there's almost no smell and no ash. Stronger than flower per puff, so go easy at first.</p>
+                    <div class="learn-card-pros">
+                        <div class="learn-card-pro">Almost no smell, very portable</div>
+                        <div class="learn-card-pro">Clean inhale, no combustion</div>
+                        <div class="learn-card-pro">Easy on-the-go</div>
+                    </div>
+                </div>
+
+                <!-- Beverages -->
+                <div class="learn-card">
+                    <div class="learn-card-icon" data-icon="beverage"></div>
+                    <div class="learn-card-tag">Social</div>
+                    <h3 class="learn-card-title">Beverages</h3>
+                    <div class="learn-card-meta">
+                        <span><strong>Onset:</strong> 15-45 minutes</span>
+                        <span><strong>Duration:</strong> 2-4 hours</span>
+                    </div>
+                    <p>Sparkling waters, sodas, mocktails, tonics. Cannabis (usually low-dose) infused into a drink. Great for social settings where you'd otherwise have a beer or cocktail. Effects come on faster than edibles and wear off sooner, which most people find more manageable.</p>
+                    <div class="learn-card-pros">
+                        <div class="learn-card-pro">Faster than edibles, gentler than smoking</div>
+                        <div class="learn-card-pro">Social, low-stigma alternative to alcohol</div>
+                        <div class="learn-card-pro">Easy to dose (usually 2-10mg)</div>
+                    </div>
+                </div>
+
+                <!-- Tinctures -->
+                <div class="learn-card">
+                    <div class="learn-card-icon" data-icon="bottle"></div>
+                    <div class="learn-card-tag">Most precise</div>
+                    <h3 class="learn-card-title">Tinctures</h3>
+                    <div class="learn-card-meta">
+                        <span><strong>Onset:</strong> 15-45 minutes</span>
+                        <span><strong>Duration:</strong> 2-6 hours</span>
+                    </div>
+                    <p>A small dropper bottle of cannabis-infused oil or alcohol. You put a few drops under your tongue and hold it there. Faster than edibles, easier to dose precisely than almost anything else, and totally smoke-free.</p>
+                    <div class="learn-card-pros">
+                        <div class="learn-card-pro">Drop-by-drop dose control</div>
+                        <div class="learn-card-pro">Faster than edibles</div>
+                        <div class="learn-card-pro">No smoke, no calories</div>
+                    </div>
+                </div>
+
+                <!-- Topicals -->
+                <div class="learn-card">
+                    <div class="learn-card-icon" data-icon="drop"></div>
+                    <div class="learn-card-tag">No high</div>
+                    <h3 class="learn-card-title">Topicals</h3>
+                    <div class="learn-card-meta">
+                        <span><strong>Onset:</strong> 15-30 minutes</span>
+                        <span><strong>Duration:</strong> 1-3 hours (localized)</span>
+                    </div>
+                    <p>Lotions, balms, salves, and roll-ons you apply directly to your skin. Mostly used for sore muscles, joint pain, or skin issues. The big thing: standard topicals don't get you high, they just work locally on the spot you applied them.</p>
+                    <div class="learn-card-pros">
+                        <div class="learn-card-pro">Targeted relief, no head effects</div>
+                        <div class="learn-card-pro">Drug-test friendly (most products)</div>
+                        <div class="learn-card-pro">Easy to add to a routine</div>
+                    </div>
+                </div>
+
+                <!-- Concentrates -->
+                <div class="learn-card">
+                    <div class="learn-card-icon" data-icon="diamond"></div>
+                    <div class="learn-card-tag">Experienced users</div>
+                    <h3 class="learn-card-title">Concentrates</h3>
+                    <div class="learn-card-meta">
+                        <span><strong>Onset:</strong> Seconds</span>
+                        <span><strong>Duration:</strong> 1-3 hours</span>
+                    </div>
+                    <p>Cannabis extracted into a much more potent form: wax, shatter, rosin, live resin, hash. Used with a dab rig or specialized vaporizer. Significantly stronger than flower, so this is generally not where new users should start. If you're curious, try a low-temp dab with someone experienced.</p>
+                    <div class="learn-card-pros">
+                        <div class="learn-card-pro">Most potent option per dose</div>
+                        <div class="learn-card-pro">Pure cannabis flavor</div>
+                        <div class="learn-card-pro">Tiny amounts go a long way</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick reference -->
+    <section class="section section-dark">
+        <div class="container" style="max-width:900px">
+            <div class="section-label" style="text-align:center">Quick Reference</div>
+            <h2 class="section-title" style="text-align:center;margin-bottom:2rem">If you're looking for...</h2>
+            <div class="learn-quick-grid">
+                <div class="learn-quick-item">
+                    <div class="learn-quick-q">The easiest first try</div>
+                    <div class="learn-quick-a">A low-dose edible (2.5-5mg) or a cannabis beverage. Both are predictable and forgiving.</div>
+                </div>
+                <div class="learn-quick-item">
+                    <div class="learn-quick-q">Something fast-acting</div>
+                    <div class="learn-quick-a">Flower, pre-rolls, or vape carts. Effects start within minutes so you know exactly where you stand.</div>
+                </div>
+                <div class="learn-quick-item">
+                    <div class="learn-quick-q">No smoke or smell</div>
+                    <div class="learn-quick-a">Edibles, beverages, tinctures, or topicals. None involve combustion or noticeable odor.</div>
+                </div>
+                <div class="learn-quick-item">
+                    <div class="learn-quick-q">Pain relief without a head buzz</div>
+                    <div class="learn-quick-a">Topicals for localized issues, or look for high-CBD low-THC tinctures.</div>
+                </div>
+                <div class="learn-quick-item">
+                    <div class="learn-quick-q">Help sleeping</div>
+                    <div class="learn-quick-a">An indica-leaning edible taken 60-90 minutes before bed, or a tincture under the tongue 30 minutes before bed.</div>
+                </div>
+                <div class="learn-quick-item">
+                    <div class="learn-quick-q">Social occasions</div>
+                    <div class="learn-quick-a">Cannabis beverages. Same ritual as a beer or cocktail, no morning headache.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA back to browse -->
+    <section class="section">
+        <div class="container" style="max-width:720px;text-align:center">
+            <h2 class="font-display font-bold text-2xl" style="margin-bottom:0.5rem">Ready to find what you're looking for?</h2>
+            <p class="text-secondary" style="margin-bottom:1.5rem">Browse every product across every Twin Cities dispensary.</p>
+            <a href="#compare" class="btn btn-primary btn-lg">Browse Products &rarr;</a>
         </div>
     </section>
 
@@ -808,9 +1102,94 @@
             </p>
             <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-bottom:2rem">
                 <a href="#for-dispensaries-claim" class="btn btn-primary btn-lg" style="font-size:1rem;padding:0.9rem 2rem">Claim Your Free Listing</a>
-                <a href="#for-dispensaries-tiers" class="btn btn-secondary btn-lg" style="font-size:1rem;padding:0.9rem 2rem">See Upgrade Options</a>
+                <a href="#for-dispensaries" class="btn btn-secondary btn-lg" style="font-size:1rem;padding:0.9rem 2rem" onclick="event.preventDefault();window.location.hash='for-dispensaries';setTimeout(function(){document.getElementById('for-dispensaries-tiers').scrollIntoView({behavior:'smooth',block:'start'})},150)">See Upgrade Options</a>
             </div>
             <p style="color:var(--green);font-weight:600;font-size:0.95rem">Your first 30 days of Featured are free. No credit card needed.</p>
+        </div>
+    </section>
+
+    <!-- Banner Ad Sample -->
+    <section class="section" style="padding-top:1rem">
+        <div class="container" style="max-width:1000px">
+            <div class="section-label" style="text-align:center">Live Sample</div>
+            <h2 class="font-display font-bold text-2xl tracking-tight" style="margin-bottom:0.5rem;text-align:center">Here's what your spotlight ad looks like</h2>
+            <p class="text-secondary text-sm" style="text-align:center;margin-bottom:2rem;max-width:560px;margin-left:auto;margin-right:auto">
+                Your products. Your branding. Front and center on the homepage and inside category browsers, clearly labeled "Sponsored" so shoppers trust what they're seeing.
+            </p>
+
+            <!-- The actual banner ad mockup -->
+            <div class="ad-banner-sample">
+                <div class="ad-banner-label">Sponsored</div>
+                <div class="ad-banner-inner">
+                    <div class="ad-banner-text">
+                        <div class="ad-banner-disp-row">
+                            <div class="ad-banner-logo">GG</div>
+                            <div>
+                                <div class="ad-banner-disp-name">Green Goods Minneapolis</div>
+                                <div class="ad-banner-disp-sub">Northeast &middot; Open until 9pm &middot; <span style="color:var(--amber)">&#9733;&#9733;&#9733;&#9733;&#9734;</span> 4.6</div>
+                            </div>
+                        </div>
+                        <div class="ad-banner-headline">Eighths starting at <span class="text-green">$30</span></div>
+                        <div class="ad-banner-sub">Top-shelf flower from Cresco, RYTHM, and Rise. Curbside pickup ready in 15 minutes.</div>
+                        <div class="ad-banner-cta-row">
+                            <a class="btn btn-primary btn-sm">View Menu &rarr;</a>
+                            <a class="btn btn-ghost btn-sm">Get Directions</a>
+                        </div>
+                    </div>
+                    <div class="ad-banner-products">
+                        <div class="ad-banner-product">
+                            <div class="ad-banner-product-img" style="background:linear-gradient(135deg,#1a4d2e,#22c55e)"></div>
+                            <div class="ad-banner-product-name">Blue Dream 1/8</div>
+                            <div class="ad-banner-product-price">$32</div>
+                            <div class="ad-banner-product-tag">22% THC</div>
+                        </div>
+                        <div class="ad-banner-product">
+                            <div class="ad-banner-product-img" style="background:linear-gradient(135deg,#581c87,#a855f7)"></div>
+                            <div class="ad-banner-product-name">GG #4 1/8</div>
+                            <div class="ad-banner-product-price">$30</div>
+                            <div class="ad-banner-product-tag">26% THC</div>
+                        </div>
+                        <div class="ad-banner-product">
+                            <div class="ad-banner-product-img" style="background:linear-gradient(135deg,#9a3412,#f97316)"></div>
+                            <div class="ad-banner-product-name">Wedding Cake 1/8</div>
+                            <div class="ad-banner-product-price">$35</div>
+                            <div class="ad-banner-product-tag">24% THC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Where it appears -->
+            <div class="ad-placement-grid">
+                <div class="ad-placement-item">
+                    <div class="ad-placement-icon">&#127968;</div>
+                    <div>
+                        <div class="font-display font-semibold text-sm">Homepage hero</div>
+                        <div class="text-xs text-secondary">Above the fold on every visit</div>
+                    </div>
+                </div>
+                <div class="ad-placement-item">
+                    <div class="ad-placement-icon">&#128269;</div>
+                    <div>
+                        <div class="font-display font-semibold text-sm">Browse results</div>
+                        <div class="text-xs text-secondary">Top of category listings</div>
+                    </div>
+                </div>
+                <div class="ad-placement-item">
+                    <div class="ad-placement-icon">&#128269;</div>
+                    <div>
+                        <div class="font-display font-semibold text-sm">Search results</div>
+                        <div class="text-xs text-secondary">Sponsored slot on every relevant search</div>
+                    </div>
+                </div>
+                <div class="ad-placement-item">
+                    <div class="ad-placement-icon">&#128205;</div>
+                    <div>
+                        <div class="font-display font-semibold text-sm">Map view</div>
+                        <div class="text-xs text-secondary">Highlighted pin and featured callout</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
