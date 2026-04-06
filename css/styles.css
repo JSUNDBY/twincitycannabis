@@ -2462,10 +2462,19 @@ ul, ol { list-style: none; }
 }
 
 /* ============ ANIMATIONS ============ */
+/* Default to visible — animations are progressive enhancement only.
+   This prevents content from being invisible if the IntersectionObserver
+   misses it (common on mobile + after hash route changes). */
 .fade-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Only hide initially when the page just loaded AND animations are honored */
+.js-animate .fade-in:not(.visible) {
     opacity: 0;
     transform: translateY(15px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .fade-in.visible {
@@ -2473,8 +2482,18 @@ ul, ol { list-style: none; }
     transform: translateY(0);
 }
 
-/* Stagger children */
-.stagger > * { opacity: 0; transform: translateY(15px); transition: opacity 0.4s ease, transform 0.4s ease; }
+/* Stagger children — same progressive-enhancement approach */
+.stagger > * {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.js-animate .stagger:not(.visible) > * {
+    opacity: 0;
+    transform: translateY(15px);
+}
+
 .stagger.visible > *:nth-child(1) { transition-delay: 0s; }
 .stagger.visible > *:nth-child(2) { transition-delay: 0.05s; }
 .stagger.visible > *:nth-child(3) { transition-delay: 0.1s; }
@@ -2488,6 +2507,15 @@ ul, ol { list-style: none; }
 .stagger.visible > *:nth-child(11) { transition-delay: 0.5s; }
 .stagger.visible > *:nth-child(12) { transition-delay: 0.55s; }
 .stagger.visible > * { opacity: 1; transform: translateY(0); }
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .fade-in, .stagger > * {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
 
 /* Skeleton loading */
 .skeleton {
@@ -2524,6 +2552,75 @@ ul, ol { list-style: none; }
 .empty-state-desc {
     color: var(--text-secondary);
     font-size: 0.9rem;
+}
+
+/* ============ MOBILE INLINE GRID OVERRIDES ============ */
+/* Many sections use inline `style="grid-template-columns:1fr 1fr"` etc.
+   These overrides collapse them to single column on mobile without
+   editing every inline style. The [style*=...] selector matches
+   inline styles that contain the substring. */
+@media (max-width: 768px) {
+    [style*="grid-template-columns:1fr 1fr"],
+    [style*="grid-template-columns: 1fr 1fr"],
+    [style*="grid-template-columns:repeat(2,1fr)"],
+    [style*="grid-template-columns: repeat(2, 1fr)"] {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    [style*="grid-template-columns:repeat(4,1fr)"],
+    [style*="grid-template-columns: repeat(4, 1fr)"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+
+    /* Sections with align-items:center and tall content (For Dispensaries CTA on home)
+       create huge gaps when stacked. Reset alignment. */
+    [style*="align-items:center"][style*="grid-template-columns"] {
+        align-items: stretch !important;
+    }
+
+    /* Remove huge inline gap values on mobile so stacked sections don't
+       have 3rem of empty space between them */
+    [style*="gap:3rem"] {
+        gap: 1.5rem !important;
+    }
+    [style*="gap:2.5rem"] {
+        gap: 1.25rem !important;
+    }
+    [style*="gap:2rem"] {
+        gap: 1.25rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    [style*="grid-template-columns:repeat(4,1fr)"],
+    [style*="grid-template-columns: repeat(4, 1fr)"] {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Tier cards on For Dispensaries page — fix overflow + readability on mobile */
+@media (max-width: 768px) {
+    /* The Featured/Premium tier cards have inline padding:2rem which is too much
+       on narrow screens, plus the absolute "MOST POPULAR" badge gets clipped */
+    #for-dispensaries-tiers .card[style*="padding:2rem"] {
+        padding: 1.5rem 1.25rem !important;
+        margin-top: 1rem; /* room for the absolute badge */
+    }
+    #for-dispensaries-tiers .card[style*="font-size:2.5rem"],
+    #for-dispensaries-tiers [style*="font-size:2.5rem"] {
+        font-size: 1.9rem !important;
+    }
+    #for-dispensaries-tiers .card-body-sm,
+    #for-dispensaries-tiers .card[style*="padding:1rem"] {
+        padding: 0.85rem !important;
+    }
+    /* Make sure long button text doesn't overflow */
+    #for-dispensaries-tiers a.btn {
+        white-space: normal;
+        line-height: 1.3;
+    }
 }
 
 /* ============ RESPONSIVE ============ */

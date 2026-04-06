@@ -129,6 +129,12 @@
         closeSearchDropdown();
         closeMobileMenu();
 
+        // After page change, force-visible any animation elements on the now-active page
+        // so users never see invisible content gaps after navigation
+        setTimeout(() => {
+            document.querySelectorAll('.page.active .fade-in, .page.active .stagger').forEach(el => el.classList.add('visible'));
+        }, 50);
+
         // Fix map: invalidate size when dispensaries page becomes visible
         if ((page === 'dispensaries') && App.mapInstance) {
             setTimeout(() => App.mapInstance.invalidateSize(), 100);
@@ -1544,14 +1550,26 @@
             });
         }
 
-        // Intersection observer for animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
-            });
-        }, { threshold: 0.1 });
+        // Intersection observer for animations.
+        // We add .js-animate to <body> ONLY if IntersectionObserver works,
+        // so animations are progressive enhancement. CSS defaults to visible
+        // so content never gets stuck invisible if anything fails.
+        if ('IntersectionObserver' in window) {
+            document.body.classList.add('js-animate');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.05, rootMargin: '50px' });
 
-        document.querySelectorAll('.fade-in, .stagger').forEach(el => observer.observe(el));
+            document.querySelectorAll('.fade-in, .stagger').forEach(el => observer.observe(el));
+
+            // Safety net: after 1.5s force-show anything still hidden,
+            // covers hash-route page transitions where new pages may not trigger
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in:not(.visible), .stagger:not(.visible)').forEach(el => el.classList.add('visible'));
+            }, 1500);
+        }
     }
 
     function applyDispFilters() {
@@ -1605,13 +1623,16 @@
     }
 
     function updateHeroCounts() {
-        const pc = TCC.products ? TCC.products.length.toLocaleString() + '+' : '5,700+';
-        const dc = TCC.dispensaries ? TCC.dispensaries.length.toString() : '44';
-        ['hero-stat-products', 'announce-product-count'].forEach(id => {
+        const pc = TCC.products ? TCC.products.length.toLocaleString() + '+' : '2,000+';
+        const dc = TCC.dispensaries ? TCC.dispensaries.length.toString() : '32';
+        // Hero + announcement bar + home stats bar + for-dispensaries proof stats
+        const productIds = ['hero-stat-products', 'announce-product-count', 'stats-bar-products', 'proof-stat-products'];
+        const dispIds = ['hero-stat-dispensaries', 'announce-disp-count', 'stats-bar-disps', 'proof-stat-disps'];
+        productIds.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.textContent = pc;
         });
-        ['hero-stat-dispensaries', 'announce-disp-count'].forEach(id => {
+        dispIds.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.textContent = dc;
         });

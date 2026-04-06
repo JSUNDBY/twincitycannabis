@@ -21,16 +21,27 @@ python3 scraper/scraper.py --export 2>/dev/null || echo "Dispensary scrape skipp
 # 2. Update dispensaries in data.js
 python3 scraper/update_site.py 2>/dev/null || echo "Dispensary update skipped"
 
-# 3. Scrape ALL menus (full product data)
+# 3. Scrape ALL menus (full product data) — applies smart name-based
+#    categorization via scraper/normalize.py to keep cartridges as cartridges,
+#    edibles as edibles, etc.
 python3 scraper/direct_menu_scrape.py --update-site
 
-# 4. Record prices for history tracking
+# 4. Re-merge Google Places data (websites, ratings, reviews) — these get
+#    wiped out by step 2 since update_site.py rewrites the dispensaries array.
+#    The Google data is cached in scraper/data/google_places.json and refreshed
+#    weekly by a separate cron (or manually via google_places.py --fetch).
+python3 scraper/merge_google_data.py
+
+# 5. Drop orphaned product price refs and reviews after metro filtering
+python3 scraper/clean_orphans.py
+
+# 6. Record prices for history tracking
 python3 scraper/price_tracker.py record
 
-# 5. Export price history
+# 7. Export price history
 python3 scraper/price_tracker.py export
 
-# 6. Git commit and push
+# 8. Git commit and push
 git add js/data.js scraper/data/price_history.json scraper/data/price_history_export.json
 if git diff --staged --quiet; then
     echo "No changes to commit"
