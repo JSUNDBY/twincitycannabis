@@ -209,10 +209,44 @@ ul, ol { list-style: none; }
     transition: all var(--transition-fast);
 }
 
+/* ============ ANNOUNCEMENT BAR ============ */
+.announce-bar {
+    position: fixed;
+    top: var(--nav-height);
+    width: 100%;
+    z-index: 999;
+    padding: 0.45rem 1.5rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.announce-bar a {
+    text-decoration: none;
+    transition: opacity var(--transition-fast);
+}
+
+.announce-bar a:hover {
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .announce-bar {
+        font-size: 0.7rem;
+        padding: 0.4rem 1rem;
+    }
+    .announce-bar span:nth-child(3),
+    .announce-bar span:nth-child(4) {
+        display: none;
+    }
+}
+
 /* ============ PAGE WRAPPER ============ */
 .page {
     display: none;
-    padding-top: var(--nav-height);
+    padding-top: calc(var(--nav-height) + 32px);
     min-height: 100vh;
 }
 
