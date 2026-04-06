@@ -37,10 +37,12 @@ _PATTERNS = {
         re.IGNORECASE
     ),
 
-    # Vape cartridges, disposables, pods, vape pens
-    # Note: must come AFTER accessories check so "vape battery" alone is accessory
+    # Vape cartridges, disposables, pods, vape pens — CONSUMABLE vape products only.
+    # Standalone "vaporizer" / "all-in-one" are excluded because they match
+    # hardware devices (Volcano, Puffco, etc.). Those are caught by ACCESSORIES_EARLY.
+    # We rely on accessories check running first to filter out hardware.
     'CARTRIDGE': re.compile(
-        r'\b(cartridge|cartridges|vaporizer|vaporizers|disposable|disposables|all[\s\-]?in[\s\-]?one|aio\s*vape|ccell|stiiizy|live\s*resin\s*cart|live\s*resin\s*vape|distillate\s*cart|prefilled.*vaporizer|prefilled.*cartridge|\d+\s*pack\s*pods?|cart\s*pack|wax\s*pen|dab\s*pen|vape[\s\-]?ix|live\s*rosin\s*vape|live\s*resin\s*disposable|live\s*rosin\s*disposable|distillate\s*vape|hash\s*vape)\b',
+        r'\b(cartridge|cartridges|disposable|disposables|vape\s*cartridge|aio\s*vape|all[\s\-]?in[\s\-]?one\s*vape|all[\s\-]?in[\s\-]?one\s*disposable|live\s*resin\s*cart|live\s*resin\s*vape|live\s*rosin\s*vape|live\s*resin\s*disposable|live\s*rosin\s*disposable|distillate\s*cart|distillate\s*vape|distillate\s*pen|prefilled.*vaporizer|prefilled.*cartridge|prefilled\s*pen|\d+\s*pack\s*pods?|cart\s*pack|wax\s*pen|dab\s*pen|vape[\s\-]?ix|hash\s*vape|stargaze\s*vape|stiiizy\s*pod|ccell\s*cart|vape\s*pen|vape\s*disposable)\b',
         re.IGNORECASE
     ),
 
@@ -118,7 +120,23 @@ _PATTERNS = {
     # words so "Vape Battery" doesn't become a cartridge and "Nug Plushie" doesn't
     # become flower. Includes 510-thread batteries, vape kits, plushies, glassware.
     'ACCESSORIES_EARLY': re.compile(
-        r'\b(grinder|lighter|rolling\s*papers?|hemp\s*wraps?|blunt\s*wraps?|leaf\s*cones?|filter\s*tips?|stash\s*jar|pipe|bong|water\s*pipe|dab\s*rig|dab\s*nail|dab\s*tool|banger|torch|510\s*battery|510\s*thread\s*battery|vape\s*battery|battery\s*pack|thread\s*battery|variable\s*voltage.*battery|wax\s*coil|wax\s*coil\s*battery|wax\s*atomizer|atomizer|coil\s*battery|charger|carrying\s*case|carry\s*case|t[\s\-]?shirt|tee\s*shirt|hoodie|stickers?|keychain|key\s*chain|magnet|sunglasses|isopropyl|alcohol\s*swab|carb\s*cap|terp\s*pearl|chillum|one[\s\-]?hitter|dugout|grinder\s*card|herb\s*grinder|pre[\s\-]?roll\s*tubes?|kief\s*box|joint\s*tubes?|plushies?|plush\s*toy|vape\s*kit|cleaning\s*kit|odor\s*spray|smell\s*proof|silicone\s*container|dab\s*mat|rolling\s*trays?|ash\s*trays?|ashtrays?|debowler|punch\s*card|membership\s*card|cone\s*pack|empty\s*cones?|nug\s*plush|tea\s*leaf\s*cones?|glass\s*cleaner|bowl\s*cleaner|pipe\s*cleaner|grinder\s*kit|sluggers?\s*battery|wax\s*melt|wax\s*melts|scented\s*wax|fragrance\s*wax|essential\s*oil\s*diffuser|incense)\b',
+        r'\b('
+        # Rolling supplies
+        r'grinder|lighter|rolling\s*papers?|rolling\s*kit|rolling\s*kits|hemp\s*rolling\s*kit|hemp\s*wraps?|blunt\s*wraps?|leaf\s*cones?|filter\s*tips?|stash\s*jar|cone\s*pack|empty\s*cones?|tea\s*leaf\s*cones?|pre[\s\-]?roll\s*tubes?|joint\s*tubes?|kief\s*box|debowler|herb\s*grinder|grinder\s*kit|grinder\s*card|rolling\s*trays?|ash\s*trays?|ashtrays?|dab\s*mat'
+        # Glassware / pipes
+        r'|pipe|bong|water\s*pipe|dab\s*rig|dab\s*nail|dab\s*tool|banger|torch|chillum|one[\s\-]?hitter|dugout|carb\s*cap|terp\s*pearl|silicone\s*container'
+        # Vape hardware (devices, batteries, atomizers - NOT consumable vapes)
+        r'|510\s*battery|510\s*thread\s*battery|vape\s*battery|battery\s*pack|thread\s*battery|variable\s*voltage.*battery|wax\s*coil|wax\s*coil\s*battery|wax\s*atomizer|atomizer|coil\s*battery|charger|vape\s*kit|cleaning\s*kit|sluggers?\s*battery'
+        # Vaporizer DEVICES (not cartridges) — these are hardware
+        r'|volcano\s*hybrid|volcano\s*vaporizer|peak\s*pro|peak\s*vaporizer|puffco|puffco\s*proxy|proxy\s*vaporizer|trident\s*vaporizer|hitoki|loov|utillian|yocan|yocan\s*celestial|storz\s*and\s*bickel|storz|crafty\s*vaporizer|mighty\s*vaporizer|pax\s*device|pax\s*era\s*device|davinci|firefly\s*vaporizer|arizer'
+        r'|standalone\s*vaporizer|herbal\s*vaporizer|dry\s*herb\s*vaporizer|tabletop\s*vaporizer|portable\s*vaporizer|vaporizer\s*device|vape\s*device|7"|8"|laser\s*co\s*vaporizer'
+        # Apparel / merch
+        r'|t[\s\-]?shirt|tee\s*shirt|hoodie|stickers?|keychain|key\s*chain|magnet|sunglasses|plushies?|plush\s*toy|nug\s*plush'
+        # Cleaning products
+        r'|isopropyl|alcohol\s*swab|odor\s*spray|smell\s*proof|glass\s*cleaner|bowl\s*cleaner|pipe\s*cleaner|punch\s*card|membership\s*card'
+        # Home fragrance (not cannabis)
+        r'|wax\s*melt|wax\s*melts|scented\s*wax|fragrance\s*wax|essential\s*oil\s*diffuser|incense'
+        r')\b',
         re.IGNORECASE
     ),
 
@@ -291,6 +309,24 @@ if __name__ == '__main__':
         ("Carpe Diem THC-Free CBD Oil Isolate 5000mg Ginger/Peach", 'concentrate', 'tincture'),
         ("Starship Triple Vape Cart/Wax Coil Battery", 'concentrate', 'EXCLUDE'),
         ("Utillian 5 | Wax Atomizer", 'concentrate', 'EXCLUDE'),
+        # Round 5 — vaporizer devices and rolling kits
+        ("S.C.S. All In One Hemp Rolling Kits - Black - 1ct", 'cartridge', 'EXCLUDE'),
+        ("S.C.S. All In One Hemp Rolling Kits - Pink & Black - 1ct", 'cartridge', 'EXCLUDE'),
+        ("Storz and Bickel Volcano Hybrid Vaporizer V612", 'cartridge', 'EXCLUDE'),
+        ("UTILLIAN 621 Vaporizer", 'cartridge', 'EXCLUDE'),
+        ("Hitoki Laser Co - Trident Vaporizer", 'cartridge', 'EXCLUDE'),
+        ("Peak Pro Vaporizer - Onyx 3DXL", 'cartridge', 'EXCLUDE'),
+        ("puffco proxy vaporizer", 'cartridge', 'EXCLUDE'),
+        ("New Proxy Vaporizer- Onyx", 'cartridge', 'EXCLUDE'),
+        ("Yocan Celestial vaporizer", 'cartridge', 'EXCLUDE'),
+        ("LOOV Multi-purpose Vaporizer", 'cartridge', 'EXCLUDE'),
+        ("Pivot Vaporizer - Onyx", 'cartridge', 'EXCLUDE'),
+        ("Ooze | Fusion Extract Vaporizer Kit | Rainbow", 'cartridge', 'EXCLUDE'),
+        ("Lookah Seahorse X All In One", 'cartridge', 'EXCLUDE'),
+        # Real consumable carts MUST still be detected
+        ("Stargaze Vape Disposable 1g - Hawaiian Herer - 1ct", 'cartridge', 'cartridge'),
+        ("Nebula | Romulan | Disposable | 1g", 'concentrate', 'cartridge'),
+        ("Grasslandz Disposable Vape Pen - Super Lemon Haze - 1g", 'cartridge', 'cartridge'),
     ]
 
     passed = failed = 0
