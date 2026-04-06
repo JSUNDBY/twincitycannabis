@@ -16,6 +16,37 @@
     };
 
     // ---- ICONS (inline SVG paths) ----
+    // ============================================================
+    // Dispensary website resolution
+    // All dispensaries now have real websites from the Google Places
+    // integration (see scraper/google_places.py). The fallback below
+    // uses Google Maps if for any reason a website is missing.
+    // ============================================================
+    function getDispensaryWebsite(d) {
+        if (!d) return '#';
+        if (d.website && !d.website.includes('weedmaps.com')) return d.website;
+        if (d.google && d.google.maps_url) return d.google.maps_url;
+        const query = encodeURIComponent(`${d.name} ${d.address || d.city || ''}`.trim());
+        return `https://www.google.com/maps/search/?api=1&query=${query}`;
+    }
+
+    function isOfficialWebsite(d) {
+        if (!d) return false;
+        return !!(d.website && !d.website.includes('weedmaps.com'));
+    }
+
+    // Format Google rating as "★ 4.7 (234)" — shown on dispensary cards
+    function googleRatingHtml(d) {
+        if (!d || !d.google || !d.google.rating) return '';
+        const r = d.google.rating;
+        const c = d.google.review_count || 0;
+        return `<span class="google-rating" title="${c} Google reviews">
+            <span class="google-rating-star">★</span>
+            <span class="google-rating-num">${r.toFixed(1)}</span>
+            <span class="google-rating-count">(${c.toLocaleString()})</span>
+        </span>`;
+    }
+
     // Custom SVG icon system - all icons inherit currentColor for theming
     const svgIcon = (size, body) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
     const Icons = {
@@ -414,7 +445,7 @@
                     <div class="empty-menu-title">Menu data not yet available</div>
                     <div class="empty-menu-desc">We're working on getting ${d.name}'s full menu into TCC. In the meantime, you can visit their site or call ahead.</div>
                     <div class="empty-menu-actions">
-                        ${d.website ? `<a href="${d.website}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Visit Menu &rarr;</a>` : ''}
+                        <a href="${getDispensaryWebsite(d)}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">${isOfficialWebsite(d) ? 'Visit Website &rarr;' : 'Find on Google Maps &rarr;'}</a>
                         <a href="tel:${(d.phone||'').replace(/[^0-9+]/g,'')}" class="btn btn-secondary btn-sm">${Icons.phone} Call</a>
                     </div>
                 </div>`;
@@ -478,19 +509,35 @@
         }
         } // end else (allProducts.length > 0)
 
-        // Reviews
-        const reviews = TCC.getReviewsForDispensary(id);
-        document.getElementById('detail-review-count').textContent = `${d.review_count} reviews`;
-        document.getElementById('detail-reviews').innerHTML = reviews.length ? reviews.map(r => `
-            <div class="review-item">
-                <div class="review-header">
-                    <span class="review-author">${r.author}</span>
-                    <span class="review-date">${r.date}</span>
+        // Reviews — use Google reviews from d.google.reviews if available
+        const googleReviews = (d.google && d.google.reviews) || [];
+        const fallbackReviews = TCC.getReviewsForDispensary(id);
+        const reviews = googleReviews.length ? googleReviews : fallbackReviews;
+        const totalCount = (d.google && d.google.review_count) || d.review_count || reviews.length;
+
+        document.getElementById('detail-review-count').textContent =
+            `${totalCount.toLocaleString()} Google review${totalCount === 1 ? '' : 's'}`;
+
+        document.getElementById('detail-reviews').innerHTML = reviews.length ? `
+            <div class="reviews-google-header">
+                <div class="google-rating-badge">
+                    <span class="stars">${'&#9733;'.repeat(Math.floor(d.google?.rating || 0))}${'&#9734;'.repeat(5 - Math.floor(d.google?.rating || 0))}</span>
+                    <span class="rating-num">${(d.google?.rating || 0).toFixed(1)}</span>
+                    <span class="text-muted text-xs">based on ${totalCount.toLocaleString()} Google reviews</span>
                 </div>
-                <div class="review-stars">${'&#9733;'.repeat(r.rating)}${'&#9734;'.repeat(5 - r.rating)}</div>
-                <div class="review-text">${r.text}</div>
+                <a href="${(d.google && d.google.maps_url) || getDispensaryWebsite(d)}" target="_blank" rel="noopener" class="btn btn-sm btn-secondary">See all on Google &rarr;</a>
             </div>
-        `).join('') : '<div class="empty-state"><div class="empty-state-desc">No reviews yet</div></div>';
+            ${reviews.map(r => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="review-author">${r.author}</span>
+                        <span class="review-date">${r.time || r.date || ''}</span>
+                    </div>
+                    <div class="review-stars">${'&#9733;'.repeat(r.rating)}${'&#9734;'.repeat(5 - r.rating)}</div>
+                    <div class="review-text">${r.text}</div>
+                </div>
+            `).join('')}
+        ` : '<div class="empty-state"><div class="empty-state-desc">No reviews yet</div></div>';
 
         // Deals
         const deals = TCC.getDealsForDispensary(id);
@@ -1095,10 +1142,12 @@
             ? `<span class="dispensary-card-tier" style="background:${TCC.getTierColor(d.tier)};color:${d.tier === 'platinum' ? '#0a0a0a' : '#fff'}">${TCC.getTierLabel(d.tier)}</span>`
             : '';
 
-        // Rating stars
-        const rating = d.weedmaps_rating || (d.tcc_score / 20);
-        const fullStars = Math.floor(rating);
-        const stars = '&#9733;'.repeat(fullStars) + '&#9734;'.repeat(5 - fullStars);
+        // Real Google rating with star rendering
+        const gRating = d.google?.rating || 0;
+        const gCount = d.google?.review_count || 0;
+        const fullStars = Math.floor(gRating);
+        const halfStar = (gRating - fullStars) >= 0.5;
+        const stars = '&#9733;'.repeat(fullStars) + (halfStar ? '&#189;' : '') + '&#9734;'.repeat(5 - fullStars - (halfStar ? 1 : 0));
 
         // Open/closed (approximate based on current hour)
         const hour = new Date().getHours();
@@ -1144,8 +1193,7 @@
                         </div>
                     </div>
                     <div class="dispensary-card-rating">
-                        <span class="stars">${stars}</span>
-                        <span class="count">${d.review_count} reviews</span>
+                        ${gRating > 0 ? `<span class="stars">${stars}</span><span class="rating-num">${gRating.toFixed(1)}</span><span class="count">(${gCount.toLocaleString()})</span>` : '<span class="text-muted text-xs">No reviews yet</span>'}
                         ${statusBadge}
                         ${tierBadge}
                     </div>
@@ -1157,7 +1205,7 @@
                     ${dealHtml}
                     <div class="dispensary-card-actions">
                         <span class="btn btn-sm btn-primary">View Menu</span>
-                        ${d.website ? `<span class="btn btn-sm btn-secondary" onclick="event.stopPropagation();window.open('${d.website}','_blank')">Website</span>` : ''}
+                        <span class="btn btn-sm btn-secondary" onclick="event.stopPropagation();window.open('${getDispensaryWebsite(d)}','_blank')">${isOfficialWebsite(d) ? 'Website' : 'Find on Maps'}</span>
                     </div>
                 </div>
             </div>

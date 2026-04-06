@@ -251,7 +251,12 @@ def parse_menu_item(item, dispensary_slug):
 
 
 def normalize_category(raw):
-    """Normalize category names."""
+    """Normalize the upstream category label.
+
+    NOTE: This only translates the API's label. The real categorization
+    (which uses the product name to override miscategorized items) is done
+    by normalize.categorize_by_name() in build_price_comparison().
+    """
     if not raw:
         return "flower"
     raw = raw.upper().strip()
@@ -268,6 +273,10 @@ def normalize_category(raw):
         "GEAR": "accessories", "ACCESSORIES": "accessories",
     }
     return mapping.get(raw, raw.lower())
+
+
+# Import the smart name-based normalizer
+from normalize import categorize_by_name as _smart_categorize
 
 
 def build_price_comparison(products):
@@ -298,7 +307,20 @@ def build_price_comparison(products):
         if p.get("thc") and not grouped[name]["thc"]:
             grouped[name]["thc"] = p["thc"]
 
-    result = sorted(grouped.values(), key=lambda x: (-len(x["prices"]), x["name"]))
+    # Apply smart name-based categorization and drop excluded products
+    cleaned = []
+    excluded = 0
+    for p in grouped.values():
+        new_cat = _smart_categorize(p["name"], p.get("brand", ""), p.get("category", ""))
+        if new_cat == 'EXCLUDE':
+            excluded += 1
+            continue
+        p["category"] = new_cat
+        cleaned.append(p)
+    if excluded:
+        print(f"  [normalize] Excluded {excluded} non-cannabis or junk products")
+
+    result = sorted(cleaned, key=lambda x: (-len(x["prices"]), x["name"]))
     return result
 
 

@@ -1619,6 +1619,237 @@ ul, ol { list-style: none; }
     line-height: 1.5;
 }
 
+/* ============ LEGAL ESSENTIALS ============ */
+.legal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.legal-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    transition: all var(--transition-fast);
+}
+
+.legal-card:hover {
+    border-color: var(--border-light);
+    transform: translateY(-2px);
+}
+
+.legal-card-warn {
+    border-color: rgba(245, 158, 11, 0.4);
+    background: linear-gradient(180deg, rgba(245, 158, 11, 0.05) 0%, var(--bg-card) 100%);
+}
+
+.legal-card-num {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 2.4rem;
+    line-height: 1;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.legal-card-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.legal-card-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.legal-card p {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.legal-card-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.75rem 0;
+}
+
+.legal-card-list li {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    padding: 0.25rem 0;
+    padding-left: 1.2rem;
+    position: relative;
+}
+
+.legal-card-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.7rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+}
+
+.legal-card-list strong {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.legal-card-note {
+    margin-top: 0.5rem !important;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem !important;
+    color: var(--text-muted) !important;
+    font-style: italic;
+}
+
+.legal-disclaimer {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.legal-disclaimer a {
+    color: var(--green);
+    text-decoration: underline;
+}
+
+/* ============ CULTURE GRID ============ */
+.culture-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.culture-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    transition: all var(--transition-fast);
+}
+
+.culture-card:hover {
+    border-color: var(--green);
+    transform: translateY(-2px);
+}
+
+.culture-card-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    line-height: 1;
+}
+
+.culture-card-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.6rem;
+}
+
+.culture-card p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.stigma-callout {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.06), rgba(168, 85, 247, 0.04));
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem 2rem;
+    margin-top: 1rem;
+}
+
+.stigma-callout-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+@media (max-width: 768px) {
+    .stigma-callout {
+        padding: 1.25rem;
+        gap: 0.75rem;
+    }
+}
+
+/* ============ GOOGLE REVIEWS ============ */
+.dispensary-card-rating .rating-num {
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-left: 0.2rem;
+}
+
+.dispensary-card-rating .stars {
+    color: var(--amber);
+    letter-spacing: 1px;
+}
+
+.dispensary-card-rating .count {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    margin-left: 0.2rem;
+}
+
+.reviews-google-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.google-rating-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.google-rating-badge .stars {
+    color: var(--amber);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+.google-rating-badge .rating-num {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--text-primary);
+}
+
 /* ============ BROWSE / COMPARE TOOLBAR ============ */
 .browse-toolbar {
     display: grid;
