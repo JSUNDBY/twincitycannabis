@@ -114,24 +114,38 @@ def scrape_menu(slug, name=""):
 
 def parse_menu_item(item, dispensary_slug):
     """Parse a Weedmaps menu item into our format."""
-    # Price - get the lowest variant price
-    prices = item.get("prices", {})
+    # Price - Weedmaps nests prices like:
+    # { "grams_per_eighth": 3.5, "ounce": [{"label":"1/8 oz","price":50}], "unit": [{"price":36}] }
+    # The actual price is inside the array objects, NOT the top-level numeric fields
+    prices_data = item.get("prices", {})
     price = 0
     weight = ""
 
-    # Prices can be structured as gram, eighth, quarter, etc.
-    price_fields = ["half_gram", "gram", "two_grams", "eighth", "quarter", "half_ounce", "ounce", "unit"]
-    for pf in price_fields:
-        val = prices.get(pf)
-        if val and isinstance(val, (int, float)) and val > 0:
-            price = val
-            weight = pf.replace("_", " ")
+    # Check array-style price entries first (ounce, unit, gram, etc.)
+    price_arrays = ["unit", "ounce", "gram", "half_gram", "two_grams", "eighth", "quarter", "half_ounce"]
+    for pf in price_arrays:
+        val = prices_data.get(pf)
+        if isinstance(val, list) and val:
+            # Get the first (cheapest) option
+            for variant in val:
+                if isinstance(variant, dict) and variant.get("price", 0) > 0:
+                    price = variant["price"]
+                    weight = variant.get("label", pf.replace("_", " "))
+                    break
+            if price > 0:
+                break
+        elif isinstance(val, dict) and val.get("price", 0) > 0:
+            price = val["price"]
+            weight = val.get("label", pf.replace("_", " "))
             break
 
+    # Skip grams_per_eighth - it's a conversion factor (3.5), not a price
+    # Only use top-level numeric values if they're clearly prices (> $4)
     if not price:
-        # Fallback to any numeric price
-        for k, v in prices.items():
-            if isinstance(v, (int, float)) and v > 0:
+        for k, v in prices_data.items():
+            if k == "grams_per_eighth":
+                continue
+            if isinstance(v, (int, float)) and v > 4:
                 price = v
                 weight = k.replace("_", " ")
                 break
