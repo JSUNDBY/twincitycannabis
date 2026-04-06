@@ -166,7 +166,11 @@
 <!-- ============ NAVIGATION ============ -->
 <nav class="nav">
     <div class="nav-logo">
-        <div class="nav-logo-mark">TC</div>
+        <div class="nav-logo-mark">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C12 2 9.5 6 9.5 9C9.5 9 7 7.5 4 8C4 8 6 10.5 8 11.5C8 11.5 5 11 2 12C2 12 5.5 13.5 8.5 12.5C8.5 12.5 6.5 14.5 6 18C6 18 9 15.5 10.5 13.5C10.5 13.5 10 16 11 19C11 19 12 16 12 14C12 14 13 16 13 19C13 19 14 16 13.5 13.5C13.5 13.5 15 15.5 18 18C18 18 17.5 14.5 15.5 12.5C15.5 12.5 18.5 13.5 22 12C22 12 19 11 16 11.5C16 11.5 18 10.5 20 8C20 8 17 7.5 14.5 9C14.5 9 14.5 6 12 2Z" fill="#0a0a0a"/>
+            </svg>
+        </div>
         <div class="nav-logo-text">Twin City <span>Cannabis</span></div>
     </div>
 
@@ -1312,6 +1316,22 @@
     </footer>
 </div>
 
+
+<!-- Image Lightbox -->
+<div class="lightbox" id="lightbox" onclick="if(event.target===this)this.classList.remove('open')">
+    <button class="lightbox-close" onclick="document.getElementById('lightbox').classList.remove('open')">&times;</button>
+    <div class="lightbox-content">
+        <img class="lightbox-img" id="lightbox-img" src="" alt="">
+        <div class="lightbox-info">
+            <div class="lightbox-name" id="lightbox-name"></div>
+            <div class="lightbox-brand" id="lightbox-brand"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="lightbox-price" id="lightbox-price"></div>
+                <div id="lightbox-tags" style="display:flex;gap:0.3rem"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- ============ SCRIPTS ============ -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>

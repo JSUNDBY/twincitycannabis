@@ -588,6 +588,13 @@ ul, ol { list-style: none; }
     flex-shrink: 0;
     background: var(--bg-secondary);
     border: 1px solid var(--border);
+    cursor: pointer;
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.product-card-img:hover {
+    border-color: var(--green);
+    transform: scale(1.05);
 }
 
 .product-card-img img {
@@ -1469,6 +1476,101 @@ ul, ol { list-style: none; }
 }
 
 .footer-links a:hover { color: var(--text-secondary); }
+
+/* ============ IMAGE LIGHTBOX ============ */
+.lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 2rem;
+    animation: lightbox-in 0.2s ease;
+}
+
+.lightbox.open {
+    display: flex;
+}
+
+.lightbox-content {
+    max-width: 500px;
+    max-height: 80vh;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    cursor: default;
+    box-shadow: var(--shadow-lg), 0 0 60px rgba(0,0,0,0.5);
+    animation: lightbox-scale 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.lightbox-img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+}
+
+.lightbox-info {
+    padding: 1.2rem 1.5rem;
+}
+
+.lightbox-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.2rem;
+}
+
+.lightbox-brand {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.lightbox-price {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--green);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition-fast);
+}
+
+.lightbox-close:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+@keyframes lightbox-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes lightbox-scale {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
 
 /* ============ ANIMATIONS ============ */
 .fade-in {

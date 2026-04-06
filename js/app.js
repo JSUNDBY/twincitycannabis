@@ -419,7 +419,7 @@
                 const hasImg = p.image && p.image.length > 10;
                 return `<div class="card product-card" onclick="window.location.hash='compare/${p.id}'">
                     <div class="card-body-sm" style="display:flex;gap:0.8rem;align-items:flex-start">
-                        ${hasImg ? `<div class="product-card-img"><img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` : ''}
+                        ${hasImg ? `<div class="product-card-img" onclick="event.stopPropagation();openLightbox('${p.image}','${p.name.replace(/'/g,"\\'")}','${(p.brand||"").replace(/'/g,"\\'")}','${TCC.formatPrice(TCC.getLowestPrice(p)?.price||0)}','${p.category}','${p.thc||""}')"><img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` : ''}
                         <div style="flex:1;min-width:0">
                             <div class="product-card-header">
                                 <div style="min-width:0">
@@ -788,7 +788,7 @@
                 <a href="#compare" style="color:var(--text-secondary);font-size:0.85rem">&larr; All products</a>
             </div>
             <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;margin-bottom:2rem">
-                ${product.image ? `<div style="width:140px;height:140px;border-radius:var(--radius-lg);overflow:hidden;background:var(--bg-card);border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:8px">
+                ${product.image ? `<div style="width:140px;height:140px;border-radius:var(--radius-lg);overflow:hidden;background:var(--bg-card);border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:8px;cursor:pointer" onclick="openLightbox('${product.image}','${product.name.replace(/'/g,"\\'")}','${(product.brand||"").replace(/'/g,"\\'")}','${TCC.formatPrice(lowest.price)}','${product.category}','${product.thc||""}')">
                     <img src="${product.image}" alt="${product.name}" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:var(--radius-sm)" onerror="this.parentElement.style.display='none'">
                 </div>` : ''}
                 <div style="flex:1;min-width:200px">
@@ -1013,7 +1013,7 @@
         // Product image
         const hasImg = p.image && p.image.length > 10;
         const imgHtml = hasImg
-            ? `<div class="product-card-img"><img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`
+            ? `<div class="product-card-img" onclick="event.stopPropagation();openLightbox('${p.image}','${p.name.replace(/'/g,"\\'")}','${(p.brand||"").replace(/'/g,"\\'")}','${TCC.formatPrice(TCC.getLowestPrice(p)?.price||0)}','${p.category}','${p.thc||""}')"><img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`
             : '';
 
         return `<div class="card product-card" onclick="window.location.hash='compare/${p.id}'">
@@ -1361,6 +1361,24 @@
     }
 
     // ---- INIT ----
+    // ---- LIGHTBOX ----
+    window.openLightbox = function(imgSrc, name, brand, price, category, thc) {
+        const lb = document.getElementById('lightbox');
+        document.getElementById('lightbox-img').src = imgSrc;
+        document.getElementById('lightbox-name').textContent = name;
+        document.getElementById('lightbox-brand').textContent = brand;
+        document.getElementById('lightbox-price').textContent = price;
+        document.getElementById('lightbox-tags').innerHTML =
+            `<span class="tag tag-sm">${category}</span>` +
+            (thc ? `<span class="tag tag-sm">THC ${thc}</span>` : '');
+        lb.classList.add('open');
+    };
+
+    // Close lightbox on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') document.getElementById('lightbox')?.classList.remove('open');
+    });
+
     function init() {
         renderHome();
         renderDispensaries();
