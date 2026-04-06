@@ -1394,6 +1394,19 @@
             document.querySelector('.nav-menu')?.classList.toggle('open');
         });
 
+        // Theme toggle (light/dark) — persists to localStorage
+        document.getElementById('theme-toggle')?.addEventListener('click', () => {
+            const html = document.documentElement;
+            const isLight = html.getAttribute('data-theme') === 'light';
+            if (isLight) {
+                html.removeAttribute('data-theme');
+                try { localStorage.setItem('tcc-theme', 'dark'); } catch (e) {}
+            } else {
+                html.setAttribute('data-theme', 'light');
+                try { localStorage.setItem('tcc-theme', 'light'); } catch (e) {}
+            }
+        });
+
         // Global search
         const searchInput = document.getElementById('hero-search-input');
         if (searchInput) {
