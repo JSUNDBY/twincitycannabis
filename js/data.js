@@ -1,4 +1,4 @@
-// Last auto-updated: 2026-04-06 23:03
+// Last auto-updated: 2026-04-06 23:14
 // ============================================================
 // Twin City Cannabis — Data Layer
 // Real Twin Cities dispensary data + products + strains
@@ -559,6 +559,30 @@ TCC.dispensaries = [
         initial: 'GG',
         img: "https://images.weedmaps.com/dispensaries/000/049/724/avatar/1712255971-primary-yellow-and-navy-gg-dispensary-logo-stacked-copy_1_.png",
         google: { rating: 4.5, review_count: 765, maps_url: 'https://maps.google.com/?cid=14384096910807857338&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA', reviews: [{author: 'Dalton Schneider', rating: 5, text: 'Always super clean store, with fun goods for sale! They can be a little spendy, but it’s worth it. The staff here are amazing, Jolie and Cole are uniquely friendly and helpful in a way that make you feel remembered and welcomed! Definitely think about stopping for your recreational or medicinal needs!', time: '4 months ago'}, {author: 'Brian Larson', rating: 1, text: 'Will I also get an AI generated response from the store? Did not like this place at all, other than the nice pharmacist I had to speak to for medical, then had an employee tell me I didn\'t speak to him.  Edit and update: The majority of the employees also seem to dislike their ordering process and we\'re very apologetic and nice. Thanks for being cool, employees. However, I sent in a more detailed ', time: '2 months ago'}, {author: 'Mary Kellogg', rating: 5, text: 'I’m a new medical user and unfamiliar with products and alternatives.  I found the review and guidance by the pharmacist extremely helpful, making recommendations for my specific type of pain and avoiding the “high” effect. This was very reassuring. The entire staff at Bloomington is wonderful! Patient, helpful, professional. The environment is bright and pleasant, plenty of available seating, cle', time: 'a month ago'}, {author: 'Jakob Gant', rating: 4, text: 'Staff is absolutely amazing. Very nice, extremely knowledgeable and helpful. Really couldn’t ask for more as a consumer from the staff.  Carts been clogging recently which is a bummer. Also, had 1 that doesn’t work from this last purchase. Gonna have to check the return policy.', time: '2 months ago'}, {author: 'PAULA CHILTON', rating: 5, text: 'Every visit I\'ve made to Green Goods has been nothing short of spectacular. Friendly, professional, knowledgable, compassionate, well-informed and helpful. GG has a great loyalty program on top of fair pricing and great sales/closeouts. The GG website is easily navigable for both medical and adult-use retail and there is always a generous selection of strains and a variety of different products to', time: 'a month ago'}] }
+    },
+    {
+        id: 'nativecare-west-st-paul',
+        name: 'NativeCare West St. Paul',
+        tagline: 'Red Lake Nation cannabis dispensary in West St. Paul',
+        address: '2067 S Robert St, West St Paul, MN 55118',
+        neighborhood: 'West St. Paul',
+        city: 'West St. Paul',
+        lat: 44.8839057,
+        lng: -93.0833719,
+        phone: '',
+        hours: { weekday: '10:00am - 8:00pm', weekend: '10:00am - 8:00pm', note: '10:00am - 8:00pm' },
+        website: 'https://www.nativecare.com',
+        tier: 'free',
+        tcc_score: 80,
+        scores: { pricing: 78, selection: 75, service: 88, lab_testing: 80 },
+        review_count: 1,
+        verified: true,
+        features: ["Tribal-owned", "Just opened", "Cash only"],
+        gradient: 'linear-gradient(135deg, #166534, #22c55e)',
+        initial: 'NC',
+        opened_at: '2026-03-20',
+        img: null,
+        google: { rating: 5.0, review_count: 1, maps_url: 'https://maps.google.com/?cid=2735657228526054067', reviews: [{author: 'Brian', rating: 5, text: 'Went opening day. Super friendly staff. Grabbed a super lemon haze disposable. The opening day gift bag was a nice surprise - rolling tray, one hitter etc. very easy process and will be back.', time: 'in the last week'}] }
     },
     {
         id: 'green-goods-blaine',
@@ -6608,7 +6632,8 @@ TCC.reviews = [
     { dispensaryId: 'strains-of-the-earth', author: 'Robert Blood', date: 'a month ago', rating: 5, text: 'I didn\'t know they reopened! The staff was very friendly, helpful, and knowledgeable about their products. Megan C. (There are 4 Megan\'s)  called a minute after I placed my order (literally) and let me know they were out of a certain product. I also had a few questions and she answered them without me feeling like she was rushing through it to get me off the phone and was very knowledgeable and pleasant. Once I got there John  helped though the transaction and I was able to add onto my order whi', source: 'google' },
     { dispensaryId: 'strains-of-the-earth', author: 'brigitte breuker', date: 'a month ago', rating: 5, text: 'Sean helped me. He was so knowledgeable, but more than that he was patient, kind, and incredibly well mannered. I enjoyed learning new things and trying a soda pop with THC was really cool. In fact I am drinking one now and I love it!  Thank you Sean for the time you spent with me. I’m sure I will never forget you 🫶.', source: 'google' },
     { dispensaryId: 'strains-of-the-earth', author: 'Chad Morningstar', date: '2 months ago', rating: 5, text: 'Visited this place for the 1st time and honestly the staff was awesome super friendly. I definitely will be going back! Good variety, good deal. Just bought prerolls and so far smooth smoking. I will be trying their flower and a variety items!', source: 'google' },
-    { dispensaryId: 'strains-of-the-earth', author: 'Tony', date: 'a month ago', rating: 3, text: 'The bud tenders at strains treat you like family & they take pride in knowing about the products that they sale. Megan helped me today and was very informative about the products I was asking for. Keep budtenders like this around and ill be a life long customer. I appreciate yall getting me through those hard days. Update: Their inventory hasnt changed very much beyond getting 1 maybe 2 new strains of prerolls and disposables every month or so that sell out extremely fast but beyond that They ha', source: 'google' }
+    { dispensaryId: 'strains-of-the-earth', author: 'Tony', date: 'a month ago', rating: 3, text: 'The bud tenders at strains treat you like family & they take pride in knowing about the products that they sale. Megan helped me today and was very informative about the products I was asking for. Keep budtenders like this around and ill be a life long customer. I appreciate yall getting me through those hard days. Update: Their inventory hasnt changed very much beyond getting 1 maybe 2 new strains of prerolls and disposables every month or so that sell out extremely fast but beyond that They ha', source: 'google' },
+    { dispensaryId: 'nativecare-west-st-paul', author: 'Brian', date: 'in the last week', rating: 5, text: 'Went opening day. Super friendly staff. Grabbed a super lemon haze disposable. The opening day gift bag was a nice surprise - rolling tray, one hitter etc. very easy process and will be back.', source: 'google' }
 ];
 
 // ---- HELPER FUNCTIONS ----

@@ -11,6 +11,7 @@ from pathlib import Path
 from datetime import datetime
 
 DISPENSARY_FILE = Path(__file__).parent / "data" / "dispensaries.json"
+MANUAL_DISPENSARY_FILE = Path(__file__).parent / "data" / "manual_dispensaries.json"
 DATA_JS = Path(__file__).parent.parent / "js" / "data.js"
 
 # Twin Cities metro area bounding box (generous)
@@ -53,6 +54,9 @@ def build_dispensary_js(dispensaries):
         features_js = json.dumps(d.get("features", []))
         scores = d.get("scores", {})
 
+        opened_at = d.get("opened_at", "")
+        opened_at_js = f"        opened_at: '{opened_at}',\n" if opened_at else ""
+
         lines.append(f"""    {{
         id: '{d["id"]}',
         name: '{_esc(d["name"])}',
@@ -73,7 +77,7 @@ def build_dispensary_js(dispensaries):
         features: {features_js},
         gradient: '{d.get("gradient", "linear-gradient(135deg, #166534, #22c55e)")}',
         initial: '{d.get("initial", "TC")}',
-        img: {json.dumps(d.get("img", "") or None)}
+{opened_at_js}        img: {json.dumps(d.get("img", "") or None)}
     }}""")
 
     return ",\n".join(lines)
@@ -124,7 +128,21 @@ def main():
     with open(DISPENSARY_FILE) as f:
         all_dispensaries = json.load(f)
 
-    print(f"Loaded {len(all_dispensaries)} total dispensaries")
+    print(f"Loaded {len(all_dispensaries)} total dispensaries from scraper")
+
+    # Merge in manually-added dispensaries (e.g. just-opened ones not yet on Weedmaps).
+    # These are kept in a separate file so the scraper doesn't wipe them out.
+    if MANUAL_DISPENSARY_FILE.exists():
+        with open(MANUAL_DISPENSARY_FILE) as f:
+            manual = json.load(f)
+        existing_ids = {d.get("id") for d in all_dispensaries}
+        added = 0
+        for m in manual:
+            if m.get("id") not in existing_ids:
+                all_dispensaries.append(m)
+                added += 1
+        if added:
+            print(f"Merged {added} manually-added dispensaries from manual_dispensaries.json")
 
     # Filter to metro area
     metro = [d for d in all_dispensaries if is_metro(d)]

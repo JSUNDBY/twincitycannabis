@@ -682,6 +682,37 @@ html[data-theme="light"] body::after {
     color: var(--bg-primary);
 }
 
+/* "Just Opened" badge — for dispensaries with opened_at within last 60 days */
+.dispensary-card-new {
+    padding: 0.18rem 0.6rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1a1d23;
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.35);
+    animation: just-opened-pulse 2.5s ease-in-out infinite;
+    white-space: nowrap;
+}
+
+@keyframes just-opened-pulse {
+    0%, 100% { box-shadow: 0 0 12px rgba(245, 158, 11, 0.35); }
+    50% { box-shadow: 0 0 18px rgba(245, 158, 11, 0.55); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dispensary-card-new { animation: none !important; }
+}
+
+/* Recently Opened section — special background treatment to distinguish */
+.recently-opened-section {
+    background: radial-gradient(ellipse at 50% 50%, rgba(245, 158, 11, 0.04) 0%, transparent 60%);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
 .dispensary-card-actions {
     display: flex;
     gap: 0.5rem;

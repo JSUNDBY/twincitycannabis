@@ -184,12 +184,33 @@
     // ---- RENDER: HOME ----
     function renderHome() {
         renderFeaturedDispensaries();
+        renderRecentlyOpened();
         renderTodaysDeals();
         renderTrendingProducts();
         renderPopularStrains();
         renderMNBrands();
         renderComingSoon();
         renderShop();
+    }
+
+    function renderRecentlyOpened() {
+        const container = document.getElementById('recently-opened-dispensaries');
+        const section = document.getElementById('recently-opened-section');
+        if (!container || !TCC.dispensaries) return;
+
+        // Find dispensaries that opened in the last 60 days, sorted by most recent first
+        const recent = TCC.dispensaries
+            .filter(d => isRecentlyOpened(d))
+            .sort((a, b) => new Date(b.opened_at) - new Date(a.opened_at));
+
+        if (recent.length === 0) {
+            // Hide the section entirely if there are no recent openings
+            if (section) section.style.display = 'none';
+            return;
+        }
+
+        if (section) section.style.display = '';
+        container.innerHTML = recent.map(d => dispensaryCard(d)).join('');
     }
 
     function renderFeaturedDispensaries() {
@@ -1223,10 +1244,23 @@
     }
 
     // ---- CARD TEMPLATES ----
+    // Check if a dispensary opened recently (within last 60 days).
+    // Used to show a "Just Opened" badge and feature in the Recently Opened section.
+    function isRecentlyOpened(d) {
+        if (!d || !d.opened_at) return false;
+        const opened = new Date(d.opened_at);
+        if (isNaN(opened.getTime())) return false;
+        const days = (Date.now() - opened.getTime()) / (1000 * 60 * 60 * 24);
+        return days >= 0 && days <= 60;
+    }
+
     function dispensaryCard(d, variant) {
         const scoreColor = TCC.getScoreColor(d.tcc_score);
         const tierBadge = d.tier !== 'free'
             ? `<span class="dispensary-card-tier" style="background:${TCC.getTierColor(d.tier)};color:${d.tier === 'platinum' ? '#0a0a0a' : '#fff'}">${TCC.getTierLabel(d.tier)}</span>`
+            : '';
+        const justOpenedBadge = isRecentlyOpened(d)
+            ? '<span class="dispensary-card-new">&#10024; Just Opened</span>'
             : '';
 
         // Real Google rating with star rendering
@@ -1283,6 +1317,7 @@
                         ${gRating > 0 ? `<span class="stars">${stars}</span><span class="rating-num">${gRating.toFixed(1)}</span><span class="count">(${gCount.toLocaleString()})</span>` : '<span class="text-muted text-xs">No reviews yet</span>'}
                         ${statusBadge}
                         ${tierBadge}
+                        ${justOpenedBadge}
                     </div>
                     <div class="dispensary-card-meta">
                         <span>${Icons.clock} ${d.hours?.note || d.hours?.weekday || 'Check hours'}</span>
