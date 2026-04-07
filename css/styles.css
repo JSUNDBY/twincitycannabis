@@ -2280,9 +2280,9 @@ html[data-theme="light"] body::after {
     display: none !important;
 }
 
-/* Hide the disclaimer line "We won't send you spam..." since we have our own */
+/* Hide the "We won't send you spam..." disclaimer line since we have our own */
 .kit-form-wrapper .formkit-disclaimer,
-.kit-form-wrapper [class*="disclaimer"] {
+.kit-form-wrapper .formkit-guarantee {
     display: none !important;
 }
 
@@ -2371,10 +2371,20 @@ html[data-theme="light"] body::after {
     box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4) !important;
 }
 
-/* Success message after submission */
+/* Hide ALL Kit alert/error messages by default. Kit renders these in the
+   DOM upfront ("Fields Missing", "Email is invalid", "Email is quarantined",
+   etc.) and reveals them only when needed. My old [class*="alert"] selector
+   was force-showing them all the time. */
 .kit-form-wrapper .formkit-alert,
-.kit-form-wrapper .formkit-alert-success,
-.kit-form-wrapper [class*="alert"] {
+.kit-form-wrapper .formkit-alert-error,
+.kit-form-wrapper .formkit-alert-warning {
+    display: none !important;
+}
+
+/* Re-show Kit's actual success message after a real form submission.
+   Kit toggles this with an .formkit-alert-success class on completion. */
+.kit-form-wrapper .formkit-alert-success {
+    display: block !important;
     color: var(--green-text) !important;
     background: rgba(34, 197, 94, 0.08) !important;
     border: 1px solid rgba(34, 197, 94, 0.25) !important;
@@ -2384,6 +2394,19 @@ html[data-theme="light"] body::after {
     font-weight: 600 !important;
     font-size: 1rem !important;
     line-height: 1.5 !important;
+}
+
+/* If Kit shows an active validation error (after a real failed submit),
+   re-show it but in a warning style */
+.kit-form-wrapper .formkit-alert.formkit-alert-error[role="alert"] {
+    display: block !important;
+    color: #f87171 !important;
+    background: rgba(239, 68, 68, 0.08) !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 0.75rem 1rem !important;
+    text-align: center !important;
+    font-size: 0.85rem !important;
 }
 
 /* Light mode tweaks for Kit form */
