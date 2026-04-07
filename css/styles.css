@@ -2146,56 +2146,128 @@ html[data-theme="light"] body::after {
     }
 }
 
+/* ============ COMPARE MODE HEADER ============
+   When viewing a specific product, the page header becomes contextual:
+   shows the product name + subtitle with brand/dispensary count + savings.
+   Includes a "back to all products" link. */
+.browse-back-link {
+    display: inline-flex;
+    align-items: center;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    margin-bottom: 0.5rem;
+}
+.browse-back-link:hover {
+    color: var(--green);
+}
+
+#compare-mode-header {
+    margin-bottom: 1.5rem;
+    animation: compare-header-in 0.4s ease;
+}
+
+@keyframes compare-header-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.compare-product-title {
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.compare-product-sub {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
 /* ============ KIT FORM EMBED OVERRIDE ============
-   Kit forms come with their own styling that doesn't match TCC.
-   These overrides re-skin the embed to look native to the dark forest theme. */
+   Kit's "Mills" template uses a monospace font that doesn't match TCC.
+   These overrides re-skin the embed to look native to the dark forest theme.
+   The * selector is intentional — Kit nests fonts deeply and we need to
+   override every descendant. */
+
+/* Custom branded header above the Kit form */
+.kit-form-brand {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.kit-form-logo {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 1rem;
+    display: block;
+    filter: drop-shadow(0 0 16px rgba(34, 197, 94, 0.25));
+}
+
+.kit-form-title {
+    font-family: var(--font-display) !important;
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3.5vw, 2rem);
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.kit-form-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    max-width: 460px;
+    margin: 0 auto;
+}
+
 .kit-form-wrapper {
     width: 100%;
 }
 
-/* Hide Kit's "Built with Kit" badge — we already credit them via the script */
+/* NUCLEAR FONT OVERRIDE — every descendant of the Kit wrapper uses TCC fonts.
+   Kit's Mills template applies its monospace font deep in the tree, so we
+   target everything to be safe. */
+.kit-form-wrapper,
+.kit-form-wrapper * {
+    font-family: var(--font-body), 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* Hide Kit's headline and subhead since we render our own above */
+.kit-form-wrapper .formkit-header,
+.kit-form-wrapper .formkit-subheader,
+.kit-form-wrapper h1,
+.kit-form-wrapper h2 {
+    display: none !important;
+}
+
+/* Hide Kit's "Built with Kit" badge */
 .kit-form-wrapper .formkit-powered-by-convertkit-container,
+.kit-form-wrapper .formkit-powered-by-convertkit,
 .kit-form-wrapper [class*="powered-by"] {
     display: none !important;
 }
 
-/* The whole form container */
-.kit-form-wrapper .formkit-form,
-.kit-form-wrapper [data-style] {
+/* Hide the disclaimer line "We won't send you spam..." since we have our own */
+.kit-form-wrapper .formkit-disclaimer,
+.kit-form-wrapper [class*="disclaimer"] {
+    display: none !important;
+}
+
+/* The form container itself */
+.kit-form-wrapper .formkit-form {
     background: var(--bg-card) !important;
     border: 1px solid var(--border) !important;
     border-radius: var(--radius-lg) !important;
     padding: 2rem !important;
     box-shadow: var(--shadow-md) !important;
     max-width: 100% !important;
-    font-family: var(--font-body) !important;
+    margin: 0 !important;
 }
 
-/* Headline */
-.kit-form-wrapper .formkit-header,
-.kit-form-wrapper h1,
-.kit-form-wrapper h2 {
-    font-family: var(--font-display) !important;
-    font-weight: 700 !important;
-    color: var(--text-primary) !important;
-    text-align: center !important;
-    font-size: 1.6rem !important;
-    letter-spacing: -0.5px !important;
-    margin-bottom: 0.5rem !important;
-}
-
-/* Description / subhead */
-.kit-form-wrapper .formkit-subheader,
-.kit-form-wrapper .formkit-form > p,
-.kit-form-wrapper [class*="subheader"] {
-    color: var(--text-secondary) !important;
-    text-align: center !important;
-    font-size: 0.95rem !important;
-    line-height: 1.5 !important;
-    margin-bottom: 1.5rem !important;
-}
-
-/* All input fields */
+/* All input fields, selects, textareas */
+.kit-form-wrapper .formkit-input,
 .kit-form-wrapper input[type="text"],
 .kit-form-wrapper input[type="email"],
 .kit-form-wrapper input[type="tel"],
@@ -2208,83 +2280,88 @@ html[data-theme="light"] body::after {
     color: var(--text-primary) !important;
     padding: 0.85rem 1rem !important;
     font-size: 0.95rem !important;
-    font-family: var(--font-body) !important;
     width: 100% !important;
-    transition: border-color 0.2s ease !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    line-height: 1.4 !important;
+    box-sizing: border-box !important;
 }
 
 .kit-form-wrapper input::placeholder,
-.kit-form-wrapper textarea::placeholder {
+.kit-form-wrapper textarea::placeholder,
+.kit-form-wrapper select::placeholder {
     color: var(--text-muted) !important;
+    opacity: 1 !important;
 }
 
 .kit-form-wrapper input:focus,
 .kit-form-wrapper select:focus,
-.kit-form-wrapper textarea:focus {
+.kit-form-wrapper textarea:focus,
+.kit-form-wrapper .formkit-input:focus {
     outline: none !important;
     border-color: var(--green) !important;
     box-shadow: 0 0 0 3px var(--green-glow) !important;
 }
 
-/* Field labels */
-.kit-form-wrapper label,
-.kit-form-wrapper [class*="label"] {
-    color: var(--text-secondary) !important;
-    font-size: 0.8rem !important;
-    font-weight: 500 !important;
-    margin-bottom: 0.3rem !important;
+/* Field wrapper spacing */
+.kit-form-wrapper .formkit-field {
+    margin-bottom: 0.85rem !important;
 }
 
-/* Submit button */
+/* Submit button — TCC brand gradient */
 .kit-form-wrapper button[type="submit"],
 .kit-form-wrapper .formkit-submit,
-.kit-form-wrapper [class*="submit"] {
+.kit-form-wrapper [class*="submit"] button {
     background: linear-gradient(135deg, #22c55e, #16a34a) !important;
-    color: var(--bg-primary) !important;
+    background-color: #22c55e !important;
+    color: #0a1410 !important;
     border: none !important;
     border-radius: var(--radius-sm) !important;
     padding: 1rem 1.5rem !important;
     font-size: 1rem !important;
     font-weight: 700 !important;
-    font-family: var(--font-body) !important;
     width: 100% !important;
     cursor: pointer !important;
     transition: transform 0.2s ease, box-shadow 0.2s ease !important;
     margin-top: 0.5rem !important;
     text-transform: none !important;
     letter-spacing: 0 !important;
+    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.25) !important;
+}
+
+.kit-form-wrapper button[type="submit"] *,
+.kit-form-wrapper .formkit-submit * {
+    color: #0a1410 !important;
+    font-weight: 700 !important;
 }
 
 .kit-form-wrapper button[type="submit"]:hover,
 .kit-form-wrapper .formkit-submit:hover {
     transform: translateY(-1px) !important;
-    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3) !important;
-}
-
-/* Spam disclaimer text Kit adds */
-.kit-form-wrapper .formkit-guarantee,
-.kit-form-wrapper [class*="guarantee"] {
-    color: var(--text-muted) !important;
-    font-size: 0.75rem !important;
-    text-align: center !important;
-    margin-top: 0.75rem !important;
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4) !important;
 }
 
 /* Success message after submission */
 .kit-form-wrapper .formkit-alert,
+.kit-form-wrapper .formkit-alert-success,
 .kit-form-wrapper [class*="alert"] {
     color: var(--green-text) !important;
     background: rgba(34, 197, 94, 0.08) !important;
     border: 1px solid rgba(34, 197, 94, 0.25) !important;
     border-radius: var(--radius-sm) !important;
-    padding: 1rem !important;
+    padding: 1.25rem !important;
     text-align: center !important;
     font-weight: 600 !important;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
 }
 
 /* Light mode tweaks for Kit form */
 html[data-theme="light"] .kit-form-wrapper button[type="submit"],
 html[data-theme="light"] .kit-form-wrapper .formkit-submit {
+    color: white !important;
+}
+html[data-theme="light"] .kit-form-wrapper button[type="submit"] *,
+html[data-theme="light"] .kit-form-wrapper .formkit-submit * {
     color: white !important;
 }
 

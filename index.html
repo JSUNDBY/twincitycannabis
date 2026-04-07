@@ -389,8 +389,11 @@
             <div class="section-label fade-in">&#128276; Price Alerts</div>
             <h2 class="section-title fade-in" style="max-width:600px;margin:0 auto 0.5rem">Never miss a deal again</h2>
             <p class="section-desc fade-in" style="max-width:500px;margin:0 auto 1.5rem">Get notified when prices drop on your favorite products and strains. Free forever.</p>
+            <!-- Real HTML form posting directly to Kit. No JS, no CORS issues.
+                 Submit triggers a real POST to Kit which handles the rest. -->
             <form class="fade-in" id="alert-form" style="max-width:480px;margin:0 auto;display:flex;gap:0.5rem"
-                  action="https://app.kit.com/forms/9289780/subscriptions" method="post" data-sv-form="9289780">
+                  action="https://app.kit.com/forms/9289780/subscriptions"
+                  method="post" target="_blank">
                 <input class="input input-lg" type="email" name="email_address" placeholder="Enter your email for alerts" required style="flex:1">
                 <button type="submit" class="btn btn-primary btn-lg">Get Alerts</button>
             </form>
@@ -770,37 +773,49 @@
 <div class="page" id="page-compare">
     <section class="section" style="padding-top:2rem">
         <div class="container">
-            <div class="section-label">Browse &amp; Compare</div>
-            <h1 class="section-title">Find your product. Compare every price.</h1>
-            <p class="section-desc" style="margin-bottom:2rem">Filter by category, search by name, sort by price. Tap any product to see who's selling it and for how much.</p>
 
-            <!-- Filter / sort toolbar -->
-            <div class="browse-toolbar" id="browse-toolbar">
-                <div class="browse-search">
-                    <span class="search-icon" data-icon="search"></span>
-                    <input type="text" id="browse-search-input" class="input" placeholder="Search by name, brand, or strain...">
+            <!-- Browse mode header — hidden when viewing a specific product -->
+            <div id="browse-mode-header">
+                <div class="section-label">Browse &amp; Compare</div>
+                <h1 class="section-title">Find your product. Compare every price.</h1>
+                <p class="section-desc" style="margin-bottom:2rem">Filter by category, search by name, sort by price. Tap any product to see who's selling it and for how much.</p>
+
+                <!-- Filter / sort toolbar -->
+                <div class="browse-toolbar" id="browse-toolbar">
+                    <div class="browse-search">
+                        <span class="search-icon" data-icon="search"></span>
+                        <input type="text" id="browse-search-input" class="input" placeholder="Search by name, brand, or strain...">
+                    </div>
+                    <select id="browse-category" class="select">
+                        <option value="all">All categories</option>
+                        <option value="flower">Flower</option>
+                        <option value="edible">Edibles</option>
+                        <option value="cartridge">Cartridges</option>
+                        <option value="pre-roll">Pre-Rolls</option>
+                        <option value="beverage">Beverages</option>
+                        <option value="tincture">Tinctures</option>
+                        <option value="topical">Topicals</option>
+                        <option value="concentrate">Concentrates</option>
+                    </select>
+                    <select id="browse-sort" class="select">
+                        <option value="popular">Most popular</option>
+                        <option value="price-asc">Price: low to high</option>
+                        <option value="price-desc">Price: high to low</option>
+                        <option value="name">Name (A-Z)</option>
+                    </select>
                 </div>
-                <select id="browse-category" class="select">
-                    <option value="all">All categories</option>
-                    <option value="flower">Flower</option>
-                    <option value="edible">Edibles</option>
-                    <option value="cartridge">Cartridges</option>
-                    <option value="pre-roll">Pre-Rolls</option>
-                    <option value="beverage">Beverages</option>
-                    <option value="tincture">Tinctures</option>
-                    <option value="topical">Topicals</option>
-                    <option value="concentrate">Concentrates</option>
-                </select>
-                <select id="browse-sort" class="select">
-                    <option value="popular">Most popular</option>
-                    <option value="price-asc">Price: low to high</option>
-                    <option value="price-desc">Price: high to low</option>
-                    <option value="name">Name (A-Z)</option>
-                </select>
+
+                <!-- Quick category pills -->
+                <div class="browse-pills" id="browse-pills"></div>
             </div>
 
-            <!-- Quick category pills -->
-            <div class="browse-pills" id="browse-pills"></div>
+            <!-- Compare mode header — only shown when viewing a specific product -->
+            <div id="compare-mode-header" style="display:none">
+                <a href="#compare" class="browse-back-link">&larr; Back to all products</a>
+                <div class="section-label" style="margin-top:0.75rem">Price Comparison</div>
+                <h1 class="section-title compare-product-title" id="compare-mode-title">Loading...</h1>
+                <p class="section-desc compare-product-sub" id="compare-mode-sub" style="margin-bottom:2rem"></p>
+            </div>
 
             <div id="compare-content"></div>
         </div>
@@ -1504,6 +1519,11 @@
     <!-- Claim / Contact Form -->
     <section class="section section-dark" id="for-dispensaries-claim">
         <div class="container" style="max-width:640px">
+            <div class="kit-form-brand">
+                <img src="img/twin-city-cannabis-logo-128.png" alt="Twin City Cannabis" class="kit-form-logo">
+                <h2 class="kit-form-title">Get started in 2 minutes</h2>
+                <p class="kit-form-subtitle">Claim your listing, start a free Featured trial, or just say hi.</p>
+            </div>
             <div class="kit-form-wrapper">
                 <!-- Kit form embed - TCC Dispensary Inquiries -->
                 <script async data-uid="43f87f1273" src="https://superthoughts.kit.com/43f87f1273/index.js"></script>

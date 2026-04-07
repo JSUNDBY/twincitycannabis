@@ -852,12 +852,36 @@
 
     function renderCompare(productId) {
         const container = document.getElementById('compare-content');
+        const browseHeader = document.getElementById('browse-mode-header');
+        const compareHeader = document.getElementById('compare-mode-header');
 
         if (productId) {
             const product = TCC.getProduct(productId);
             if (!product) { renderCompareDefault(); return; }
+            // Switch to compare mode header — contextual to the specific product
+            if (browseHeader) browseHeader.style.display = 'none';
+            if (compareHeader) {
+                compareHeader.style.display = 'block';
+                const titleEl = document.getElementById('compare-mode-title');
+                const subEl = document.getElementById('compare-mode-sub');
+                if (titleEl) titleEl.textContent = product.name;
+                if (subEl) {
+                    const numDisps = Object.keys(product.prices || {}).length;
+                    const lowest = TCC.getLowestPrice(product);
+                    const highest = TCC.getHighestPrice ? TCC.getHighestPrice(product) : null;
+                    const savings = (highest && lowest) ? highest.price - lowest.price : 0;
+                    let sub = `${product.brand || 'Unknown brand'}${product.weight ? ' &middot; ' + product.weight : ''} &middot; Available at ${numDisps} dispensar${numDisps === 1 ? 'y' : 'ies'}`;
+                    if (savings > 1) {
+                        sub += ` &middot; <span style="color:var(--green-text);font-weight:600">Save up to $${savings.toFixed(0)}</span>`;
+                    }
+                    subEl.innerHTML = sub;
+                }
+            }
             renderCompareProduct(product);
         } else {
+            // Switch back to browse mode header
+            if (browseHeader) browseHeader.style.display = 'block';
+            if (compareHeader) compareHeader.style.display = 'none';
             renderCompareDefault();
         }
     }
@@ -1505,33 +1529,17 @@
             tab.addEventListener('click', () => switchDetailTab(tab.dataset.tab));
         });
 
-        // Alert form (consumer email signup) — submits to Kit via the public
-        // forms endpoint (no API key needed). Uses no-cors so we can't read the
-        // response but the request still gets through.
+        // Alert form (consumer email signup) — real HTML form posts directly
+        // to Kit via target="_blank". We don't preventDefault so the browser
+        // performs a real POST submission. We just track the conversion event
+        // and swap to a success message after a short delay.
         const alertForm = document.getElementById('alert-form');
         if (alertForm) {
-            alertForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = alertForm.querySelector('input[name="email_address"]').value;
-                const formId = alertForm.dataset.svForm || '9289780';
-                const btn = alertForm.querySelector('button');
-                btn.textContent = 'Signing up...';
-                btn.disabled = true;
+            alertForm.addEventListener('submit', () => {
+                const email = alertForm.querySelector('input[name="email_address"]')?.value;
+                if (!email) return;
 
-                // Submit to Kit
-                try {
-                    const fd = new FormData();
-                    fd.append('email_address', email);
-                    await fetch(`https://app.kit.com/forms/${formId}/subscriptions`, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        body: fd,
-                    });
-                } catch (err) {
-                    console.log('Kit submit fallback', err);
-                }
-
-                // Save locally as backup
+                // Save locally as backup so you can verify signups locally
                 try {
                     const signups = JSON.parse(localStorage.getItem('tcc-alerts') || '[]');
                     signups.push({ email, timestamp: new Date().toISOString(), type: 'alert' });
@@ -1542,8 +1550,12 @@
                 if (typeof gtag === 'function') gtag('event', 'generate_lead', { event_category: 'engagement', event_label: 'price_alert_signup' });
                 if (typeof fbq === 'function') fbq('track', 'Lead', { content_name: 'TCC Price Alerts' });
 
-                alertForm.style.display = 'none';
-                document.getElementById('alert-success').style.display = 'block';
+                // Swap to success message after a beat (the real form post still goes through)
+                setTimeout(() => {
+                    alertForm.style.display = 'none';
+                    const successEl = document.getElementById('alert-success');
+                    if (successEl) successEl.style.display = 'block';
+                }, 400);
             });
         }
 
