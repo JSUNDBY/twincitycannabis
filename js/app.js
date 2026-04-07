@@ -242,32 +242,25 @@
     }
 
     function renderPopularStrains() {
-        // Legacy hardcoded strain catalog had no link to real product data
-        // (every product had strain: null), so every strain card showed
-        // "0 products available". Replaced with renderMostStocked() below
-        // which pulls real product counts.
-        renderMostStocked();
-    }
+        const container = document.getElementById('popular-strains');
+        if (!container || !TCC.strains) return;
 
-    function renderMostStocked() {
-        const container = document.getElementById('most-stocked-products');
-        if (!container || !TCC.products) return;
+        // Sort strains by real product count (from installStrainMatching)
+        // and take the top 8 with at least one product. Strains with 0
+        // products are hidden so we never show "0 products available".
+        const popular = TCC.strains
+            .map(s => ({ strain: s, count: TCC.getStrainProductCount(s.id) }))
+            .filter(x => x.count > 0)
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 8)
+            .map(x => x.strain);
 
-        // Filter to real cannabis products (no accessories), sort by # of
-        // dispensaries carrying it, take the top 6
-        const cannabisCategories = new Set(['flower','edible','cartridge','pre-roll','beverage','tincture','topical','concentrate']);
-        const sorted = TCC.products
-            .filter(p => cannabisCategories.has(p.category))
-            .filter(p => p.prices && Object.keys(p.prices).length >= 2)
-            .sort((a, b) => Object.keys(b.prices).length - Object.keys(a.prices).length)
-            .slice(0, 6);
-
-        if (sorted.length === 0) {
-            container.innerHTML = '<div class="empty-state"><div class="empty-state-desc">No products to show yet.</div></div>';
+        if (popular.length === 0) {
+            container.innerHTML = '<div class="empty-state"><div class="empty-state-desc">No strain data yet — check back soon.</div></div>';
             return;
         }
 
-        container.innerHTML = sorted.map(p => productCard(p)).join('');
+        container.innerHTML = popular.map(s => strainCard(s)).join('');
     }
 
     function renderMNBrands() {
@@ -673,6 +666,16 @@
         if (filters.type && filters.type !== 'all') {
             results = results.filter(s => s.type === filters.type);
         }
+
+        // Sort: strains with products first (most → least), then 0-product strains
+        results.sort((a, b) => {
+            const ca = TCC.getStrainProductCount(a.id);
+            const cb = TCC.getStrainProductCount(b.id);
+            return cb - ca;
+        });
+
+        // Hide strains with zero products entirely (they're noise)
+        results = results.filter(s => TCC.getStrainProductCount(s.id) > 0);
 
         container.innerHTML = results.length ? results.map(s => strainCard(s)).join('') :
             `<div class="empty-state" style="grid-column:1/-1">
@@ -1727,7 +1730,67 @@
         });
     }
 
+    // Override TCC.getProductsByStrain with name-based matching since the
+    // scraped product data has no strain field. This scans every product
+    // name (and brand) for strain name + alias matches and caches results
+    // so we don't re-scan on every call. Lives in app.js so it persists
+    // across scraper-driven data.js regenerations.
+    function installStrainMatching() {
+        if (!TCC.strains || !TCC.products) return;
+        const cache = {};
+
+        // Build a regex for each strain (name + aliases). Word boundaries to
+        // avoid partial matches like "Soap" in "Soapy" or "Mac" in "Magic".
+        const strainRegexes = TCC.strains.map(s => {
+            const variants = [s.name, ...(s.aliases || [])];
+            // Sort by length descending so longer aliases match before shorter ones
+            // (e.g., "Lemon Cherry Gelato" should match before "Gelato")
+            variants.sort((a, b) => b.length - a.length);
+            const escaped = variants.map(v => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+'));
+            return {
+                strain: s,
+                regex: new RegExp('\\b(' + escaped.join('|') + ')\\b', 'i')
+            };
+        });
+
+        // Pre-compute strain → matching products map for fast lookup
+        const strainProducts = {};
+        TCC.strains.forEach(s => { strainProducts[s.id] = []; });
+
+        // For each product, check which strain it matches.
+        // Greedy approach: a product can only match ONE strain (the longest/first).
+        // This avoids "Lemon Cherry Gelato" being counted under both "Lemon Cherry Gelato" and "Gelato".
+        TCC.products.forEach(p => {
+            const haystack = `${p.name} ${p.brand || ''}`;
+            for (const { strain, regex } of strainRegexes) {
+                if (regex.test(haystack)) {
+                    strainProducts[strain.id].push(p);
+                    break;
+                }
+            }
+        });
+
+        // Replace the data.js implementation with our name-based one
+        TCC.getProductsByStrain = (strainId) => {
+            if (cache[strainId]) return cache[strainId];
+            cache[strainId] = strainProducts[strainId] || [];
+            return cache[strainId];
+        };
+
+        // Also expose a helper that returns total count without requiring full lookup
+        TCC.getStrainProductCount = (strainId) => {
+            return (strainProducts[strainId] || []).length;
+        };
+
+        // For debugging — number of strains with at least 1 product
+        if (typeof console !== 'undefined') {
+            const withProducts = TCC.strains.filter(s => strainProducts[s.id].length > 0).length;
+            console.log(`[strain matching] ${withProducts}/${TCC.strains.length} strains have matching products`);
+        }
+    }
+
     function init() {
+        installStrainMatching();
         updateHeroCounts();
         injectDataIcons();
         renderHome();
