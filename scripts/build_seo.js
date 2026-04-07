@@ -1029,13 +1029,13 @@ const catLinks = TCC.categories
   .map(c => `<a href="/products/${esc(c.id)}/">${esc(c.name)}</a>`).join(' &middot; ');
 
 const seoFooter = `
-    <section class="seo-crawl-footer" style="background:rgba(255,255,255,0.02);border-top:1px solid rgba(255,255,255,0.06);padding:3rem 0 2rem;margin-top:4rem">
-      <div class="container" style="max-width:1100px">
+    <section class="seo-crawl-footer" style="background:rgba(255,255,255,0.02);border-top:1px solid rgba(255,255,255,0.06);padding:3rem 0 2rem;margin-top:4rem;overflow-wrap:break-word;word-wrap:break-word">
+      <div class="container" style="max-width:1100px;padding-left:1.25rem;padding-right:1.25rem">
         <h2 style="font-size:1.1rem;font-weight:600;color:var(--text-primary);margin:0 0 1.5rem;letter-spacing:.3px;text-transform:uppercase">Browse Twin City Cannabis</h2>
 
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem">
 
-          <div>
+          <div style="min-width:0">
             <h3 style="font-size:.78rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;letter-spacing:.5px;margin:0 0 .75rem">Top guides</h3>
             <ul style="list-style:none;padding:0;margin:0;font-size:.92rem;line-height:1.9">
               <li><a href="/best-dispensaries-twin-cities/" style="color:var(--text-secondary);text-decoration:none">Best-rated dispensaries in the Twin Cities</a></li>
@@ -1047,23 +1047,23 @@ const seoFooter = `
             </ul>
           </div>
 
-          <div>
+          <div style="min-width:0">
             <h3 style="font-size:.78rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;letter-spacing:.5px;margin:0 0 .75rem">By category</h3>
-            <p style="font-size:.88rem;line-height:1.8;color:var(--text-secondary);margin:0">${catLinks}</p>
+            <p style="font-size:.88rem;line-height:1.8;color:var(--text-secondary);margin:0;overflow-wrap:break-word">${catLinks}</p>
           </div>
 
-          <div>
+          <div style="min-width:0">
             <h3 style="font-size:.78rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;letter-spacing:.5px;margin:0 0 .75rem">By city</h3>
-            <p style="font-size:.88rem;line-height:1.8;color:var(--text-secondary);margin:0">${cityLinks}</p>
+            <p style="font-size:.88rem;line-height:1.8;color:var(--text-secondary);margin:0;overflow-wrap:break-word">${cityLinks}</p>
           </div>
 
         </div>
 
         <h3 style="font-size:.78rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;letter-spacing:.5px;margin:2rem 0 .75rem">All dispensaries</h3>
-        <p style="font-size:.85rem;line-height:1.9;color:var(--text-secondary);margin:0 0 1.5rem">${dispLinks}</p>
+        <p style="font-size:.85rem;line-height:1.9;color:var(--text-secondary);margin:0 0 1.5rem;overflow-wrap:break-word">${dispLinks}</p>
 
         <h3 style="font-size:.78rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;letter-spacing:.5px;margin:1.5rem 0 .75rem">Brands</h3>
-        <p style="font-size:.85rem;line-height:1.9;color:var(--text-secondary);margin:0">${brandLinks}</p>
+        <p style="font-size:.85rem;line-height:1.9;color:var(--text-secondary);margin:0;overflow-wrap:break-word">${brandLinks}</p>
 
       </div>
     </section>
