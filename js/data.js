@@ -812,7 +812,7 @@ TCC.strains = [
 TCC.categories = [
     { id: 'flower', name: 'Flower', icon: '&#127807;' },
     { id: 'pre-roll', name: 'Pre-Rolls', icon: '&#128684;' },
-    { id: 'cartridge', name: 'Cartridges', icon: '&#128267;' },
+    { id: 'cartridge', name: 'Vapes', icon: '&#128267;' },
     { id: 'edible', name: 'Edibles', icon: '&#127850;' },
     { id: 'concentrate', name: 'Concentrates', icon: '&#128142;' },
     { id: 'topical', name: 'Topicals', icon: '&#128167;' },
