@@ -400,18 +400,322 @@ ${cards}
 ` + footer;
 };
 
+// ---------- BRAND HELPERS ----------
+const slugify = (s) => String(s).toLowerCase()
+  .replace(/&/g, 'and')
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-+|-+$/g, '');
+
+const BRAND_BLOCKLIST = new Set([
+  'house', 'gummies', 'disposable', 'cartridge', 'flower', 'vape',
+  'disposable-vape-pen-ix', 'cartridge-vape-ix', 'pre-roll'
+]);
+
+const isJunkBrand = (name) => {
+  const s = slugify(name);
+  if (BRAND_BLOCKLIST.has(s)) return true;
+  if (/-ix$/i.test(s)) return true;
+  if (/\d+\s*mg/i.test(name)) return true;          // dosage in name = SKU not brand
+  if (/\b(cbd|skincare|mocktail|seltzer|soda|gummies|infusions|narc|drops|tincture|pretzels|nano)\b/i.test(name)) return true;
+  if (name.length > 28) return true;                // overlong = likely a product variant
+  return false;
+};
+
+const getBrands = () => {
+  const counts = {};
+  TCC.products.forEach(p => {
+    if (!p.brand) return;
+    counts[p.brand] = (counts[p.brand] || 0) + 1;
+  });
+  return Object.entries(counts)
+    .filter(([name, n]) => n >= 5)
+    .filter(([name]) => !isJunkBrand(name))
+    .map(([name, n]) => ({ name, slug: slugify(name), count: n }))
+    .sort((a, b) => b.count - a.count);
+};
+
+// ---------- BRAND PAGE ----------
+const buildBrandPage = (brand) => {
+  const products = TCC.products
+    .filter(p => p.brand === brand.name)
+    .sort((a, b) => (lowestPrice(a) || 9999) - (lowestPrice(b) || 9999));
+
+  const carriedBy = new Set();
+  products.forEach(p => Object.keys(p.prices || {}).forEach(id => carriedBy.add(id)));
+  const dispensaries = Array.from(carriedBy)
+    .map(id => TCC.dispensaries.find(d => d.id === id))
+    .filter(Boolean);
+
+  const title = `${brand.name} — Where to Buy in the Twin Cities | Prices & Dispensaries`;
+  const description = `${brand.name} cannabis products at Twin Cities dispensaries. ${products.length} products tracked across ${dispensaries.length} stores. Compare prices, find the cheapest.`;
+  const canonical = `${SITE}/brands/${brand.slug}/`;
+
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'Brand',
+    name: brand.name,
+    url: canonical,
+    description: `${brand.name} is a cannabis brand carried at ${dispensaries.length} dispensaries in the Minneapolis-Saint Paul metro.`
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE },
+      { '@type': 'ListItem', position: 2, name: 'Brands', item: `${SITE}/brands/` },
+      { '@type': 'ListItem', position: 3, name: brand.name, item: canonical }
+    ]
+  }];
+
+  const rows = products.slice(0, 50).map(p => {
+    const lo = lowestPrice(p);
+    const hi = highestPrice(p);
+    return `<tr>
+  <td>${esc(p.name)}</td>
+  <td>${esc((TCC.categories.find(c => c.id === p.category) || {}).name || p.category)}</td>
+  <td style="text-align:right" class="price">$${lo ? lo.toFixed(2) : '—'}</td>
+  <td style="text-align:right">$${hi ? hi.toFixed(2) : '—'}</td>
+  <td style="text-align:right">${Object.keys(p.prices || {}).length}</td>
+</tr>`;
+  }).join('\n');
+
+  const dispLinks = dispensaries.map(d => `<a class="card" href="/dispensaries/${esc(d.id)}/"><p class="title">${esc(d.name)}</p><p class="sub">${esc(d.city || 'Twin Cities')}</p></a>`).join('\n');
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/brands/">Brands</a> / ${esc(brand.name)}</div>
+<h1>${esc(brand.name)}</h1>
+<p>${esc(brand.name)} is a cannabis brand sold at ${dispensaries.length} Twin Cities dispensaries. We track ${products.length} ${esc(brand.name)} products with daily price updates so you can find the cheapest store carrying what you want.</p>
+<a class="cta" href="/#compare">Compare ${esc(brand.name)} prices →</a>
+<h2>${esc(brand.name)} products &amp; prices</h2>
+<table>
+<thead><tr><th>Product</th><th>Category</th><th style="text-align:right">Lowest</th><th style="text-align:right">Highest</th><th style="text-align:right">Stores</th></tr></thead>
+<tbody>${rows}</tbody>
+</table>
+<h2>Dispensaries carrying ${esc(brand.name)}</h2>
+<div class="grid">${dispLinks}</div>
+` + footer;
+};
+
+const buildBrandsIndex = (brands) => {
+  const title = 'Cannabis Brands Sold in the Twin Cities — Browse by Brand';
+  const description = `Every cannabis brand carried at Minneapolis-Saint Paul dispensaries. ${brands.length} brands tracked with live pricing.`;
+  const canonical = `${SITE}/brands/`;
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: brands.map((b, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      url: `${SITE}/brands/${b.slug}/`, name: b.name
+    }))
+  }];
+
+  const cards = brands.map(b => `<a class="card" href="/brands/${esc(b.slug)}/">
+<p class="title">${esc(b.name)}</p>
+<p class="sub">${b.count} products tracked</p>
+</a>`).join('\n');
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / Brands</div>
+<h1>Cannabis Brands in the Twin Cities</h1>
+<p>${brands.length} brands carried across 33 Minneapolis-Saint Paul dispensaries, ranked by how many distinct products we track. Click any brand to see prices and which stores carry it.</p>
+<div class="grid">${cards}</div>
+` + footer;
+};
+
+// ---------- CITY PAGE ----------
+const buildCityPage = (cityName, slug) => {
+  const dispensaries = TCC.dispensaries.filter(d =>
+    (d.city || '').toLowerCase() === cityName.toLowerCase());
+  if (dispensaries.length === 0) return null;
+
+  const title = `Cannabis Dispensaries in ${cityName}, MN — Menus, Prices & Reviews`;
+  const description = `Every recreational cannabis dispensary in ${cityName}, Minnesota. ${dispensaries.length} stores with real Google ratings, live menus, and side-by-side price comparison. Updated daily.`;
+  const canonical = `${SITE}/${slug}/`;
+
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Cannabis dispensaries in ${cityName}, MN`,
+    itemListElement: dispensaries.map((d, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      url: `${SITE}/dispensaries/${d.id}/`, name: d.name
+    }))
+  }];
+
+  const cards = dispensaries.map(d => {
+    const rating = d.google && d.google.rating;
+    const rc = (d.google && d.google.review_count) || 0;
+    return `<a class="card" href="/dispensaries/${esc(d.id)}/">
+  <p class="title">${esc(d.name)}</p>
+  <p class="sub">${esc(d.address || cityName)}${rating ? ` · <span class="stars">★</span> ${rating} (${rc})` : ''}</p>
+</a>`;
+  }).join('\n');
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/dispensaries/">Dispensaries</a> / ${esc(cityName)}</div>
+<h1>Cannabis Dispensaries in ${esc(cityName)}, Minnesota</h1>
+<p>${dispensaries.length} recreational cannabis ${dispensaries.length === 1 ? 'dispensary' : 'dispensaries'} in ${esc(cityName)}. We track every menu, every price, every Google review — updated daily — so you can compare before you drive.</p>
+<a class="cta" href="/#dispensaries">Open interactive map →</a>
+<h2>All ${esc(cityName)} dispensaries</h2>
+<div class="grid">${cards}</div>
+<h2>Compare prices across ${esc(cityName)} stores</h2>
+<p>Twin City Cannabis is the only place that shows real-time prices side-by-side across every recreational cannabis store in ${esc(cityName)} and the broader Minneapolis-Saint Paul metro. No affiliate links, no pay-to-play rankings.</p>
+<p><a class="cta" href="/#compare">Compare ${esc(cityName)} prices →</a></p>
+` + footer;
+};
+
+// ---------- BEST RATED ----------
+const buildBestRatedPage = () => {
+  const ranked = TCC.dispensaries
+    .filter(d => d.google && d.google.rating)
+    .sort((a, b) => {
+      const rd = b.google.rating - a.google.rating;
+      if (rd !== 0) return rd;
+      return (b.google.review_count || 0) - (a.google.review_count || 0);
+    });
+
+  const title = `Best-Rated Cannabis Dispensaries in the Twin Cities (${today.slice(0, 4)})`;
+  const description = `The highest-rated recreational cannabis dispensaries in Minneapolis-Saint Paul, ranked by real Google reviews. Updated daily with verified ratings.`;
+  const canonical = `${SITE}/best-dispensaries-twin-cities/`;
+
+  const rows = ranked.map((d, i) => `<tr>
+  <td>${i + 1}</td>
+  <td><a href="/dispensaries/${esc(d.id)}/">${esc(d.name)}</a></td>
+  <td>${esc(d.city || '—')}</td>
+  <td><span class="stars">★</span> <strong>${d.google.rating}</strong></td>
+  <td style="text-align:right">${d.google.review_count}</td>
+</tr>`).join('\n');
+
+  return headOpen({ title, description, canonical }) + `
+<div class="crumbs"><a href="/">Home</a> / Best-rated dispensaries</div>
+<h1>Best-Rated Cannabis Dispensaries in the Twin Cities</h1>
+<p>Ranked by real Google reviews — no editorial picks, no pay-to-play. Pulled directly from Google Maps and refreshed weekly. Last updated ${today}.</p>
+<table>
+<thead><tr><th>#</th><th>Dispensary</th><th>City</th><th>Rating</th><th style="text-align:right">Reviews</th></tr></thead>
+<tbody>${rows}</tbody>
+</table>
+<h2>How we rank</h2>
+<p>Every dispensary on Twin City Cannabis is matched against its Google Maps profile so the rating and review count you see are pulled from the source — not from our own opinion or paid placements. Free listings rank exactly the same as Featured listings.</p>
+<a class="cta" href="/dispensaries/">See full dispensary directory →</a>
+` + footer;
+};
+
+// ---------- CHEAPEST PAGE ----------
+const buildCheapestPage = () => {
+  const title = 'Cheapest Cannabis in the Twin Cities — Best Deals by Category';
+  const description = `The cheapest cannabis products at Minneapolis-Saint Paul dispensaries, by category. Real prices, updated daily. Save money before you shop.`;
+  const canonical = `${SITE}/cheapest-cannabis-twin-cities/`;
+
+  const sections = TCC.categories.map(cat => {
+    const top10 = TCC.products
+      .filter(p => p.category === cat.id && lowestPrice(p) != null)
+      .sort((a, b) => lowestPrice(a) - lowestPrice(b))
+      .slice(0, 10);
+    if (top10.length === 0) return '';
+
+    const rows = top10.map(p => {
+      const lo = lowestPrice(p);
+      const cheapestStoreId = Object.entries(p.prices).sort((a, b) => a[1] - b[1])[0][0];
+      const store = TCC.dispensaries.find(d => d.id === cheapestStoreId);
+      return `<tr>
+  <td>${esc(p.name)}</td>
+  <td class="price">$${lo.toFixed(2)}</td>
+  <td>${store ? `<a href="/dispensaries/${esc(store.id)}/">${esc(store.name)}</a>` : '—'}</td>
+</tr>`;
+    }).join('\n');
+
+    return `<h2>Cheapest ${esc(cat.name.toLowerCase())}</h2>
+<table>
+<thead><tr><th>Product</th><th>Lowest price</th><th>At dispensary</th></tr></thead>
+<tbody>${rows}</tbody>
+</table>
+<p style="font-size:.9rem"><a href="/products/${esc(cat.id)}/">See all ${esc(cat.name.toLowerCase())} →</a></p>`;
+  }).join('\n');
+
+  return headOpen({ title, description, canonical }) + `
+<div class="crumbs"><a href="/">Home</a> / Cheapest cannabis</div>
+<h1>Cheapest Cannabis in the Twin Cities</h1>
+<p>The lowest-priced products in every category, pulled from live menus across 33 Minneapolis-Saint Paul dispensaries. Prices update daily. Last refreshed ${today}.</p>
+${sections}
+<h2>Why prices vary</h2>
+<p>Twin Cities cannabis is brand new — Minnesota only legalized recreational sales in August 2023. With dispensaries still ramping supply chains, the same product can cost $20 more at one store than another a few miles away. Twin City Cannabis is the only site that shows you the spread before you drive.</p>
+<a class="cta" href="/#compare">Open interactive comparison →</a>
+` + footer;
+};
+
+// ---------- LAWS PAGE ----------
+const buildLawsPage = () => {
+  const title = 'Minnesota Cannabis Laws — What\u2019s Legal in 2026';
+  const description = `Plain-English guide to Minnesota recreational cannabis laws: possession limits, where you can use it, driving, public consumption, and home growing. Updated 2026.`;
+  const canonical = `${SITE}/minnesota-cannabis-laws/`;
+
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Minnesota Cannabis Laws — What\u2019s Legal in 2026',
+    description,
+    datePublished: today,
+    dateModified: today,
+    author: { '@type': 'Organization', name: 'Twin City Cannabis' },
+    publisher: {
+      '@type': 'Organization', name: 'Twin City Cannabis',
+      logo: { '@type': 'ImageObject', url: `${SITE}/img/twin-city-cannabis-logo-512.png` }
+    },
+    mainEntityOfPage: canonical
+  }];
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / Minnesota cannabis laws</div>
+<h1>Minnesota Cannabis Laws — What\u2019s Legal in 2026</h1>
+<p>Minnesota legalized recreational cannabis on August 1, 2023. Here\u2019s the plain-English version of what adults 21+ can and can\u2019t do, current as of ${today}.</p>
+
+<h2>How much can I have?</h2>
+<p>Adults 21 and over can possess up to <strong>2 ounces of cannabis flower</strong> in public, <strong>2 pounds at home</strong>, <strong>8 grams of concentrate</strong>, and <strong>edibles containing up to 800 mg of THC</strong>.</p>
+
+<h2>Where can I buy it?</h2>
+<p>Only at licensed retail dispensaries. <a href="/dispensaries/">Twin City Cannabis lists every licensed dispensary in the metro</a> with current menus and prices.</p>
+
+<h2>Where can I use it?</h2>
+<ul>
+  <li><strong>Yes:</strong> private property (with the owner\u2019s permission)</li>
+  <li><strong>No:</strong> in a vehicle (even as a passenger), in public, on school grounds, or anywhere smoking tobacco is banned</li>
+  <li><strong>No:</strong> federal land — that includes national parks and federal buildings</li>
+</ul>
+
+<h2>Driving</h2>
+<p>It is illegal to drive under the influence of cannabis in Minnesota. There is no per-se THC limit like alcohol\u2019s 0.08 BAC — impairment is determined by the officer and field sobriety tests. Treat it like alcohol: do not drive impaired.</p>
+
+<h2>Home growing</h2>
+<p>Adults 21+ can grow up to <strong>8 cannabis plants</strong> at home, with no more than 4 mature/flowering at once. Plants must be in an enclosed, locked space not visible from public view.</p>
+
+<h2>Out-of-state visitors</h2>
+<p>Non-residents 21+ can purchase and possess the same amounts as residents. You cannot legally transport cannabis across state lines, including into Wisconsin or Iowa where it remains illegal.</p>
+
+<h2>Expungement</h2>
+<p>Minnesota is automatically expunging eligible low-level cannabis convictions. You don\u2019t need to apply — the state Cannabis Expungement Board is processing records on a rolling basis.</p>
+
+<a class="cta" href="/dispensaries/">Browse Twin Cities dispensaries →</a>
+
+<p style="margin-top:2rem;font-size:.85rem;color:#8b909a">This page is informational and not legal advice. For the official statute, see Minnesota Statutes Chapter 342.</p>
+` + footer;
+};
+
 // ---------- SITEMAP ----------
-const buildSitemap = () => {
+const buildSitemap = (extras = []) => {
   const urls = [
     { loc: `${SITE}/`,                         priority: '1.0', changefreq: 'daily' },
     { loc: `${SITE}/dispensaries/`,            priority: '0.9', changefreq: 'daily' },
     { loc: `${SITE}/products/`,                priority: '0.9', changefreq: 'daily' },
+    { loc: `${SITE}/brands/`,                  priority: '0.8', changefreq: 'weekly' },
+    { loc: `${SITE}/best-dispensaries-twin-cities/`, priority: '0.8', changefreq: 'weekly' },
+    { loc: `${SITE}/cheapest-cannabis-twin-cities/`, priority: '0.8', changefreq: 'daily' },
+    { loc: `${SITE}/minnesota-cannabis-laws/`, priority: '0.7', changefreq: 'monthly' },
     ...TCC.dispensaries.map(d => ({
       loc: `${SITE}/dispensaries/${d.id}/`,    priority: '0.8', changefreq: 'daily'
     })),
     ...TCC.categories.map(c => ({
       loc: `${SITE}/products/${c.id}/`,        priority: '0.7', changefreq: 'daily'
     })),
+    ...extras,
   ];
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -428,7 +732,9 @@ ${urls.map(u => `  <url>
 
 // ---------- BUILD ----------
 let count = 0;
+const extraSitemap = [];
 
+// Dispensaries
 TCC.dispensaries.forEach(d => {
   writePage(`dispensaries/${d.id}/index.html`, buildDispensaryPage(d));
   count++;
@@ -436,6 +742,7 @@ TCC.dispensaries.forEach(d => {
 writePage('dispensaries/index.html', buildDispensariesIndex());
 count++;
 
+// Categories
 TCC.categories.forEach(c => {
   writePage(`products/${c.id}/index.html`, buildCategoryPage(c));
   count++;
@@ -443,9 +750,115 @@ TCC.categories.forEach(c => {
 writePage('products/index.html', buildProductsHub());
 count++;
 
-fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), buildSitemap());
+// Brands
+const brands = getBrands();
+brands.forEach(b => {
+  writePage(`brands/${b.slug}/index.html`, buildBrandPage(b));
+  extraSitemap.push({ loc: `${SITE}/brands/${b.slug}/`, priority: '0.6', changefreq: 'weekly' });
+  count++;
+});
+writePage('brands/index.html', buildBrandsIndex(brands));
+count++;
+
+// City landing pages (auto-generated for every city with ≥1 dispensary)
+const cities = [...new Set(TCC.dispensaries.map(d => d.city).filter(Boolean))];
+const citySlug = (c) => `${slugify(c)}-cannabis-dispensaries`;
+cities.forEach(city => {
+  const html = buildCityPage(city, citySlug(city));
+  if (html) {
+    writePage(`${citySlug(city)}/index.html`, html);
+    extraSitemap.push({ loc: `${SITE}/${citySlug(city)}/`, priority: '0.7', changefreq: 'weekly' });
+    count++;
+  }
+});
+
+// Long-tail content pages
+writePage('best-dispensaries-twin-cities/index.html', buildBestRatedPage());
+count++;
+writePage('cheapest-cannabis-twin-cities/index.html', buildCheapestPage());
+count++;
+writePage('minnesota-cannabis-laws/index.html', buildLawsPage());
+count++;
+
+// Sitemap
+fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), buildSitemap(extraSitemap));
+
+// ---------- INJECT INTERNAL CRAWL FOOTER INTO index.html ----------
+// Replaces the marked block with up-to-date links to all generated pages so the
+// SPA homepage exposes a real, crawlable internal link graph to every static SEO
+// page (dispensaries, brands, cities, long-tail content). This is what tells
+// Google all those pages exist and are considered important by the homepage.
+const indexPath = path.join(ROOT, 'index.html');
+let indexHtml = fs.readFileSync(indexPath, 'utf8');
+
+const dispLinks = TCC.dispensaries
+  .slice()
+  .sort((a, b) => a.name.localeCompare(b.name))
+  .map(d => `<a href="/dispensaries/${esc(d.id)}/">${esc(d.name)}</a>`).join(' &middot; ');
+
+const cityLinks = cities
+  .slice()
+  .sort()
+  .map(c => `<a href="/${citySlug(c)}/">${esc(c)}</a>`).join(' &middot; ');
+
+const brandLinks = brands
+  .map(b => `<a href="/brands/${esc(b.slug)}/">${esc(b.name)}</a>`).join(' &middot; ');
+
+const catLinks = TCC.categories
+  .map(c => `<a href="/products/${esc(c.id)}/">${esc(c.name)}</a>`).join(' &middot; ');
+
+const seoFooter = `
+    <section class="seo-crawl-footer" style="background:rgba(255,255,255,0.02);border-top:1px solid rgba(255,255,255,0.06);padding:3rem 0 2rem;margin-top:4rem">
+      <div class="container" style="max-width:1100px">
+        <h2 style="font-size:1.1rem;font-weight:600;color:var(--text-primary);margin:0 0 1.5rem;letter-spacing:.3px;text-transform:uppercase">Browse Twin City Cannabis</h2>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem">
+
+          <div>
+            <h3 style="font-size:.78rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;letter-spacing:.5px;margin:0 0 .75rem">Top guides</h3>
+            <ul style="list-style:none;padding:0;margin:0;font-size:.92rem;line-height:1.9">
+              <li><a href="/best-dispensaries-twin-cities/" style="color:var(--text-secondary);text-decoration:none">Best-rated dispensaries in the Twin Cities</a></li>
+              <li><a href="/cheapest-cannabis-twin-cities/" style="color:var(--text-secondary);text-decoration:none">Cheapest cannabis in the Twin Cities</a></li>
+              <li><a href="/minnesota-cannabis-laws/" style="color:var(--text-secondary);text-decoration:none">Minnesota cannabis laws</a></li>
+              <li><a href="/dispensaries/" style="color:var(--text-secondary);text-decoration:none">All ${TCC.dispensaries.length} dispensaries</a></li>
+              <li><a href="/products/" style="color:var(--text-secondary);text-decoration:none">All product categories</a></li>
+              <li><a href="/brands/" style="color:var(--text-secondary);text-decoration:none">All cannabis brands</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 style="font-size:.78rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;letter-spacing:.5px;margin:0 0 .75rem">By category</h3>
+            <p style="font-size:.88rem;line-height:1.8;color:var(--text-secondary);margin:0">${catLinks}</p>
+          </div>
+
+          <div>
+            <h3 style="font-size:.78rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;letter-spacing:.5px;margin:0 0 .75rem">By city</h3>
+            <p style="font-size:.88rem;line-height:1.8;color:var(--text-secondary);margin:0">${cityLinks}</p>
+          </div>
+
+        </div>
+
+        <h3 style="font-size:.78rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;letter-spacing:.5px;margin:2rem 0 .75rem">All dispensaries</h3>
+        <p style="font-size:.85rem;line-height:1.9;color:var(--text-secondary);margin:0 0 1.5rem">${dispLinks}</p>
+
+        <h3 style="font-size:.78rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;letter-spacing:.5px;margin:1.5rem 0 .75rem">Brands</h3>
+        <p style="font-size:.85rem;line-height:1.9;color:var(--text-secondary);margin:0">${brandLinks}</p>
+
+      </div>
+    </section>
+`;
+
+indexHtml = indexHtml.replace(
+  /<!-- SEO_LINKS_START[^>]*-->[\s\S]*?<!-- SEO_LINKS_END -->/,
+  `<!-- SEO_LINKS_START — auto-generated by scripts/build_seo.js, do not edit by hand -->${seoFooter}    <!-- SEO_LINKS_END -->`
+);
+
+fs.writeFileSync(indexPath, indexHtml);
+console.log('Injected internal crawl footer into index.html');
 
 console.log(`SEO build complete: ${count} static pages + sitemap.xml`);
 console.log(`  Dispensaries: ${TCC.dispensaries.length}`);
 console.log(`  Categories:   ${TCC.categories.length}`);
+console.log(`  Brands:       ${brands.length}`);
+console.log(`  Cities:       ${cities.length}`);
 console.log(`  Products:     ${TCC.products.length}`);

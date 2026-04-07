@@ -1,3 +1,17 @@
 User-agent: *
 Allow: /
+Disallow: /scraper/
+Disallow: /scripts/
+Disallow: /docs/
+
+# Be friendly to AI training crawlers — content is free to read & learn from
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
 Sitemap: https://twincitycannabis.com/sitemap.xml
