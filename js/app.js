@@ -6,6 +6,20 @@
 (function() {
     'use strict';
 
+    // ─── Stripe / Cloudflare config ──────────────────────────────────────────
+    // Worker URL deployed from /cloudflare. Returns tier overrides as JSON.
+    const TCC_WORKER_URL = 'https://tcc-stripe.j-sundby.workers.dev';
+
+    // Stripe Payment Link URLs. Replace these with the real URLs after creating
+    // the products in Stripe (see /cloudflare/README.md step 3).
+    // The Subscribe button appends ?client_reference_id=<dispensary_id> so the
+    // worker can identify which dispensary is paying.
+    window.TIER_PAYMENT_LINKS = {
+        featured: '',  // e.g. 'https://buy.stripe.com/test_xxx'
+        premium:  '',  // e.g. 'https://buy.stripe.com/test_yyy'
+    };
+    // ─────────────────────────────────────────────────────────────────────────
+
     const App = {
         currentPage: 'home',
         currentDispensary: null,
@@ -1789,6 +1803,37 @@
         }
     }
 
+    // Fetch tier overrides from the Cloudflare Worker and merge into TCC.dispensaries.
+    // Non-blocking — runs in the background after first paint. If it succeeds and
+    // any dispensary's tier changed, re-renders the views that show tier badges.
+    async function loadTierOverrides() {
+        try {
+            const res = await fetch(`${TCC_WORKER_URL}/overrides`, { cache: 'no-store' });
+            if (!res.ok) return;
+            const overrides = await res.json();
+            let changed = 0;
+            for (const id of Object.keys(overrides)) {
+                const d = TCC.dispensaries.find(x => x.id === id);
+                if (!d) continue;
+                const newTier = overrides[id] && overrides[id].tier;
+                if (newTier && d.tier !== newTier) {
+                    d.tier = newTier;
+                    changed++;
+                }
+            }
+            if (changed > 0) {
+                console.log(`[overrides] applied ${changed} tier override(s)`);
+                // Re-render anything that displays tier badges
+                renderHome();
+                renderDispensaries();
+                renderCompare();
+            }
+        } catch (err) {
+            // Silent failure — overrides are optional, base experience still works
+            console.debug('[overrides] fetch failed (non-fatal):', err.message);
+        }
+    }
+
     function init() {
         installStrainMatching();
         updateHeroCounts();
@@ -1800,7 +1845,33 @@
         renderCompare();
         bindBrowseControls();
         bindEvents();
+        bindSubscribeButtons();
         route();
+        // Load tier overrides asynchronously after first paint
+        loadTierOverrides();
+    }
+
+    // Wires the Featured/Premium "Start Free Trial" / "Contact Us" buttons on
+    // /for-dispensaries to the Stripe Payment Links (when configured). If a
+    // dispensary id is in the URL hash (e.g. ?dispensary=wildflower-5), it
+    // gets passed as client_reference_id so the webhook can identify the buyer.
+    function bindSubscribeButtons() {
+        const buttons = document.querySelectorAll('[data-subscribe-tier]');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const tier = btn.getAttribute('data-subscribe-tier');
+                const url = (window.TIER_PAYMENT_LINKS || {})[tier];
+                if (!url) return; // not configured yet, fall through to default href (claim form)
+                e.preventDefault();
+                const params = new URLSearchParams(window.location.search);
+                const dispensaryId = params.get('dispensary') || sessionStorage.getItem('tcc_claim_dispensary');
+                let target = url;
+                if (dispensaryId) {
+                    target += (url.includes('?') ? '&' : '?') + 'client_reference_id=' + encodeURIComponent(dispensaryId);
+                }
+                window.location.href = target;
+            });
+        });
     }
 
     // Wait for DOM

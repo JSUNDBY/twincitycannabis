@@ -1,0 +1,33 @@
+# Twin City Cannabis — Cloudflare Worker config
+#
+# Deploy with:  cd cloudflare && npx wrangler deploy
+# Tail logs:    npx wrangler tail
+# Set secrets:  npx wrangler secret put STRIPE_SECRET_KEY
+#               npx wrangler secret put STRIPE_WEBHOOK_SECRET
+#
+# Account / KV namespace IDs are pre-filled from the existing setup:
+#   - account_id: 0672ae6f0ce7a86086cafbcba03ed68f (J.sundby@gmail.com)
+#   - kv namespace: tcc-overrides (id 71b77df77ea74522ab66c82e20cc9339)
+
+name = "tcc-stripe"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+account_id = "0672ae6f0ce7a86086cafbcba03ed68f"
+
+# Worker URL after deploy will be:
+#   https://tcc-stripe.j-sundby.workers.dev
+#
+# Stripe webhook config should point to:
+#   https://tcc-stripe.j-sundby.workers.dev/webhook
+#
+# Frontend reads tier overrides from:
+#   https://tcc-stripe.j-sundby.workers.dev/overrides
+
+[[kv_namespaces]]
+binding = "TCC_OVERRIDES"
+id = "71b77df77ea74522ab66c82e20cc9339"
+
+# Observability — keeps the last 7 days of logs accessible via `wrangler tail`
+[observability]
+enabled = true
