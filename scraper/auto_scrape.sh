@@ -41,8 +41,13 @@ python3 scraper/price_tracker.py record
 # 7. Export price history
 python3 scraper/price_tracker.py export
 
-# 8. Git commit and push
-git add js/data.js scraper/data/price_history.json scraper/data/price_history_export.json
+# 8. Rebuild static SEO pages (per-dispensary, per-category, sitemap.xml)
+#    These are crawler-facing pages with LocalBusiness/Product Schema.org markup
+#    so Google indexes every dispensary + category as its own URL.
+node scripts/build_seo.js
+
+# 9. Git commit and push
+git add js/data.js scraper/data/price_history.json scraper/data/price_history_export.json sitemap.xml dispensaries products
 if git diff --staged --quiet; then
     echo "No changes to commit"
 else
