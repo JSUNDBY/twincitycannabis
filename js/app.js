@@ -242,9 +242,32 @@
     }
 
     function renderPopularStrains() {
-        const container = document.getElementById('popular-strains');
-        const popular = TCC.strains.slice(0, 8);
-        container.innerHTML = popular.map(s => strainCard(s)).join('');
+        // Legacy hardcoded strain catalog had no link to real product data
+        // (every product had strain: null), so every strain card showed
+        // "0 products available". Replaced with renderMostStocked() below
+        // which pulls real product counts.
+        renderMostStocked();
+    }
+
+    function renderMostStocked() {
+        const container = document.getElementById('most-stocked-products');
+        if (!container || !TCC.products) return;
+
+        // Filter to real cannabis products (no accessories), sort by # of
+        // dispensaries carrying it, take the top 6
+        const cannabisCategories = new Set(['flower','edible','cartridge','pre-roll','beverage','tincture','topical','concentrate']);
+        const sorted = TCC.products
+            .filter(p => cannabisCategories.has(p.category))
+            .filter(p => p.prices && Object.keys(p.prices).length >= 2)
+            .sort((a, b) => Object.keys(b.prices).length - Object.keys(a.prices).length)
+            .slice(0, 6);
+
+        if (sorted.length === 0) {
+            container.innerHTML = '<div class="empty-state"><div class="empty-state-desc">No products to show yet.</div></div>';
+            return;
+        }
+
+        container.innerHTML = sorted.map(p => productCard(p)).join('');
     }
 
     function renderMNBrands() {
