@@ -100,7 +100,7 @@
         // find the page that contains it, navigate there, then scroll to the anchor.
         // (This makes #for-dispensaries-claim work — the form lives inside the
         // for-dispensaries page.)
-        const knownPages = new Set(['home','dispensaries','dispensary','dispensary-detail','deals','strains','strain','strain-detail','compare','learn','for-dispensaries','dashboard']);
+        const knownPages = new Set(['home','dispensaries','dispensary','dispensary-detail','deals','strains','strain','strain-detail','compare','learn','for-dispensaries','dashboard','welcome']);
         let anchorId = null;
         if (!knownPages.has(page)) {
             const anchorEl = document.getElementById(hash);
