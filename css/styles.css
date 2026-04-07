@@ -2146,6 +2146,148 @@ html[data-theme="light"] body::after {
     }
 }
 
+/* ============ KIT FORM EMBED OVERRIDE ============
+   Kit forms come with their own styling that doesn't match TCC.
+   These overrides re-skin the embed to look native to the dark forest theme. */
+.kit-form-wrapper {
+    width: 100%;
+}
+
+/* Hide Kit's "Built with Kit" badge — we already credit them via the script */
+.kit-form-wrapper .formkit-powered-by-convertkit-container,
+.kit-form-wrapper [class*="powered-by"] {
+    display: none !important;
+}
+
+/* The whole form container */
+.kit-form-wrapper .formkit-form,
+.kit-form-wrapper [data-style] {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-lg) !important;
+    padding: 2rem !important;
+    box-shadow: var(--shadow-md) !important;
+    max-width: 100% !important;
+    font-family: var(--font-body) !important;
+}
+
+/* Headline */
+.kit-form-wrapper .formkit-header,
+.kit-form-wrapper h1,
+.kit-form-wrapper h2 {
+    font-family: var(--font-display) !important;
+    font-weight: 700 !important;
+    color: var(--text-primary) !important;
+    text-align: center !important;
+    font-size: 1.6rem !important;
+    letter-spacing: -0.5px !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Description / subhead */
+.kit-form-wrapper .formkit-subheader,
+.kit-form-wrapper .formkit-form > p,
+.kit-form-wrapper [class*="subheader"] {
+    color: var(--text-secondary) !important;
+    text-align: center !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 1.5rem !important;
+}
+
+/* All input fields */
+.kit-form-wrapper input[type="text"],
+.kit-form-wrapper input[type="email"],
+.kit-form-wrapper input[type="tel"],
+.kit-form-wrapper input[type="number"],
+.kit-form-wrapper select,
+.kit-form-wrapper textarea {
+    background: var(--bg-input) !important;
+    border: 1px solid var(--border-light) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--text-primary) !important;
+    padding: 0.85rem 1rem !important;
+    font-size: 0.95rem !important;
+    font-family: var(--font-body) !important;
+    width: 100% !important;
+    transition: border-color 0.2s ease !important;
+}
+
+.kit-form-wrapper input::placeholder,
+.kit-form-wrapper textarea::placeholder {
+    color: var(--text-muted) !important;
+}
+
+.kit-form-wrapper input:focus,
+.kit-form-wrapper select:focus,
+.kit-form-wrapper textarea:focus {
+    outline: none !important;
+    border-color: var(--green) !important;
+    box-shadow: 0 0 0 3px var(--green-glow) !important;
+}
+
+/* Field labels */
+.kit-form-wrapper label,
+.kit-form-wrapper [class*="label"] {
+    color: var(--text-secondary) !important;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 0.3rem !important;
+}
+
+/* Submit button */
+.kit-form-wrapper button[type="submit"],
+.kit-form-wrapper .formkit-submit,
+.kit-form-wrapper [class*="submit"] {
+    background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+    color: var(--bg-primary) !important;
+    border: none !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 1rem 1.5rem !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    font-family: var(--font-body) !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    margin-top: 0.5rem !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+}
+
+.kit-form-wrapper button[type="submit"]:hover,
+.kit-form-wrapper .formkit-submit:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3) !important;
+}
+
+/* Spam disclaimer text Kit adds */
+.kit-form-wrapper .formkit-guarantee,
+.kit-form-wrapper [class*="guarantee"] {
+    color: var(--text-muted) !important;
+    font-size: 0.75rem !important;
+    text-align: center !important;
+    margin-top: 0.75rem !important;
+}
+
+/* Success message after submission */
+.kit-form-wrapper .formkit-alert,
+.kit-form-wrapper [class*="alert"] {
+    color: var(--green-text) !important;
+    background: rgba(34, 197, 94, 0.08) !important;
+    border: 1px solid rgba(34, 197, 94, 0.25) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 1rem !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+}
+
+/* Light mode tweaks for Kit form */
+html[data-theme="light"] .kit-form-wrapper button[type="submit"],
+html[data-theme="light"] .kit-form-wrapper .formkit-submit {
+    color: white !important;
+}
+
 /* ============ EMPTY MENU STATE ============ */
 .empty-menu-state {
     text-align: center;

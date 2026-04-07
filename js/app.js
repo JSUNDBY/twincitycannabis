@@ -1547,82 +1547,16 @@
             });
         }
 
-        // Dispensary signup form
-        // Strategy: (1) add their email to Kit so they get the welcome sequence,
-        // (2) open a mailto: with all form fields prefilled so the user can
-        // send the full details directly to hello@twincitycannabis.com,
-        // (3) save locally as a backup so nothing is ever lost.
-        const dispSignupForm = document.getElementById('dispensary-signup-form');
-        if (dispSignupForm) {
-            dispSignupForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const formData = new FormData(dispSignupForm);
-                const data = Object.fromEntries(formData);
-
-                // Basic validation
-                if (!data.name || !data.dispensary || !data.email) {
-                    alert('Please fill in your name, dispensary, and email.');
-                    return;
-                }
-
-                const btn = dispSignupForm.querySelector('button[type="submit"]');
-                btn.textContent = 'Sending...';
-                btn.disabled = true;
-
-                // 1. Subscribe to Kit (public form endpoint, no API key needed).
-                //    no-cors means we can't read the response but the request goes through.
-                try {
-                    const kitFormData = new FormData();
-                    kitFormData.append('email_address', data.email);
-                    kitFormData.append('fields[first_name]', data.name);
-                    await fetch('https://app.kit.com/forms/9289780/subscriptions', {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        body: kitFormData,
-                    });
-                } catch (err) {
-                    console.log('Kit submit fallback', err);
-                }
-
-                // 2. Save locally as backup so nothing is ever lost
-                data.timestamp = new Date().toISOString();
-                try {
-                    const signups = JSON.parse(localStorage.getItem('tcc-dispensary-signups') || '[]');
-                    signups.push(data);
-                    localStorage.setItem('tcc-dispensary-signups', JSON.stringify(signups));
-                } catch (err) {}
-
-                // 3. Track conversion
+        // Dispensary signup form is now a Kit embed (script tag in index.html)
+        // Kit handles the submit + storage + success message. We just track
+        // the conversion event when their submit button is clicked.
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.kit-form-wrapper button[type="submit"], .formkit-submit');
+            if (btn) {
                 if (typeof gtag === 'function') gtag('event', 'generate_lead', { event_category: 'dispensary', event_label: 'dispensary_signup', value: 299 });
                 if (typeof fbq === 'function') fbq('track', 'Lead', { content_name: 'Dispensary Signup', value: 299, currency: 'USD' });
-
-                // 4. Open a mailto: with the full message so it lands in hello@twincitycannabis.com
-                const subject = `[TCC] ${data.interest || 'Inquiry'} — ${data.dispensary}`;
-                const body = [
-                    `New dispensary inquiry from twincitycannabis.com`,
-                    ``,
-                    `Name: ${data.name}`,
-                    `Dispensary: ${data.dispensary}`,
-                    `Email: ${data.email}`,
-                    `Phone: ${data.phone || '(not provided)'}`,
-                    `Interest: ${data.interest || '(not specified)'}`,
-                    ``,
-                    `Message:`,
-                    data.message || '(none)',
-                    ``,
-                    `---`,
-                    `Submitted: ${new Date().toLocaleString()}`,
-                ].join('\n');
-                const mailto = `mailto:hello@twincitycannabis.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                window.location.href = mailto;
-
-                // Show success message + reset
-                setTimeout(() => {
-                    dispSignupForm.style.display = 'none';
-                    document.getElementById('dispensary-signup-success').style.display = 'block';
-                }, 300);
-            });
-        }
+            }
+        });
 
         // Intersection observer for animations.
         // We add .js-animate to <body> ONLY if IntersectionObserver works,
