@@ -642,6 +642,189 @@ ${sections}
 ` + footer;
 };
 
+// ---------- PRODUCT PAGES (top N by # of stores carrying) ----------
+const productSlug = (p) => slugify(p.name).slice(0, 80);
+
+const buildProductPage = (p) => {
+  const offerCount = Object.keys(p.prices || {}).length;
+  const lo = lowestPrice(p);
+  const hi = highestPrice(p);
+  const sortedOffers = Object.entries(p.prices)
+    .map(([id, price]) => ({ d: TCC.dispensaries.find(x => x.id === id), price }))
+    .filter(x => x.d)
+    .sort((a, b) => a.price - b.price);
+
+  const cat = TCC.categories.find(c => c.id === p.category) || { id: p.category, name: p.category };
+  const slug = productSlug(p);
+  const canonical = `${SITE}/products/${cat.id}/${slug}/`;
+  const title = `${p.name} — Compare Prices at ${offerCount} Twin Cities Dispensaries`;
+  const savings = (hi - lo).toFixed(2);
+  const description = `${p.name}${p.brand ? ' by ' + p.brand : ''} at ${offerCount} Minneapolis-Saint Paul dispensaries. Lowest $${lo.toFixed(2)}, highest $${hi.toFixed(2)} — save up to $${savings}. Updated daily.`;
+
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: p.name,
+    brand: p.brand ? { '@type': 'Brand', name: p.brand } : undefined,
+    image: p.image || undefined,
+    description: `${p.name} from ${p.brand || 'a Twin Cities cannabis brand'}, available at ${offerCount} dispensaries in the Minneapolis-Saint Paul metro.`,
+    category: cat.name,
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'USD',
+      lowPrice: lo,
+      highPrice: hi,
+      offerCount,
+      offers: sortedOffers.map(o => ({
+        '@type': 'Offer',
+        price: o.price,
+        priceCurrency: 'USD',
+        seller: { '@type': 'CannabisStore', name: o.d.name }
+      }))
+    }
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: `${SITE}/products/` },
+      { '@type': 'ListItem', position: 3, name: cat.name, item: `${SITE}/products/${cat.id}/` },
+      { '@type': 'ListItem', position: 4, name: p.name, item: canonical }
+    ]
+  }];
+
+  const rows = sortedOffers.map((o, i) => `<tr>
+  <td>${i + 1}</td>
+  <td><a href="/dispensaries/${esc(o.d.id)}/">${esc(o.d.name)}</a></td>
+  <td>${esc(o.d.city || '—')}</td>
+  <td style="text-align:right" class="price">$${o.price.toFixed(2)}${o.price === lo ? ' ✓ best' : ''}</td>
+</tr>`).join('\n');
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/products/">Products</a> / <a href="/products/${esc(cat.id)}/">${esc(cat.name)}</a> / ${esc(p.name)}</div>
+<h1>${esc(p.name)}</h1>
+<div class="meta">
+  ${p.brand ? `<span>Brand: <a href="/brands/${esc(slugify(p.brand))}/">${esc(p.brand)}</a></span>` : ''}
+  ${p.thc ? `<span>THC: ${esc(p.thc)}</span>` : ''}
+  ${p.cbd ? `<span>CBD: ${esc(p.cbd)}</span>` : ''}
+  ${p.weight ? `<span>Size: ${esc(p.weight)}</span>` : ''}
+</div>
+<p>${esc(p.name)} is currently sold at <strong>${offerCount} Twin Cities dispensaries</strong>. The cheapest store is selling it for <strong class="price">$${lo.toFixed(2)}</strong>, while the most expensive is at <strong>$${hi.toFixed(2)}</strong>. You can save up to <strong>$${savings}</strong> by checking the comparison below before you shop. Prices update daily.</p>
+
+<a class="cta" href="/#compare">Open interactive price tracker →</a>
+
+<h2>Where to buy ${esc(p.name)} in the Twin Cities</h2>
+<table>
+<thead><tr><th>#</th><th>Dispensary</th><th>City</th><th style="text-align:right">Price</th></tr></thead>
+<tbody>${rows}</tbody>
+</table>
+
+<h2>About this product</h2>
+<p>${esc(p.name)} is a ${esc(cat.name.toLowerCase().replace(/s$/, ''))}${p.brand ? ' from ' + esc(p.brand) : ''}${p.thc ? ` testing at ${esc(p.thc)} THC` : ''}. Twin City Cannabis tracks its price daily across every dispensary in the Minneapolis-Saint Paul metro that carries it, so you always know which store has the best deal before you leave home.</p>
+
+<h2>More ${esc(cat.name.toLowerCase())} to compare</h2>
+<p><a class="cta" href="/products/${esc(cat.id)}/">See all ${esc(cat.name.toLowerCase())} →</a></p>
+` + footer;
+};
+
+// ---------- NEIGHBORHOOD PAGES ----------
+// Hand-curated neighborhood centers for Minneapolis + Saint Paul. Each dispensary
+// is assigned to its nearest neighborhood (Haversine), capped at ~1.5mi so distant
+// stores don't get falsely lumped in.
+const NEIGHBORHOODS = [
+  { slug: 'northeast-minneapolis',     name: 'Northeast Minneapolis',          city: 'Minneapolis', lat: 45.0090, lng: -93.2470 },
+  { slug: 'dinkytown-marcy-holmes',    name: 'Dinkytown / Marcy-Holmes',       city: 'Minneapolis', lat: 44.9810, lng: -93.2370 },
+  { slug: 'north-loop-warehouse',      name: 'North Loop & Warehouse District',city: 'Minneapolis', lat: 44.9870, lng: -93.2750 },
+  { slug: 'downtown-minneapolis',      name: 'Downtown Minneapolis',           city: 'Minneapolis', lat: 44.9740, lng: -93.2650 },
+  { slug: 'uptown-lyn-lake',           name: 'Uptown / Lyn-Lake',              city: 'Minneapolis', lat: 44.9490, lng: -93.2880 },
+  { slug: 'highland-park-saint-paul',  name: 'Highland Park, Saint Paul',      city: 'Saint Paul',  lat: 44.9210, lng: -93.1880 },
+  { slug: 'macalester-groveland',      name: 'Macalester-Groveland, Saint Paul', city: 'Saint Paul', lat: 44.9300, lng: -93.1700 },
+  { slug: 'midway-saint-paul',         name: 'Midway, Saint Paul',             city: 'Saint Paul',  lat: 44.9580, lng: -93.1910 },
+];
+
+const haversineMiles = (lat1, lng1, lat2, lng2) => {
+  const R = 3958.8;
+  const toRad = (x) => x * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+};
+
+const assignNeighborhood = (d) => {
+  if (!d.lat || !d.lng) return null;
+  let best = null;
+  for (const n of NEIGHBORHOODS) {
+    const miles = haversineMiles(d.lat, d.lng, n.lat, n.lng);
+    if (miles > 1.5) continue;
+    if (!best || miles < best.miles) best = { n, miles };
+  }
+  return best ? best.n : null;
+};
+
+const buildNeighborhoodPage = (n, dispensaries) => {
+  const title = `Cannabis Dispensaries in ${n.name} | Twin City Cannabis`;
+  const description = `Recreational cannabis dispensaries in ${n.name}. ${dispensaries.length} stores within walking or biking distance, with real Google reviews and live price comparison.`;
+  const canonical = `${SITE}/neighborhoods/${n.slug}/`;
+
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Cannabis dispensaries in ${n.name}`,
+    itemListElement: dispensaries.map((d, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      url: `${SITE}/dispensaries/${d.id}/`, name: d.name
+    }))
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE },
+      { '@type': 'ListItem', position: 2, name: 'Neighborhoods', item: `${SITE}/neighborhoods/` },
+      { '@type': 'ListItem', position: 3, name: n.name, item: canonical }
+    ]
+  }];
+
+  const cards = dispensaries.map(d => {
+    const rating = d.google && d.google.rating;
+    const rc = (d.google && d.google.review_count) || 0;
+    return `<a class="card" href="/dispensaries/${esc(d.id)}/">
+  <p class="title">${esc(d.name)}</p>
+  <p class="sub">${esc(d.address || n.city)}${rating ? ` &middot; <span class="stars">★</span> ${rating} (${rc})` : ''}</p>
+</a>`;
+  }).join('\n');
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/neighborhoods/">Neighborhoods</a> / ${esc(n.name)}</div>
+<h1>Cannabis Dispensaries in ${esc(n.name)}</h1>
+<p>${dispensaries.length} recreational cannabis ${dispensaries.length === 1 ? 'dispensary' : 'dispensaries'} in ${esc(n.name)}. All within roughly 1.5 miles of the neighborhood center — most are walkable or a quick bike ride. Real Google reviews, real prices, updated daily.</p>
+<a class="cta" href="/#dispensaries">Open the interactive map →</a>
+<h2>Stores in ${esc(n.name)}</h2>
+<div class="grid">${cards}</div>
+<h2>Compare prices in ${esc(n.name)}</h2>
+<p>Twin City Cannabis is the only place where you can compare what every nearby store is charging side-by-side before you walk in. Whether you're going to your closest shop or willing to bike a few blocks for a better deal, we show you the spread.</p>
+<p><a class="cta" href="/#compare">Compare ${esc(n.name)} prices →</a></p>
+` + footer;
+};
+
+const buildNeighborhoodsIndex = (groups) => {
+  const title = 'Cannabis Dispensaries by Neighborhood — Minneapolis & Saint Paul';
+  const description = `Browse Twin Cities cannabis dispensaries by neighborhood. ${groups.length} walkable neighborhood guides covering Northeast, Uptown, Highland Park, Midway, and more.`;
+  const canonical = `${SITE}/neighborhoods/`;
+
+  const cards = groups.map(g => `<a class="card" href="/neighborhoods/${esc(g.n.slug)}/">
+  <p class="title">${esc(g.n.name)}</p>
+  <p class="sub">${g.dispensaries.length} ${g.dispensaries.length === 1 ? 'dispensary' : 'dispensaries'}</p>
+</a>`).join('\n');
+
+  return headOpen({ title, description, canonical }) + `
+<div class="crumbs"><a href="/">Home</a> / Neighborhoods</div>
+<h1>Cannabis Dispensaries by Twin Cities Neighborhood</h1>
+<p>The Minneapolis and Saint Paul cannabis scene is concentrated in a handful of walkable neighborhoods. Pick yours below to see every dispensary within ~1.5 miles, plus prices and reviews.</p>
+<div class="grid">${cards}</div>
+` + footer;
+};
+
 // ---------- LAWS PAGE ----------
 const buildLawsPage = () => {
   const title = 'Minnesota Cannabis Laws — What\u2019s Legal in 2026';
@@ -780,6 +963,44 @@ count++;
 writePage('minnesota-cannabis-laws/index.html', buildLawsPage());
 count++;
 
+// Per-product pages — top by offer count, min 3 stores carrying. Highest-value
+// long-tail SEO surfaces ("Vireo Blue Dream cartridge minneapolis price").
+const topProducts = TCC.products
+  .filter(p => Object.keys(p.prices || {}).length >= 3)
+  .sort((a, b) => Object.keys(b.prices).length - Object.keys(a.prices).length)
+  .slice(0, 100);
+const seenProductSlugs = new Set();
+topProducts.forEach(p => {
+  let slug = productSlug(p);
+  if (!slug) return;
+  let final = slug, n = 2;
+  while (seenProductSlugs.has(`${p.category}/${final}`)) { final = `${slug}-${n++}`; }
+  seenProductSlugs.add(`${p.category}/${final}`);
+  // store final slug for sitemap
+  p._seoSlug = final;
+  writePage(`products/${p.category}/${final}/index.html`, buildProductPage(p));
+  extraSitemap.push({ loc: `${SITE}/products/${p.category}/${final}/`, priority: '0.6', changefreq: 'daily' });
+  count++;
+});
+
+// Neighborhood pages
+const neighborhoodGroups = NEIGHBORHOODS.map(n => ({
+  n,
+  dispensaries: TCC.dispensaries.filter(d => {
+    const assigned = assignNeighborhood(d);
+    return assigned && assigned.slug === n.slug;
+  })
+})).filter(g => g.dispensaries.length > 0);
+
+neighborhoodGroups.forEach(g => {
+  writePage(`neighborhoods/${g.n.slug}/index.html`, buildNeighborhoodPage(g.n, g.dispensaries));
+  extraSitemap.push({ loc: `${SITE}/neighborhoods/${g.n.slug}/`, priority: '0.7', changefreq: 'weekly' });
+  count++;
+});
+writePage('neighborhoods/index.html', buildNeighborhoodsIndex(neighborhoodGroups));
+extraSitemap.push({ loc: `${SITE}/neighborhoods/`, priority: '0.8', changefreq: 'weekly' });
+count++;
+
 // Sitemap
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), buildSitemap(extraSitemap));
 
@@ -857,8 +1078,10 @@ fs.writeFileSync(indexPath, indexHtml);
 console.log('Injected internal crawl footer into index.html');
 
 console.log(`SEO build complete: ${count} static pages + sitemap.xml`);
-console.log(`  Dispensaries: ${TCC.dispensaries.length}`);
-console.log(`  Categories:   ${TCC.categories.length}`);
-console.log(`  Brands:       ${brands.length}`);
-console.log(`  Cities:       ${cities.length}`);
-console.log(`  Products:     ${TCC.products.length}`);
+console.log(`  Dispensaries:    ${TCC.dispensaries.length}`);
+console.log(`  Categories:      ${TCC.categories.length}`);
+console.log(`  Brands:          ${brands.length}`);
+console.log(`  Cities:          ${cities.length}`);
+console.log(`  Neighborhoods:   ${neighborhoodGroups.length}`);
+console.log(`  Top products:    ${topProducts.length}`);
+console.log(`  Total products:  ${TCC.products.length}`);

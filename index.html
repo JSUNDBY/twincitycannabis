@@ -168,6 +168,10 @@
     }
     </script>
 
+    <!-- Preconnect to heavy CDNs for faster handshake (perf win) -->
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1275,7 +1279,7 @@
     <section class="welcome-hero">
         <div class="container" style="max-width:720px;text-align:center">
             <div class="welcome-logo-wrap">
-                <img src="img/email-icon-240.png" alt="Twin City Cannabis" class="welcome-logo">
+                <img src="img/email-icon-240.png" alt="Twin City Cannabis" class="welcome-logo" loading="lazy" width="120" height="120">
             </div>
             <div class="section-label welcome-eyebrow">You're in</div>
             <h1 class="welcome-title">
@@ -1645,7 +1649,7 @@
     <section class="section section-dark" id="for-dispensaries-claim">
         <div class="container" style="max-width:640px">
             <div class="kit-form-brand">
-                <img src="img/twin-city-cannabis-logo-128.png" alt="Twin City Cannabis" class="kit-form-logo">
+                <img src="img/twin-city-cannabis-logo-128.png" alt="Twin City Cannabis" class="kit-form-logo" loading="lazy" width="80" height="80">
                 <h2 class="kit-form-title">Get started in 2 minutes</h2>
                 <p class="kit-form-subtitle">Claim your listing, start a free Featured trial, or just say hi.</p>
             </div>
@@ -1929,10 +1933,14 @@
 </div>
 
 <!-- ============ SCRIPTS ============ -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
+<!-- defer = parse HTML first, execute scripts in order after DOMContentLoaded.
+     Big perf win: data.js is 745KB and was blocking the parser. With defer, it
+     downloads in parallel with HTML parsing and only executes once the DOM is
+     ready. Order is preserved so app.js still runs after data.js. -->
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script defer src="js/data.js"></script>
+<script defer src="js/app.js"></script>
 
 </body>
 </html>

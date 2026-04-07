@@ -49,7 +49,7 @@ node scripts/build_seo.js
 # 9. Git commit and push (include all generated SEO surfaces)
 git add js/data.js index.html sitemap.xml \
     scraper/data/price_history.json scraper/data/price_history_export.json \
-    dispensaries products brands \
+    dispensaries products brands neighborhoods \
     best-dispensaries-twin-cities cheapest-cannabis-twin-cities minnesota-cannabis-laws
 # city landing pages (auto-generated, slug pattern: <city>-cannabis-dispensaries)
 for d in *-cannabis-dispensaries; do [ -d "$d" ] && git add "$d"; done
