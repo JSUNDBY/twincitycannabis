@@ -1039,7 +1039,40 @@
         const strain = product.strain ? TCC.getStrain(product.strain) : null;
         const lowest = TCC.getLowestPrice(product);
         const highest = TCC.getHighestPrice(product);
-        const entries = Object.entries(product.prices).sort((a, b) => a[1] - b[1]);
+
+        // Sort entries by price ASC. When prices tie, use a deterministic but
+        // FAIR shuffle that rotates each day so no single dispensary always wins
+        // the top spot. The shuffle uses a daily seed + product id so the order
+        // is stable within a session but rotates across days.
+        const dailySeed = (function() {
+            const today = new Date();
+            const dayKey = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+            // Cheap hash of (productId + day) → 0..1
+            let h = 0;
+            const s = (product.id || '') + dayKey;
+            for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+            return Math.abs(h);
+        })();
+
+        const entries = Object.entries(product.prices)
+            .map(([dispId, price], idx) => {
+                // Per-dispensary tiebreaker score: combines TCC score (higher is better)
+                // with a daily-rotating offset so no one dispensary dominates ties
+                const disp = TCC.getDispensary(dispId);
+                const score = disp ? disp.tcc_score : 70;
+                // Hash dispensary id + dailySeed for stable but rotating order
+                let h = dailySeed;
+                for (let i = 0; i < dispId.length; i++) h = ((h << 5) - h + dispId.charCodeAt(i)) | 0;
+                const dailyJitter = (Math.abs(h) % 1000) / 10000; // 0..0.1
+                return { dispId, price, score, tiebreaker: -score + dailyJitter };
+            })
+            .sort((a, b) => {
+                if (a.price !== b.price) return a.price - b.price;
+                // Same price → use the tiebreaker (negative TCC score so higher score wins,
+                // plus a daily-rotating jitter for fairness when scores also tie)
+                return a.tiebreaker - b.tiebreaker;
+            })
+            .map(e => [e.dispId, e.price]);
 
         // Detect real price history (not just flat line)
         const ph = product.priceHistory || [];
@@ -1049,9 +1082,6 @@
             : '';
 
         container.innerHTML = `
-            <div style="margin-bottom:2rem">
-                <a href="#compare" style="color:var(--text-secondary);font-size:0.85rem">&larr; All products</a>
-            </div>
             <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;margin-bottom:2rem">
                 ${product.image ? `<div style="width:140px;height:140px;border-radius:var(--radius-lg);overflow:hidden;background:var(--bg-card);border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:8px;cursor:pointer" onclick="openLightbox('${product.image}','${product.name.replace(/'/g,"\\'")}','${(product.brand||"").replace(/'/g,"\\'")}','${TCC.formatPrice(lowest.price)}','${product.category}','${product.thc||""}')">
                     <img src="${product.image}" alt="${product.name}" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:var(--radius-sm)" onerror="this.parentElement.style.display='none'">
@@ -1100,7 +1130,7 @@
                                 <td class="text-secondary">${disp.neighborhood}</td>
                                 <td><span style="color:${TCC.getScoreColor(disp.tcc_score)};font-weight:600">${disp.tcc_score}</span></td>
                                 <td class="${isLowest ? 'compare-lowest' : ''}" style="font-family:var(--font-display);font-weight:600">${TCC.formatPrice(price)}</td>
-                                <td class="text-muted">${isLowest ? '<span class="tag tag-sm tag-green">Best price</span>' : '+$' + diff}</td>
+                                <td class="text-muted">${isLowest ? '<span class="tag tag-sm tag-green">Best price</span>' : '+$' + diff.toFixed(2)}</td>
                             </tr>`;
                         }).join('')}
                     </tbody>
