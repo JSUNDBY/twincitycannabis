@@ -404,16 +404,11 @@
             <div class="section-label fade-in">&#128276; Price Alerts</div>
             <h2 class="section-title fade-in" style="max-width:600px;margin:0 auto 0.5rem">Never miss a deal again</h2>
             <p class="section-desc fade-in" style="max-width:500px;margin:0 auto 1.5rem">Get notified when prices drop on your favorite products and strains. Free forever.</p>
-            <!-- Real HTML form posting directly to Kit. No JS, no CORS issues.
-                 Submit triggers a real POST to Kit which handles the rest. -->
-            <form class="fade-in" id="alert-form" style="max-width:480px;margin:0 auto;display:flex;gap:0.5rem"
-                  action="https://app.kit.com/forms/9289780/subscriptions"
-                  method="post" target="_blank">
-                <input class="input input-lg" type="email" name="email_address" placeholder="Enter your email for alerts" required style="flex:1">
-                <button type="submit" class="btn btn-primary btn-lg">Get Alerts</button>
-            </form>
+            <!-- Kit consumer form embed (ee755f1be7) -->
+            <div class="kit-form-wrapper kit-form-minimal fade-in" style="max-width:480px;margin:0 auto">
+                <script async data-uid="ee755f1be7" src="https://superthoughts.kit.com/ee755f1be7/index.js"></script>
+            </div>
             <p class="text-xs text-muted fade-in" style="margin-top:0.6rem">No spam. Unsubscribe anytime.</p>
-            <p class="text-sm text-green font-semibold" id="alert-success" style="display:none;margin-top:0.8rem">You're signed up for alerts!</p>
         </div>
     </section>
 

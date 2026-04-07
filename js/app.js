@@ -1594,35 +1594,16 @@
             tab.addEventListener('click', () => switchDetailTab(tab.dataset.tab));
         });
 
-        // Alert form (consumer email signup) — real HTML form posts directly
-        // to Kit via target="_blank". We don't preventDefault so the browser
-        // performs a real POST submission. We just track the conversion event
-        // and swap to a success message after a short delay.
-        const alertForm = document.getElementById('alert-form');
-        if (alertForm) {
-            alertForm.addEventListener('submit', () => {
-                const email = alertForm.querySelector('input[name="email_address"]')?.value;
-                if (!email) return;
-
-                // Save locally as backup so you can verify signups locally
-                try {
-                    const signups = JSON.parse(localStorage.getItem('tcc-alerts') || '[]');
-                    signups.push({ email, timestamp: new Date().toISOString(), type: 'alert' });
-                    localStorage.setItem('tcc-alerts', JSON.stringify(signups));
-                } catch (err) {}
-
-                // Conversion tracking
+        // Consumer email signup is now a Kit embed (script tag in index.html,
+        // form ee755f1be7). Kit handles submission + success state. We just
+        // track the conversion event when the embed's submit button is clicked.
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.kit-form-minimal button[type="submit"], .kit-form-minimal .formkit-submit');
+            if (btn) {
                 if (typeof gtag === 'function') gtag('event', 'generate_lead', { event_category: 'engagement', event_label: 'price_alert_signup' });
                 if (typeof fbq === 'function') fbq('track', 'Lead', { content_name: 'TCC Price Alerts' });
-
-                // Swap to success message after a beat (the real form post still goes through)
-                setTimeout(() => {
-                    alertForm.style.display = 'none';
-                    const successEl = document.getElementById('alert-success');
-                    if (successEl) successEl.style.display = 'block';
-                }, 400);
-            });
-        }
+            }
+        });
 
         // Dispensary signup form is now a Kit embed (script tag in index.html)
         // Kit handles the submit + storage + success message. We just track
