@@ -825,6 +825,216 @@ const buildNeighborhoodsIndex = (groups) => {
 ` + footer;
 };
 
+// ---------- LEGAL / CONTACT PAGES ----------
+const buildTermsPage = () => {
+  const title = 'Terms of Use — Twin City Cannabis';
+  const description = 'Terms and conditions for using twincitycannabis.com — a free cannabis price comparison tool for the Minneapolis-Saint Paul metro.';
+  const canonical = `${SITE}/terms/`;
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    url: canonical,
+    datePublished: today,
+    dateModified: today,
+  }];
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / Terms</div>
+<h1>Terms of Use</h1>
+<p style="color:#8b909a;font-size:.9rem">Last updated: ${today}</p>
+
+<p>Welcome to Twin City Cannabis ("we", "us", "our"). By using twincitycannabis.com (the "Site"), you agree to these terms. If you don't agree, please don't use the Site.</p>
+
+<h2>1. Who can use this site</h2>
+<p>The Site is intended for adults aged <strong>21 or older</strong>. By using the Site you affirm that you are 21 or older. The Site is intended for use within the state of Minnesota where adult-use recreational cannabis is legal.</p>
+
+<h2>2. What we do (and don't do)</h2>
+<p>Twin City Cannabis is a free, independent price comparison tool. We aggregate publicly available menu data, ratings, and reviews from licensed cannabis dispensaries in the Minneapolis-Saint Paul metro area.</p>
+<ul>
+  <li><strong>We don't sell cannabis.</strong> All purchases happen at the dispensary, not on this Site.</li>
+  <li><strong>We don't deliver cannabis.</strong></li>
+  <li><strong>We don't accept payment from consumers.</strong> The Site is free to use.</li>
+  <li><strong>We're not affiliated with any dispensary unless explicitly stated.</strong> Featured and Premium tier dispensaries pay for additional visibility but never influence organic rankings.</li>
+</ul>
+
+<h2>3. Accuracy of information</h2>
+<p>We work hard to keep prices, menus, hours, and other dispensary information accurate and up to date. Our scraper updates multiple times per day. However, dispensary inventory and pricing can change at any moment, and we cannot guarantee that what you see on the Site matches what you'll find in store at any given moment.</p>
+<p><strong>Always verify with the dispensary directly</strong> before traveling to make a purchase.</p>
+
+<h2>4. Reviews and ratings</h2>
+<p>Reviews displayed on the Site are pulled from public Google Maps profiles. Star ratings reflect Google's aggregate score at the time of last fetch. We do not edit, moderate, or curate review content — what's on Google is what shows up here.</p>
+
+<h2>5. Health and safety</h2>
+<p>Cannabis affects everyone differently. The Site provides general information about cannabis products, methods, and effects, but it is not medical, legal, or health advice. Effects vary based on dosage, body weight, metabolism, food intake, tolerance, and individual chemistry.</p>
+<ul>
+  <li>Do not consume cannabis if you are pregnant, nursing, or planning to become pregnant.</li>
+  <li>Do not operate a vehicle, machinery, or perform tasks that require alertness while under the influence.</li>
+  <li>Keep cannabis products out of reach of children and pets.</li>
+  <li>Consult a healthcare provider if you have a medical condition or are taking medication.</li>
+</ul>
+
+<h2>6. Acceptable use</h2>
+<p>You agree not to:</p>
+<ul>
+  <li>Scrape or copy Site content for commercial republication without permission</li>
+  <li>Submit false reviews or impersonate dispensaries or other users</li>
+  <li>Attempt to reverse-engineer, attack, or interfere with the Site or its infrastructure</li>
+  <li>Use the Site if you are under 21 or in a jurisdiction where cannabis is illegal</li>
+</ul>
+
+<h2>7. Third-party links</h2>
+<p>The Site links to dispensary websites, Google Maps, and other third-party services. We're not responsible for the content, accuracy, or practices of those sites.</p>
+
+<h2>8. Disclaimer of warranties</h2>
+<p>The Site is provided "as is" and "as available", without warranties of any kind, express or implied. We don't guarantee that the Site will be uninterrupted, error-free, or completely accurate.</p>
+
+<h2>9. Limitation of liability</h2>
+<p>To the maximum extent allowed by law, Twin City Cannabis is not liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the Site, including but not limited to lost profits, lost data, or any cannabis purchase decision made based on Site information.</p>
+
+<h2>10. Dispensary listings &amp; paid tiers</h2>
+<p>Every licensed Twin Cities dispensary is listed for free. Featured ($299/month) and Premium ($599/month) tiers add extra visibility in clearly-labeled sections of the Site. Paid tiers do not influence organic search rankings, the TCC Score, or review display.</p>
+
+<h2>11. Changes to these terms</h2>
+<p>We may update these terms from time to time. The "Last updated" date at the top will reflect the most recent revision. Continued use of the Site after changes means you accept the updated terms.</p>
+
+<h2>12. Contact</h2>
+<p>Questions about these terms? Email <a href="mailto:hello@twincitycannabis.com">hello@twincitycannabis.com</a>.</p>
+
+<p style="margin-top:3rem;font-size:.85rem;color:#8b909a">Twin City Cannabis is operated independently in Minneapolis, Minnesota.</p>
+` + footer;
+};
+
+const buildPrivacyPage = () => {
+  const title = 'Privacy Policy — Twin City Cannabis';
+  const description = 'How Twin City Cannabis collects, uses, and protects your information. Plain-English privacy policy.';
+  const canonical = `${SITE}/privacy/`;
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    url: canonical,
+    datePublished: today,
+    dateModified: today,
+  }];
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / Privacy</div>
+<h1>Privacy Policy</h1>
+<p style="color:#8b909a;font-size:.9rem">Last updated: ${today}</p>
+
+<p>This is the plain-English version of how Twin City Cannabis ("we", "us", "our") handles information about you when you use twincitycannabis.com.</p>
+
+<h2>The short version</h2>
+<ul>
+  <li>We don't sell your data. Ever.</li>
+  <li>We don't ask you to create an account.</li>
+  <li>We don't track you across other websites.</li>
+  <li>We use Google Analytics and Meta Pixel to understand site traffic, and Kit (formerly ConvertKit) for the optional email signup.</li>
+  <li>If you sign up for price alerts or contact us, we keep your email and any info you submit, and use it only to send you what you signed up for.</li>
+</ul>
+
+<h2>What we collect</h2>
+
+<h3>Automatically (via analytics)</h3>
+<p>When you visit the Site, our analytics tools collect standard web data:</p>
+<ul>
+  <li>Pages you view and how long you spend on them</li>
+  <li>Approximate location (city / region, not precise GPS)</li>
+  <li>Device type, browser, screen size, operating system</li>
+  <li>How you found us (search engine, direct link, social media)</li>
+  <li>Anonymous identifiers in cookies (so we can tell repeat visitors from new ones)</li>
+</ul>
+<p>This data is aggregated and used to understand which pages are useful, which dispensaries are popular, and how to improve the Site.</p>
+
+<h3>When you sign up</h3>
+<p>If you submit the price alerts form, the dispensary inquiry form, or otherwise contact us, we collect:</p>
+<ul>
+  <li>Your email address</li>
+  <li>Your name (if you provide it)</li>
+  <li>Anything else you choose to include in the form (dispensary name, phone, message)</li>
+</ul>
+
+<h2>How we use it</h2>
+<ul>
+  <li><strong>To send you what you signed up for</strong> — price alerts, occasional updates, or a personal reply if you contacted us</li>
+  <li><strong>To improve the Site</strong> — what's working, what's broken, what people want more of</li>
+  <li><strong>To respond to dispensary inquiries</strong> — when a dispensary owner contacts us about a listing</li>
+</ul>
+
+<h2>Who has access</h2>
+<p>We use the following third-party services. Your data is subject to their respective privacy policies:</p>
+<ul>
+  <li><strong>Google Analytics</strong> — anonymous traffic analytics. <a href="https://policies.google.com/privacy" rel="nofollow noopener" target="_blank">Google's policy</a></li>
+  <li><strong>Meta Pixel (Facebook)</strong> — used for understanding ad performance if we ever run ads. <a href="https://www.facebook.com/policy.php" rel="nofollow noopener" target="_blank">Meta's policy</a></li>
+  <li><strong>Kit (ConvertKit)</strong> — handles the email signup forms and sends emails. <a href="https://kit.com/privacy" rel="nofollow noopener" target="_blank">Kit's policy</a></li>
+  <li><strong>Stripe</strong> — handles payment processing if a dispensary subscribes to a paid tier. We never see your full credit card number. <a href="https://stripe.com/privacy" rel="nofollow noopener" target="_blank">Stripe's policy</a></li>
+  <li><strong>Cloudflare</strong> — runs the small backend that handles dispensary tier upgrades. <a href="https://www.cloudflare.com/privacypolicy/" rel="nofollow noopener" target="_blank">Cloudflare's policy</a></li>
+  <li><strong>GitHub Pages</strong> — hosts the website itself. <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="nofollow noopener" target="_blank">GitHub's policy</a></li>
+</ul>
+
+<h2>Cookies</h2>
+<p>The Site uses cookies for analytics and to remember your theme preference (light/dark mode). You can disable cookies in your browser settings, but some Site features may not work correctly.</p>
+
+<h2>Your choices</h2>
+<ul>
+  <li><strong>Unsubscribe from emails</strong> — every email we send has an unsubscribe link in the footer. One click and you're out.</li>
+  <li><strong>Delete your data</strong> — email <a href="mailto:hello@twincitycannabis.com">hello@twincitycannabis.com</a> and we'll remove your email and any info you've submitted.</li>
+  <li><strong>Opt out of analytics</strong> — install a browser extension like uBlock Origin or Privacy Badger.</li>
+</ul>
+
+<h2>Children</h2>
+<p>The Site is intended for adults 21 and older. We do not knowingly collect information from anyone under 21. If you believe we have, contact us and we'll delete it.</p>
+
+<h2>Changes to this policy</h2>
+<p>We may update this policy from time to time. The "Last updated" date at the top will reflect the most recent revision.</p>
+
+<h2>Contact</h2>
+<p>Questions, requests, or concerns? Email <a href="mailto:hello@twincitycannabis.com">hello@twincitycannabis.com</a>.</p>
+` + footer;
+};
+
+const buildContactPage = () => {
+  const title = 'Contact — Twin City Cannabis';
+  const description = 'Get in touch with Twin City Cannabis. For questions, listing corrections, partnerships, and dispensary inquiries.';
+  const canonical = `${SITE}/contact/`;
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: title,
+    url: canonical,
+  }];
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / Contact</div>
+<h1>Get in Touch</h1>
+<p>Twin City Cannabis is built and maintained by one person — me, Josh — based in the Twin Cities. I read and reply to every message personally. No autoresponders, no support tickets, no phone tree.</p>
+
+<h2>Email</h2>
+<p style="font-size:1.15rem"><a href="mailto:hello@twincitycannabis.com">hello@twincitycannabis.com</a></p>
+<p>I usually reply within 24 hours.</p>
+
+<h2>What to email me about</h2>
+<ul>
+  <li><strong>Listing corrections</strong> — wrong hours, wrong address, missing menu, outdated info on your dispensary</li>
+  <li><strong>Dispensary inquiries</strong> — Featured / Premium tier upgrades, free 30-day trials, custom requests</li>
+  <li><strong>Press &amp; partnerships</strong> — local journalism, podcast guests, content collaborations</li>
+  <li><strong>Bug reports</strong> — something broken or weird on the site</li>
+  <li><strong>Feature requests</strong> — what would you want to see?</li>
+  <li><strong>Just saying hi</strong> — always welcome</li>
+</ul>
+
+<h2>Dispensary owners — claim your listing</h2>
+<p>Every Twin Cities dispensary is already listed for free. If you're a dispensary owner who wants to update info, see analytics, or upgrade to a paid tier with extra visibility, the dispensary signup form is the fastest path:</p>
+<a class="cta" href="/#for-dispensaries">For dispensaries →</a>
+
+<h2>Mailing address</h2>
+<p>Twin City Cannabis<br>Minneapolis, Minnesota</p>
+
+<p style="margin-top:3rem;font-size:.85rem;color:#8b909a">For privacy and security reasons we don't publish a physical street address. All communication is via email.</p>
+` + footer;
+};
+
 // ---------- LAWS PAGE ----------
 const buildLawsPage = () => {
   const title = 'Minnesota Cannabis Laws — What\u2019s Legal in 2026';
@@ -892,6 +1102,9 @@ const buildSitemap = (extras = []) => {
     { loc: `${SITE}/best-dispensaries-twin-cities/`, priority: '0.8', changefreq: 'weekly' },
     { loc: `${SITE}/cheapest-cannabis-twin-cities/`, priority: '0.8', changefreq: 'daily' },
     { loc: `${SITE}/minnesota-cannabis-laws/`, priority: '0.7', changefreq: 'monthly' },
+    { loc: `${SITE}/terms/`,                   priority: '0.3', changefreq: 'yearly' },
+    { loc: `${SITE}/privacy/`,                 priority: '0.3', changefreq: 'yearly' },
+    { loc: `${SITE}/contact/`,                 priority: '0.5', changefreq: 'monthly' },
     ...TCC.dispensaries.map(d => ({
       loc: `${SITE}/dispensaries/${d.id}/`,    priority: '0.8', changefreq: 'daily'
     })),
@@ -961,6 +1174,12 @@ count++;
 writePage('cheapest-cannabis-twin-cities/index.html', buildCheapestPage());
 count++;
 writePage('minnesota-cannabis-laws/index.html', buildLawsPage());
+count++;
+writePage('terms/index.html', buildTermsPage());
+count++;
+writePage('privacy/index.html', buildPrivacyPage());
+count++;
+writePage('contact/index.html', buildContactPage());
 count++;
 
 // Per-product pages — top by offer count, min 3 stores carrying. Highest-value
@@ -1074,8 +1293,15 @@ indexHtml = indexHtml.replace(
   `<!-- SEO_LINKS_START — auto-generated by scripts/build_seo.js, do not edit by hand -->${seoFooter}    <!-- SEO_LINKS_END -->`
 );
 
+// Replace dead footer links with real /privacy/, /terms/, /contact/ paths.
+// Idempotent — only matches the literal href="#" instances next to those labels.
+indexHtml = indexHtml
+  .replace(/<a href="#">Privacy<\/a>/g,  '<a href="/privacy/">Privacy</a>')
+  .replace(/<a href="#">Terms<\/a>/g,    '<a href="/terms/">Terms</a>')
+  .replace(/<a href="#">Contact<\/a>/g,  '<a href="/contact/">Contact</a>');
+
 fs.writeFileSync(indexPath, indexHtml);
-console.log('Injected internal crawl footer into index.html');
+console.log('Injected internal crawl footer + fixed dead legal links into index.html');
 
 console.log(`SEO build complete: ${count} static pages + sitemap.xml`);
 console.log(`  Dispensaries:    ${TCC.dispensaries.length}`);
