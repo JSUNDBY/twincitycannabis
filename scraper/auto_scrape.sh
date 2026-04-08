@@ -44,7 +44,11 @@ python3 scraper/price_tracker.py export
 # 8. Rebuild static SEO pages (per-dispensary, per-category, sitemap.xml)
 #    These are crawler-facing pages with LocalBusiness/Product Schema.org markup
 #    so Google indexes every dispensary + category as its own URL.
-node scripts/build_seo.js
+#    Use absolute path because cron's PATH doesn't include /usr/local/bin
+#    on macOS — without this, step 8 silently fails and the live site never
+#    gets rebuilt with fresh prices.
+NODE_BIN="$(command -v node 2>/dev/null || echo /usr/local/bin/node)"
+"$NODE_BIN" scripts/build_seo.js
 
 # 9. Git commit and push (include all generated SEO surfaces)
 git add js/data.js index.html sitemap.xml \
