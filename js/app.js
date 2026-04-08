@@ -1834,6 +1834,68 @@
         }
     }
 
+    // ─── Live "people comparing prices now" counter ──────────────────────
+    // Pings the worker on load + every 2 min while tab is visible. Polls
+    // /active every 30s to refresh the displayed count. Hybrid (Option C):
+    // real visitors + small modest baseline server-side. Frontend just
+    // displays whatever the worker returns. Silent failure: if the worker
+    // is offline, the dash stays as "—" and nothing breaks.
+    function startActiveCounter() {
+        const el = document.getElementById('announce-active-count');
+        const labelEl = document.getElementById('announce-active-label');
+        if (!el) return;
+
+        // Persistent session id so a single user counts as one visitor across
+        // page navigations within the SPA. Stored in sessionStorage so it dies
+        // when the tab closes — that's the desired behavior.
+        let sid = sessionStorage.getItem('tcc-sid');
+        if (!sid) {
+            sid = Math.random().toString(36).slice(2, 14) + Date.now().toString(36).slice(-6);
+            try { sessionStorage.setItem('tcc-sid', sid); } catch (e) {}
+        }
+
+        async function ping() {
+            try {
+                await fetch(`${TCC_WORKER_URL}/ping`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sid }),
+                    keepalive: true,
+                });
+            } catch (e) { /* silent */ }
+        }
+
+        async function poll() {
+            try {
+                const res = await fetch(`${TCC_WORKER_URL}/active`, { cache: 'no-store' });
+                if (!res.ok) return;
+                const data = await res.json();
+                const n = Math.max(1, Number(data.active) || 0);
+                el.textContent = n;
+                if (labelEl) {
+                    labelEl.textContent = n === 1 ? 'person comparing prices now' : 'people comparing prices now';
+                }
+            } catch (e) { /* silent */ }
+        }
+
+        // Kick off immediately, then on a cadence
+        ping();
+        poll();
+        setInterval(poll, 30000);  // refresh display every 30s
+        setInterval(() => {
+            // Re-ping every 2 min so we stay counted as active
+            if (document.visibilityState === 'visible') ping();
+        }, 120000);
+
+        // Also re-ping when the tab regains focus after being backgrounded
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                ping();
+                poll();
+            }
+        });
+    }
+
     function init() {
         installStrainMatching();
         updateHeroCounts();
@@ -1847,8 +1909,9 @@
         bindEvents();
         bindSubscribeButtons();
         route();
-        // Load tier overrides asynchronously after first paint
+        // Async post-init: load tier overrides + start the live counter
         loadTierOverrides();
+        startActiveCounter();
     }
 
     // Wires the Featured/Premium "Start Free Trial" / "Contact Us" buttons on

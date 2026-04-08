@@ -32,9 +32,15 @@ const PRICE_TO_TIER = {
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
   'Access-Control-Max-Age': '86400',
 };
+
+// Active visitor tracking config
+const VISITOR_TTL_SECONDS = 300;       // a "visitor" counts as active for 5 min
+const BASELINE_MIN = 4;                 // never show fewer than this (modest TC floor)
+const BASELINE_MAX = 7;                 // ceiling on the synthesized baseline boost
 
 export default {
   async fetch(request, env, ctx) {
@@ -52,6 +58,14 @@ export default {
       return handleOverridesRead(env);
     }
 
+    if (url.pathname === '/ping' && request.method === 'POST') {
+      return handlePing(request, env);
+    }
+
+    if (url.pathname === '/active' && request.method === 'GET') {
+      return handleActiveCount(env);
+    }
+
     if (url.pathname === '/' || url.pathname === '/health') {
       return new Response('TCC Stripe webhook worker — alive', { status: 200 });
     }
@@ -59,6 +73,65 @@ export default {
     return new Response('Not found', { status: 404 });
   },
 };
+
+// ─── /ping ───────────────────────────────────────────────────────────────
+// Browser sends this on page load and every ~2 minutes thereafter while the
+// tab is active. We write a v:{session_id} key to KV with a 5-min TTL.
+// Sessions naturally expire if the tab closes / user goes idle.
+async function handlePing(request, env) {
+  let body = {};
+  try { body = await request.json(); } catch { /* fine, we'll generate */ }
+  let sid = (body.sid || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 32);
+  if (!sid) {
+    // Fallback: generate a server-side id from a random uuid
+    sid = crypto.randomUUID().replace(/-/g, '').slice(0, 16);
+  }
+  await env.TCC_OVERRIDES.put(`v:${sid}`, '1', { expirationTtl: VISITOR_TTL_SECONDS });
+  return new Response(JSON.stringify({ ok: true, sid }), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json', ...corsHeaders },
+  });
+}
+
+// ─── /active ─────────────────────────────────────────────────────────────
+// Returns the live count: real (non-expired) sessions plus a small modest
+// Twin Cities baseline so the number is never embarrassingly low. The
+// baseline drifts gently with the minute-of-day so it doesn't pulse jaggedly.
+async function handleActiveCount(env) {
+  const list = await env.TCC_OVERRIDES.list({ prefix: 'v:', limit: 1000 });
+  const real = list.keys.length;
+
+  // Baseline = a small smooth wave between BASELINE_MIN and BASELINE_MAX,
+  // seeded by the current 5-minute bucket so it changes slowly. Range is
+  // intentionally tight (4-7) for a modest emerging market.
+  const bucket = Math.floor(Date.now() / (5 * 60 * 1000));
+  const noise = Math.abs(Math.sin(bucket * 1.7)) ;          // 0..1, smooth
+  const baseline = BASELINE_MIN + Math.round(noise * (BASELINE_MAX - BASELINE_MIN));
+
+  // Time-of-day damping: between 2-6 AM CDT, drop the baseline so it
+  // matches reality (cannabis shoppers aren't browsing at 4 AM).
+  // CDT = UTC-5, so 2-6 AM CDT = 7-11 UTC.
+  const utcHour = new Date().getUTCHours();
+  const isLateNight = utcHour >= 7 && utcHour < 11;
+  const adjustedBaseline = isLateNight ? Math.max(2, baseline - 3) : baseline;
+
+  // Day-of-week boost: Friday + Saturday evenings (UTC 22-04 = 5pm-11pm CDT),
+  // bump baseline by 1-2 to reflect realistic peak shopping windows.
+  const utcDay = new Date().getUTCDay();
+  const isWeekendEvening = (utcDay === 6 || utcDay === 0 /* Sat/Sun UTC ~ Fri/Sat eve CDT */) && (utcHour >= 22 || utcHour < 4);
+  const finalBaseline = isWeekendEvening ? adjustedBaseline + 2 : adjustedBaseline;
+
+  const total = real + finalBaseline;
+
+  return new Response(JSON.stringify({ active: total, real, baseline: finalBaseline }), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, max-age=15, s-maxage=15',
+      ...corsHeaders,
+    },
+  });
+}
 
 // ─── /overrides ──────────────────────────────────────────────────────────────
 async function handleOverridesRead(env) {
