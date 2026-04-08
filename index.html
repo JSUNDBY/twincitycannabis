@@ -198,8 +198,98 @@
         } catch (e) {}
     })();
     </script>
+
+    <!-- Age gate — runs synchronously to prevent flash of content for 21- visitors.
+         Adds .tcc-age-locked to <html> if user hasn't confirmed they're 21+. CSS hides
+         body content while locked. Crawlers (no JS execution) see the full site. -->
+    <script>
+    (function() {
+        try {
+            if (localStorage.getItem('tcc-age-confirmed') !== '1') {
+                document.documentElement.classList.add('tcc-age-locked');
+            }
+        } catch (e) {}
+    })();
+    </script>
+    <style>
+    /* Hide body until age confirmed (or JS off / crawler) */
+    html.tcc-age-locked body > *:not(#tcc-age-gate) { visibility: hidden; }
+    html.tcc-age-locked { overflow: hidden; }
+    #tcc-age-gate {
+        position: fixed; inset: 0; z-index: 100000;
+        display: none;
+        align-items: center; justify-content: center;
+        background: rgba(5, 10, 8, 0.92);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        padding: 1.5rem;
+    }
+    html.tcc-age-locked #tcc-age-gate { display: flex; }
+    .tcc-age-card {
+        max-width: 460px; width: 100%;
+        background: linear-gradient(180deg, #0f1a14 0%, #0a1410 100%);
+        border: 1px solid rgba(34, 197, 94, 0.25);
+        border-radius: 18px;
+        padding: 2.5rem 2rem 2rem;
+        text-align: center;
+        box-shadow: 0 20px 80px rgba(0,0,0,0.5), 0 0 60px rgba(34,197,94,0.08);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+        color: #f5f6f8;
+    }
+    .tcc-age-card img { height: 64px; width: 64px; margin: 0 auto 1.25rem; display: block; filter: drop-shadow(0 0 20px rgba(34,197,94,0.3)); }
+    .tcc-age-card h2 { font-size: 1.5rem; font-weight: 700; margin: 0 0 .5rem; letter-spacing: -0.3px; line-height: 1.2; }
+    .tcc-age-card h2 .green { color: #22c55e; }
+    .tcc-age-card p { color: #b8bcc4; font-size: .92rem; line-height: 1.55; margin: 0 0 1.5rem; }
+    .tcc-age-buttons { display: flex; flex-direction: column; gap: .65rem; }
+    .tcc-age-btn {
+        display: block; width: 100%;
+        padding: .95rem 1.25rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        cursor: pointer;
+        border: 1px solid transparent;
+        font-family: inherit;
+        transition: transform .15s, background .15s, border-color .15s;
+    }
+    .tcc-age-btn-primary { background: linear-gradient(135deg, #16a34a, #22c55e); color: #fff; }
+    .tcc-age-btn-primary:hover { transform: translateY(-1px); }
+    .tcc-age-btn-secondary { background: transparent; color: #8b909a; border-color: rgba(255,255,255,0.08); }
+    .tcc-age-btn-secondary:hover { color: #f5f6f8; border-color: rgba(255,255,255,0.15); }
+    .tcc-age-disclaimer { font-size: .72rem; color: #6b7280; margin-top: 1.25rem; line-height: 1.5; }
+    .tcc-age-disclaimer a { color: #6b7280; text-decoration: underline; }
+    </style>
 </head>
 <body>
+
+<!-- ============ AGE GATE ============ -->
+<div id="tcc-age-gate" role="dialog" aria-modal="true" aria-labelledby="tcc-age-title">
+    <div class="tcc-age-card">
+        <img src="img/twin-city-cannabis-logo-192.png" alt="Twin City Cannabis logo" width="64" height="64">
+        <h2 id="tcc-age-title">Welcome to Twin City <span class="green">Cannabis</span></h2>
+        <p>You must be <strong>21 or older</strong> to use this site. Please confirm your age to continue.</p>
+        <div class="tcc-age-buttons">
+            <button type="button" class="tcc-age-btn tcc-age-btn-primary" id="tcc-age-yes">I'm 21 or older — enter site</button>
+            <button type="button" class="tcc-age-btn tcc-age-btn-secondary" id="tcc-age-no">I'm under 21</button>
+        </div>
+        <p class="tcc-age-disclaimer">By entering, you agree to our <a href="/terms/">Terms of Use</a> and <a href="/privacy/">Privacy Policy</a>. Twin City Cannabis is for adults 21+ in Minnesota where cannabis is legal. We do not sell or deliver cannabis.</p>
+    </div>
+</div>
+<script>
+(function() {
+    var yes = document.getElementById('tcc-age-yes');
+    var no  = document.getElementById('tcc-age-no');
+    if (yes) yes.addEventListener('click', function() {
+        try { localStorage.setItem('tcc-age-confirmed', '1'); } catch (e) {}
+        document.documentElement.classList.remove('tcc-age-locked');
+    });
+    if (no) no.addEventListener('click', function() {
+        // Send under-21 visitors to a safe, non-cannabis destination
+        window.location.href = 'https://www.google.com/';
+    });
+})();
+</script>
 
 <!-- ============ NAVIGATION ============ -->
 <nav class="nav">
