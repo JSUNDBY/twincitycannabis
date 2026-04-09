@@ -1881,7 +1881,7 @@
         // Kick off immediately, then on a cadence
         ping();
         poll();
-        setInterval(poll, 30000);  // refresh display every 30s
+        setInterval(poll, 300000);  // refresh display every 5 min (synthetic, no need to hammer)
         setInterval(() => {
             // Re-ping every 2 min so we stay counted as active
             if (document.visibilityState === 'visible') ping();
