@@ -1133,8 +1133,42 @@ html[data-theme="light"] body::after {
     color: var(--text-secondary);
     font-size: 1.05rem;
     max-width: 540px;
-    margin: 0 auto 2rem;
+    margin: 0 auto 0.5rem;
     line-height: 1.5;
+}
+
+.hero-fresh-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted, #8b909a);
+    font-size: 0.82rem;
+    margin: 0 auto 2rem;
+    letter-spacing: 0.2px;
+    font-variant-numeric: tabular-nums;
+}
+.fresh-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+    animation: fresh-pulse 2.4s ease-out infinite;
+    flex-shrink: 0;
+}
+@keyframes fresh-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.55); }
+    70%  { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+.footer-fresh {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted, #8b909a);
+    font-size: 0.78rem;
+    margin-left: 1rem;
+    font-variant-numeric: tabular-nums;
 }
 
 /* Hero stats row */
