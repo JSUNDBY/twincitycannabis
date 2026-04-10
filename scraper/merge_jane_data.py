@@ -27,7 +27,7 @@ DATA_JS = Path(__file__).parent.parent / "js" / "data.js"
 
 
 def load_jane_products():
-    """Load Jane-scraped products and group by (name, weight)."""
+    """Load Jane-scraped products and group by (name, weight, menu_type)."""
     if not JANE_FILE.exists():
         print("No jane_products.json found, skipping Jane merge")
         return {}, set()
@@ -42,18 +42,28 @@ def load_jane_products():
     # Collect which dispensary IDs are Jane-sourced
     jane_dispensaries = set(p["dispensary_id"] for p in products)
 
-    # Group by product name for cross-store comparison
+    # Group by (name, weight, menu_type) for cross-store comparison
+    # Rec and med versions of the same product stay separate
     grouped = {}
+    rec_count = 0
+    med_count = 0
     for p in products:
         name = p["name"].strip()
         weight = (p.get("weight") or "").strip()
-        key = f"{name}|||{weight}"
+        menu_type = p.get("menu_type", "rec")
+        key = f"{name}|||{weight}|||{menu_type}"
+
+        if menu_type == "med":
+            med_count += 1
+        else:
+            rec_count += 1
 
         if key not in grouped:
             grouped[key] = {
                 "name": name,
                 "brand": p.get("brand", "House"),
                 "category": p.get("category", "flower"),
+                "menu_type": menu_type,
                 "thc": p.get("thc", ""),
                 "cbd": p.get("cbd", ""),
                 "weight": weight,
@@ -61,11 +71,10 @@ def load_jane_products():
                 "prices": {},
             }
         grouped[key]["prices"][p["dispensary_id"]] = p["price"]
-        # Prefer image if we don't have one
         if p.get("image") and not grouped[key]["image"]:
             grouped[key]["image"] = p["image"]
 
-    print(f"Loaded {len(products)} Jane products -> {len(grouped)} unique")
+    print(f"Loaded {len(products)} Jane products ({rec_count} rec, {med_count} med) -> {len(grouped)} unique")
     print(f"Jane dispensaries: {', '.join(sorted(jane_dispensaries))}")
     return grouped, jane_dispensaries
 
@@ -132,8 +141,8 @@ def merge_into_data_js(jane_grouped, jane_dispensaries):
         if not p["prices"]:
             continue
 
+        menu_type = p.get("menu_type", "rec")
         prices_js = ", ".join(f"'{k}': {v}" for k, v in sorted(p["prices"].items()))
-        # Use flat price history (no history for Jane products yet)
         low = min(p["prices"].values())
         history = [low] * 8
 
@@ -141,11 +150,16 @@ def merge_into_data_js(jane_grouped, jane_dispensaries):
         brand_escaped = p["brand"].replace("'", "\\'")
         image_escaped = (p.get("image") or "").replace("'", "\\'")
 
+        # Medical products get menu_type: 'med' field so the frontend can
+        # show the ℞ indicator and support the rec/med filter toggle
+        menu_type_field = f"menu_type: '{menu_type}', " if menu_type == "med" else ""
+
         entry = (
             f"{{ id: 'j{len(jane_entries):04d}', "
             f"name: '{name_escaped}', "
             f"brand: '{brand_escaped}', "
             f"category: '{p['category']}', "
+            f"{menu_type_field}"
             f"strain: null, "
             f"weight: '{p['weight']}', "
             f"thc: '{p.get('thc', '')}', "

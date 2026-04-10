@@ -954,6 +954,7 @@
         query: '',
         page: 1,
         perPage: 24,
+        menuType: 'rec',  // 'rec', 'med', or 'all'
     };
 
     // Categories shown in the browse UI (excludes accessories/apparel/seeds/etc.)
@@ -961,6 +962,15 @@
 
     function getBrowseFiltered() {
         let list = TCC.products.filter(p => BROWSE_CATEGORIES.includes(p.category));
+
+        // Menu type filter: rec (default), med, or all
+        const menuFilter = Browse.menuType || 'rec';
+        if (menuFilter === 'rec') {
+            list = list.filter(p => !p.menu_type || p.menu_type === 'rec');
+        } else if (menuFilter === 'med') {
+            list = list.filter(p => p.menu_type === 'med');
+        }
+        // 'all' shows everything
 
         if (Browse.category !== 'all') {
             list = list.filter(p => p.category === Browse.category);
@@ -1093,6 +1103,15 @@
             Browse.page = 1;
             renderCompareDefault();
         });
+
+        const menuTypeSelect = document.getElementById('browse-menu-type');
+        if (menuTypeSelect) {
+            menuTypeSelect.addEventListener('change', (e) => {
+                Browse.menuType = e.target.value;
+                Browse.page = 1;
+                renderCompareDefault();
+            });
+        }
     }
 
     function renderCompareProduct(product) {
@@ -1393,7 +1412,7 @@
                 <div style="flex:1;min-width:0">
                     <div class="product-card-header">
                         <div style="min-width:0">
-                            <div class="product-card-name">${p.name}</div>
+                            <div class="product-card-name">${p.name}${p.menu_type === 'med' ? ' <span class="rx-badge" title="Medical menu price">℞</span>' : ''}</div>
                             <div class="product-card-brand">${p.brand}${p.weight ? ' &middot; ' + p.weight : ''}</div>
                         </div>
                         <div class="product-card-prices">

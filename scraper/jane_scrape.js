@@ -28,28 +28,43 @@ const DATA_DIR = path.join(__dirname, "data");
 const JANE_OUTPUT = path.join(DATA_DIR, "jane_products.json");
 
 // ─── STORE CONFIG ────────────────────────────────────────────────────────────
-// Each entry maps a TCC dispensary slug to its Jane rec menu URL.
-// Add new Jane-powered dispensaries here.
+// Each entry maps a TCC dispensary slug to its Jane menu URLs.
+// Both rec and med menus are scraped; products get tagged with menu_type.
 const JANE_STORES = {
   "minnesota-medical-solutions": {
     name: "Green Goods - Minneapolis",
-    url: "https://visitgreengoods.com/minneapolis-mn-menu-rec/",
+    menus: [
+      { url: "https://visitgreengoods.com/minneapolis-mn-menu-rec/", menu_type: "rec" },
+      { url: "https://visitgreengoods.com/minneapolis-mn-menu-med/", menu_type: "med" },
+    ],
   },
   "green-goods-woodbury": {
     name: "Green Goods - Woodbury",
-    url: "https://visitgreengoods.com/woodbury-mn-menu-rec/",
+    menus: [
+      { url: "https://visitgreengoods.com/woodbury-mn-menu-rec/", menu_type: "rec" },
+      { url: "https://visitgreengoods.com/woodbury-mn-menu-med/", menu_type: "med" },
+    ],
   },
   "minnesota-medical-solutions-bloomington": {
     name: "Green Goods - Bloomington",
-    url: "https://visitgreengoods.com/bloomington-mn-menu-rec/",
+    menus: [
+      { url: "https://visitgreengoods.com/bloomington-mn-menu-rec/", menu_type: "rec" },
+      { url: "https://visitgreengoods.com/bloomington-mn-menu-med/", menu_type: "med" },
+    ],
   },
   "green-goods-blaine": {
     name: "Green Goods - Blaine",
-    url: "https://visitgreengoods.com/blaine-mn-menu-rec/",
+    menus: [
+      { url: "https://visitgreengoods.com/blaine-mn-menu-rec/", menu_type: "rec" },
+      { url: "https://visitgreengoods.com/blaine-mn-menu-med/", menu_type: "med" },
+    ],
   },
   "green-goods-burnsville": {
     name: "Green Goods - Burnsville",
-    url: "https://visitgreengoods.com/burnsville-mn-menu-rec/",
+    menus: [
+      { url: "https://visitgreengoods.com/burnsville-mn-menu-rec/", menu_type: "rec" },
+      { url: "https://visitgreengoods.com/burnsville-mn-menu-med/", menu_type: "med" },
+    ],
   },
 };
 
@@ -113,8 +128,8 @@ function normalizeWeight(weight) {
   return map[w] || w;
 }
 
-// ─── SCRAPE ONE STORE ────────────────────────────────────────────────────────
-async function scrapeStore(browser, slug, config) {
+// ─── SCRAPE ONE MENU ─────────────────────────────────────────────────────────
+async function scrapeMenu(browser, slug, storeName, menuUrl, menuType) {
   const page = await browser.newPage();
   await page.setViewport({ width: 1440, height: 900 });
 
@@ -124,7 +139,6 @@ async function scrapeStore(browser, slug, config) {
     if (url.includes("dmerch.iheartjane.com") && (url.includes("/v2/multi") || url.includes("/v2/smart"))) {
       try {
         const text = await resp.text();
-        // Keep the largest response (the full catalog, not the specials-only one)
         if (!catalogData || text.length > catalogData.length) {
           catalogData = text;
         }
@@ -132,11 +146,12 @@ async function scrapeStore(browser, slug, config) {
     }
   });
 
-  console.log(`  Loading ${config.name}...`);
+  const label = `${storeName} [${menuType}]`;
+  console.log(`  Loading ${label}...`);
   try {
-    await page.goto(config.url, { waitUntil: "domcontentloaded", timeout: 45000 });
+    await page.goto(menuUrl, { waitUntil: "domcontentloaded", timeout: 45000 });
   } catch (e) {
-    console.log(`  WARN: page load issue (${e.message}), continuing...`);
+    console.log(`  WARN: page load issue for ${label} (${e.message}), continuing...`);
   }
 
   // Wait for dmerch response
@@ -157,11 +172,11 @@ async function scrapeStore(browser, slug, config) {
   await page.close();
 
   if (!catalogData) {
-    console.log(`  WARN: no product data from ${config.name}`);
+    console.log(`  WARN: no product data from ${label}`);
     return [];
   }
 
-  console.log(`  Received ${catalogData.length} bytes`);
+  console.log(`  Received ${catalogData.length} bytes from ${label}`);
 
   const parsed = JSON.parse(catalogData);
 
@@ -229,6 +244,7 @@ async function scrapeStore(browser, slug, config) {
       name,
       brand: attrs.brand || "House",
       category,
+      menu_type: menuType,
       thc: attrs.percent_thc ? `${attrs.percent_thc}%` : "",
       cbd: attrs.percent_cbd ? `${attrs.percent_cbd}%` : "",
       price,
@@ -238,7 +254,7 @@ async function scrapeStore(browser, slug, config) {
     });
   }
 
-  console.log(`  ${config.name}: ${unique.length} unique -> ${products.length} products after filter`);
+  console.log(`  ${label}: ${unique.length} unique -> ${products.length} products after filter`);
   return products;
 }
 
@@ -270,14 +286,16 @@ async function main() {
   let allProducts = [];
   try {
     for (const [slug, config] of Object.entries(storesToScrape)) {
-      try {
-        const products = await scrapeStore(browser, slug, config);
-        allProducts = allProducts.concat(products);
-      } catch (e) {
-        console.log(`  ERROR scraping ${config.name}: ${e.message}`);
+      for (const menu of config.menus) {
+        try {
+          const products = await scrapeMenu(browser, slug, config.name, menu.url, menu.menu_type);
+          allProducts = allProducts.concat(products);
+        } catch (e) {
+          console.log(`  ERROR scraping ${config.name} [${menu.menu_type}]: ${e.message}`);
+        }
+        // Be polite between menus
+        await new Promise((r) => setTimeout(r, 3000));
       }
-      // Be polite — wait between stores
-      await new Promise((r) => setTimeout(r, 3000));
     }
   } finally {
     await browser.close();
@@ -285,14 +303,16 @@ async function main() {
 
   console.log(`\nTotal Jane products: ${allProducts.length}`);
 
-  // Summary by store
-  const byStore = {};
+  // Summary by store + menu type
+  const summary = {};
   allProducts.forEach((p) => {
-    byStore[p.dispensary_id] = (byStore[p.dispensary_id] || 0) + 1;
+    const key = `${p.dispensary_id}|${p.menu_type}`;
+    summary[key] = (summary[key] || 0) + 1;
   });
-  Object.entries(byStore).forEach(([id, count]) => {
+  Object.entries(summary).forEach(([key, count]) => {
+    const [id, type] = key.split("|");
     const name = JANE_STORES[id] && JANE_STORES[id].name || id;
-    console.log(`  ${name}: ${count} products`);
+    console.log(`  ${name} [${type}]: ${count} products`);
   });
 
   if (!dryRun) {
