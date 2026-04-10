@@ -107,15 +107,21 @@ def merge_into_data_js(jane_grouped, jane_dispensaries):
 
     products_text = content[start:end]
 
-    # Parse each product entry — they're JS objects with single quotes and no trailing commas
-    # Strategy: for each product, check if any of its price keys are Jane dispensaries.
-    # If so, remove those price entries. Then we'll add Jane products separately.
+    # Step 1: Remove any previously-added Jane entries (id starts with 'j')
+    # so we don't accumulate orphans on repeated runs
+    old_jane = len(re.findall(r"id:\s*'j\d{4}'", products_text))
+    products_text = re.sub(
+        r"\{[^{}]*id:\s*'j\d{4}'[^{}]*priceHistory:[^}]*\},?\s*",
+        "",
+        products_text
+    )
+    if old_jane:
+        print(f"Removed {old_jane} old Jane entries before re-adding fresh ones")
 
-    # Count removals
+    # Step 2: Remove Jane dispensary prices from Weedmaps product entries
     removed_prices = 0
     removed_products = 0
 
-    # Remove Jane dispensary prices from existing products
     for disp_id in jane_dispensaries:
         # Match patterns like 'minnesota-medical-solutions': 25.0 or 'green-goods-blaine': 41.89
         pattern = rf"'{re.escape(disp_id)}':\s*[\d.]+,?\s*"
