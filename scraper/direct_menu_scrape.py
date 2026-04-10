@@ -235,9 +235,15 @@ def parse_menu_item(item, dispensary_slug):
     # Genetics / strain type
     genetics = (item.get("genetics", "") or "").lower()
 
+    # Clean product name: strip trailing barcodes/UPCs (6-13 digit numbers
+    # that some dispensaries append to their product names, e.g.
+    # "LKF Pine Soul 4g 6013156398")
+    raw_name = item.get("name", "").strip()
+    raw_name = re.sub(r'\s+\d{6,13}\s*$', '', raw_name).strip()
+
     return {
         "dispensary_id": dispensary_slug,
-        "name": item.get("name", "").strip(),
+        "name": raw_name,
         "brand": brand,
         "category": category,
         "strain_type": genetics,
