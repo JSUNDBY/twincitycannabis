@@ -25,9 +25,15 @@ EXCLUDED_CATEGORIES = {
 # Compile patterns once
 # Order of evaluation matters — see categorize_by_name() for the priority logic.
 _PATTERNS = {
-    # Things that aren't products at all — donation campaigns, services
+    # Things that aren't products at all — donations, services, accessories
     'EXCLUDE_NOT_PRODUCT': re.compile(
-        r'\b(donation|fundraiser|gift\s*card|raffle|service\s*fee|delivery\s*fee)\b',
+        r'\b(donation|fundraiser|gift\s*card|raffle|service\s*fee|delivery\s*fee'
+        r'|volcano\s*dosing|dosing\s*capsule|boveda\s*pack|dab\s*rag|dab\s*straw'
+        r'|rolling\s*paper|raw\s*cone|grinder|lighter|ashtray|rolling\s*tray'
+        r'|stash\s*jar|smell\s*proof|dugout|one\s*hitter|chillum|pipe\s*screen'
+        r'|bong|rig\s*mat|torch|hemp\s*wick|filter\s*tip|joint\s*holder'
+        r'|doob\s*tube|clipper|blazy\s*susan|bic\s+lighter'
+        r'|pulsar\s*scribe|tronian|battery\s*\d|button\s*battery)\b',
         re.IGNORECASE
     ),
 
