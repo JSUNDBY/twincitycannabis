@@ -280,7 +280,13 @@ from normalize import categorize_by_name as _smart_categorize
 
 
 def build_price_comparison(products):
-    """Group products by name for cross-dispensary price comparison."""
+    """Group products by name + weight for cross-dispensary price comparison.
+
+    Products are keyed by (name, weight) so a 0.5g and 1g version of the same
+    product stay separate. Without this, the same product name at different
+    sizes merges into one entry with wildly different prices (e.g., $65 for a
+    1g cart vs $110 for a 2g at another location).
+    """
     grouped = {}
 
     for p in products:
@@ -288,24 +294,27 @@ def build_price_comparison(products):
         if not name or p.get("price", 0) <= 0:
             continue
 
-        if name not in grouped:
-            grouped[name] = {
+        weight = (p.get("weight") or "").strip()
+        key = (name, weight)
+
+        if key not in grouped:
+            grouped[key] = {
                 "name": name,
                 "brand": p.get("brand", "Unknown"),
                 "category": p.get("category", "flower"),
                 "strain_type": p.get("strain_type", ""),
                 "thc": p.get("thc", ""),
                 "cbd": p.get("cbd", ""),
-                "weight": p.get("weight", ""),
+                "weight": weight,
                 "image": p.get("image", ""),
                 "prices": {},
             }
 
-        grouped[name]["prices"][p["dispensary_id"]] = p["price"]
-        if p.get("image") and not grouped[name]["image"]:
-            grouped[name]["image"] = p["image"]
-        if p.get("thc") and not grouped[name]["thc"]:
-            grouped[name]["thc"] = p["thc"]
+        grouped[key]["prices"][p["dispensary_id"]] = p["price"]
+        if p.get("image") and not grouped[key]["image"]:
+            grouped[key]["image"] = p["image"]
+        if p.get("thc") and not grouped[key]["thc"]:
+            grouped[key]["thc"] = p["thc"]
 
     # Apply smart name-based categorization and drop excluded products
     cleaned = []
