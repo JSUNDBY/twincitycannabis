@@ -38,6 +38,16 @@ if [ -f scraper/data/jane_products.json ]; then
     python3 scraper/merge_jane_data.py 2>&1 || echo "Jane merge skipped"
 fi
 
+# 5b. Carrot menu scrape (Wildflower locations)
+#     Pulls from dispensary website via Typesense API (no browser needed).
+echo "--- Carrot scrape ---"
+python3 scraper/carrot_scrape.py 2>&1 || echo "Carrot scrape failed, continuing"
+
+# 5c. Merge Carrot data over Weedmaps data for Carrot-scraped dispensaries
+if [ -f scraper/data/carrot_products.json ]; then
+    python3 scraper/merge_carrot_data.py 2>&1 || echo "Carrot merge skipped"
+fi
+
 # 6. Re-merge Google Places data (cached file, no API call usually)
 python3 scraper/merge_google_data.py 2>&1 || echo "Google merge skipped"
 
@@ -57,7 +67,7 @@ node scripts/build_seo.js
 git add js/data.js index.html sitemap.xml \
     scraper/data/price_history.json scraper/data/price_history_export.json \
     scraper/data/full_menu_products.json scraper/data/dispensaries.json \
-    scraper/data/dispensaries_export.json scraper/data/jane_products.json \
+    scraper/data/dispensaries_export.json scraper/data/jane_products.json scraper/data/carrot_products.json \
     dispensaries products brands neighborhoods \
     best-dispensaries-twin-cities cheapest-cannabis-twin-cities minnesota-cannabis-laws \
     terms privacy contact 2>/dev/null || true
