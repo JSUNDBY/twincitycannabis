@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Twin City Cannabis — 90-Day Marketing Plan</title>
+<style>
+  @page {
+    size: letter;
+    margin: 0.75in 0.7in 0.85in 0.7in;
+    @bottom-center {
+      content: "Twin City Cannabis  ·  90-Day Marketing Plan  ·  Page " counter(page) " of " counter(pages);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 8.5pt;
+      color: #6b7280;
+    }
+  }
+  @page :first { margin: 0; @bottom-center { content: ""; } }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; color:#1a1d23; line-height:1.55; font-size:10.5pt; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .cover { width:8.5in; height:11in; background:linear-gradient(160deg,#0f1a14 0%,#0a1410 50%,#050a08 100%); color:#f5f6f8; padding:1.5in 1in; position:relative; page-break-after:always; overflow:hidden; }
+  .cover::before { content:''; position:absolute; top:-200px; right:-200px; width:600px; height:600px; background:radial-gradient(circle,rgba(34,197,94,0.12) 0%,transparent 60%); border-radius:50%; }
+  .cover-inner { position:relative; z-index:2; height:100%; display:flex; flex-direction:column; }
+  .cover-logo { display:flex; align-items:center; gap:0.75rem; margin-bottom:2.5in; }
+  .cover-logo img { width:56px; height:56px; filter:drop-shadow(0 0 24px rgba(34,197,94,0.4)); }
+  .cover-logo .wordmark { font-size:16pt; font-weight:700; letter-spacing:-0.3px; }
+  .cover-logo .wordmark .green { color:#22c55e; }
+  .cover h1 { font-size:52pt; font-weight:800; line-height:1.0; letter-spacing:-2px; margin:0 0 0.4in; color:#f5f6f8; }
+  .cover h1 .green { color:#22c55e; display:block; }
+  .cover .subtitle { font-size:14pt; color:#b8bcc4; line-height:1.5; margin:0 0 0.5in; max-width:6in; }
+  .cover-meta { margin-top:auto; border-top:1px solid rgba(34,197,94,0.25); padding-top:0.4in; display:flex; justify-content:space-between; align-items:flex-end; color:#8b909a; font-size:9.5pt; }
+  .cover-meta .left strong { color:#f5f6f8; font-size:11pt; display:block; margin-bottom:0.15rem; }
+  .cover-meta .right { text-align:right; }
+  .cover-meta .right strong { color:#22c55e; font-size:11pt; display:block; }
+  h1.section-h1 { font-size:22pt; font-weight:800; color:#0a1410; letter-spacing:-0.8px; line-height:1.1; margin:0 0 0.15in; padding-bottom:0.12in; border-bottom:3px solid #22c55e; }
+  h2 { font-size:14pt; font-weight:700; color:#0a1410; margin:0.35in 0 0.1in; letter-spacing:-0.3px; line-height:1.2; page-break-after:avoid; }
+  h3 { font-size:11.5pt; font-weight:700; color:#16a34a; margin:0.22in 0 0.06in; letter-spacing:0.2px; page-break-after:avoid; }
+  h4 { font-size:10.5pt; font-weight:700; color:#1a1d23; margin:0.15in 0 0.05in; page-break-after:avoid; }
+  p { margin:0 0 0.1in; color:#374151; }
+  ul, ol { margin:0.05in 0 0.15in; padding-left:0.25in; color:#374151; }
+  li { margin-bottom:0.04in; }
+  strong { color:#0a1410; }
+  em { color:#16a34a; font-style:normal; font-weight:600; }
+  a { color:#16a34a; text-decoration:none; }
+  table { width:100%; border-collapse:collapse; margin:0.12in 0 0.2in; font-size:9.5pt; page-break-inside:avoid; }
+  th, td { text-align:left; padding:0.07in 0.1in; border-bottom:1px solid #e2e5ea; vertical-align:top; }
+  th { background:#f4f6f4; color:#0a1410; font-weight:700; text-transform:uppercase; font-size:8pt; letter-spacing:0.5px; border-bottom:2px solid #22c55e; }
+  td.numeric, th.numeric { text-align:right; font-variant-numeric:tabular-nums; }
+  tr:nth-child(even) td { background:#fafbfa; }
+  .callout { background:linear-gradient(135deg,rgba(34,197,94,0.06) 0%,rgba(34,197,94,0.02) 100%); border-left:4px solid #22c55e; padding:0.15in 0.2in; margin:0.18in 0; border-radius:0 6px 6px 0; page-break-inside:avoid; }
+  .callout p { margin:0; color:#1a1d23; }
+  .callout .label { font-size:8pt; font-weight:700; text-transform:uppercase; color:#16a34a; letter-spacing:1px; margin-bottom:0.06in; display:block; }
+  .one-sentence { background:#0a1410; color:#f5f6f8; padding:0.25in 0.3in; margin:0.18in 0; border-radius:8px; border-left:5px solid #22c55e; font-size:12pt; line-height:1.5; page-break-inside:avoid; }
+  .one-sentence strong { color:#22c55e; }
+  .tier { background:#fafbfa; border:1px solid #e2e5ea; border-radius:8px; padding:0.18in 0.22in; margin:0.12in 0; page-break-inside:avoid; }
+  .tier-a { border-left:5px solid #22c55e; }
+  .tier-b { border-left:5px solid #f59e0b; }
+  .tier-c { border-left:5px solid #6b7280; }
+  .tier h3 { margin-top:0; }
+  .week { background:#fafbfa; border-left:3px solid #22c55e; padding:0.1in 0.18in; margin:0.08in 0; page-break-inside:avoid; }
+  .week strong { color:#16a34a; display:block; margin-bottom:0.04in; font-size:10pt; }
+  .milestones { background:rgba(34,197,94,0.05); border:1px dashed #22c55e; border-radius:6px; padding:0.12in 0.18in; margin:0.12in 0 0.18in; page-break-inside:avoid; }
+  .milestones .label { font-size:8pt; font-weight:700; color:#16a34a; text-transform:uppercase; letter-spacing:0.8px; display:block; margin-bottom:0.05in; }
+  .milestones ul { margin:0; padding-left:0.2in; }
+  .milestones li::marker { content:"✓  "; color:#22c55e; font-weight:700; }
+  .three-actions { background:linear-gradient(135deg,#0a1410 0%,#0f1a14 100%); color:#f5f6f8; padding:0.3in 0.35in; border-radius:10px; margin:0.2in 0; page-break-inside:avoid; }
+  .three-actions h2 { color:#22c55e; margin-top:0; }
+  .three-actions ol { color:#b8bcc4; padding-left:0.3in; }
+  .three-actions li { margin-bottom:0.08in; }
+  .three-actions strong { color:#f5f6f8; }
+  .pagebreak { page-break-before:always; }
+  .back-cover { width:8.5in; height:11in; background:linear-gradient(160deg,#0a1410 0%,#050a08 100%); color:#f5f6f8; padding:1.5in 1in; position:relative; overflow:hidden; page-break-before:always; }
+  .back-cover::before { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:700px; height:700px; background:radial-gradient(circle,rgba(34,197,94,0.05) 0%,transparent 60%); border-radius:50%; }
+  .back-cover-inner { position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
+  .back-cover img { width:100px; height:100px; margin-bottom:0.4in; filter:drop-shadow(0 0 30px rgba(34,197,94,0.3)); }
+  .back-cover h2 { color:#f5f6f8; font-size:22pt; margin:0 0 0.15in; border:none; }
+  .back-cover .green { color:#22c55e; }
+  .back-cover p { color:#b8bcc4; max-width:5in; font-size:11pt; line-height:1.6; margin:0 0 0.15in; }
+  .back-cover .url { color:#22c55e; font-weight:700; font-size:13pt; margin-top:0.4in; }
+  .status-table { margin:0.15in 0 0.2in; }
+  .status-table td:first-child { font-weight:600; white-space:nowrap; }
+  .status-table .done { color:#16a34a; }
+  .status-table .pending { color:#f59e0b; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════════════ COVER ════════════════════════════════════════════════════════════════════════ -->
+<section class="cover">
+  <div class="cover-inner">
+    <div class="cover-logo">
+      <img src="../../img/twin-city-cannabis-logo-192.png" alt="Twin City Cannabis logo">
+      <div class="wordmark">Twin City <span class="green">Cannabis</span></div>
+    </div>
+    <h1>90-Day<span class="green">Marketing Plan</span></h1>
+    <p class="subtitle">Strategy, positioning, channels, and a week-by-week playbook for becoming the cannabis price comparison site for Minnesota.</p>
+    <div class="cover-meta">
+      <div class="left"><strong>Twin City Cannabis</strong>Minneapolis &middot; Saint Paul &middot; MN</div>
+      <div class="right"><strong>Confidential</strong>Revised April 9, 2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════════ 1 — SITUATION ════════════════════════════════════════════════════════════════════════ -->
+<div class="page-content">
+<h1 class="section-h1">1 &nbsp;The Honest Situation</h1>
+
+<h2>What we've built (shipped &amp; live)</h2>
+<table class="status-table">
+  <tbody>
+    <tr><td class="done">✓ Product data</td><td><strong>35 dispensaries, 1,500+ products</strong>, real Google ratings &amp; reviews, updated 5×/day via automated scraper</td></tr>
+    <tr><td class="done">✓ SEO build</td><td><strong>204 indexed pages</strong> submitted to Google Search Console &amp; Bing Webmaster Tools — dispensary pages, brand pages, city pages, neighborhood pages, per-product comparison pages, long-tail guides (cheapest, best-rated, MN cannabis laws)</td></tr>
+    <tr><td class="done">✓ Schema.org</td><td>CannabisStore, Product, AggregateOffer, Brand, Article, BreadcrumbList, FAQPage — rich snippets enabled for every page type</td></tr>
+    <tr><td class="done">✓ Paid tiers</td><td><strong>$299/mo Featured, $599/mo Premium</strong> — Cloudflare Worker deployed, Stripe webhook handler ready, frontend badge system wired</td></tr>
+    <tr><td class="done">✓ Live counter</td><td>"X people comparing prices now" — real visitor tracking via Cloudflare KV + modest baseline, live on homepage</td></tr>
+    <tr><td class="done">✓ Legal pages</td><td>Terms of Use, Privacy Policy, Contact — all live with real content</td></tr>
+    <tr><td class="done">✓ Age gate</td><td>21+ verification modal on first visit, branded, SEO-safe</td></tr>
+    <tr><td class="done">✓ Email capture</td><td>Kit forms (consumer price alerts + dispensary inquiries), branded HTML email template, verified sender hello@twincitycannabis.com</td></tr>
+    <tr><td class="done">✓ Analytics</td><td>GA4 + Meta Pixel + Schema.org SEO — all wired</td></tr>
+    <tr><td class="done">✓ Performance</td><td>Lighthouse: SEO 100, Best Practices 100, Accessibility 94, Desktop 95</td></tr>
+    <tr><td class="pending">◯ Kit sequences</td><td>Welcome email flows drafted but not yet live in Kit (manual setup remaining)</td></tr>
+    <tr><td class="pending">◯ Stripe products</td><td>Worker deployed, user needs to create Stripe products + payment links to activate billing</td></tr>
+  </tbody>
+</table>
+
+<h2>What we don't have yet</h2>
+<ul>
+  <li>Traffic — SEO pages were just submitted, rankings haven't developed</li>
+  <li>Brand recognition in the Twin Cities market</li>
+  <li>Relationships with dispensary owners</li>
+  <li>Revenue</li>
+  <li>A meaningful marketing budget</li>
+</ul>
+
+<h2>The market</h2>
+<ul>
+  <li><strong>Minnesota legalized August 2023.</strong> Retail just ramped in 2024-2025.</li>
+  <li>~35 retail dispensaries in the metro today; ~150 statewide projected by end of 2026</li>
+  <li><strong>No dominant local price-comparison player.</strong> Only competitor (MN Cannabis Hub) is editorial, not interactive.</li>
+  <li>Massive consumer confusion — legal cannabis is brand new, people don't know what to buy or where</li>
+  <li>Dispensaries are spending zero on marketing and have no competitive intel</li>
+</ul>
+
+<div class="callout">
+  <span class="label">The key insight</span>
+  <p>Best possible market timing. Early in a new legal market, defensible product, dense and price-sensitive metro, no competition. The window to become "the cannabis price site for Minnesota" is open now and closes in 18-24 months. Speed is the moat.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ 2 — POSITIONING ════════════════════════════════════════════════════════════════════════ -->
+<h1 class="section-h1" style="margin-top:0.4in">2 &nbsp;Strategic Positioning</h1>
+
+<h2>The one sentence</h2>
+<div class="one-sentence">
+  <strong>Twin City Cannabis</strong> is the only place that shows real prices side-by-side across every Minneapolis-Saint Paul dispensary, updated daily, free for shoppers.
+</div>
+
+<h2>Why this wins</h2>
+<table>
+  <thead><tr><th>Phrase</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td><strong>"Real prices"</strong></td><td>Distinguishes from review sites and dispensary ads</td></tr>
+    <tr><td><strong>"Side-by-side"</strong></td><td>Single-screen comparison is the actual shopper need</td></tr>
+    <tr><td><strong>"Every dispensary"</strong></td><td>Comprehensive — we don't play favorites</td></tr>
+    <tr><td><strong>"Updated daily"</strong></td><td>Fresh data is the moat (actually 5×/day)</td></tr>
+    <tr><td><strong>"Free for shoppers"</strong></td><td>Trust signal, removes friction</td></tr>
+    <tr><td><strong>Doesn't say "best"</strong></td><td>We don't editorialize; the data does</td></tr>
+  </tbody>
+</table>
+
+<h2>Three audiences, three messages</h2>
+<table>
+  <thead><tr><th>Audience</th><th>What they need</th><th>Our message</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Shoppers</strong></td><td>Save money, avoid bad shops</td><td>"Compare every dispensary in 30 seconds. No guessing."</td></tr>
+    <tr><td><strong>Dispensaries</strong></td><td>Visibility, customer intel</td><td>"Your customers are price-checking right now. Are you winning?"</td></tr>
+    <tr><td><strong>Press / industry</strong></td><td>A unique data angle</td><td>"The first independent price tracker for the new MN cannabis market"</td></tr>
+  </tbody>
+</table>
+
+<h2>What we stand against</h2>
+<ul>
+  <li><strong>Sponsored placement disguised as recommendations</strong> — Weedmaps is famous for this</li>
+  <li><strong>Pay-to-rank</strong> — our TCC Score is never influenced by tier</li>
+  <li><strong>Fake reviews</strong> — we pull real Google reviews</li>
+  <li><strong>Stale data</strong> — we update 5×/day</li>
+  <li><strong>Walled gardens</strong> — every dispensary listed for free</li>
+</ul>
+
+<!-- ════════════════════════════════════════════════════════════════════════ 3 — CHANNELS ════════════════════════════════════════════════════════════════════════ -->
+<div class="pagebreak"></div>
+<h1 class="section-h1">3 &nbsp;Channels That Actually Work</h1>
+
+<h2>Tier A &nbsp;·&nbsp; Do these first</h2>
+
+<div class="tier tier-a">
+  <h3>A1 &nbsp;·&nbsp; SEO Content Engine</h3>
+  <p><strong>Status: already running.</strong> 204 indexed pages, self-rebuilding 5×/day via cron. This is the moat. No competitor has anything close.</p>
+  <h4>Action: one new long-tail page per week</h4>
+  <ul>
+    <li>"Cheapest [category] in Minneapolis this week" (auto-generated weekly snapshot)</li>
+    <li>"First time at a dispensary — what to expect"</li>
+    <li>"How to read a Minnesota cannabis label"</li>
+    <li>"What's the difference between live resin and live rosin?"</li>
+    <li>"Cannabis delivery in Minneapolis (which dispensaries do it)"</li>
+    <li>"Best dispensary near [neighborhood]" — one per major neighborhood</li>
+    <li>"Minnesota cannabis news roundup [Month Year]"</li>
+  </ul>
+  <p><strong>CMO role:</strong> generate content topics from search trends; write 1-2 pieces/month for voice variety.</p>
+</div>
+
+<div class="tier tier-a">
+  <h3>A2 &nbsp;·&nbsp; Reddit r/MNTrees + r/twincities</h3>
+  <p><strong>Free, immediate, biggest growth lever for the next 90 days.</strong> r/MNTrees has 30K+ active members — <em>the</em> MN cannabis community. They love data, hate corporate marketing, trust independent voices.</p>
+  <h4>Action</h4>
+  <ul>
+    <li>Start as a member, not a marketer. Answer real questions using TCC data.</li>
+    <li>Every Sunday: "Twin Cities Weekly Price Drop" thread — top 5 deals, cite dispensaries.</li>
+    <li>Monthly AMA: "Ask me anything about Twin Cities cannabis prices."</li>
+    <li>Build genuine reputation. The mods will protect us if we're useful.</li>
+  </ul>
+  <p><strong>CMO role:</strong> tone-check posts, help craft the AMA narrative, engage in comments.</p>
+</div>
+
+<div class="tier tier-a">
+  <h3>A3 &nbsp;·&nbsp; Outbound to Dispensary Owners</h3>
+  <p><strong>The direct path to revenue.</strong> Cold email every TC dispensary owner with a personalized pitch based on our data.</p>
+  <h4>Action</h4>
+  <ul>
+    <li>Identify dispensaries with worst pricing visibility (high prices, low reviews, no website)</li>
+    <li>Personalized email: "I built a tool that compares your menu to every competitor. Here's what I see: [3 specific facts]. Free Featured trial, 30 days."</li>
+    <li>Non-extractive: free listing forever, paid adds visibility not rank, no contracts</li>
+    <li><strong>Target: 5 paid dispensaries in 90 days = $1,495-$2,995 MRR</strong></li>
+  </ul>
+  <p><strong>CMO role:</strong> write the master template, polish outbound voice, warm intros if possible.</p>
+</div>
+
+<h2>Tier B &nbsp;·&nbsp; Do these next</h2>
+
+<div class="tier tier-b">
+  <h3>B1 &nbsp;·&nbsp; Local Press &amp; Earned Media</h3>
+  <p>Star Tribune, MinnPost, Bring Me The News, MSP Magazine. Cannabis is a hot local beat. Offer to be "the neutral data source" for any cannabis story.</p>
+  <p><strong>Goal: 1 mention per quarter.</strong> CMO friend owns this entirely.</p>
+</div>
+
+<div class="tier tier-b">
+  <h3>B2 &nbsp;·&nbsp; Micro-Influencers</h3>
+  <p>Minnesota cannabis creators with 1K-10K followers. DM 20, convert 3-5 to organic collabs via free data access + cross-promo. Hashtags: #mncannabis, #mnweed, #twincitiescannabis.</p>
+</div>
+
+<div class="tier tier-b">
+  <h3>B3 &nbsp;·&nbsp; Email Newsletter</h3>
+  <p>Kit forms are wired, welcome sequences are drafted. Once live: weekly "Twin Cities Cannabis Weekly" — deals, openings, insights. <strong>Goal: 500 subscribers by day 90, 2,500 by day 180.</strong></p>
+</div>
+
+<h2>Tier C &nbsp;·&nbsp; Worth doing eventually</h2>
+
+<div class="tier tier-c">
+  <h3>C1 · Paid Ads</h3><p>Cannabis ads restricted on Meta/Google. Skip until $500+/month to test. Reddit may be a sleeper channel.</p>
+</div>
+<div class="tier tier-c">
+  <h3>C2 · SEO Backlink Outreach</h3><p>5 outreach emails/week to local directories, neighborhood blogs, business journals. ~50 backlinks/year, compounds heavily.</p>
+</div>
+<div class="tier tier-c">
+  <h3>C3 · Events</h3><p>After 6 months with name recognition: 4/20 events, dispensary openings, MN Cannabis Expo.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ 4 — PLAYBOOK ════════════════════════════════════════════════════════════════════════ -->
+<div class="pagebreak"></div>
+<h1 class="section-h1">4 &nbsp;The 90-Day Playbook</h1>
+
+<h2>Days 1-30 &nbsp;·&nbsp; Foundation + first traffic</h2>
+
+<div class="week"><strong>Week 1</strong>SEO build shipped. Finish Kit welcome sequences (the unblock). Claim @twincitycannabis on Instagram + TikTok. CMO onboarding: walk through everything, agree on roles + cadence.</div>
+<div class="week"><strong>Week 2</strong>First Reddit post in r/MNTrees with 5 specific price examples and TCC link. Be transparent. Cold outbound batch 1: 10 dispensaries. Publish one new long-tail content page.</div>
+<div class="week"><strong>Week 3</strong>First press pitch with real data angle. Cold outbound batch 2: 10 more. One new content page. Identify 5 micro-influencers, send intro DMs.</div>
+<div class="week"><strong>Week 4</strong>First newsletter to all signups. Cold outbound batch 3: 10 more. One new content page. Second Reddit post (different angle).</div>
+
+<div class="milestones"><span class="label">Day 30 milestones</span>
+<ul><li>~30 dispensaries cold-emailed, ~3 in conversation</li><li>50-200 daily visitors</li><li>~25-100 email signups</li><li>Maybe 1 paid Featured customer = $299 MRR</li></ul></div>
+
+<h2>Days 31-60 &nbsp;·&nbsp; First revenue + brand building</h2>
+
+<div class="week"><strong>Weeks 5-6</strong><strong>Land first paying dispensary.</strong> White-glove onboarding. Use the win as a case study. Continue weekly Reddit cadence + content page.</div>
+<div class="week"><strong>Weeks 7-8</strong>Press hit #1 — even small. Use in all subsequent outreach. Backlink outreach: 5/week. 2nd and 3rd paying dispensary target.</div>
+
+<div class="milestones"><span class="label">Day 60 milestones</span>
+<ul><li>3 paying dispensaries = $897 MRR</li><li>200-500 daily visitors</li><li>200-500 email subscribers</li><li>First press mention</li><li>Recognized name in r/MNTrees</li></ul></div>
+
+<h2>Days 61-90 &nbsp;·&nbsp; Scale + repeat what's working</h2>
+
+<div class="week"><strong>Weeks 9-10</strong>Double down on whichever channel produces best ROI. If outbound: hire part-time VA for 30 emails/week. If SEO: ramp to 2 content pages/week. If Reddit: become the trusted authority.</div>
+<div class="week"><strong>Weeks 11-12</strong>Launch <strong>TCC Score V2:</strong> publish "Top 10 Twin Cities Dispensaries" with methodology. Viral potential — dispensaries share rank (good or bad = traffic). Pitch as press story.</div>
+
+<div class="milestones"><span class="label">Day 90 milestones</span>
+<ul><li>5+ paying dispensaries = ~$1,495-$2,995 MRR</li><li>1,000+ daily visitors</li><li>1,000+ email subscribers</li><li>2-3 press mentions</li><li>Top-3 Google result for "twin cities cannabis prices"</li></ul></div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ 5 — KPIS ════════════════════════════════════════════════════════════════════════ -->
+<div class="pagebreak"></div>
+<h1 class="section-h1">5 &nbsp;KPIs That Matter</h1>
+
+<table>
+  <thead><tr><th>Metric</th><th class="numeric">Day 30</th><th class="numeric">Day 60</th><th class="numeric">Day 90</th><th class="numeric">Day 180</th></tr></thead>
+  <tbody>
+    <tr><td>Daily site visitors</td><td class="numeric">200</td><td class="numeric">500</td><td class="numeric">1,000</td><td class="numeric">5,000</td></tr>
+    <tr><td>Email subscribers</td><td class="numeric">100</td><td class="numeric">300</td><td class="numeric">1,000</td><td class="numeric">5,000</td></tr>
+    <tr><td>Paying dispensaries</td><td class="numeric">1</td><td class="numeric">3</td><td class="numeric">5</td><td class="numeric">15</td></tr>
+    <tr><td><strong>MRR</strong></td><td class="numeric"><strong>$299</strong></td><td class="numeric"><strong>$897</strong></td><td class="numeric"><strong>$1,495</strong></td><td class="numeric"><strong>$4,485</strong></td></tr>
+    <tr><td>Top-10 Google rankings</td><td class="numeric">5</td><td class="numeric">25</td><td class="numeric">75</td><td class="numeric">200</td></tr>
+    <tr><td>Press mentions (cumulative)</td><td class="numeric">0</td><td class="numeric">1</td><td class="numeric">3</td><td class="numeric">8</td></tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════════════════════ 6 — REVENUE MATH ════════════════════════════════════════════════════════════════════════ -->
+<h1 class="section-h1" style="margin-top:0.4in">6 &nbsp;The Revenue Math</h1>
+
+<h2>Unit economics</h2>
+<ul>
+  <li>$299/mo × 12 = <strong>$3,588/year per Featured customer</strong></li>
+  <li>~85% annual retention → <strong>lifetime value ~$11,960</strong></li>
+  <li>CAC on cold outbound = ~$0-100 (your time)</li>
+  <li><strong>Margin: $11,860 lifetime per customer.</strong></li>
+</ul>
+
+<table>
+  <thead><tr><th>Customers</th><th class="numeric">Monthly recurring</th><th class="numeric">Annual recurring</th><th>What it looks like</th></tr></thead>
+  <tbody>
+    <tr><td>10 Featured</td><td class="numeric">$2,990</td><td class="numeric">$35,880</td><td>Part-time income, 1-2 days/week work</td></tr>
+    <tr><td>30 mixed (avg $400)</td><td class="numeric">$12,000</td><td class="numeric">$144,000</td><td>Quit day job, hire help</td></tr>
+    <tr><td>75 paying (50% market)</td><td class="numeric">~$30,000</td><td class="numeric">~$360,000</td><td>18-month dominant-player outcome</td></tr>
+  </tbody>
+</table>
+
+<div class="callout"><span class="label">18-month picture</span>
+<p>~75 paying dispensaries + consumer revenue (newsletter sponsors, premium features, affiliate). <strong>Total realistic 18-month potential: $400-500K ARR for a 1-2 person operation.</strong></p></div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ 7 — RISKS ════════════════════════════════════════════════════════════════════════ -->
+<h1 class="section-h1" style="margin-top:0.4in">7 &nbsp;Risks &amp; Mitigations</h1>
+
+<table>
+  <thead><tr><th>Risk</th><th>Likelihood</th><th>Mitigation</th></tr></thead>
+  <tbody>
+    <tr><td>Weedmaps blocks scraper</td><td>Medium</td><td>Phase out for direct Dutchie/Jane scrapers</td></tr>
+    <tr><td>Big competitor enters MN</td><td>High</td><td>Move fast, lock dispensary relationships, brand equity is the moat</td></tr>
+    <tr><td>Dispensaries don't pay</td><td>Medium</td><td>Free tier forever + clear ROI dashboards = low resistance</td></tr>
+    <tr><td>MN market consolidates</td><td>Low</td><td>Same total dispensary count, just bigger players</td></tr>
+    <tr><td>Legal/compliance pressure</td><td>Low</td><td>We don't sell cannabis. Stay an information source.</td></tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════════════════════ 8 — CMO ROLE ════════════════════════════════════════════════════════════════════════ -->
+<h1 class="section-h1" style="margin-top:0.4in">8 &nbsp;What the CMO Owns</h1>
+
+<h3>He owns</h3>
+<ul>
+  <li><strong>Press relationships + earned media</strong> — every press play runs through him</li>
+  <li><strong>Brand voice + messaging</strong> — polishes outbound, Reddit posts, press releases</li>
+  <li><strong>Strategic positioning + storytelling</strong> — shapes the narrative</li>
+</ul>
+<h3>Don't delegate to him</h3>
+<ul>
+  <li>Outbound sales execution (cold email stays with founder)</li>
+  <li>Tactical content writing (founder writes, CMO polishes)</li>
+  <li>SEO (different discipline)</li>
+  <li>Anything technical</li>
+</ul>
+
+<div class="callout"><span class="label">Cadence</span><p>Weekly 30-minute call. He owns press + brand voice. Founder owns everything else. Equity vs. paid is a separate conversation — settle up front.</p></div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ 9 — START HERE ════════════════════════════════════════════════════════════════════════ -->
+<h1 class="section-h1" style="margin-top:0.4in">9 &nbsp;The First Three Things</h1>
+
+<div class="three-actions">
+  <h2>Start this week</h2>
+  <ol>
+    <li><strong>Finish the Kit welcome sequences.</strong> Every signup is hitting a dead end. ~30 min of clicking in Kit to unblock every email capture on the site.</li>
+    <li><strong>Write the first cold outbound email</strong> to one specific dispensary owner. Send it. See what happens.</li>
+    <li><strong>Make the first r/MNTrees post.</strong> Don't sell. Share useful data and link to TCC at the end.</li>
+  </ol>
+  <p style="margin-top:0.2in;color:#8b909a;font-size:9.5pt"><strong>Three actions. Total time: 2 hours.</strong> That's the real start of the marketing plan.</p>
+</div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ BACK COVER ════════════════════════════════════════════════════════════════════════ -->
+<section class="back-cover">
+  <div class="back-cover-inner">
+    <img src="../../img/twin-city-cannabis-brand-mark-512.png" alt="Twin City Cannabis brand mark">
+    <h2>Twin City <span class="green">Cannabis</span></h2>
+    <p>Real prices, real reviews, every dispensary in the Minneapolis-Saint Paul metro. Free for shoppers, fair to dispensaries, honest to everyone.</p>
+    <div class="url">twincitycannabis.com</div>
+  </div>
+</section>
+
+</body>
+</html>

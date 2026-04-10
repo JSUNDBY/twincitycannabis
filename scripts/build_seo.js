@@ -1357,6 +1357,35 @@ indexHtml = indexHtml
   .replace(/<a href="#">Terms<\/a>/g,    '<a href="/terms/">Terms</a>')
   .replace(/<a href="#">Contact<\/a>/g,  '<a href="/contact/">Contact</a>');
 
+// ---------- INJECT LIVE DISPENSARY / PRODUCT COUNTS ----------
+// Replaces hardcoded counts like "35 dispensaries" and "1,500+ products" across
+// meta tags, OG tags, schema.org, announce bar, and marketing copy with real
+// values from TCC data. Runs after every scrape so numbers never go stale.
+const liveDispCount = TCC.dispensaries.length;
+const liveProdRaw   = TCC.products.length;
+const liveProdRound = Math.floor(liveProdRaw / 100) * 100;
+const liveProdLabel = liveProdRound.toLocaleString('en-US') + '+';
+
+// "33 Twin Cities dispensaries" pattern (number + city name + dispensaries) — must run before plain pattern
+indexHtml = indexHtml.replace(/\b\d{2}\s+Twin Cities\s+dispensaries\b/g, `${liveDispCount} Twin Cities dispensaries`);
+
+// Any 2-digit number + " dispensaries" (e.g. "33 dispensaries", "37 dispensaries")
+indexHtml = indexHtml.replace(/\b\d{2}\s+dispensaries\b/g, `${liveDispCount} dispensaries`);
+
+// Dispensary count inside HTML tags: >33</strong> dispensaries, >33</span> dispensaries
+indexHtml = indexHtml.replace(/(id="announce-disp-count">)\d{2}(<\/)/g, `$1${liveDispCount}$2`);
+
+// Any formatted number + "+ products" (e.g. "1,500+ products", "2,000+ products")
+indexHtml = indexHtml.replace(/[\d,]+\+\s*products/g, `${liveProdLabel} products`);
+
+// Product counts inside HTML tags (announce bar, hero stat, stats bar, proof bar)
+indexHtml = indexHtml.replace(/(id="announce-product-count">)[\d,]+\+(<\/)/g, `$1${liveProdLabel}$2`);
+indexHtml = indexHtml.replace(/(id="hero-stat-products">)[\d,]+\+(<\/)/g, `$1${liveProdLabel}$2`);
+indexHtml = indexHtml.replace(/(id="stats-bar-products">)[\d,]+\+(<\/)/g, `$1${liveProdLabel}$2`);
+indexHtml = indexHtml.replace(/(id="proof-stat-products">)[\d,]+\+(<\/)/g, `$1${liveProdLabel}$2`);
+
+console.log(`Injected live counts: ${liveDispCount} dispensaries, ${liveProdLabel} products (${liveProdRaw} actual)`);
+
 fs.writeFileSync(indexPath, indexHtml);
 console.log('Injected internal crawl footer + fixed dead legal links into index.html');
 
