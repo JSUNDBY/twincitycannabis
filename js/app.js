@@ -1582,6 +1582,25 @@
             }
         });
 
+        // Dispensary Map/List view toggle (mobile UX)
+        const viewToggle = document.getElementById('disp-view-toggle');
+        if (viewToggle) {
+            viewToggle.addEventListener('click', (e) => {
+                const btn = e.target.closest('.disp-view-btn');
+                if (!btn) return;
+                const view = btn.dataset.view;
+                const layout = document.getElementById('disp-split-layout');
+                if (!layout) return;
+                viewToggle.querySelectorAll('.disp-view-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                layout.classList.remove('view-list', 'view-map');
+                layout.classList.add('view-' + view);
+                if (view === 'map' && App.mapInstance) {
+                    setTimeout(function() { App.mapInstance.invalidateSize(); }, 100);
+                }
+            });
+        }
+
         // Global search
         const searchInput = document.getElementById('hero-search-input');
         if (searchInput) {

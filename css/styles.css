@@ -808,8 +808,32 @@ html[data-theme="light"] body::after {
 .dispensary-list-count {
     font-size: 0.8rem;
     color: var(--text-muted);
-    margin-bottom: 0.5rem;
 }
+
+/* Map / List view toggle */
+.disp-view-toggle {
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+.disp-view-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, color 0.15s;
+}
+.disp-view-btn:hover { color: var(--text-primary); }
+.disp-view-btn.active { background: var(--green); color: #fff; }
+.disp-view-btn svg { flex-shrink: 0; }
 
 @media (max-width: 1024px) {
     .split-layout {
@@ -820,6 +844,11 @@ html[data-theme="light"] body::after {
         top: 0;
         height: 300px;
     }
+    /* Mobile view toggle: show one or the other */
+    .split-layout.view-map .dispensary-list-view { display: none; }
+    .split-layout.view-map .map-container { display: block; height: 70vh; min-height: 400px; }
+    .split-layout.view-list .map-container { display: none; }
+    .split-layout.view-list .dispensary-list-view { display: flex; }
 }
 
 @media (max-width: 768px) {
