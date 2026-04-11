@@ -46,6 +46,70 @@ const highestPrice = (p) => {
   return v.length ? Math.max(...v) : null;
 };
 
+// ---------- Cannabis-only filter ----------
+// Scraper data leaks accessories, snacks, papers, glassware, lab fees, etc.
+// This filter is the last line of defense before products hit the SEO pages.
+// Two layers: name regex blocklist, then per-category minimum price floors.
+const ACCESSORY_RE = new RegExp(
+  [
+    // glass / hardware / accessories
+    'bowl', 'pipe', 'bong', '\\brig\\b', 'banger', 'nail\\b', 'carb cap', 'dabber',
+    'dab tool', 'dab rag', 'rags?\\b', '\\btray', 'holder', '\\bcase\\b', '\\bjar\\b',
+    'ashtray', 'grinder', 'lighter', 'matches?', 'torch', 'butane',
+    'battery', 'batteries', 'wick', '510 thread', 'mod\\b', '\\bcoil',
+    'capsule', 'dosing capsule', 'humidor', 'boveda', 'humidipak',
+    'cleaner', 'cleaning', 'cotton bud', 'cotton swab', 'q.?tip',
+    '\\bkit\\b', 'starter kit', 'happy kit', 'dab kit',
+    'nectar collector', 'dab grab', 'honey straw', 'silicone container',
+    // vape devices / hardware (NOT cartridges with cannabis)
+    'bud kup', '\\bkup\\b', '\\bgo stik\\b', '\\bstik\\b', 'roller\\b',
+    '\\bpax\\b', 'dynavap', 'storz', 'volcano\\b', '\\bccell\\b', 'ccell go',
+    'puffco', 'dr.? dabber', 'kandypens', 'davinci', 'firefly',
+    'kodo\\b', 'icons? - ', 'icons\\b',
+    // papers / wraps / cones / tips (the actual paper, not infused pre-rolls)
+    'rolling paper', 'rolling tray', 'raw cone', 'pre.?rolled tips?', 'pre.?roll case',
+    '\\bcone(s)?\\b(?!.*infused)', 'wraps?\\b', 'blunt wrap', 'hemp wrap',
+    'filter tip', 'filter\\b', 'wood tip', 'glass tip', 'roach',
+    // brands of accessories/papers
+    '^raw ', '\\braw\\s', 'blazy', 'futurola', 'ooze', 'barbasol', 'king palm',
+    'juicy jay', 'zig.?zag', 'elements\\b', 'rolls?\\b(?!.*infused)', 'ocb\\b',
+    // labels / stickers / merch
+    'velcro label', 'sticker', 'merch\\b', 't.?shirt', 'hoodie', 'hat\\b', 'beanie',
+    // food / snacks (NOT edibles)
+    'almonds?\\b', 'pretzels?\\b', 'popcorn', 'chips\\b', 'crackers?\\b',
+    'beef jerky', 'jerky\\b', 'gum\\b(?!my)',
+    // seeds (not consumable cannabis)
+    'seeds?\\b', 'genetics\\b',
+    // services / fees / non-products
+    'donation', 'lab fee', 'testing fee', 'delivery fee', 'membership',
+    'consultation', 'gift card', 'merchandise',
+  ].join('|'),
+  'i'
+);
+
+// Per-category minimum prices. Anything below is almost certainly an
+// accessory, paper pack, or data error — real cannabis doesn't sell this low.
+const MIN_PRICE_BY_CATEGORY = {
+  'flower':       12,   // per gram, real flower in MN is $12-50
+  'pre-roll':     5,    // mini joints can be cheap, $4 = papers
+  'cartridge':    20,   // real carts $25+
+  'edible':       4,    // single gummy floor
+  'concentrate':  18,   // bargain rosin is $20+
+  'topical':      8,    // bath bombs / lip balm gray area
+  'tincture':     15,
+  'beverage':     4,
+};
+
+const isRealCannabisProduct = (p) => {
+  if (!p || !p.name) return false;
+  if (ACCESSORY_RE.test(p.name)) return false;
+  const lo = lowestPrice(p);
+  if (lo == null) return false;
+  const floor = MIN_PRICE_BY_CATEGORY[p.category];
+  if (floor != null && lo < floor) return false;
+  return true;
+};
+
 const writePage = (relPath, html) => {
   const full = path.join(ROOT, relPath);
   fs.mkdirSync(path.dirname(full), { recursive: true });
@@ -141,7 +205,7 @@ const footer = `</main>
 // ---------- DISPENSARY PAGES ----------
 const buildDispensaryPage = (d) => {
   const products = TCC.products
-    .filter(p => p.prices && p.prices[d.id] != null)
+    .filter(p => p.prices && p.prices[d.id] != null && isRealCannabisProduct(p))
     .sort((a, b) => (a.prices[d.id] - b.prices[d.id]));
 
   const byCategory = {};
@@ -304,7 +368,7 @@ ${cards}
 
 // ---------- CATEGORY PAGES ----------
 const buildCategoryPage = (cat) => {
-  const products = TCC.products.filter(p => p.category === cat.id);
+  const products = TCC.products.filter(p => p.category === cat.id && isRealCannabisProduct(p));
   const sorted = products
     .slice()
     .sort((a, b) => (lowestPrice(a) || 9999) - (lowestPrice(b) || 9999));
@@ -383,7 +447,7 @@ const buildProductsHub = () => {
   const canonical = `${SITE}/products/`;
 
   const cards = TCC.categories.map(c => {
-    const count = TCC.products.filter(p => p.category === c.id).length;
+    const count = TCC.products.filter(p => p.category === c.id && isRealCannabisProduct(p)).length;
     return `<a class="card" href="/products/${esc(c.id)}/">
   <p class="title">${esc(c.name)}</p>
   <p class="sub">${count} products tracked</p>
@@ -437,7 +501,7 @@ const getBrands = () => {
 // ---------- BRAND PAGE ----------
 const buildBrandPage = (brand) => {
   const products = TCC.products
-    .filter(p => p.brand === brand.name)
+    .filter(p => p.brand === brand.name && isRealCannabisProduct(p))
     .sort((a, b) => (lowestPrice(a) || 9999) - (lowestPrice(b) || 9999));
 
   const carriedBy = new Set();
@@ -607,7 +671,7 @@ const buildCheapestPage = () => {
 
   const sections = TCC.categories.map(cat => {
     const top10 = TCC.products
-      .filter(p => p.category === cat.id && lowestPrice(p) != null)
+      .filter(p => p.category === cat.id && isRealCannabisProduct(p))
       .sort((a, b) => lowestPrice(a) - lowestPrice(b))
       .slice(0, 10);
     if (top10.length === 0) return '';
@@ -1436,7 +1500,7 @@ count++;
 // Per-product pages — top by offer count, min 3 stores carrying. Highest-value
 // long-tail SEO surfaces ("Vireo Blue Dream cartridge minneapolis price").
 const topProducts = TCC.products
-  .filter(p => Object.keys(p.prices || {}).length >= 3)
+  .filter(p => Object.keys(p.prices || {}).length >= 3 && isRealCannabisProduct(p))
   .sort((a, b) => Object.keys(b.prices).length - Object.keys(a.prices).length)
   .slice(0, 100);
 const seenProductSlugs = new Set();
