@@ -1047,6 +1047,123 @@ const buildEventsPage = () => {
   }];
 
   return headOpen({ title, description, canonical, schema }) + `
+<style>
+/* ─── Aurora Borealis + Starfield + Tree Silhouettes ─── */
+.aurora-scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aurora-scene *{position:absolute}
+
+/* Stars */
+.stars{inset:0;background:radial-gradient(1px 1px at 10% 15%,rgba(255,255,255,0.7),transparent),
+  radial-gradient(1px 1px at 25% 35%,rgba(255,255,255,0.5),transparent),
+  radial-gradient(1.5px 1.5px at 40% 8%,rgba(255,255,255,0.8),transparent),
+  radial-gradient(1px 1px at 55% 22%,rgba(255,255,255,0.4),transparent),
+  radial-gradient(1px 1px at 70% 12%,rgba(255,255,255,0.6),transparent),
+  radial-gradient(1.5px 1.5px at 85% 28%,rgba(255,255,255,0.7),transparent),
+  radial-gradient(1px 1px at 15% 45%,rgba(255,255,255,0.3),transparent),
+  radial-gradient(1px 1px at 32% 52%,rgba(255,255,255,0.5),transparent),
+  radial-gradient(1.5px 1.5px at 48% 40%,rgba(255,255,255,0.6),transparent),
+  radial-gradient(1px 1px at 62% 48%,rgba(255,255,255,0.4),transparent),
+  radial-gradient(1px 1px at 78% 38%,rgba(255,255,255,0.5),transparent),
+  radial-gradient(1px 1px at 92% 18%,rgba(255,255,255,0.6),transparent),
+  radial-gradient(1px 1px at 5% 60%,rgba(255,255,255,0.3),transparent),
+  radial-gradient(1.5px 1.5px at 20% 70%,rgba(255,255,255,0.4),transparent),
+  radial-gradient(1px 1px at 88% 55%,rgba(255,255,255,0.5),transparent);
+  animation:twinkle 8s ease-in-out infinite alternate}
+@keyframes twinkle{0%{opacity:.6}50%{opacity:1}100%{opacity:.7}}
+
+/* Aurora bands */
+.aurora{top:5%;left:-20%;width:140%;height:55%;filter:blur(60px);opacity:.35;animation:aurora-drift 20s ease-in-out infinite alternate}
+.aurora-1{background:radial-gradient(ellipse at 30% 50%,rgba(34,197,94,0.5) 0%,rgba(16,163,74,0.2) 30%,transparent 70%);animation-duration:25s}
+.aurora-2{background:radial-gradient(ellipse at 60% 40%,rgba(56,189,248,0.3) 0%,rgba(34,197,94,0.15) 35%,transparent 70%);animation-duration:18s;animation-delay:-5s;top:2%}
+.aurora-3{background:radial-gradient(ellipse at 45% 60%,rgba(139,92,246,0.25) 0%,rgba(34,197,94,0.1) 40%,transparent 70%);animation-duration:30s;animation-delay:-10s;top:8%}
+@keyframes aurora-drift{
+  0%{transform:translateX(-5%) translateY(0) scaleY(1)}
+  33%{transform:translateX(3%) translateY(-8px) scaleY(1.15)}
+  66%{transform:translateX(-2%) translateY(4px) scaleY(0.9)}
+  100%{transform:translateX(5%) translateY(-3px) scaleY(1.05)}
+}
+
+/* Tree silhouettes at bottom */
+.trees{bottom:0;left:0;right:0;height:180px;z-index:1}
+.tree-line{position:absolute;bottom:0;left:0;right:0;height:100%}
+.tree-line svg{width:100%;height:100%;display:block}
+
+/* Page content sits above the scene */
+.seo-wrap{position:relative;z-index:2}
+.seo-nav{position:relative;z-index:3}
+
+/* Override the dark bg so the aurora shows through */
+body{background:#050a08 !important}
+
+/* Parallax on scroll (subtle) */
+@media (prefers-reduced-motion: no-preference) {
+  .stars{transform:translateZ(0);will-change:transform}
+  .aurora{will-change:transform,opacity}
+}
+</style>
+
+<!-- Aurora Borealis Scene -->
+<div class="aurora-scene">
+  <div class="stars"></div>
+  <div class="aurora aurora-1"></div>
+  <div class="aurora aurora-2"></div>
+  <div class="aurora aurora-3"></div>
+  <div class="trees">
+    <div class="tree-line">
+      <svg viewBox="0 0 1440 180" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Pine tree silhouette skyline -->
+        <path d="M0,180 L0,140 L15,140 L20,90 L25,120 L30,70 L35,110 L40,55 L45,100 L50,140
+          L60,140 L65,110 L70,130 L75,80 L80,120 L85,60 L90,110 L95,130 L100,140
+          L120,140 L125,120 L130,95 L135,115 L140,65 L145,105 L150,50 L155,95 L160,120 L165,140
+          L190,140 L195,125 L200,100 L205,120 L210,75 L215,110 L220,45 L225,100 L230,125 L235,140
+          L260,140 L265,130 L268,105 L272,125 L276,80 L280,115 L284,55 L288,105 L292,130 L296,140
+          L320,140 L325,120 L330,90 L335,115 L340,60 L345,100 L350,40 L355,90 L360,120 L365,140
+          L395,140 L398,125 L402,100 L406,120 L410,70 L414,110 L418,48 L422,100 L426,125 L430,140
+          L455,140 L460,115 L465,85 L470,110 L475,55 L480,95 L485,35 L490,85 L495,115 L500,140
+          L530,140 L533,130 L537,105 L541,125 L545,75 L549,115 L553,50 L557,105 L561,130 L565,140
+          L590,140 L595,120 L600,95 L605,118 L610,68 L615,108 L620,42 L625,98 L630,122 L635,140
+          L665,140 L668,128 L672,100 L676,122 L680,72 L684,112 L688,52 L692,102 L696,128 L700,140
+          L725,140 L730,118 L735,88 L740,115 L745,58 L750,98 L755,38 L760,88 L765,118 L770,140
+          L800,140 L805,130 L810,105 L815,128 L820,78 L825,118 L830,55 L835,108 L840,132 L845,140
+          L870,140 L875,122 L880,92 L885,118 L890,62 L895,102 L900,42 L905,92 L910,122 L915,140
+          L940,140 L945,128 L950,98 L955,122 L960,68 L965,108 L970,48 L975,98 L980,128 L985,140
+          L1010,140 L1015,118 L1020,88 L1025,115 L1030,58 L1035,98 L1040,35 L1045,88 L1050,118 L1055,140
+          L1080,140 L1085,130 L1090,102 L1095,125 L1100,72 L1105,112 L1110,50 L1115,102 L1120,130 L1125,140
+          L1150,140 L1155,120 L1160,90 L1165,118 L1170,62 L1175,105 L1180,40 L1185,90 L1190,120 L1195,140
+          L1220,140 L1225,128 L1230,98 L1235,122 L1240,70 L1245,110 L1250,45 L1255,98 L1260,128 L1265,140
+          L1290,140 L1295,120 L1300,92 L1305,118 L1310,65 L1315,105 L1320,42 L1325,92 L1330,120 L1335,140
+          L1360,140 L1365,128 L1370,100 L1375,125 L1380,75 L1385,115 L1390,52 L1395,100 L1400,128 L1405,140
+          L1440,140 L1440,180 Z" fill="#0a1410"/>
+        <!-- Ground -->
+        <rect x="0" y="140" width="1440" height="40" fill="#0a1410"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<script>
+// Subtle parallax: stars shift slightly on scroll
+(function(){
+  var stars = document.querySelector('.stars');
+  var auroras = document.querySelectorAll('.aurora');
+  if (!stars || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var ticking = false;
+  window.addEventListener('scroll', function(){
+    if (!ticking) {
+      requestAnimationFrame(function(){
+        var y = window.scrollY;
+        stars.style.transform = 'translateY(' + (y * 0.15) + 'px)';
+        auroras.forEach(function(a, i) {
+          a.style.transform = 'translateY(' + (y * (0.08 + i * 0.03)) + 'px)';
+        });
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+})();
+</script>
+
 <div class="crumbs"><a href="/">Home</a> / Events</div>
 <h1>Minnesota Cannabis Events 2026</h1>
 <p>The Twin Cities cannabis scene is growing fast. Whether you're a consumer, a dispensary owner, or just curious, these are the events worth knowing about.</p>
