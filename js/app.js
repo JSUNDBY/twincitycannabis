@@ -460,7 +460,7 @@
 
         // Auto-fit map to show all dispensary markers
         if (bounds.length > 1) {
-            App.mapInstance.fitBounds(bounds, { padding: [30, 30], maxZoom: 13 });
+            App.mapInstance.fitBounds(bounds, { padding: [20, 20], maxZoom: 11 });
         } else if (bounds.length === 1) {
             App.mapInstance.setView(bounds[0], 13);
         }
