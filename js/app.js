@@ -433,7 +433,10 @@
             maxZoom: 19,
         }).addTo(App.mapInstance);
 
+        const bounds = [];
         dispensaries.forEach(d => {
+            if (!d.lat || !d.lng) return;
+            bounds.push([d.lat, d.lng]);
             const color = TCC.getScoreColor(d.tcc_score);
             const marker = L.circleMarker([d.lat, d.lng], {
                 radius: 8,
@@ -447,13 +450,20 @@
             marker.bindPopup(`
                 <div style="font-family:Inter,sans-serif;padding:0.3rem">
                     <strong style="font-size:0.85rem">${d.name}</strong><br>
-                    <span style="font-size:0.75rem;color:#888">${d.neighborhood}</span><br>
+                    <span style="font-size:0.75rem;color:#888">${d.city || d.neighborhood}</span><br>
                     <span style="font-size:0.85rem;color:${color};font-weight:700">TCC ${d.tcc_score}</span>
                 </div>
             `);
 
             marker.on('click', () => navigate('dispensary/' + d.id));
         });
+
+        // Auto-fit map to show all dispensary markers
+        if (bounds.length > 1) {
+            App.mapInstance.fitBounds(bounds, { padding: [30, 30], maxZoom: 13 });
+        } else if (bounds.length === 1) {
+            App.mapInstance.setView(bounds[0], 13);
+        }
     }
 
     // ---- RENDER: DISPENSARY DETAIL ----
