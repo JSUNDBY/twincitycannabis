@@ -347,7 +347,20 @@
             results = TCC.searchDispensaries(filters.search);
         }
         if (filters.city && filters.city !== 'all') {
-            results = results.filter(d => d.city === filters.city);
+            const METRO_CITIES = new Set([
+                'Minneapolis', 'Saint Paul', 'St. Paul', 'Bloomington', 'Edina',
+                'Eden Prairie', 'Hopkins', 'Roseville', 'New Brighton', 'Brooklyn Park',
+                'Blaine', 'Eagan', 'Burnsville', 'Woodbury', 'Lakeville',
+                'Rosemount', 'Anoka', 'Ramsey', 'Chaska', 'Jordan',
+                'West St. Paul', 'Stillwater', 'Fridley', 'Mendota Heights',
+            ]);
+            if (filters.city === 'metro') {
+                results = results.filter(d => METRO_CITIES.has(d.city));
+            } else if (filters.city === 'greater-mn') {
+                results = results.filter(d => !METRO_CITIES.has(d.city));
+            } else {
+                results = results.filter(d => d.city === filters.city);
+            }
         }
 
         // Toggle filters

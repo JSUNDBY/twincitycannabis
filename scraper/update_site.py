@@ -28,12 +28,22 @@ METRO_CITIES = {
     "Eden Prairie", "Hopkins", "Roseville", "New Brighton", "Brooklyn Park",
     "Blaine", "Eagan", "Burnsville", "Woodbury", "Lakeville",
     "Rosemount", "Anoka", "Ramsey", "Chaska", "Jordan",
-    "West St. Paul", "Stillwater",
+    "West St. Paul", "Stillwater", "Fridley", "Mendota Heights",
+}
+
+# Manually included dispensaries that bypass the metro filter.
+# Keep in sync with scraper.py and direct_menu_scrape.py.
+MANUAL_INCLUDE_SLUGS = {
+    "green-canopy-inc",  # Green Canopy Craft Dispensary, Lakeland Shores — owner requested 2026-04-10
 }
 
 
-def is_metro(disp):
-    """Check if a dispensary is in the Twin Cities metro area."""
+def is_included(disp):
+    """Check if a dispensary should be included (metro OR manually added)."""
+    slug = disp.get("weedmaps_slug", disp.get("id", ""))
+    if slug in MANUAL_INCLUDE_SLUGS:
+        return True
+
     lat = disp.get("lat", 0)
     lng = disp.get("lng", 0)
     city = disp.get("city", "")
@@ -144,9 +154,9 @@ def main():
         if added:
             print(f"Merged {added} manually-added dispensaries from manual_dispensaries.json")
 
-    # Filter to metro area
-    metro = [d for d in all_dispensaries if is_metro(d)]
-    print(f"Filtered to {len(metro)} Twin Cities metro dispensaries")
+    # Filter to metro area + manual includes
+    metro = [d for d in all_dispensaries if is_included(d)]
+    print(f"Filtered to {len(metro)} dispensaries (metro + manual includes)")
 
     # Sort by TCC score
     metro.sort(key=lambda d: -d.get("tcc_score", 0))
