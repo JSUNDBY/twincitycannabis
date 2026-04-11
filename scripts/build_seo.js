@@ -1048,167 +1048,174 @@ const buildEventsPage = () => {
 
   return headOpen({ title, description, canonical, schema }) + `
 <style>
-/* ─── Aurora Borealis Hero ─── */
-body{background:#040908 !important}
-.aurora-hero{position:relative;width:100%;height:100vh;min-height:600px;max-height:900px;overflow:hidden;margin-bottom:-2rem}
+/* ─── Full-page Aurora Night Sky ─── */
+body{background:#030712 !important}
 
-/* Starfield — two layers for depth */
-.ah-stars{position:absolute;inset:0;
+/* Fixed sky background that shows behind all content */
+.night-sky{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:linear-gradient(180deg,#030712 0%,#051015 40%,#081a12 75%,#0a1f15 100%)}
+
+/* Stars */
+.sky-stars{position:absolute;inset:0;
   background-image:
-    radial-gradient(1px 1px at 7% 12%,#fff,transparent),radial-gradient(1.5px 1.5px at 18% 8%,#ffe,transparent),
-    radial-gradient(1px 1px at 30% 22%,#fff,transparent),radial-gradient(1px 1px at 42% 5%,#eef,transparent),
-    radial-gradient(1.5px 1.5px at 55% 18%,#fff,transparent),radial-gradient(1px 1px at 68% 10%,#ffe,transparent),
-    radial-gradient(1px 1px at 80% 25%,#fff,transparent),radial-gradient(1.5px 1.5px at 92% 7%,#eef,transparent),
-    radial-gradient(1px 1px at 12% 35%,#fff,transparent),radial-gradient(1px 1px at 35% 42%,#ffe,transparent),
-    radial-gradient(1px 1px at 50% 32%,#fff,transparent),radial-gradient(1.5px 1.5px at 75% 38%,#fff,transparent),
-    radial-gradient(1px 1px at 88% 30%,#eef,transparent),radial-gradient(1px 1px at 22% 48%,#fff,transparent),
-    radial-gradient(1px 1px at 62% 45%,#ffe,transparent),radial-gradient(1px 1px at 95% 42%,#fff,transparent);
-  animation:ah-twinkle 6s ease-in-out infinite alternate}
-@keyframes ah-twinkle{0%{opacity:.5}100%{opacity:.9}}
+    radial-gradient(1px 1px at 7% 12%,rgba(255,255,255,.8),transparent),
+    radial-gradient(1.5px 1.5px at 18% 6%,rgba(255,255,240,.9),transparent),
+    radial-gradient(1px 1px at 30% 20%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1px 1px at 42% 4%,rgba(240,240,255,.7),transparent),
+    radial-gradient(2px 2px at 55% 15%,rgba(255,255,255,.9),transparent),
+    radial-gradient(1px 1px at 68% 9%,rgba(255,255,240,.5),transparent),
+    radial-gradient(1px 1px at 80% 22%,rgba(255,255,255,.7),transparent),
+    radial-gradient(1.5px 1.5px at 92% 5%,rgba(240,240,255,.8),transparent),
+    radial-gradient(1px 1px at 12% 32%,rgba(255,255,255,.4),transparent),
+    radial-gradient(1px 1px at 35% 38%,rgba(255,255,240,.5),transparent),
+    radial-gradient(1.5px 1.5px at 50% 28%,rgba(255,255,255,.7),transparent),
+    radial-gradient(1px 1px at 75% 35%,rgba(255,255,255,.5),transparent),
+    radial-gradient(1px 1px at 88% 26%,rgba(240,240,255,.6),transparent),
+    radial-gradient(1px 1px at 22% 44%,rgba(255,255,255,.3),transparent),
+    radial-gradient(1px 1px at 62% 40%,rgba(255,255,240,.4),transparent),
+    radial-gradient(2px 2px at 5% 8%,rgba(255,255,255,.9),transparent),
+    radial-gradient(1px 1px at 47% 10%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1px 1px at 73% 3%,rgba(255,255,240,.7),transparent);
+  animation:sky-twinkle 5s ease-in-out infinite alternate}
+@keyframes sky-twinkle{0%{opacity:.6}100%{opacity:1}}
 
-/* Aurora curtains — vertical streaks like real northern lights */
-.ah-curtain{position:absolute;top:0;width:100%;height:70%;filter:blur(40px);mix-blend-mode:screen;opacity:0;animation-fill-mode:both}
-
-.ah-c1{background:linear-gradient(180deg,transparent 0%,rgba(34,197,94,0.4) 20%,rgba(34,197,94,0.15) 50%,transparent 80%);
-  left:-10%;width:60%;animation:ah-wave1 12s ease-in-out infinite}
-.ah-c2{background:linear-gradient(180deg,transparent 0%,rgba(16,185,129,0.3) 25%,rgba(56,189,248,0.15) 55%,transparent 85%);
-  left:20%;width:50%;animation:ah-wave2 15s ease-in-out 2s infinite}
-.ah-c3{background:linear-gradient(180deg,transparent 5%,rgba(139,92,246,0.2) 30%,rgba(34,197,94,0.2) 50%,transparent 75%);
-  left:45%;width:55%;animation:ah-wave3 18s ease-in-out 4s infinite}
-.ah-c4{background:linear-gradient(180deg,transparent 0%,rgba(34,197,94,0.35) 15%,rgba(52,211,153,0.1) 45%,transparent 70%);
-  left:65%;width:45%;animation:ah-wave4 14s ease-in-out 1s infinite}
-
-/* Curtain animations — each sways independently like hanging fabric */
-@keyframes ah-wave1{
-  0%{opacity:0.3;transform:translateX(0) skewX(0deg) scaleX(1)}
-  25%{opacity:0.6;transform:translateX(3%) skewX(-2deg) scaleX(1.1)}
-  50%{opacity:0.4;transform:translateX(-2%) skewX(1deg) scaleX(0.95)}
-  75%{opacity:0.7;transform:translateX(5%) skewX(-1deg) scaleX(1.05)}
-  100%{opacity:0.3;transform:translateX(0) skewX(0deg) scaleX(1)}
+/* Aurora — soft diffused bands across the sky */
+.sky-aurora{position:absolute;top:0;left:-10%;width:120%;height:60%;filter:blur(80px);opacity:.4;
+  background:
+    radial-gradient(ellipse 80% 50% at 25% 40%,rgba(34,197,94,.35),transparent 70%),
+    radial-gradient(ellipse 60% 40% at 55% 30%,rgba(56,189,248,.2),transparent 65%),
+    radial-gradient(ellipse 70% 45% at 75% 45%,rgba(34,197,94,.25),transparent 70%);
+  animation:sky-aurora-move 25s ease-in-out infinite alternate}
+.sky-aurora-2{position:absolute;top:5%;left:0;width:100%;height:50%;filter:blur(100px);opacity:.25;
+  background:
+    radial-gradient(ellipse 50% 60% at 40% 35%,rgba(139,92,246,.2),transparent 65%),
+    radial-gradient(ellipse 70% 40% at 70% 50%,rgba(16,185,129,.2),transparent 70%);
+  animation:sky-aurora-move2 35s ease-in-out 5s infinite alternate}
+@keyframes sky-aurora-move{
+  0%{transform:translateX(0) translateY(0)}
+  50%{transform:translateX(3%) translateY(-10px)}
+  100%{transform:translateX(-2%) translateY(5px)}
 }
-@keyframes ah-wave2{
-  0%{opacity:0.2;transform:translateX(0) skewX(1deg)}
-  30%{opacity:0.5;transform:translateX(-4%) skewX(-2deg)}
-  60%{opacity:0.3;transform:translateX(3%) skewX(2deg)}
-  100%{opacity:0.2;transform:translateX(0) skewX(1deg)}
-}
-@keyframes ah-wave3{
-  0%{opacity:0.15;transform:translateX(2%) skewX(0deg)}
-  40%{opacity:0.4;transform:translateX(-3%) skewX(-3deg)}
-  70%{opacity:0.25;transform:translateX(4%) skewX(1deg)}
-  100%{opacity:0.15;transform:translateX(2%) skewX(0deg)}
-}
-@keyframes ah-wave4{
-  0%{opacity:0.2;transform:translateX(-1%) scaleX(1)}
-  35%{opacity:0.55;transform:translateX(4%) scaleX(1.15)}
-  65%{opacity:0.3;transform:translateX(-2%) scaleX(0.9)}
-  100%{opacity:0.2;transform:translateX(-1%) scaleX(1)}
+@keyframes sky-aurora-move2{
+  0%{transform:translateX(0) scale(1)}
+  50%{transform:translateX(-4%) scale(1.08)}
+  100%{transform:translateX(2%) scale(0.95)}
 }
 
-/* Horizon glow — the green band above the treeline */
-.ah-glow{position:absolute;bottom:15%;left:0;right:0;height:25%;
-  background:linear-gradient(180deg,transparent 0%,rgba(34,197,94,0.08) 40%,rgba(34,197,94,0.15) 70%,rgba(16,163,74,0.08) 100%);
-  filter:blur(30px)}
-
-/* Pine tree silhouettes — proper tree shapes */
-.ah-trees{position:absolute;bottom:0;left:0;right:0;height:220px;z-index:2}
-.ah-trees svg{width:100%;height:100%;display:block}
-
-/* Hero text overlay */
-.ah-content{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem}
-.ah-content h1{font-size:clamp(2.2rem,5vw,3.5rem);color:#f5f6f8;margin:0 0 0.75rem;letter-spacing:-1px;text-shadow:0 2px 20px rgba(0,0,0,0.5)}
-.ah-content p{color:#b8bcc4;font-size:clamp(1rem,2vw,1.2rem);max-width:600px;line-height:1.6;text-shadow:0 1px 10px rgba(0,0,0,0.5)}
-
-/* Content below hero */
-.seo-wrap{position:relative;z-index:2;background:#040908}
-
-@media (prefers-reduced-motion: reduce) {
-  .ah-c1,.ah-c2,.ah-c3,.ah-c4,.ah-stars{animation:none !important}
-  .ah-c1,.ah-c2,.ah-c3,.ah-c4{opacity:0.3}
+/* Misty clouds drifting slowly */
+.sky-mist{position:absolute;width:200%;height:40%;filter:blur(60px);opacity:.12}
+.sky-mist-1{top:20%;left:-50%;
+  background:radial-gradient(ellipse at 30% 50%,rgba(200,220,210,.4),transparent 50%),
+    radial-gradient(ellipse at 70% 40%,rgba(180,200,190,.3),transparent 45%);
+  animation:mist-drift 60s linear infinite}
+.sky-mist-2{top:35%;left:-80%;
+  background:radial-gradient(ellipse at 40% 50%,rgba(180,210,200,.3),transparent 50%),
+    radial-gradient(ellipse at 65% 45%,rgba(200,220,210,.2),transparent 45%);
+  animation:mist-drift 90s linear 15s infinite}
+@keyframes mist-drift{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(50%)}
 }
-@media (max-width: 768px) {
-  .aurora-hero{min-height:450px;max-height:600px}
-  .ah-trees{height:140px}
+
+/* Horizon glow */
+.sky-horizon{position:absolute;bottom:12%;left:0;right:0;height:20%;
+  background:linear-gradient(180deg,transparent,rgba(34,197,94,.06) 50%,rgba(34,197,94,.1) 80%,rgba(16,163,74,.05));
+  filter:blur(25px)}
+
+/* Pine trees — fixed at bottom of viewport */
+.sky-trees{position:fixed;bottom:0;left:0;right:0;height:160px;z-index:1;pointer-events:none}
+.sky-trees svg{width:100%;height:100%;display:block}
+
+/* All page content floats above */
+.seo-nav{position:relative;z-index:10}
+.seo-wrap{position:relative;z-index:5;padding-bottom:180px}
+.seo-wrap .card{background:rgba(6,18,16,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.seo-wrap h1{text-shadow:0 2px 30px rgba(0,0,0,.6)}
+.seo-wrap h2{text-shadow:0 1px 15px rgba(0,0,0,.4)}
+footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;padding-bottom:180px}
+
+@media (prefers-reduced-motion:reduce){
+  .sky-stars,.sky-aurora,.sky-aurora-2,.sky-mist-1,.sky-mist-2{animation:none !important}
+}
+@media (max-width:768px){
+  .sky-trees{height:100px}
+  .seo-wrap{padding-bottom:120px}
+  footer{padding-bottom:120px}
 }
 </style>
 
-<!-- Aurora Borealis Hero -->
-<div class="aurora-hero">
-  <div class="ah-stars"></div>
-  <div class="ah-curtain ah-c1"></div>
-  <div class="ah-curtain ah-c2"></div>
-  <div class="ah-curtain ah-c3"></div>
-  <div class="ah-curtain ah-c4"></div>
-  <div class="ah-glow"></div>
-  <div class="ah-trees">
-    <svg viewBox="0 0 1600 220" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
-      <!-- Back tree layer (shorter, lighter) -->
-      <g fill="#0a1a12" opacity="0.7">
-        <polygon points="50,220 60,130 62,145 67,100 70,135 73,85 76,125 78,145 80,90 83,130 85,150 90,220"/>
-        <polygon points="130,220 140,140 143,110 146,135 150,80 154,130 157,105 160,140 165,220"/>
-        <polygon points="250,220 258,145 262,115 266,140 270,75 274,130 278,100 282,135 286,150 290,220"/>
-        <polygon points="380,220 388,135 392,105 396,130 400,70 404,120 408,95 412,125 416,145 420,220"/>
-        <polygon points="520,220 528,140 532,110 536,135 540,78 544,125 548,98 552,130 556,148 560,220"/>
-        <polygon points="650,220 658,138 662,108 666,132 670,72 674,122 678,95 682,128 686,145 690,220"/>
-        <polygon points="780,220 788,142 792,112 796,138 800,76 804,128 808,100 812,132 816,148 820,220"/>
-        <polygon points="920,220 928,136 932,106 936,132 940,74 944,124 948,96 952,128 956,146 960,220"/>
-        <polygon points="1060,220 1068,140 1072,108 1076,134 1080,78 1084,126 1088,98 1092,130 1096,148 1100,220"/>
-        <polygon points="1200,220 1208,138 1212,110 1216,136 1220,76 1224,128 1228,100 1232,132 1236,150 1240,220"/>
-        <polygon points="1340,220 1348,135 1352,105 1356,130 1360,72 1364,122 1368,94 1372,126 1376,145 1380,220"/>
-        <polygon points="1480,220 1488,140 1492,108 1496,134 1500,80 1504,126 1508,100 1512,132 1516,148 1520,220"/>
-      </g>
-      <!-- Front tree layer (taller, darker, more varied) -->
-      <g fill="#061210">
-        <polygon points="0,220 10,160 15,120 18,150 22,80 25,140 28,60 31,130 34,100 37,145 40,160 50,220"/>
-        <polygon points="80,220 88,155 92,125 95,148 98,85 101,138 104,65 107,128 110,105 113,142 116,158 125,220"/>
-        <polygon points="170,220 178,150 182,118 185,145 188,78 191,135 194,58 197,125 200,100 203,138 206,155 215,220"/>
-        <polygon points="280,220 290,148 294,112 298,140 302,72 306,130 310,50 314,120 318,95 322,135 326,152 335,220"/>
-        <polygon points="400,220 408,155 412,120 416,148 420,82 424,140 428,55 432,130 436,102 440,142 444,158 452,220"/>
-        <polygon points="500,220 510,145 514,108 518,138 522,68 526,125 530,45 534,118 538,92 542,132 546,150 555,220"/>
-        <polygon points="620,220 628,152 632,118 636,145 640,78 644,135 648,52 652,125 656,98 660,138 664,155 672,220"/>
-        <polygon points="740,220 748,148 752,112 756,140 760,72 764,130 768,48 772,122 776,95 780,135 784,152 792,220"/>
-        <polygon points="850,220 858,155 862,122 866,148 870,80 874,138 878,55 882,128 886,100 890,140 894,156 902,220"/>
-        <polygon points="960,220 968,150 972,115 976,142 980,75 984,132 988,52 992,125 996,96 1000,136 1004,154 1012,220"/>
-        <polygon points="1080,220 1088,148 1092,110 1096,140 1100,70 1104,128 1108,48 1112,120 1116,92 1120,134 1124,150 1132,220"/>
-        <polygon points="1190,220 1198,155 1202,120 1206,148 1210,82 1214,138 1218,56 1222,128 1226,100 1230,140 1234,156 1242,220"/>
-        <polygon points="1300,220 1308,150 1312,112 1316,142 1320,74 1324,132 1328,50 1332,122 1336,94 1340,135 1344,152 1352,220"/>
-        <polygon points="1410,220 1418,148 1422,115 1426,142 1430,78 1434,130 1438,52 1442,124 1446,96 1450,136 1454,154 1462,220"/>
-        <polygon points="1530,220 1538,152 1542,118 1546,145 1550,80 1554,135 1558,55 1562,126 1566,98 1570,138 1574,155 1582,220"/>
-      </g>
-      <!-- Ground fill -->
-      <rect x="0" y="195" width="1600" height="25" fill="#061210"/>
-    </svg>
-  </div>
-  <!-- Hero text on top of the scene -->
-  <div class="ah-content">
-    <h1>Minnesota Cannabis Events</h1>
-    <p>Expos, festivals, meetups, and community gatherings across the state. Your guide to what's happening in the Minnesota cannabis scene.</p>
-  </div>
+<!-- Full-page night sky background -->
+<div class="night-sky">
+  <div class="sky-stars"></div>
+  <div class="sky-aurora"></div>
+  <div class="sky-aurora-2"></div>
+  <div class="sky-mist sky-mist-1"></div>
+  <div class="sky-mist sky-mist-2"></div>
+  <div class="sky-horizon"></div>
+</div>
+
+<!-- Trees fixed at bottom of viewport -->
+<div class="sky-trees">
+  <svg viewBox="0 0 1600 160" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="tg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0a1a12"/>
+        <stop offset="100%" stop-color="#061210"/>
+      </linearGradient>
+    </defs>
+    <!-- Far trees (lighter, misty) -->
+    <g fill="#0c1f16" opacity=".5">
+      <polygon points="20,160 30,95 33,110 36,75 39,105 42,55 45,100 48,80 51,108 54,92 57,115 60,160"/>
+      <polygon points="100,160 108,100 111,80 114,98 117,60 120,92 123,45 126,88 129,72 132,100 135,160"/>
+      <polygon points="200,160 210,105 214,82 218,100 222,58 226,95 230,42 234,90 238,75 242,102 246,160"/>
+      <polygon points="330,160 338,98 342,78 346,96 350,55 354,90 358,40 362,85 366,70 370,98 374,160"/>
+      <polygon points="460,160 468,102 472,80 476,98 480,56 484,92 488,38 492,86 496,72 500,100 504,160"/>
+      <polygon points="580,160 588,95 592,76 596,94 600,52 604,88 608,36 612,84 616,68 620,96 624,160"/>
+      <polygon points="710,160 718,100 722,78 726,96 730,54 734,90 738,38 742,86 746,70 750,98 754,160"/>
+      <polygon points="840,160 848,98 852,76 856,94 860,52 864,88 868,35 872,84 876,68 880,96 884,160"/>
+      <polygon points="970,160 978,102 982,80 986,98 990,56 994,92 998,40 1002,88 1006,72 1010,100 1014,160"/>
+      <polygon points="1100,160 1108,96 1112,78 1116,96 1120,54 1124,90 1128,38 1132,86 1136,70 1140,98 1144,160"/>
+      <polygon points="1230,160 1238,100 1242,80 1246,98 1250,58 1254,92 1258,42 1262,88 1266,72 1270,100 1274,160"/>
+      <polygon points="1370,160 1378,95 1382,76 1386,94 1390,52 1394,88 1398,36 1402,84 1406,68 1410,96 1414,160"/>
+      <polygon points="1500,160 1508,98 1512,78 1516,96 1520,55 1524,90 1528,40 1532,86 1536,70 1540,98 1544,160"/>
+    </g>
+    <!-- Near trees (darker, taller, prominent) -->
+    <g fill="url(#tg)">
+      <polygon points="0,160 8,110 11,85 14,108 17,60 20,100 23,40 26,95 29,70 32,105 35,88 38,115 45,160"/>
+      <polygon points="55,160 65,105 68,80 72,102 76,52 80,95 84,30 88,90 92,65 96,100 100,82 104,112 112,160"/>
+      <polygon points="140,160 148,108 152,82 156,105 160,55 164,98 168,32 172,92 176,68 180,102 184,85 188,115 195,160"/>
+      <polygon points="240,160 250,100 254,75 258,98 262,48 266,90 270,28 274,85 278,62 282,95 286,78 290,108 298,160"/>
+      <polygon points="350,160 358,105 362,78 366,100 370,50 374,92 378,30 382,88 386,64 390,98 394,80 398,110 406,160"/>
+      <polygon points="440,160 450,102 454,76 458,98 462,48 466,90 470,26 474,86 478,62 482,96 486,78 490,108 498,160"/>
+      <polygon points="540,160 548,108 552,82 556,104 560,54 564,96 568,32 572,90 576,66 580,100 584,82 588,112 596,160"/>
+      <polygon points="640,160 650,100 654,74 658,96 662,46 666,88 670,24 674,84 678,60 682,94 686,76 690,106 698,160"/>
+      <polygon points="750,160 758,106 762,80 766,102 770,52 774,94 778,30 782,88 786,64 790,98 794,80 798,110 806,160"/>
+      <polygon points="850,160 860,102 864,76 868,98 872,48 876,90 880,28 884,86 888,62 892,96 896,78 900,108 908,160"/>
+      <polygon points="950,160 958,108 962,82 966,104 970,54 974,96 978,32 982,90 986,66 990,100 994,82 998,112 1006,160"/>
+      <polygon points="1050,160 1060,100 1064,74 1068,96 1072,46 1076,88 1080,24 1084,84 1088,60 1092,94 1096,76 1100,106 1108,160"/>
+      <polygon points="1150,160 1158,106 1162,80 1166,102 1170,52 1174,94 1178,30 1182,88 1186,64 1190,98 1194,80 1198,110 1206,160"/>
+      <polygon points="1250,160 1260,102 1264,76 1268,98 1272,48 1276,90 1280,28 1284,86 1288,62 1292,96 1296,78 1300,108 1308,160"/>
+      <polygon points="1350,160 1358,108 1362,82 1366,104 1370,54 1374,96 1378,32 1382,90 1386,66 1390,100 1394,82 1398,112 1406,160"/>
+      <polygon points="1450,160 1460,100 1464,74 1468,96 1472,46 1476,88 1480,24 1484,84 1488,60 1492,94 1496,76 1500,106 1508,160"/>
+      <polygon points="1550,160 1558,106 1562,80 1566,102 1570,52 1574,94 1578,30 1582,88 1586,64 1590,98 1594,80 1598,110 1600,160"/>
+    </g>
+    <rect x="0" y="148" width="1600" height="12" fill="#061210"/>
+  </svg>
 </div>
 
 <script>
-// Parallax: stars + aurora curtains shift at different rates on scroll
+// Subtle parallax on the stars and aurora
 (function(){
-  var hero = document.querySelector('.aurora-hero');
-  var stars = document.querySelector('.ah-stars');
-  var curtains = document.querySelectorAll('.ah-curtain');
-  if (!hero || !stars || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var ticking = false;
+  var stars = document.querySelector('.sky-stars');
+  var aurora = document.querySelector('.sky-aurora');
+  if (!stars || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var t = false;
   window.addEventListener('scroll', function(){
-    if (!ticking) {
-      requestAnimationFrame(function(){
-        var y = window.scrollY;
-        var h = hero.offsetHeight;
-        if (y < h * 1.5) {
-          stars.style.transform = 'translateY(' + (y * 0.2) + 'px)';
-          curtains.forEach(function(c, i) {
-            c.style.transform = 'translateY(' + (y * (0.1 + i * 0.04)) + 'px)';
-          });
-        }
-        ticking = false;
-      });
-      ticking = true;
-    }
+    if (!t) { requestAnimationFrame(function(){
+      var y = window.scrollY;
+      stars.style.transform = 'translateY(' + (y * 0.12) + 'px)';
+      if (aurora) aurora.style.transform = 'translateY(' + (y * 0.06) + 'px)';
+      t = false;
+    }); t = true; }
   });
 })();
 </script>
