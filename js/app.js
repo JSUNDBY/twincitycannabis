@@ -2011,8 +2011,10 @@
         if (hash.startsWith('compare/')) {
             const productId = hash.split('/')[1];
             renderCompare(productId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         } else if (hash === 'compare') {
             renderCompare();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     });
 
