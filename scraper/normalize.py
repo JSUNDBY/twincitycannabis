@@ -247,8 +247,17 @@ def categorize_by_name(name, brand='', original_category=''):
     if _PATTERNS['ACCESSORIES'].search(text):
         return 'EXCLUDE'
 
-    # NO fallback to original category — it's unreliable. Drop unrecognized
-    # products. Accuracy > completeness.
+    # 15) Trust Weedmaps strain-type buckets — when the source labels a product
+    # "Indica" / "Sativa" / "Hybrid", that's flower. Some dispensaries (Sweetleaves)
+    # list strain-name flower with no weight/keywords, so this is the only signal.
+    orig = (original_category or '').strip().lower()
+    if orig in ('indica', 'sativa', 'hybrid'):
+        return 'flower'
+    if orig == 'flower':
+        return 'flower'
+
+    # NO fallback to other original categories — they're unreliable. Drop
+    # unrecognized products. Accuracy > completeness.
     return 'EXCLUDE'
 
 
