@@ -427,7 +427,7 @@
         App.mapInstance = L.map('dispensary-map', {
             scrollWheelZoom: false,
             attributionControl: false
-        }).setView([44.9778, -93.2650], 11);
+        }).setView([44.9778, -93.2650], 10);
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             maxZoom: 19,

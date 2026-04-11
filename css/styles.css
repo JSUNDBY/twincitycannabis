@@ -787,7 +787,7 @@ html[data-theme="light"] body::after {
 /* ============ SPLIT MAP LAYOUT ============ */
 .split-layout {
     display: grid;
-    grid-template-columns: 1fr 400px;
+    grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
     align-items: start;
 }
