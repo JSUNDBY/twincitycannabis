@@ -1035,6 +1035,80 @@ const buildContactPage = () => {
 ` + footer;
 };
 
+// ---------- EVENTS PAGE ----------
+const buildEventsPage = () => {
+  const title = 'Minnesota Cannabis Events 2026 — Twin City Cannabis';
+  const description = 'Upcoming cannabis events, expos, and industry meetups in Minnesota. CannaFest, NECANN, Legacy Cup, and more.';
+  const canonical = `${SITE}/events/`;
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: title, url: canonical, description, dateModified: today,
+  }];
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / Events</div>
+<h1>Minnesota Cannabis Events 2026</h1>
+<p>The Twin Cities cannabis scene is growing fast. Whether you're a consumer, a dispensary owner, or just curious, these are the events worth knowing about.</p>
+
+<h2>Upcoming events</h2>
+
+<div class="card" style="border-left:4px solid #22c55e;margin:1rem 0;padding:1.2rem 1.4rem">
+  <h3 style="margin-top:0;color:#f5f6f8">CannaFest 2026</h3>
+  <p style="margin:0.3rem 0"><strong style="color:#22c55e">April 16, 2026</strong> &middot; 6:00 - 9:00 PM</p>
+  <p style="margin:0.3rem 0">The Lowlands &middot; 160 Wabasha St S, St. Paul</p>
+  <p>Premium product showcase in a meet-the-makers format. Talk directly with Minnesota cannabis brands, sample products, and connect with the community. Tickets $40.</p>
+  <p style="color:#8b909a;font-size:.85rem">Good for: consumers who want to explore products and meet brands face-to-face.</p>
+</div>
+
+<div class="card" style="border-left:4px solid #22c55e;margin:1rem 0;padding:1.2rem 1.4rem">
+  <h3 style="margin-top:0;color:#f5f6f8">NECANN Minnesota Cannabis Convention</h3>
+  <p style="margin:0.3rem 0"><strong style="color:#22c55e">May 14-15, 2026</strong></p>
+  <p style="margin:0.3rem 0">Minneapolis Convention Center</p>
+  <p>The biggest B2B cannabis event in the state. 120+ exhibitors, 60+ speakers, thousands of attendees. Networking, education, and industry deals.</p>
+  <p style="color:#8b909a;font-size:.85rem">Good for: dispensary owners, industry professionals, anyone building a cannabis business in Minnesota.</p>
+</div>
+
+<div class="card" style="border-left:4px solid #22c55e;margin:1rem 0;padding:1.2rem 1.4rem">
+  <h3 style="margin-top:0;color:#f5f6f8">Legacy Cup Minnesota</h3>
+  <p style="margin:0.3rem 0"><strong style="color:#22c55e">September 26, 2026</strong></p>
+  <p style="margin:0.3rem 0">Surly Festival Field &middot; Minneapolis</p>
+  <p>Minnesota's first licensed cannabis festival. Flower competition, live music (past headliners include Killer Mike and Lupe Fiasco), skate demos, art, food. Running annually since 2019.</p>
+  <p style="color:#8b909a;font-size:.85rem">Good for: everyone. The big consumer-facing event of the year.</p>
+</div>
+
+<h2>Recurring meetups and organizations</h2>
+
+<div class="card" style="margin:1rem 0;padding:1.2rem 1.4rem">
+  <h3 style="margin-top:0;color:#f5f6f8">Canna Connect MN</h3>
+  <p>Regular cannabis community events, education, and The Canna Connect Show podcast.</p>
+  <p><a href="https://cannaconnectmn.com" rel="nofollow noopener" target="_blank">cannaconnectmn.com</a></p>
+</div>
+
+<div class="card" style="margin:1rem 0;padding:1.2rem 1.4rem">
+  <h3 style="margin-top:0;color:#f5f6f8">SotaCann</h3>
+  <p>Member-based organization offering industry meetups, education events, and legislative updates.</p>
+  <p><a href="https://www.sotacann.org" rel="nofollow noopener" target="_blank">sotacann.org</a></p>
+</div>
+
+<div class="card" style="margin:1rem 0;padding:1.2rem 1.4rem">
+  <h3 style="margin-top:0;color:#f5f6f8">Minnesota Cannabis Growers Cooperative</h3>
+  <p>Co-op with networking events, group purchasing, and legislative advocacy.</p>
+  <p><a href="https://mncannabis.coop" rel="nofollow noopener" target="_blank">mncannabis.coop</a></p>
+</div>
+
+<h2>Dispensary openings</h2>
+<p>New dispensaries are opening across the Twin Cities every month. We track every new opening automatically. Recent additions: Fridley Dispensary, Pot Mama's, Green Canopy Craft Dispensary.</p>
+<p><a class="cta" href="/dispensaries/">Browse all ${TCC.dispensaries.length} dispensaries &rarr;</a></p>
+
+<h2>Know about an event we're missing?</h2>
+<p>Email <a href="mailto:hello@twincitycannabis.com">hello@twincitycannabis.com</a> and we'll add it.</p>
+
+<h2>Want to partner on an event?</h2>
+<p>Twin City Cannabis tracks ${TCC.products.length.toLocaleString()}+ products across ${TCC.dispensaries.length} dispensaries with real-time pricing. If you're organizing a cannabis event in Minnesota and want a data partner or media coverage, <a href="/contact/">get in touch</a>.</p>
+` + footer;
+};
+
 // ---------- LAWS PAGE ----------
 const buildLawsPage = () => {
   const title = 'Minnesota Cannabis Laws — What\u2019s Legal in 2026';
@@ -1102,6 +1176,7 @@ const buildSitemap = (extras = []) => {
     { loc: `${SITE}/best-dispensaries-twin-cities/`, priority: '0.8', changefreq: 'weekly' },
     { loc: `${SITE}/cheapest-cannabis-twin-cities/`, priority: '0.8', changefreq: 'daily' },
     { loc: `${SITE}/minnesota-cannabis-laws/`, priority: '0.7', changefreq: 'monthly' },
+    { loc: `${SITE}/events/`,                  priority: '0.7', changefreq: 'weekly' },
     { loc: `${SITE}/terms/`,                   priority: '0.3', changefreq: 'yearly' },
     { loc: `${SITE}/privacy/`,                 priority: '0.3', changefreq: 'yearly' },
     { loc: `${SITE}/contact/`,                 priority: '0.5', changefreq: 'monthly' },
@@ -1174,6 +1249,8 @@ count++;
 writePage('cheapest-cannabis-twin-cities/index.html', buildCheapestPage());
 count++;
 writePage('minnesota-cannabis-laws/index.html', buildLawsPage());
+count++;
+writePage('events/index.html', buildEventsPage());
 count++;
 writePage('terms/index.html', buildTermsPage());
 count++;
@@ -1260,6 +1337,7 @@ const seoFooter = `
               <li><a href="/best-dispensaries-twin-cities/" style="color:var(--text-secondary);text-decoration:none">Best-rated dispensaries in the Twin Cities</a></li>
               <li><a href="/cheapest-cannabis-twin-cities/" style="color:var(--text-secondary);text-decoration:none">Cheapest cannabis in the Twin Cities</a></li>
               <li><a href="/minnesota-cannabis-laws/" style="color:var(--text-secondary);text-decoration:none">Minnesota cannabis laws</a></li>
+              <li><a href="/events/" style="color:var(--text-secondary);text-decoration:none">Cannabis events in Minnesota</a></li>
               <li><a href="/dispensaries/" style="color:var(--text-secondary);text-decoration:none">All ${TCC.dispensaries.length} dispensaries</a></li>
               <li><a href="/products/" style="color:var(--text-secondary);text-decoration:none">All product categories</a></li>
               <li><a href="/brands/" style="color:var(--text-secondary);text-decoration:none">All cannabis brands</a></li>
