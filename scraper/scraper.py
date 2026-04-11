@@ -43,10 +43,18 @@ MPLS_LAT = 44.9778
 MPLS_LNG = -93.2650
 
 
+# Manually included dispensaries outside the geo radius.
+# Shared with direct_menu_scrape.py — keep both lists in sync.
+MANUAL_INCLUDE_SLUGS = [
+    "green-canopy-inc",  # Green Canopy Craft Dispensary, Lakeland Shores — owner requested 2026-04-10
+]
+
+
 def fetch_dispensaries(lat=MPLS_LAT, lng=MPLS_LNG, radius_pages=2):
-    """Fetch dispensary listings from Weedmaps Discovery API."""
+    """Fetch dispensary listings from Weedmaps Discovery API + manual includes."""
     print("Fetching dispensary listings from Weedmaps...")
     all_listings = []
+    seen_slugs = set()
 
     for page in range(1, radius_pages + 1):
         r = requests.get(
@@ -64,9 +72,30 @@ def fetch_dispensaries(lat=MPLS_LAT, lng=MPLS_LNG, radius_pages=2):
         r.raise_for_status()
         listings = r.json()["data"]["listings"]
         all_listings.extend(listings)
+        for l in listings:
+            seen_slugs.add(l.get("slug", ""))
         if len(listings) < 50:
             break
         time.sleep(1)
+
+    # Fetch manually included dispensaries
+    for slug in MANUAL_INCLUDE_SLUGS:
+        if slug in seen_slugs:
+            continue
+        try:
+            r = requests.get(
+                f"https://api-g.weedmaps.com/discovery/v2/listings/{slug}",
+                headers=HEADERS,
+                proxies=PROXIES,
+                timeout=15,
+            )
+            if r.status_code == 200:
+                listing = r.json().get("data", {}).get("listing", {})
+                if listing:
+                    all_listings.append(listing)
+                    print(f"  + Manual include: {listing.get('name', slug)} ({listing.get('city', '?')})")
+        except Exception as e:
+            print(f"  WARN: could not fetch manual include {slug}: {e}")
 
     print(f"Found {len(all_listings)} dispensaries")
     return all_listings

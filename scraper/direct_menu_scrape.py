@@ -40,8 +40,16 @@ PROXIES = {"http": PROXY_URL, "https": PROXY_URL} if PROXY_URL else None
 WM_API = "https://api-g.weedmaps.com/discovery/v1/listings/dispensaries"
 
 
+# Dispensaries outside the metro radius that requested inclusion.
+# These get fetched by slug regardless of geo distance.
+# Add new entries when a dispensary owner reaches out.
+MANUAL_INCLUDE_SLUGS = [
+    "green-canopy-inc",          # Green Canopy Craft Dispensary, Lakeland Shores — owner requested 2026-04-10
+]
+
+
 def get_dispensary_slugs():
-    """Get all TC dispensary slugs from Weedmaps."""
+    """Get TC dispensary slugs from Weedmaps + any manually included."""
     print("Fetching TC dispensary list...")
     r = requests.get(
         "https://api-g.weedmaps.com/discovery/v2/listings",
@@ -57,6 +65,7 @@ def get_dispensary_slugs():
     r.raise_for_status()
     listings = r.json()["data"]["listings"]
 
+    seen_slugs = set()
     dispensaries = []
     for l in listings:
         menu_count = l.get("menu_items_count", 0)
@@ -67,6 +76,32 @@ def get_dispensary_slugs():
                 "city": l.get("city", ""),
                 "menu_count": menu_count,
             })
+            seen_slugs.add(l["slug"])
+
+    # Fetch manually included dispensaries not already in the radius
+    for slug in MANUAL_INCLUDE_SLUGS:
+        if slug in seen_slugs:
+            continue
+        try:
+            r2 = requests.get(
+                f"{WM_API}/{slug}",
+                headers=HEADERS,
+                proxies=PROXIES,
+                timeout=15,
+            )
+            if r2.status_code == 200:
+                data = r2.json().get("data", {}).get("listing", {})
+                menu_count = data.get("menu_items_count", 0)
+                if menu_count > 0:
+                    dispensaries.append({
+                        "slug": slug,
+                        "name": data.get("name", slug),
+                        "city": data.get("city", ""),
+                        "menu_count": menu_count,
+                    })
+                    print(f"  + Manual include: {data.get('name', slug)} ({data.get('city', '?')}) - {menu_count} items")
+        except Exception as e:
+            print(f"  WARN: could not fetch manual include {slug}: {e}")
 
     print(f"Found {len(dispensaries)} dispensaries with menus ({sum(d['menu_count'] for d in dispensaries)} total products)")
     return dispensaries
