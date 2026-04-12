@@ -134,7 +134,7 @@ _PATTERNS = {
         # Vape hardware (devices, batteries, atomizers - NOT consumable vapes)
         r'|510\s*battery|510\s*thread\s*battery|vape\s*battery|battery\s*pack|thread\s*battery|variable\s*voltage.*battery|wax\s*coil|wax\s*coil\s*battery|wax\s*atomizer|atomizer|coil\s*battery|charger|vape\s*kit|cleaning\s*kit|sluggers?\s*battery'
         # Vaporizer DEVICES (not cartridges) — these are hardware
-        r'|volcano\s*hybrid|volcano\s*vaporizer|peak\s*pro|peak\s*vaporizer|puffco|puffco\s*proxy|proxy\s*vaporizer|trident\s*vaporizer|hitoki|loov|utillian|yocan|yocan\s*celestial|storz\s*and\s*bickel|storz|crafty\s*vaporizer|mighty\s*vaporizer|pax\s*device|pax\s*era\s*device|davinci|firefly\s*vaporizer|arizer'
+        r'|volcano\s*hybrid|volcano\s*vaporizer|peak\s*pro|peak\s*vaporizer|puffco|puffco\s*proxy|proxy\s*vaporizer|trident\s*vaporizer|hitoki|loov|utillian|yocan|yocan\s*celestial|storz\s*and\s*bickel|storz|crafty\s*vaporizer|mighty\s*vaporizer|pax\s*device|pax\s*era\s*device|davinci|firefly\s*vaporizer|arizer|pulsar'
         r'|standalone\s*vaporizer|herbal\s*vaporizer|dry\s*herb\s*vaporizer|tabletop\s*vaporizer|portable\s*vaporizer|vaporizer\s*device|vape\s*device|7"|8"|laser\s*co\s*vaporizer'
         # Apparel / merch
         r'|t[\s\-]?shirt|tee\s*shirt|hoodie|stickers?|keychain|key\s*chain|magnet|sunglasses|plushies?|plush\s*toy|nug\s*plush'

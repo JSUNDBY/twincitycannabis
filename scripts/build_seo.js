@@ -64,7 +64,7 @@ const ACCESSORY_RE = new RegExp(
     // vape devices / hardware (NOT cartridges with cannabis)
     'bud kup', '\\bkup\\b', '\\bgo stik\\b', '\\bstik\\b', 'roller\\b',
     '\\bpax\\b', 'dynavap', 'storz', 'volcano\\b', '\\bccell\\b', 'ccell go',
-    'puffco', 'dr.? dabber', 'kandypens', 'davinci', 'firefly',
+    'puffco', 'dr.? dabber', 'kandypens', 'davinci', 'firefly', 'pulsar',
     'kodo\\b', 'icons? - ', 'icons\\b',
     // papers / wraps / cones / tips (the actual paper, not infused pre-rolls)
     'rolling paper', 'rolling tray', 'raw cone', 'pre.?rolled tips?', 'pre.?roll case',
