@@ -6,6 +6,10 @@
 (function() {
     'use strict';
 
+    // ─── HTML escape — prevents XSS from scraped data in innerHTML ──────────
+    const _escMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+    const esc = (s) => s == null ? '' : String(s).replace(/[&<>"']/g, c => _escMap[c]);
+
     // ─── Stripe / Cloudflare config ──────────────────────────────────────────
     // Worker URL deployed from /cloudflare. Returns tier overrides as JSON.
     const TCC_WORKER_URL = 'https://tcc-stripe.j-sundby.workers.dev';
@@ -285,13 +289,13 @@
                 <div class="card-body-sm">
                     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem">
                         <div>
-                            <div class="font-display font-semibold" style="font-size:0.95rem">${b.name}</div>
-                            <div class="text-xs text-secondary">${b.location}</div>
+                            <div class="font-display font-semibold" style="font-size:0.95rem">${esc(b.name)}</div>
+                            <div class="text-xs text-secondary">${esc(b.location)}</div>
                         </div>
-                        <span class="tag tag-sm tag-green">${b.type}</span>
+                        <span class="tag tag-sm tag-green">${esc(b.type)}</span>
                     </div>
-                    <div class="text-sm text-secondary" style="line-height:1.5;margin-bottom:0.5rem">${b.desc}</div>
-                    <span class="tag tag-sm">${b.specialty}</span>
+                    <div class="text-sm text-secondary" style="line-height:1.5;margin-bottom:0.5rem">${esc(b.desc)}</div>
+                    <span class="tag tag-sm">${esc(b.specialty)}</span>
                 </div>
             </div>
         `).join('');
@@ -305,13 +309,13 @@
                 <div class="card-body-sm">
                     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem">
                         <div>
-                            <div class="font-display font-semibold" style="font-size:0.95rem">${d.name}</div>
-                            <div class="text-xs text-secondary">${d.location}</div>
+                            <div class="font-display font-semibold" style="font-size:0.95rem">${esc(d.name)}</div>
+                            <div class="text-xs text-secondary">${esc(d.location)}</div>
                         </div>
-                        <span class="tag tag-sm tag-amber">${d.status}</span>
+                        <span class="tag tag-sm tag-amber">${esc(d.status)}</span>
                     </div>
-                    <div class="text-sm text-secondary" style="line-height:1.5;margin-bottom:0.5rem">${d.desc}</div>
-                    ${d.notable ? `<span class="tag tag-sm tag-purple">${d.notable}</span>` : ''}
+                    <div class="text-sm text-secondary" style="line-height:1.5;margin-bottom:0.5rem">${esc(d.desc)}</div>
+                    ${d.notable ? `<span class="tag tag-sm tag-purple">${esc(d.notable)}</span>` : ''}
                 </div>
             </div>
         `).join('');
@@ -325,8 +329,8 @@
                 <div class="card-body-sm">
                     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem">
                         <div>
-                            <div class="font-display font-semibold" style="font-size:0.95rem">${item.name}</div>
-                            <div class="text-xs text-secondary">${item.desc}</div>
+                            <div class="font-display font-semibold" style="font-size:0.95rem">${esc(item.name)}</div>
+                            <div class="text-xs text-secondary">${esc(item.desc)}</div>
                         </div>
                         <div style="text-align:right">
                             <div class="font-display font-bold text-green">$${item.price}</div>
@@ -449,8 +453,8 @@
 
             marker.bindPopup(`
                 <div style="font-family:Inter,sans-serif;padding:0.3rem">
-                    <strong style="font-size:0.85rem">${d.name}</strong><br>
-                    <span style="font-size:0.75rem;color:#888">${d.city || d.neighborhood}</span><br>
+                    <strong style="font-size:0.85rem">${esc(d.name)}</strong><br>
+                    <span style="font-size:0.75rem;color:#888">${esc(d.city || d.neighborhood)}</span><br>
                     <span style="font-size:0.85rem;color:${color};font-weight:700">TCC ${d.tcc_score}</span>
                 </div>
             `);
@@ -480,7 +484,7 @@
         const initialEl = document.getElementById('detail-banner-initial');
         const hasImg = d.img && d.img.length > 10 && !d.img.includes('placeholder');
         if (hasImg) {
-            initialEl.innerHTML = `<img src="${d.img}" alt="${d.name}" style="max-height:120px;max-width:280px;object-fit:contain;border-radius:12px">`;
+            initialEl.innerHTML = `<img src="${d.img}" alt="${esc(d.name)}" style="max-height:120px;max-width:280px;object-fit:contain;border-radius:12px">`;
         } else {
             initialEl.textContent = d.initial;
         }
@@ -488,9 +492,9 @@
         // Info
         document.getElementById('detail-name').textContent = d.name;
         document.getElementById('detail-tagline').textContent = d.tagline;
-        document.getElementById('detail-address').innerHTML = `${Icons.pin} ${d.address}`;
-        document.getElementById('detail-hours').innerHTML = `${Icons.clock} ${d.hours.note || d.hours.weekday}`;
-        document.getElementById('detail-phone').innerHTML = `${Icons.phone} ${d.phone}`;
+        document.getElementById('detail-address').innerHTML = `${Icons.pin} ${esc(d.address)}`;
+        document.getElementById('detail-hours').innerHTML = `${Icons.clock} ${esc(d.hours.note || d.hours.weekday)}`;
+        document.getElementById('detail-phone').innerHTML = `${Icons.phone} ${esc(d.phone)}`;
 
         // Score
         const scoreColor = TCC.getScoreColor(d.tcc_score);
@@ -516,7 +520,7 @@
 
         // Features
         document.getElementById('detail-features').innerHTML = d.features.map(f =>
-            `<span class="tag tag-sm">${Icons.check} ${f}</span>`
+            `<span class="tag tag-sm">${Icons.check} ${esc(f)}</span>`
         ).join('');
 
         // Dashboard link
@@ -550,7 +554,7 @@
                 <div class="empty-menu-state">
                     <div class="empty-menu-icon">${Icons.leafLine}</div>
                     <div class="empty-menu-title">Menu data not yet available</div>
-                    <div class="empty-menu-desc">We're working on getting ${d.name}'s full menu into TCC. In the meantime, you can visit their site or call ahead.</div>
+                    <div class="empty-menu-desc">We're working on getting ${esc(d.name)}'s full menu into TCC. In the meantime, you can visit their site or call ahead.</div>
                     <div class="empty-menu-actions">
                         <a href="${getDispensaryWebsite(d)}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">${isOfficialWebsite(d) ? 'Visit Website &rarr;' : 'Find on Google Maps &rarr;'}</a>
                         <a href="tel:${(d.phone||'').replace(/[^0-9+]/g,'')}" class="btn btn-secondary btn-sm">${Icons.phone} Call</a>
@@ -593,12 +597,12 @@
                 const hasImg = p.image && p.image.length > 10;
                 return `<div class="card product-card" onclick="window.location.hash='compare/${p.id}'">
                     <div class="card-body-sm" style="display:flex;gap:0.8rem;align-items:flex-start">
-                        ${hasImg ? `<div class="product-card-img" onclick="event.stopPropagation();openLightbox('${p.image}','${p.name.replace(/'/g,"\\'")}','${(p.brand||"").replace(/'/g,"\\'")}','${TCC.formatPrice(TCC.getLowestPrice(p)?.price||0)}','${p.category}','${p.thc||""}')"><img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` : ''}
+                        ${hasImg ? `<div class="product-card-img" onclick="event.stopPropagation();openLightbox('${p.image}','${esc(p.name).replace(/'/g,"\\'")}','${esc(p.brand||"").replace(/'/g,"\\'")}','${TCC.formatPrice(TCC.getLowestPrice(p)?.price||0)}','${esc(p.category)}','${esc(p.thc||"")}')"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` : ''}
                         <div style="flex:1;min-width:0">
                             <div class="product-card-header">
                                 <div style="min-width:0">
-                                    <div class="product-card-name">${p.name}</div>
-                                    <div class="product-card-brand">${p.brand}${p.weight ? ' &middot; ' + p.weight : ''}</div>
+                                    <div class="product-card-name">${esc(p.name)}</div>
+                                    <div class="product-card-brand">${esc(p.brand)}${p.weight ? ' &middot; ' + esc(p.weight) : ''}</div>
                                 </div>
                                 <div class="product-card-prices">
                                     <div class="product-card-price-low">${TCC.formatPrice(price)}</div>
@@ -606,8 +610,8 @@
                                 </div>
                             </div>
                             <div class="product-card-meta">
-                                <span class="tag tag-sm">${catIcons[p.category] || ''} ${p.category}</span>
-                                ${p.thc ? `<span class="tag tag-sm">THC ${p.thc}</span>` : ''}
+                                <span class="tag tag-sm">${catIcons[p.category] || ''} ${esc(p.category)}</span>
+                                ${p.thc ? `<span class="tag tag-sm">THC ${esc(p.thc)}</span>` : ''}
                             </div>
                         </div>
                     </div>
@@ -637,11 +641,11 @@
             ${reviews.map(r => `
                 <div class="review-item">
                     <div class="review-header">
-                        <span class="review-author">${r.author}</span>
-                        <span class="review-date">${r.time || r.date || ''}</span>
+                        <span class="review-author">${esc(r.author)}</span>
+                        <span class="review-date">${esc(r.time || r.date || '')}</span>
                     </div>
                     <div class="review-stars">${'&#9733;'.repeat(r.rating)}${'&#9734;'.repeat(5 - r.rating)}</div>
-                    <div class="review-text">${r.text}</div>
+                    <div class="review-text">${esc(r.text)}</div>
                 </div>
             `).join('')}
         ` : '<div class="empty-state"><div class="empty-state-desc">No reviews yet</div></div>';
@@ -736,11 +740,11 @@
         document.getElementById('strain-detail-cbd').textContent = s.cbd;
 
         document.getElementById('strain-detail-effects').innerHTML = s.effects.map(e =>
-            `<span class="tag tag-green">${e}</span>`
+            `<span class="tag tag-green">${esc(e)}</span>`
         ).join('');
 
         document.getElementById('strain-detail-flavors').innerHTML = s.flavors.map(f =>
-            `<span class="tag">${f}</span>`
+            `<span class="tag">${esc(f)}</span>`
         ).join('');
 
         // Products with this strain
@@ -815,11 +819,11 @@
         document.getElementById('dash-reviews').innerHTML = reviews.length ? reviews.map(r => `
             <div class="review-item">
                 <div class="review-header">
-                    <span class="review-author">${r.author}</span>
-                    <span class="review-date">${r.date}</span>
+                    <span class="review-author">${esc(r.author)}</span>
+                    <span class="review-date">${esc(r.date)}</span>
                 </div>
                 <div class="review-stars">${'&#9733;'.repeat(r.rating)}${'&#9734;'.repeat(5 - r.rating)}</div>
-                <div class="review-text">${r.text}</div>
+                <div class="review-text">${esc(r.text)}</div>
             </div>
         `).join('') : '<p class="text-secondary text-sm">No reviews on TCC yet. Share your profile link to start collecting reviews.</p>';
 
@@ -849,7 +853,7 @@
                         ${compRows.map(c => `
                             <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--border)">
                                 <div>
-                                    <div class="text-sm font-semibold">${c.name}</div>
+                                    <div class="text-sm font-semibold">${esc(c.name)}</div>
                                     <div class="text-xs text-muted">${c.shared} shared products</div>
                                 </div>
                                 <div style="text-align:right">
@@ -954,7 +958,7 @@
                     const lowest = TCC.getLowestPrice(product);
                     const highest = TCC.getHighestPrice ? TCC.getHighestPrice(product) : null;
                     const savings = (highest && lowest) ? highest.price - lowest.price : 0;
-                    let sub = `${product.brand || 'Unknown brand'}${product.weight ? ' &middot; ' + product.weight : ''} &middot; Available at ${numDisps} dispensar${numDisps === 1 ? 'y' : 'ies'}`;
+                    let sub = `${esc(product.brand || 'Unknown brand')}${product.weight ? ' &middot; ' + esc(product.weight) : ''} &middot; Available at ${numDisps} dispensar${numDisps === 1 ? 'y' : 'ies'}`;
                     if (savings > 1) {
                         sub += ` &middot; <span style="color:var(--green-text);font-weight:600">Save up to $${savings.toFixed(0)}</span>`;
                     }
@@ -1039,7 +1043,7 @@
 
         container.innerHTML = `
             <div class="browse-result-meta">
-                <span><strong>${total.toLocaleString()}</strong> ${total === 1 ? 'product' : 'products'}${Browse.query ? ` matching "${Browse.query}"` : ''}</span>
+                <span><strong>${total.toLocaleString()}</strong> ${total === 1 ? 'product' : 'products'}${Browse.query ? ` matching "${esc(Browse.query)}"` : ''}</span>
                 ${total > 0 ? `<span class="text-muted">Showing ${visible.length} of ${total}</span>` : ''}
             </div>
             ${total === 0 ? `
@@ -1086,7 +1090,7 @@
             name: TCC.categories?.find(c => c.id === id)?.name || id
         }))];
         pillsContainer.innerHTML = cats.map(c =>
-            `<button class="browse-pill ${Browse.category === c.id ? 'active' : ''}" data-cat="${c.id}">${c.name}</button>`
+            `<button class="browse-pill ${Browse.category === c.id ? 'active' : ''}" data-cat="${c.id}">${esc(c.name)}</button>`
         ).join('');
         pillsContainer.querySelectorAll('.browse-pill').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -1186,16 +1190,16 @@
 
         container.innerHTML = `
             <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;margin-bottom:2rem">
-                ${product.image ? `<div style="width:140px;height:140px;border-radius:var(--radius-lg);overflow:hidden;background:var(--bg-card);border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:8px;cursor:pointer" onclick="openLightbox('${product.image}','${product.name.replace(/'/g,"\\'")}','${(product.brand||"").replace(/'/g,"\\'")}','${TCC.formatPrice(lowest.price)}','${product.category}','${product.thc||""}')">
-                    <img src="${product.image}" alt="${product.name}" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:var(--radius-sm)" onerror="this.parentElement.style.display='none'">
+                ${product.image ? `<div style="width:140px;height:140px;border-radius:var(--radius-lg);overflow:hidden;background:var(--bg-card);border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:8px;cursor:pointer" onclick="openLightbox('${product.image}','${esc(product.name).replace(/'/g,"\\'")}','${esc(product.brand||"").replace(/'/g,"\\'")}','${TCC.formatPrice(lowest.price)}','${esc(product.category)}','${esc(product.thc||"")}')">
+                    <img src="${product.image}" alt="${esc(product.name)}" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:var(--radius-sm)" onerror="this.parentElement.style.display='none'">
                 </div>` : ''}
                 <div style="flex:1;min-width:200px">
-                    <h2 class="font-display font-bold text-2xl tracking-tight">${product.name}</h2>
-                    <div class="text-secondary text-sm" style="margin-top:0.3rem">${product.brand}${product.weight ? ' &middot; ' + product.weight : ''} ${strain ? '&bull; ' + strain.name : ''}</div>
+                    <h2 class="font-display font-bold text-2xl tracking-tight">${esc(product.name)}</h2>
+                    <div class="text-secondary text-sm" style="margin-top:0.3rem">${esc(product.brand)}${product.weight ? ' &middot; ' + esc(product.weight) : ''} ${strain ? '&bull; ' + esc(strain.name) : ''}</div>
                     <div style="display:flex;gap:0.4rem;margin-top:0.6rem;flex-wrap:wrap">
-                        <span class="tag">${product.category}</span>
-                        ${product.thc ? `<span class="tag">THC ${product.thc}</span>` : ''}
-                        ${product.cbd ? `<span class="tag">CBD ${product.cbd}</span>` : ''}
+                        <span class="tag">${esc(product.category)}</span>
+                        ${product.thc ? `<span class="tag">THC ${esc(product.thc)}</span>` : ''}
+                        ${product.cbd ? `<span class="tag">CBD ${esc(product.cbd)}</span>` : ''}
                         ${strain ? `<span class="tag strain-tag-${strain.type}">${strain.type}</span>` : ''}
                         <span class="tag tag-blue">${entries.length} dispensar${entries.length === 1 ? 'y' : 'ies'}</span>
                     </div>
@@ -1203,7 +1207,7 @@
                 <div style="text-align:right;flex-shrink:0">
                     <div class="text-sm text-muted">Best price</div>
                     <div class="font-display font-bold text-3xl text-green">${TCC.formatPrice(lowest.price)}</div>
-                    <div class="text-xs text-secondary">at ${TCC.getDispensary(lowest.dispensaryId)?.name || 'Unknown'}</div>
+                    <div class="text-xs text-secondary">at ${esc(TCC.getDispensary(lowest.dispensaryId)?.name || 'Unknown')}</div>
                     ${highest.price - lowest.price > 1 ? `<div class="tag tag-sm tag-green" style="margin-top:0.4rem">Save $${(highest.price - lowest.price).toFixed(0)} vs highest</div>` : ''}
                 </div>
             </div>
@@ -1227,10 +1231,10 @@
                             const isLowest = diff === 0;
                             return `<tr style="cursor:pointer" onclick="window.location.hash='dispensary/${dispId}'">
                                 <td>
-                                    <span style="font-weight:600">${disp.name}</span>
+                                    <span style="font-weight:600">${esc(disp.name)}</span>
                                     ${disp.tier !== 'free' ? `<span class="tag tag-sm" style="margin-left:0.3rem;background:${TCC.getTierColor(disp.tier)};color:${disp.tier === 'platinum' ? '#0a0a0a' : '#fff'};border:none">${TCC.getTierLabel(disp.tier)}</span>` : ''}
                                 </td>
-                                <td class="text-secondary">${disp.neighborhood}</td>
+                                <td class="text-secondary">${esc(disp.neighborhood)}</td>
                                 <td><span style="color:${TCC.getScoreColor(disp.tcc_score)};font-weight:600">${disp.tcc_score}</span></td>
                                 <td class="${isLowest ? 'compare-lowest' : ''}" style="font-family:var(--font-display);font-weight:600">${TCC.formatPrice(price)}</td>
                                 <td class="text-muted">${isLowest ? '<span class="tag tag-sm tag-green">Best price</span>' : '+$' + diff.toFixed(2)}</td>
@@ -1362,8 +1366,8 @@
         // Avatar (real image or gradient fallback)
         const hasImage = d.img && d.img.length > 10 && !d.img.includes('placeholder');
         const avatar = hasImage
-            ? `<img src="${d.img}" alt="${d.name}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'dispensary-card-avatar-fallback\\' style=\\'background:${d.gradient}\\'>${d.initial}</div>'">`
-            : `<div class="dispensary-card-avatar-fallback" style="background:${d.gradient}">${d.initial}</div>`;
+            ? `<img src="${d.img}" alt="${esc(d.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'dispensary-card-avatar-fallback\\' style=\\'background:${d.gradient}\\'>${esc(d.initial)}</div>'">`
+            : `<div class="dispensary-card-avatar-fallback" style="background:${d.gradient}">${esc(d.initial)}</div>`;
 
         // Deals for this dispensary
         const deals = TCC.getDealsForDispensary ? TCC.getDealsForDispensary(d.id) : [];
@@ -1377,7 +1381,7 @@
 
         // Features badges
         const featureBadges = (d.features || []).slice(0, 3).map(f =>
-            `<span class="tag tag-sm">${f}</span>`
+            `<span class="tag tag-sm">${esc(f)}</span>`
         ).join('');
 
         const tierClass = d.tier === 'premium' ? 'dispensary-card-premium'
@@ -1398,8 +1402,8 @@
                 <div class="dispensary-card-info">
                     <div class="dispensary-card-header">
                         <div style="min-width:0">
-                            <div class="dispensary-card-name">${d.name}</div>
-                            <div class="dispensary-card-loc">${Icons.pin} ${d.neighborhood || d.city}${d.neighborhood && d.neighborhood !== d.city ? ' &bull; ' + d.city : ''}</div>
+                            <div class="dispensary-card-name">${esc(d.name)}</div>
+                            <div class="dispensary-card-loc">${Icons.pin} ${esc(d.neighborhood || d.city)}${d.neighborhood && d.neighborhood !== d.city ? ' &bull; ' + esc(d.city) : ''}</div>
                         </div>
                         <div class="dispensary-card-score">
                             <span class="dispensary-card-score-num" style="background:${scoreColor}">${d.tcc_score}</span>
@@ -1412,7 +1416,7 @@
                         ${justOpenedBadge}
                     </div>
                     <div class="dispensary-card-meta">
-                        <span>${Icons.clock} ${d.hours?.note || d.hours?.weekday || 'Check hours'}</span>
+                        <span>${Icons.clock} ${esc(d.hours?.note || d.hours?.weekday || 'Check hours')}</span>
                         ${productCount > 0 ? `<span>${Icons.leaf} ${productCount} products</span>` : ''}
                         ${d.verified ? `<span>${Icons.verified} Verified</span>` : ''}
                     </div>
@@ -1436,7 +1440,7 @@
         // Product image
         const hasImg = p.image && p.image.length > 10;
         const imgHtml = hasImg
-            ? `<div class="product-card-img" onclick="event.stopPropagation();openLightbox('${p.image}','${p.name.replace(/'/g,"\\'")}','${(p.brand||"").replace(/'/g,"\\'")}','${TCC.formatPrice(TCC.getLowestPrice(p)?.price||0)}','${p.category}','${p.thc||""}')"><img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`
+            ? `<div class="product-card-img" onclick="event.stopPropagation();openLightbox('${p.image}','${esc(p.name).replace(/'/g,"\\'")}','${esc(p.brand||"").replace(/'/g,"\\'")}','${TCC.formatPrice(TCC.getLowestPrice(p)?.price||0)}','${esc(p.category)}','${esc(p.thc||"")}')"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`
             : '';
 
         return `<div class="card product-card" onclick="window.location.hash='compare/${p.id}'">
@@ -1445,8 +1449,8 @@
                 <div style="flex:1;min-width:0">
                     <div class="product-card-header">
                         <div style="min-width:0">
-                            <div class="product-card-name">${p.name}${p.menu_type === 'med' ? ' <span class="rx-badge" title="Medical menu price">℞</span>' : ''}</div>
-                            <div class="product-card-brand">${p.brand}${p.weight ? ' &middot; ' + p.weight : ''}</div>
+                            <div class="product-card-name">${esc(p.name)}${p.menu_type === 'med' ? ' <span class="rx-badge" title="Medical menu price">℞</span>' : ''}</div>
+                            <div class="product-card-brand">${esc(p.brand)}${p.weight ? ' &middot; ' + esc(p.weight) : ''}</div>
                         </div>
                         <div class="product-card-prices">
                             <div class="product-card-price-low">${TCC.formatPrice(range.low)}</div>
@@ -1454,8 +1458,8 @@
                         </div>
                     </div>
                     <div class="product-card-meta">
-                        <span class="tag tag-sm">${catIcons[p.category] || ''} ${p.category}</span>
-                        ${p.thc ? `<span class="tag tag-sm">THC ${p.thc}</span>` : ''}
+                        <span class="tag tag-sm">${catIcons[p.category] || ''} ${esc(p.category)}</span>
+                        ${p.thc ? `<span class="tag tag-sm">THC ${esc(p.thc)}</span>` : ''}
                         ${strainTag}
                         ${numDisps > 1 ? `<span class="tag tag-sm tag-blue">${numDisps} dispensaries</span>` : ''}
                         ${savings > 3 ? `<span class="tag tag-sm tag-green">Save $${savings.toFixed(0)}</span>` : ''}
@@ -1477,13 +1481,13 @@
             <div class="card-body">
                 <span class="deal-card-badge deal-type-${d.type}">${typeLabels[d.type] || d.type}</span>
                 ${d.featured ? '<span class="tag tag-sm tag-amber" style="margin-left:0.3rem">Featured</span>' : ''}
-                <div class="deal-card-title">${d.title}</div>
-                <div class="deal-card-dispensary">${disp ? disp.name + ' &bull; ' + disp.neighborhood : ''}</div>
+                <div class="deal-card-title">${esc(d.title)}</div>
+                <div class="deal-card-dispensary">${disp ? esc(disp.name) + ' &bull; ' + esc(disp.neighborhood) : ''}</div>
                 ${d.salePrice ? `<div class="deal-card-pricing">
                     <span class="deal-card-sale">${TCC.formatPrice(d.salePrice)}</span>
                     ${d.originalPrice ? `<span class="deal-card-original">${TCC.formatPrice(d.originalPrice)}</span>` : ''}
                 </div>` : ''}
-                ${d.expires ? `<div class="deal-card-expires">Expires ${d.expires}</div>` : ''}
+                ${d.expires ? `<div class="deal-card-expires">Expires ${esc(d.expires)}</div>` : ''}
             </div>
         </div>`;
     }
@@ -1496,12 +1500,12 @@
         return `<div class="card strain-card" onclick="window.location.hash='strain/${s.id}'">
             <div class="card-body">
                 <div class="strain-card-header">
-                    <div class="strain-card-name">${s.name}</div>
-                    <span class="tag strain-tag-${s.type} strain-card-type">${s.type}</span>
+                    <div class="strain-card-name">${esc(s.name)}</div>
+                    <span class="tag strain-tag-${s.type} strain-card-type">${esc(s.type)}</span>
                 </div>
-                <div class="strain-card-desc">${s.desc}</div>
+                <div class="strain-card-desc">${esc(s.desc)}</div>
                 <div class="strain-card-effects">
-                    ${s.effects.slice(0, 3).map(e => `<span class="tag tag-sm tag-green">${e}</span>`).join('')}
+                    ${s.effects.slice(0, 3).map(e => `<span class="tag tag-sm tag-green">${esc(e)}</span>`).join('')}
                 </div>
                 <div class="strain-card-footer">
                     <span class="strain-card-availability">${products.length} product${products.length !== 1 ? 's' : ''} available</span>
@@ -1535,10 +1539,10 @@
                 <div class="search-dropdown-label">Dispensaries</div>
                 ${dispensaries.map(d => `
                     <div class="search-dropdown-item" onclick="window.location.hash='dispensary/${d.id}'">
-                        <div class="search-dropdown-item-icon" style="background:${d.gradient}">${d.initial}</div>
+                        <div class="search-dropdown-item-icon" style="background:${d.gradient}">${esc(d.initial)}</div>
                         <div class="search-dropdown-item-info">
-                            <div class="search-dropdown-item-name">${d.name}</div>
-                            <div class="search-dropdown-item-detail">${d.neighborhood} &bull; TCC ${d.tcc_score}</div>
+                            <div class="search-dropdown-item-name">${esc(d.name)}</div>
+                            <div class="search-dropdown-item-detail">${esc(d.neighborhood)} &bull; TCC ${d.tcc_score}</div>
                         </div>
                     </div>`).join('')}
             </div>`;
@@ -1552,8 +1556,8 @@
                     return `<div class="search-dropdown-item" onclick="window.location.hash='compare/${p.id}'">
                         <div class="search-dropdown-item-icon" style="background:var(--bg-secondary);border:1px solid var(--border)">${catIcons[p.category] || ''}</div>
                         <div class="search-dropdown-item-info">
-                            <div class="search-dropdown-item-name">${p.name}</div>
-                            <div class="search-dropdown-item-detail">${p.brand}</div>
+                            <div class="search-dropdown-item-name">${esc(p.name)}</div>
+                            <div class="search-dropdown-item-detail">${esc(p.brand)}</div>
                         </div>
                         <div class="search-dropdown-item-price">${low ? TCC.formatPrice(low.price) : ''}</div>
                     </div>`;
@@ -1568,8 +1572,8 @@
                     <div class="search-dropdown-item" onclick="window.location.hash='strain/${s.id}'">
                         <div class="search-dropdown-item-icon" style="background:var(--green-bg);border:1px solid rgba(34,197,94,0.2);color:var(--green)">${Icons.leaf}</div>
                         <div class="search-dropdown-item-info">
-                            <div class="search-dropdown-item-name">${s.name}</div>
-                            <div class="search-dropdown-item-detail">${s.type} &bull; THC ${s.thc}</div>
+                            <div class="search-dropdown-item-name">${esc(s.name)}</div>
+                            <div class="search-dropdown-item-detail">${esc(s.type)} &bull; THC ${esc(s.thc)}</div>
                         </div>
                     </div>`).join('')}
             </div>`;

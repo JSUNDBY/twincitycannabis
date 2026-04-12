@@ -30,12 +30,18 @@ const PRICE_TO_TIER = {
   // 'price_1XYZ...': 'premium',
 };
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Max-Age': '86400',
-};
+const ALLOWED_ORIGIN = 'https://twincitycannabis.com';
+
+function getCorsHeaders(request) {
+  const origin = request?.headers?.get('Origin') || '';
+  const allowed = origin === ALLOWED_ORIGIN || origin === 'http://localhost:8765';
+  return {
+    'Access-Control-Allow-Origin': allowed ? origin : ALLOWED_ORIGIN,
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Max-Age': '86400',
+  };
+}
 
 // Active visitor tracking config
 const VISITOR_TTL_SECONDS = 300;       // a "visitor" counts as active for 5 min
@@ -46,8 +52,10 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
+    const cors = getCorsHeaders(request);
+
     if (request.method === 'OPTIONS') {
-      return new Response(null, { headers: corsHeaders });
+      return new Response(null, { headers: cors });
     }
 
     if (url.pathname === '/webhook' && request.method === 'POST') {
@@ -55,19 +63,18 @@ export default {
     }
 
     if (url.pathname === '/overrides' && request.method === 'GET') {
-      return handleOverridesRead(env);
+      return handleOverridesRead(env, cors);
     }
 
     if (url.pathname === '/ping' && request.method === 'POST') {
-      // Accept the ping but don't write to KV — saves 1,000 writes/day
       return new Response(JSON.stringify({ ok: true }), {
         status: 200,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        headers: { 'Content-Type': 'application/json', ...cors },
       });
     }
 
     if (url.pathname === '/active' && request.method === 'GET') {
-      return handleActiveCount();
+      return handleActiveCount(cors);
     }
 
     if (url.pathname === '/' || url.pathname === '/health') {
@@ -83,7 +90,7 @@ export default {
 // cost. The number drifts gently with time-of-day and day-of-week to look
 // natural. When real traffic justifies it, upgrade to CF $5 plan and
 // re-enable KV-based real visitor tracking.
-function handleActiveCount() {
+function handleActiveCount(cors) {
   const bucket = Math.floor(Date.now() / (5 * 60 * 1000));
   const noise = Math.abs(Math.sin(bucket * 1.7));
   const baseline = BASELINE_MIN + Math.round(noise * (BASELINE_MAX - BASELINE_MIN));
@@ -103,13 +110,13 @@ function handleActiveCount() {
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': 'public, max-age=30, s-maxage=30',
-      ...corsHeaders,
+      ...cors,
     },
   });
 }
 
 // ─── /overrides ──────────────────────────────────────────────────────────────
-async function handleOverridesRead(env) {
+async function handleOverridesRead(env, cors) {
   // List all KV keys with prefix "tier:" — each value is JSON
   const list = await env.TCC_OVERRIDES.list({ prefix: 'tier:' });
   const overrides = {};
@@ -125,17 +132,16 @@ async function handleOverridesRead(env) {
 
   for (const [id, value] of entries) {
     if (!value) continue;
-    // Filter expired entries (subscription canceled but KV write hasn't propagated)
     if (value.valid_until && Date.parse(value.valid_until) < Date.now()) continue;
-    overrides[id] = value;
+    overrides[id] = { tier: value.tier, valid_until: value.valid_until };
   }
 
   return new Response(JSON.stringify(overrides), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
-      'Cache-Control': 'public, max-age=300, s-maxage=300', // 5 min edge cache
-      ...corsHeaders,
+      'Cache-Control': 'public, max-age=300, s-maxage=300',
+      ...cors,
     },
   });
 }
