@@ -1380,7 +1380,17 @@
             `<span class="tag tag-sm">${f}</span>`
         ).join('');
 
-        return `<div class="card dispensary-card ${variant === 'grid' ? 'dispensary-card-grid' : ''}" onclick="window.location.hash='dispensary/${d.id}'">
+        const tierClass = d.tier === 'premium' ? 'dispensary-card-premium'
+                       : d.tier === 'featured' ? 'dispensary-card-featured'
+                       : '';
+        const ribbon = d.tier === 'premium'
+            ? '<div class="dispensary-card-ribbon ribbon-premium">&#9733; PREMIUM PARTNER</div>'
+            : d.tier === 'featured'
+            ? '<div class="dispensary-card-ribbon ribbon-featured">FEATURED</div>'
+            : '';
+
+        return `<div class="card dispensary-card ${tierClass} ${variant === 'grid' ? 'dispensary-card-grid' : ''}" onclick="window.location.hash='dispensary/${d.id}'">
+            ${ribbon}
             <div class="card-body">
                 <div class="dispensary-card-avatar">
                     ${avatar}
