@@ -709,6 +709,9 @@ html[data-theme="light"] body::after {
 .dispensary-card-premium .dispensary-card-name {
     font-size: 1.18rem;
     color: #f5f6f8;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
 }
 
 /* Featured = upgraded above free. Green border, subtle glow, smaller ribbon. */
@@ -735,6 +738,9 @@ html[data-theme="light"] body::after {
 
 .dispensary-card-featured .dispensary-card-name {
     font-size: 1.1rem;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
 }
 
 /* Ribbon — sits at the top of the card */
