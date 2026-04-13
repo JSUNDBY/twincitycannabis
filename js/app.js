@@ -232,8 +232,10 @@
     }
 
     function renderFeaturedDispensaries() {
-        const container = document.getElementById('featured-dispensaries');
-        const featured = TCC.dispensaries
+        const grid = document.getElementById('featured-dispensaries');
+        const ctaEl = document.getElementById('featured-cta');
+
+        const paid = TCC.dispensaries
             .filter(d => d.tier !== 'free')
             .sort((a, b) => {
                 const tierOrder = { platinum: 0, premium: 1, featured: 2 };
@@ -241,7 +243,18 @@
             })
             .slice(0, 6);
 
-        container.innerHTML = featured.map(d => dispensaryCard(d)).join('');
+        grid.innerHTML = paid.map(d => dispensaryCard(d)).join('');
+
+        // Show the FOMO CTA if there is at least one paid dispensary
+        if (ctaEl) {
+            ctaEl.style.display = paid.length > 0 ? '' : 'none';
+        }
+
+        // Hide entire section if nothing to show
+        const section = document.getElementById('featured-section');
+        if (section) {
+            section.style.display = paid.length === 0 ? 'none' : '';
+        }
     }
 
     function renderTodaysDeals() {
@@ -1342,9 +1355,6 @@
 
     function dispensaryCard(d, variant) {
         const scoreColor = TCC.getScoreColor(d.tcc_score);
-        const tierBadge = d.tier !== 'free'
-            ? `<span class="dispensary-card-tier" style="background:${TCC.getTierColor(d.tier)};color:${d.tier === 'platinum' ? '#0a0a0a' : '#fff'}">${TCC.getTierLabel(d.tier)}</span>`
-            : '';
         const justOpenedBadge = isRecentlyOpened(d)
             ? '<span class="dispensary-card-new">&#10024; Just Opened</span>'
             : '';
@@ -1384,22 +1394,68 @@
             `<span class="tag tag-sm">${esc(f)}</span>`
         ).join('');
 
+        // Product spotlight for paid tiers — show up to 3 products with images
+        // Priority: flower with images first, then best-selling categories
+        let spotlightHtml = '';
+        if (d.tier === 'premium' || d.tier === 'featured') {
+            const spotProducts = products
+                .filter(p => p.image && p.image.length > 10)
+                .sort((a, b) => {
+                    // Flower first, then edibles, then carts, then everything else
+                    const catOrder = { flower: 0, edible: 1, cartridge: 2, 'pre-roll': 3, concentrate: 4 };
+                    return (catOrder[a.category] ?? 9) - (catOrder[b.category] ?? 9);
+                });
+            const maxSpot = d.tier === 'premium' ? 3 : 2;
+            const spots = spotProducts.slice(0, maxSpot);
+            if (spots.length > 0) {
+                const spotLabel = deals.length > 0
+                    ? `${Icons.tag} Latest deals &amp; products`
+                    : spots[0].category === 'flower' ? `${Icons.leaf} Newest flower` : `${Icons.leaf} On the menu`;
+                spotlightHtml = `
+                    <div class="dispensary-card-spotlight">
+                        <div class="spotlight-label">${spotLabel}</div>
+                        <div class="spotlight-items">
+                            ${spots.map(p => {
+                                const price = p.prices[d.id];
+                                return `<div class="spotlight-item">
+                                    <img src="${p.image}" alt="${esc(p.name)}" loading="lazy" onerror="this.parentElement.style.display='none'">
+                                    <div class="spotlight-item-info">
+                                        <div class="spotlight-item-name">${esc(p.name)}</div>
+                                        <div class="spotlight-item-price">${price ? '$' + price.toFixed(2) : ''}</div>
+                                    </div>
+                                </div>`;
+                            }).join('')}
+                        </div>
+                    </div>`;
+            }
+        }
+        const isPaid = d.tier !== 'free';
         const tierClass = d.tier === 'premium' ? 'dispensary-card-premium'
                        : d.tier === 'featured' ? 'dispensary-card-featured'
                        : '';
-        const ribbon = d.tier === 'premium'
-            ? '<div class="dispensary-card-ribbon ribbon-premium">&#9733; PREMIUM PARTNER</div>'
+
+        // Paid tiers: small "Sponsored" text above the name
+        const sponsorLine = d.tier === 'premium'
+            ? '<div class="dispensary-card-sponsor-label sponsor-label-premium">Sponsored</div>'
             : d.tier === 'featured'
-            ? '<div class="dispensary-card-ribbon ribbon-featured">FEATURED</div>'
+            ? '<div class="dispensary-card-sponsor-label sponsor-label-featured">Featured</div>'
+            : '';
+
+        // Top Google review — only for paid tiers, pick a good one
+        const topReview = isPaid && d.google?.reviews?.length > 0
+            ? d.google.reviews.find(r => r.rating >= 4 && r.text && r.text.length > 40)
+            : null;
+        const quoteHtml = topReview
+            ? `<div class="dispensary-card-quote">&ldquo;${esc(topReview.text.slice(0, 100))}${topReview.text.length > 100 ? '...' : ''}&rdquo; &mdash; ${esc(topReview.author)}</div>`
             : '';
 
         return `<div class="card dispensary-card ${tierClass} ${variant === 'grid' ? 'dispensary-card-grid' : ''}" onclick="window.location.hash='dispensary/${d.id}'">
-            ${ribbon}
             <div class="card-body">
                 <div class="dispensary-card-avatar">
                     ${avatar}
                 </div>
                 <div class="dispensary-card-info">
+                    ${sponsorLine}
                     <div class="dispensary-card-header">
                         <div style="min-width:0">
                             <div class="dispensary-card-name">${esc(d.name)}</div>
@@ -1412,7 +1468,6 @@
                     <div class="dispensary-card-rating">
                         ${gRating > 0 ? `<span class="stars">${stars}</span><span class="rating-num">${gRating.toFixed(1)}</span><span class="count">(${gCount.toLocaleString()})</span>` : '<span class="text-muted text-xs">No reviews yet</span>'}
                         ${statusBadge}
-                        ${tierBadge}
                         ${justOpenedBadge}
                     </div>
                     <div class="dispensary-card-meta">
@@ -1421,6 +1476,8 @@
                         ${d.verified ? `<span>${Icons.verified} Verified</span>` : ''}
                     </div>
                     ${dealHtml}
+                    ${spotlightHtml}
+                    ${quoteHtml}
                     <div class="dispensary-card-actions">
                         <span class="btn btn-sm btn-primary">View Menu</span>
                         <span class="btn btn-sm btn-secondary" onclick="event.stopPropagation();window.open('${getDispensaryWebsite(d)}','_blank')">${isOfficialWebsite(d) ? 'Website' : 'Find on Maps'}</span>
