@@ -107,6 +107,18 @@ def merge_into_data_js(jane_grouped, jane_dispensaries):
 
     products_text = content[start:end]
 
+    # Build name→image lookup from existing Weedmaps products before we wipe them.
+    # This preserves images for products that Jane scrapes without images.
+    # Two lookups: exact match and a list for fuzzy (substring) matching.
+    wm_images = {}
+    wm_images_list = []  # (lowercase_name, image_url) for substring matching
+    for m in re.finditer(r"name:\s*'([^']+)'.*?image:\s*\"([^\"]+)\"", products_text, re.DOTALL):
+        name = m.group(1).replace("\\'", "'")
+        img = m.group(2)
+        if img and 'placeholder' not in img:
+            wm_images[name.lower().strip()] = img
+            wm_images_list.append((name.lower().strip(), img))
+
     # Step 1: Remove any previously-added Jane entries (id starts with 'j')
     # so we don't accumulate orphans on repeated runs
     old_jane = len(re.findall(r"id:\s*'j\d{4}'", products_text))
@@ -154,7 +166,18 @@ def merge_into_data_js(jane_grouped, jane_dispensaries):
 
         name_escaped = p["name"].replace("'", "\\'")
         brand_escaped = p["brand"].replace("'", "\\'")
-        image_escaped = (p.get("image") or "").replace("'", "\\'")
+        # Use Weedmaps image as fallback if Jane didn't provide one.
+        # Try exact match first, then fuzzy (Jane name is substring of WM name).
+        image = p.get("image") or ""
+        if not image:
+            pname = p["name"].lower().strip()
+            image = wm_images.get(pname, "")
+            if not image and len(pname) >= 5:
+                for wm_name, wm_img in wm_images_list:
+                    if pname in wm_name or wm_name in pname:
+                        image = wm_img
+                        break
+        image_escaped = image.replace("'", "\\'")
 
         # Medical products get menu_type: 'med' field so the frontend can
         # show the ℞ indicator and support the rec/med filter toggle

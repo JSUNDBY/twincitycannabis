@@ -86,6 +86,15 @@ def main():
 
     products_text = content[start:end]
 
+    # Build name→image lookup from existing Weedmaps products before we wipe them.
+    # This preserves images for products that Carrot scrapes without images.
+    wm_images = {}
+    for m in re.finditer(r"name:\s*'([^']+)'.*?image:\s*\"([^\"]+)\"", products_text, re.DOTALL):
+        name = m.group(1).replace("\\'", "'")
+        img = m.group(2)
+        if img and 'placeholder' not in img:
+            wm_images[name.lower().strip()] = img
+
     # Remove old Carrot entries (id starts with 'c')
     old_carrot = len(re.findall(r"id:\s*'c\d{4}'", products_text))
     products_text = re.sub(
@@ -123,7 +132,9 @@ def main():
 
         name_escaped = p["name"].replace("'", "\\'")
         brand_escaped = p["brand"].replace("'", "\\'")
-        image_escaped = (p.get("image") or "").replace("'", "\\'")
+        # Use Weedmaps image as fallback if Carrot didn't provide one
+        image = p.get("image") or wm_images.get(p["name"].lower().strip(), "")
+        image_escaped = image.replace("'", "\\'")
 
         entry = (
             f"{{ id: 'c{len(carrot_entries):04d}', "
