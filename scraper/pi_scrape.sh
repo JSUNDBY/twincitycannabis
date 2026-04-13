@@ -15,8 +15,14 @@ echo "=========================================="
 echo "TCC Pi Scrape: $(date)"
 echo "=========================================="
 
-# Pull latest first so we do not race with manual commits
-git pull --rebase --autostash 2>&1 || echo "git pull warning, continuing"
+# Pull latest — if rebase conflicts on generated files, abort and
+# force-reset to origin. The scrape will regenerate everything anyway.
+if ! git pull --rebase --autostash 2>&1; then
+    echo "Rebase conflict detected — resetting to origin/main"
+    git rebase --abort 2>/dev/null || true
+    git reset --hard origin/main
+    git pull origin main 2>&1 || true
+fi
 
 # 1. Dispensary listings (Weedmaps Discovery API)
 python3 scraper/scraper.py --export 2>/dev/null || echo "Dispensary scrape skipped"
@@ -68,7 +74,7 @@ git add js/data.js index.html sitemap.xml \
     scraper/data/price_history.json scraper/data/price_history_export.json \
     scraper/data/full_menu_products.json scraper/data/dispensaries.json \
     scraper/data/dispensaries_export.json scraper/data/jane_products.json scraper/data/carrot_products.json \
-    dispensaries products brands neighborhoods \
+    dispensaries products brands neighborhoods events \
     best-dispensaries-twin-cities cheapest-cannabis-twin-cities minnesota-cannabis-laws \
     terms privacy contact 2>/dev/null || true
 for d in *-cannabis-dispensaries; do [ -d "$d" ] && git add "$d"; done
@@ -76,7 +82,28 @@ if git diff --staged --quiet; then
     echo "No changes to commit"
 else
     git commit -m "Pi auto: $(date +%Y-%m-%d\ %H:%M) - fresh prices"
-    git push
+    # Push with one retry — if Mac pushed while we were scraping, pull and retry
+    if ! git push 2>&1; then
+        echo "Push failed — pulling and retrying"
+        git pull --rebase --autostash 2>&1 || {
+            echo "Retry rebase conflict — force reset + re-push"
+            git rebase --abort 2>/dev/null || true
+            git reset --hard origin/main
+            git pull origin main 2>&1 || true
+            # Re-run just the build + commit (data files are already fresh on disk)
+            node scripts/build_seo.js
+            git add js/data.js index.html sitemap.xml \
+                scraper/data/price_history.json scraper/data/price_history_export.json \
+                scraper/data/full_menu_products.json scraper/data/dispensaries.json \
+                scraper/data/dispensaries_export.json scraper/data/jane_products.json scraper/data/carrot_products.json \
+                dispensaries products brands neighborhoods \
+                best-dispensaries-twin-cities cheapest-cannabis-twin-cities minnesota-cannabis-laws \
+                terms privacy contact events 2>/dev/null || true
+            for d in *-cannabis-dispensaries; do [ -d "$d" ] && git add "$d"; done
+            git diff --staged --quiet || git commit -m "Pi auto: $(date +%Y-%m-%d\ %H:%M) - fresh prices (retry)"
+        }
+        git push 2>&1 || echo "WARN: push still failed after retry"
+    fi
     echo "Pushed fresh data"
 fi
 
