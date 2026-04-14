@@ -1737,32 +1737,112 @@ html[data-theme="light"] body::after {
     align-items: center;
     justify-content: center;
     color: var(--text-secondary);
-    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    transition:
+        color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+        background 0.25s ease,
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.3s ease;
     padding: 12px;
     box-sizing: border-box;
+    position: relative;
 }
 
 .quick-cat-icon svg {
     width: 100%;
     height: 100%;
+    transition: filter 0.3s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .quick-cat:hover .quick-cat-icon {
     color: var(--green);
-    border-color: rgba(34, 197, 94, 0.4);
-    background: rgba(34, 197, 94, 0.06);
-    transform: translateY(-2px);
+    border-color: rgba(34, 197, 94, 0.45);
+    background: rgba(34, 197, 94, 0.07);
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 10px 28px rgba(34, 197, 94, 0.18),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.quick-cat:hover .quick-cat-icon svg {
+    filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.45));
 }
 
 .quick-cat-label {
     font-size: 0.78rem;
     color: var(--text-secondary);
     font-weight: 500;
-    transition: color 0.2s ease;
+    transition: color 0.25s ease, letter-spacing 0.3s ease;
 }
 
 .quick-cat:hover .quick-cat-label {
     color: var(--text-primary);
+    letter-spacing: 0.02em;
+}
+
+/* ---- Per-category signature micro-interactions (hover only, idle dead quiet) ---- */
+
+/* Pre-Roll: outer ember glow pulses */
+.quick-cat[data-category="pre-roll"]:hover .quick-cat-icon svg circle:nth-of-type(2) {
+    animation: qc-ember 1.3s ease-in-out infinite;
+    transform-origin: 26.5px 14px;
+    transform-box: fill-box;
+}
+@keyframes qc-ember {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50%      { opacity: 0.55; transform: scale(1.35); }
+}
+
+/* Cart: LED dot blinks */
+.quick-cat[data-category="cartridge"]:hover .quick-cat-icon svg circle {
+    animation: qc-led 1.1s ease-in-out infinite;
+}
+@keyframes qc-led {
+    0%, 40%, 100% { opacity: 1; }
+    50%           { opacity: 0.25; }
+}
+
+/* Flower: only the outer leaf group sways. Inner rotation groups stay put. */
+.quick-cat[data-category="flower"]:hover .quick-cat-icon svg .leaf-fan {
+    animation: qc-sway 2.8s ease-in-out infinite;
+    transform-origin: 20px 34px;
+    transform-box: view-box;
+}
+@keyframes qc-sway {
+    0%, 100% { transform: translate(20px, 22.5px) rotate(0deg); }
+    50%      { transform: translate(20px, 22.5px) rotate(2.5deg); }
+}
+
+/* Concentrate: catches light (slow rotate) */
+.quick-cat[data-category="concentrate"]:hover .quick-cat-icon svg path:first-of-type {
+    animation: qc-catch 3s ease-in-out infinite;
+    transform-origin: 20px 20px;
+    transform-box: fill-box;
+}
+@keyframes qc-catch {
+    0%, 100% { transform: rotate(0deg); }
+    50%      { transform: rotate(-4deg); }
+}
+
+/* Edible: wrapped candy jiggle */
+.quick-cat[data-category="edible"]:hover .quick-cat-icon svg ellipse {
+    animation: qc-jiggle 1.4s ease-in-out infinite;
+    transform-origin: 20px 20px;
+    transform-box: fill-box;
+}
+@keyframes qc-jiggle {
+    0%, 100% { transform: rotate(-2deg); }
+    50%      { transform: rotate(2deg); }
+}
+
+/* Respect reduced motion — all hover animations off */
+@media (prefers-reduced-motion: reduce) {
+    .quick-cat[data-category="pre-roll"]:hover .quick-cat-icon svg circle:nth-of-type(2),
+    .quick-cat[data-category="cartridge"]:hover .quick-cat-icon svg circle,
+    .quick-cat[data-category="flower"]:hover .quick-cat-icon svg .leaf-fan,
+    .quick-cat[data-category="concentrate"]:hover .quick-cat-icon svg path:first-of-type,
+    .quick-cat[data-category="edible"]:hover .quick-cat-icon svg ellipse {
+        animation: none !important;
+    }
 }
 
 /* ============ FEATURED SECTION GRID ============ */

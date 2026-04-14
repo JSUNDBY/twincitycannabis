@@ -87,11 +87,9 @@
         // Flat silhouettes, single color (currentColor), bold and obvious.
 
         // Cannabis leaf — 7 lanceolate leaflets radiating from a center base.
-        // Each leaflet uses cubic Bezier curves to get the classic cannabis
-        // blade shape: narrow at base, widening mid-length, tapering to a
-        // sharp point. Lengths scale down from center outward.
+        // Outer wrapper has class="leaf-fan" so it can be swayed on hover.
         leaf: catIcon(`
-          <g transform="translate(20 22.5)">
+          <g class="leaf-fan" transform="translate(20 22.5)">
             <path d="M-0.7 0 C -1.4 -4 -1.9 -10 -1.2 -15 L 0 -20 L 1.2 -15 C 1.9 -10 1.4 -4 0.7 0 Z"/>
             <g transform="rotate(-34)"><path d="M-0.7 0 C -1.3 -4 -1.8 -9 -1.1 -13 L 0 -18 L 1.1 -13 C 1.8 -9 1.3 -4 0.7 0 Z"/></g>
             <g transform="rotate(34)"><path d="M-0.7 0 C -1.3 -4 -1.8 -9 -1.1 -13 L 0 -18 L 1.1 -13 C 1.8 -9 1.3 -4 0.7 0 Z"/></g>
