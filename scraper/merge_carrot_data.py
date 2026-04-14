@@ -13,7 +13,11 @@ Run after carrot_scrape.py:
 
 import json
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+from normalize import categorize_by_name
 
 DATA_DIR = Path(__file__).parent / "data"
 CARROT_FILE = DATA_DIR / "carrot_products.json"
@@ -36,17 +40,28 @@ def main():
 
     # Group by (name, weight, menu_type)
     grouped = {}
+    excluded_count = 0
     for p in products:
         name = p["name"].strip()
         weight = (p.get("weight") or "").strip()
         menu_type = p.get("menu_type", "rec")
+        brand = p.get("brand", "House")
+
+        # Re-normalize the category — Carrot source data can mislabel flower
+        # as topical etc. (same fix as merge_jane_data.py).
+        raw_cat = p.get("category", "flower")
+        normalized_cat = categorize_by_name(name, brand, raw_cat)
+        if normalized_cat == "EXCLUDE":
+            excluded_count += 1
+            continue
+
         key = f"{name}|||{weight}|||{menu_type}"
 
         if key not in grouped:
             grouped[key] = {
                 "name": name,
-                "brand": p.get("brand", "House"),
-                "category": p.get("category", "flower"),
+                "brand": brand,
+                "category": normalized_cat,
                 "menu_type": menu_type,
                 "thc": p.get("thc", ""),
                 "cbd": p.get("cbd", ""),
@@ -58,7 +73,7 @@ def main():
         if p.get("image") and not grouped[key]["image"]:
             grouped[key]["image"] = p["image"]
 
-    print(f"Loaded {len(products)} Carrot products -> {len(grouped)} unique")
+    print(f"Loaded {len(products)} Carrot products -> {len(grouped)} unique" + (f" [excluded {excluded_count} mislabeled/junk]" if excluded_count else ""))
     print(f"Carrot dispensaries: {', '.join(sorted(carrot_dispensaries))}")
 
     if not DATA_JS.exists():
@@ -95,13 +110,10 @@ def main():
         if img and 'placeholder' not in img:
             wm_images[name.lower().strip()] = img
 
-    # Remove old Carrot entries (id starts with 'c')
-    old_carrot = len(re.findall(r"id:\s*'c\d{4}'", products_text))
-    products_text = re.sub(
-        r"\{[^{}]*id:\s*'c\d{4}'[^{}]*priceHistory:[^}]*\},?\s*",
-        "",
-        products_text
-    )
+    # Remove old Carrot entries (id starts with 'c'). Uses brace-counting
+    # because the simple `[^{}]*` regex fails on entries with nested braces.
+    from merge_jane_data import _strip_entries_with_id_prefix
+    products_text, old_carrot = _strip_entries_with_id_prefix(products_text, 'c')
     if old_carrot:
         print(f"Removed {old_carrot} old Carrot entries")
 

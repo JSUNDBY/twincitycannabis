@@ -19,11 +19,60 @@ Integrated into pi_scrape.sh between the Weedmaps scrape and build_seo.js.
 
 import json
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+from normalize import categorize_by_name
 
 DATA_DIR = Path(__file__).parent / "data"
 JANE_FILE = DATA_DIR / "jane_products.json"
 DATA_JS = Path(__file__).parent.parent / "js" / "data.js"
+
+
+def _strip_entries_with_id_prefix(text, prefix):
+    """Remove product entries whose id starts with `prefix` (e.g. 'j' or 'c').
+
+    Brace-counting parser — handles entries with nested braces (the
+    prices: {} block) which broke the previous regex approach.
+    Returns (cleaned_text, count_removed).
+    """
+    id_pattern = re.compile(rf"id:\s*'{prefix}\d+'")
+    out_parts = []
+    pos = 0
+    removed = 0
+    while True:
+        m = id_pattern.search(text, pos)
+        if not m:
+            out_parts.append(text[pos:])
+            break
+        # Walk backward to find the opening { of this entry
+        entry_start = text.rfind('{', pos, m.start())
+        if entry_start == -1:
+            # No opening brace before this id — shouldn't happen, just skip
+            out_parts.append(text[pos:m.end()])
+            pos = m.end()
+            continue
+        # Walk forward from entry_start counting braces to find matching }
+        depth = 0
+        i = entry_start
+        while i < len(text):
+            c = text[i]
+            if c == '{':
+                depth += 1
+            elif c == '}':
+                depth -= 1
+                if depth == 0:
+                    i += 1
+                    break
+            i += 1
+        # Skip trailing comma + whitespace so we don't leave dangling commas
+        while i < len(text) and text[i] in ', \t\n':
+            i += 1
+        out_parts.append(text[pos:entry_start])
+        pos = i
+        removed += 1
+    return ''.join(out_parts), removed
 
 
 def load_jane_products():
@@ -47,10 +96,22 @@ def load_jane_products():
     grouped = {}
     rec_count = 0
     med_count = 0
+    excluded_count = 0
     for p in products:
         name = p["name"].strip()
         weight = (p.get("weight") or "").strip()
         menu_type = p.get("menu_type", "rec")
+        brand = p.get("brand", "House")
+
+        # Re-normalize the category. Jane source data is unreliable —
+        # strain-name flower products often get tagged "topical" by the
+        # dispensary, etc. categorize_by_name uses name patterns to fix this.
+        raw_cat = p.get("category", "flower")
+        normalized_cat = categorize_by_name(name, brand, raw_cat)
+        if normalized_cat == "EXCLUDE":
+            excluded_count += 1
+            continue
+
         key = f"{name}|||{weight}|||{menu_type}"
 
         if menu_type == "med":
@@ -61,8 +122,8 @@ def load_jane_products():
         if key not in grouped:
             grouped[key] = {
                 "name": name,
-                "brand": p.get("brand", "House"),
-                "category": p.get("category", "flower"),
+                "brand": brand,
+                "category": normalized_cat,
                 "menu_type": menu_type,
                 "thc": p.get("thc", ""),
                 "cbd": p.get("cbd", ""),
@@ -74,7 +135,7 @@ def load_jane_products():
         if p.get("image") and not grouped[key]["image"]:
             grouped[key]["image"] = p["image"]
 
-    print(f"Loaded {len(products)} Jane products ({rec_count} rec, {med_count} med) -> {len(grouped)} unique")
+    print(f"Loaded {len(products)} Jane products ({rec_count} rec, {med_count} med) -> {len(grouped)} unique" + (f" [excluded {excluded_count} mislabeled/junk]" if excluded_count else ""))
     print(f"Jane dispensaries: {', '.join(sorted(jane_dispensaries))}")
     return grouped, jane_dispensaries
 
@@ -119,14 +180,10 @@ def merge_into_data_js(jane_grouped, jane_dispensaries):
             wm_images[name.lower().strip()] = img
             wm_images_list.append((name.lower().strip(), img))
 
-    # Step 1: Remove any previously-added Jane entries (id starts with 'j')
-    # so we don't accumulate orphans on repeated runs
-    old_jane = len(re.findall(r"id:\s*'j\d{4}'", products_text))
-    products_text = re.sub(
-        r"\{[^{}]*id:\s*'j\d{4}'[^{}]*priceHistory:[^}]*\},?\s*",
-        "",
-        products_text
-    )
+    # Step 1: Remove any previously-added Jane entries (id starts with 'j').
+    # Brace-counting parser — the simple `[^{}]*` regex from before failed on
+    # entries that contained nested braces (the prices: { ... } block).
+    products_text, old_jane = _strip_entries_with_id_prefix(products_text, 'j')
     if old_jane:
         print(f"Removed {old_jane} old Jane entries before re-adding fresh ones")
 
