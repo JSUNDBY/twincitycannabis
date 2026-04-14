@@ -86,13 +86,18 @@
         // ===== CATEGORY ICONS =====
         // Flat silhouettes, single color (currentColor), bold and obvious.
 
-        // Cannabis leaf — 7 sharp pointed leaflets meeting at center, stem below
+        // Cannabis leaf — 7 leaflets radiating from a base, each a narrow spear
         leaf: catIcon(`
-          <path d="M20 3
-                   L19 14 L15.5 11.5 L14.5 19 L10.5 14 L12 21 L6 16 L10 22.5 L4.5 22 L11 25 L6 26 L13 26.5 L17 22 L19 23
-                   L21 23 L23 22 L27 26.5 L34 26 L29 25 L35.5 22 L30 22.5 L34 16 L28 21 L29.5 14 L25.5 19 L24.5 11.5 L21 14
-                   Z"/>
-          <rect x="19.2" y="22.5" width="1.6" height="12" rx="0.8"/>`),
+          <g transform="translate(20 22)">
+            <path d="M-0.9 0 Q -1.4 -10 0 -19 Q 1.4 -10 0.9 0 Z"/>
+            <g transform="rotate(-32)"><path d="M-0.9 0 Q -1.3 -9 0 -17 Q 1.3 -9 0.9 0 Z"/></g>
+            <g transform="rotate(32)"><path d="M-0.9 0 Q -1.3 -9 0 -17 Q 1.3 -9 0.9 0 Z"/></g>
+            <g transform="rotate(-62)"><path d="M-0.9 0 Q -1.2 -7 0 -14 Q 1.2 -7 0.9 0 Z"/></g>
+            <g transform="rotate(62)"><path d="M-0.9 0 Q -1.2 -7 0 -14 Q 1.2 -7 0.9 0 Z"/></g>
+            <g transform="rotate(-92)"><path d="M-0.9 0 Q -1 -5 0 -10 Q 1 -5 0.9 0 Z"/></g>
+            <g transform="rotate(92)"><path d="M-0.9 0 Q -1 -5 0 -10 Q 1 -5 0.9 0 Z"/></g>
+          </g>
+          <rect x="19.2" y="22" width="1.6" height="12" rx="0.8"/>`),
 
         // Pre-roll — clean angled joint, darker filter tip, one subtle ember
         joint: catIcon(`
