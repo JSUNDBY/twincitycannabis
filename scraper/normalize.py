@@ -55,7 +55,7 @@ _PATTERNS = {
     # Edible formats — explicit food formats. Checked EARLY so "Live Rosin
     # Gummies" or "Lemonade Gummies" don't get caught by concentrate or beverage.
     'EDIBLE_FORMAT': re.compile(
-        r'\b(gummy|gummies|gummi|chocolate|chocolates|cookie|cookies|brownie|brownies|truffle|truffles|caramel|caramels|hard\s*candy|gumdrop|gumdrops|gummy\s*ring|gummy\s*rings|peach\s*ring|peach\s*rings|sour\s*ring|chew|chews|fruit\s*chew|fruit\s*snack|lozenge|lozenges|taffy|honey\s*stick|honey\s*sticks|chocolate\s*bar|baked\s*good|cake\s*pop|protein\s*bar|granola\s*bar|fudge|marshmallow|popcorn\s*ball|moon\s*rock\s*candies|smokehouse\s*almonds|roasted.*almonds|trail\s*mix|nut\s*mix|infused\s*almonds|cannabis\s*almond|edible|edibles|candy|candies)\b',
+        r'\b(gummy|gummies|gummi|chocolate|chocolates|cookie|cookies|brownie|brownies|truffle|truffles|caramel|caramels|hard\s*candy|gumdrop|gumdrops|gummy\s*ring|gummy\s*rings|peach\s*ring|peach\s*rings|sour\s*ring|sour\s*patch|sour\s*watermelon|watermelon\s*ring|chew|chews|fruit\s*chew|fruit\s*snack|lozenge|lozenges|taffy|honey\s*stick|honey\s*sticks|chocolate\s*bar|baked\s*good|cake\s*pop|protein\s*bar|granola\s*bar|fudge|marshmallow|popcorn\s*ball|moon\s*rock\s*candies|smokehouse\s*almonds|roasted.*almonds|trail\s*mix|nut\s*mix|infused\s*almonds|cannabis\s*almond|edible|edibles|candy|candies)\b',
         re.IGNORECASE
     ),
 
@@ -86,7 +86,7 @@ _PATTERNS = {
 
     # Topicals — applied to skin. Includes skincare, masks, mists.
     'TOPICAL': re.compile(
-        r'\b(lotion|balm|salve|ointment|massage\s*oil|body\s*oil|bath\s*bomb|bath\s*salt|cannabis\s*soap|cbd\s*soap|patch|patches|transdermal|hand\s*cream|foot\s*cream|muscle\s*rub|topical|topicals|hemp\s*cream|cbd\s*cream|cbd\s*lotion|relief\s*cream|relief\s*gel|warming\s*gel|cooling\s*gel|pain\s*gel|roll[\s\-]?on\s*(?:relief|stick|gel)|skincare|skin\s*care|face\s*mist|face\s*mask|body\s*mist|body\s*mask|cbg\s*face|cbd\s*face|hemp\s*lotion|hemp\s*balm)\b',
+        r'\b(lotion|balm|salve|ointment|massage\s*oil|body\s*oil|bath\s*bomb|bath\s*salt|cannabis\s*soap|cbd\s*soap|transdermal|transdermal\s*patch|topical\s*patch|cbd\s*patch|thc\s*patch|hand\s*cream|foot\s*cream|muscle\s*rub|topical|topicals|hemp\s*cream|cbd\s*cream|cbd\s*lotion|relief\s*cream|relief\s*gel|warming\s*gel|cooling\s*gel|pain\s*gel|roll[\s\-]?on\s*(?:relief|stick|gel)|skincare|skin\s*care|face\s*mist|face\s*mask|body\s*mist|body\s*mask|cbg\s*face|cbd\s*face|hemp\s*lotion|hemp\s*balm)\b',
         re.IGNORECASE
     ),
 
