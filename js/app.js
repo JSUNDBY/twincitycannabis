@@ -86,17 +86,13 @@
         // ===== CATEGORY ICONS =====
         // Flat silhouettes, single color (currentColor), bold and obvious.
 
-        // Cannabis leaf — classic 7-leaflet fan, pointed tips
+        // Cannabis leaf — 7 sharp pointed leaflets meeting at center, stem below
         leaf: catIcon(`
-          <path d="M20 4 C19.4 10 18.4 15 18.8 19 L21.2 19 C21.6 15 20.6 10 20 4 Z
-                   M20 9 C15.5 10 13 13 14 19 C15.5 19.5 17 19.5 18.8 19 Z
-                   M20 9 C24.5 10 27 13 26 19 C24.5 19.5 23 19.5 21.2 19 Z
-                   M20 14 C13 15 9 17 11 22.5 C13 22.7 15.5 22 18 20.5 Z
-                   M20 14 C27 15 31 17 29 22.5 C27 22.7 24.5 22 22 20.5 Z
-                   M20 19 C14 20 11 21.5 13.5 25 C15.5 25 17.5 24 19 22.5 Z
-                   M20 19 C26 20 29 21.5 26.5 25 C24.5 25 22.5 24 21 22.5 Z"
-                fill-rule="evenodd"/>
-          <rect x="19.2" y="23" width="1.6" height="11" rx="0.8"/>`),
+          <path d="M20 3
+                   L19 14 L15.5 11.5 L14.5 19 L10.5 14 L12 21 L6 16 L10 22.5 L4.5 22 L11 25 L6 26 L13 26.5 L17 22 L19 23
+                   L21 23 L23 22 L27 26.5 L34 26 L29 25 L35.5 22 L30 22.5 L34 16 L28 21 L29.5 14 L25.5 19 L24.5 11.5 L21 14
+                   Z"/>
+          <rect x="19.2" y="22.5" width="1.6" height="12" rx="0.8"/>`),
 
         // Pre-roll — clean angled joint, darker filter tip, one subtle ember
         joint: catIcon(`
