@@ -705,7 +705,8 @@ html[data-theme="light"] body::after {
     color: var(--green-dim);
 }
 
-/* Review quote — only rendered on paid cards */
+/* Review quote — only rendered on paid cards. Wraps to 2 lines so the
+   quote actually reads instead of getting chopped mid-sentence. */
 .dispensary-card-quote {
     margin-top: 0.4rem;
     padding: 0;
@@ -713,9 +714,10 @@ html[data-theme="light"] body::after {
     line-height: 1.4;
     color: var(--text-muted);
     font-style: italic;
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 /* ============ PRODUCT SPOTLIGHT (paid tier cards) ============ */
@@ -792,6 +794,87 @@ html[data-theme="light"] body::after {
     .spotlight-items { gap: 0.4rem; }
     .spotlight-item { padding: 0.3rem 0.5rem; max-width: 160px; }
     .spotlight-item img { width: 32px; height: 32px; }
+}
+
+/* ---- PREMIUM grid card spans 2 columns and gets hero treatment ---- */
+.dispensary-card-grid.dispensary-card-premium {
+    grid-column: 1 / -1;  /* span all columns */
+    border: 2px solid #d4a853 !important;
+    box-shadow: 0 0 0 1px rgba(212, 168, 83, 0.15),
+                0 16px 50px rgba(212, 168, 83, 0.18),
+                0 6px 20px rgba(0, 0, 0, 0.4) !important;
+    background: linear-gradient(180deg, rgba(212, 168, 83, 0.06) 0%, transparent 50%),
+                rgba(6, 18, 16, 0.85) !important;
+    position: relative;
+    overflow: visible !important;
+}
+
+.dispensary-card-grid.dispensary-card-premium::before {
+    content: '★ FEATURED PARTNER';
+    position: absolute;
+    top: -10px;
+    left: 24px;
+    background: linear-gradient(90deg, #b8862e, #d4a853, #f1cf6f, #d4a853, #b8862e);
+    color: #1a1208;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.65rem;
+    letter-spacing: 1.6px;
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    box-shadow: 0 4px 14px rgba(212, 168, 83, 0.4);
+    z-index: 2;
+}
+
+/* Premium grid card — restructure to a 3-column inner layout: avatar | info | spotlight */
+.dispensary-card-grid.dispensary-card-premium .card-body {
+    display: grid;
+    grid-template-columns: auto 1fr 280px;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.dispensary-card-grid.dispensary-card-premium .dispensary-card-avatar {
+    width: 96px;
+    height: 96px;
+}
+
+.dispensary-card-grid.dispensary-card-premium .dispensary-card-info {
+    min-width: 0;
+}
+
+.dispensary-card-grid.dispensary-card-premium .dispensary-card-spotlight {
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-left: 1px solid rgba(212, 168, 83, 0.2);
+    padding-left: 1.5rem;
+}
+
+@media (max-width: 760px) {
+    .dispensary-card-grid.dispensary-card-premium .card-body {
+        grid-template-columns: auto 1fr;
+    }
+    .dispensary-card-grid.dispensary-card-premium .dispensary-card-spotlight {
+        grid-column: 1 / -1;
+        border-left: none;
+        border-top: 1px solid rgba(212, 168, 83, 0.2);
+        padding-left: 0;
+        padding-top: 0.8rem;
+        margin-top: 0.6rem;
+    }
+}
+
+/* Hide the small "Sponsored" inline label on premium since the ribbon does the job */
+.dispensary-card-grid.dispensary-card-premium .dispensary-card-sponsor-label {
+    display: none;
+}
+
+/* Featured grid card — green accent, normal size */
+.dispensary-card-grid.dispensary-card-featured {
+    border: 1px solid rgba(34, 197, 94, 0.4) !important;
+    box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.08),
+                0 8px 24px rgba(34, 197, 94, 0.1) !important;
 }
 
 /* Grid view (homepage featured section) — stack spotlight vertically.

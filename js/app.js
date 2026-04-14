@@ -1405,11 +1405,12 @@
                     const catOrder = { flower: 0, edible: 1, cartridge: 2, 'pre-roll': 3, concentrate: 4 };
                     return (catOrder[a.category] ?? 9) - (catOrder[b.category] ?? 9);
                 });
-            // Grid view (narrow cards) shows fewer items since they stack vertically
+            // Premium gets 3 products everywhere (it has dedicated spotlight column
+            // in grid view). Featured gets 1 in grid (narrow) or 2 in list view.
             const isGrid = variant === 'grid';
-            const maxSpot = isGrid
-                ? (d.tier === 'premium' ? 2 : 1)
-                : (d.tier === 'premium' ? 3 : 2);
+            const maxSpot = d.tier === 'premium'
+                ? 3
+                : (isGrid ? 1 : 2);
             const spots = spotProducts.slice(0, maxSpot);
             if (spots.length > 0) {
                 const spotLabel = deals.length > 0
@@ -1465,7 +1466,7 @@
             ? d.google.reviews.find(r => r.rating >= 4 && r.text && r.text.length > 40)
             : null;
         const quoteHtml = topReview
-            ? `<div class="dispensary-card-quote">&ldquo;${esc(topReview.text.slice(0, 100))}${topReview.text.length > 100 ? '...' : ''}&rdquo; &mdash; ${esc(topReview.author)}</div>`
+            ? `<div class="dispensary-card-quote">&ldquo;${esc(topReview.text.slice(0, 160))}${topReview.text.length > 160 ? '…' : ''}&rdquo; &mdash; ${esc(topReview.author)}</div>`
             : '';
 
         return `<div class="card dispensary-card ${tierClass} ${variant === 'grid' ? 'dispensary-card-grid' : ''}" onclick="window.location.hash='dispensary/${d.id}'">
