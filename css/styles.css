@@ -1728,78 +1728,41 @@ html[data-theme="light"] body::after {
 }
 
 .quick-cat-icon {
-    width: 72px;
-    height: 72px;
-    border-radius: 18px;
-    background: linear-gradient(160deg, rgba(6, 18, 14, 0.95) 0%, rgba(15, 42, 28, 0.9) 100%);
-    border: 1px solid rgba(34, 197, 94, 0.18);
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-secondary);
-    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-                box-shadow 0.28s ease,
-                border-color 0.28s ease;
-    padding: 10px;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    padding: 12px;
     box-sizing: border-box;
-    position: relative;
-    overflow: visible;
-    box-shadow:
-        0 8px 24px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.04);
-}
-
-/* Ambient glow ring that pulses subtly */
-.quick-cat-icon::before {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: inherit;
-    background: radial-gradient(ellipse at 50% 40%,
-        rgba(34, 197, 94, 0.18) 0%,
-        rgba(34, 197, 94, 0) 70%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: -1;
-    pointer-events: none;
 }
 
 .quick-cat-icon svg {
     width: 100%;
     height: 100%;
-    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-                filter 0.3s ease;
 }
 
 .quick-cat:hover .quick-cat-icon {
-    border-color: rgba(34, 197, 94, 0.55);
-    transform: translateY(-4px) scale(1.04);
-    box-shadow:
-        0 16px 40px rgba(34, 197, 94, 0.25),
-        0 0 0 1px rgba(34, 197, 94, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.quick-cat:hover .quick-cat-icon::before {
-    opacity: 1;
-}
-
-.quick-cat:hover .quick-cat-icon svg {
-    transform: scale(1.08);
-    filter: drop-shadow(0 2px 12px rgba(34, 197, 94, 0.55));
+    color: var(--green);
+    border-color: rgba(34, 197, 94, 0.4);
+    background: rgba(34, 197, 94, 0.06);
+    transform: translateY(-2px);
 }
 
 .quick-cat-label {
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     color: var(--text-secondary);
-    font-weight: 600;
-    letter-spacing: 0.3px;
+    font-weight: 500;
     transition: color 0.2s ease;
 }
 
 .quick-cat:hover .quick-cat-label {
-    color: var(--green);
+    color: var(--text-primary);
 }
 
 /* ============ FEATURED SECTION GRID ============ */

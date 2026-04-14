@@ -68,22 +68,9 @@
     // Custom SVG icon system - all icons inherit currentColor for theming
     const svgIcon = (size, body) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
 
-    // Signature duotone category icon — gradient fill + highlight stroke + signature detail.
-    // Used for the homepage quick-cats. Each one has a unique "glow" element.
-    const catIcon = (id, body) => `<svg width="48" height="48" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="${id}Grad" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#4ade80"/>
-          <stop offset="55%" stop-color="#22c55e"/>
-          <stop offset="100%" stop-color="#15803d"/>
-        </linearGradient>
-        <linearGradient id="${id}Sheen" x1="12" y1="8" x2="28" y2="14" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="rgba(255,255,255,0.55)"/>
-          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-        </linearGradient>
-      </defs>
-      ${body}
-    </svg>`;
+    // Category icon — flat single-color silhouette in currentColor.
+    // Clean, obvious, no ornament. Inherits parent color for theming.
+    const catIcon = (body) => `<svg width="48" height="48" viewBox="0 0 40 40" fill="currentColor" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
     const Icons = {
         search: svgIcon(16, '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>'),
         pin: svgIcon(14, '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>'),
@@ -96,164 +83,69 @@
         tag: svgIcon(14, '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>'),
         verified: '<svg width="14" height="14" viewBox="0 0 24 24" fill="var(--blue)" stroke="white" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>',
 
-        // ===== CUSTOM CATEGORY ICONS =====
-        // Cannabis leaf — 7-leaflet fan with stem, vein, and a corner sheen
-        leaf: catIcon('flower', `
-          <g>
-            <line x1="20" y1="26" x2="20" y2="36" stroke="url(#flowerGrad)" stroke-width="2" stroke-linecap="round"/>
-            <path d="M20 4 C19 11, 18.5 17, 19.5 22 L20.5 22 C21.5 17, 21 11, 20 4 Z" fill="url(#flowerGrad)"/>
-            <path d="M20 8 C14 9, 11 13, 15 20 C17 21.5, 19 22, 20 22 Z" fill="url(#flowerGrad)"/>
-            <path d="M20 8 C26 9, 29 13, 25 20 C23 21.5, 21 22, 20 22 Z" fill="url(#flowerGrad)"/>
-            <path d="M20 13 C12 14, 7 17, 13 23 C16 23.5, 18.5 23, 20 22 Z" fill="url(#flowerGrad)" opacity="0.92"/>
-            <path d="M20 13 C28 14, 33 17, 27 23 C24 23.5, 21.5 23, 20 22 Z" fill="url(#flowerGrad)" opacity="0.92"/>
-            <path d="M20 19 C14 20, 10 22, 15 26 C17 26, 19 25, 20 24 Z" fill="url(#flowerGrad)" opacity="0.8"/>
-            <path d="M20 19 C26 20, 30 22, 25 26 C23 26, 21 25, 20 24 Z" fill="url(#flowerGrad)" opacity="0.8"/>
-            <path d="M20 5 C19.2 12, 18.8 18, 19.2 22" stroke="rgba(255,255,255,0.45)" stroke-width="0.7" fill="none" stroke-linecap="round"/>
-            <path d="M15 10 C14 14, 14 18, 16 20" stroke="url(#flowerSheen)" stroke-width="0.9" fill="none" opacity="0.7"/>
-          </g>`),
+        // ===== CATEGORY ICONS =====
+        // Flat silhouettes, single color (currentColor), bold and obvious.
 
-        // Pre-roll — angled joint with glowing ember tip and 3 smoke wisps
-        joint: catIcon('preroll', `
-          <g>
-            <!-- paper body -->
-            <path d="M6 26 L24 12 L28 15 L10 29 Z" fill="url(#prerollGrad)"/>
-            <!-- filter tip -->
-            <path d="M6 26 L10.5 22.5 L14 25 L10 29 Z" fill="#0f3a20"/>
-            <!-- paper seam line -->
-            <path d="M8 27 L26 13" stroke="rgba(255,255,255,0.35)" stroke-width="0.7" stroke-linecap="round"/>
-            <!-- ember glow -->
-            <circle cx="26" cy="13.5" r="2.2" fill="#fb923c"/>
-            <circle cx="26" cy="13.5" r="1.2" fill="#fcd34d"/>
-            <circle cx="26" cy="13.5" r="3.5" fill="#fb923c" opacity="0.25"/>
-            <!-- smoke wisps -->
-            <path d="M28 8 C29.5 6, 28 4.5, 29.5 2.5" stroke="rgba(255,255,255,0.55)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-            <path d="M31 10 C33 8, 31 5.5, 33 3.5" stroke="rgba(255,255,255,0.4)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
-            <path d="M34 12 C35.5 10.5, 34.5 8.5, 36 7" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none" stroke-linecap="round"/>
-          </g>`),
+        // Cannabis leaf — classic 7-leaflet fan, pointed tips
+        leaf: catIcon(`
+          <path d="M20 4 C19.4 10 18.4 15 18.8 19 L21.2 19 C21.6 15 20.6 10 20 4 Z
+                   M20 9 C15.5 10 13 13 14 19 C15.5 19.5 17 19.5 18.8 19 Z
+                   M20 9 C24.5 10 27 13 26 19 C24.5 19.5 23 19.5 21.2 19 Z
+                   M20 14 C13 15 9 17 11 22.5 C13 22.7 15.5 22 18 20.5 Z
+                   M20 14 C27 15 31 17 29 22.5 C27 22.7 24.5 22 22 20.5 Z
+                   M20 19 C14 20 11 21.5 13.5 25 C15.5 25 17.5 24 19 22.5 Z
+                   M20 19 C26 20 29 21.5 26.5 25 C24.5 25 22.5 24 21 22.5 Z"
+                fill-rule="evenodd"/>
+          <rect x="19.2" y="23" width="1.6" height="11" rx="0.8"/>`),
 
-        // Cart — cartridge with visible oil level and mouthpiece highlight
-        cart: catIcon('cart', `
-          <g>
-            <!-- mouthpiece -->
-            <rect x="16" y="3" width="8" height="4.5" rx="1.2" fill="#0f3a20"/>
-            <!-- main chamber glass -->
-            <rect x="14" y="7.5" width="12" height="19" rx="1.5" fill="url(#cartGrad)" opacity="0.55"/>
-            <!-- oil level -->
-            <rect x="14.8" y="12" width="10.4" height="13.5" rx="0.8" fill="url(#cartGrad)"/>
-            <!-- shine highlight -->
-            <rect x="15.5" y="9" width="2" height="16" rx="1" fill="url(#cartSheen)" opacity="0.7"/>
-            <!-- atomizer base -->
-            <rect x="15" y="26" width="10" height="4" rx="0.8" fill="#0f3a20"/>
-            <!-- battery body -->
-            <rect x="13.5" y="30" width="13" height="7" rx="1.5" fill="url(#cartGrad)"/>
-            <!-- LED dot -->
-            <circle cx="20" cy="33.5" r="1" fill="#4ade80"/>
-            <circle cx="20" cy="33.5" r="2" fill="#4ade80" opacity="0.3"/>
-          </g>`),
+        // Pre-roll — clean angled joint, darker filter tip, one subtle ember
+        joint: catIcon(`
+          <path d="M6.5 27 L25 12.5 L28.5 15.5 L10 30 Z"/>
+          <path d="M6.5 27 L11 23.5 L14.5 26 L10 30 Z" fill-opacity="0.45"/>
+          <circle cx="26.5" cy="14" r="2.2"/>
+          <circle cx="26.5" cy="14" r="3.5" fill-opacity="0.2"/>`),
 
-        // Edible — rounded gummy cube with sugar crystals and top gleam
-        cookie: catIcon('edible', `
-          <g>
-            <!-- gummy body (3D-ish cube) -->
-            <path d="M9 13 L20 7 L31 13 L31 27 L20 33 L9 27 Z" fill="url(#edibleGrad)"/>
-            <!-- top face highlight -->
-            <path d="M9 13 L20 7 L31 13 L20 19 Z" fill="url(#edibleSheen)" opacity="0.8"/>
-            <!-- front edge line -->
-            <path d="M9 13 L20 19 L31 13" stroke="rgba(255,255,255,0.35)" stroke-width="0.7" fill="none"/>
-            <path d="M20 19 L20 33" stroke="rgba(0,0,0,0.2)" stroke-width="0.7" fill="none"/>
-            <!-- sugar crystals -->
-            <circle cx="14" cy="13" r="0.8" fill="#fff" opacity="0.8"/>
-            <circle cx="19" cy="11" r="0.6" fill="#fff" opacity="0.8"/>
-            <circle cx="24" cy="12.5" r="0.7" fill="#fff" opacity="0.8"/>
-            <circle cx="27" cy="14.5" r="0.5" fill="#fff" opacity="0.7"/>
-            <circle cx="17" cy="15.5" r="0.5" fill="#fff" opacity="0.7"/>
-          </g>`),
+        // Cart — cartridge outline with mouthpiece and pill shape
+        cart: catIcon(`
+          <rect x="16" y="3" width="8" height="5" rx="1.2"/>
+          <path d="M13 10 L27 10 L27 27 C27 28 26 29 25 29 L15 29 C14 29 13 28 13 27 Z"/>
+          <rect x="14.5" y="30" width="11" height="7" rx="1.5" fill-opacity="0.65"/>
+          <circle cx="20" cy="33.5" r="1.2" fill-opacity="1"/>`),
 
-        // Concentrate — faceted diamond with inner glow
-        diamond: catIcon('concentrate', `
-          <g>
-            <!-- outer diamond -->
-            <path d="M20 4 L8 14 L14 16 L20 36 L26 16 L32 14 Z" fill="url(#concentrateGrad)"/>
-            <!-- top crown darker -->
-            <path d="M20 4 L8 14 L14 16 Z" fill="#15803d" opacity="0.5"/>
-            <path d="M20 4 L32 14 L26 16 Z" fill="#15803d" opacity="0.3"/>
-            <!-- facets -->
-            <path d="M8 14 L14 16 L20 14 L20 4 Z" fill="url(#concentrateSheen)" opacity="0.6"/>
-            <path d="M14 16 L26 16" stroke="rgba(255,255,255,0.5)" stroke-width="0.8"/>
-            <path d="M14 16 L20 36" stroke="rgba(255,255,255,0.2)" stroke-width="0.6"/>
-            <path d="M26 16 L20 36" stroke="rgba(0,0,0,0.2)" stroke-width="0.6"/>
-            <!-- inner spark -->
-            <circle cx="20" cy="18" r="1.2" fill="#fff" opacity="0.85"/>
-          </g>`),
+        // Edible — wrapped candy, twist ends
+        cookie: catIcon(`
+          <ellipse cx="20" cy="20" rx="7.5" ry="5.5"/>
+          <path d="M12.5 20 L5 15 L5 25 Z"/>
+          <path d="M27.5 20 L35 15 L35 25 Z"/>
+          <line x1="8" y1="17" x2="10" y2="20" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="8" y1="23" x2="10" y2="20" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="32" y1="17" x2="30" y2="20" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="32" y1="23" x2="30" y2="20" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>`),
 
-        // Topical — lotion tube with cap and squeeze highlight
-        drop: catIcon('topical', `
-          <g>
-            <!-- cap -->
-            <rect x="14" y="3" width="12" height="4" rx="1.2" fill="#0f3a20"/>
-            <rect x="15.5" y="4" width="2" height="2" rx="0.5" fill="rgba(255,255,255,0.35)"/>
-            <!-- neck -->
-            <rect x="16" y="7" width="8" height="2" fill="#0f3a20"/>
-            <!-- tube body -->
-            <path d="M11 9 L29 9 L27 35 C26.5 36.5, 25.5 37, 24 37 L16 37 C14.5 37, 13.5 36.5, 13 35 Z" fill="url(#topicalGrad)"/>
-            <!-- label band -->
-            <rect x="13" y="18" width="14" height="8" fill="rgba(255,255,255,0.15)"/>
-            <line x1="15" y1="21" x2="25" y2="21" stroke="rgba(255,255,255,0.5)" stroke-width="0.7"/>
-            <line x1="15" y1="23" x2="23" y2="23" stroke="rgba(255,255,255,0.35)" stroke-width="0.6"/>
-            <!-- sheen -->
-            <path d="M13 10 L14 34" stroke="url(#topicalSheen)" stroke-width="2.5" opacity="0.55" stroke-linecap="round"/>
-          </g>`),
+        // Concentrate — bold diamond silhouette
+        diamond: catIcon(`
+          <path d="M20 4 L8 15 L20 36 L32 15 Z"/>
+          <path d="M8 15 L32 15" stroke="currentColor" stroke-width="1.2" fill-opacity="0" opacity="0.35"/>`),
 
-        // Tincture — dropper bottle with pipette and suspended drop
-        bottle: catIcon('tincture', `
-          <g>
-            <!-- dropper bulb -->
-            <path d="M17 3 L23 3 L22.5 6 L17.5 6 Z" fill="#0f3a20"/>
-            <rect x="16" y="5" width="8" height="2" rx="0.5" fill="#0f3a20"/>
-            <!-- pipette -->
-            <rect x="19" y="7" width="2" height="4" fill="rgba(74, 222, 128, 0.5)"/>
-            <!-- bottle shoulder -->
-            <path d="M12 12 L28 12 L28 15 L12 15 Z" fill="#0f3a20"/>
-            <!-- bottle body -->
-            <path d="M11 15 L29 15 L29 34 C29 35.5, 27.5 37, 26 37 L14 37 C12.5 37, 11 35.5, 11 34 Z" fill="url(#tinctureGrad)"/>
-            <!-- liquid level -->
-            <path d="M12 22 L28 22 L28 34 C28 35, 27 36, 26 36 L14 36 C13 36, 12 35, 12 34 Z" fill="url(#tinctureGrad)" opacity="0.5"/>
-            <line x1="12" y1="22" x2="28" y2="22" stroke="rgba(255,255,255,0.5)" stroke-width="0.7"/>
-            <!-- label -->
-            <rect x="13" y="24" width="14" height="6" fill="rgba(255,255,255,0.2)"/>
-            <line x1="15" y1="26" x2="25" y2="26" stroke="rgba(255,255,255,0.6)" stroke-width="0.6"/>
-            <line x1="15" y1="28" x2="23" y2="28" stroke="rgba(255,255,255,0.4)" stroke-width="0.5"/>
-            <!-- suspended drop -->
-            <path d="M20 10 C19 11.5, 19 13, 20 14 C21 13, 21 11.5, 20 10 Z" fill="#22c55e" opacity="0.9"/>
-          </g>`),
+        // Topical — clean tube with cap
+        drop: catIcon(`
+          <rect x="14" y="3" width="12" height="4" rx="1.5" fill-opacity="0.5"/>
+          <path d="M11 9 L29 9 L27 35 C26.5 36.5 25.5 37 24 37 L16 37 C14.5 37 13.5 36.5 13 35 Z"/>
+          <rect x="14" y="18" width="12" height="8" rx="1" fill-opacity="0" stroke="currentColor" stroke-width="1.3"/>`),
 
-        // Beverage — can with pull tab, condensation, and bubbles
-        beverage: catIcon('beverage', `
-          <g>
-            <!-- top rim -->
-            <ellipse cx="20" cy="6" rx="9" ry="2.5" fill="#0f3a20"/>
-            <!-- pull tab -->
-            <path d="M17 5 L21 5 L20.5 7 L17.5 7 Z" fill="rgba(255,255,255,0.55)"/>
-            <circle cx="19" cy="6" r="0.8" fill="#0f3a20"/>
-            <!-- can body -->
-            <path d="M11 6.5 L11 33.5 C11 35, 15 37, 20 37 C25 37, 29 35, 29 33.5 L29 6.5 Z" fill="url(#beverageGrad)"/>
-            <!-- bottom rim -->
-            <ellipse cx="20" cy="33.5" rx="9" ry="2" fill="rgba(0,0,0,0.25)"/>
-            <!-- label band -->
-            <rect x="11" y="15" width="18" height="10" fill="rgba(255,255,255,0.15)"/>
-            <!-- bubbles rising -->
-            <circle cx="14" cy="22" r="0.9" fill="rgba(255,255,255,0.7)"/>
-            <circle cx="17" cy="18" r="0.7" fill="rgba(255,255,255,0.75)"/>
-            <circle cx="22" cy="20" r="1" fill="rgba(255,255,255,0.8)"/>
-            <circle cx="25" cy="16" r="0.6" fill="rgba(255,255,255,0.7)"/>
-            <circle cx="19" cy="25" r="0.5" fill="rgba(255,255,255,0.6)"/>
-            <!-- shine strip -->
-            <rect x="12" y="9" width="1.5" height="24" rx="0.8" fill="url(#beverageSheen)" opacity="0.75"/>
-            <!-- condensation dots on side -->
-            <circle cx="27" cy="14" r="0.7" fill="rgba(255,255,255,0.8)"/>
-            <circle cx="28" cy="20" r="0.5" fill="rgba(255,255,255,0.7)"/>
-            <circle cx="27" cy="27" r="0.6" fill="rgba(255,255,255,0.7)"/>
-          </g>`),
+        // Tincture — dropper bottle
+        bottle: catIcon(`
+          <rect x="15" y="3" width="10" height="5" rx="1" fill-opacity="0.55"/>
+          <rect x="18" y="8" width="4" height="5" fill-opacity="0.4"/>
+          <path d="M11 13 L29 13 L29 34 C29 35.5 27.5 37 26 37 L14 37 C12.5 37 11 35.5 11 34 Z"/>
+          <rect x="14" y="20" width="12" height="8" rx="1" fill-opacity="0" stroke="currentColor" stroke-width="1.3"/>`),
+
+        // Beverage — can with pull tab
+        beverage: catIcon(`
+          <ellipse cx="20" cy="7" rx="8.5" ry="2.5" fill-opacity="0.55"/>
+          <path d="M11.5 7 L11.5 33 C11.5 34.5 15.5 37 20 37 C24.5 37 28.5 34.5 28.5 33 L28.5 7 Z"/>
+          <path d="M17 6 L21 6 L20.5 8 L17.5 8 Z" fill-opacity="0" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+          <rect x="11.5" y="15" width="17" height="11" rx="0.5" fill-opacity="0" stroke="currentColor" stroke-width="1.1" opacity="0.4"/>`),
 
         fire: svgIcon(14, '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>'),
         sparkle: svgIcon(14, '<path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>'),
