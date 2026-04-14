@@ -1205,6 +1205,96 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
   .seo-wrap{padding-bottom:120px}
   footer{padding-bottom:120px}
 }
+
+/* ─── EVENT CARDS ─── */
+.events-intro{color:#b8bcc4;font-size:1rem;margin:0 0 2rem;max-width:640px}
+.events-section-head{display:flex;align-items:baseline;gap:.8rem;margin:2.5rem 0 1.2rem;
+  padding-bottom:.6rem;border-bottom:1px solid rgba(34,197,94,.18)}
+.events-section-head h2{margin:0;color:#f5f6f8}
+.events-section-count{color:#22c55e;font-size:.8rem;font-weight:700;padding:.2rem .6rem;
+  background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:999px}
+
+.event-card{position:relative;display:grid;grid-template-columns:130px 1fr;gap:1.5rem;
+  background:rgba(6,18,14,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:1.4rem;margin:1rem 0;
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;overflow:hidden}
+.event-card:hover{border-color:rgba(34,197,94,.45);transform:translateY(-3px);
+  box-shadow:0 16px 44px rgba(0,0,0,.5),0 0 40px rgba(34,197,94,.12)}
+.event-card::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(ellipse at top right,rgba(34,197,94,.06),transparent 60%);pointer-events:none}
+@media (max-width:560px){.event-card{grid-template-columns:100px 1fr;gap:1rem;padding:1rem}}
+
+.event-date{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:.9rem .6rem;border-radius:12px;text-align:center;position:relative;
+  background:linear-gradient(180deg,rgba(34,197,94,.14),rgba(22,163,74,.04));
+  border:1px solid rgba(34,197,94,.28)}
+.event-date-month{color:#22c55e;font-weight:800;font-size:.78rem;letter-spacing:1.5px;
+  text-transform:uppercase;line-height:1}
+.event-date-day{color:#f5f6f8;font-weight:900;font-size:2.8rem;line-height:1;margin:.25rem 0;
+  font-variant-numeric:tabular-nums;text-shadow:0 2px 14px rgba(34,197,94,.3)}
+.event-date-range{color:#f5f6f8;font-weight:800;font-size:1.5rem;line-height:1.05;margin:.35rem 0;
+  font-variant-numeric:tabular-nums}
+.event-date-year{color:#8b909a;font-size:.7rem;letter-spacing:1px;font-weight:600}
+@media (max-width:560px){.event-date{padding:.6rem}.event-date-day{font-size:2.2rem}}
+
+.event-countdown{display:block;margin-top:.45rem;padding:.2rem .55rem;font-size:.65rem;
+  font-weight:700;letter-spacing:.7px;text-transform:uppercase;border-radius:999px;
+  background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);color:#22c55e;white-space:nowrap}
+.event-countdown.soon{background:rgba(245,158,11,.2);border-color:rgba(245,158,11,.5);color:#fbbf24;
+  animation:cd-pulse 2s ease-in-out infinite}
+.event-countdown.today{background:rgba(239,68,68,.2);border-color:rgba(239,68,68,.5);color:#ef4444}
+.event-countdown.past{background:rgba(120,120,120,.12);border-color:rgba(120,120,120,.3);color:#8b909a}
+@keyframes cd-pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.35)}50%{box-shadow:0 0 0 5px rgba(245,158,11,0)}}
+
+.event-body{min-width:0;position:relative;z-index:1}
+.event-type{display:inline-flex;align-items:center;gap:.35rem;padding:.22rem .6rem;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:999px;
+  font-size:.66rem;color:#b8bcc4;text-transform:uppercase;letter-spacing:1.1px;font-weight:700;
+  margin-bottom:.55rem}
+.event-title{color:#f5f6f8;font-size:1.4rem;font-weight:800;line-height:1.15;margin:0 0 .35rem;
+  letter-spacing:-.4px}
+.event-tagline{color:#22c55e;font-weight:600;font-size:.95rem;margin:0 0 .6rem;font-style:italic}
+.event-meta{display:flex;flex-wrap:wrap;gap:.35rem 1rem;color:#8b909a;font-size:.85rem;margin:.15rem 0 .8rem}
+.event-meta span{display:inline-flex;align-items:center;gap:.3rem;white-space:nowrap}
+.event-desc{color:#b8bcc4;font-size:.95rem;line-height:1.55;margin:.4rem 0}
+.event-audience{color:#7a7f88;font-size:.8rem;font-style:italic;margin:.5rem 0 .9rem}
+.event-cta{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.1rem;
+  background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff !important;font-weight:700;
+  font-size:.85rem;border-radius:10px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;
+  box-shadow:0 4px 14px rgba(34,197,94,.3)}
+.event-cta:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(34,197,94,.45)}
+.event-cta-ig{color:#8b909a !important;font-size:.8rem;text-decoration:none;margin-left:.8rem}
+.event-cta-ig:hover{color:#22c55e !important}
+
+.event-sponsors{display:flex;flex-wrap:wrap;gap:.4rem;margin:.9rem 0;
+  padding:.65rem .85rem;background:rgba(255,255,255,.03);border-radius:10px;
+  border:1px solid rgba(255,255,255,.06)}
+.event-sponsors-label{color:#8b909a;font-size:.66rem;text-transform:uppercase;letter-spacing:1.3px;
+  font-weight:800;margin-right:.3rem;align-self:center}
+.event-sponsor{padding:.28rem .65rem;background:rgba(34,197,94,.08);
+  border:1px solid rgba(34,197,94,.18);border-radius:999px;color:#d4f5e0;
+  font-size:.72rem;font-weight:600}
+
+.event-featured{border:1px solid rgba(34,197,94,.4);
+  box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 80px rgba(34,197,94,.1)}
+.event-featured-ribbon{position:absolute;top:0;left:0;right:0;text-align:center;padding:.4rem;
+  background:linear-gradient(90deg,#15803d,#22c55e,#15803d);color:#fff;font-weight:800;
+  font-size:.7rem;text-transform:uppercase;letter-spacing:2.5px;z-index:2}
+.event-featured{padding-top:2.6rem !important}
+.event-featured .event-title{font-size:1.65rem}
+
+.org-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin:1.2rem 0}
+.org-card{background:rgba(6,18,14,.8);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;padding:1.2rem;transition:all .2s ease}
+.org-card:hover{border-color:rgba(34,197,94,.35);transform:translateY(-2px)}
+.org-card h3{margin:0 0 .4rem;color:#f5f6f8;font-size:1.05rem}
+.org-card p{color:#b8bcc4;font-size:.88rem;margin:.3rem 0;line-height:1.5}
+.org-card a{color:#22c55e;font-size:.85rem;font-weight:600;text-decoration:none}
+.org-card a:hover{text-decoration:underline}
+
+.events-footer-block{margin-top:3rem;padding:1.8rem;background:rgba(6,18,14,.85);
+  backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.08);border-radius:14px}
+.events-footer-block h2{margin-top:0}
 </style>
 
 <!-- Full-page night sky background -->
@@ -1285,65 +1375,172 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
 </script>
 
 <div class="crumbs"><a href="/">Home</a> / Events</div>
+<h1 style="margin-top:1rem">Minnesota Cannabis Events</h1>
+<p class="events-intro">Every major cannabis event in Minnesota, one page. Sorted by date, with live countdowns and real sponsor credits.</p>
 
-<h2>Upcoming events</h2>
-
-<div class="card" style="border-left:4px solid #22c55e;margin:1rem 0;padding:1.2rem 1.4rem">
-  <h3 style="margin-top:0;color:#f5f6f8">CannaFest 2026</h3>
-  <p style="margin:0.3rem 0"><strong style="color:#22c55e">April 16, 2026</strong> &middot; 6:00 - 9:00 PM</p>
-  <p style="margin:0.3rem 0">The Lowlands &middot; 160 Wabasha St S, St. Paul</p>
-  <p>Premium product showcase in a meet-the-makers format. Talk directly with Minnesota cannabis brands, sample products, and connect with the community. Tickets $40.</p>
-  <p style="color:#8b909a;font-size:.85rem">Good for: consumers who want to explore products and meet brands face-to-face.</p>
-  <p><a href="https://events.humanitix.com/cannafest-2026" rel="noopener" target="_blank" style="color:#22c55e;font-weight:600">Get tickets &rarr;</a></p>
+<div class="events-section-head">
+  <h2>Upcoming events</h2>
+  <span class="events-section-count" id="upcoming-count">&nbsp;</span>
 </div>
 
-<div class="card" style="border-left:4px solid #22c55e;margin:1rem 0;padding:1.2rem 1.4rem">
-  <h3 style="margin-top:0;color:#f5f6f8">NECANN Minnesota Cannabis Convention</h3>
-  <p style="margin:0.3rem 0"><strong style="color:#22c55e">May 14-15, 2026</strong></p>
-  <p style="margin:0.3rem 0">Minneapolis Convention Center</p>
-  <p>The biggest B2B cannabis event in the state. 120+ exhibitors, 60+ speakers, thousands of attendees. Networking, education, and industry deals.</p>
-  <p style="color:#8b909a;font-size:.85rem">Good for: dispensary owners, industry professionals, anyone building a cannabis business in Minnesota.</p>
-  <p><a href="https://necann.com/minnesota-convention/" rel="noopener" target="_blank" style="color:#22c55e;font-weight:600">Learn more &amp; register &rarr;</a></p>
+<!-- CannaFest -->
+<article class="event-card" data-event-date="2026-04-16">
+  <div class="event-date">
+    <div class="event-date-month">Apr</div>
+    <div class="event-date-day">16</div>
+    <div class="event-date-year">2026</div>
+    <span class="event-countdown" data-countdown>&nbsp;</span>
+  </div>
+  <div class="event-body">
+    <div class="event-type">&#127863; Product Showcase</div>
+    <div class="event-title">CannaFest 2026</div>
+    <div class="event-meta">
+      <span>&#128337; Thu 6:00 &ndash; 9:00 PM</span>
+      <span>&#128205; The Lowlands, St. Paul</span>
+      <span>&#127915; $40</span>
+    </div>
+    <p class="event-desc">Premium product showcase in a meet-the-makers format. Talk directly with Minnesota cannabis brands, sample products, and connect with the community.</p>
+    <p class="event-audience">Good for consumers who want to explore products and meet brands face-to-face.</p>
+    <a class="event-cta" href="https://events.humanitix.com/cannafest-2026" rel="noopener" target="_blank">Get tickets &rarr;</a>
+  </div>
+</article>
+
+<!-- Smokin on the Runway — FEATURED -->
+<article class="event-card event-featured" data-event-date="2026-05-03">
+  <div class="event-featured-ribbon">&#9733; Featured Event</div>
+  <div class="event-date">
+    <div class="event-date-month">May</div>
+    <div class="event-date-day">3</div>
+    <div class="event-date-year">2026</div>
+    <span class="event-countdown" data-countdown>&nbsp;</span>
+  </div>
+  <div class="event-body">
+    <div class="event-type">&#128092; Fashion &middot; Culture</div>
+    <div class="event-title">Smokin on the Runway</div>
+    <p class="event-tagline">MN&rsquo;s Canna Fashion Show &mdash; &ldquo;Together Again, Rooted in Community&rdquo;</p>
+    <div class="event-meta">
+      <span>&#128337; Sun 4:00 &ndash; 10:00 PM</span>
+      <span>&#128205; The Hook &amp; Ladder, 3010 Minnehaha Ave, Minneapolis</span>
+    </div>
+    <p class="event-desc">Cannabis meets fashion on the runway. A night of live shows, local cannabis culture, and community connection.</p>
+    <div class="event-sponsors">
+      <span class="event-sponsors-label">Sponsors</span>
+      <span class="event-sponsor">K&uuml;ressence</span>
+      <span class="event-sponsor">Cannon J&rsquo;s</span>
+      <span class="event-sponsor">Stone Daze</span>
+      <span class="event-sponsor">21 Simpatico</span>
+      <span class="event-sponsor">NECANN</span>
+      <span class="event-sponsor">Zen</span>
+      <span class="event-sponsor">Cannon Coffee</span>
+      <span class="event-sponsor">Foundry Nation</span>
+    </div>
+    <a class="event-cta" href="https://thehookmpls.com/event/smokin-on-the-runway/" rel="noopener" target="_blank">Get tickets &rarr;</a>
+    <a class="event-cta-ig" href="https://www.instagram.com/smokinontherunway/" rel="noopener" target="_blank">&#9656; @smokinontherunway</a>
+  </div>
+</article>
+
+<!-- NECANN -->
+<article class="event-card" data-event-date="2026-05-14">
+  <div class="event-date">
+    <div class="event-date-month">May</div>
+    <div class="event-date-range">14&ndash;15</div>
+    <div class="event-date-year">2026</div>
+    <span class="event-countdown" data-countdown>&nbsp;</span>
+  </div>
+  <div class="event-body">
+    <div class="event-type">&#127970; B2B Convention</div>
+    <div class="event-title">NECANN Minnesota Cannabis Convention</div>
+    <div class="event-meta">
+      <span>&#128197; Two-day convention</span>
+      <span>&#128205; Minneapolis Convention Center</span>
+    </div>
+    <p class="event-desc">The biggest B2B cannabis event in the state. 120+ exhibitors, 60+ speakers, thousands of attendees. Networking, education, and industry deals.</p>
+    <p class="event-audience">Good for dispensary owners, industry professionals, and anyone building a cannabis business in Minnesota.</p>
+    <a class="event-cta" href="https://necann.com/minnesota-convention/" rel="noopener" target="_blank">Learn more &amp; register &rarr;</a>
+  </div>
+</article>
+
+<!-- Legacy Cup -->
+<article class="event-card" data-event-date="2026-09-26">
+  <div class="event-date">
+    <div class="event-date-month">Sep</div>
+    <div class="event-date-day">26</div>
+    <div class="event-date-year">2026</div>
+    <span class="event-countdown" data-countdown>&nbsp;</span>
+  </div>
+  <div class="event-body">
+    <div class="event-type">&#127881; Festival</div>
+    <div class="event-title">Legacy Cup Minnesota</div>
+    <div class="event-meta">
+      <span>&#128197; Saturday, all-day</span>
+      <span>&#128205; Surly Festival Field, Minneapolis</span>
+    </div>
+    <p class="event-desc">Minnesota&rsquo;s first licensed cannabis festival. Flower competition, live music (past headliners include Killer Mike and Lupe Fiasco), skate demos, art, food. Running annually since 2019.</p>
+    <p class="event-audience">Good for everyone. The big consumer-facing event of the year.</p>
+    <a class="event-cta" href="https://legacycupmn.com/" rel="noopener" target="_blank">Learn more &rarr;</a>
+  </div>
+</article>
+
+<div class="events-section-head">
+  <h2>Recurring meetups &amp; organizations</h2>
 </div>
 
-<div class="card" style="border-left:4px solid #22c55e;margin:1rem 0;padding:1.2rem 1.4rem">
-  <h3 style="margin-top:0;color:#f5f6f8">Legacy Cup Minnesota</h3>
-  <p style="margin:0.3rem 0"><strong style="color:#22c55e">September 26, 2026</strong></p>
-  <p style="margin:0.3rem 0">Surly Festival Field &middot; Minneapolis</p>
-  <p>Minnesota's first licensed cannabis festival. Flower competition, live music (past headliners include Killer Mike and Lupe Fiasco), skate demos, art, food. Running annually since 2019.</p>
-  <p style="color:#8b909a;font-size:.85rem">Good for: everyone. The big consumer-facing event of the year.</p>
-  <p><a href="https://legacycupmn.com/" rel="noopener" target="_blank" style="color:#22c55e;font-weight:600">Learn more &rarr;</a></p>
+<div class="org-grid">
+  <div class="org-card">
+    <h3>Canna Connect MN</h3>
+    <p>Regular cannabis community events, education, and The Canna Connect Show podcast.</p>
+    <a href="https://cannaconnectmn.com" rel="nofollow noopener" target="_blank">cannaconnectmn.com &rarr;</a>
+  </div>
+  <div class="org-card">
+    <h3>SotaCann</h3>
+    <p>Member-based organization offering industry meetups, education events, and legislative updates.</p>
+    <a href="https://www.sotacann.org" rel="nofollow noopener" target="_blank">sotacann.org &rarr;</a>
+  </div>
+  <div class="org-card">
+    <h3>MN Cannabis Growers Co-op</h3>
+    <p>Co-op with networking events, group purchasing, and legislative advocacy.</p>
+    <a href="https://mncannabis.coop" rel="nofollow noopener" target="_blank">mncannabis.coop &rarr;</a>
+  </div>
 </div>
 
-<h2>Recurring meetups and organizations</h2>
+<div class="events-footer-block">
+  <h2 style="margin-top:0">Dispensary openings</h2>
+  <p>New dispensaries are opening across the Twin Cities every month. We track every new opening automatically.</p>
+  <p><a class="cta" href="/dispensaries/">Browse all ${TCC.dispensaries.length} dispensaries &rarr;</a></p>
 
-<div class="card" style="margin:1rem 0;padding:1.2rem 1.4rem">
-  <h3 style="margin-top:0;color:#f5f6f8">Canna Connect MN</h3>
-  <p>Regular cannabis community events, education, and The Canna Connect Show podcast.</p>
-  <p><a href="https://cannaconnectmn.com" rel="nofollow noopener" target="_blank">cannaconnectmn.com</a></p>
+  <h2 style="margin-top:2rem">Know about an event we&rsquo;re missing?</h2>
+  <p>Email <a href="mailto:hello@twincitycannabis.com">hello@twincitycannabis.com</a> and we&rsquo;ll add it.</p>
+
+  <h2 style="margin-top:2rem">Want to partner on an event?</h2>
+  <p>Twin City Cannabis tracks ${TCC.products.length.toLocaleString()}+ products across ${TCC.dispensaries.length} dispensaries with real-time pricing. If you&rsquo;re organizing a cannabis event in Minnesota and want a data partner or media coverage, <a href="/contact/">get in touch</a>.</p>
 </div>
 
-<div class="card" style="margin:1rem 0;padding:1.2rem 1.4rem">
-  <h3 style="margin-top:0;color:#f5f6f8">SotaCann</h3>
-  <p>Member-based organization offering industry meetups, education events, and legislative updates.</p>
-  <p><a href="https://www.sotacann.org" rel="nofollow noopener" target="_blank">sotacann.org</a></p>
-</div>
-
-<div class="card" style="margin:1rem 0;padding:1.2rem 1.4rem">
-  <h3 style="margin-top:0;color:#f5f6f8">Minnesota Cannabis Growers Cooperative</h3>
-  <p>Co-op with networking events, group purchasing, and legislative advocacy.</p>
-  <p><a href="https://mncannabis.coop" rel="nofollow noopener" target="_blank">mncannabis.coop</a></p>
-</div>
-
-<h2>Dispensary openings</h2>
-<p>New dispensaries are opening across the Twin Cities every month. We track every new opening automatically. Recent additions: Fridley Dispensary, Pot Mama's, Green Canopy Craft Dispensary.</p>
-<p><a class="cta" href="/dispensaries/">Browse all ${TCC.dispensaries.length} dispensaries &rarr;</a></p>
-
-<h2>Know about an event we're missing?</h2>
-<p>Email <a href="mailto:hello@twincitycannabis.com">hello@twincitycannabis.com</a> and we'll add it.</p>
-
-<h2>Want to partner on an event?</h2>
-<p>Twin City Cannabis tracks ${TCC.products.length.toLocaleString()}+ products across ${TCC.dispensaries.length} dispensaries with real-time pricing. If you're organizing a cannabis event in Minnesota and want a data partner or media coverage, <a href="/contact/">get in touch</a>.</p>
+<script>
+// Live countdown — re-renders every minute
+(function(){
+  var MS_DAY = 86400000;
+  function tick(){
+    var now = new Date(); now.setHours(0,0,0,0);
+    var upcoming = 0;
+    document.querySelectorAll('.event-card[data-event-date]').forEach(function(card){
+      var when = new Date(card.getAttribute('data-event-date') + 'T00:00:00');
+      var days = Math.round((when - now) / MS_DAY);
+      var badge = card.querySelector('[data-countdown]');
+      if (!badge) return;
+      badge.classList.remove('soon','today','past');
+      if (days < 0) { badge.textContent = 'Past'; badge.classList.add('past'); card.style.opacity = '0.55'; }
+      else if (days === 0) { badge.textContent = 'Today'; badge.classList.add('today'); upcoming++; }
+      else if (days === 1) { badge.textContent = 'Tomorrow'; badge.classList.add('soon'); upcoming++; }
+      else if (days <= 14) { badge.textContent = 'In ' + days + ' days'; badge.classList.add('soon'); upcoming++; }
+      else { badge.textContent = 'In ' + days + ' days'; upcoming++; }
+    });
+    var c = document.getElementById('upcoming-count');
+    if (c) c.textContent = upcoming;
+  }
+  tick();
+  setInterval(tick, 60000);
+})();
+</script>
 ` + footer;
 };
 
