@@ -794,6 +794,40 @@ html[data-theme="light"] body::after {
     .spotlight-item img { width: 32px; height: 32px; }
 }
 
+/* Grid view (homepage featured section) — stack spotlight vertically.
+   Narrow cards can't fit 3 items in a row without truncating everything. */
+.dispensary-card-grid .spotlight-items {
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.dispensary-card-grid .spotlight-item {
+    max-width: none;
+    width: 100%;
+    flex: none;
+    padding: 0.5rem 0.7rem;
+}
+
+.dispensary-card-grid .spotlight-item img {
+    width: 44px;
+    height: 44px;
+}
+
+.dispensary-card-grid .spotlight-item-name {
+    font-size: 0.8rem;
+    white-space: normal;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.dispensary-card-grid .spotlight-item-price {
+    font-size: 0.85rem;
+    margin-top: 0.15rem;
+}
+
 /* ---- FOMO CTA — single line below featured section ---- */
 .featured-cta {
     text-align: center;

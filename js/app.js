@@ -243,7 +243,7 @@
             })
             .slice(0, 6);
 
-        grid.innerHTML = paid.map(d => dispensaryCard(d)).join('');
+        grid.innerHTML = paid.map(d => dispensaryCard(d, 'grid')).join('');
 
         // Show the FOMO CTA if there is at least one paid dispensary
         if (ctaEl) {
@@ -1405,7 +1405,11 @@
                     const catOrder = { flower: 0, edible: 1, cartridge: 2, 'pre-roll': 3, concentrate: 4 };
                     return (catOrder[a.category] ?? 9) - (catOrder[b.category] ?? 9);
                 });
-            const maxSpot = d.tier === 'premium' ? 3 : 2;
+            // Grid view (narrow cards) shows fewer items since they stack vertically
+            const isGrid = variant === 'grid';
+            const maxSpot = isGrid
+                ? (d.tier === 'premium' ? 2 : 1)
+                : (d.tier === 'premium' ? 3 : 2);
             const spots = spotProducts.slice(0, maxSpot);
             if (spots.length > 0) {
                 const spotLabel = deals.length > 0
