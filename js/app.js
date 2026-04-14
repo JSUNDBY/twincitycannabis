@@ -10,6 +10,148 @@
     const _escMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
     const esc = (s) => s == null ? '' : String(s).replace(/[&<>"']/g, c => _escMap[c]);
 
+    // ─── Cannabis-only filter — keep this in sync with build_seo.js ─────────
+    // Scraper data leaks humidity packs, rolling papers, electrolyte sticks,
+    // glass bowls, kits, etc. all mis-tagged as "flower". We apply two layers:
+    // a name regex blocklist + per-category minimum price floors.
+    const ACCESSORY_RE = new RegExp([
+        'bowl', 'pipe', 'bong', '\\brig\\b', 'banger', 'nail\\b', 'carb cap', 'dabber',
+        'dab tool', 'dab rag', 'rags?\\b', '\\btray', 'holder', '\\bcase\\b', '\\bjar\\b',
+        'ashtray', 'grinder', 'lighter', 'matches?', 'torch', 'butane',
+        'battery', 'batteries', 'wick', '510 thread', 'mod\\b', '\\bcoil',
+        'capsule', 'dosing capsule', 'humidor', 'boveda', 'humidipak',
+        'cleaner', 'cleaning', 'cotton bud', 'cotton swab', 'q.?tip',
+        '\\bkit\\b', 'starter kit', 'happy kit', 'dab kit',
+        'nectar collector', 'dab grab', 'honey straw', 'silicone container',
+        'bud kup', '\\bkup\\b', '\\bgo stik\\b', '\\bstik\\b', 'roller\\b',
+        '\\bpax\\b', 'dynavap', 'storz', 'volcano\\b', '\\bccell\\b', 'ccell go',
+        'puffco', 'dr.? dabber', 'kandypens', 'davinci', 'firefly', 'pulsar',
+        'kodo\\b', 'icons? - ', 'icons\\b',
+        'rolling paper', 'rolling tray', 'raw cone', 'pre.?rolled tips?', 'pre.?roll case',
+        '\\bcone(s)?\\b(?!.*infused)', 'wraps?\\b', 'blunt wrap', 'hemp wrap',
+        'filter tip', 'filter\\b', 'wood tip', 'glass tip', 'roach',
+        '^raw ', '\\braw\\s', 'blazy', 'futurola', 'ooze', 'barbasol', 'king palm',
+        'juicy jay', 'zig.?zag', 'elements\\b', 'rolls?\\b(?!.*infused)', 'ocb\\b',
+        'velcro label', 'sticker', 'merch\\b', 't.?shirt', 'hoodie', 'hat\\b', 'beanie',
+        'coloring book', 'color book', 'exit bag', 'koozie', 'magnifier',
+        'screens?\\b', 'root riot', 'cube\\b(?!.*gummy)', 'shears', 'electrolyte', 'probiotic',
+        'pre.?workout', 'sunblaster', 'garden', 'wrapping paper', 'gift wrap',
+        'fanny pack', 'backpack', 'tote bag', 'dugout', 'keychain',
+        'on a stoop', 'holiday elf', 'christmas', 'ornament',
+        'almonds?\\b', 'pretzels?\\b', 'popcorn', 'chips\\b', 'crackers?\\b',
+        'beef jerky', 'jerky\\b', 'gum\\b(?!my)',
+        'seeds?\\b', 'genetics\\b',
+        'donation', 'lab fee', 'testing fee', 'delivery fee', 'membership',
+        'consultation', 'gift card', 'merchandise',
+    ].join('|'), 'i');
+
+    const MIN_PRICE_BY_CATEGORY = {
+        'flower':      12,
+        'pre-roll':    5,
+        'cartridge':   20,
+        'edible':      4,
+        'concentrate': 18,
+        'topical':     8,
+        'tincture':    15,
+        'beverage':    4,
+    };
+
+    const _lowestPriceOf = (p) => {
+        const v = Object.values(p.prices || {});
+        return v.length ? Math.min(...v) : null;
+    };
+
+    // Category-specific sanity: does the name actually look like its category?
+    const _NOT_ANYTHING_CANNABIS_RE = /\b(book|handbook|field guide|guide to|coloring|foundation|fertilizer|soil\b|nutrient|rooting|grow tent|tent kit|field\s*guide|textbook|novel|story|bible)\b/i;
+
+    const _FLOWER_WEIGHT_RE = /\b(1\/8|1\/4|1\/2|eighth|quarter|half\s*oz|ounce|oz\b|3\.5\s*g|7\s*g|14\s*g|28\s*g|mixed\s*bud|whole\s*flower|pre.?pack)\b/i;
+    const _FLOWER_KEYWORD_RE = /\b(flower|bud|nug|smalls|popcorn|ground\b|shake\b)\b/i;
+    const _NOT_FLOWER_RE = /\b(cart(ridge)?|disposable|vape|shot|seltzer|soda|drink|tonic|lemonade|iced\s*tea|fl\s*oz|gummi|chocolate|candy|brownie|cookie|chew|mint|honey|lotion|balm|salve|bath\s*bomb|dab|wax|shatter|rosin|hash|tincture|dropper|capsule|softgel|book|bible|textbook|blend|deodorant|headband|blanket|guasha|bronners|soap\b|koozie|keychain|jewel|stoop|holiday|ornament|pack\b|box\b|scarf|buddy|pass\b|wash|immunity|mushroom|spirulina|wellness|roller|stik\b)\b/i;
+    const _MG_RE = /\b\d+\s*mg\b/i;
+    // Obviously not-cannabis words — supplements, household, pet products,
+    // merchandise, etc. that get mistakenly tagged with a cannabis category.
+    const _NON_CANNABIS_SIGNAL_RE = /\b(mushroom|immunity|spirulina|wound|scarf|hat\b|shirt|blanket|deodorant|soap\b|tea\b|coffee|salt\b|wellness|bliss|mystery|flavor|magnesium|liver|ashwagandha|multivitamin|immune|organ|castor|canviva|pet\b|crochet|bone\b|mineral|probiotic|complex|supplement|rescue|wash\b|shield|guard|detox|cleanse|balance(?!\s*point)|clarity(?!\s*gumm)|focus(?!\s*gumm)|energy(?!\s*drink)|sleep\s*aid|anxiety|recovery(?!\s*gumm)|blend(?!ed)|holistic|ashwaganda|essential\s*oil|fish\s*oil|flax|turmeric|collagen|electrolyte|pre.?workout|protein\s*powder)\b/i;
+
+    const _CART_KEYWORD_RE = /\b(cart(ridge)?s?|vape|vaporizer|disposable|pen|510|pod|pods|oil\b|distillate|live\s*resin|live\s*rosin|rosin\s*cart)\b/i;
+
+    // Case-insensitive substring blocklist — catches prefix/suffix variants
+    // (crochet / crocheted / crocheting) that regex \b\b misses.
+    const _SUBSTRING_BLOCKLIST = [
+        'crochet', 'canviva', 'graffe', 'lookah', 'spoon', 'flower and tree',
+        'ashwagand', 'ashwaganda', 'magnesium', 'spirulina', 'castor',
+        'multivitamin', 'ps zinc', 'ps desiccated', 'ps liver', 'ps mineral',
+        'immune rescue', 'organ complex', 'mushroom immunity',
+        'fanny pack', 'koozie', 'keychain', 'scarf', 'headband',
+        'bronners', 'dr. bronner', 'dandy blend', 'guasha',
+        'nf1 - 3.5g', // crochet art named NF1
+    ];
+
+    const hasBlockedSubstring = (name) => {
+        const ln = name.toLowerCase();
+        return _SUBSTRING_BLOCKLIST.some(b => ln.includes(b));
+    };
+
+    const looksLikeFlower = (p) => {
+        const n = p.name || '';
+        if (_NOT_FLOWER_RE.test(n)) return false;
+        if (_MG_RE.test(n)) return false;
+        if (_NON_CANNABIS_SIGNAL_RE.test(n)) return false;
+        if (hasBlockedSubstring(n)) return false;
+        // Whitelist: explicit flower weight or flower keyword
+        if (_FLOWER_WEIGHT_RE.test(n) || _FLOWER_KEYWORD_RE.test(n)) return true;
+        // Bare strain names: 1-3 words, letters only, no digits, no red flags
+        if (!/\d/.test(n)
+            && /^[A-Za-z][A-Za-z '&.-]*$/.test(n)
+            && n.split(/\s+/).filter(Boolean).length <= 3
+            && n.length >= 3) {
+            return true;
+        }
+        return false;
+    };
+
+    const looksLikeCart = (p) => {
+        const n = p.name || '';
+        if (_NON_CANNABIS_SIGNAL_RE.test(n)) return false;
+        if (hasBlockedSubstring(n)) return false;
+        if (_CART_KEYWORD_RE.test(n)) return true;
+        if (!/\d/.test(n)
+            && n.split(/\s+/).filter(Boolean).length <= 4
+            && n.length >= 3) return true;
+        return false;
+    };
+
+    const looksLikeEdible = (p) => {
+        // Edibles should smell like food/dose, not flower strains sold by the gram
+        const n = p.name || '';
+        if (/\b\d+(?:\.\d+)?\s*g\b/i.test(n) && !/gumm|chocolate|candy|brownie|cookie|bar\b|chew|mint/i.test(n)) return false;
+        return true;
+    };
+
+    const isRealCannabisProduct = (p) => {
+        if (!p || !p.name) return false;
+        if (ACCESSORY_RE.test(p.name)) return false;
+        if (_NOT_ANYTHING_CANNABIS_RE.test(p.name)) return false;
+        const lo = _lowestPriceOf(p);
+        if (lo == null) return false;
+        const floor = MIN_PRICE_BY_CATEGORY[p.category];
+        if (floor != null && lo < floor) return false;
+        // Category-specific sanity checks
+        if (p.category === 'flower' && !looksLikeFlower(p)) return false;
+        if (p.category === 'edible' && !looksLikeEdible(p)) return false;
+        if (p.category === 'cartridge' && !looksLikeCart(p)) return false;
+        return true;
+    };
+
+    // Prune TCC.products on load so every renderer sees only real cannabis.
+    // Keep the original array count available for any stats that want it.
+    if (typeof TCC !== 'undefined' && Array.isArray(TCC.products)) {
+        const originalLen = TCC.products.length;
+        TCC.products = TCC.products.filter(isRealCannabisProduct);
+        if (originalLen !== TCC.products.length) {
+            console.log(`[TCC] Filtered ${originalLen - TCC.products.length} non-cannabis products (kept ${TCC.products.length})`);
+        }
+    }
+
     // ─── Stripe / Cloudflare config ──────────────────────────────────────────
     // Worker URL deployed from /cloudflare. Returns tier overrides as JSON.
     const TCC_WORKER_URL = 'https://tcc-stripe.j-sundby.workers.dev';
