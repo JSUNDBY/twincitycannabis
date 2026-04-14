@@ -1421,10 +1421,25 @@
                         <div class="spotlight-items">
                             ${spots.map(p => {
                                 const price = p.prices[d.id];
+                                // Clean up noisy product names for the spotlight display.
+                                // Strip everything after " | " (metadata), strip weight/THC
+                                // tails, and cut to the strain name before the dash if the
+                                // suffix is just a category like "Hybrid Flower".
+                                let displayName = (p.name || '')
+                                    .split(/\s*\|\s*/)[0]  // drop " | 17% THC (3.5g)"
+                                    .replace(/\s*\([^)]*\)/g, '')  // drop "(3.5g)", "(100mg)"
+                                    .replace(/\s*\[[^\]]*\]/g, '')
+                                    .trim();
+                                // If there's a trailing " - Hybrid Flower" / " - Sativa" etc, trim it
+                                displayName = displayName
+                                    .replace(/\s+[-–]\s+(Hybrid|Indica|Sativa|Cbd|CBD|Thc)(\s+(Flower|Pre.?roll|Cartridge|Vape|Edible|Gummies?))?\s*$/i, '')
+                                    .trim();
+                                if (displayName.length > 42) displayName = displayName.slice(0, 40) + '…';
+                                if (!displayName) displayName = p.name;
                                 return `<div class="spotlight-item">
                                     <img src="${p.image}" alt="${esc(p.name)}" loading="lazy" onerror="this.parentElement.style.display='none'">
                                     <div class="spotlight-item-info">
-                                        <div class="spotlight-item-name">${esc(p.name)}</div>
+                                        <div class="spotlight-item-name">${esc(displayName)}</div>
                                         <div class="spotlight-item-price">${price ? '$' + price.toFixed(2) : ''}</div>
                                     </div>
                                 </div>`;
