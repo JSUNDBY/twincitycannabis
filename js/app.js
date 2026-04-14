@@ -1800,12 +1800,13 @@
             });
         });
 
-        // Quick category clicks
+        // Quick category clicks — navigate to compare with category pre-filtered
         document.querySelectorAll('.quick-cat').forEach(el => {
-            el.addEventListener('click', () => {
-                const cat = el.dataset.category;
-                navigate('compare');
-                // Wait for page to render, then filter would happen
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const cat = el.dataset.category || 'all';
+                navigate(`compare/cat/${cat}`);
             });
         });
 
