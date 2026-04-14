@@ -29,6 +29,7 @@ METRO_CITIES = {
     "Blaine", "Eagan", "Burnsville", "Woodbury", "Lakeville",
     "Rosemount", "Anoka", "Ramsey", "Chaska", "Jordan",
     "West St. Paul", "Stillwater", "Fridley", "Mendota Heights",
+    "Prior Lake",
 }
 
 # Manually included dispensaries that bypass the metro filter.
