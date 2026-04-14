@@ -67,12 +67,13 @@ const ACCESSORY_RE = new RegExp(
     'puffco', 'dr.? dabber', 'kandypens', 'davinci', 'firefly', 'pulsar',
     'kodo\\b', 'icons? - ', 'icons\\b',
     // papers / wraps / cones / tips (the actual paper, not infused pre-rolls)
-    'rolling paper', 'rolling tray', 'raw cone', 'pre.?rolled tips?', 'pre.?roll case',
-    '\\bcone(s)?\\b(?!.*infused)', 'wraps?\\b', 'blunt wrap', 'hemp wrap',
+    'rolling paper', 'rolling tray', 'raw cone', 'blunt cone', 'blunt cones',
+    'pre.?rolled tips?', 'pre.?roll case', 'pre.?roll card', 'preroll card',
+    'wraps?\\b', 'blunt wrap', 'hemp wrap',
     'filter tip', 'filter\\b', 'wood tip', 'glass tip', 'roach',
     // brands of accessories/papers
     '^raw ', '\\braw\\s', 'blazy', 'futurola', 'ooze', 'barbasol', 'king palm',
-    'juicy jay', 'zig.?zag', 'elements\\b', 'rolls?\\b(?!.*infused)', 'ocb\\b',
+    'juicy jay', 'zig.?zag', 'elements\\b', 'ocb\\b',
     // labels / stickers / merch
     'velcro label', 'sticker', 'merch\\b', 't.?shirt', 'hoodie', 'hat\\b', 'beanie',
     // food / snacks (NOT edibles)
