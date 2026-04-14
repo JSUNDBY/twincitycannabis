@@ -1206,6 +1206,44 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
   footer{padding-bottom:120px}
 }
 
+/* ─── EVENT PAGE HERO ─── */
+.events-hero{position:relative;margin:1.5rem 0 2.5rem;padding:3rem 2rem 2.5rem;
+  border-radius:20px;overflow:hidden;
+  background:
+    radial-gradient(ellipse at 20% 0%,rgba(34,197,94,.18),transparent 55%),
+    radial-gradient(ellipse at 85% 100%,rgba(139,92,246,.12),transparent 60%),
+    linear-gradient(160deg,rgba(10,30,20,.75),rgba(6,18,14,.9));
+  border:1px solid rgba(34,197,94,.2);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.events-hero::before{content:'';position:absolute;top:-20px;right:-20px;width:180px;height:180px;
+  background:radial-gradient(circle,rgba(34,197,94,.15),transparent 70%);pointer-events:none}
+.events-hero-eyebrow{color:#22c55e;font-weight:800;font-size:.78rem;letter-spacing:3px;
+  text-transform:uppercase;margin:0 0 .7rem}
+.events-hero h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.05;margin:0 0 .8rem;color:#f5f6f8;
+  letter-spacing:-.02em;font-weight:800}
+.events-hero h1 .accent{color:#22c55e}
+.events-hero-sub{color:#b8bcc4;font-size:clamp(.95rem,1.6vw,1.1rem);line-height:1.55;max-width:640px;margin:0 0 1.5rem}
+.events-hero-stats{display:flex;flex-wrap:wrap;gap:1.5rem 2.5rem;margin-top:1.2rem;padding-top:1.2rem;
+  border-top:1px solid rgba(255,255,255,.08)}
+.events-hero-stat{display:flex;flex-direction:column}
+.events-hero-stat-num{font-family:var(--font-display,Inter,sans-serif);font-size:1.6rem;font-weight:800;color:#22c55e;line-height:1}
+.events-hero-stat-label{font-size:.7rem;color:#8b909a;text-transform:uppercase;letter-spacing:1.2px;margin-top:.35rem;font-weight:600}
+@media (max-width:560px){.events-hero{padding:2.2rem 1.4rem 1.8rem}}
+
+/* ─── SUBMIT CTA BANNER ─── */
+.events-submit-cta{margin:2.5rem 0;padding:1.8rem 2rem;border-radius:16px;
+  background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(34,197,94,.04));
+  border:1px solid rgba(34,197,94,.3);
+  display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
+.events-submit-cta-text{min-width:0;flex:1 1 320px}
+.events-submit-cta-title{color:#f5f6f8;font-size:1.2rem;font-weight:700;margin:0 0 .3rem;letter-spacing:-.01em}
+.events-submit-cta-desc{color:#b8bcc4;font-size:.92rem;margin:0;line-height:1.5}
+.events-submit-cta-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.4rem;
+  background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff !important;font-weight:700;
+  font-size:.95rem;border-radius:12px;text-decoration:none;white-space:nowrap;
+  box-shadow:0 6px 20px rgba(34,197,94,.35);transition:transform .15s ease,box-shadow .15s ease}
+.events-submit-cta-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(34,197,94,.5)}
+
 /* ─── EVENT CARDS ─── */
 .events-intro{color:#b8bcc4;font-size:1rem;margin:0 0 2rem;max-width:640px}
 .events-section-head{display:flex;align-items:baseline;gap:.8rem;margin:2.5rem 0 1.2rem;
@@ -1375,8 +1413,17 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
 </script>
 
 <div class="crumbs"><a href="/">Home</a> / Events</div>
-<h1 style="margin-top:1rem">Minnesota Cannabis Events</h1>
-<p class="events-intro">Every major cannabis event in Minnesota, one page. Sorted by date, with live countdowns and real sponsor credits.</p>
+
+<section class="events-hero">
+  <div class="events-hero-eyebrow">Minnesota Cannabis Calendar</div>
+  <h1>Every MN cannabis event,<br><span class="accent">in one place.</span></h1>
+  <p class="events-hero-sub">Festivals, fashion shows, B2B conventions, community meetups &mdash; sorted by date with live countdowns. If it&rsquo;s happening in Minnesota cannabis, it&rsquo;s here.</p>
+  <div class="events-hero-stats">
+    <div class="events-hero-stat"><span class="events-hero-stat-num" id="hero-upcoming">&nbsp;</span><span class="events-hero-stat-label">Upcoming events</span></div>
+    <div class="events-hero-stat"><span class="events-hero-stat-num">3</span><span class="events-hero-stat-label">Recurring orgs</span></div>
+    <div class="events-hero-stat"><span class="events-hero-stat-num">Free</span><span class="events-hero-stat-label">Always</span></div>
+  </div>
+</section>
 
 <div class="events-section-head">
   <h2>Upcoming events</h2>
@@ -1481,6 +1528,14 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
   </div>
 </article>
 
+<div class="events-submit-cta">
+  <div class="events-submit-cta-text">
+    <p class="events-submit-cta-title">Got an event? Tell us about it.</p>
+    <p class="events-submit-cta-desc">Hosting a cannabis event in Minnesota, or know about one we&rsquo;re missing? Send us the details and we&rsquo;ll add it to the calendar. Free, always.</p>
+  </div>
+  <a class="events-submit-cta-btn" href="mailto:hello@twincitycannabis.com?subject=Event%20Submission">Email hello@twincitycannabis.com &rarr;</a>
+</div>
+
 <div class="events-section-head">
   <h2>Recurring meetups &amp; organizations</h2>
 </div>
@@ -1536,6 +1591,8 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
     });
     var c = document.getElementById('upcoming-count');
     if (c) c.textContent = upcoming;
+    var h = document.getElementById('hero-upcoming');
+    if (h) h.textContent = upcoming;
   }
   tick();
   setInterval(tick, 60000);
