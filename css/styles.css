@@ -813,22 +813,50 @@ html[data-theme="light"] body::after {
 .spotlight-item {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    background: rgba(255,255,255,0.03);
+    gap: 0.75rem;
+    background: rgba(255,255,255,0.025);
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: 10px;
-    padding: 0.4rem 0.6rem;
+    padding: 0.55rem 0.75rem;
     min-width: 0;
     flex: 1 1 0;
-    max-width: 200px;
+    max-width: 220px;
+    transition: border-color 0.2s ease, background 0.2s ease;
 }
 
-.spotlight-item img {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    object-fit: cover;
+.spotlight-item:hover {
+    border-color: rgba(34, 197, 94, 0.3);
+    background: rgba(34, 197, 94, 0.04);
+}
+
+/* Category icon badge — small dark rounded tile with a brand-green glyph.
+   Replaces the old product photos (Weedmaps white-bg) which jarred
+   visually against the dark card. */
+.spotlight-item-cat {
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.22);
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
+    padding: 7px;
+    box-sizing: border-box;
+}
+
+.spotlight-item-cat svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Gold accent for Premium spotlight items */
+.dispensary-card-premium .spotlight-item-cat {
+    background: rgba(212, 168, 83, 0.1);
+    border-color: rgba(212, 168, 83, 0.3);
+    color: #d4a853;
 }
 
 .spotlight-item-info {

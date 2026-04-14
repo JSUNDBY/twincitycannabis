@@ -1550,8 +1550,9 @@
                                     .trim();
                                 if (displayName.length > 42) displayName = displayName.slice(0, 40) + '…';
                                 if (!displayName) displayName = p.name;
+                                const catIcon = Icons[ ({flower:'leaf','pre-roll':'joint',cartridge:'cart',edible:'cookie',concentrate:'diamond',topical:'drop',tincture:'bottle',beverage:'beverage'})[p.category] || 'leaf' ] || '';
                                 return `<div class="spotlight-item">
-                                    <img src="${p.image}" alt="${esc(p.name)}" loading="lazy" onerror="this.parentElement.style.display='none'">
+                                    <div class="spotlight-item-cat">${catIcon}</div>
                                     <div class="spotlight-item-info">
                                         <div class="spotlight-item-name">${esc(displayName)}</div>
                                         <div class="spotlight-item-price">${price ? '$' + price.toFixed(2) : ''}</div>
