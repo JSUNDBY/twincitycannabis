@@ -151,6 +151,23 @@
                 showPage('dashboard');
                 renderDashboard(param);
                 break;
+            case 'compare':
+                // Handle #compare, #compare/<productId>, and #compare/cat/<category>
+                showPage('compare');
+                if (navMap[page]) {
+                    const navEl = document.getElementById(navMap[page]);
+                    if (navEl) navEl.classList.add('active');
+                }
+                if (parts[1] === 'cat' && parts[2]) {
+                    Browse.category = parts[2];
+                    Browse.page = 1;
+                    renderCompare();
+                } else if (parts[1]) {
+                    renderCompare(parts[1]);
+                } else {
+                    renderCompare();
+                }
+                break;
             default:
                 showPage(page);
                 if (navMap[page]) {
@@ -2143,7 +2160,14 @@
     // Expose for hash routing on compare
     window.addEventListener('hashchange', () => {
         const hash = window.location.hash.slice(1);
-        if (hash.startsWith('compare/')) {
+        if (hash.startsWith('compare/cat/')) {
+            // Quick-category navigation from the homepage tiles
+            const cat = hash.split('/')[2];
+            Browse.category = cat || 'all';
+            Browse.page = 1;
+            renderCompare();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else if (hash.startsWith('compare/')) {
             const productId = hash.split('/')[1];
             renderCompare(productId);
             window.scrollTo({ top: 0, behavior: 'smooth' });
