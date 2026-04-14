@@ -54,6 +54,13 @@ if [ -f scraper/data/carrot_products.json ]; then
     python3 scraper/merge_carrot_data.py 2>&1 || echo "Carrot merge skipped"
 fi
 
+# 5d. NativeCare W. St. Paul menu (WordPress page, no dispensary platform)
+echo "--- NativeCare scrape ---"
+python3 scraper/nativecare_scrape.py 2>&1 || echo "NativeCare scrape failed, continuing"
+if [ -f scraper/data/nativecare_products.json ]; then
+    python3 scraper/merge_nativecare_data.py 2>&1 || echo "NativeCare merge skipped"
+fi
+
 # 6. Re-merge Google Places data (cached file, no API call usually)
 python3 scraper/merge_google_data.py 2>&1 || echo "Google merge skipped"
 
@@ -74,6 +81,7 @@ git add js/data.js index.html sitemap.xml \
     scraper/data/price_history.json scraper/data/price_history_export.json \
     scraper/data/full_menu_products.json scraper/data/dispensaries.json \
     scraper/data/dispensaries_export.json scraper/data/jane_products.json scraper/data/carrot_products.json \
+    scraper/data/nativecare_products.json \
     dispensaries products brands neighborhoods events \
     best-dispensaries-twin-cities cheapest-cannabis-twin-cities minnesota-cannabis-laws \
     terms privacy contact 2>/dev/null || true
