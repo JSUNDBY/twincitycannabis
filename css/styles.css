@@ -886,15 +886,22 @@ html[data-theme="light"] body::after {
     .spotlight-item img { width: 32px; height: 32px; }
 }
 
-/* ---- PREMIUM grid card spans 2 columns and gets hero treatment ---- */
+/* ---- PREMIUM grid card spans 2 columns and gets hero treatment.
+   Background matches the site's card tone (var(--bg-card)) with a
+   subtle gold gradient fade from the top, so the card reads as
+   "elevated" instead of "grey box floating on green page". ---- */
 .dispensary-card-grid.dispensary-card-premium {
     grid-column: 1 / -1;  /* span all columns */
     border: 2px solid #d4a853 !important;
     box-shadow: 0 0 0 1px rgba(212, 168, 83, 0.15),
                 0 16px 50px rgba(212, 168, 83, 0.18),
                 0 6px 20px rgba(0, 0, 0, 0.4) !important;
-    background: linear-gradient(180deg, rgba(212, 168, 83, 0.06) 0%, transparent 50%),
-                rgba(6, 18, 16, 0.85) !important;
+    background:
+        linear-gradient(180deg,
+            rgba(212, 168, 83, 0.08) 0%,
+            rgba(212, 168, 83, 0.02) 40%,
+            transparent 100%),
+        var(--bg-card) !important;
     position: relative;
     overflow: visible !important;
 }
