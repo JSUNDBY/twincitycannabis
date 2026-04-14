@@ -86,18 +86,21 @@
         // ===== CATEGORY ICONS =====
         // Flat silhouettes, single color (currentColor), bold and obvious.
 
-        // Cannabis leaf — 7 leaflets radiating from a base, each a narrow spear
+        // Cannabis leaf — 7 lanceolate leaflets radiating from a center base.
+        // Each leaflet uses cubic Bezier curves to get the classic cannabis
+        // blade shape: narrow at base, widening mid-length, tapering to a
+        // sharp point. Lengths scale down from center outward.
         leaf: catIcon(`
-          <g transform="translate(20 22)">
-            <path d="M-0.9 0 Q -1.4 -10 0 -19 Q 1.4 -10 0.9 0 Z"/>
-            <g transform="rotate(-32)"><path d="M-0.9 0 Q -1.3 -9 0 -17 Q 1.3 -9 0.9 0 Z"/></g>
-            <g transform="rotate(32)"><path d="M-0.9 0 Q -1.3 -9 0 -17 Q 1.3 -9 0.9 0 Z"/></g>
-            <g transform="rotate(-62)"><path d="M-0.9 0 Q -1.2 -7 0 -14 Q 1.2 -7 0.9 0 Z"/></g>
-            <g transform="rotate(62)"><path d="M-0.9 0 Q -1.2 -7 0 -14 Q 1.2 -7 0.9 0 Z"/></g>
-            <g transform="rotate(-92)"><path d="M-0.9 0 Q -1 -5 0 -10 Q 1 -5 0.9 0 Z"/></g>
-            <g transform="rotate(92)"><path d="M-0.9 0 Q -1 -5 0 -10 Q 1 -5 0.9 0 Z"/></g>
+          <g transform="translate(20 22.5)">
+            <path d="M-0.7 0 C -1.4 -4 -1.9 -10 -1.2 -15 L 0 -20 L 1.2 -15 C 1.9 -10 1.4 -4 0.7 0 Z"/>
+            <g transform="rotate(-34)"><path d="M-0.7 0 C -1.3 -4 -1.8 -9 -1.1 -13 L 0 -18 L 1.1 -13 C 1.8 -9 1.3 -4 0.7 0 Z"/></g>
+            <g transform="rotate(34)"><path d="M-0.7 0 C -1.3 -4 -1.8 -9 -1.1 -13 L 0 -18 L 1.1 -13 C 1.8 -9 1.3 -4 0.7 0 Z"/></g>
+            <g transform="rotate(-66)"><path d="M-0.7 0 C -1.2 -3 -1.6 -7 -1 -10 L 0 -14 L 1 -10 C 1.6 -7 1.2 -3 0.7 0 Z"/></g>
+            <g transform="rotate(66)"><path d="M-0.7 0 C -1.2 -3 -1.6 -7 -1 -10 L 0 -14 L 1 -10 C 1.6 -7 1.2 -3 0.7 0 Z"/></g>
+            <g transform="rotate(-96)"><path d="M-0.6 0 C -1 -2 -1.3 -5 -0.9 -7 L 0 -10 L 0.9 -7 C 1.3 -5 1 -2 0.6 0 Z"/></g>
+            <g transform="rotate(96)"><path d="M-0.6 0 C -1 -2 -1.3 -5 -0.9 -7 L 0 -10 L 0.9 -7 C 1.3 -5 1 -2 0.6 0 Z"/></g>
           </g>
-          <rect x="19.2" y="22" width="1.6" height="12" rx="0.8"/>`),
+          <rect x="19.3" y="22.5" width="1.4" height="12" rx="0.7"/>`),
 
         // Pre-roll — clean angled joint, darker filter tip, one subtle ember
         joint: catIcon(`
