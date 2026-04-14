@@ -402,20 +402,39 @@
             }
         }
 
-        if (filters.sort) {
-            switch (filters.sort) {
-                case 'score': results.sort((a, b) => b.tcc_score - a.tcc_score); break;
-                case 'name': results.sort((a, b) => a.name.localeCompare(b.name)); break;
-                case 'reviews': results.sort((a, b) => b.review_count - a.review_count); break;
-            }
-        } else {
-            const tierOrder = { platinum: 0, premium: 1, featured: 2, free: 3 };
-            results.sort((a, b) => (tierOrder[a.tier] || 3) - (tierOrder[b.tier] || 3) || b.tcc_score - a.tcc_score);
-        }
+        // Region grouping: metro first, then a divider, then greater MN.
+        // Within each group, paid tiers pin to the top, then by score.
+        const tierOrder = { platinum: 0, premium: 1, featured: 2, free: 3 };
+        const regionOrder = { metro: 0, 'greater-mn': 1 };
+        const sortFn = filters.sort
+            ? ({
+                score: (a, b) => b.tcc_score - a.tcc_score,
+                name: (a, b) => a.name.localeCompare(b.name),
+                reviews: (a, b) => b.review_count - a.review_count,
+            })[filters.sort]
+            : null;
+        results.sort((a, b) => {
+            const ra = regionOrder[a.region] ?? 1;
+            const rb = regionOrder[b.region] ?? 1;
+            if (ra !== rb) return ra - rb;
+            if (sortFn) return sortFn(a, b);
+            const ta = tierOrder[a.tier] ?? 3;
+            const tb = tierOrder[b.tier] ?? 3;
+            if (ta !== tb) return ta - tb;
+            return b.tcc_score - a.tcc_score;
+        });
 
         // Update count
         const countEl = document.getElementById('disp-count');
-        if (countEl) countEl.textContent = `Showing ${results.length} dispensar${results.length === 1 ? 'y' : 'ies'}`;
+        if (countEl) {
+            const metroN = results.filter(d => d.region === 'metro').length;
+            const greaterN = results.filter(d => d.region === 'greater-mn').length;
+            if (metroN && greaterN) {
+                countEl.innerHTML = `Showing <strong>${metroN}</strong> Twin Cities + <strong>${greaterN}</strong> Greater MN dispensaries`;
+            } else {
+                countEl.textContent = `Showing ${results.length} dispensar${results.length === 1 ? 'y' : 'ies'}`;
+            }
+        }
 
         if (results.length === 0) {
             container.innerHTML = `
@@ -427,7 +446,32 @@
             return;
         }
 
-        container.innerHTML = results.map(d => dispensaryCard(d)).join('');
+        // Build the rendered list, inserting a region divider when crossing
+        // from metro into greater MN. Skip the divider if the user is filtered
+        // to only one region.
+        let html = '';
+        let lastRegion = null;
+        const hasMetro = results.some(d => d.region === 'metro');
+        const hasGreater = results.some(d => d.region === 'greater-mn');
+        results.forEach(d => {
+            if (d.region !== lastRegion && hasMetro && hasGreater) {
+                if (d.region === 'greater-mn') {
+                    const greaterCount = results.filter(x => x.region === 'greater-mn').length;
+                    html += `
+                        <div class="dispensary-region-divider">
+                            <div class="dispensary-region-divider-label">
+                                <span class="region-divider-icon">${Icons.pin || '&#9678;'}</span>
+                                Greater Minnesota
+                                <span class="region-divider-count">${greaterCount}</span>
+                            </div>
+                            <div class="dispensary-region-divider-sub">Outside the Twin Cities metro</div>
+                        </div>`;
+                }
+                lastRegion = d.region;
+            }
+            html += dispensaryCard(d);
+        });
+        container.innerHTML = html;
         renderMap(results);
     }
 

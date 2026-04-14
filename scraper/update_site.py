@@ -39,23 +39,40 @@ MANUAL_INCLUDE_SLUGS = {
 }
 
 
-def is_included(disp):
-    """Check if a dispensary should be included (metro OR manually added)."""
-    slug = disp.get("weedmaps_slug", disp.get("id", ""))
-    if slug in MANUAL_INCLUDE_SLUGS:
-        return True
+def is_minnesota(disp):
+    """True if the dispensary is in Minnesota (ZIP 55xxx-56xxx).
 
+    Weedmaps mistags out-of-state dispensaries as MN in its raw data, so we
+    rely on the ZIP code in the address — that's the only reliable signal.
+    """
+    address = disp.get("address", "")
+    m = re.search(r"\s(\d{5})(?:-\d{4})?\s*$", address)
+    if not m:
+        return False
+    zip_code = int(m.group(1))
+    return 55000 <= zip_code <= 56999
+
+
+def get_region(disp):
+    """Returns 'metro' for Twin Cities metro, 'greater-mn' for the rest of MN."""
+    city = disp.get("city", "")
+    if city in METRO_CITIES:
+        return "metro"
     lat = disp.get("lat", 0)
     lng = disp.get("lng", 0)
-    city = disp.get("city", "")
-
     in_bounds = (
         METRO_BOUNDS["lat_min"] <= lat <= METRO_BOUNDS["lat_max"]
         and METRO_BOUNDS["lng_min"] <= lng <= METRO_BOUNDS["lng_max"]
     )
-    in_city = city in METRO_CITIES
+    return "metro" if in_bounds else "greater-mn"
 
-    return in_bounds or in_city
+
+def is_included(disp):
+    """Include any MN dispensary — metro AND greater MN — plus manual overrides."""
+    slug = disp.get("weedmaps_slug", disp.get("id", ""))
+    if slug in MANUAL_INCLUDE_SLUGS:
+        return True
+    return is_minnesota(disp)
 
 
 def build_dispensary_js(dispensaries):
@@ -68,6 +85,7 @@ def build_dispensary_js(dispensaries):
         opened_at = d.get("opened_at", "")
         opened_at_js = f"        opened_at: '{opened_at}',\n" if opened_at else ""
 
+        region = d.get("region") or get_region(d)
         lines.append(f"""    {{
         id: '{d["id"]}',
         name: '{_esc(d["name"])}',
@@ -75,6 +93,7 @@ def build_dispensary_js(dispensaries):
         address: '{_esc(d.get("address", ""))}',
         neighborhood: '{_esc(d.get("neighborhood", ""))}',
         city: '{_esc(d.get("city", ""))}',
+        region: '{region}',
         lat: {d.get("lat", 0)},
         lng: {d.get("lng", 0)},
         phone: '{d.get("phone", "")}',
