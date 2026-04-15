@@ -239,7 +239,8 @@ ${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</scri
 const footer = `</main>
 <footer>
   <p><strong style="color:#f5f6f8">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Twin Cities dispensary.</p>
-  <p><a href="/">Home</a> &middot; <a href="/dispensaries/">All dispensaries</a> &middot; <a href="/products/">Browse by category</a></p>
+  <p><a href="/">Home</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/products/">Products</a> &middot; <a href="/events/">Events</a></p>
+  <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
 </footer>
 </body>
@@ -1711,6 +1712,8 @@ const buildSitemap = (extras = []) => {
     { loc: `${SITE}/best-dispensaries-twin-cities/`, priority: '0.8', changefreq: 'weekly' },
     { loc: `${SITE}/cheapest-cannabis-twin-cities/`, priority: '0.8', changefreq: 'daily' },
     { loc: `${SITE}/minnesota-cannabis-laws/`, priority: '0.7', changefreq: 'monthly' },
+    { loc: `${SITE}/tax-calculator/`,          priority: '0.8', changefreq: 'monthly' },
+    { loc: `${SITE}/dosage-calculator/`,       priority: '0.7', changefreq: 'monthly' },
     { loc: `${SITE}/events/`,                  priority: '0.7', changefreq: 'weekly' },
     { loc: `${SITE}/terms/`,                   priority: '0.3', changefreq: 'yearly' },
     { loc: `${SITE}/privacy/`,                 priority: '0.3', changefreq: 'yearly' },

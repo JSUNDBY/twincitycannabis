@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THC Edible Dosage Calculator — Twin City Cannabis</title>
+<meta name="description" content="How many milligrams of THC should you take? A simple Minnesota-legal edible dose calculator based on tolerance, body weight, and desired effect. Not medical advice.">
+<link rel="canonical" href="https://twincitycannabis.com/dosage-calculator/">
+<meta property="og:title" content="THC Edible Dosage Calculator">
+<meta property="og:description" content="How many milligrams of THC for your target effect — simple calculator for Minnesota cannabis consumers. Based on tolerance and body weight.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://twincitycannabis.com/dosage-calculator/">
+<meta property="og:image" content="https://twincitycannabis.com/og-image.png">
+<meta property="og:site_name" content="Twin City Cannabis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="THC Edible Dosage Calculator">
+<meta name="twitter:description" content="How many milligrams of THC for your target effect.">
+<meta name="twitter:image" content="https://twincitycannabis.com/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/twin-city-cannabis-logo-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/img/twin-city-cannabis-logo-192.png">
+<link rel="apple-touch-icon" href="/img/twin-city-cannabis-logo-192.png">
+<link rel="stylesheet" href="/css/styles.css">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NEZH9HCSSH"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-NEZH9HCSSH');</script>
+<style>
+  body{background:var(--bg,#0a1410);color:var(--text-primary,#f5f6f8);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;margin:0;line-height:1.6}
+  .seo-wrap{max-width:920px;margin:0 auto;padding:2rem 1.25rem 4rem}
+  .seo-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(10,20,16,0.85);position:sticky;top:0;backdrop-filter:blur(10px);z-index:10}
+  .seo-nav a.brand{display:flex;align-items:center;gap:.6rem;color:#f5f6f8;text-decoration:none;font-weight:700}
+  .seo-nav a.brand img{height:36px;width:36px}
+  .seo-nav .links a{color:#b8bcc4;text-decoration:none;margin-left:1.2rem;font-size:.95rem}
+  .seo-nav .links a:hover{color:#22c55e}
+  h1{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;margin:1.5rem 0 .5rem;letter-spacing:-.5px}
+  h2{font-size:1.4rem;margin:2.5rem 0 .75rem;color:#f5f6f8}
+  p,li{color:#b8bcc4}
+  a{color:#22c55e}
+  .crumbs{font-size:.85rem;color:#8b909a;margin-bottom:.5rem}
+  .crumbs a{color:#8b909a;text-decoration:none}
+  .crumbs a:hover{color:#22c55e}
+  .eyebrow{color:#22c55e;font-size:.78rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;margin:0 0 .6rem}
+  .subtitle{color:#b8bcc4;font-size:1.05rem;max-width:640px;margin:0 0 2rem}
+
+  .calc-card{background:linear-gradient(180deg,rgba(34,197,94,.05),transparent 70%),rgba(6,18,14,.85);
+    border:1px solid rgba(34,197,94,.22);border-radius:18px;padding:1.8rem;margin:1rem 0 2rem;
+    box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 40px rgba(34,197,94,.05)}
+  .field{margin-bottom:1.2rem}
+  .field label{display:block;font-size:.75rem;color:#8b909a;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:.5rem}
+  .segmented{display:flex;gap:.4rem;flex-wrap:wrap}
+  .segmented button{flex:1 1 auto;min-width:0;padding:.75rem 1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+    border-radius:10px;color:#b8bcc4;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .18s ease;font-family:inherit}
+  .segmented button:hover{color:#f5f6f8;border-color:rgba(255,255,255,.15)}
+  .segmented button[aria-pressed="true"]{background:rgba(34,197,94,.12);border-color:#22c55e;color:#22c55e}
+  .segmented button small{display:block;font-weight:500;font-size:.72rem;color:#6a7078;margin-top:.15rem;text-transform:none;letter-spacing:.2px}
+  .segmented button[aria-pressed="true"] small{color:rgba(34,197,94,.7)}
+
+  .dose-display{text-align:center;padding:1.5rem 1rem 1.2rem;border-top:1px solid rgba(255,255,255,.08);margin-top:.5rem}
+  .dose-num{font-size:clamp(3.5rem,9vw,5rem);font-weight:900;color:#22c55e;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+  .dose-unit{color:#8b909a;font-size:.9rem;text-transform:uppercase;letter-spacing:2.5px;margin-top:.3rem;font-weight:700}
+  .dose-note{color:#b8bcc4;font-size:.95rem;margin-top:.9rem;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.5}
+
+  .equivalents{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-top:1.4rem;padding-top:1.2rem;border-top:1px dashed rgba(255,255,255,.08)}
+  .equiv{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:.8rem 1rem;text-align:center}
+  .equiv-label{font-size:.7rem;color:#8b909a;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:.25rem}
+  .equiv-value{color:#f5f6f8;font-size:1.1rem;font-weight:700;line-height:1.2}
+  .equiv-sub{color:#8b909a;font-size:.78rem;margin-top:.15rem}
+
+  .notice{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.28);border-radius:12px;padding:1rem 1.2rem;margin:1.5rem 0;font-size:.9rem;color:#fbd38d}
+  .notice strong{color:#fef3c7}
+
+  .explainer{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+    border-radius:12px;padding:1.2rem 1.4rem;margin:2rem 0}
+  .explainer h3{margin:0 0 .5rem;color:#f5f6f8;font-size:1.05rem}
+  .explainer p:last-child{margin-bottom:0}
+
+  .back-cta{display:inline-flex;align-items:center;gap:.5rem;color:#22c55e;text-decoration:none;font-weight:600;margin-top:1.2rem}
+  .back-cta:hover{text-decoration:underline}
+
+  footer{border-top:1px solid rgba(255,255,255,0.06);padding:2rem 1.25rem;text-align:center;color:#8b909a;font-size:.85rem;margin-top:3rem}
+  footer a{color:#22c55e}
+</style>
+</head>
+<body>
+<nav class="seo-nav">
+  <a class="brand" href="/"><img src="/img/twin-city-cannabis-logo-192.png" alt="Twin City Cannabis logo"> Twin City <span style="color:#22c55e">Cannabis</span></a>
+  <div class="links">
+    <a href="/">Home</a>
+    <a href="/dispensaries/">Dispensaries</a>
+    <a href="/products/">Products</a>
+  </div>
+</nav>
+<main class="seo-wrap">
+
+<div class="crumbs"><a href="/">Home</a> / Dosage Calculator</div>
+<p class="eyebrow">Edibles Dose Guide</p>
+<h1>How much THC should I take?</h1>
+<p class="subtitle">A simple starting point based on your experience and body. Edibles hit differently than flower — start low, wait two hours, then decide if you want more.</p>
+
+<div class="calc-card">
+  <div class="field">
+    <label>Your experience with THC edibles</label>
+    <div class="segmented" id="tolerance">
+      <button type="button" data-t="new" aria-pressed="true">First-timer<small>never, or only once or twice</small></button>
+      <button type="button" data-t="occasional">Occasional<small>a few times a month</small></button>
+      <button type="button" data-t="regular">Regular<small>weekly or more</small></button>
+      <button type="button" data-t="daily">Daily user<small>high tolerance</small></button>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>What are you going for?</label>
+    <div class="segmented" id="effect">
+      <button type="button" data-e="microdose">Microdose<small>focus, calm, barely notice</small></button>
+      <button type="button" data-e="mild" aria-pressed="true">Mild<small>relaxed, a little lifted</small></button>
+      <button type="button" data-e="moderate">Moderate<small>clearly high, social</small></button>
+      <button type="button" data-e="strong">Strong<small>couch-lock, sleep</small></button>
+    </div>
+  </div>
+
+  <div class="dose-display">
+    <div class="dose-num" id="dose-value">2.5 - 5</div>
+    <div class="dose-unit">mg THC</div>
+    <p class="dose-note" id="dose-note">Start at the low end of this range. Wait two full hours before taking more.</p>
+  </div>
+
+  <div class="equivalents" id="equivalents"></div>
+</div>
+
+<div class="notice">
+  <strong>Important:</strong> Edibles take 30-90 minutes to kick in and can last 4-8 hours. Don't redose within 2 hours even if you feel nothing yet. If you take too much, you can't undo it — you just ride it out. Drink water, find a comfortable spot, remind yourself it will pass.
+</div>
+
+<div class="explainer">
+  <h3>Why edibles are different</h3>
+  <p>When you smoke or vape, THC hits your bloodstream fast and tops out in 10-15 minutes. Edibles go through your liver, which converts THC to 11-hydroxy-THC — a different compound that's stronger and lasts longer. That's why 5mg in a gummy feels different than 5mg in a joint.</p>
+</div>
+
+<div class="explainer">
+  <h3>Minnesota's 10mg cap</h3>
+  <p>Minnesota law caps edibles at 10mg THC per serving. Most gummies you'll find at MN dispensaries are 2mg, 5mg, or 10mg per piece. <a href="/products/edible/">See all edibles on the site &rarr;</a></p>
+</div>
+
+<a class="back-cta" href="/">&larr; Back to dispensary comparisons</a>
+
+</main>
+<footer>
+  <p><strong style="color:#f5f6f8">Twin City Cannabis</strong> · Real prices, real reviews, every Twin Cities dispensary.</p>
+  <p><a href="/">Home</a> · <a href="/dispensaries/">Dispensaries</a> · <a href="/products/">Products</a> · <a href="/tax-calculator/">Tax</a> · <a href="/dosage-calculator/">Dosage</a></p>
+  <p style="margin-top:.75rem;font-size:.78rem;color:#6a6f78">Educational only. Not medical advice. Consult a healthcare provider before using cannabis if you're pregnant, on medication, or have health concerns.</p>
+</footer>
+
+<script>
+// ─── Dose matrix ──────────────────────────────────────────────────
+// Values are mg THC, expressed as [low, high]. Conservative — lean
+// toward "start low, wait two hours" guidance. Not medical advice.
+const DOSES = {
+  new: {
+    microdose: [1, 2.5],
+    mild:      [2.5, 5],
+    moderate:  [5, 10],
+    strong:    [10, 15],
+  },
+  occasional: {
+    microdose: [2.5, 5],
+    mild:      [5, 10],
+    moderate:  [10, 15],
+    strong:    [15, 25],
+  },
+  regular: {
+    microdose: [5, 10],
+    mild:      [10, 15],
+    moderate:  [15, 25],
+    strong:    [25, 50],
+  },
+  daily: {
+    microdose: [10, 15],
+    mild:      [15, 25],
+    moderate:  [25, 50],
+    strong:    [50, 100],
+  },
+};
+
+const NOTES = {
+  microdose: 'Micro-doses are subtle — you should barely feel it. Great for focus, creativity, or daily stress relief without getting high.',
+  mild: 'Light relaxation, slight body warmth, mild lift. Good for social settings, a movie, or winding down.',
+  moderate: 'Clearly high. Music sounds better, food tastes amazing, time slows down. Plan for 4-6 hours of effects.',
+  strong: 'Full-body relaxation, possibly couch-lock. Best for experienced users, at home, with nothing on the schedule. Can cause sleepiness and dry mouth.',
+};
+
+let tolerance = 'new';
+let effect = 'mild';
+
+function render() {
+  const [lo, hi] = DOSES[tolerance][effect];
+  const display = lo === hi ? `${lo}` : `${lo} – ${hi}`;
+  document.getElementById('dose-value').textContent = display;
+  document.getElementById('dose-note').textContent = NOTES[effect] + ' ' + (tolerance === 'new' ? 'Start at the low end of this range. Wait two full hours before taking more.' : '');
+
+  // Equivalents — how many pieces of common gummy strengths
+  const avg = (lo + hi) / 2;
+  const mkEquiv = (mgPerPiece, label) => {
+    const pieces = avg / mgPerPiece;
+    let pieceText;
+    if (pieces < 0.5) pieceText = 'less than half';
+    else if (pieces < 1) pieceText = '~ 1/2';
+    else if (pieces === Math.round(pieces)) pieceText = pieces;
+    else pieceText = pieces.toFixed(1);
+    return `<div class="equiv">
+      <div class="equiv-label">${label}</div>
+      <div class="equiv-value">${pieceText}${pieces > 1 ? ' pieces' : pieces === 1 ? ' piece' : ''}</div>
+      <div class="equiv-sub">${mgPerPiece}mg each</div>
+    </div>`;
+  };
+  document.getElementById('equivalents').innerHTML =
+    mkEquiv(2, '2mg gummies') +
+    mkEquiv(5, '5mg gummies') +
+    mkEquiv(10, '10mg gummies (MN max)');
+}
+
+function setPressed(groupId, dataKey, value) {
+  const group = document.getElementById(groupId);
+  group.querySelectorAll('button').forEach(b => {
+    b.setAttribute('aria-pressed', b.dataset[dataKey] === value ? 'true' : 'false');
+  });
+}
+
+document.getElementById('tolerance').addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  tolerance = btn.dataset.t;
+  setPressed('tolerance', 't', tolerance);
+  render();
+});
+document.getElementById('effect').addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  effect = btn.dataset.e;
+  setPressed('effect', 'e', effect);
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

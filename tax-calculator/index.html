@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minnesota Cannabis Tax Calculator — Twin City Cannabis</title>
+<meta name="description" content="Calculate the true checkout price on any cannabis purchase in Minnesota. Includes 15% cannabis gross receipts tax + 6.875% state sales tax + your city's local rate. Updated 2026.">
+<link rel="canonical" href="https://twincitycannabis.com/tax-calculator/">
+<meta property="og:title" content="Minnesota Cannabis Tax Calculator">
+<meta property="og:description" content="What you'll actually pay at checkout on any cannabis purchase in Minnesota — including the 15% cannabis tax, state sales tax, and local rates.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://twincitycannabis.com/tax-calculator/">
+<meta property="og:image" content="https://twincitycannabis.com/og-image.png">
+<meta property="og:site_name" content="Twin City Cannabis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Minnesota Cannabis Tax Calculator">
+<meta name="twitter:description" content="What you'll actually pay at checkout on cannabis in Minnesota.">
+<meta name="twitter:image" content="https://twincitycannabis.com/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/twin-city-cannabis-logo-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/img/twin-city-cannabis-logo-192.png">
+<link rel="apple-touch-icon" href="/img/twin-city-cannabis-logo-192.png">
+<link rel="stylesheet" href="/css/styles.css">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NEZH9HCSSH"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-NEZH9HCSSH');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Minnesota Cannabis Tax Calculator","url":"https://twincitycannabis.com/tax-calculator/","description":"Calculate the true checkout price on cannabis in Minnesota including the 15% cannabis gross receipts tax."}</script>
+<style>
+  body{background:var(--bg,#0a1410);color:var(--text-primary,#f5f6f8);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;margin:0;line-height:1.6}
+  .seo-wrap{max-width:920px;margin:0 auto;padding:2rem 1.25rem 4rem}
+  .seo-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(10,20,16,0.85);position:sticky;top:0;backdrop-filter:blur(10px);z-index:10}
+  .seo-nav a.brand{display:flex;align-items:center;gap:.6rem;color:#f5f6f8;text-decoration:none;font-weight:700}
+  .seo-nav a.brand img{height:36px;width:36px}
+  .seo-nav .links a{color:#b8bcc4;text-decoration:none;margin-left:1.2rem;font-size:.95rem}
+  .seo-nav .links a:hover{color:#22c55e}
+  h1{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;margin:1.5rem 0 .5rem;letter-spacing:-.5px}
+  h2{font-size:1.4rem;margin:2.5rem 0 .75rem;color:#f5f6f8}
+  p,li{color:#b8bcc4}
+  a{color:#22c55e}
+  .crumbs{font-size:.85rem;color:#8b909a;margin-bottom:.5rem}
+  .crumbs a{color:#8b909a;text-decoration:none}
+  .crumbs a:hover{color:#22c55e}
+  .eyebrow{color:#22c55e;font-size:.78rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;margin:0 0 .6rem}
+  .subtitle{color:#b8bcc4;font-size:1.05rem;max-width:640px;margin:0 0 2rem}
+
+  /* Calculator card */
+  .calc-card{background:linear-gradient(180deg,rgba(34,197,94,.05),transparent 70%),rgba(6,18,14,.85);
+    border:1px solid rgba(34,197,94,.22);border-radius:18px;padding:1.8rem;margin:1rem 0 2rem;
+    box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 40px rgba(34,197,94,.05)}
+  .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem}
+  @media (max-width:560px){.calc-grid{grid-template-columns:1fr}}
+  .calc-field label{display:block;font-size:.75rem;color:#8b909a;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:.4rem}
+  .calc-field input,.calc-field select{width:100%;padding:.85rem 1rem;background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#f5f6f8;font-size:1.05rem;font-family:inherit;
+    -webkit-appearance:none;-moz-appearance:none;appearance:none;box-sizing:border-box}
+  .calc-field input:focus,.calc-field select:focus{outline:none;border-color:#22c55e;background:rgba(34,197,94,.08)}
+  .calc-field .prefix{position:relative}
+  .calc-field .prefix::before{content:'$';position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:#8b909a;font-weight:700;pointer-events:none;font-size:1.05rem}
+  .calc-field .prefix input{padding-left:2rem}
+  .calc-field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%238b909a' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem}
+
+  /* Result breakdown */
+  .result{border-top:1px solid rgba(255,255,255,.08);padding-top:1.2rem;margin-top:.5rem}
+  .result-row{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;font-size:.95rem}
+  .result-row .label{color:#b8bcc4}
+  .result-row .value{color:#f5f6f8;font-variant-numeric:tabular-nums}
+  .result-row .rate{color:#8b909a;font-size:.82rem;margin-left:.4rem}
+  .result-row.subtotal{border-top:1px dashed rgba(255,255,255,.1);padding-top:.8rem;margin-top:.4rem;font-weight:600}
+  .result-row.total{border-top:1px solid rgba(34,197,94,.35);margin-top:.5rem;padding-top:1rem;font-size:1.35rem;font-weight:800}
+  .result-row.total .label{color:#f5f6f8}
+  .result-row.total .value{color:#22c55e;font-size:1.8rem;font-family:Inter,system-ui,sans-serif;letter-spacing:-.03em}
+
+  .hint{color:#8b909a;font-size:.82rem;margin-top:1rem;line-height:1.5}
+  .hint strong{color:#b8bcc4}
+
+  /* Rate reference table */
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.94rem}
+  th,td{text-align:left;padding:.6rem .5rem;border-bottom:1px solid rgba(255,255,255,.06)}
+  th{color:#8b909a;font-weight:500;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;color:#22c55e;font-weight:600}
+
+  /* Explainer */
+  .explainer{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+    border-radius:12px;padding:1.2rem 1.4rem;margin:2rem 0}
+  .explainer h3{margin:0 0 .5rem;color:#f5f6f8;font-size:1.05rem}
+  .explainer p:last-child{margin-bottom:0}
+
+  .back-cta{display:inline-flex;align-items:center;gap:.5rem;color:#22c55e;text-decoration:none;font-weight:600;margin-top:1.2rem}
+  .back-cta:hover{text-decoration:underline}
+
+  footer{border-top:1px solid rgba(255,255,255,0.06);padding:2rem 1.25rem;text-align:center;color:#8b909a;font-size:.85rem;margin-top:3rem}
+  footer a{color:#22c55e}
+</style>
+</head>
+<body>
+<nav class="seo-nav">
+  <a class="brand" href="/"><img src="/img/twin-city-cannabis-logo-192.png" alt="Twin City Cannabis logo"> Twin City <span style="color:#22c55e">Cannabis</span></a>
+  <div class="links">
+    <a href="/">Home</a>
+    <a href="/dispensaries/">Dispensaries</a>
+    <a href="/products/">Products</a>
+  </div>
+</nav>
+<main class="seo-wrap">
+
+<div class="crumbs"><a href="/">Home</a> / Tax Calculator</div>
+<p class="eyebrow">Minnesota Cannabis Tax</p>
+<h1>What you'll actually pay at checkout.</h1>
+<p class="subtitle">Every Minnesota cannabis purchase is taxed twice — a <strong style="color:#22c55e">15% cannabis gross receipts tax</strong> plus state and local sales tax. Enter a price to see the real total.</p>
+
+<div class="calc-card">
+  <div class="calc-grid">
+    <div class="calc-field">
+      <label for="amount">Pre-tax price</label>
+      <div class="prefix">
+        <input type="number" id="amount" inputmode="decimal" step="0.01" min="0" placeholder="50.00" value="50">
+      </div>
+    </div>
+    <div class="calc-field">
+      <label for="location">Location</label>
+      <select id="location">
+        <option value="6.875" data-label="Default (state rate only)">Default — state rate only</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="result" id="result">
+    <div class="result-row">
+      <span class="label">Pre-tax price</span>
+      <span class="value" id="r-pre">$0.00</span>
+    </div>
+    <div class="result-row">
+      <span class="label">Cannabis gross receipts tax <span class="rate">15%</span></span>
+      <span class="value" id="r-cannabis">$0.00</span>
+    </div>
+    <div class="result-row">
+      <span class="label">Sales tax <span class="rate" id="r-sales-rate">6.875%</span></span>
+      <span class="value" id="r-sales">$0.00</span>
+    </div>
+    <div class="result-row total">
+      <span class="label">Total at checkout</span>
+      <span class="value" id="r-total">$0.00</span>
+    </div>
+  </div>
+
+  <p class="hint">Effective tax rate: <strong id="r-pct">21.88%</strong> — for every $100 of cannabis, you pay about <strong id="r-per100">$21.88</strong> in tax.</p>
+</div>
+
+<div class="explainer">
+  <h3>How the math works</h3>
+  <p>Minnesota stacks two taxes on cannabis sales:</p>
+  <ol style="color:#b8bcc4;margin:.6rem 0 .8rem;padding-left:1.4rem">
+    <li><strong style="color:#f5f6f8">15% cannabis gross receipts tax</strong> — goes to the state. Funds social equity, local government aid, and enforcement.</li>
+    <li><strong style="color:#f5f6f8">6.875% Minnesota state sales tax</strong> — plus any local sales tax the city or county adds on top.</li>
+  </ol>
+  <p style="font-size:.9rem;color:#8b909a;margin:0">Minneapolis and Saint Paul each add ~1.15-1.5% in local tax. Rural and suburban cities typically have no local cannabis tax beyond the state rate. Cannabis sold on sovereign tribal land may have different rules.</p>
+</div>
+
+<h2>Rates by Minnesota city</h2>
+<p>Combined state + local sales tax applied on top of the 15% cannabis tax:</p>
+<table>
+  <thead><tr><th>City</th><th style="text-align:right">Sales tax</th><th style="text-align:right">Effective total</th></tr></thead>
+  <tbody id="rates-table"></tbody>
+</table>
+
+<div class="explainer">
+  <h3>A quick example</h3>
+  <p><strong style="color:#f5f6f8">$50 eighth in Minneapolis:</strong></p>
+  <ul style="color:#b8bcc4;margin:.5rem 0;padding-left:1.4rem;font-size:.95rem">
+    <li>Pre-tax: $50.00</li>
+    <li>+ 15% cannabis tax = $7.50</li>
+    <li>+ 8.025% sales tax = $4.01</li>
+    <li><strong style="color:#22c55e">= $61.51 at checkout</strong></li>
+  </ul>
+</div>
+
+<a class="back-cta" href="/">&larr; Back to dispensary comparisons</a>
+
+</main>
+<footer>
+  <p><strong style="color:#f5f6f8">Twin City Cannabis</strong> · Real prices, real reviews, every Twin Cities dispensary.</p>
+  <p><a href="/">Home</a> · <a href="/dispensaries/">Dispensaries</a> · <a href="/products/">Products</a> · <a href="/tax-calculator/">Tax Calculator</a></p>
+  <p style="margin-top:.75rem;font-size:.78rem;color:#6a6f78">Tax rates sourced from Minnesota Department of Revenue (2026). Rates are educational estimates — always verify at checkout.</p>
+</footer>
+
+<script>
+// ─── MN CANNABIS TAX DATA ─────────────────────────────────────────
+// Rates are state + local combined, applied to the pre-tax subtotal.
+// The 15% cannabis gross receipts tax is stacked on top separately.
+// Sources: MN Dept of Revenue, city/county websites (2026).
+const LOCATIONS = [
+  { city: 'Minneapolis',    rate: 8.025 },
+  { city: 'Saint Paul',     rate: 7.875 },
+  { city: 'Bloomington',    rate: 7.525 },
+  { city: 'Edina',          rate: 7.525 },
+  { city: 'Eden Prairie',   rate: 7.525 },
+  { city: 'Hopkins',        rate: 7.525 },
+  { city: 'Roseville',      rate: 7.375 },
+  { city: 'New Brighton',   rate: 7.375 },
+  { city: 'Brooklyn Park',  rate: 7.525 },
+  { city: 'Blaine',         rate: 7.375 },
+  { city: 'Eagan',          rate: 7.375 },
+  { city: 'Burnsville',     rate: 7.375 },
+  { city: 'Woodbury',       rate: 7.375 },
+  { city: 'Lakeville',      rate: 7.375 },
+  { city: 'Rosemount',      rate: 7.375 },
+  { city: 'Anoka',          rate: 7.375 },
+  { city: 'Ramsey',         rate: 7.375 },
+  { city: 'Chaska',         rate: 7.375 },
+  { city: 'Jordan',         rate: 7.375 },
+  { city: 'Prior Lake',     rate: 7.375 },
+  { city: 'West St. Paul',  rate: 7.875 },
+  { city: 'Stillwater',     rate: 7.375 },
+  { city: 'Fridley',        rate: 7.375 },
+  { city: 'Mendota Heights',rate: 7.375 },
+  { city: 'Duluth',         rate: 8.875 },
+  { city: 'Rochester',      rate: 8.125 },
+  { city: 'St. Cloud',      rate: 7.875 },
+  { city: 'Mankato',        rate: 7.875 },
+  { city: 'Moorhead',       rate: 7.375 },
+  { city: 'Hermantown',     rate: 8.875 },
+  { city: 'Winona',         rate: 7.375 },
+  { city: 'Hibbing',        rate: 7.375 },
+];
+
+const CANNABIS_TAX = 0.15;  // 15% cannabis gross receipts tax
+
+// ─── WIRE UP THE UI ────────────────────────────────────────────────
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+// Populate location dropdown
+const locSelect = $('location');
+LOCATIONS.sort((a,b) => a.city.localeCompare(b.city)).forEach(l => {
+  const opt = document.createElement('option');
+  opt.value = l.rate;
+  opt.dataset.label = l.city;
+  opt.textContent = `${l.city} — ${l.rate}%`;
+  locSelect.appendChild(opt);
+});
+
+// Populate rates reference table
+const tbody = $('rates-table');
+LOCATIONS.forEach(l => {
+  const tr = document.createElement('tr');
+  const effective = ((1 + CANNABIS_TAX) * (1 + l.rate/100) - 1) * 100;
+  tr.innerHTML = `<td>${l.city}</td><td class="num" style="color:#b8bcc4;font-weight:500">${l.rate.toFixed(3)}%</td><td class="num">${effective.toFixed(2)}%</td>`;
+  tbody.appendChild(tr);
+});
+
+function calc() {
+  const amount = parseFloat($('amount').value) || 0;
+  const salesRate = parseFloat(locSelect.value) || 6.875;
+
+  const cannabisTax = amount * CANNABIS_TAX;
+  const subtotalWithCannabis = amount + cannabisTax;
+  // Sales tax applied to pre-tax amount (MN rule — cannabis tax is "tax-on-tax" exempt)
+  const salesTax = amount * (salesRate / 100);
+  const total = amount + cannabisTax + salesTax;
+  const effectivePct = amount > 0 ? ((total - amount) / amount) * 100 : 0;
+
+  $('r-pre').textContent = fmt(amount);
+  $('r-cannabis').textContent = fmt(cannabisTax);
+  $('r-sales').textContent = fmt(salesTax);
+  $('r-sales-rate').textContent = salesRate.toFixed(3) + '%';
+  $('r-total').textContent = fmt(total);
+  $('r-pct').textContent = effectivePct.toFixed(2) + '%';
+  $('r-per100').textContent = '$' + (effectivePct).toFixed(2);
+}
+
+$('amount').addEventListener('input', calc);
+locSelect.addEventListener('change', calc);
+
+// Deep linking: /tax-calculator?amount=50&city=minneapolis
+const params = new URLSearchParams(location.search);
+if (params.get('amount')) $('amount').value = params.get('amount');
+if (params.get('city')) {
+  const want = params.get('city').toLowerCase().replace(/-/g, ' ');
+  for (const opt of locSelect.options) {
+    if (opt.dataset.label && opt.dataset.label.toLowerCase() === want) {
+      locSelect.value = opt.value;
+      break;
+    }
+  }
+}
+calc();
+</script>
+</body>
+</html>
