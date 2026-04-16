@@ -703,18 +703,21 @@ async function handleTrack(request, env, cors) {
   if (!id || !TRACK_EVENTS.has(event)) return trackErr(cors);
 
   const date = new Date().toISOString().slice(0, 10);
-  const dailyKey = `stat:${id}:${event}:d${date}`;
-  const totalKey = `stat:${id}:${event}:total`;
+  const key = `stats:${id}`;
+  const current = (await env.TCC_OVERRIDES.get(key, { type: 'json' })) || { totals: {}, daily: {} };
+  current.totals[event] = (current.totals[event] || 0) + 1;
+  if (!current.daily[date]) current.daily[date] = {};
+  current.daily[date][event] = (current.daily[date][event] || 0) + 1;
 
-  const [daily, total] = await Promise.all([
-    env.TCC_OVERRIDES.get(dailyKey).then((v) => Number(v) || 0),
-    env.TCC_OVERRIDES.get(totalKey).then((v) => Number(v) || 0),
-  ]);
+  // Prune daily entries older than 95 days so the value stays bounded
+  const cutoff = new Date();
+  cutoff.setUTCDate(cutoff.getUTCDate() - 95);
+  const cutoffKey = cutoff.toISOString().slice(0, 10);
+  for (const d of Object.keys(current.daily)) {
+    if (d < cutoffKey) delete current.daily[d];
+  }
 
-  await Promise.all([
-    env.TCC_OVERRIDES.put(dailyKey, String(daily + 1), { expirationTtl: 86400 * 95 }),
-    env.TCC_OVERRIDES.put(totalKey, String(total + 1)),
-  ]);
+  await env.TCC_OVERRIDES.put(key, JSON.stringify(current));
 
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,
@@ -730,24 +733,8 @@ function trackErr(cors) {
 }
 
 async function fetchDispensaryStats(env, id) {
-  const list = await env.TCC_OVERRIDES.list({ prefix: `stat:${id}:` });
-  const entries = await Promise.all(
-    list.keys.map(async (k) => [k.name, Number(await env.TCC_OVERRIDES.get(k.name)) || 0])
-  );
-  const stats = { totals: {}, daily: {} };
-  for (const [key, count] of entries) {
-    const parts = key.split(':');
-    const event = parts[2];
-    const range = parts[3];
-    if (range === 'total') {
-      stats.totals[event] = count;
-    } else if (range && range.startsWith('d')) {
-      const date = range.slice(1);
-      if (!stats.daily[date]) stats.daily[date] = {};
-      stats.daily[date][event] = count;
-    }
-  }
-  return stats;
+  const v = await env.TCC_OVERRIDES.get(`stats:${id}`, { type: 'json' });
+  return v && v.totals ? v : { totals: {}, daily: {} };
 }
 
 // ─── /dashboard ──────────────────────────────────────────────────────────────
