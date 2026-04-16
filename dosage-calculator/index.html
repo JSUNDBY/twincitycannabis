@@ -223,11 +223,18 @@ function setPressed(groupId, dataKey, value) {
   });
 }
 
+let _dosageToolTracked = false;
+function trackToolOnce() {
+  if (_dosageToolTracked) return;
+  _dosageToolTracked = true;
+  if (typeof gtag === 'function') gtag('event', 'tool_use', { tool: 'dosage_calculator' });
+}
 document.getElementById('tolerance').addEventListener('click', (e) => {
   const btn = e.target.closest('button');
   if (!btn) return;
   tolerance = btn.dataset.t;
   setPressed('tolerance', 't', tolerance);
+  trackToolOnce();
   render();
 });
 document.getElementById('effect').addEventListener('click', (e) => {
@@ -235,6 +242,7 @@ document.getElementById('effect').addEventListener('click', (e) => {
   if (!btn) return;
   effect = btn.dataset.e;
   setPressed('effect', 'e', effect);
+  trackToolOnce();
   render();
 });
 

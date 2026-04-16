@@ -266,8 +266,14 @@ function calc() {
   $('r-per100').textContent = '$' + (effectivePct).toFixed(2);
 }
 
-$('amount').addEventListener('input', calc);
-locSelect.addEventListener('change', calc);
+let _taxToolTracked = false;
+function trackToolOnce() {
+  if (_taxToolTracked) return;
+  _taxToolTracked = true;
+  if (typeof gtag === 'function') gtag('event', 'tool_use', { tool: 'tax_calculator' });
+}
+$('amount').addEventListener('input', () => { trackToolOnce(); calc(); });
+locSelect.addEventListener('change', () => { trackToolOnce(); calc(); });
 
 // Deep linking: /tax-calculator?amount=50&city=minneapolis
 const params = new URLSearchParams(location.search);

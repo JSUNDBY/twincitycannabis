@@ -2338,6 +2338,7 @@
                 e.preventDefault();
                 const params = new URLSearchParams(window.location.search);
                 const dispensaryId = params.get('dispensary') || sessionStorage.getItem('tcc_claim_dispensary');
+                trackEvent('subscribe_click', { tier, dispensary_id: dispensaryId || 'unspecified' });
                 let target = url;
                 if (dispensaryId) {
                     target += (url.includes('?') ? '&' : '?') + 'client_reference_id=' + encodeURIComponent(dispensaryId);
@@ -2346,6 +2347,35 @@
             });
         });
     }
+
+    function trackEvent(name, params) {
+        if (typeof window.gtag === 'function') {
+            try { window.gtag('event', name, params || {}); } catch (_) {}
+        }
+    }
+
+    // Classifies any outbound click so GA can show which dispensaries we drive
+    // traffic to. Fires once per click, delegated so dynamically-rendered cards
+    // are covered without re-wiring on every render.
+    document.addEventListener('click', (e) => {
+        const a = e.target.closest('a[href]');
+        if (!a) return;
+        let u;
+        try { u = new URL(a.href, window.location.href); } catch (_) { return; }
+        if (!u.hostname || u.hostname === window.location.hostname) return;
+        const host = u.hostname.replace(/^www\./, '');
+        // Subscribe clicks are already tracked in bindSubscribeButtons
+        if (host.endsWith('buy.stripe.com')) return;
+        if (host.endsWith('google.com') || host.endsWith('maps.google.com')) {
+            trackEvent('google_outbound', { destination: host });
+            return;
+        }
+        const card = a.closest('[data-dispensary-id]');
+        trackEvent('dispensary_outbound', {
+            destination: host,
+            dispensary_id: (card && card.getAttribute('data-dispensary-id')) || 'unknown',
+        });
+    });
 
     // Wait for DOM
     if (document.readyState === 'loading') {
