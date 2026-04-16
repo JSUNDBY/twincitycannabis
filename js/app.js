@@ -162,8 +162,8 @@
     // The Subscribe button appends ?client_reference_id=<dispensary_id> so the
     // worker can identify which dispensary is paying.
     window.TIER_PAYMENT_LINKS = {
-        featured: '',  // e.g. 'https://buy.stripe.com/test_xxx'
-        premium:  '',  // e.g. 'https://buy.stripe.com/test_yyy'
+        featured: 'https://buy.stripe.com/eVq5k0aRJblmetM7xGbQY80',
+        premium:  'https://buy.stripe.com/7sYaEX39hdtuclzdW4bQY01',
     };
     // ─────────────────────────────────────────────────────────────────────────
 

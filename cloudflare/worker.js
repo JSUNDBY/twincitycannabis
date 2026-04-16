@@ -25,9 +25,8 @@
  */
 
 const PRICE_TO_TIER = {
-  // FILL THESE IN AFTER CREATING STRIPE PRODUCTS
-  // 'price_1ABC...': 'featured',
-  // 'price_1XYZ...': 'premium',
+  'price_1TMgZrIdXtVMG9WO5Fgmuy55': 'featured',  // $299/mo
+  'price_1TMgipIdXtVMG9WOFRFtFA39': 'premium',   // $599/mo
 };
 
 const ALLOWED_ORIGIN = 'https://twincitycannabis.com';
