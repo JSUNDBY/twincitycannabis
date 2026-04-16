@@ -140,22 +140,25 @@ function handleActiveCount(cors) {
   });
 }
 
+// ─── Tier index ──────────────────────────────────────────────────────────────
+// Single KV blob containing ALL tier overrides. Read on every page via /overrides
+// and on every admin dashboard refresh, so we use a single `get` instead of a
+// `list` + N gets. Free tier KV was hitting the 1000 list/day limit otherwise.
+// Updated on every subscription webhook event.
+async function getTierIndex(env) {
+  const v = await env.TCC_OVERRIDES.get('index:tiers', { type: 'json' });
+  return v || {};
+}
+
+async function putTierIndex(env, index) {
+  await env.TCC_OVERRIDES.put('index:tiers', JSON.stringify(index));
+}
+
 // ─── /overrides ──────────────────────────────────────────────────────────────
 async function handleOverridesRead(env, cors) {
-  // List all KV keys with prefix "tier:" — each value is JSON
-  const list = await env.TCC_OVERRIDES.list({ prefix: 'tier:' });
+  const index = await getTierIndex(env);
   const overrides = {};
-
-  // Parallel fetch all values
-  const entries = await Promise.all(
-    list.keys.map(async (k) => {
-      const dispensaryId = k.name.slice('tier:'.length);
-      const value = await env.TCC_OVERRIDES.get(k.name, { type: 'json' });
-      return [dispensaryId, value];
-    })
-  );
-
-  for (const [id, value] of entries) {
+  for (const [id, value] of Object.entries(index)) {
     if (!value) continue;
     if (value.valid_until && Date.parse(value.valid_until) < Date.now()) continue;
     overrides[id] = { tier: value.tier, valid_until: value.valid_until };
@@ -230,6 +233,11 @@ async function handleWebhook(request, env) {
         const sub = event.data.object;
         const dispensaryId = sub.metadata && sub.metadata.dispensary_id;
         if (dispensaryId) {
+          const idx = await getTierIndex(env);
+          if (idx[dispensaryId]) {
+            delete idx[dispensaryId];
+            await putTierIndex(env, idx);
+          }
           await env.TCC_OVERRIDES.delete(`tier:${dispensaryId}`);
           console.log(`Deleted tier for ${dispensaryId} (subscription canceled)`);
         }
@@ -274,9 +282,15 @@ async function writeSubscriptionToKV(sub, dispensaryId, env) {
     return;
   }
 
+  const idx = await getTierIndex(env);
+
   // Active only if the subscription is active or trialing
   const isActive = sub.status === 'active' || sub.status === 'trialing';
   if (!isActive) {
+    if (idx[dispensaryId]) {
+      delete idx[dispensaryId];
+      await putTierIndex(env, idx);
+    }
     await env.TCC_OVERRIDES.delete(`tier:${dispensaryId}`);
     console.log(`Removed tier for ${dispensaryId} (status=${sub.status})`);
     return;
@@ -292,6 +306,9 @@ async function writeSubscriptionToKV(sub, dispensaryId, env) {
     updated_at: new Date().toISOString(),
   };
 
+  idx[dispensaryId] = record;
+  await putTierIndex(env, idx);
+  // Keep per-id key as well for back-compat with tools that read it directly
   await env.TCC_OVERRIDES.put(`tier:${dispensaryId}`, JSON.stringify(record));
   console.log(`Wrote tier=${tier} for ${dispensaryId} (valid until ${record.valid_until})`);
 }
@@ -453,15 +470,8 @@ async function fetchSubscribers(env) {
 }
 
 async function fetchOverrides(env) {
-  const list = await env.TCC_OVERRIDES.list({ prefix: 'tier:' });
-  const entries = await Promise.all(
-    list.keys.map(async (k) => {
-      const id = k.name.slice('tier:'.length);
-      const value = await env.TCC_OVERRIDES.get(k.name, { type: 'json' });
-      return { id, ...(value || {}) };
-    })
-  );
-  return entries;
+  const idx = await getTierIndex(env);
+  return Object.entries(idx).map(([id, value]) => ({ id, ...(value || {}) }));
 }
 
 async function fetchSiteHealth() {
