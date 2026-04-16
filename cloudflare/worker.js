@@ -582,9 +582,14 @@ function render(d) {
         <div class="sub">\${site.last_commit_message ? esc(site.last_commit_message.slice(0, 40)) : 'since last Pi push'}</div>
       </div>
       <div class="stat">
-        <div class="label">Manual Overrides</div>
+        <div class="label">Active Overrides</div>
         <div class="value">\${overrides.length}</div>
-        <div class="sub">comp'd / promo tiers</div>
+        <div class="sub">paid + comp'd tiers</div>
+      </div>
+      <div class="stat \${overrides.length >= 10 ? 'warn' : ''}">
+        <div class="label">Founding Slots Left</div>
+        <div class="value" style="color:#eab308">\${Math.max(0, 10 - overrides.length)}</div>
+        <div class="sub">of 10 lifetime-lock spots</div>
       </div>
     </div>\`;
 

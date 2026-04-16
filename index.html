@@ -1660,7 +1660,21 @@
         <div class="container" style="max-width:900px">
             <div class="section-label" style="text-align:center">Upgrade for more visibility</div>
             <h2 class="font-display font-bold text-2xl tracking-tight" style="margin-bottom:0.5rem;text-align:center">Get in front of more shoppers</h2>
-            <p class="text-secondary text-sm" style="text-align:center;margin-bottom:2rem;max-width:600px;margin-left:auto;margin-right:auto">Your organic TCC Score ranking is never influenced by payment. Paid tiers add <em>additional</em> visibility in clearly-labeled sections. Every shopper sees honest rankings.</p>
+            <p class="text-secondary text-sm" style="text-align:center;margin-bottom:1.5rem;max-width:600px;margin-left:auto;margin-right:auto">Your organic TCC Score ranking is never influenced by payment. Paid tiers add <em>additional</em> visibility in clearly-labeled sections. Every shopper sees honest rankings.</p>
+
+            <!-- Founding Member banner -->
+            <div style="background:linear-gradient(135deg,rgba(234,179,8,0.12),rgba(234,179,8,0.04));border:1px solid rgba(234,179,8,0.35);border-radius:var(--radius-lg);padding:1.1rem 1.3rem;margin-bottom:2rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+                <div style="flex-shrink:0;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#eab308,#ca8a04);display:flex;align-items:center;justify-content:center;font-size:1.4rem">&#11088;</div>
+                <div style="flex:1;min-width:200px">
+                    <div style="font-size:0.7rem;font-weight:700;color:#eab308;letter-spacing:1.5px;margin-bottom:0.2rem">FOUNDING MEMBER PRICING &middot; LIMITED</div>
+                    <div class="font-display font-bold" style="font-size:1.05rem;margin-bottom:0.2rem">First 10 dispensaries lock in these prices <em>for life</em>.</div>
+                    <div class="text-sm text-secondary">After all 10 slots fill, Featured goes to <strong>$499/mo</strong> and Premium to <strong>$899/mo</strong>. Subscribers at founding rates stay at those rates forever.</div>
+                </div>
+                <div style="flex-shrink:0;text-align:center;padding:0.4rem 1rem;background:rgba(234,179,8,0.15);border-radius:var(--radius-md);min-width:120px">
+                    <div class="font-display font-bold text-2xl" style="color:#eab308;line-height:1" id="founding-slots-remaining">10</div>
+                    <div style="font-size:0.65rem;color:#eab308;letter-spacing:1px;font-weight:700">of 10 left</div>
+                </div>
+            </div>
 
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
 
@@ -1668,7 +1682,11 @@
                 <div class="card" style="border-color:var(--green);padding:2rem;position:relative;overflow:visible">
                     <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:var(--bg-primary);font-size:0.7rem;font-weight:700;padding:0.2rem 1rem;border-radius:var(--radius-full);letter-spacing:1px">MOST POPULAR</div>
                     <div class="font-display font-bold text-green" style="font-size:1.2rem;margin-bottom:0.2rem">Featured</div>
-                    <div class="font-display font-bold" style="font-size:2.5rem;margin-bottom:0.5rem">$299<span class="text-sm text-muted font-medium">/month</span></div>
+                    <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.3rem">
+                        <div class="font-display font-bold" style="font-size:2.5rem">$299<span class="text-sm text-muted font-medium">/mo</span></div>
+                        <div class="text-sm text-muted" style="text-decoration:line-through">$499/mo</div>
+                    </div>
+                    <div style="display:inline-block;font-size:0.65rem;font-weight:700;color:#eab308;background:rgba(234,179,8,0.12);padding:0.15rem 0.6rem;border-radius:var(--radius-full);letter-spacing:1.2px;margin-bottom:0.8rem">&#11088; FOUNDING MEMBER &middot; LOCKED FOR LIFE</div>
                     <p class="text-sm text-secondary" style="margin-bottom:1.2rem">Be the dispensary shoppers see first.</p>
                     <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.85rem;margin-bottom:1.5rem">
                         <div><span class="text-green">&#10003;</span> <strong>"Featured" badge</strong> on your profile and cards</div>
@@ -1695,7 +1713,11 @@
                 <!-- Premium -->
                 <div class="card" style="border-color:var(--purple);padding:2rem">
                     <div class="font-display font-bold text-purple" style="font-size:1.2rem;margin-bottom:0.2rem">Premium</div>
-                    <div class="font-display font-bold" style="font-size:2.5rem;margin-bottom:0.5rem">$599<span class="text-sm text-muted font-medium">/month</span></div>
+                    <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.3rem">
+                        <div class="font-display font-bold" style="font-size:2.5rem">$599<span class="text-sm text-muted font-medium">/mo</span></div>
+                        <div class="text-sm text-muted" style="text-decoration:line-through">$899/mo</div>
+                    </div>
+                    <div style="display:inline-block;font-size:0.65rem;font-weight:700;color:#eab308;background:rgba(234,179,8,0.12);padding:0.15rem 0.6rem;border-radius:var(--radius-full);letter-spacing:1.2px;margin-bottom:0.8rem">&#11088; FOUNDING MEMBER &middot; LOCKED FOR LIFE</div>
                     <p class="text-sm text-secondary" style="margin-bottom:1.2rem">Turn comparison shoppers into your customers.</p>
                     <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.85rem;margin-bottom:1.5rem">
                         <div><span class="text-purple">&#10003;</span> Everything in Featured</div>
@@ -1749,6 +1771,10 @@
         <div class="container" style="max-width:700px">
             <h2 class="font-display font-bold text-2xl tracking-tight" style="margin-bottom:1.5rem;text-align:center">Questions from dispensary owners</h2>
             <div style="display:flex;flex-direction:column;gap:1rem">
+                <div class="card" style="border-color:rgba(234,179,8,0.35)"><div class="card-body">
+                    <div class="font-display font-semibold" style="margin-bottom:0.3rem">&#11088; What's the Founding Member deal?</div>
+                    <div class="text-sm text-secondary">The first 10 dispensaries to subscribe lock in <strong>$299/mo Featured</strong> or <strong>$599/mo Premium</strong> permanently. As long as your subscription stays active, your rate never goes up, even when we raise prices to $499 and $899 for everyone else. This is a one-time offer for early supporters who help us prove the model.</div>
+                </div></div>
                 <div class="card"><div class="card-body">
                     <div class="font-display font-semibold" style="margin-bottom:0.3rem">Can you just buy a higher ranking?</div>
                     <div class="text-sm text-secondary">No. TCC Scores are algorithmic and never influenced by payment. Paid tiers get additional visibility in clearly-labeled "Featured" sections, but your organic search position is based on reviews, pricing, and selection.</div>

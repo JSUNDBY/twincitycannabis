@@ -2231,6 +2231,12 @@
                     changed++;
                 }
             }
+            // Update Founding Member slot counter on pricing page
+            const slotsEl = document.getElementById('founding-slots-remaining');
+            if (slotsEl) {
+                const remaining = Math.max(0, 10 - Object.keys(overrides).length);
+                slotsEl.textContent = remaining;
+            }
             if (changed > 0) {
                 console.log(`[overrides] applied ${changed} tier override(s)`);
                 // Re-render anything that displays tier badges
