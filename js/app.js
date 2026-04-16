@@ -471,7 +471,18 @@
 
     function renderTodaysDeals() {
         const container = document.getElementById('todays-deals');
-        const deals = TCC.deals.filter(d => d.featured).slice(0, 6);
+        // Sort by dispensary tier so Premium/Featured deals surface first.
+        // Within the same tier, original deal order is preserved.
+        const tierRank = { premium: 0, featured: 1, free: 2 };
+        const deals = TCC.deals
+            .filter(d => d.featured)
+            .slice()
+            .sort((a, b) => {
+                const da = TCC.dispensaries.find(x => x.id === a.dispensaryId);
+                const db = TCC.dispensaries.find(x => x.id === b.dispensaryId);
+                return (tierRank[da && da.tier] ?? 2) - (tierRank[db && db.tier] ?? 2);
+            })
+            .slice(0, 6);
         container.innerHTML = deals.map(d => dealCard(d)).join('');
     }
 
@@ -746,6 +757,7 @@
             navigate('dispensaries');
             return;
         }
+        trackServerEvent(id, 'view');
 
         // Banner - show logo image if available
         const bannerEl = document.getElementById('detail-banner');
@@ -2360,6 +2372,25 @@
         }
     }
 
+    // Fires a server-side event that increments per-dispensary counters in KV.
+    // Powers the dispensary dashboard at /dashboard?id=X. Dedupes within the tab
+    // so repeated renders of the same listing don't inflate the "views" count.
+    const _trackedThisSession = new Set();
+    function trackServerEvent(dispensaryId, event, { dedupe = true } = {}) {
+        if (!dispensaryId) return;
+        const dedupeKey = `${dispensaryId}:${event}`;
+        if (dedupe && _trackedThisSession.has(dedupeKey)) return;
+        _trackedThisSession.add(dedupeKey);
+        try {
+            fetch(`${TCC_WORKER_URL}/track`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: dispensaryId, event }),
+                keepalive: true,
+            }).catch(() => {});
+        } catch (_) {}
+    }
+
     // Classifies any outbound click so GA can show which dispensaries we drive
     // traffic to. Fires once per click, delegated so dynamically-rendered cards
     // are covered without re-wiring on every render.
@@ -2377,10 +2408,15 @@
             return;
         }
         const card = a.closest('[data-dispensary-id]');
+        const dispensaryId = (card && card.getAttribute('data-dispensary-id')) || null;
+        // Also track via dispensary id if the page is a dispensary detail view
+        const routeId = (window.location.hash || '').match(/#dispensary\/([a-z0-9-]+)/i);
+        const effectiveId = dispensaryId || (routeId && routeId[1]) || null;
         trackEvent('dispensary_outbound', {
             destination: host,
-            dispensary_id: (card && card.getAttribute('data-dispensary-id')) || 'unknown',
+            dispensary_id: effectiveId || 'unknown',
         });
+        if (effectiveId) trackServerEvent(effectiveId, 'outbound', { dedupe: false });
     });
 
     // Wait for DOM
