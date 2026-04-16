@@ -1039,7 +1039,7 @@ async function handleMonthlyReport(request, env) {
     <div style="color:#8b909a;font-size:.8rem;margin-top:.3rem">${monthOutbound} of ${monthViews} viewers clicked through to your website.</div>
   </div>
 
-  <p style="color:#b8bcc4;font-size:.9rem;line-height:1.6">Want more detail? <a href="https://tcc-stripe.j-sundby.workers.dev/dashboard?id=${id}" style="color:#22c55e">View your live dashboard &rarr;</a></p>
+  <p style="color:#b8bcc4;font-size:.9rem;line-height:1.6">Want more detail? <a href="https://dashboard.twincitycannabis.com/dashboard?id=${id}" style="color:#22c55e">View your live dashboard &rarr;</a></p>
 
   <hr style="border:none;border-top:1px solid rgba(255,255,255,.08);margin:2rem 0">
   <p style="color:#8b909a;font-size:.78rem;line-height:1.5">Twin City Cannabis · Real prices, real reviews, every Twin Cities dispensary.<br>You received this because ${id} is subscribed to Twin City Cannabis.</p>

@@ -155,7 +155,7 @@
 
     // ─── Stripe / Cloudflare config ──────────────────────────────────────────
     // Worker URL deployed from /cloudflare. Returns tier overrides as JSON.
-    const TCC_WORKER_URL = 'https://tcc-stripe.j-sundby.workers.dev';
+    const TCC_WORKER_URL = 'https://dashboard.twincitycannabis.com';
 
     // Stripe Payment Link URLs. Replace these with the real URLs after creating
     // the products in Stripe (see /cloudflare/README.md step 3).

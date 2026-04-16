@@ -81,10 +81,10 @@ npx wrangler login            # opens browser, log in to J.sundby@gmail.com
 npx wrangler deploy
 ```
 
-This deploys to `https://tcc-stripe.j-sundby.workers.dev`. Verify with:
+This deploys to `https://dashboard.twincitycannabis.com`. Verify with:
 
 ```bash
-curl https://tcc-stripe.j-sundby.workers.dev/health
+curl https://dashboard.twincitycannabis.com/health
 # → "TCC Stripe webhook worker — alive"
 ```
 
@@ -102,7 +102,7 @@ npx wrangler secret put STRIPE_WEBHOOK_SECRET
 
 Go to <https://dashboard.stripe.com/test/webhooks/create>.
 
-- **Endpoint URL:** `https://tcc-stripe.j-sundby.workers.dev/webhook`
+- **Endpoint URL:** `https://dashboard.twincitycannabis.com/webhook`
 - **Events to send:**
   - `checkout.session.completed`
   - `customer.subscription.created`
@@ -125,7 +125,7 @@ npx wrangler secret put STRIPE_WEBHOOK_SECRET
 3. Watch the worker logs: `npx wrangler tail`
 4. You should see: `Wrote tier=featured for wildflower-5 (valid until ...)`
 5. Check the override endpoint:
-   `curl https://tcc-stripe.j-sundby.workers.dev/overrides`
+   `curl https://dashboard.twincitycannabis.com/overrides`
 6. Reload <https://twincitycannabis.com> — Wildflower should now show a "Featured" badge
 
 ---

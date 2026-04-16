@@ -16,13 +16,13 @@ compatibility_date = "2026-01-01"
 account_id = "0672ae6f0ce7a86086cafbcba03ed68f"
 
 # Worker URL after deploy will be:
-#   https://tcc-stripe.j-sundby.workers.dev
+#   https://dashboard.twincitycannabis.com
 #
 # Stripe webhook config should point to:
-#   https://tcc-stripe.j-sundby.workers.dev/webhook
+#   https://dashboard.twincitycannabis.com/webhook
 #
 # Frontend reads tier overrides from:
-#   https://tcc-stripe.j-sundby.workers.dev/overrides
+#   https://dashboard.twincitycannabis.com/overrides
 
 [[kv_namespaces]]
 binding = "TCC_OVERRIDES"
