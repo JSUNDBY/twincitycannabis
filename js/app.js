@@ -2329,7 +2329,7 @@
         updateHeroCounts();
         injectDataIcons();
         renderHome();
-        renderDispensaries();
+        renderDispensaries({ city: 'metro' });
         renderDeals();
         renderStrains();
         renderCompare();
