@@ -2419,6 +2419,31 @@
         if (effectiveId) trackServerEvent(effectiveId, 'outbound', { dedupe: false });
     });
 
+    // ─── Easter egg: type 420 anywhere to float away ──────────────────────
+    // Keeps a short rolling buffer of digit keys. When the sequence 4-2-0
+    // appears, drift off to /cloud-nine/. Ignored while typing in inputs so
+    // search bars don't accidentally trigger it.
+    (function () {
+        let buf = '';
+        document.addEventListener('keydown', (e) => {
+            const tag = (e.target && e.target.tagName) || '';
+            if (tag === 'INPUT' || tag === 'TEXTAREA' || (e.target && e.target.isContentEditable)) return;
+            if (e.metaKey || e.ctrlKey || e.altKey) return;
+            if (!/^[0-9]$/.test(e.key)) { buf = ''; return; }
+            buf = (buf + e.key).slice(-3);
+            if (buf === '420') {
+                buf = '';
+                trackEvent('easter_egg', { egg: 'cloud_nine_420' });
+                window.location.href = '/cloud-nine/';
+            }
+        });
+        // Subtle hint for anyone peeking at DevTools
+        try {
+            console.log('%cTwin City Cannabis', 'color:#22c55e;font-weight:bold;font-size:14px');
+            console.log('%ctry the magic number somewhere on the page ☁️', 'color:#8b909a;font-size:11px');
+        } catch (_) {}
+    })();
+
     // Wait for DOM
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);

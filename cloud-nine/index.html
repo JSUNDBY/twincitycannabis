@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Cloud Nine · Twin City Cannabis</title>
+<meta name="description" content="A little ambient cannabis experience. Click or tap the sky, watch your puffs drift up, read a funny thought. No score, no losing.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://twincitycannabis.com/cloud-nine/">
+<meta property="og:title" content="Cloud Nine">
+<meta property="og:description" content="A little ambient cannabis experience. No score, no losing. Just puffs and thoughts.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://twincitycannabis.com/cloud-nine/">
+<meta property="og:image" content="https://twincitycannabis.com/og-image.png">
+<meta property="og:site_name" content="Twin City Cannabis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cloud Nine">
+<meta name="twitter:description" content="A little ambient cannabis experience.">
+<meta name="twitter:image" content="https://twincitycannabis.com/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/twin-city-cannabis-logo-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/img/twin-city-cannabis-logo-192.png">
+<link rel="apple-touch-icon" href="/img/twin-city-cannabis-logo-192.png">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NEZH9HCSSH"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-NEZH9HCSSH');</script>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#050608;color:#f5f6f8;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    overscroll-behavior:none;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+
+  #sky{position:fixed;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;
+       display:block}
+
+  /* ─── Minimal HUD ─── */
+  .hud{position:fixed;left:0;right:0;top:0;padding:env(safe-area-inset-top,0) 0 0;
+       display:flex;justify-content:space-between;align-items:flex-start;
+       padding:max(14px,env(safe-area-inset-top)) 18px 0;pointer-events:none;z-index:5}
+  .brand{display:flex;align-items:center;gap:.5rem;font-size:.78rem;letter-spacing:3px;
+         text-transform:uppercase;color:rgba(245,246,248,.55);font-weight:600;pointer-events:auto}
+  .brand a{color:inherit;text-decoration:none;display:flex;align-items:center;gap:.5rem}
+  .brand a:hover{color:#22c55e}
+  .brand img{height:22px;width:22px;opacity:.8}
+  .brand .dot{opacity:.5}
+  .brand strong{color:rgba(245,246,248,.85);letter-spacing:2px}
+  .brand strong span{color:#22c55e}
+
+  .stats{display:flex;gap:1.1rem;font-family:'Courier New',ui-monospace,monospace;
+         font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;
+         color:rgba(245,246,248,.5);text-align:right}
+  .stats .s{display:flex;flex-direction:column;align-items:flex-end;line-height:1.1}
+  .stats .s .v{color:rgba(245,246,248,.85);font-size:1.05rem;font-weight:700;margin-top:.15rem;font-variant-numeric:tabular-nums}
+
+  /* Bottom-left controls */
+  .foot{position:fixed;left:18px;bottom:max(16px,env(safe-area-inset-bottom,16px));
+        display:flex;gap:.5rem;z-index:5}
+  .chip{pointer-events:auto;background:rgba(10,20,16,.45);border:1px solid rgba(255,255,255,.1);
+        backdrop-filter:blur(8px);border-radius:999px;padding:.5rem .85rem;
+        color:rgba(245,246,248,.7);font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;
+        font-weight:600;cursor:pointer;user-select:none;display:inline-flex;align-items:center;gap:.4rem}
+  .chip:hover{color:#fff;border-color:rgba(255,255,255,.22)}
+  .chip svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+  .chip a{color:inherit;text-decoration:none}
+
+  /* Hint that fades on first interaction */
+  .hint{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+        font-family:'Courier New',ui-monospace,monospace;color:rgba(245,246,248,.55);
+        font-size:.85rem;letter-spacing:3px;text-transform:uppercase;text-align:center;pointer-events:none;
+        transition:opacity .8s ease;z-index:3}
+  .hint.gone{opacity:0}
+  .hint .big{font-size:1.15rem;color:#22c55e;display:block;margin-bottom:.6rem;letter-spacing:4px}
+  .hint .sub{color:rgba(245,246,248,.4);font-size:.7rem;letter-spacing:2px;display:block;margin-top:.6rem}
+
+  /* Unlock toast */
+  .toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);
+         background:rgba(10,20,16,.8);border:1px solid rgba(34,197,94,.35);
+         backdrop-filter:blur(10px);border-radius:14px;padding:.7rem 1.2rem;
+         color:#dcffe4;font-size:.82rem;letter-spacing:1.5px;text-transform:uppercase;
+         font-family:'Courier New',monospace;font-weight:700;white-space:nowrap;
+         opacity:0;pointer-events:none;transition:all .6s ease;z-index:6;
+         box-shadow:0 10px 40px rgba(34,197,94,.2)}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  /* Responsive sizing */
+  @media (max-width:520px){
+    .stats{gap:.8rem;font-size:.65rem}
+    .stats .s .v{font-size:.9rem}
+    .brand{font-size:.7rem;letter-spacing:2px}
+    .brand img{height:18px;width:18px}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="sky"></canvas>
+
+<div class="hud">
+  <div class="brand">
+    <a href="/"><img src="/img/twin-city-cannabis-logo-192.png" alt=""> <strong>Twin City <span>Cannabis</span></strong></a>
+  </div>
+  <div class="stats">
+    <div class="s"><span>Puffs</span><span class="v" id="puffCount">0</span></div>
+    <div class="s"><span>Drift</span><span class="v" id="driftTime">0:00</span></div>
+  </div>
+</div>
+
+<div class="hint" id="hint">
+  <span class="big">Cloud Nine</span>
+  Tap the sky. Exhale.
+  <span class="sub">no score. no losing. just drift.</span>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="foot">
+  <button class="chip" id="muteBtn" aria-label="Toggle sound">
+    <svg id="muteIcon" viewBox="0 0 24 24"><path d="M5 9v6h4l5 4V5L9 9H5z"/><path d="M19 5c2.5 2 2.5 12 0 14" stroke-linecap="round"/></svg>
+    <span id="muteLabel">Sound</span>
+  </button>
+  <a class="chip" href="/">
+    <svg viewBox="0 0 24 24" style="stroke-linecap:round;stroke-linejoin:round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>
+    Home
+  </a>
+</div>
+
+<script>
+(() => {
+  // ───────────── Canvas setup ─────────────
+  const canvas = document.getElementById('sky');
+  const ctx = canvas.getContext('2d');
+  const hintEl = document.getElementById('hint');
+  const toastEl = document.getElementById('toast');
+  const puffCountEl = document.getElementById('puffCount');
+  const driftTimeEl = document.getElementById('driftTime');
+  const muteBtn = document.getElementById('muteBtn');
+  const muteLabel = document.getElementById('muteLabel');
+
+  let W = 0, H = 0, dpr = 1;
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    layoutScene();
+  }
+  window.addEventListener('resize', resize);
+
+  // ───────────── Thoughts (the "funny" part) ─────────────
+  const THOUGHTS = [
+    "is a hot dog a sandwich",
+    "the cast of friends never ordered coffee to go",
+    "why do we park on driveways and drive on parkways",
+    "a clock is right twice a day. goals.",
+    "we're all just hot meat piloting bone suits",
+    "mountains are just tall ground",
+    "my teeth are technically outside bones",
+    "sleeping is just time travel",
+    "trees are slow explosions",
+    "bread is cooked dough. that's the whole thing.",
+    "soup is a beverage with ambition",
+    "pancakes are flat cake",
+    "every pizza is a personal pizza if you commit",
+    "cereal is spoon salad",
+    "a jellyfish is 95% water. confident water.",
+    "octopuses have three hearts and still ghost you",
+    "cows drink milk by eating grass",
+    "we've been to the moon more than the bottom of the ocean",
+    "sharks existed before trees",
+    "the sky is just blue ground",
+    "the alphabet is a song with the worst lyrics",
+    "salt is a rock you put on food",
+    "glass is a liquid. just very slow.",
+    "somewhere, someone is holding a door for nobody",
+    "cashews grow on the outside of a fruit. think about that.",
+    "if you clean a vacuum you become the vacuum",
+    "your stomach thinks all potatoes are mashed",
+    "wet clothes are just regular clothes plus water opinions",
+    "a king-size bed has never been ridden by a king",
+    "silent and listen have the same letters",
+    "the opposite of entrance is exit, unexpectedly",
+    "smelling is just tiny bits of things entering your face",
+    "no two snowflakes are alike. allegedly. who checked.",
+    "laughter is forced air with vibes",
+    "a library is a book party",
+    "if two small dogs stack, is that one medium dog",
+    "your heart has its own electrical system. you're sort of a robot.",
+    "we name ships after countries but cars after animals",
+    "the earth is 70% water. we live on 30%. it's not our lease.",
+    "all cups are bowls with commitment issues",
+    "humans are the only species who pay to live here",
+    "somewhere there's a very confident pigeon",
+    "if you get old enough you are automatically wise. or just old.",
+    "the fridge light turns off when you close it. probably.",
+    "you never see baby pigeons. suspicious.",
+    "a shadow is evidence that something exists by lying about it",
+    "birds are just dinosaurs that downsized",
+    "sound is just air having opinions",
+    "a map is just a tiny promise",
+    "you can't hum with your nose plugged. try it. i'll wait.",
+    "a pickle is a cucumber with a past",
+    "the word 'mouth' stops looking like a word if you read it enough. mouth. mouth. mouth.",
+    "somebody, somewhere, invented the high-five on purpose",
+    "the moon is just a rock we got attached to",
+    "every song you've ever loved was made of the same notes",
+    "the ocean has no walls but you still know when you're in it",
+    "you've been breathing this whole time. good job.",
+    "a forest is a committee of trees",
+    "clouds are just shy water",
+    "nothing is truly new. even this thought.",
+    "gravity is just the earth being clingy",
+    "a door is a wall with second thoughts",
+    "dreams are free and you still sleep through them",
+    "if a tree falls in a forest it's still rude",
+    "thunder is the sky clearing its throat",
+    "a butterfly used to be a worm with a plan",
+    "you're 37 trillion cells all having a meeting right now",
+    "fire is a slow kind of fast",
+    "time is just vibes with a schedule",
+    "the sun has never filed a single tax return",
+    "your reflection is you but flipped and judging",
+    "an echo is a mountain repeating the gossip",
+    "a river is just water going somewhere with conviction",
+    "a garden is a yard with ambition",
+    "a name is a noise someone decided meant you",
+    "you share a birthday with 21 million people",
+    "a cat is a liquid that loves you sometimes",
+    "the first person to milk a cow had questions",
+    "plants eat light. we eat plants. we are slightly sunshine.",
+    "a song is just feelings in a row",
+    "home is wherever the couch recognizes you",
+    "you have never met future you",
+    "rain is sky laundry",
+    "every forest was once a seed. every couch was once a tree."
+  ];
+  let thoughtPool = shuffled(THOUGHTS.slice());
+  function shuffled(a){ for (let i=a.length-1;i>0;i--){ const j=(Math.random()* (i+1))|0; [a[i],a[j]]=[a[j],a[i]]; } return a; }
+  function nextThought(){
+    if (!thoughtPool.length) thoughtPool = shuffled(THOUGHTS.slice());
+    return thoughtPool.pop();
+  }
+
+  // ───────────── Scene state ─────────────
+  let stars = [];
+  let bgClouds = [];
+  let fireflies = [];
+  let shootingStars = [];
+  let puffs = [];
+  let ripples = [];
+
+  let startMs = performance.now();
+  let lastMs = startMs;
+  let puffCount = +localStorage.getItem('cn_puffs') || 0;
+  let sessionPuffs = 0;
+  let muted = localStorage.getItem('cn_muted') === '1';
+  refreshMute();
+  puffCountEl.textContent = puffCount.toLocaleString();
+
+  function layoutScene(){
+    // Stars — dense at top, sparse at bottom
+    stars = [];
+    const n = Math.min(220, Math.round((W*H)/5500));
+    for (let i=0;i<n;i++){
+      stars.push({
+        x: Math.random()*W,
+        y: Math.random()*H*0.75,
+        r: Math.random()*1.4 + 0.3,
+        tw: Math.random()*Math.PI*2,
+        speed: 0.2 + Math.random()*0.8
+      });
+    }
+    // Background silhouette clouds (parallax)
+    bgClouds = [];
+    const cn = Math.max(4, Math.round(W/280));
+    for (let i=0;i<cn;i++){
+      bgClouds.push({
+        x: Math.random()*W,
+        y: H*0.55 + Math.random()*H*0.15,
+        w: 180 + Math.random()*260,
+        h: 34 + Math.random()*24,
+        vx: 4 + Math.random()*6,
+        a: 0.04 + Math.random()*0.05
+      });
+    }
+  }
+
+  // ───────────── Audio (ambient pad + puff bell) ─────────────
+  let audio = null;
+  let padNodes = null;
+  function initAudio(){
+    if (audio || muted) return;
+    try {
+      audio = new (window.AudioContext||window.webkitAudioContext)();
+      startPad();
+    } catch(e){ audio = null; }
+  }
+  function startPad(){
+    if (!audio) return;
+    const master = audio.createGain();
+    master.gain.value = 0.0;
+    master.connect(audio.destination);
+
+    const filt = audio.createBiquadFilter();
+    filt.type = 'lowpass';
+    filt.frequency.value = 700;
+    filt.Q.value = 0.7;
+    filt.connect(master);
+
+    // Three detuned sines forming a low chord
+    const base = 98; // G2
+    const notes = [base, base*1.5, base*2.25]; // root, fifth, ninth-ish
+    const oscs = notes.map(f => {
+      const o = audio.createOscillator();
+      o.type = 'sine'; o.frequency.value = f;
+      const g = audio.createGain(); g.gain.value = 0.22;
+      o.connect(g).connect(filt); o.start();
+      return { o, g };
+    });
+
+    // Slow filter LFO
+    const lfo = audio.createOscillator();
+    const lfoG = audio.createGain();
+    lfo.frequency.value = 0.03;
+    lfoG.gain.value = 350;
+    lfo.connect(lfoG).connect(filt.frequency);
+    lfo.start();
+
+    // Fade in
+    master.gain.setTargetAtTime(0.10, audio.currentTime, 1.4);
+
+    padNodes = { master, filt, oscs, lfo, lfoG };
+  }
+  function stopPad(){
+    if (!audio || !padNodes) return;
+    padNodes.master.gain.setTargetAtTime(0.0, audio.currentTime, 0.5);
+  }
+  function pentatonic(i){
+    // Lo pentatonic pool for puff bells
+    const freqs = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25, 783.99, 880.00];
+    return freqs[(i % freqs.length + freqs.length) % freqs.length];
+  }
+  let bellIdx = 0;
+  function bell(){
+    if (!audio || muted) return;
+    const t = audio.currentTime;
+    const o = audio.createOscillator();
+    const g = audio.createGain();
+    o.type = 'sine';
+    const f = pentatonic(bellIdx++ + (Math.random()*3|0));
+    o.frequency.setValueAtTime(f, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.18, t+0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+1.6);
+    o.connect(g).connect(audio.destination);
+    o.start(t); o.stop(t+1.7);
+  }
+  function refreshMute(){
+    muteLabel.textContent = muted ? 'Silent' : 'Sound';
+    document.getElementById('muteIcon').innerHTML = muted
+      ? '<path d="M5 9v6h4l5 4V5L9 9H5z"/><path d="M16 9l6 6M22 9l-6 6" stroke-linecap="round"/>'
+      : '<path d="M5 9v6h4l5 4V5L9 9H5z"/><path d="M19 5c2.5 2 2.5 12 0 14" stroke-linecap="round"/>';
+  }
+  muteBtn.addEventListener('click', () => {
+    muted = !muted;
+    localStorage.setItem('cn_muted', muted ? '1' : '0');
+    refreshMute();
+    if (muted){ stopPad(); }
+    else { initAudio(); if (padNodes) padNodes.master.gain.setTargetAtTime(0.10, audio.currentTime, 1.0); }
+  });
+
+  // ───────────── Interaction ─────────────
+  let holdStart = 0;
+  let holdX = 0, holdY = 0;
+  let dragging = false;
+  let lastDragMs = 0;
+  let firstInteraction = false;
+
+  canvas.addEventListener('pointerdown', e => {
+    canvas.setPointerCapture?.(e.pointerId);
+    holdStart = performance.now();
+    holdX = e.clientX; holdY = e.clientY;
+    dragging = true;
+    if (!firstInteraction){
+      firstInteraction = true;
+      hintEl.classList.add('gone');
+      initAudio();
+    }
+    ripples.push({ x:e.clientX, y:e.clientY, r:8, life:1 });
+  });
+
+  canvas.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const now = performance.now();
+    // Light trail puffs while dragging (rate-limited)
+    if (now - lastDragMs > 110){
+      spawnPuff(e.clientX, e.clientY, 0.6 + Math.random()*0.25, true);
+      lastDragMs = now;
+    }
+  });
+
+  canvas.addEventListener('pointerup', e => {
+    if (!dragging) return;
+    dragging = false;
+    const held = Math.min(1400, performance.now() - holdStart);
+    const size = 0.85 + (held / 1400) * 1.2; // 0.85 → 2.05
+    spawnPuff(e.clientX, e.clientY, size, false);
+  });
+
+  canvas.addEventListener('pointercancel', () => { dragging = false; });
+  canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+  // ───────────── Puff spawning ─────────────
+  function spawnPuff(x, y, size, silent){
+    const puffs_to_add = 1;
+    for (let i=0;i<puffs_to_add;i++){
+      const blobs = [];
+      const bCount = 5 + (Math.random()*3|0);
+      for (let j=0;j<bCount;j++){
+        blobs.push({
+          ox: (Math.random()-0.5) * 28 * size,
+          oy: (Math.random()-0.5) * 22 * size,
+          r:  (16 + Math.random()*22) * size,
+          phase: Math.random()*Math.PI*2
+        });
+      }
+      puffs.push({
+        x, y, vx: (Math.random()-0.5)*8, vy: -(10 + Math.random()*10),
+        life: 0, maxLife: 10 + Math.random()*5,
+        size, blobs,
+        thought: null, thoughtAt: 0.35 + Math.random()*0.15,
+        hue: 150 + Math.random()*60,        // light green-cyan-blue range
+        rot: (Math.random()-0.5)*0.2, vRot: (Math.random()-0.5)*0.05
+      });
+    }
+    if (!silent){
+      sessionPuffs++;
+      puffCount++;
+      localStorage.setItem('cn_puffs', puffCount);
+      puffCountEl.textContent = puffCount.toLocaleString();
+      bell();
+      checkMilestones();
+      if (window.gtag && sessionPuffs === 1) gtag('event','cloud_nine_first_puff');
+    }
+  }
+
+  // ───────────── Milestones ─────────────
+  const MILESTONES = [
+    { at: 3,  msg: 'A shooting star.',        fn: () => triggerShootingStar() },
+    { at: 7,  msg: 'Fireflies showed up.',    fn: () => spawnFireflies(18) },
+    { at: 12, msg: 'Something shimmered.',    fn: () => auroraOn = true },
+    { at: 20, msg: 'A second shooting star.', fn: () => triggerShootingStar() },
+    { at: 30, msg: "The moon is watching.",    fn: () => moonPhase = 1 },
+    { at: 50, msg: 'You have been here a while. thank you.', fn: () => {} },
+    { at: 80, msg: 'A whole flock of stars.',  fn: () => triggerStarRain() },
+    { at:120, msg: 'You are basically a cloud now.', fn: () => {} }
+  ];
+  let firedMilestones = new Set();
+  function checkMilestones(){
+    for (const m of MILESTONES){
+      if (sessionPuffs >= m.at && !firedMilestones.has(m.at)){
+        firedMilestones.add(m.at);
+        m.fn();
+        showToast(m.msg);
+      }
+    }
+  }
+  function showToast(text){
+    toastEl.textContent = text;
+    toastEl.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=>toastEl.classList.remove('show'), 3200);
+  }
+
+  // ───────────── Special scene elements ─────────────
+  let auroraOn = false;
+  let moonPhase = 0;
+  function triggerShootingStar(){
+    shootingStars.push({
+      x: Math.random()*W*0.4,
+      y: Math.random()*H*0.3,
+      vx: 320 + Math.random()*180,
+      vy: 120 + Math.random()*60,
+      life: 0, maxLife: 1.6,
+      trail: []
+    });
+  }
+  function triggerStarRain(){
+    for (let i=0;i<5;i++) setTimeout(triggerShootingStar, i*400);
+  }
+  function spawnFireflies(n){
+    for (let i=0;i<n;i++){
+      fireflies.push({
+        x: Math.random()*W,
+        y: H*0.55 + Math.random()*H*0.35,
+        baseY: 0,
+        phase: Math.random()*Math.PI*2,
+        phaseSpeed: 1.5 + Math.random()*2.2,
+        vx: (Math.random()-0.5)*12,
+        vy: (Math.random()-0.5)*8,
+        hue: 55 + Math.random()*20
+      });
+      fireflies[fireflies.length-1].baseY = fireflies[fireflies.length-1].y;
+    }
+  }
+
+  // ───────────── Render ─────────────
+  function drawBackground(t){
+    // Slow color cycle (full cycle every ~3 minutes)
+    const phase = (t/1000 / 180) % 1; // 0..1
+    // Palette keyframes: dusk → night → aurora-green → purple-night → dawn
+    const palettes = [
+      // top, mid, bottom
+      ['#0a1020','#1a1830','#2b1f3a'], // dusk
+      ['#050814','#0a0f20','#121a2e'], // deep night
+      ['#05141a','#0a2a2a','#1a3632'], // aurora green
+      ['#0f0620','#1a0b2e','#24123a'], // purple
+      ['#1a0f1a','#2a1520','#3a2030']  // pre-dawn
+    ];
+    const segs = palettes.length;
+    const idx = Math.floor(phase*segs);
+    const nextIdx = (idx+1)%segs;
+    const localT = (phase*segs) - idx;
+    const blend = (a,b) => lerpColor(a,b,localT);
+    const c0 = blend(palettes[idx][0], palettes[nextIdx][0]);
+    const c1 = blend(palettes[idx][1], palettes[nextIdx][1]);
+    const c2 = blend(palettes[idx][2], palettes[nextIdx][2]);
+
+    const g = ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0, c0);
+    g.addColorStop(0.55, c1);
+    g.addColorStop(1, c2);
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,W,H);
+
+    // Aurora overlay
+    if (auroraOn){
+      const a = 0.12 + Math.sin(t*0.0008)*0.04;
+      const gg = ctx.createLinearGradient(0,0,0,H*0.6);
+      gg.addColorStop(0, `rgba(34,197,94,${a*0.15})`);
+      gg.addColorStop(0.4, `rgba(34,197,94,${a})`);
+      gg.addColorStop(1, `rgba(34,197,94,0)`);
+      ctx.fillStyle = gg;
+      ctx.save();
+      ctx.translate(0, H*0.1 + Math.sin(t*0.0005)*20);
+      ctx.fillRect(0,0,W,H*0.6);
+      ctx.restore();
+      // second ribbon
+      const gg2 = ctx.createLinearGradient(0,0,0,H*0.45);
+      gg2.addColorStop(0, 'rgba(168,85,247,0)');
+      gg2.addColorStop(0.5, 'rgba(168,85,247,'+ (a*0.7) +')');
+      gg2.addColorStop(1, 'rgba(168,85,247,0)');
+      ctx.fillStyle = gg2;
+      ctx.save();
+      ctx.translate(0, H*0.18 + Math.cos(t*0.0006)*25);
+      ctx.fillRect(0,0,W,H*0.45);
+      ctx.restore();
+    }
+  }
+  function lerpColor(a,b,t){
+    const pa = hex(a), pb = hex(b);
+    const r = Math.round(pa[0] + (pb[0]-pa[0])*t);
+    const g = Math.round(pa[1] + (pb[1]-pa[1])*t);
+    const bl= Math.round(pa[2] + (pb[2]-pa[2])*t);
+    return `rgb(${r},${g},${bl})`;
+  }
+  function hex(h){
+    h = h.replace('#','');
+    return [parseInt(h.substr(0,2),16), parseInt(h.substr(2,2),16), parseInt(h.substr(4,2),16)];
+  }
+
+  function drawStars(t){
+    for (const s of stars){
+      const twinkle = 0.6 + Math.sin(t*0.003*s.speed + s.tw)*0.4;
+      ctx.fillStyle = `rgba(255,255,255,${0.22*twinkle})`;
+      const r = s.r * twinkle;
+      ctx.beginPath(); ctx.arc(s.x, s.y, r, 0, Math.PI*2); ctx.fill();
+    }
+  }
+
+  function drawMoon(t){
+    if (moonPhase <= 0) return;
+    const cx = W - 110, cy = 110;
+    const r = 46;
+    // soft halo
+    const halo = ctx.createRadialGradient(cx, cy, r*0.4, cx, cy, r*3);
+    halo.addColorStop(0, 'rgba(255,240,210,0.18)');
+    halo.addColorStop(1, 'rgba(255,240,210,0)');
+    ctx.fillStyle = halo;
+    ctx.beginPath(); ctx.arc(cx, cy, r*3, 0, Math.PI*2); ctx.fill();
+    // disc
+    ctx.fillStyle = 'rgba(250,240,220,0.92)';
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.fill();
+    // craters
+    ctx.fillStyle = 'rgba(200,190,170,0.35)';
+    [[-14,-8,9],[10,6,6],[-4,14,5],[15,-16,4]].forEach(([dx,dy,rr]) => {
+      ctx.beginPath(); ctx.arc(cx+dx, cy+dy, rr, 0, Math.PI*2); ctx.fill();
+    });
+  }
+
+  function drawBgClouds(dt){
+    for (const c of bgClouds){
+      c.x += c.vx * dt;
+      if (c.x - c.w > W) c.x = -c.w - 40;
+      ctx.fillStyle = `rgba(12,18,20,${c.a})`;
+      const y = c.y;
+      // A rounded cloud silhouette made of a few ellipses
+      ctx.beginPath();
+      ctx.ellipse(c.x, y, c.w*0.5, c.h*0.5, 0, 0, Math.PI*2);
+      ctx.ellipse(c.x - c.w*0.3, y+4, c.w*0.22, c.h*0.4, 0, 0, Math.PI*2);
+      ctx.ellipse(c.x + c.w*0.3, y+4, c.w*0.26, c.h*0.42, 0, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  function drawHorizon(){
+    // Low silhouette hill + a little cannabis leaf icon on the right
+    const y = H - 80;
+    ctx.fillStyle = 'rgba(4,8,10,0.92)';
+    ctx.beginPath();
+    ctx.moveTo(0, H);
+    ctx.lineTo(0, y+10);
+    ctx.bezierCurveTo(W*0.2, y-30, W*0.35, y+20, W*0.5, y);
+    ctx.bezierCurveTo(W*0.65, y-15, W*0.8, y+25, W, y-5);
+    ctx.lineTo(W, H);
+    ctx.closePath();
+    ctx.fill();
+
+    // Person silhouette reclining on the hill around 30% width
+    const px = W*0.3, py = y + 6;
+    ctx.fillStyle = 'rgba(2,4,6,1)';
+    // body
+    ctx.beginPath();
+    ctx.ellipse(px, py, 30, 10, 0, 0, Math.PI*2); ctx.fill();
+    // head
+    ctx.beginPath(); ctx.arc(px - 26, py - 8, 7, 0, Math.PI*2); ctx.fill();
+    // legs
+    ctx.fillRect(px+10, py-2, 22, 5);
+  }
+
+  function drawShootingStars(dt){
+    for (let i=shootingStars.length-1;i>=0;i--){
+      const s = shootingStars[i];
+      s.life += dt;
+      s.trail.unshift({x:s.x, y:s.y});
+      if (s.trail.length > 20) s.trail.pop();
+      s.x += s.vx * dt;
+      s.y += s.vy * dt;
+      // trail
+      for (let j=0;j<s.trail.length;j++){
+        const p = s.trail[j];
+        const a = (1 - j/s.trail.length) * 0.8 * (1 - s.life/s.maxLife);
+        ctx.fillStyle = `rgba(255,255,240,${a})`;
+        ctx.beginPath(); ctx.arc(p.x, p.y, (1 - j/s.trail.length)*2.2, 0, Math.PI*2); ctx.fill();
+      }
+      // head
+      ctx.fillStyle = `rgba(255,255,255,${1 - s.life/s.maxLife})`;
+      ctx.beginPath(); ctx.arc(s.x, s.y, 2.2, 0, Math.PI*2); ctx.fill();
+
+      if (s.life > s.maxLife || s.x > W+100 || s.y > H+60) shootingStars.splice(i,1);
+    }
+  }
+
+  function drawFireflies(t, dt){
+    for (const f of fireflies){
+      f.phase += f.phaseSpeed * dt;
+      const glow = (Math.sin(f.phase) + 1) / 2; // 0..1
+      f.x += f.vx * dt + Math.sin(t*0.001 + f.phase)*0.4;
+      f.y += f.vy * dt + Math.cos(t*0.0013 + f.phase)*0.3;
+      // gentle bounds, drift sideways
+      if (f.x < -20) f.x = W+10;
+      if (f.x > W+20) f.x = -10;
+      if (f.y < H*0.45) f.vy = Math.abs(f.vy);
+      if (f.y > H - 30) f.vy = -Math.abs(f.vy);
+
+      const size = 1.8 + glow*1.6;
+      const halo = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, size*6);
+      halo.addColorStop(0, `hsla(${f.hue}, 90%, 75%, ${0.55*glow})`);
+      halo.addColorStop(1, `hsla(${f.hue}, 90%, 75%, 0)`);
+      ctx.fillStyle = halo;
+      ctx.beginPath(); ctx.arc(f.x, f.y, size*6, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = `hsla(${f.hue}, 100%, 85%, ${0.85*glow})`;
+      ctx.beginPath(); ctx.arc(f.x, f.y, size, 0, Math.PI*2); ctx.fill();
+    }
+  }
+
+  function drawRipples(dt){
+    for (let i=ripples.length-1;i>=0;i--){
+      const r = ripples[i];
+      r.r += 90 * dt;
+      r.life -= dt * 1.4;
+      ctx.strokeStyle = `rgba(255,255,255,${0.28 * Math.max(0,r.life)})`;
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(r.x, r.y, r.r, 0, Math.PI*2); ctx.stroke();
+      if (r.life <= 0) ripples.splice(i,1);
+    }
+  }
+
+  function drawPuffs(t, dt){
+    for (let i=puffs.length-1;i>=0;i--){
+      const p = puffs[i];
+      p.life += dt;
+      const age = p.life / p.maxLife; // 0..1
+      if (age >= 1){ puffs.splice(i,1); continue; }
+
+      // Rise and slowly decelerate, drift sideways
+      p.vy += 2 * dt;     // tiny gravity drag slows ascent? actually reduce speed over time
+      p.vy = Math.max(p.vy, -50);
+      p.vx += (Math.sin(t*0.0009 + p.x*0.01) - p.vx*0.15) * dt; // drift
+      p.x += p.vx * dt * 8;
+      p.y += p.vy * dt;
+      p.rot += p.vRot * dt;
+
+      // Grow slightly over lifetime
+      const growth = 1 + age*0.4;
+
+      // Fade curve
+      const alpha = Math.sin(age * Math.PI) * 0.85; // ease in and out
+      if (alpha <= 0) continue;
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+
+      for (const b of p.blobs){
+        const bx = b.ox + Math.sin(t*0.001 + b.phase)*3;
+        const by = b.oy + Math.cos(t*0.001 + b.phase)*2;
+        const r = b.r * growth;
+        const grd = ctx.createRadialGradient(bx, by, 0, bx, by, r);
+        grd.addColorStop(0,   `hsla(${p.hue}, 35%, 92%, ${0.55*alpha})`);
+        grd.addColorStop(0.6, `hsla(${p.hue}, 30%, 88%, ${0.22*alpha})`);
+        grd.addColorStop(1,   `hsla(${p.hue}, 30%, 85%, 0)`);
+        ctx.fillStyle = grd;
+        ctx.beginPath(); ctx.arc(bx, by, r, 0, Math.PI*2); ctx.fill();
+      }
+      ctx.restore();
+
+      // Assign a thought once the puff has risen a bit
+      if (!p.thought && age > p.thoughtAt && p.size > 0.8 && Math.random() < 0.5 + p.size*0.3){
+        p.thought = nextThought();
+      }
+      // Draw thought text inside the puff (fades with puff)
+      if (p.thought){
+        // Emerge + fade
+        const textAge = (age - p.thoughtAt) / (1 - p.thoughtAt); // 0..1 after appearance
+        const textAlpha = Math.sin(textAge * Math.PI) * 0.9;
+        if (textAlpha > 0.02){
+          const fontSize = Math.max(12, Math.min(20, 12 + p.size*3));
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.font = `italic ${fontSize}px Georgia, 'Times New Roman', serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = `rgba(30,36,46,${0.85*textAlpha})`;
+          // Wrap long thoughts into 2-3 lines
+          const maxW = 200 + p.size*50;
+          const lines = wrap(p.thought, maxW, ctx);
+          const lh = fontSize*1.25;
+          lines.forEach((ln, j) => {
+            ctx.fillText(ln, 0, (j - (lines.length-1)/2) * lh);
+          });
+          ctx.restore();
+        }
+      }
+    }
+  }
+  function wrap(text, maxWidth, ctx){
+    const words = text.split(' ');
+    const lines = [];
+    let cur = '';
+    for (const w of words){
+      const trial = cur ? cur+' '+w : w;
+      if (ctx.measureText(trial).width <= maxWidth) cur = trial;
+      else { if (cur) lines.push(cur); cur = w; }
+    }
+    if (cur) lines.push(cur);
+    return lines;
+  }
+
+  // ───────────── Main loop ─────────────
+  function frame(now){
+    const dt = Math.min(0.05, (now - lastMs)/1000);
+    lastMs = now;
+
+    // Drift timer
+    const secs = Math.floor((now - startMs)/1000);
+    const mm = Math.floor(secs/60), ss = (secs%60).toString().padStart(2,'0');
+    driftTimeEl.textContent = `${mm}:${ss}`;
+
+    drawBackground(now);
+    drawStars(now);
+    drawMoon(now);
+    drawBgClouds(dt);
+    drawHorizon();
+    drawShootingStars(dt);
+    drawFireflies(now, dt);
+    drawRipples(dt);
+    drawPuffs(now, dt);
+
+    requestAnimationFrame(frame);
+  }
+
+  resize();
+  lastMs = performance.now();
+  requestAnimationFrame(frame);
+
+  // Hide hint after ~18s even if they don't interact
+  setTimeout(() => hintEl.classList.add('gone'), 18000);
+
+  // Gentle auto-ambient puff every ~25s if user hasn't interacted, so the scene stays alive on the landing
+  setInterval(() => {
+    if (!firstInteraction && document.visibilityState === 'visible') {
+      spawnPuff(W*0.3, H - 60, 0.9 + Math.random()*0.4, true);
+    }
+  }, 7000);
+})();
+</script>
+</body>
+</html>
