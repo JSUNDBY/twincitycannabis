@@ -88,6 +88,10 @@ export default {
       return handleTrack(request, env, cors);
     }
 
+    if (url.pathname === '/contact' && request.method === 'POST') {
+      return handleContact(request, env, cors);
+    }
+
     if (url.pathname === '/dashboard' && request.method === 'GET') {
       return handleDispensaryDashboardPage(request, env);
     }
@@ -418,16 +422,18 @@ async function handleAdminData(request, env, cors) {
     });
   }
 
-  const [subscribers, overrides, site] = await Promise.all([
+  const [subscribers, overrides, site, leads] = await Promise.all([
     fetchSubscribers(env),
     fetchOverrides(env),
     fetchSiteHealth(),
+    fetchLeads(env),
   ]);
 
   return new Response(JSON.stringify({
     subscribers,
     overrides,
     site,
+    leads,
     generated_at: new Date().toISOString(),
   }), {
     status: 200,
@@ -472,6 +478,12 @@ async function fetchSubscribers(env) {
 async function fetchOverrides(env) {
   const idx = await getTierIndex(env);
   return Object.entries(idx).map(([id, value]) => ({ id, ...(value || {}) }));
+}
+
+async function fetchLeads(env) {
+  const leads = (await env.TCC_OVERRIDES.get('index:leads', { type: 'json' })) || [];
+  // Newest first
+  return leads.sort((a, b) => (b.submitted_at || '').localeCompare(a.submitted_at || ''));
 }
 
 async function fetchSiteHealth() {
@@ -668,6 +680,21 @@ function render(d) {
     </section>
 
     <section>
+      <h2>Incoming leads <span style="font-size:.75rem;color:var(--accent);float:right">\${(d.leads || []).length} total</span></h2>
+      \${(d.leads || []).length ? '<table><thead><tr><th>When</th><th>Name</th><th>Email</th><th>Dispensary</th><th>Role</th><th>Message</th></tr></thead><tbody>' +
+        (d.leads || []).slice(0, 25).map(l => '<tr>' +
+          '<td><code class="mono">' + esc(l.submitted_at ? l.submitted_at.slice(0,10) : '—') + '</code></td>' +
+          '<td><strong>' + esc(l.name) + '</strong></td>' +
+          '<td>' + esc(l.email) + '</td>' +
+          '<td>' + esc(l.dispensary || '—') + '</td>' +
+          '<td>' + esc(l.role || '—') + '</td>' +
+          '<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(l.message || '—') + '</td>' +
+        '</tr>').join('') +
+        '</tbody></table>'
+        : '<div class="empty">No leads yet. Share your dispensary listing page with prospects — the claim form on each listing feeds here.</div>'}
+    </section>
+
+    <section>
       <h2>Quick links</h2>
       <div class="links">
         <a class="btn" href="https://dashboard.stripe.com/subscriptions" target="_blank">Stripe subscriptions</a>
@@ -694,6 +721,43 @@ setInterval(load, 30000);
 //   stat:<id>:<event>:d<YYYY-MM-DD>   daily counter (95-day TTL)
 //   stat:<id>:<event>:total            lifetime counter (no TTL)
 const TRACK_EVENTS = new Set(['view', 'outbound', 'search_hit']);
+
+// ─── /contact ────────────────────────────────────────────────────────────────
+// Receives claim/inquiry form submissions, stores in KV, shows on /admin.
+async function handleContact(request, env, cors) {
+  let body;
+  try { body = await request.json(); } catch {
+    return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+
+  const lead = {
+    name: String(body.name || '').slice(0, 200),
+    email: String(body.email || '').slice(0, 200),
+    phone: String(body.phone || '').slice(0, 50),
+    role: String(body.role || '').slice(0, 50),
+    dispensary: String(body.dispensary || '').slice(0, 200),
+    dispensary_id: String(body.dispensary_id || '').slice(0, 100),
+    message: String(body.message || '').slice(0, 2000),
+    submitted_at: new Date().toISOString(),
+  };
+
+  if (!lead.name || !lead.email) {
+    return new Response(JSON.stringify({ ok: false, error: 'name and email required' }), {
+      status: 400, headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+
+  // Append to leads index (single key, no list ops needed)
+  const leads = (await env.TCC_OVERRIDES.get('index:leads', { type: 'json' })) || [];
+  leads.push(lead);
+  // Cap at 500 to keep the blob bounded
+  if (leads.length > 500) leads.splice(0, leads.length - 500);
+  await env.TCC_OVERRIDES.put('index:leads', JSON.stringify(leads));
+
+  return new Response(JSON.stringify({ ok: true }), {
+    status: 200, headers: { 'Content-Type': 'application/json', ...cors },
+  });
+}
 
 async function handleTrack(request, env, cors) {
   let body;

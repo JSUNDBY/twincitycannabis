@@ -1158,29 +1158,27 @@
         // Contact form handler
         const contactForm = document.getElementById('dash-contact-form');
         if (contactForm) {
-            contactForm.onsubmit = (e) => {
+            contactForm.onsubmit = async (e) => {
                 e.preventDefault();
                 const formData = new FormData(contactForm);
                 const data = Object.fromEntries(formData);
                 data.dispensary = d.name;
                 data.dispensary_id = d.id;
-                data.timestamp = new Date().toISOString();
 
-                // Save locally + fire tracking
-                const claims = JSON.parse(localStorage.getItem('tcc-claims') || '[]');
-                claims.push(data);
-                localStorage.setItem('tcc-claims', JSON.stringify(claims));
+                const submitBtn = contactForm.querySelector('button[type="submit"]');
+                if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending...'; }
 
-                if (typeof gtag === 'function') gtag('event', 'generate_lead', { event_category: 'dispensary', event_label: 'claim_form' });
-                if (typeof fbq === 'function') fbq('track', 'Lead', { content_name: 'Dispensary Claim: ' + d.name });
+                try {
+                    await fetch(`${TCC_WORKER_URL}/contact`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data),
+                    });
+                } catch (_) {}
 
+                trackEvent('generate_lead', { event_category: 'dispensary', event_label: 'claim_form', dispensary_id: d.id });
                 contactForm.style.display = 'none';
                 document.getElementById('dash-contact-success').style.display = 'block';
-
-                // Also send via mailto as backup
-                const subject = encodeURIComponent('Dispensary Claim: ' + d.name);
-                const body = encodeURIComponent(`Name: ${data.name}\nRole: ${data.role}\nEmail: ${data.email}\nPhone: ${data.phone || 'N/A'}\nDispensary: ${d.name}\nMessage: ${data.message || 'N/A'}`);
-                window.open(`mailto:hello@twincitycannabis.com?subject=${subject}&body=${body}`, '_blank');
             };
         }
 
