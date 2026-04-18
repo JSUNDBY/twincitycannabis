@@ -486,6 +486,73 @@
         container.innerHTML = deals.map(d => dealCard(d)).join('');
     }
 
+    // ─── Staff Pick ───────────────────────────────────────────────────────
+    // Manual weekly product spotlight. Change STAFF_PICK_QUERY to feature a
+    // different product. Searches by name substring (case-insensitive).
+    const STAFF_PICK = {
+        query: 'Pine Soul',
+        category: 'flower',
+        blurb: 'Pine Soul is a smooth indica-hybrid with earthy pine and subtle citrus. Deep body relaxation without heavy sedation. One of our favorites for winding down.',
+    };
+
+    function renderStaffPick() {
+        const section = document.getElementById('staff-pick-section');
+        const container = document.getElementById('staff-pick-card');
+        if (!section || !container) return;
+
+        const q = STAFF_PICK.query.toLowerCase();
+        const matches = TCC.products.filter(p =>
+            p.name.toLowerCase().includes(q) &&
+            (!STAFF_PICK.category || p.category === STAFF_PICK.category)
+        );
+        if (!matches.length) return;
+
+        // Collect all dispensaries + prices for this product
+        const locations = [];
+        matches.forEach(p => {
+            Object.entries(p.prices || {}).forEach(([dispId, price]) => {
+                if (price > 500) return; // skip bulk/wholesale outliers
+                const disp = TCC.dispensaries.find(x => x.id === dispId);
+                if (!disp) return;
+                locations.push({ disp, price, product: p });
+            });
+        });
+        if (!locations.length) return;
+
+        locations.sort((a, b) => a.price - b.price);
+        const cheapest = locations[0];
+        const img = matches.find(m => m.image && m.image.length > 10) || {};
+        const priceRange = locations.length > 1
+            ? `$${locations[0].price} – $${locations[locations.length - 1].price}`
+            : `$${locations[0].price}`;
+
+        section.style.display = '';
+        container.innerHTML = `
+            <div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:1.5rem;padding:1.5rem;border-color:rgba(234,179,8,0.25);background:linear-gradient(135deg,rgba(234,179,8,0.04),transparent 60%)">
+                ${img.image ? `<div style="width:140px;height:140px;border-radius:12px;overflow:hidden;background:var(--bg-secondary);flex-shrink:0;display:flex;align-items:center;justify-content:center">
+                    <img src="${esc(img.image)}" alt="${esc(STAFF_PICK.query)}" style="width:100%;height:100%;object-fit:cover">
+                </div>` : ''}
+                <div>
+                    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.4rem">
+                        <span style="font-size:0.65rem;font-weight:700;color:#eab308;background:rgba(234,179,8,0.12);padding:0.15rem 0.6rem;border-radius:var(--radius-full);letter-spacing:1.2px">&#11088; STAFF PICK</span>
+                        <span class="tag tag-sm" style="background:rgba(34,197,94,0.1);color:var(--green)">${esc(STAFF_PICK.category)}</span>
+                    </div>
+                    <div class="font-display font-bold text-xl" style="margin-bottom:0.3rem">${esc(STAFF_PICK.query)}</div>
+                    <p class="text-sm text-secondary" style="margin-bottom:0.8rem;max-width:500px">${esc(STAFF_PICK.blurb)}</p>
+                    <div style="font-size:1.3rem;font-weight:800;color:var(--green);margin-bottom:0.8rem">${priceRange}</div>
+                    <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.6rem">Available at ${locations.length} dispensar${locations.length === 1 ? 'y' : 'ies'}:</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:0.4rem">
+                        ${locations.slice(0, 8).map(l => `
+                            <a href="#dispensary/${esc(l.disp.id)}" class="tag tag-sm" style="text-decoration:none;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);cursor:pointer">
+                                ${esc(l.disp.name)} <span style="color:var(--green);font-weight:700;margin-left:0.3rem">$${l.price}</span>
+                            </a>
+                        `).join('')}
+                        ${locations.length > 8 ? `<span class="tag tag-sm" style="color:var(--text-muted)">+${locations.length - 8} more</span>` : ''}
+                    </div>
+                </div>
+            </div>`;
+    }
+
     function renderTrendingProducts() {
         const container = document.getElementById('trending-products');
         const trending = TCC.products
@@ -2327,6 +2394,7 @@
         updateHeroCounts();
         injectDataIcons();
         renderHome();
+        renderStaffPick();
         renderDispensaries({ city: 'metro' });
         renderDeals();
         renderStrains();
