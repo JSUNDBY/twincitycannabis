@@ -1977,12 +1977,13 @@
     function priceTrendTag(p) {
         if (!p.priceHistory || p.priceHistory.length < 2) return '';
         const ph = p.priceHistory;
-        if (new Set(ph).size <= 1) return ''; // flat — no real history yet
         const oldest = ph[0], newest = ph[ph.length - 1];
         const diff = oldest - newest;
-        if (Math.abs(diff) < 1) return '';
-        if (diff > 0) return `<span class="tag tag-sm" style="background:rgba(34,197,94,0.1);color:var(--green)" title="Price dropped $${diff.toFixed(0)} over 8 weeks">&darr; $${diff.toFixed(0)}</span>`;
-        return `<span class="tag tag-sm" style="background:rgba(239,68,68,0.1);color:#ef4444" title="Price rose $${Math.abs(diff).toFixed(0)} over 8 weeks">&uarr; $${Math.abs(diff).toFixed(0)}</span>`;
+        if (new Set(ph).size <= 1 || Math.abs(diff) < 1) {
+            return `<span class="tag tag-sm" style="background:rgba(139,144,154,0.08);color:var(--text-muted)" title="Price stable over tracked period">&mdash; Stable</span>`;
+        }
+        if (diff > 0) return `<span class="tag tag-sm" style="background:rgba(34,197,94,0.1);color:var(--green)" title="Price dropped $${diff.toFixed(0)} recently">&darr; $${diff.toFixed(0)}</span>`;
+        return `<span class="tag tag-sm" style="background:rgba(239,68,68,0.1);color:#ef4444" title="Price rose $${Math.abs(diff).toFixed(0)} recently">&uarr; $${Math.abs(diff).toFixed(0)}</span>`;
     }
 
     function productCard(p) {
