@@ -65,7 +65,7 @@
     // Category-specific sanity: does the name actually look like its category?
     const _NOT_ANYTHING_CANNABIS_RE = /\b(book|handbook|field guide|guide to|coloring|foundation|fertilizer|soil\b|nutrient|rooting|grow tent|tent kit|field\s*guide|textbook|novel|story|bible)\b/i;
 
-    const _FLOWER_WEIGHT_RE = /\b(1\/8|1\/4|1\/2|eighth|quarter|half\s*oz|ounce|oz\b|3\.5\s*g|7\s*g|14\s*g|28\s*g|mixed\s*bud|whole\s*flower|pre.?pack)\b/i;
+    const _FLOWER_WEIGHT_RE = /\b(1\/8|1\/4|1\/2|eighth|quarter|half\s*oz|ounce|oz\b|\d+(?:\.\d+)?\s*g\b|mixed\s*bud|whole\s*flower|pre.?pack)\b/i;
     const _FLOWER_KEYWORD_RE = /\b(flower|bud|nug|smalls|popcorn|ground\b|shake\b)\b/i;
     const _NOT_FLOWER_RE = /\b(cart(ridge)?|disposable|vape|shot|seltzer|soda|drink|tonic|lemonade|iced\s*tea|fl\s*oz|gummi|chocolate|candy|brownie|cookie|chew|mint|honey|lotion|balm|salve|bath\s*bomb|dab|wax|shatter|rosin|hash|tincture|dropper|capsule|softgel|book|bible|textbook|blend|deodorant|headband|blanket|guasha|bronners|soap\b|koozie|keychain|jewel|stoop|holiday|ornament|pack\b|box\b|scarf|buddy|pass\b|wash|immunity|mushroom|spirulina|wellness|roller|stik\b)\b/i;
     const _MG_RE = /\b\d+\s*mg\b/i;

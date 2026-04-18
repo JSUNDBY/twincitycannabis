@@ -104,7 +104,7 @@ const MIN_PRICE_BY_CATEGORY = {
 // Category-specific whitelist rules — mirror the SPA filter in js/app.js
 const _NOT_FLOWER_RE = /\b(cart(ridge)?|disposable|vape|shot|seltzer|soda|drink|tonic|lemonade|iced\s*tea|fl\s*oz|gummi|chocolate|candy|brownie|cookie|chew|mint|honey|lotion|balm|salve|bath\s*bomb|dab|wax|shatter|rosin|hash|tincture|dropper|capsule|softgel|book|bible|textbook|blend|deodorant|headband|blanket|guasha|bronners|soap\b|koozie|keychain|jewel|stoop|holiday|ornament|pack\b|box\b|scarf|buddy|pass\b|wash|immunity|mushroom|spirulina|wellness|roller|stik\b)\b/i;
 const _NON_CANNABIS_SIGNAL_RE = /\b(mushroom|immunity|spirulina|wound|scarf|hat\b|shirt|blanket|deodorant|soap\b|tea\b|coffee|salt\b|wellness|bliss|mystery|flavor|magnesium|liver|ashwagandha|multivitamin|immune|organ|castor|canviva|pet\b|crochet|bone\b|mineral|probiotic|complex|supplement|rescue|wash\b|shield|guard|detox|cleanse|holistic|collagen|electrolyte|pre.?workout)\b/i;
-const _FLOWER_WEIGHT_RE = /\b(1\/8|1\/4|1\/2|eighth|quarter|half\s*oz|ounce|oz\b|3\.5\s*g|7\s*g|14\s*g|28\s*g|mixed\s*bud|whole\s*flower|pre.?pack)\b/i;
+const _FLOWER_WEIGHT_RE = /\b(1\/8|1\/4|1\/2|eighth|quarter|half\s*oz|ounce|oz\b|\d+(?:\.\d+)?\s*g\b|mixed\s*bud|whole\s*flower|pre.?pack)\b/i;
 const _FLOWER_KEYWORD_RE = /\b(flower|bud|nug|smalls|popcorn|ground\b|shake\b)\b/i;
 const _CART_KEYWORD_RE = /\b(cart(ridge)?s?|vape|vaporizer|disposable|pen|510|pod|pods|oil\b|distillate|live\s*resin|live\s*rosin|rosin\s*cart)\b/i;
 const _MG_RE = /\b\d+\s*mg\b/i;
