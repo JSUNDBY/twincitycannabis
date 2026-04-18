@@ -167,7 +167,12 @@
         }
         TCC.products.forEach(p => {
             if (p.category !== 'edible' && p.category !== 'beverage') return;
-            const totalMg = _parseTotalMg(p.name);
+            let totalMg = _parseTotalMg(p.name);
+            // Fallback: use the THC field if the name didn't have mg
+            if (!totalMg && p.thc) {
+                const thcMatch = String(p.thc).match(/(\d+(?:\.\d+)?)\s*mg/i);
+                if (thcMatch) totalMg = Number(thcMatch[1]);
+            }
             if (totalMg && totalMg > 0) {
                 p.mg = totalMg;
                 const lo = _lowestPriceOf(p);
