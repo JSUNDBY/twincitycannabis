@@ -151,6 +151,17 @@
         if (originalLen !== TCC.products.length) {
             console.log(`[TCC] Filtered ${originalLen - TCC.products.length} non-cannabis products (kept ${TCC.products.length})`);
         }
+        // Parse mg dosage from edible/beverage names for comparison features
+        const _mgRe = /\b(\d+(?:\.\d+)?)\s*mg\b/i;
+        TCC.products.forEach(p => {
+            if (p.category !== 'edible' && p.category !== 'beverage') return;
+            const m = (p.name || '').match(_mgRe);
+            if (m) {
+                p.mg = Number(m[1]);
+                const lo = _lowestPriceOf(p);
+                if (lo && p.mg > 0) p.pricePerMg = Math.round((lo / p.mg) * 100) / 100;
+            }
+        });
     }
 
     // ─── Stripe / Cloudflare config ──────────────────────────────────────────
@@ -1330,6 +1341,7 @@
         page: 1,
         perPage: 24,
         menuType: 'rec',  // 'rec', 'med', or 'all'
+        dosage: 'all',    // edible/bev mg filter: 'all','1-5','6-10','11-25','26-50','51-100','100+'
     };
 
     // Categories shown in the browse UI (excludes accessories/apparel/seeds/etc.)
@@ -1359,6 +1371,13 @@
             });
         }
 
+        // Dosage filter (edibles/beverages)
+        if (Browse.dosage && Browse.dosage !== 'all') {
+            const ranges = { '1-5': [0, 5], '6-10': [6, 10], '11-25': [11, 25], '26-50': [26, 50], '51-100': [51, 100], '100+': [101, 99999] };
+            const [lo, hi] = ranges[Browse.dosage] || [0, 99999];
+            list = list.filter(p => p.mg && p.mg >= lo && p.mg <= hi);
+        }
+
         // Sort
         switch (Browse.sort) {
             case 'price-asc':
@@ -1366,6 +1385,12 @@
                 break;
             case 'price-desc':
                 list.sort((a, b) => (TCC.getLowestPrice(b)?.price || 0) - (TCC.getLowestPrice(a)?.price || 0));
+                break;
+            case 'price-per-mg':
+                list.sort((a, b) => (a.pricePerMg || 9e9) - (b.pricePerMg || 9e9));
+                break;
+            case 'mg-desc':
+                list.sort((a, b) => (b.mg || 0) - (a.mg || 0));
                 break;
             case 'name':
                 list.sort((a, b) => a.name.localeCompare(b.name));
@@ -1446,6 +1471,12 @@
                 Browse.page = 1;
                 const sel = document.getElementById('browse-category');
                 if (sel) sel.value = Browse.category;
+                const ds = document.getElementById('browse-dosage');
+                if (ds) {
+                    const show = Browse.category === 'edible' || Browse.category === 'beverage';
+                    ds.style.display = show ? '' : 'none';
+                    if (!show) { Browse.dosage = 'all'; ds.value = 'all'; }
+                }
                 renderCompareDefault();
             });
         });
@@ -1467,9 +1498,20 @@
             }, 200);
         });
 
+        const dosageSelect = document.getElementById('browse-dosage');
+
+        function updateDosageVisibility() {
+            if (dosageSelect) {
+                const show = Browse.category === 'edible' || Browse.category === 'beverage';
+                dosageSelect.style.display = show ? '' : 'none';
+                if (!show) { Browse.dosage = 'all'; dosageSelect.value = 'all'; }
+            }
+        }
+
         catSelect.addEventListener('change', (e) => {
             Browse.category = e.target.value;
             Browse.page = 1;
+            updateDosageVisibility();
             renderCompareDefault();
         });
 
@@ -1478,6 +1520,14 @@
             Browse.page = 1;
             renderCompareDefault();
         });
+
+        if (dosageSelect) {
+            dosageSelect.addEventListener('change', (e) => {
+                Browse.dosage = e.target.value;
+                Browse.page = 1;
+                renderCompareDefault();
+            });
+        }
 
         const menuTypeSelect = document.getElementById('browse-menu-type');
         if (menuTypeSelect) {
@@ -1872,7 +1922,9 @@
                     </div>
                     <div class="product-card-meta">
                         <span class="tag tag-sm">${catIcons[p.category] || ''} ${esc(p.category)}</span>
-                        ${p.thc ? `<span class="tag tag-sm">THC ${esc(p.thc)}</span>` : ''}
+                        ${p.mg ? `<span class="tag tag-sm" style="background:rgba(168,85,247,0.12);color:#a855f7">${p.mg}mg</span>` : ''}
+                        ${p.pricePerMg ? `<span class="tag tag-sm" style="background:rgba(34,197,94,0.08);color:var(--green)">$${p.pricePerMg.toFixed(2)}/mg</span>` : ''}
+                        ${p.thc && !p.mg ? `<span class="tag tag-sm">THC ${esc(p.thc)}</span>` : ''}
                         ${strainTag}
                         ${numDisps > 1 ? `<span class="tag tag-sm tag-blue">${numDisps} dispensaries</span>` : ''}
                         ${savings > 3 ? `<span class="tag tag-sm tag-green">Save $${savings.toFixed(0)}</span>` : ''}
