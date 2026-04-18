@@ -165,6 +165,22 @@
             // All mg values ≤ 10 = per-piece; multiply by count
             return maxMg * count;
         }
+        // Parse grams + $/g for flower
+        const _gramsRe = /\b(\d+(?:\.\d+)?)\s*g\b/i;
+        TCC.products.forEach(p => {
+            if (p.category === 'flower') {
+                const m = (p.name || '').match(_gramsRe);
+                if (m) {
+                    const grams = Number(m[1]);
+                    if (grams > 0 && grams <= 56) { // ignore obviously wrong weights
+                        p.grams = grams;
+                        const lo = _lowestPriceOf(p);
+                        if (lo) p.pricePerGram = Math.round((lo / grams) * 100) / 100;
+                    }
+                }
+            }
+        });
+
         TCC.products.forEach(p => {
             if (p.category !== 'edible' && p.category !== 'beverage') return;
             let totalMg = _parseTotalMg(p.name);
@@ -1406,6 +1422,9 @@
             case 'price-per-mg':
                 list.sort((a, b) => (a.pricePerMg || 9e9) - (b.pricePerMg || 9e9));
                 break;
+            case 'price-per-gram':
+                list.sort((a, b) => (a.pricePerGram || 9e9) - (b.pricePerGram || 9e9));
+                break;
             case 'mg-desc':
                 list.sort((a, b) => (b.mg || 0) - (a.mg || 0));
                 break;
@@ -1939,6 +1958,8 @@
                     </div>
                     <div class="product-card-meta">
                         <span class="tag tag-sm">${catIcons[p.category] || ''} ${esc(p.category)}</span>
+                        ${p.grams ? `<span class="tag tag-sm" style="background:rgba(168,85,247,0.12);color:#a855f7">${p.grams}g</span>` : ''}
+                        ${p.pricePerGram ? `<span class="tag tag-sm" style="background:rgba(34,197,94,0.08);color:var(--green)">$${p.pricePerGram.toFixed(2)}/g</span>` : ''}
                         ${p.mg ? `<span class="tag tag-sm" style="background:rgba(168,85,247,0.12);color:#a855f7">${p.mg}mg</span>` : ''}
                         ${p.pricePerMg ? `<span class="tag tag-sm" style="background:rgba(34,197,94,0.08);color:var(--green)">$${p.pricePerMg.toFixed(2)}/mg</span>` : ''}
                         ${p.thc && !p.mg ? `<span class="tag tag-sm">THC ${esc(p.thc)}</span>` : ''}
