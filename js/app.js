@@ -167,16 +167,29 @@
         }
         // Parse grams + $/g for flower
         const _gramsRe = /\b(\d+(?:\.\d+)?)\s*g\b/i;
+        const _ozFractions = { '1/8': 3.5, '1/4': 7, '1/2': 14, '1': 28 };
+        function _parseGrams(name, weight) {
+            // Try name first
+            const m = (name || '').match(_gramsRe);
+            if (m) return Number(m[1]);
+            // Fallback: weight field
+            if (!weight) return null;
+            const w = String(weight).trim();
+            // "4 g", "3.5g", "14g"
+            const gMatch = w.match(/^(\d+(?:\.\d+)?)\s*g$/i);
+            if (gMatch) return Number(gMatch[1]);
+            // "1/8 oz", "1/4 oz", "1/2 oz", "1 oz"
+            const ozMatch = w.match(/^(1(?:\/[248])?)?\s*oz$/i);
+            if (ozMatch) return _ozFractions[ozMatch[1] || '1'] || 28;
+            return null;
+        }
         TCC.products.forEach(p => {
             if (p.category === 'flower') {
-                const m = (p.name || '').match(_gramsRe);
-                if (m) {
-                    const grams = Number(m[1]);
-                    if (grams > 0 && grams <= 56) { // ignore obviously wrong weights
-                        p.grams = grams;
-                        const lo = _lowestPriceOf(p);
-                        if (lo) p.pricePerGram = Math.round((lo / grams) * 100) / 100;
-                    }
+                const grams = _parseGrams(p.name, p.weight);
+                if (grams && grams > 0 && grams <= 56) {
+                    p.grams = grams;
+                    const lo = _lowestPriceOf(p);
+                    if (lo) p.pricePerGram = Math.round((lo / grams) * 100) / 100;
                 }
             }
         });
