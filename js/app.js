@@ -10,6 +10,31 @@
     const _escMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
     const esc = (s) => s == null ? '' : String(s).replace(/[&<>"']/g, c => _escMap[c]);
 
+    // ─── Geolocation for "Near me" sorting ───────────────────────────────
+    let _userLat = null, _userLng = null;
+    function _haversine(lat1, lng1, lat2, lng2) {
+        const R = 3959; // miles
+        const toRad = d => d * Math.PI / 180;
+        const dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
+        const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng/2)**2;
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+    function _getDistanceMi(d) {
+        if (_userLat == null || !d.lat || !d.lng) return null;
+        return Math.round(_haversine(_userLat, _userLng, d.lat, d.lng) * 10) / 10;
+    }
+    function _requestLocation() {
+        return new Promise((resolve) => {
+            if (_userLat != null) return resolve(true);
+            if (!navigator.geolocation) return resolve(false);
+            navigator.geolocation.getCurrentPosition(
+                (pos) => { _userLat = pos.coords.latitude; _userLng = pos.coords.longitude; resolve(true); },
+                () => resolve(false),
+                { timeout: 8000, maximumAge: 300000 }
+            );
+        });
+    }
+
     // ─── Cannabis-only filter — keep this in sync with build_seo.js ─────────
     // Scraper data leaks humidity packs, rolling papers, electrolyte sticks,
     // glass bowls, kits, etc. all mis-tagged as "flower". We apply two layers:
@@ -754,23 +779,30 @@
         // Within each group, paid tiers pin to the top, then by score.
         const tierOrder = { platinum: 0, premium: 1, featured: 2, free: 3 };
         const regionOrder = { metro: 0, 'greater-mn': 1 };
+        const isNearMe = filters.sort === 'near-me';
         const sortFn = filters.sort
             ? ({
                 score: (a, b) => b.tcc_score - a.tcc_score,
                 name: (a, b) => a.name.localeCompare(b.name),
                 reviews: (a, b) => b.review_count - a.review_count,
+                'near-me': (a, b) => (_getDistanceMi(a) ?? 9999) - (_getDistanceMi(b) ?? 9999),
             })[filters.sort]
             : null;
-        results.sort((a, b) => {
-            const ra = regionOrder[a.region] ?? 1;
-            const rb = regionOrder[b.region] ?? 1;
-            if (ra !== rb) return ra - rb;
-            if (sortFn) return sortFn(a, b);
-            const ta = tierOrder[a.tier] ?? 3;
-            const tb = tierOrder[b.tier] ?? 3;
-            if (ta !== tb) return ta - tb;
-            return b.tcc_score - a.tcc_score;
-        });
+        if (isNearMe) {
+            // Skip region grouping when sorting by distance
+            results.sort((a, b) => (_getDistanceMi(a) ?? 9999) - (_getDistanceMi(b) ?? 9999));
+        } else {
+            results.sort((a, b) => {
+                const ra = regionOrder[a.region] ?? 1;
+                const rb = regionOrder[b.region] ?? 1;
+                if (ra !== rb) return ra - rb;
+                if (sortFn) return sortFn(a, b);
+                const ta = tierOrder[a.tier] ?? 3;
+                const tb = tierOrder[b.tier] ?? 3;
+                if (ta !== tb) return ta - tb;
+                return b.tcc_score - a.tcc_score;
+            });
+        }
 
         // Update count
         const countEl = document.getElementById('disp-count');
@@ -1914,7 +1946,7 @@
                     <div class="dispensary-card-header">
                         <div style="min-width:0">
                             <div class="dispensary-card-name">${esc(d.name)}</div>
-                            <div class="dispensary-card-loc">${Icons.pin} ${esc(d.neighborhood || d.city)}${d.neighborhood && d.neighborhood !== d.city ? ' &bull; ' + esc(d.city) : ''}</div>
+                            <div class="dispensary-card-loc">${Icons.pin} ${esc(d.neighborhood || d.city)}${d.neighborhood && d.neighborhood !== d.city ? ' &bull; ' + esc(d.city) : ''}${_getDistanceMi(d) != null ? ' &bull; <span style="color:var(--green)">' + _getDistanceMi(d) + ' mi</span>' : ''}</div>
                         </div>
                         <div class="dispensary-card-score">
                             <span class="dispensary-card-score-num" style="background:${scoreColor}">${d.tcc_score}</span>
@@ -1940,6 +1972,17 @@
                 </div>
             </div>
         </div>`;
+    }
+
+    function priceTrendTag(p) {
+        if (!p.priceHistory || p.priceHistory.length < 2) return '';
+        const ph = p.priceHistory;
+        if (new Set(ph).size <= 1) return ''; // flat — no real history yet
+        const oldest = ph[0], newest = ph[ph.length - 1];
+        const diff = oldest - newest;
+        if (Math.abs(diff) < 1) return '';
+        if (diff > 0) return `<span class="tag tag-sm" style="background:rgba(34,197,94,0.1);color:var(--green)" title="Price dropped $${diff.toFixed(0)} over 8 weeks">&darr; $${diff.toFixed(0)}</span>`;
+        return `<span class="tag tag-sm" style="background:rgba(239,68,68,0.1);color:#ef4444" title="Price rose $${Math.abs(diff).toFixed(0)} over 8 weeks">&uarr; $${Math.abs(diff).toFixed(0)}</span>`;
     }
 
     function productCard(p) {
@@ -1975,10 +2018,11 @@
                         ${p.pricePerGram ? `<span class="tag tag-sm" style="background:rgba(34,197,94,0.08);color:var(--green)">$${p.pricePerGram.toFixed(2)}/g</span>` : ''}
                         ${p.mg ? `<span class="tag tag-sm" style="background:rgba(168,85,247,0.12);color:#a855f7">${p.mg}mg</span>` : ''}
                         ${p.pricePerMg ? `<span class="tag tag-sm" style="background:rgba(34,197,94,0.08);color:var(--green)">$${p.pricePerMg.toFixed(2)}/mg</span>` : ''}
-                        ${p.thc && !p.mg ? `<span class="tag tag-sm">THC ${esc(p.thc)}</span>` : ''}
+                        ${p.thc && !p.mg ? `<span class="tag tag-sm" style="background:rgba(251,191,36,0.1);color:#fbbf24">THC ${esc(p.thc)}</span>` : ''}
                         ${strainTag}
                         ${numDisps > 1 ? `<span class="tag tag-sm tag-blue">${numDisps} dispensaries</span>` : ''}
                         ${savings > 3 ? `<span class="tag tag-sm tag-green">Save $${savings.toFixed(0)}</span>` : ''}
+                        ${priceTrendTag(p)}
                     </div>
                 </div>
             </div>
@@ -2270,12 +2314,22 @@
         }
     }
 
-    function applyDispFilters() {
+    async function applyDispFilters() {
         const search = document.getElementById('disp-search')?.value || '';
         const city = document.getElementById('disp-city')?.value || 'all';
         const sort = document.getElementById('disp-sort')?.value || 'score';
         const activeToggle = document.querySelector('#disp-toggles .filter-toggle.active');
         const toggle = activeToggle ? activeToggle.dataset.filter : 'all';
+        // Request geolocation when "near me" sort is selected
+        if (sort === 'near-me' && _userLat == null) {
+            const ok = await _requestLocation();
+            if (!ok) {
+                // Couldn't get location, fall back to score
+                document.getElementById('disp-sort').value = 'score';
+                renderDispensaries({ search, city, sort: 'score', toggle });
+                return;
+            }
+        }
         renderDispensaries({ search, city, sort, toggle });
     }
 
