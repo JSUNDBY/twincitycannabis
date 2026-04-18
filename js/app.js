@@ -474,8 +474,9 @@
         // Sort by dispensary tier so Premium/Featured deals surface first.
         // Within the same tier, original deal order is preserved.
         const tierRank = { premium: 0, featured: 1, free: 2 };
+        const today = new Date().toISOString().slice(0, 10);
         const deals = TCC.deals
-            .filter(d => d.featured)
+            .filter(d => d.featured && (!d.expires || d.expires >= today))
             .slice()
             .sort((a, b) => {
                 const da = TCC.dispensaries.find(x => x.id === a.dispensaryId);
@@ -1017,7 +1018,8 @@
     // ---- RENDER: DEALS ----
     function renderDeals(filter = 'all') {
         const container = document.getElementById('deals-list');
-        let deals = [...TCC.deals];
+        const todayStr = new Date().toISOString().slice(0, 10);
+        let deals = TCC.deals.filter(d => !d.expires || d.expires >= todayStr);
 
         if (filter !== 'all') {
             deals = deals.filter(d => d.type === filter);
