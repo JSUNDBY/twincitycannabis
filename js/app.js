@@ -151,15 +151,27 @@
         if (originalLen !== TCC.products.length) {
             console.log(`[TCC] Filtered ${originalLen - TCC.products.length} non-cannabis products (kept ${TCC.products.length})`);
         }
-        // Parse mg dosage from edible/beverage names for comparison features
-        const _mgRe = /\b(\d+(?:\.\d+)?)\s*mg\b/i;
+        // Parse TOTAL mg dosage from edible/beverage names for comparison.
+        // Handles both "50mg" (total) and "5mg × 10ct" (per-piece × count).
+        function _parseTotalMg(name) {
+            const n = name || '';
+            const allMg = [...n.matchAll(/(\d+(?:\.\d+)?)\s*mg/gi)].map(m => Number(m[1]));
+            if (!allMg.length) return null;
+            const countMatch = n.match(/(\d+)\s*(?:ct|pk|pcs?|pack|count|per\s*bag)/i);
+            const count = countMatch ? Number(countMatch[1]) : 1;
+            const maxMg = Math.max(...allMg);
+            // If any mg value > 10, it's likely the total package mg
+            if (maxMg > 10) return maxMg;
+            // All mg values ≤ 10 = per-piece; multiply by count
+            return maxMg * count;
+        }
         TCC.products.forEach(p => {
             if (p.category !== 'edible' && p.category !== 'beverage') return;
-            const m = (p.name || '').match(_mgRe);
-            if (m) {
-                p.mg = Number(m[1]);
+            const totalMg = _parseTotalMg(p.name);
+            if (totalMg && totalMg > 0) {
+                p.mg = totalMg;
                 const lo = _lowestPriceOf(p);
-                if (lo && p.mg > 0) p.pricePerMg = Math.round((lo / p.mg) * 100) / 100;
+                if (lo) p.pricePerMg = Math.round((lo / totalMg) * 100) / 100;
             }
         });
     }
