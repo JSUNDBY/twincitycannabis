@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Twin City Cannabis — Your Guide to Smarter Shopping</title>
+<style>
+  @page { size: letter; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #0a1410; color: #e8e9eb; line-height: 1.65; font-size: 10.5pt; }
+  .page { width: 8.5in; min-height: 11in; padding: 0.7in 0.85in; position: relative; page-break-after: always; }
+  .page:last-child { page-break-after: avoid; }
+
+  /* Cover */
+  .cover { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 10in; text-align: center; background: linear-gradient(180deg, #0a1410 0%, #0f1d17 50%, #0a1410 100%); }
+  .cover .logo { font-size: 2.6rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.2rem; }
+  .cover .logo span { color: #22c55e; }
+  .cover .tagline { color: #8b909a; font-size: 1.15rem; margin-bottom: 2.5rem; max-width: 420px; }
+  .cover .divider { width: 60px; height: 3px; background: #22c55e; border-radius: 2px; margin-bottom: 2.5rem; }
+  .cover .stats { display: flex; gap: 2.5rem; margin-bottom: 2rem; }
+  .cover .stat .num { font-size: 2rem; font-weight: 800; color: #22c55e; line-height: 1; }
+  .cover .stat .label { font-size: 0.65rem; color: #6a7078; text-transform: uppercase; letter-spacing: 2px; margin-top: 0.3rem; }
+  .cover .url { color: #22c55e; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; margin-top: 1rem; opacity: 0.8; }
+
+  /* Typography */
+  h2 { font-size: 1.2rem; color: #f5f6f8; margin: 1.8rem 0 0.6rem; letter-spacing: -0.3px; }
+  h2 .accent { color: #22c55e; }
+  h3 { font-size: 0.95rem; color: #f5f6f8; margin: 1rem 0 0.3rem; }
+  p { margin-bottom: 0.55rem; color: #b8bcc4; }
+  ul { margin: 0.3rem 0 0.7rem 1.3rem; color: #b8bcc4; }
+  li { margin-bottom: 0.25rem; }
+  strong { color: #f5f6f8; }
+
+  /* Section header bar */
+  .section-bar { display: flex; align-items: center; gap: 0.6rem; margin: 1.8rem 0 0.8rem; }
+  .section-bar .icon { width: 28px; height: 28px; border-radius: 7px; background: rgba(34,197,94,0.12); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+  .section-bar h2 { margin: 0; font-size: 1.15rem; }
+  .section-bar .line { flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+
+  /* Cards */
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; margin: 0.6rem 0; }
+  .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 0.7rem 0.85rem; }
+  .card .title { font-weight: 700; font-size: 0.88rem; color: #f5f6f8; margin-bottom: 0.2rem; }
+  .card .desc { font-size: 0.8rem; color: #8b909a; line-height: 1.5; }
+  .card .emoji { font-size: 1.1rem; margin-bottom: 0.3rem; }
+
+  /* Callout */
+  .callout { background: linear-gradient(135deg, rgba(34,197,94,0.08), rgba(34,197,94,0.02)); border: 1px solid rgba(34,197,94,0.2); border-radius: 10px; padding: 0.65rem 0.85rem; margin: 0.7rem 0; }
+  .callout strong { color: #22c55e; }
+  .callout p { margin: 0; font-size: 0.88rem; }
+
+  /* Tag legend */
+  .tag-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem 1.5rem; margin: 0.5rem 0; }
+  .tag-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; }
+  .tag-chip { display: inline-block; padding: 0.1rem 0.45rem; border-radius: 4px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; }
+  .tag-purple { background: rgba(168,85,247,0.15); color: #a855f7; }
+  .tag-green { background: rgba(34,197,94,0.1); color: #22c55e; }
+  .tag-amber { background: rgba(251,191,36,0.12); color: #fbbf24; }
+  .tag-red { background: rgba(239,68,68,0.1); color: #ef4444; }
+  .tag-grey { background: rgba(139,144,154,0.1); color: #8b909a; }
+  .tag-blue { background: rgba(59,130,246,0.12); color: #60a5fa; }
+
+  /* Footer */
+  .footer { text-align: center; color: #6a7078; font-size: 0.75rem; margin-top: auto; padding-top: 1.5rem; }
+  .footer .brand { color: #f5f6f8; font-weight: 700; }
+  .footer .green { color: #22c55e; }
+
+  /* Tips */
+  .tip-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; margin: 0.5rem 0; }
+  .tip { background: rgba(34,197,94,0.04); border-left: 2px solid #22c55e; padding: 0.5rem 0.7rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; color: #b8bcc4; }
+  .tip strong { color: #22c55e; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: COVER -->
+<div class="page cover">
+  <div class="logo">Twin City <span>Cannabis</span></div>
+  <div class="tagline">Your free guide to smarter cannabis shopping in Minnesota</div>
+  <div class="divider"></div>
+  <div class="stats">
+    <div class="stat"><div class="num">80</div><div class="label">Dispensaries</div></div>
+    <div class="stat"><div class="num">2,300+</div><div class="label">Products</div></div>
+    <div class="stat"><div class="num">56</div><div class="label">Cities</div></div>
+    <div class="stat"><div class="num">4x</div><div class="label">Daily Updates</div></div>
+  </div>
+  <div class="url">twincitycannabis.com</div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+  <div class="section-bar">
+    <div class="icon">&#127807;</div>
+    <h2>What is Twin City Cannabis?</h2>
+    <div class="line"></div>
+  </div>
+  <p>Twin City Cannabis is a <strong>free, independent price comparison site</strong> for every cannabis dispensary in Minnesota. We pull real menu data from 80 dispensaries multiple times a day so you can compare prices, find deals, and stop overpaying.</p>
+  <p>No login required. No ads. No affiliation with any dispensary. Just honest data.</p>
+
+  <div class="callout">
+    <p><strong>Did you know?</strong> The same 1g cart can cost $48 at one metro dispensary and $70 at another, 15 minutes away. Same brand, same size, 46% markup.</p>
+  </div>
+
+  <div class="section-bar">
+    <div class="icon">&#128270;</div>
+    <h2>How to Use the Site</h2>
+    <div class="line"></div>
+  </div>
+
+  <h3>1. Search for any product</h3>
+  <p>Type a product name, brand, or strain into the search bar. You'll see every dispensary that carries it with side-by-side pricing. The cheapest option is highlighted.</p>
+
+  <h3>2. Compare prices</h3>
+  <p>Go to <strong>Browse</strong> to see all products. Key comparison tools:</p>
+  <ul>
+    <li><strong>Sort by $/g</strong> for flower &mdash; compare eighths vs quarters vs 4g jars by real value</li>
+    <li><strong>Sort by $/mg</strong> for edibles &mdash; see the true cost per milligram of THC</li>
+    <li><strong>Filter by dosage</strong> &mdash; microdose (1-5mg), standard (6-10mg), or higher</li>
+    <li><strong>Price trend arrows</strong> &mdash; see if a price dropped or rose recently</li>
+  </ul>
+
+  <h3>3. Find your nearest dispensary</h3>
+  <p>On the <strong>Dispensaries</strong> page, select <strong>"Sort: Nearest to me"</strong>. Your browser asks for location once, then every card shows distance in miles.</p>
+
+  <h3>4. Check the TCC Score</h3>
+  <p>Every dispensary gets a 0-100 score based on Pricing, Selection, Service, and Lab Testing. It's algorithmic and never influenced by payment.</p>
+
+  <div class="section-bar">
+    <div class="icon">&#128736;</div>
+    <h2>Tools</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="emoji">&#128176;</div>
+      <div class="title">Tax Calculator</div>
+      <div class="desc">True checkout price for any purchase. Includes 15% cannabis tax + state + 32 city local rates.</div>
+    </div>
+    <div class="card">
+      <div class="emoji">&#128138;</div>
+      <div class="title">Dosage Calculator</div>
+      <div class="desc">How many mg of THC? Based on tolerance and desired effect. Shows gummy equivalents.</div>
+    </div>
+    <div class="card">
+      <div class="emoji">&#128200;</div>
+      <div class="title">Price History</div>
+      <div class="desc">Trend arrows on every card. See if you're catching a deal or getting squeezed.</div>
+    </div>
+    <div class="card">
+      <div class="emoji">&#127807;</div>
+      <div class="title">Strain Browser</div>
+      <div class="desc">Browse by Sativa, Indica, Hybrid. See THC%, dispensaries, and prices for each strain.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page">
+  <div class="section-bar">
+    <div class="icon">&#127991;</div>
+    <h2>Reading Product Tags</h2>
+    <div class="line"></div>
+  </div>
+  <p>Every product card has color-coded tags that give you key info at a glance:</p>
+
+  <div class="tag-list">
+    <div class="tag-item"><span class="tag-chip tag-purple">3.5g</span> <span>Size / weight of the product</span></div>
+    <div class="tag-item"><span class="tag-chip tag-purple">50mg</span> <span>Total THC dosage (edibles)</span></div>
+    <div class="tag-item"><span class="tag-chip tag-green">$11.43/g</span> <span>Price per gram (flower)</span></div>
+    <div class="tag-item"><span class="tag-chip tag-green">$0.40/mg</span> <span>Price per mg THC (edibles)</span></div>
+    <div class="tag-item"><span class="tag-chip tag-amber">THC 19.2%</span> <span>THC percentage</span></div>
+    <div class="tag-item"><span class="tag-chip tag-green">&darr; $5</span> <span>Price dropped recently</span></div>
+    <div class="tag-item"><span class="tag-chip tag-red">&uarr; $3</span> <span>Price went up recently</span></div>
+    <div class="tag-item"><span class="tag-chip tag-grey">&mdash; Stable</span> <span>Price unchanged</span></div>
+    <div class="tag-item"><span class="tag-chip tag-blue">3 dispensaries</span> <span>Number of stores carrying it</span></div>
+    <div class="tag-item"><span class="tag-chip tag-green">Save $12</span> <span>Cheapest vs most expensive</span></div>
+  </div>
+
+  <div class="section-bar">
+    <div class="icon">&#128161;</div>
+    <h2>Pro Tips</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="tip-grid">
+    <div class="tip"><strong>Best value flower</strong><br>Sort by $/g. A 7g jar at $65 ($9.28/g) beats an eighth at $45 ($12.86/g).</div>
+    <div class="tip"><strong>Best value edibles</strong><br>Sort by $/mg. A $4 gummy at 50mg ($0.08/mg) beats a $12 gummy at 50mg ($0.24/mg).</div>
+    <div class="tip"><strong>New to cannabis?</strong><br>Check the Learn page for onset times, duration, and beginner tips for each product type.</div>
+    <div class="tip"><strong>Know your rights</strong><br>MN allows 2oz possession, 8g concentrate, home grow (4 flowering + 4 veg). Full legal guide on the site.</div>
+    <div class="tip"><strong>Check before you drive</strong><br>Prices update multiple times daily. Bookmark the site and check before you shop.</div>
+  </div>
+
+  <div style="margin-top:2rem"></div>
+  <div class="callout">
+    <p><strong>Easter egg:</strong> Type <strong>420</strong> anywhere on the site. You'll thank us later.</p>
+  </div>
+
+  <div class="footer">
+    <p><span class="brand">Twin City <span class="green">Cannabis</span></span></p>
+    <p>twincitycannabis.com &middot; hello@twincitycannabis.com</p>
+    <p style="margin-top:0.4rem">Educational only. Not medical advice. Must be 21+ to purchase cannabis in Minnesota.</p>
+  </div>
+</div>
+
+</body>
+</html>

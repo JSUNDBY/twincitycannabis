@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Twin City Cannabis — For Dispensary Owners</title>
+<style>
+  @page { size: letter; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #0a1410; color: #e8e9eb; line-height: 1.65; font-size: 10.5pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 8.5in; min-height: 11in; padding: 0.7in 0.85in; position: relative; page-break-after: always; }
+  .page:last-child { page-break-after: avoid; }
+
+  /* Cover */
+  .cover { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 10in; text-align: center; background: linear-gradient(180deg, #0a1410 0%, #0f1d17 50%, #0a1410 100%); }
+  .cover .eyebrow { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; color: #22c55e; font-weight: 700; margin-bottom: 0.8rem; }
+  .cover .logo { font-size: 2.6rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.3rem; }
+  .cover .logo span { color: #22c55e; }
+  .cover .tagline { color: #8b909a; font-size: 1rem; margin-bottom: 2.5rem; max-width: 460px; line-height: 1.5; }
+  .cover .divider { width: 60px; height: 3px; background: #22c55e; border-radius: 2px; margin-bottom: 2.5rem; }
+  .cover .stats { display: flex; gap: 2.5rem; margin-bottom: 2rem; }
+  .cover .stat .num { font-size: 2rem; font-weight: 800; color: #22c55e; line-height: 1; }
+  .cover .stat .label { font-size: 0.6rem; color: #6a7078; text-transform: uppercase; letter-spacing: 2px; margin-top: 0.3rem; }
+  .cover .url { color: #22c55e; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; margin-top: 1rem; opacity: 0.8; }
+
+  /* Typography */
+  h2 { font-size: 1.15rem; color: #f5f6f8; margin: 1.6rem 0 0.5rem; letter-spacing: -0.3px; }
+  h3 { font-size: 0.92rem; color: #f5f6f8; margin: 0.8rem 0 0.25rem; }
+  p { margin-bottom: 0.5rem; color: #b8bcc4; font-size: 0.92rem; }
+  ul, ol { margin: 0.3rem 0 0.6rem 1.3rem; color: #b8bcc4; font-size: 0.92rem; }
+  li { margin-bottom: 0.2rem; }
+  strong { color: #f5f6f8; }
+
+  /* Section header bar */
+  .section-bar { display: flex; align-items: center; gap: 0.6rem; margin: 1.6rem 0 0.7rem; }
+  .section-bar .icon { width: 26px; height: 26px; border-radius: 6px; background: rgba(34,197,94,0.12); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
+  .section-bar h2 { margin: 0; font-size: 1.1rem; }
+  .section-bar .line { flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+
+  /* Cards */
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin: 0.5rem 0; }
+  .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 0.65rem 0.8rem; }
+  .card .title { font-weight: 700; font-size: 0.85rem; color: #f5f6f8; margin-bottom: 0.15rem; }
+  .card .desc { font-size: 0.78rem; color: #8b909a; line-height: 1.45; }
+
+  /* Callout */
+  .callout { background: linear-gradient(135deg, rgba(34,197,94,0.08), rgba(34,197,94,0.02)); border: 1px solid rgba(34,197,94,0.2); border-radius: 10px; padding: 0.6rem 0.8rem; margin: 0.6rem 0; }
+  .callout strong { color: #22c55e; }
+  .callout p { margin: 0; font-size: 0.85rem; }
+
+  /* Founding banner */
+  .founding { background: linear-gradient(135deg, rgba(234,179,8,0.1), rgba(234,179,8,0.03)); border: 1px solid rgba(234,179,8,0.3); border-radius: 10px; padding: 0.65rem 0.85rem; margin: 0.6rem 0; }
+  .founding strong { color: #eab308; }
+  .founding p { margin: 0; font-size: 0.85rem; }
+
+  /* Tier table */
+  .tier-table { width: 100%; border-collapse: collapse; margin: 0.6rem 0; font-size: 0.82rem; }
+  .tier-table th { text-align: left; padding: 0.4rem 0.5rem; background: rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: #8b909a; }
+  .tier-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.04); color: #b8bcc4; }
+  .tier-table .check { color: #22c55e; font-weight: 700; font-size: 0.9rem; }
+  .tier-table .dash { color: #3a3f47; }
+  .tier-table .th-free { color: #8b909a; }
+  .tier-table .th-featured { color: #22c55e; }
+  .tier-table .th-premium { color: #a855f7; }
+
+  /* Footer */
+  .footer { text-align: center; color: #6a7078; font-size: 0.73rem; padding-top: 1.5rem; margin-top: auto; }
+  .footer .brand { color: #f5f6f8; font-weight: 700; font-size: 0.8rem; }
+  .footer .green { color: #22c55e; }
+
+  /* Dashboard preview */
+  .dash-preview { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 0.7rem 0.85rem; margin: 0.5rem 0; }
+  .dash-stats { display: flex; gap: 1rem; }
+  .dash-stat { flex: 1; }
+  .dash-stat .num { font-size: 1.3rem; font-weight: 800; color: #22c55e; }
+  .dash-stat .label { font-size: 0.6rem; color: #6a7078; text-transform: uppercase; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: COVER -->
+<div class="page cover">
+  <div class="eyebrow">For Dispensary Owners</div>
+  <div class="logo">Twin City <span>Cannabis</span></div>
+  <div class="tagline">The price comparison site Minnesota cannabis shoppers use to decide where to buy. Your dispensary is already listed. Here's how to make it work harder for you.</div>
+  <div class="divider"></div>
+  <div class="stats">
+    <div class="stat"><div class="num">80</div><div class="label">Dispensaries</div></div>
+    <div class="stat"><div class="num">2,300+</div><div class="label">Products</div></div>
+    <div class="stat"><div class="num">300+</div><div class="label">Weekly Visitors</div></div>
+    <div class="stat"><div class="num">4x</div><div class="label">Daily Updates</div></div>
+  </div>
+  <div class="url">twincitycannabis.com/for-dispensaries</div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+  <div class="section-bar">
+    <div class="icon">&#127807;</div>
+    <h2>What We Do</h2>
+    <div class="line"></div>
+  </div>
+  <p>Twin City Cannabis is the only <strong>real-time price comparison site</strong> covering every cannabis dispensary in Minnesota. We pull your full menu multiple times a day. Consumers use us to compare prices, find the nearest dispensary, and read reviews before they choose where to shop.</p>
+  <p><strong>Your dispensary is already listed for free.</strong> Menu, hours, address, Google reviews, and TCC Score are all live right now.</p>
+
+  <div class="callout">
+    <p><strong>Real example:</strong> The Grasslandz Durban Poison 1g cart is $48 at one metro store and $70 at another. Shoppers see this comparison on TCC in seconds. If you're the $48 store, you want people to find you. If you're the $70 store, you need to understand why shoppers choose elsewhere.</p>
+  </div>
+
+  <div class="section-bar">
+    <div class="icon">&#128179;</div>
+    <h2>Why This Matters</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="title">Purchase-intent traffic</div>
+      <div class="desc">Shoppers come to TCC to decide where to buy today. Not browsing, not researching. Deciding. Every visitor has a wallet in hand.</div>
+    </div>
+    <div class="card">
+      <div class="title">You can't win a comparison you're invisible in</div>
+      <div class="desc">Free listings show up in search. Paid tiers get featured placement, deal highlights, and analytics showing exactly who's viewing your listing.</div>
+    </div>
+  </div>
+
+  <div class="section-bar">
+    <div class="icon">&#10003;</div>
+    <h2>What Every Dispensary Gets (Free)</h2>
+    <div class="line"></div>
+  </div>
+  <ul>
+    <li>Full listing with address, hours, phone, and website link</li>
+    <li>Complete menu, automatically synced multiple times daily</li>
+    <li>Google star rating and review count</li>
+    <li>TCC Score (0-100) with Pricing, Selection, Service, Lab Testing sub-scores</li>
+    <li>Inclusion in all search results, price comparisons, and category pages</li>
+    <li>Your own SEO page at twincitycannabis.com/dispensaries/your-name/</li>
+    <li>Interactive map with "Near me" geolocation sorting</li>
+  </ul>
+
+  <div class="section-bar">
+    <div class="icon">&#11088;</div>
+    <h2>Paid Tiers</h2>
+    <div class="line"></div>
+  </div>
+
+  <table class="tier-table">
+    <thead>
+      <tr><th>Feature</th><th class="th-free">Free</th><th class="th-featured">Featured $299/mo</th><th class="th-premium">Premium $599/mo</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Full listing + auto menu sync</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+      <tr><td>Google reviews + TCC Score</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+      <tr><td>SEO landing page</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+      <tr><td>"Featured" badge</td><td class="dash">&mdash;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+      <tr><td>Homepage carousel placement</td><td class="dash">&mdash;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+      <tr><td>Deals prioritized in Today's Deals</td><td class="dash">&mdash;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+      <tr><td>Analytics dashboard (views, clicks, CTR)</td><td class="dash">&mdash;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+      <tr><td>Monthly performance report</td><td class="dash">&mdash;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+      <tr><td>Competitor price comparison</td><td class="dash">&mdash;</td><td class="dash">&mdash;</td><td class="check">&#10003;</td></tr>
+      <tr><td>Sponsored product cards</td><td class="dash">&mdash;</td><td class="dash">&mdash;</td><td class="check">&#10003;</td></tr>
+      <tr><td>Weekly market intel email</td><td class="dash">&mdash;</td><td class="dash">&mdash;</td><td class="check">&#10003;</td></tr>
+    </tbody>
+  </table>
+
+  <div class="founding">
+    <p><strong>&#11088; Founding Member Pricing:</strong> First 10 dispensaries keep these rates as long as their subscription is active. After 10 slots fill, Featured goes to $499/mo and Premium to $899/mo. No contracts, cancel anytime.</p>
+  </div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page">
+  <div class="section-bar">
+    <div class="icon">&#128202;</div>
+    <h2>Your Analytics Dashboard</h2>
+    <div class="line"></div>
+  </div>
+  <p>Every paid listing includes a private, real-time analytics dashboard:</p>
+
+  <div class="dash-preview">
+    <div style="font-size:0.65rem;color:#8b909a;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:0.5rem">Sample Dashboard View</div>
+    <div class="dash-stats">
+      <div class="dash-stat"><div class="num">142</div><div class="label">Listing Views (7d)</div></div>
+      <div class="dash-stat"><div class="num">38</div><div class="label">Clicks to Your Site</div></div>
+      <div class="dash-stat"><div class="num">27%</div><div class="label">Click-Through Rate</div></div>
+      <div class="dash-stat"><div class="num">&uarr;12%</div><div class="label">vs Prior Week</div></div>
+    </div>
+  </div>
+
+  <ul>
+    <li><strong>Listing views</strong> &mdash; how many shoppers opened your dispensary page</li>
+    <li><strong>Clicks to your site</strong> &mdash; outbound clicks from TCC to your website or menu</li>
+    <li><strong>Click-through rate</strong> &mdash; percentage of viewers who visited your site</li>
+    <li><strong>30-day trend chart</strong> &mdash; visualize traffic over time</li>
+    <li><strong>Week-over-week comparison</strong> &mdash; is your visibility growing?</li>
+  </ul>
+  <p style="font-size:0.82rem;color:#8b909a">Data captured server-side. No cookies, no consent banners. Private URL updates in real time.</p>
+
+  <div class="section-bar">
+    <div class="icon">&#9878;</div>
+    <h2>How We're Different from Weedmaps</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="title">No competitor ads on your listing</div>
+      <div class="desc">Weedmaps sells ads that appear on YOUR page. TCC never does this. Your listing is yours.</div>
+    </div>
+    <div class="card">
+      <div class="title">Local and Minnesota-only</div>
+      <div class="desc">Built in Minneapolis for this market. Direct support, same-day responses, personal relationships.</div>
+    </div>
+    <div class="card">
+      <div class="title">Price comparison is our core</div>
+      <div class="desc">Every visitor has purchase intent. They're deciding where to buy, not browsing for fun.</div>
+    </div>
+    <div class="card">
+      <div class="title">$299/mo vs $400-1,500/mo</div>
+      <div class="desc">Weedmaps starts at $400/mo. TCC Featured is $299/mo founding rate, locked forever.</div>
+    </div>
+  </div>
+
+  <div class="section-bar">
+    <div class="icon">&#128640;</div>
+    <h2>Getting Started</h2>
+    <div class="line"></div>
+  </div>
+  <ol>
+    <li><strong>Your listing is already live</strong> &mdash; search for your dispensary at twincitycannabis.com</li>
+    <li><strong>Claim your listing</strong> &mdash; fill out the form on your dispensary page to verify ownership</li>
+    <li><strong>See your dashboard</strong> &mdash; we set up analytics and send you the private link</li>
+    <li><strong>Upgrade if it makes sense</strong> &mdash; see the data, decide if the traffic is worth $299/mo</li>
+  </ol>
+  <p>No long-term contracts. No setup fees. Invoiced monthly, cancel anytime.</p>
+
+  <div style="margin-top:1.5rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 0.8rem 1rem;">
+    <h3 style="margin-bottom:0.3rem">Contact</h3>
+    <p style="margin-bottom:0.15rem"><strong>Josh</strong> &mdash; owner and builder of Twin City Cannabis</p>
+    <p style="margin-bottom:0.15rem; color: #22c55e; font-weight: 600;">hello@twincitycannabis.com</p>
+    <p style="margin-bottom:0; font-size:0.82rem; color: #8b909a;">I read and reply to every message personally. No autoresponders, no sales team. One person building something useful for the Minnesota cannabis community.</p>
+  </div>
+
+  <div class="footer">
+    <p><span class="brand">Twin City <span class="green">Cannabis</span></span></p>
+    <p>twincitycannabis.com &middot; hello@twincitycannabis.com</p>
+  </div>
+</div>
+
+</body>
+</html>
