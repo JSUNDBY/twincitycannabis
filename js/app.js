@@ -474,13 +474,15 @@
             document.querySelectorAll('.page.active .fade-in, .page.active .stagger').forEach(el => el.classList.add('visible'));
         }, 50);
 
-        // Fix map: invalidate size when dispensaries page becomes visible
-        if ((page === 'dispensaries') && App.mapInstance) {
-            setTimeout(() => App.mapInstance.invalidateSize(), 100);
-        }
-        // Re-render map on first visit to dispensaries
-        if (page === 'dispensaries' && !App.mapInstance) {
-            setTimeout(() => renderDispensaries(), 50);
+        // Re-render dispensaries + map when page becomes visible.
+        // Leaflet needs a visible container to position markers correctly,
+        // so the initial render during init() (while page is hidden) produces
+        // an empty map. Re-rendering here guarantees markers appear.
+        if (page === 'dispensaries') {
+            setTimeout(() => {
+                applyDispFilters();
+                if (App.mapInstance) App.mapInstance.invalidateSize();
+            }, 80);
         }
     }
 
