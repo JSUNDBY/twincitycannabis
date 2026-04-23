@@ -1544,7 +1544,7 @@ TCC.dispensaries = [
         id: 'waabigwan-mashkiki-saint-cloud',
         name: 'Waabigwan Mashkiki - Saint Cloud',
         tagline: 'Cannabis dispensary in St. Cloud',
-        address: 'Coming Soon, St. Cloud, MN 56301',
+        address: 'St. Cloud, MN 56301',
         neighborhood: 'St. Cloud',
         city: 'St. Cloud',
         region: 'greater-mn',
