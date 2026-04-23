@@ -561,21 +561,28 @@ async function handleAdminDispensaries(request, env, cors) {
       const m = block.match(re);
       return m ? Number(m[1]) : null;
     };
-    const dispensaries = items.map((block) => ({
-      id: pickStr(block, 'id'),
-      name: pickStr(block, 'name'),
-      city: pickStr(block, 'city'),
-      neighborhood: pickStr(block, 'neighborhood'),
-      region: pickStr(block, 'region'),
-      phone: pickStr(block, 'phone'),
-      website: pickStr(block, 'website'),
-      tier: pickStr(block, 'tier') || 'free',
-      tcc_score: pickNum(block, 'tcc_score'),
-    })).filter((d) => d.id);
+    // Merge scraped emails from KV (not committed to repo for privacy)
+    const emails = (await env.TCC_OVERRIDES.get('index:emails', { type: 'json' })) || {};
+
+    const dispensaries = items.map((block) => {
+      const id = pickStr(block, 'id');
+      return {
+        id,
+        name: pickStr(block, 'name'),
+        city: pickStr(block, 'city'),
+        neighborhood: pickStr(block, 'neighborhood'),
+        region: pickStr(block, 'region'),
+        phone: pickStr(block, 'phone'),
+        website: pickStr(block, 'website'),
+        email: emails[id] || '',
+        tier: pickStr(block, 'tier') || 'free',
+        tcc_score: pickNum(block, 'tcc_score'),
+      };
+    }).filter((d) => d.id);
 
     return new Response(JSON.stringify({ dispensaries, count: dispensaries.length }), {
       status: 200,
-      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=1800', ...cors },
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...cors },
     });
   } catch (e) {
     return new Response(JSON.stringify({ error: 'parse failed', detail: String(e) }), {
