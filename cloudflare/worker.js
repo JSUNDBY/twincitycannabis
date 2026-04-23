@@ -1091,9 +1091,53 @@ async function handleContact(request, env, cors) {
   if (leads.length > 500) leads.splice(0, leads.length - 500);
   await env.TCC_OVERRIDES.put('index:leads', JSON.stringify(leads));
 
+  // Fire email notification — non-blocking, don't fail the form if email fails
+  try { await sendLeadNotification(lead, env); } catch (e) { console.error('email send failed:', e); }
+
   return new Response(JSON.stringify({ ok: true }), {
     status: 200, headers: { 'Content-Type': 'application/json', ...cors },
   });
+}
+
+async function sendLeadNotification(lead, env) {
+  if (!env.RESEND_API_KEY) return;
+  const escHtml = (s) => String(s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const subject = `New lead: ${lead.name}${lead.dispensary ? ' — ' + lead.dispensary : ''}`;
+  const adminLink = 'https://dashboard.twincitycannabis.com/admin?key=' + (env.ADMIN_TOKEN || '');
+  const html = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:560px;margin:0 auto;padding:1.5rem;background:#0a1410;color:#e8e9eb;border-radius:12px">
+    <div style="color:#22c55e;font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:.5rem">Twin City Cannabis</div>
+    <h2 style="margin:0 0 1rem;color:#f5f6f8;font-size:1.3rem">New lead from the site</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:.95rem">
+      <tr><td style="color:#8b909a;padding:.3rem 0;width:110px">Name</td><td style="padding:.3rem 0;color:#f5f6f8"><strong>${escHtml(lead.name)}</strong></td></tr>
+      <tr><td style="color:#8b909a;padding:.3rem 0">Email</td><td style="padding:.3rem 0"><a href="mailto:${escHtml(lead.email)}" style="color:#22c55e">${escHtml(lead.email)}</a></td></tr>
+      ${lead.phone ? `<tr><td style="color:#8b909a;padding:.3rem 0">Phone</td><td style="padding:.3rem 0;color:#f5f6f8">${escHtml(lead.phone)}</td></tr>` : ''}
+      ${lead.role ? `<tr><td style="color:#8b909a;padding:.3rem 0">Role</td><td style="padding:.3rem 0;color:#f5f6f8">${escHtml(lead.role)}</td></tr>` : ''}
+      ${lead.dispensary ? `<tr><td style="color:#8b909a;padding:.3rem 0">Dispensary</td><td style="padding:.3rem 0;color:#f5f6f8">${escHtml(lead.dispensary)}</td></tr>` : ''}
+    </table>
+    ${lead.message ? `<div style="margin-top:1.2rem;padding:1rem;background:rgba(255,255,255,.04);border-left:3px solid #22c55e;border-radius:0 8px 8px 0"><div style="color:#8b909a;font-size:.7rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem">Message</div><div style="color:#f5f6f8;white-space:pre-wrap;line-height:1.5">${escHtml(lead.message)}</div></div>` : ''}
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.08);font-size:.82rem;color:#8b909a">
+      Hit <strong>Reply</strong> — it goes straight to ${escHtml(lead.email)}.<br>
+      Or <a href="${adminLink}" style="color:#22c55e">open your admin dashboard</a> to see all leads.
+    </div>
+  </div>`;
+  const text = `New lead from Twin City Cannabis\n\nName: ${lead.name}\nEmail: ${lead.email}${lead.phone ? '\nPhone: ' + lead.phone : ''}${lead.role ? '\nRole: ' + lead.role : ''}${lead.dispensary ? '\nDispensary: ' + lead.dispensary : ''}\n${lead.message ? '\nMessage:\n' + lead.message + '\n' : ''}\nReply to this email — it goes directly to ${lead.email}.`;
+
+  const r = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: 'TCC Leads <notifications@send.twincitycannabis.com>',
+      to: ['hello@twincitycannabis.com'],
+      reply_to: lead.email,
+      subject,
+      html,
+      text,
+    }),
+  });
+  if (!r.ok) {
+    const err = await r.text();
+    throw new Error(`Resend API ${r.status}: ${err}`);
+  }
 }
 
 async function handleTrack(request, env, cors) {
