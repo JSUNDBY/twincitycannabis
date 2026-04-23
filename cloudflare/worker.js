@@ -84,6 +84,14 @@ export default {
       return handleAdminData(request, env, cors);
     }
 
+    if (url.pathname === '/admin/crm' && request.method === 'GET') {
+      return handleCrmRead(request, env, cors);
+    }
+
+    if (url.pathname === '/admin/crm/update' && request.method === 'POST') {
+      return handleCrmUpdate(request, env, cors);
+    }
+
     if (url.pathname === '/track' && request.method === 'POST') {
       return handleTrack(request, env, cors);
     }
@@ -486,6 +494,52 @@ async function fetchLeads(env) {
   return leads.sort((a, b) => (b.submitted_at || '').localeCompare(a.submitted_at || ''));
 }
 
+// ─── /admin/crm ──────────────────────────────────────────────────────────────
+// Lightweight CRM for tracking dispensary outreach. Stores per-dispensary
+// status, notes, contact dates in a single KV blob.
+async function handleCrmRead(request, env, cors) {
+  if (!verifyAdminToken(request, env)) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401, headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+  const crm = (await env.TCC_OVERRIDES.get('index:crm', { type: 'json' })) || {};
+  return new Response(JSON.stringify({ crm, generated_at: new Date().toISOString() }), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...cors },
+  });
+}
+
+async function handleCrmUpdate(request, env, cors) {
+  if (!verifyAdminToken(request, env)) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401, headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+  let body;
+  try { body = await request.json(); } catch {
+    return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const id = String(body.id || '').replace(/[^a-z0-9-]/gi, '').toLowerCase();
+  if (!id) return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+
+  const VALID_STATUS = new Set(['cold', 'emailed', 'replied', 'interested', 'signed', 'passed']);
+  const idx = (await env.TCC_OVERRIDES.get('index:crm', { type: 'json' })) || {};
+  const cur = idx[id] || {};
+  if (body.status !== undefined) cur.status = VALID_STATUS.has(body.status) ? body.status : 'cold';
+  if (body.notes !== undefined) cur.notes = String(body.notes).slice(0, 2000);
+  if (body.last_contacted !== undefined) cur.last_contacted = String(body.last_contacted).slice(0, 20);
+  if (body.next_followup !== undefined) cur.next_followup = String(body.next_followup).slice(0, 20);
+  cur.updated_at = new Date().toISOString();
+  idx[id] = cur;
+
+  await env.TCC_OVERRIDES.put('index:crm', JSON.stringify(idx));
+
+  return new Response(JSON.stringify({ ok: true }), {
+    status: 200, headers: { 'Content-Type': 'application/json', ...cors },
+  });
+}
+
 async function fetchSiteHealth() {
   try {
     const r = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/commits/main`, {
@@ -550,6 +604,33 @@ function renderAdminHTML() {
   .pill.premium { background:rgba(234,179,8,.15); color:#facc15 }
   code.mono { color:var(--dim); font-size:.78rem; font-family:'SF Mono',Menlo,monospace }
   .empty { color:var(--dim); text-align:center; padding:2rem; font-size:.9rem }
+
+  /* Pipeline */
+  .pipe-tabs { display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:1rem }
+  .pipe-tab { background:rgba(255,255,255,.04); border:1px solid var(--border); border-radius:999px; color:var(--dim); padding:.35rem .8rem; font-size:.78rem; cursor:pointer; font-weight:600; transition:all .15s ease }
+  .pipe-tab:hover { color:var(--text); border-color:rgba(255,255,255,.2) }
+  .pipe-tab.active { background:rgba(34,197,94,.12); border-color:var(--accent); color:var(--accent) }
+  .pipe-tab .count { color:var(--dim); margin-left:.3rem; font-weight:500 }
+  .pipe-tab.active .count { color:var(--accent) }
+  .pipe-table { width:100%; border-collapse:collapse; font-size:.85rem; table-layout:fixed }
+  .pipe-table th { font-size:.68rem; color:var(--dim); text-transform:uppercase; letter-spacing:1.2px; text-align:left; padding:.5rem .5rem; border-bottom:1px solid var(--border); font-weight:600 }
+  .pipe-table td { padding:.55rem .5rem; border-bottom:1px solid rgba(255,255,255,.04); vertical-align:top }
+  .pipe-table tr:hover td { background:rgba(255,255,255,.015) }
+  .pipe-disp { min-width:0 }
+  .pipe-disp strong { display:block; color:var(--text); font-size:.88rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+  .pipe-disp .sub { color:var(--dim); font-size:.72rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+  .pipe-disp .contact { color:var(--dim); font-size:.72rem; margin-top:.15rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+  .pipe-disp a { color:var(--accent); text-decoration:none }
+  .pipe-disp a:hover { text-decoration:underline }
+  .pipe-status { padding:.3rem .45rem; border-radius:6px; background:rgba(255,255,255,.04); border:1px solid var(--border); color:var(--text); font-size:.78rem; font-weight:600; width:100%; cursor:pointer; font-family:inherit }
+  .pipe-status:focus { outline:2px solid var(--accent); outline-offset:1px }
+  .pipe-date { padding:.3rem .4rem; border-radius:6px; background:rgba(255,255,255,.04); border:1px solid var(--border); color:var(--text); font-size:.75rem; width:100%; font-family:inherit; font-variant-numeric:tabular-nums }
+  .pipe-date:focus { outline:2px solid var(--accent); outline-offset:1px; border-color:var(--accent) }
+  .pipe-notes { padding:.4rem .55rem; border-radius:6px; background:rgba(255,255,255,.03); border:1px solid var(--border); color:var(--text); font-size:.78rem; width:100%; font-family:inherit; min-height:32px; resize:vertical; line-height:1.4 }
+  .pipe-notes:focus { outline:2px solid var(--accent); outline-offset:1px; border-color:var(--accent) }
+  .pipe-saved { display:inline-block; color:var(--accent); font-size:.65rem; margin-left:.3rem; opacity:0; transition:opacity .2s ease }
+  .pipe-saved.visible { opacity:1 }
+  .pipe-tcc { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; font-size:.75rem; font-weight:800; color:#000; font-variant-numeric:tabular-nums }
   .fresh { color:var(--accent) } .stale { color:var(--warn) } .rotten { color:var(--danger) }
   .btn { display:inline-block; padding:.55rem 1rem; background:var(--accent); color:#000; border-radius:8px; text-decoration:none; font-weight:600; font-size:.85rem; margin-right:.5rem }
   .btn.ghost { background:transparent; color:var(--accent); border:1px solid var(--accent) }
@@ -570,10 +651,20 @@ function renderAdminHTML() {
 <footer>
   Internal dashboard · auto-refreshes every 30s
 </footer>
+<!-- Load dispensary list from main site so the CRM can show every shop -->
+<script src="https://twincitycannabis.com/js/data.js"></script>
 <script>
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money = (cents) => '$' + (cents/100).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+
+const STATUS_ORDER = ['cold', 'emailed', 'replied', 'interested', 'signed', 'passed'];
+const STATUS_COLOR = {
+  cold: '#8b909a', emailed: '#60a5fa', replied: '#06b6d4',
+  interested: '#fbbf24', signed: '#22c55e', passed: '#ef4444'
+};
+let CRM_DATA = {};
+let PIPELINE_FILTER = 'all';
 
 async function load() {
   const key = new URLSearchParams(location.search).get('key');
@@ -679,6 +770,12 @@ function render(d) {
       </div>
     </section>
 
+    <section id="pipeline-section">
+      <h2>Leads Pipeline <span id="pipeline-summary" style="font-size:.75rem;color:var(--accent);float:right"></span></h2>
+      <div class="pipe-tabs" id="pipe-tabs"></div>
+      <div id="pipe-table-wrap"><div class="empty">Loading dispensary list…</div></div>
+    </section>
+
     <section>
       <h2>Incoming leads <span style="font-size:.75rem;color:var(--accent);float:right">\${(d.leads || []).length} total</span></h2>
       \${(d.leads || []).length ? '<table><thead><tr><th>When</th><th>Name</th><th>Email</th><th>Dispensary</th><th>Role</th><th>Message</th></tr></thead><tbody>' +
@@ -706,8 +803,146 @@ function render(d) {
     </section>\`;
 }
 
+// ─── Leads Pipeline ─────────────────────────────────────────────────
+async function loadPipeline() {
+  if (!window.TCC || !window.TCC.dispensaries) { setTimeout(loadPipeline, 150); return; }
+  const key = new URLSearchParams(location.search).get('key');
+  if (!key) return;
+  try {
+    const r = await fetch('/admin/crm?key=' + encodeURIComponent(key), { cache: 'no-store' });
+    if (!r.ok) return;
+    const data = await r.json();
+    CRM_DATA = data.crm || {};
+    renderPipeline();
+  } catch (e) { /* silent */ }
+}
+
+function tccScoreColor(s) {
+  if (s >= 90) return '#22c55e';
+  if (s >= 80) return '#a3e635';
+  if (s >= 70) return '#fbbf24';
+  return '#8b909a';
+}
+
+function renderPipeline() {
+  const disps = (window.TCC && window.TCC.dispensaries) || [];
+  if (!disps.length) return;
+
+  // Count dispensaries by status
+  const counts = { all: disps.length };
+  STATUS_ORDER.forEach(s => counts[s] = 0);
+  disps.forEach(d => {
+    const s = (CRM_DATA[d.id] && CRM_DATA[d.id].status) || 'cold';
+    counts[s] = (counts[s] || 0) + 1;
+  });
+
+  // Tabs
+  const tabs = [
+    { id: 'all', label: 'All' },
+    ...STATUS_ORDER.map(s => ({ id: s, label: s.charAt(0).toUpperCase() + s.slice(1) }))
+  ];
+  document.getElementById('pipe-tabs').innerHTML = tabs.map(t =>
+    '<div class="pipe-tab ' + (PIPELINE_FILTER === t.id ? 'active' : '') + '" data-filter="' + t.id + '">' +
+      esc(t.label) + '<span class="count">' + (counts[t.id] || 0) + '</span></div>'
+  ).join('');
+  document.querySelectorAll('.pipe-tab').forEach(el => {
+    el.addEventListener('click', () => { PIPELINE_FILTER = el.dataset.filter; renderPipeline(); });
+  });
+
+  // Summary line
+  const signed = counts.signed || 0;
+  const interested = counts.interested || 0;
+  const emailed = counts.emailed || 0;
+  document.getElementById('pipeline-summary').textContent =
+    emailed + ' emailed · ' + interested + ' interested · ' + signed + ' signed';
+
+  // Filter + sort (interested/signed first, then by tcc_score desc)
+  let filtered = disps.slice();
+  if (PIPELINE_FILTER !== 'all') {
+    filtered = filtered.filter(d => {
+      const s = (CRM_DATA[d.id] && CRM_DATA[d.id].status) || 'cold';
+      return s === PIPELINE_FILTER;
+    });
+  }
+  const statusRank = { interested: 0, replied: 1, emailed: 2, signed: 3, cold: 4, passed: 5 };
+  filtered.sort((a, b) => {
+    const sa = (CRM_DATA[a.id] && CRM_DATA[a.id].status) || 'cold';
+    const sb = (CRM_DATA[b.id] && CRM_DATA[b.id].status) || 'cold';
+    if (statusRank[sa] !== statusRank[sb]) return statusRank[sa] - statusRank[sb];
+    return (b.tcc_score || 0) - (a.tcc_score || 0);
+  });
+
+  if (!filtered.length) {
+    document.getElementById('pipe-table-wrap').innerHTML = '<div class="empty">No dispensaries match this filter.</div>';
+    return;
+  }
+
+  const rows = filtered.map(d => {
+    const crm = CRM_DATA[d.id] || {};
+    const status = crm.status || 'cold';
+    const color = STATUS_COLOR[status];
+    const email = (d.email || '') || '';
+    const phone = d.phone || '';
+    return '<tr data-id="' + esc(d.id) + '">' +
+      '<td class="pipe-disp">' +
+        '<strong>' + esc(d.name) + '</strong>' +
+        '<div class="sub">' + esc(d.city || d.neighborhood || '') + '</div>' +
+        (email ? '<div class="contact"><a href="mailto:' + esc(email) + '">' + esc(email) + '</a></div>' : '') +
+        (phone ? '<div class="contact">' + esc(phone) + '</div>' : '') +
+      '</td>' +
+      '<td><span class="pipe-tcc" style="background:' + tccScoreColor(d.tcc_score) + '">' + (d.tcc_score || '—') + '</span></td>' +
+      '<td><select class="pipe-status" style="color:' + color + ';border-color:' + color + '40">' +
+        STATUS_ORDER.map(s => '<option value="' + s + '"' + (s === status ? ' selected' : '') + '>' + s + '</option>').join('') +
+      '</select></td>' +
+      '<td><input type="date" class="pipe-date" data-field="last_contacted" value="' + esc(crm.last_contacted || '') + '"></td>' +
+      '<td><input type="date" class="pipe-date" data-field="next_followup" value="' + esc(crm.next_followup || '') + '"></td>' +
+      '<td><textarea class="pipe-notes" rows="1" placeholder="Notes…">' + esc(crm.notes || '') + '</textarea></td>' +
+      '</tr>';
+  }).join('');
+
+  document.getElementById('pipe-table-wrap').innerHTML =
+    '<div style="overflow-x:auto"><table class="pipe-table">' +
+    '<colgroup><col style="width:26%"><col style="width:6%"><col style="width:13%"><col style="width:13%"><col style="width:13%"><col style="width:29%"></colgroup>' +
+    '<thead><tr><th>Dispensary · contact</th><th>TCC</th><th>Status</th><th>Last Contact</th><th>Next Followup</th><th>Notes</th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table></div>';
+
+  // Wire inline edits
+  document.querySelectorAll('.pipe-table tr[data-id]').forEach(tr => {
+    const id = tr.dataset.id;
+    const statusSel = tr.querySelector('.pipe-status');
+    statusSel.addEventListener('change', () => saveCrm(id, { status: statusSel.value }));
+    tr.querySelectorAll('.pipe-date').forEach(inp => {
+      inp.addEventListener('change', () => saveCrm(id, { [inp.dataset.field]: inp.value }));
+    });
+    const notes = tr.querySelector('.pipe-notes');
+    let notesTimer;
+    notes.addEventListener('input', () => {
+      clearTimeout(notesTimer);
+      notesTimer = setTimeout(() => saveCrm(id, { notes: notes.value }), 600);
+    });
+    notes.addEventListener('blur', () => { clearTimeout(notesTimer); saveCrm(id, { notes: notes.value }); });
+  });
+}
+
+async function saveCrm(id, patch) {
+  const key = new URLSearchParams(location.search).get('key');
+  if (!key) return;
+  // Update local cache immediately so tabs/counts update
+  CRM_DATA[id] = { ...(CRM_DATA[id] || {}), ...patch };
+  try {
+    await fetch('/admin/crm/update?key=' + encodeURIComponent(key), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, ...patch }),
+    });
+    // If status changed, re-render so the dispensary moves to the correct tab
+    if (patch.status !== undefined) renderPipeline();
+  } catch (e) { /* silent */ }
+}
+
 load();
 setInterval(load, 30000);
+loadPipeline();
 </script>
 </body>
 </html>`;
