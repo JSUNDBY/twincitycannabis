@@ -2007,11 +2007,12 @@
         const numDisps = Object.keys(p.prices).length;
         const savings = range.high && range.low ? range.high - range.low : 0;
 
-        // Product image
+        // Product image — falls back to category emoji tile if no real image
         const hasImg = p.image && p.image.length > 10;
+        const catEmoji = { flower: '\u{1F33F}', 'pre-roll': '\u{1F4A8}', cartridge: '\u{1F52B}', edible: '\u{1F36C}', beverage: '\u{1F964}', tincture: '\u{1F48A}', topical: '\u{1F9F4}', concentrate: '\u{1F48E}' }[p.category] || '\u{1F33F}';
         const imgHtml = hasImg
-            ? `<div class="product-card-img" onclick="event.stopPropagation();openLightbox('${p.image}','${esc(p.name).replace(/'/g,"\\'")}','${esc(p.brand||"").replace(/'/g,"\\'")}','${TCC.formatPrice(TCC.getLowestPrice(p)?.price||0)}','${esc(p.category)}','${esc(p.thc||"")}')"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`
-            : '';
+            ? `<div class="product-card-img" onclick="event.stopPropagation();openLightbox('${p.image}','${esc(p.name).replace(/'/g,"\\'")}','${esc(p.brand||"").replace(/'/g,"\\'")}','${TCC.formatPrice(TCC.getLowestPrice(p)?.price||0)}','${esc(p.category)}','${esc(p.thc||"")}')"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'product-card-img-fallback\\'>${catEmoji}</div>'"></div>`
+            : `<div class="product-card-img"><div class="product-card-img-fallback">${catEmoji}</div></div>`;
 
         return `<div class="card product-card" onclick="window.location.hash='compare/${p.id}'">
             <div class="card-body-sm" style="display:flex;gap:0.8rem;align-items:flex-start">
