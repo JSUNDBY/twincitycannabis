@@ -1986,7 +1986,9 @@ const liveProdLabel = liveProdRound.toLocaleString('en-US') + '+';
 indexHtml = indexHtml.replace(/\b\d{2}\s+Twin Cities\s+dispensaries\b/g, `${liveDispCount} Twin Cities dispensaries`);
 
 // Any 2-digit number + " dispensaries" (e.g. "33 dispensaries", "37 dispensaries")
-indexHtml = indexHtml.replace(/\b\d{2}\s+dispensaries\b/g, `${liveDispCount} dispensaries`);
+// Negative lookbehind skips "First 10 dispensaries" and similar — those are
+// Founding Member copy where the number is intentional, not a stale count.
+indexHtml = indexHtml.replace(/(?<!first\s|First\s)\b\d{2}\s+dispensaries\b/g, `${liveDispCount} dispensaries`);
 
 // Dispensary count inside HTML tags: >33</strong> dispensaries, >33</span> dispensaries
 indexHtml = indexHtml.replace(/(id="announce-disp-count">)\d{2}(<\/)/g, `$1${liveDispCount}$2`);
