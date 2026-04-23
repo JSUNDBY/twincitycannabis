@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Munchie Madness — A Very Serious Cannabis Game · Twin City Cannabis</title>
+<meta name="description" content="Catch the snacks. Dodge the broccoli. Try not to get too zooted. A little browser game from Twin City Cannabis.">
+<link rel="canonical" href="https://twincitycannabis.com/munchie-madness/">
+<meta property="og:title" content="Munchie Madness — A Very Serious Cannabis Game">
+<meta property="og:description" content="Catch the snacks. Dodge the broccoli. Try not to get too zooted.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://twincitycannabis.com/munchie-madness/">
+<meta property="og:image" content="https://twincitycannabis.com/og-image.png">
+<meta property="og:site_name" content="Twin City Cannabis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Munchie Madness">
+<meta name="twitter:description" content="Catch the snacks. Dodge the broccoli. Try not to get too zooted.">
+<meta name="twitter:image" content="https://twincitycannabis.com/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/twin-city-cannabis-logo-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/img/twin-city-cannabis-logo-192.png">
+<link rel="apple-touch-icon" href="/img/twin-city-cannabis-logo-192.png">
+<link rel="stylesheet" href="/css/styles.css">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NEZH9HCSSH"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-NEZH9HCSSH');</script>
+<style>
+  :root{
+    --bg:#0a1410; --panel:#06120e; --text:#f5f6f8; --muted:#b8bcc4; --dim:#8b909a;
+    --green:#22c55e; --green-soft:rgba(34,197,94,.12); --green-line:rgba(34,197,94,.22);
+    --pink:#ff5fa8; --purple:#a855f7; --orange:#fb923c; --red:#ef4444; --yellow:#facc15;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    line-height:1.5;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
+
+  .seo-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;
+    border-bottom:1px solid rgba(255,255,255,.06);background:rgba(10,20,16,.85);
+    position:sticky;top:0;backdrop-filter:blur(10px);z-index:30}
+  .seo-nav a.brand{display:flex;align-items:center;gap:.6rem;color:#f5f6f8;text-decoration:none;font-weight:700}
+  .seo-nav a.brand img{height:36px;width:36px}
+  .seo-nav .links a{color:#b8bcc4;text-decoration:none;margin-left:1.2rem;font-size:.95rem}
+  .seo-nav .links a:hover{color:#22c55e}
+
+  main{max-width:980px;margin:0 auto;padding:.9rem 1rem 2rem}
+  .crumbs{font-size:.78rem;color:var(--dim);margin-bottom:.2rem}
+  .crumbs a{color:var(--dim);text-decoration:none}
+  .crumbs a:hover{color:var(--green)}
+  .header-row{display:flex;align-items:baseline;gap:.8rem;flex-wrap:wrap;margin:.2rem 0 .7rem}
+  h1{font-family:'Courier New',ui-monospace,monospace;font-size:clamp(1.4rem,3.6vw,2rem);margin:0;letter-spacing:-.5px;line-height:1}
+  h1 .accent{color:var(--green);text-shadow:0 0 18px rgba(34,197,94,.4)}
+  .subtitle{color:var(--muted);margin:0;font-size:.88rem;flex:1;min-width:200px}
+
+  /* ─── Game shell ─── */
+  /* Width is driven by whichever is smaller: the full row, or an amount
+     that keeps the 5/7 stage within (viewport - chrome). Prevents overflow. */
+  .stage-wrap{position:relative;border:1px solid var(--green-line);border-radius:16px;overflow:hidden;
+    background:linear-gradient(180deg,#081a12 0%, #0a1410 70%);
+    box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 40px rgba(34,197,94,.06);
+    aspect-ratio:5/7;
+    width:min(100%, 560px, calc((100vh - 190px) * 5/7));
+    margin:0 auto}
+  @media (min-width:720px){
+    .stage-wrap{aspect-ratio:4/5; width:min(100%, 640px, calc((100vh - 170px) * 4/5))}
+  }
+
+  canvas{display:block;width:100%;height:100%;touch-action:none;image-rendering:pixelated;image-rendering:crisp-edges}
+
+  /* HUD overlays */
+  .hud{position:absolute;inset:0;pointer-events:none;padding:.8rem;display:flex;flex-direction:column;justify-content:space-between;z-index:4}
+  .hud-top{display:flex;justify-content:space-between;align-items:flex-start;gap:.6rem}
+  .hud-pill{pointer-events:auto;background:rgba(6,18,14,.75);border:1px solid rgba(255,255,255,.08);
+    backdrop-filter:blur(6px);padding:.4rem .7rem;border-radius:10px;font-family:'Courier New',monospace;
+    font-size:.8rem;letter-spacing:1px;text-transform:uppercase}
+  .hud-pill .lbl{color:var(--dim);font-size:.65rem;display:block;margin-bottom:.1rem;letter-spacing:2px}
+  .hud-pill .val{color:var(--text);font-weight:700;font-size:1.1rem;font-variant-numeric:tabular-nums}
+  .hud-pill.score .val{color:var(--green)}
+  .hud-pill.combo .val{color:var(--yellow)}
+  .hud-pill.best .val{color:var(--muted);font-size:.95rem}
+
+  .lives{display:flex;gap:.25rem;align-items:center;font-size:1rem}
+  .heart{filter:grayscale(1) brightness(.5);transition:filter .2s}
+  .heart.on{filter:none}
+
+  /* Highness meter */
+  .meter-wrap{position:absolute;left:.8rem;right:.8rem;bottom:4.2rem;pointer-events:none;z-index:4}
+  .meter-label{display:flex;justify-content:space-between;align-items:center;font-family:'Courier New',monospace;
+    font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:.2rem}
+  .meter-label .stage{color:var(--green);font-weight:700;transition:color .3s}
+  .meter{height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+  .meter-fill{height:100%;width:0%;background:linear-gradient(90deg,#22c55e,#facc15 55%,#fb923c 80%,#ef4444);
+    transition:width .25s ease;border-radius:4px}
+
+  /* Flash text (WHOA, DUDE, etc) */
+  .flash{position:absolute;top:32%;left:50%;transform:translate(-50%,-50%) rotate(-4deg);
+    font-family:'Courier New',monospace;font-weight:900;font-size:clamp(2.4rem,8vw,4rem);
+    color:#fff;text-shadow:0 0 24px rgba(34,197,94,.6),4px 4px 0 rgba(0,0,0,.35);
+    letter-spacing:2px;opacity:0;pointer-events:none;z-index:5;white-space:nowrap}
+  .flash.show{animation:flashIn 1.1s ease-out forwards}
+  @keyframes flashIn{
+    0%{opacity:0;transform:translate(-50%,-50%) rotate(-4deg) scale(.6)}
+    20%{opacity:1;transform:translate(-50%,-50%) rotate(-4deg) scale(1.1)}
+    75%{opacity:1;transform:translate(-50%,-58%) rotate(-4deg) scale(1)}
+    100%{opacity:0;transform:translate(-50%,-72%) rotate(-4deg) scale(.95)}
+  }
+
+  /* Floating score pops */
+  .pop{position:absolute;font-family:'Courier New',monospace;font-weight:900;font-size:1.1rem;
+    color:var(--green);text-shadow:0 2px 0 rgba(0,0,0,.4);pointer-events:none;z-index:5;
+    animation:popUp .9s ease-out forwards}
+  .pop.bad{color:var(--red)}
+  .pop.big{font-size:1.5rem;color:var(--yellow)}
+  @keyframes popUp{
+    0%{opacity:0;transform:translate(-50%,0) scale(.6)}
+    25%{opacity:1;transform:translate(-50%,-18px) scale(1.2)}
+    100%{opacity:0;transform:translate(-50%,-60px) scale(1)}
+  }
+
+  /* Overlay screens: start / game over */
+  .overlay{position:absolute;inset:0;background:rgba(6,18,14,.88);backdrop-filter:blur(8px);
+    display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;
+    padding:1.5rem;z-index:10;transition:opacity .25s}
+  .overlay.hide{opacity:0;pointer-events:none}
+  .overlay h2{font-family:'Courier New',monospace;font-size:clamp(2rem,6vw,3.2rem);margin:0 0 .6rem;letter-spacing:-1px;color:var(--text)}
+  .overlay h2 .accent{color:var(--green)}
+  .overlay p{color:var(--muted);max-width:420px;margin:.3rem auto}
+  .overlay .stats{display:flex;gap:1.4rem;margin:1rem 0 1.2rem;justify-content:center;flex-wrap:wrap}
+  .overlay .stats .stat{text-align:center;min-width:70px}
+  .overlay .stats .v{font-family:'Courier New',monospace;font-weight:900;font-size:1.8rem;color:var(--green);display:block;line-height:1}
+  .overlay .stats .l{font-size:.68rem;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:.3rem;display:block}
+  .overlay .howto{font-size:.85rem;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+    border-radius:10px;padding:.7rem .9rem;max-width:380px;margin:.6rem auto 1rem;line-height:1.55}
+  .overlay .howto kbd{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:4px;
+    padding:.08rem .4rem;font-family:'Courier New',monospace;font-size:.8rem;color:var(--text)}
+
+  .btn{display:inline-block;background:var(--green);color:#06120e;font-weight:800;font-family:'Courier New',monospace;
+    letter-spacing:2px;text-transform:uppercase;padding:.95rem 1.8rem;border:none;border-radius:10px;
+    cursor:pointer;font-size:1rem;box-shadow:0 6px 24px rgba(34,197,94,.35);transition:all .15s;pointer-events:auto}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(34,197,94,.5)}
+  .btn:active{transform:translateY(0)}
+  .btn.secondary{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.12);
+    box-shadow:none;margin-left:.5rem}
+  .btn.secondary:hover{color:var(--text);border-color:rgba(255,255,255,.25);transform:none;box-shadow:none}
+
+  .game-over .reason{color:var(--muted);font-size:1rem;margin:0 0 .6rem;font-style:italic}
+
+  /* Game over sticker */
+  .overlay .stamp{display:inline-block;padding:.3rem .8rem;border:2px solid var(--red);color:var(--red);
+    font-family:'Courier New',monospace;font-weight:900;letter-spacing:4px;transform:rotate(-6deg);
+    font-size:.85rem;margin-bottom:.7rem;text-transform:uppercase}
+
+  /* Below-game content */
+  .below{margin:2.5rem auto 0;max-width:720px}
+  .below h3{font-size:1.2rem;margin:0 0 .5rem;color:var(--text)}
+  .below p{color:var(--muted);margin:.4rem 0}
+  .legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.55rem;margin:1rem 0 1.5rem}
+  .leg{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;
+    padding:.6rem .7rem;display:flex;align-items:center;gap:.5rem}
+  .leg .ic{font-size:1.3rem;line-height:1}
+  .leg .t{font-size:.8rem;color:var(--text);font-weight:600}
+  .leg .v{font-size:.7rem;color:var(--dim);display:block;margin-top:.1rem}
+  .leg.bad{border-color:rgba(239,68,68,.2);background:rgba(239,68,68,.05)}
+  .leg.bad .v{color:#fca5a5}
+  .leg.rare{border-color:rgba(250,204,21,.25);background:rgba(250,204,21,.06)}
+  .leg.rare .v{color:#fde68a}
+  .leg.power{border-color:rgba(168,85,247,.25);background:rgba(168,85,247,.06)}
+  .leg.power .v{color:#ddd6fe}
+
+  .back-cta{display:inline-flex;align-items:center;gap:.5rem;color:var(--green);text-decoration:none;font-weight:600;margin-top:1.5rem}
+  .back-cta:hover{text-decoration:underline}
+
+  footer{border-top:1px solid rgba(255,255,255,.06);padding:2rem 1.25rem;text-align:center;color:var(--dim);font-size:.85rem;margin-top:3rem}
+  footer a{color:var(--green)}
+
+  /* Trippy filter when maxed */
+  .stage-wrap.zooted canvas{filter:hue-rotate(20deg) saturate(1.2) contrast(1.05)}
+  .stage-wrap.peak canvas{animation:wobble 4s ease-in-out infinite}
+  @keyframes wobble{
+    0%,100%{filter:hue-rotate(0deg) saturate(1.4) contrast(1.1)}
+    50%{filter:hue-rotate(60deg) saturate(1.6) contrast(1.15)}
+  }
+
+  .muted-icon{position:absolute;right:.8rem;bottom:.8rem;z-index:6;background:rgba(6,18,14,.75);
+    border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(6px);border-radius:10px;
+    width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    color:var(--muted);font-size:1rem;pointer-events:auto;user-select:none}
+  .muted-icon:hover{color:var(--text);border-color:rgba(255,255,255,.18)}
+</style>
+</head>
+<body>
+
+<nav class="seo-nav">
+  <a class="brand" href="/"><img src="/img/twin-city-cannabis-logo-192.png" alt="Twin City Cannabis logo"> Twin City <span style="color:#22c55e">Cannabis</span></a>
+  <div class="links">
+    <a href="/">Home</a>
+    <a href="/dispensaries/">Dispensaries</a>
+    <a href="/products/">Products</a>
+  </div>
+</nav>
+
+<main>
+
+<div class="crumbs"><a href="/">Home</a> / Munchie Madness</div>
+<div class="header-row">
+  <h1>Munchie <span class="accent">Madness</span></h1>
+  <p class="subtitle">Snacks are raining. You are extremely high. Catch the good stuff, dodge anything resembling responsibility.</p>
+</div>
+
+<div class="stage-wrap" id="stage">
+  <canvas id="game" width="400" height="560"></canvas>
+
+  <div class="hud">
+    <div class="hud-top">
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <div class="hud-pill score"><span class="lbl">Score</span><span class="val" id="score">0</span></div>
+        <div class="hud-pill combo" id="comboPill" style="display:none"><span class="lbl">Combo</span><span class="val" id="combo">x1</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.4rem">
+        <div class="hud-pill best"><span class="lbl">Best</span><span class="val" id="best">0</span></div>
+        <div class="lives" id="lives" aria-label="Snacks remaining">
+          <span class="heart on">🍟</span><span class="heart on">🍟</span><span class="heart on">🍟</span><span class="heart on">🍟</span><span class="heart on">🍟</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="meter-wrap" id="meterWrap" style="display:none">
+    <div class="meter-label"><span>Highness</span><span class="stage" id="stageLabel">Sober</span></div>
+    <div class="meter"><div class="meter-fill" id="meterFill"></div></div>
+  </div>
+
+  <div class="flash" id="flash"></div>
+
+  <div class="muted-icon" id="muteBtn" title="Mute">🔊</div>
+
+  <!-- START screen -->
+  <div class="overlay" id="startScreen">
+    <h2>Munchie <span class="accent">Madness</span></h2>
+    <p style="color:var(--muted);max-width:380px">Catch the snacks. Skip the vegetables. Don't let three snacks hit the floor. The more you eat, the floatier it gets. You've been warned.</p>
+    <div class="howto" id="howto">
+      <div><strong style="color:var(--text)">Desktop:</strong> <kbd>←</kbd> <kbd>→</kbd> or <kbd>A</kbd> <kbd>D</kbd> to move · <kbd>Space</kbd> to start</div>
+      <div style="margin-top:.3rem"><strong style="color:var(--text)">Mobile:</strong> drag anywhere on screen</div>
+    </div>
+    <div style="margin-top:.2rem">
+      <button class="btn" id="startBtn">Start Munching</button>
+    </div>
+  </div>
+
+  <!-- GAME OVER screen -->
+  <div class="overlay game-over hide" id="gameOverScreen">
+    <div class="stamp">Passed Out</div>
+    <h2 id="goTitle">You Are <span class="accent">Toast</span></h2>
+    <p class="reason" id="goReason">You ate three broccolis. What were you thinking.</p>
+    <div class="stats">
+      <div class="stat"><span class="v" id="goScore">0</span><span class="l">Score</span></div>
+      <div class="stat"><span class="v" id="goBest">0</span><span class="l">Best</span></div>
+      <div class="stat"><span class="v" id="goCaught">0</span><span class="l">Caught</span></div>
+      <div class="stat"><span class="v" id="goPeak">x1</span><span class="l">Best Combo</span></div>
+    </div>
+    <div>
+      <button class="btn" id="restartBtn">One More Try</button>
+      <button class="btn secondary" id="shareBtn">Brag</button>
+    </div>
+  </div>
+</div>
+
+<div class="below">
+  <details style="margin-top:1.5rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:.5rem 1rem">
+    <summary style="cursor:pointer;color:var(--text);font-weight:600;padding:.4rem 0;font-size:.95rem">What's falling (the cheat sheet)</summary>
+    <div class="legend">
+      <div class="leg"><span class="ic">🍕</span><div><span class="t">Pizza</span><span class="v">+10</span></div></div>
+      <div class="leg"><span class="ic">🍔</span><div><span class="t">Burger</span><span class="v">+15</span></div></div>
+      <div class="leg"><span class="ic">🌮</span><div><span class="t">Taco</span><span class="v">+10</span></div></div>
+      <div class="leg"><span class="ic">🍩</span><div><span class="t">Donut</span><span class="v">+15</span></div></div>
+      <div class="leg"><span class="ic">🌭</span><div><span class="t">Dog</span><span class="v">+10</span></div></div>
+      <div class="leg"><span class="ic">🍟</span><div><span class="t">Fries</span><span class="v">+5</span></div></div>
+      <div class="leg rare"><span class="ic">🍦</span><div><span class="t">Ice cream</span><span class="v">+25 rare</span></div></div>
+      <div class="leg rare"><span class="ic">🥒</span><div><span class="t">Pickle</span><span class="v">+50 weird</span></div></div>
+      <div class="leg power"><span class="ic">🌿</span><div><span class="t">The Joint</span><span class="v">zooted mode</span></div></div>
+      <div class="leg power"><span class="ic">💧</span><div><span class="t">Water</span><span class="v">sobers you up</span></div></div>
+      <div class="leg bad"><span class="ic">🥦</span><div><span class="t">Broccoli</span><span class="v">ew, −life</span></div></div>
+      <div class="leg bad"><span class="ic">📚</span><div><span class="t">Homework</span><span class="v">no thx</span></div></div>
+      <div class="leg bad"><span class="ic">💸</span><div><span class="t">Bills</span><span class="v">scary</span></div></div>
+      <div class="leg bad"><span class="ic">📱</span><div><span class="t">Mom calling</span><span class="v">ignore</span></div></div>
+    </div>
+    <p style="font-size:.88rem">3 lives. Miss a snack or catch a responsibility — you lose one. Highness meter fills as you eat: controls float, snacks taste double. The joint gives slow-mo + 2x. Water sobers you up.</p>
+  </details>
+
+  <a class="back-cta" href="/">← Back to dispensary comparisons</a>
+</div>
+
+</main>
+
+<footer>
+  <p><strong style="color:#f5f6f8">Twin City Cannabis</strong> · Real prices, real reviews, every Twin Cities dispensary.</p>
+  <p><a href="/">Home</a> · <a href="/dispensaries/">Dispensaries</a> · <a href="/products/">Products</a> · <a href="/tax-calculator/">Tax</a> · <a href="/dosage-calculator/">Dosage</a></p>
+  <p style="margin-top:.75rem;font-size:.78rem;color:#6a6f78">This is a joke game, not a safety tutorial. If you're new to edibles, see our <a href="/dosage-calculator/">dosage calculator</a>.</p>
+</footer>
+
+<script>
+(() => {
+  // ───── Setup ──────────────────────────────────────────────────
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const stage = document.getElementById('stage');
+  const scoreEl = document.getElementById('score');
+  const bestEl = document.getElementById('best');
+  const comboEl = document.getElementById('combo');
+  const comboPill = document.getElementById('comboPill');
+  const livesEl = document.getElementById('lives');
+  const meterWrap = document.getElementById('meterWrap');
+  const meterFill = document.getElementById('meterFill');
+  const stageLabel = document.getElementById('stageLabel');
+  const flashEl = document.getElementById('flash');
+  const startScreen = document.getElementById('startScreen');
+  const gameOverScreen = document.getElementById('gameOverScreen');
+  const startBtn = document.getElementById('startBtn');
+  const restartBtn = document.getElementById('restartBtn');
+  const shareBtn = document.getElementById('shareBtn');
+  const muteBtn = document.getElementById('muteBtn');
+  const goScore = document.getElementById('goScore');
+  const goBest = document.getElementById('goBest');
+  const goCaught = document.getElementById('goCaught');
+  const goPeak = document.getElementById('goPeak');
+  const goTitle = document.getElementById('goTitle');
+  const goReason = document.getElementById('goReason');
+
+  // Design size – we'll scale draws based on the live canvas size.
+  // Game logic works in a normalized 400x560 world.
+  const W = 400, H = 560;
+  let scale = 1;
+  function resize(){
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    scale = canvas.width / W;
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    ctx.imageSmoothingEnabled = false;
+  }
+  new ResizeObserver(resize).observe(canvas);
+
+  // ───── Items ──────────────────────────────────────────────────
+  // type: food | rare | bad | power
+  const ITEMS = {
+    fries:    { emoji:'🍟', pts:5,   type:'food', w:54, weight:14 },
+    pizza:    { emoji:'🍕', pts:10,  type:'food', w:58, weight:12 },
+    taco:     { emoji:'🌮', pts:10,  type:'food', w:54, weight:10 },
+    donut:    { emoji:'🍩', pts:15,  type:'food', w:54, weight:10 },
+    burger:   { emoji:'🍔', pts:15,  type:'food', w:58, weight:10 },
+    dog:      { emoji:'🌭', pts:10,  type:'food', w:56, weight:9 },
+    cookie:   { emoji:'🍪', pts:8,   type:'food', w:54, weight:10 },
+    pretzel:  { emoji:'🥨', pts:8,   type:'food', w:54, weight:8 },
+    cereal:   { emoji:'🥣', pts:12,  type:'food', w:56, weight:6 },
+    ice:      { emoji:'🍦', pts:25,  type:'rare', w:56, weight:3 },
+    pickle:   { emoji:'🥒', pts:50,  type:'rare', w:54, weight:1.2 },
+    cake:     { emoji:'🎂', pts:40,  type:'rare', w:56, weight:1.5 },
+    // power-ups
+    joint:    { emoji:'🌿', pts:0,   type:'power', sub:'joint', w:52, weight:2 },
+    water:    { emoji:'💧', pts:0,   type:'power', sub:'water', w:46, weight:1.8 },
+    // bad (rarer + smaller pool)
+    broccoli: { emoji:'🥦', pts:0,   type:'bad', w:52, weight:1.8 },
+    homework: { emoji:'📚', pts:0,   type:'bad', w:52, weight:1.2 },
+    bill:     { emoji:'💸', pts:0,   type:'bad', w:52, weight:1.2 },
+    mom:      { emoji:'📱', pts:0,   type:'bad', w:46, weight:1 },
+    salad:    { emoji:'🥗', pts:0,   type:'bad', w:52, weight:1 }
+  };
+  const KEYS = Object.keys(ITEMS);
+  function pickItem() {
+    const elapsed = (performance.now() - startTime) / 1000;
+    // Skip bad items for the first 10 seconds — pure snack warmup.
+    const includeBad = elapsed > 10;
+    const list = KEYS.map(k => {
+      let w = ITEMS[k].weight;
+      if (!includeBad && ITEMS[k].type === 'bad') w = 0;
+      return [k, w];
+    });
+    const total = list.reduce((a,b)=>a+b[1],0);
+    let r = Math.random()*total;
+    for (const [k,w] of list) { if ((r-=w) <= 0) return k; }
+    return list[0][0];
+  }
+
+  // Funny flash phrases, keyed by event
+  const PHRASES = {
+    combo3:   ['niiice','dude!','stacked','snacc szn','lit','chef kiss','ok wow','heck yes'],
+    combo6:   ['UNREAL','ZOOTED','GALAXY BRAIN','BIG MUNCH','SIX-PACK','CERTIFIED'],
+    combo10:  ['SNACK GOD','ASCENDED','LEGENDARY','COSMIC','CANONIZED','GOATED'],
+    rare:     ['TASTY','JACKPOT','ooh yeahhh','fancy','bougie','deluxe'],
+    pickle:   ['WEIRD FLEX','PICKLE???','vinegar arc','unhinged','respect tho'],
+    bad:      ['nope','ew','who ordered that','not it','absolutely not','pass','bruh'],
+    joint:    ['ZOOOOTED','HERE WE GO','time slows…','puff puff pass'],
+    water:    ['hydrate','ah. clarity.','whew','adulting','crisp'],
+    missed:   ['noo','my snack','tragic','five second rule??','rip','dang'],
+    peak:     ['MAX VIBES','PEAK HIGH','MELTING','BLISSED','whoa the ceiling']
+  };
+  // Contextual flash per item
+  const ITEM_FLASH = {
+    pizza:  ['PIZZA. CLASSIC.','a slice of life','pepperoni drip'],
+    burger: ['GRILLED','medium rare vibes','double stack'],
+    taco:   ['TUESDAY MOOD','crunch time','guac included?'],
+    donut:  ['DOUGHNUT STOP','glazed and confused','donut worry'],
+    cookie: ['cookie monster','dough zone','butter feelings'],
+    dog:    ['dog mode','relish this','mustard energy'],
+    fries:  ['fry guy','crispy!','salt prince'],
+    pretzel:['twisted','knot bad','german engineering'],
+    cereal: ['breakfast anytime','milk ✓','crunch'],
+    ice:    ['SUNDAE VIBES','frosty','cold as hell','DESSERT COURT'],
+    cake:   ['BIRTHDAY ENERGY','let them eat it','unbirthday','🎂🎂🎂'],
+  };
+  const GAME_OVER_LINES = {
+    miss:   ['Three snacks hit the floor. A moment of silence for the fallen.',
+             'You let the cheese slide. Literally.',
+             'RIP those fries. They had families.',
+             'Gravity: 3. You: 0.',
+             "Physics don't care about your feelings."],
+    bad:    ['You caught broccoli. On purpose, apparently.',
+             'Reading a bill while high = game over.',
+             'Your mom called. You answered. Rookie mistake.',
+             "Homework? In THIS economy?",
+             'You accepted a salad. We are disappointed.',
+             'The vegetables won. Nobody expected this.'],
+    any:    ['Roll credits. Roll another one.',
+             'You did your best. Kind of.',
+             "That's showbiz, baby.",
+             'Take five. Or ten. Or a nap.']
+  };
+  const TITLE_BY_SCORE = [
+    [1500, 'Absolute <span class="accent">Unit</span>'],
+    [900,  'Snack <span class="accent">Sommelier</span>'],
+    [500,  'Certified <span class="accent">Snackmaster</span>'],
+    [250,  'Respectably <span class="accent">Baked</span>'],
+    [100,  'Not <span class="accent">Bad</span>'],
+    [30,   'A Valiant <span class="accent">Attempt</span>'],
+    [0,    'You Are <span class="accent">Toast</span>']
+  ];
+
+  // ───── State ──────────────────────────────────────────────────
+  let state = 'start'; // start | playing | over
+  let items = [], pops = [], particles = [];
+  let score = 0, best = +localStorage.getItem('mm_best') || 0;
+  let lives = 3, misses = 0, caught = 0;
+  let combo = 0, peakCombo = 0;
+  let highness = 0; // 0..1
+  let zootedUntil = 0;
+  let player = { x: W/2, vx:0, tx:W/2, w:80, h:40 };
+  let lastSpawn = 0, spawnInterval = 1250, speedMul = 1;
+  let startTime = 0;
+  let lastTs = 0;
+  let flashQueue = [];
+  let gameOverReason = '';
+  let targetX = null; // pointer/touch target
+  let keys = { left:false, right:false };
+  let muted = localStorage.getItem('mm_muted') === '1';
+
+  bestEl.textContent = best;
+  muteBtn.textContent = muted ? '🔇' : '🔊';
+
+  // ───── Audio (tiny web audio beeps) ──────────────────────────
+  let audioCtx = null;
+  function initAudio(){
+    if (audioCtx || muted) return;
+    try { audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){}
+  }
+  function beep(freq, dur=0.08, type='square', vol=0.12){
+    if (muted || !audioCtx) return;
+    const t = audioCtx.currentTime;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+    o.connect(g).connect(audioCtx.destination);
+    o.start(t); o.stop(t+dur);
+  }
+  function sfx(kind){
+    if (muted) return;
+    initAudio();
+    if (!audioCtx) return;
+    if (kind==='catch')  { beep(660, .06); setTimeout(()=>beep(880, .06), 50); }
+    else if (kind==='rare'){ [523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,.07,'square',.14), i*60)); }
+    else if (kind==='bad') { beep(160,.18,'sawtooth',.18); setTimeout(()=>beep(110,.18,'sawtooth',.15),80); }
+    else if (kind==='miss'){ beep(220,.12,'triangle',.15); }
+    else if (kind==='joint'){ [330,392,494,587,659].forEach((f,i)=>setTimeout(()=>beep(f,.1,'sine',.13), i*70)); }
+    else if (kind==='water'){ beep(800,.05,'sine',.1); setTimeout(()=>beep(1100,.06,'sine',.1),40); }
+    else if (kind==='over'){ [440,392,349,330,294,262].forEach((f,i)=>setTimeout(()=>beep(f,.15,'square',.12), i*120)); }
+    else if (kind==='combo'){ beep(880,.05); setTimeout(()=>beep(1320,.07),60); }
+  }
+
+  // ───── Drawing the player (pixel art stoner) ─────────────────
+  // Simple 8-bit style character drawn with colored rectangles.
+  function drawPlayer(t){
+    const px = player.x, py = H - 60;
+    const bob = Math.sin(t*0.006) * 1.5;
+    const p = 2; // pixel unit
+    const cx = Math.round(px), cy = Math.round(py + bob);
+
+    // Shadow
+    ctx.fillStyle = 'rgba(0,0,0,.35)';
+    ctx.beginPath(); ctx.ellipse(cx, cy+24, 28, 5, 0, 0, Math.PI*2); ctx.fill();
+
+    // Body (hoodie) — greenish
+    const hoodie = highness > 0.6 ? '#16a34a' : '#15803d';
+    ctx.fillStyle = hoodie;
+    roundRect(cx-22, cy-4, 44, 30, 4, true);
+    // Hoodie hood
+    ctx.fillStyle = hoodie;
+    roundRect(cx-24, cy-18, 48, 18, 6, true);
+    // Face (skin)
+    ctx.fillStyle = '#f5d0a9';
+    roundRect(cx-16, cy-16, 32, 22, 4, true);
+
+    // Hair tufts peeking
+    ctx.fillStyle = '#3b2a1e';
+    ctx.fillRect(cx-16, cy-18, 6, 3);
+    ctx.fillRect(cx+10, cy-18, 6, 3);
+
+    // Sunglasses — get wider/rounder when zooted
+    ctx.fillStyle = '#0a0a0a';
+    if (zootedUntil > performance.now()) {
+      // heart/round shades
+      ctx.beginPath(); ctx.arc(cx-7, cy-7, 5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx+7, cy-7, 5, 0, Math.PI*2); ctx.fill();
+      // shine
+      ctx.fillStyle = '#ff5fa8';
+      ctx.fillRect(cx-8, cy-9, 2, 2);
+      ctx.fillRect(cx+6, cy-9, 2, 2);
+    } else {
+      ctx.fillRect(cx-14, cy-9, 11, 4);
+      ctx.fillRect(cx+3,  cy-9, 11, 4);
+      ctx.fillRect(cx-4,  cy-8, 8, 2); // bridge
+    }
+
+    // Mouth — opens wider as combo grows and when near an item
+    const mouthOpen = Math.min(10, 4 + combo*0.4);
+    ctx.fillStyle = '#3b0a0a';
+    ctx.fillRect(cx-5, cy+2, 10, Math.round(mouthOpen*0.6));
+    // teeth
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(cx-5, cy+2, 10, 1);
+
+    // Smile curve (when combo > 0)
+    if (combo > 0) {
+      ctx.fillStyle = '#3b0a0a';
+      ctx.fillRect(cx-6, cy+4, 1, 1);
+      ctx.fillRect(cx+5, cy+4, 1, 1);
+    }
+
+    // Arms (little pixel blobs)
+    ctx.fillStyle = hoodie;
+    ctx.fillRect(cx-26, cy+6, 6, 14);
+    ctx.fillRect(cx+20, cy+6, 6, 14);
+    // Hands (skin)
+    ctx.fillStyle = '#f5d0a9';
+    ctx.fillRect(cx-27, cy+18, 8, 6);
+    ctx.fillRect(cx+19, cy+18, 8, 6);
+
+    // Feet
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(cx-14, cy+26, 10, 4);
+    ctx.fillRect(cx+4,  cy+26, 10, 4);
+  }
+
+  function roundRect(x,y,w,h,r,fill){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+    ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+    ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
+    ctx.closePath();
+    if (fill) ctx.fill();
+  }
+
+  // Background scene — cabinets at top, sofa hint at bottom
+  let bgStars = [];
+  function initStars(){
+    bgStars = [];
+    for (let i=0;i<26;i++) bgStars.push({x:Math.random()*W, y:Math.random()*(H-100), r:Math.random()*1.4+.3, s:Math.random()*.3+.05});
+  }
+  initStars();
+
+  function drawBackground(t){
+    // Sky gradient varies by highness
+    const hue = (highness*60)|0;
+    const g = ctx.createLinearGradient(0,0,0,H);
+    if (zootedUntil > performance.now()) {
+      g.addColorStop(0, `hsl(${(t/30)%360}, 45%, 10%)`);
+      g.addColorStop(1, `hsl(${(t/30+60)%360}, 50%, 7%)`);
+    } else {
+      g.addColorStop(0, `hsl(${150+hue}, 35%, ${8+highness*3}%)`);
+      g.addColorStop(1, `hsl(${160+hue*0.4}, 30%, 5%)`);
+    }
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+    // subtle stars / dust
+    for (const s of bgStars){
+      s.y += s.s;
+      if (s.y > H-90) s.y = 0;
+      ctx.fillStyle = `rgba(255,255,255,${0.15 + Math.sin(t*0.003 + s.x)*0.1})`;
+      ctx.fillRect(s.x|0, s.y|0, s.r|0 || 1, s.r|0 || 1);
+    }
+
+    // Cabinets (top strip)
+    ctx.fillStyle = '#1a3328';
+    ctx.fillRect(0,0,W,22);
+    ctx.strokeStyle = '#0f2019';
+    ctx.lineWidth = 1;
+    for (let i=0;i<6;i++) { ctx.beginPath(); ctx.moveTo(i*(W/6), 0); ctx.lineTo(i*(W/6), 22); ctx.stroke(); }
+    // handles
+    ctx.fillStyle = '#d4af37';
+    for (let i=0;i<6;i++) ctx.fillRect(i*(W/6) + W/12 - 3, 16, 6, 2);
+
+    // Floor / couch hint at bottom
+    ctx.fillStyle = '#1a1210';
+    ctx.fillRect(0, H-24, W, 24);
+    ctx.fillStyle = 'rgba(255,255,255,.03)';
+    for (let x=0;x<W;x+=16) ctx.fillRect(x, H-24, 1, 24);
+  }
+
+  function drawItem(it){
+    // emoji rendering
+    const size = it.w;
+    ctx.save();
+    ctx.translate(it.x, it.y);
+    ctx.rotate(it.rot);
+    // glow for power/rare
+    if (it.t==='power' || it.t==='rare'){
+      ctx.shadowColor = it.t==='power' ? '#a855f7' : '#facc15';
+      ctx.shadowBlur = 16;
+    }
+    ctx.font = `${size}px -apple-system, "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(it.emoji, 0, 0);
+    ctx.restore();
+  }
+
+  // ───── Game flow ─────────────────────────────────────────────
+  function start(){
+    initAudio();
+    state = 'playing';
+    score = 0; lives = 5; misses = 0; caught = 0;
+    combo = 0; peakCombo = 0; highness = 0;
+    items = []; pops = []; particles = [];
+    spawnInterval = 1250; speedMul = 1; lastSpawn = 0;
+    zootedUntil = 0;
+    startTime = performance.now();
+    startScreen.classList.add('hide');
+    gameOverScreen.classList.add('hide');
+    meterWrap.style.display = 'block';
+    updateHUD();
+    showLives();
+    lastTs = performance.now();
+    requestAnimationFrame(loop);
+  }
+
+  function endGame(reason){
+    if (state === 'over') return;
+    state = 'over';
+    gameOverReason = reason;
+    sfx('over');
+    if (score > best) { best = score; localStorage.setItem('mm_best', best); }
+    bestEl.textContent = best;
+    goScore.textContent = score;
+    goBest.textContent = best;
+    goCaught.textContent = caught;
+    goPeak.textContent = 'x'+peakCombo;
+    // Title varies with score
+    if (score > 0 && score === best) {
+      goTitle.innerHTML = 'New <span class="accent">Personal Best</span>';
+    } else {
+      for (const [thresh, html] of TITLE_BY_SCORE){
+        if (score >= thresh){ goTitle.innerHTML = html; break; }
+      }
+    }
+    // Reason line
+    let pool = GAME_OVER_LINES[reason] || GAME_OVER_LINES.any;
+    goReason.textContent = pool[Math.floor(Math.random()*pool.length)];
+    meterWrap.style.display = 'none';
+    gameOverScreen.classList.remove('hide');
+    stage.classList.remove('zooted','peak');
+    if (window.gtag) gtag('event','munchie_over',{score, caught, peak_combo:peakCombo});
+  }
+
+  // ───── Spawning ──────────────────────────────────────────────
+  function spawn(){
+    const k = pickItem();
+    const def = ITEMS[k];
+    const x = 30 + Math.random() * (W - 60);
+    const rot = (Math.random()-0.5) * 0.3;
+    const vRot = (Math.random()-0.5) * 0.04;
+    const base = 45 + Math.random()*25;                  // was 70 + 50
+    items.push({
+      key:k, emoji:def.emoji, pts:def.pts, t:def.type, sub:def.sub||null,
+      x, y:-30, w:def.w,
+      vx:(Math.random()-0.5)*10, vy: base * speedMul,
+      rot, vRot
+    });
+  }
+
+  // ───── Input ─────────────────────────────────────────────────
+  window.addEventListener('keydown', e=>{
+    if (e.code==='ArrowLeft' || e.code==='KeyA') { keys.left = true; targetX=null; e.preventDefault(); }
+    if (e.code==='ArrowRight'|| e.code==='KeyD') { keys.right = true; targetX=null; e.preventDefault(); }
+    if (e.code==='Space' || e.code==='Enter') {
+      if (state==='start' || state==='over') { start(); e.preventDefault(); }
+    }
+    if (e.code==='KeyM') toggleMute();
+  });
+  window.addEventListener('keyup', e=>{
+    if (e.code==='ArrowLeft' || e.code==='KeyA') keys.left = false;
+    if (e.code==='ArrowRight'|| e.code==='KeyD') keys.right = false;
+  });
+
+  // Pointer: drag anywhere, or tap left/right halves
+  function pointerMove(clientX){
+    const rect = canvas.getBoundingClientRect();
+    const x = ((clientX - rect.left) / rect.width) * W;
+    targetX = Math.max(30, Math.min(W-30, x));
+  }
+  canvas.addEventListener('pointerdown', e=>{ canvas.setPointerCapture?.(e.pointerId); pointerMove(e.clientX); });
+  canvas.addEventListener('pointermove', e=>{ if (e.buttons || e.pointerType==='touch') pointerMove(e.clientX); });
+  canvas.addEventListener('pointerup',   ()=>{ /* keep last targetX so movement eases to rest */ });
+
+  startBtn.addEventListener('click', start);
+  restartBtn.addEventListener('click', start);
+  shareBtn.addEventListener('click', share);
+  muteBtn.addEventListener('click', toggleMute);
+
+  function toggleMute(){
+    muted = !muted;
+    localStorage.setItem('mm_muted', muted ? '1' : '0');
+    muteBtn.textContent = muted ? '🔇' : '🔊';
+    if (!muted) initAudio();
+  }
+
+  async function share(){
+    const txt = `I scored ${score} in Munchie Madness 🍕🥒 on twincitycannabis.com — try to beat me.`;
+    const url = 'https://twincitycannabis.com/munchie-madness/';
+    if (navigator.share){
+      try { await navigator.share({ title:'Munchie Madness', text: txt, url }); } catch(_){}
+    } else {
+      try { await navigator.clipboard.writeText(`${txt} ${url}`); shareBtn.textContent = 'Copied!'; setTimeout(()=>shareBtn.textContent='Brag', 1400); }
+      catch(_){}
+    }
+  }
+
+  // ───── HUD helpers ───────────────────────────────────────────
+  function updateHUD(){
+    scoreEl.textContent = score;
+    if (combo >= 2) { comboPill.style.display='inline-block'; comboEl.textContent = 'x' + combo; }
+    else comboPill.style.display = 'none';
+    const pct = Math.min(1, highness);
+    meterFill.style.width = (pct*100).toFixed(1) + '%';
+    // Stage label
+    let label = 'Sober', color = '#22c55e';
+    if (pct > 0.95){ label='MELTING';  color='#ef4444'; }
+    else if (pct > 0.75){ label='Zooted';  color='#fb923c'; }
+    else if (pct > 0.5) { label='Lifted';  color='#facc15'; }
+    else if (pct > 0.2) { label='Vibing';  color='#22c55e'; }
+    stageLabel.textContent = label;
+    stageLabel.style.color = color;
+
+    stage.classList.toggle('zooted', pct > 0.6 || zootedUntil > performance.now());
+    stage.classList.toggle('peak',   pct > 0.9);
+  }
+  function showLives(){
+    const hearts = livesEl.querySelectorAll('.heart');
+    hearts.forEach((h,i) => h.classList.toggle('on', i < lives));
+  }
+  function showFlash(text){
+    flashEl.textContent = text;
+    flashEl.classList.remove('show');
+    // restart animation
+    void flashEl.offsetWidth;
+    flashEl.classList.add('show');
+  }
+  function popAt(x,y,text,cls){
+    const p = document.createElement('div');
+    p.className = 'pop' + (cls? ' '+cls:'');
+    p.textContent = text;
+    const rect = canvas.getBoundingClientRect();
+    p.style.left = (rect.width * (x/W)) + 'px';
+    p.style.top  = (rect.height * (y/H)) + 'px';
+    stage.appendChild(p);
+    setTimeout(()=>p.remove(), 900);
+  }
+
+  // ───── Collision ─────────────────────────────────────────────
+  function playerCatches(it){
+    const py = H - 60; // player center y
+    const pw = 78, ph = 42; // generous catch zone
+    return it.y > py - ph/2 && it.y < py + ph/2 + 10
+        && Math.abs(it.x - player.x) < pw/2 + it.w*0.4;
+  }
+
+  // ───── Main loop ─────────────────────────────────────────────
+  function loop(ts){
+    const dt = Math.min(48, ts - lastTs) / 1000; // seconds, clamped
+    lastTs = ts;
+
+    // gentle difficulty ramp (much tamer than before)
+    const elapsed = (ts - startTime) / 1000;
+    speedMul = 1 + Math.min(0.5, elapsed / 120);          // caps at 1.5x after 2 min
+    spawnInterval = Math.max(750, 1250 - elapsed * 4);    // never faster than ~0.75s
+
+    // zooted slow-mo
+    const zooted = zootedUntil > ts;
+    const timeScale = zooted ? 0.6 : 1;
+    const dts = dt * timeScale;
+
+    // Spawn — just one at a time, relaxed pacing
+    if (state==='playing' && ts - lastSpawn > spawnInterval){
+      spawn();
+      lastSpawn = ts;
+    }
+
+    // Player movement — velocity in px/sec, controls stay mostly responsive
+    const BASE_SPEED = 480;
+    const drift = highness * 0.25;   // very mild floaty feel at peak
+    if (targetX != null){
+      player.x += (targetX - player.x) * 0.24;
+      player.vx = 0;
+    } else {
+      let dir = 0;
+      if (keys.left)  dir -= 1;
+      if (keys.right) dir += 1;
+      const intended = dir * BASE_SPEED;
+      const responsiveness = 0.9 - drift;          // 0.9 sober → 0.65 peak
+      player.vx += (intended - player.vx) * responsiveness;
+      player.x += player.vx * dt;
+    }
+    player.x = Math.max(30, Math.min(W-30, player.x));
+
+    // Items
+    for (const it of items){
+      it.y += it.vy * dts;
+      it.x += it.vx * dts;
+      it.rot += it.vRot * (zooted ? 0.5 : 1);
+      if (it.x < 20) it.vx = Math.abs(it.vx);
+      if (it.x > W-20) it.vx = -Math.abs(it.vx);
+    }
+
+    // Collision & miss
+    if (state==='playing'){
+      for (let i=items.length-1;i>=0;i--){
+        const it = items[i];
+        if (playerCatches(it)){
+          handleCatch(it, ts);
+          items.splice(i,1);
+          continue;
+        }
+        if (it.y > H + 30){
+          // missed
+          if (it.t === 'food' || it.t === 'rare'){
+            combo = 0; misses++; lives--;
+            showLives();
+            sfx('miss');
+            if (Math.random() < 0.5) showFlash(rand(PHRASES.missed));
+            if (lives <= 0) { items.splice(i,1); endGame('miss'); break; }
+          }
+          items.splice(i,1);
+        }
+      }
+    }
+
+    // Highness decays slowly
+    if (state==='playing') {
+      highness = Math.max(0, highness - 0.015 * dt);
+    }
+
+    // ── Render ──
+    drawBackground(ts);
+
+    // Items
+    for (const it of items) drawItem(it);
+
+    // Player
+    drawPlayer(ts);
+
+    // Trippy overlay at peak
+    if (highness > 0.8){
+      ctx.fillStyle = `rgba(168,85,247,${(highness-0.8)*0.25})`;
+      ctx.fillRect(0,0,W,H);
+    }
+    if (zooted){
+      ctx.fillStyle = `rgba(34,197,94,${0.05 + Math.sin(ts*0.004)*0.03})`;
+      ctx.fillRect(0,0,W,H);
+    }
+
+    updateHUD();
+    if (state!=='over') requestAnimationFrame(loop);
+  }
+
+  function handleCatch(it, ts){
+    caught++;
+    if (it.t === 'bad'){
+      // penalty
+      combo = 0;
+      lives--;
+      sfx('bad');
+      showLives();
+      showFlash(rand(PHRASES.bad));
+      popAt(it.x, it.y, badLabel(it.key), 'bad');
+      // screen shake
+      shake(8);
+      if (lives <= 0) endGame('bad');
+      return;
+    }
+    if (it.t === 'power'){
+      if (it.sub === 'joint'){
+        zootedUntil = ts + 8000;
+        sfx('joint');
+        showFlash(rand(PHRASES.joint));
+        popAt(it.x, it.y, '+ZOOTED', 'big');
+      } else if (it.sub === 'water'){
+        highness = Math.max(0, highness - 0.55);
+        sfx('water');
+        showFlash(rand(PHRASES.water));
+        popAt(it.x, it.y, '💧 -HIGH', '');
+      }
+      return;
+    }
+    // Food / rare
+    combo++;
+    if (combo > peakCombo) peakCombo = combo;
+    let mult = 1;
+    mult *= 1 + Math.min(2, (combo-1) * 0.1);           // combo bonus
+    if (highness > 0.75) mult *= 2;                     // zooted taste buds
+    if (zootedUntil > ts) mult *= 2;                    // joint mode
+    const pts = Math.round(it.pts * mult);
+    score += pts;
+    highness = Math.min(1, highness + (it.t==='rare' ? 0.04 : 0.06));
+
+    if (it.t === 'rare'){
+      sfx('rare');
+      const rareFlash = it.key==='pickle' ? rand(PHRASES.pickle)
+                      : (ITEM_FLASH[it.key] ? rand(ITEM_FLASH[it.key]) : rand(PHRASES.rare));
+      showFlash(rareFlash);
+      popAt(it.x, it.y, '+'+pts, 'big');
+    } else {
+      sfx('catch');
+      popAt(it.x, it.y, '+'+pts, '');
+      // Occasional item-specific flash when not in combo territory yet
+      if (combo < 3 && ITEM_FLASH[it.key] && Math.random() < 0.35){
+        showFlash(rand(ITEM_FLASH[it.key]));
+      }
+    }
+
+    // Combo flashes
+    if (combo === 3 || combo === 4)  showFlash(rand(PHRASES.combo3));
+    else if (combo === 6 || combo === 8) { sfx('combo'); showFlash(rand(PHRASES.combo6)); }
+    else if (combo === 10 || combo === 14 || combo === 20) { sfx('combo'); showFlash(rand(PHRASES.combo10)); }
+
+    if (highness >= 0.99 && Math.random() < 0.2) showFlash(rand(PHRASES.peak));
+  }
+
+  function badLabel(k){
+    switch(k){
+      case 'broccoli': return 'BROCCOLI?!';
+      case 'homework': return 'HOMEWORK';
+      case 'bill': return 'BILLS';
+      case 'mom': return 'MOM';
+      case 'salad': return 'SALAD?';
+      default: return 'NOPE';
+    }
+  }
+  function rand(a){ return a[Math.floor(Math.random()*a.length)]; }
+
+  // Screen shake using CSS transform
+  let shakeRemain = 0;
+  function shake(amount){
+    shakeRemain = amount;
+    const tick = ()=>{
+      if (shakeRemain <= 0){ stage.style.transform=''; return; }
+      const x = (Math.random()-.5)*shakeRemain;
+      const y = (Math.random()-.5)*shakeRemain;
+      stage.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+      shakeRemain *= 0.8;
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  // Idle loop before start so the stage renders
+  function idle(){
+    if (state !== 'start' && state !== 'over') return;
+    drawBackground(performance.now());
+    drawPlayer(performance.now());
+    requestAnimationFrame(idle);
+  }
+  resize();
+  requestAnimationFrame(idle);
+
+  // Prevent page scroll when dragging in canvas on mobile
+  canvas.addEventListener('touchmove', e => e.preventDefault(), { passive:false });
+})();
+</script>
+
+</body>
+</html>

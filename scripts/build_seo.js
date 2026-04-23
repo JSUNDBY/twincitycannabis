@@ -1835,6 +1835,423 @@ writePage('neighborhoods/index.html', buildNeighborhoodsIndex(neighborhoodGroups
 extraSitemap.push({ loc: `${SITE}/neighborhoods/`, priority: '0.8', changefreq: 'weekly' });
 count++;
 
+// ============================================================================
+// DISPENSARY VS DISPENSARY COMPARISON PAGES
+// ============================================================================
+// Auto-generates /compare/A-vs-B/ pages for the top ~25 metro dispensaries by
+// TCC score. Pure long-tail SEO play — people search "bloomn vs wildflower"
+// and there's literally no good answer right now.
+const buildVsPage = (a, b) => {
+  const title = `${a.name} vs ${b.name} — Price & Score Comparison | Twin City Cannabis`;
+  const description = `Side-by-side comparison of ${a.name} and ${b.name} — real prices, Google ratings, product selection, and TCC Score. Updated ${today}.`;
+  const canonical = `${SITE}/compare/${a.id}-vs-${b.id}/`;
+
+  const prodsA = TCC.products.filter(p => p.prices && p.prices[a.id] !== undefined && isRealCannabisProduct(p));
+  const prodsB = TCC.products.filter(p => p.prices && p.prices[b.id] !== undefined && isRealCannabisProduct(p));
+  // Products both carry — compare heads up by name+brand match
+  const keyOf = (p) => `${(p.brand || '').toLowerCase()}|${p.name.toLowerCase().slice(0, 40)}`;
+  const bByKey = new Map(prodsB.map(p => [keyOf(p), p]));
+  const overlap = prodsA
+    .map(pa => ({ pa, pb: bByKey.get(keyOf(pa)) }))
+    .filter(x => x.pb);
+  // Sort by biggest absolute price difference — that's what readers care about
+  overlap.sort((x, y) => Math.abs(y.pa.prices[a.id] - y.pb.prices[b.id]) - Math.abs(x.pa.prices[a.id] - x.pb.prices[b.id]));
+
+  const productRows = overlap.slice(0, 15).map(({ pa, pb }) => {
+    const pA = pa.prices[a.id];
+    const pB = pb.prices[b.id];
+    const winner = pA < pB ? 'a' : pA > pB ? 'b' : 'tie';
+    return `<tr>
+  <td>${esc(pa.name)}</td>
+  <td class="price"${winner === 'a' ? ' style="color:#22c55e;font-weight:700"' : ''}>$${pA.toFixed(2)}</td>
+  <td class="price"${winner === 'b' ? ' style="color:#22c55e;font-weight:700"' : ''}>$${pB.toFixed(2)}</td>
+  <td>${winner === 'tie' ? 'Tie' : winner === 'a' ? esc(a.name.split(' ')[0]) + ` $${(pB - pA).toFixed(2)} cheaper` : esc(b.name.split(' ')[0]) + ` $${(pA - pB).toFixed(2)} cheaper`}</td>
+</tr>`;
+  }).join('\n');
+
+  const aWins = overlap.filter(x => x.pa.prices[a.id] < x.pb.prices[b.id]).length;
+  const bWins = overlap.filter(x => x.pb.prices[b.id] < x.pa.prices[a.id]).length;
+  const ties  = overlap.length - aWins - bWins;
+
+  const statsRow = (label, va, vb, fmt = (x) => x) => `<tr>
+  <td><strong>${esc(label)}</strong></td>
+  <td>${fmt(va)}</td>
+  <td>${fmt(vb)}</td>
+</tr>`;
+
+  return headOpen({ title, description, canonical }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/dispensaries/">Dispensaries</a> / ${esc(a.name)} vs ${esc(b.name)}</div>
+<h1>${esc(a.name)} vs ${esc(b.name)}</h1>
+<p>Side-by-side price and score comparison for two Twin Cities dispensaries. Data pulled from live menus and refreshed multiple times daily — last updated ${today}.</p>
+
+<h2>At a glance</h2>
+<table>
+<thead><tr><th></th><th><a href="/dispensaries/${esc(a.id)}/">${esc(a.name)}</a></th><th><a href="/dispensaries/${esc(b.id)}/">${esc(b.name)}</a></th></tr></thead>
+<tbody>
+${statsRow('Location', a.city || '—', b.city || '—')}
+${statsRow('TCC Score', a.tcc_score || '—', b.tcc_score || '—')}
+${statsRow('Google Rating', a.google && a.google.rating ? `★ ${a.google.rating} (${a.google.review_count || 0})` : '—', b.google && b.google.rating ? `★ ${b.google.rating} (${b.google.review_count || 0})` : '—')}
+${statsRow('Products listed', prodsA.length, prodsB.length)}
+${statsRow('Products overlapping', overlap.length, overlap.length)}
+</tbody>
+</table>
+
+${overlap.length > 0 ? `<h2>Price comparison on products both carry</h2>
+<p>${aWins > bWins ? esc(a.name) + ' has the cheaper price on ' + aWins + ' of ' + overlap.length + ' shared products' : bWins > aWins ? esc(b.name) + ' has the cheaper price on ' + bWins + ' of ' + overlap.length + ' shared products' : 'Both dispensaries are evenly matched on price'}${ties ? ` (${ties} ties)` : ''}.</p>
+<table>
+<thead><tr><th>Product</th><th>${esc(a.name.split(' ')[0])}</th><th>${esc(b.name.split(' ')[0])}</th><th>Winner</th></tr></thead>
+<tbody>${productRows}</tbody>
+</table>` : '<h2>Shared products</h2><p>These two dispensaries don\'t currently carry the same brand-name products in our data, so a price head-to-head isn\'t possible right now. Check their individual menus for current selection.</p>'}
+
+<h2>Which should you choose?</h2>
+<p>Cannabis isn't a one-size-fits-all purchase. Consider: distance, your preferred brands, specific strains you like, in-stock alerts, and whether you value lowest price over experience. Both dispensaries are listed on Twin City Cannabis for a reason — they're both legal, licensed Minnesota operations with real inventory.</p>
+<ul>
+<li><a href="/dispensaries/${esc(a.id)}/">Open ${esc(a.name)}'s full profile →</a></li>
+<li><a href="/dispensaries/${esc(b.id)}/">Open ${esc(b.name)}'s full profile →</a></li>
+</ul>
+
+<a class="cta" href="/#compare">Compare every dispensary in Minnesota →</a>
+` + footer;
+};
+
+// Pick top metro dispensaries, build pairs (score-weighted so best pairs get priority)
+const comparePool = TCC.dispensaries
+  .filter(d => d.region === 'metro' && d.tcc_score >= 85)
+  .sort((a, b) => (b.tcc_score || 0) - (a.tcc_score || 0))
+  .slice(0, 18);
+// Skip obvious chain duplicates (two RISE locations don't need a vs page)
+const isChain = (n) => /^(rise|green goods|leafline)/i.test(n || '');
+const chainKey = (n) => (n || '').match(/^(rise|green goods|leafline)/i)?.[1].toLowerCase() || '';
+const comparePairs = [];
+const seenChainPair = new Set();
+for (let i = 0; i < comparePool.length; i++) {
+  for (let j = i + 1; j < comparePool.length; j++) {
+    const a = comparePool[i], b = comparePool[j];
+    // Skip same-chain comparisons
+    if (isChain(a.name) && isChain(b.name) && chainKey(a.name) === chainKey(b.name)) continue;
+    comparePairs.push([a, b]);
+    if (comparePairs.length >= 30) break;
+  }
+  if (comparePairs.length >= 30) break;
+}
+comparePairs.forEach(([a, b]) => {
+  writePage(`compare/${a.id}-vs-${b.id}/index.html`, buildVsPage(a, b));
+  extraSitemap.push({ loc: `${SITE}/compare/${a.id}-vs-${b.id}/`, priority: '0.6', changefreq: 'weekly' });
+  count++;
+});
+console.log(`Wrote ${comparePairs.length} dispensary comparison pages`);
+
+// ============================================================================
+// CATEGORY × CITY PAGES
+// ============================================================================
+// "/cheapest-flower-minneapolis/" type long-tail pages. High-volume searches
+// with essentially zero good results in the current landscape.
+const METRO_CITIES = ['Minneapolis', 'Saint Paul', 'Bloomington', 'Edina', 'Brooklyn Park',
+  'Blaine', 'Roseville', 'Eagan', 'Woodbury', 'Burnsville', 'Lakeville', 'Fridley', 'Anoka'];
+
+const buildCheapestCategoryCity = (catId, catName, city) => {
+  const citySlug2 = slugify(city);
+  const dispensariesHere = TCC.dispensaries.filter(d => d.city === city);
+  if (dispensariesHere.length === 0) return null;
+  const dispIds = new Set(dispensariesHere.map(d => d.id));
+  const productsHere = TCC.products
+    .filter(p => p.category === catId && isRealCannabisProduct(p))
+    .map(p => {
+      const offers = Object.entries(p.prices || {}).filter(([id]) => dispIds.has(id));
+      if (!offers.length) return null;
+      offers.sort((x, y) => x[1] - y[1]);
+      return { p, price: offers[0][1], dispensaryId: offers[0][0] };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.price - b.price)
+    .slice(0, 20);
+
+  if (productsHere.length < 3) return null; // not enough data to make a page worth reading
+
+  const title = `Cheapest ${catName} in ${city} — Real Prices, Updated Daily | Twin City Cannabis`;
+  const description = `The lowest-priced ${catName.toLowerCase()} at ${city} cannabis dispensaries, compared side-by-side. Real prices from every licensed shop, refreshed multiple times a day.`;
+  const canonical = `${SITE}/cheapest-${catId}-${citySlug2}/`;
+
+  const rows = productsHere.map((o, i) => {
+    const store = TCC.dispensaries.find(d => d.id === o.dispensaryId);
+    return `<tr>
+  <td>${i + 1}</td>
+  <td>${esc(o.p.name)}</td>
+  <td class="price">$${o.price.toFixed(2)}</td>
+  <td>${store ? `<a href="/dispensaries/${esc(store.id)}/">${esc(store.name)}</a>` : '—'}</td>
+</tr>`;
+  }).join('\n');
+
+  const dispList = dispensariesHere.slice(0, 8).map(d => `<a href="/dispensaries/${esc(d.id)}/">${esc(d.name)}</a>`).join(' · ');
+
+  return headOpen({ title, description, canonical }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/${citySlug(city)}/">${esc(city)}</a> / Cheapest ${esc(catName.toLowerCase())}</div>
+<h1>Cheapest ${esc(catName)} in ${esc(city)}</h1>
+<p>The lowest-priced ${esc(catName.toLowerCase())} at ${dispensariesHere.length} licensed cannabis ${dispensariesHere.length === 1 ? 'dispensary' : 'dispensaries'} in ${esc(city)}, pulled from live menus. Updated ${today} — prices shift throughout the day as inventory moves.</p>
+
+<table>
+<thead><tr><th>#</th><th>Product</th><th>Lowest price</th><th>At dispensary</th></tr></thead>
+<tbody>${rows}</tbody>
+</table>
+
+<h2>${esc(city)} dispensaries on Twin City Cannabis</h2>
+<p>${dispList}${dispensariesHere.length > 8 ? ` · <a href="/${citySlug(city)}/">see all ${dispensariesHere.length} →</a>` : ''}</p>
+
+<h2>Why prices vary</h2>
+<p>Minnesota legalized recreational cannabis in 2023 and retail only opened statewide in 2024, so supply chains and pricing strategies still vary wildly between dispensaries. Even on identical brand-name products, the same item can cost 20-50% more at one ${esc(city)} shop than at another a few miles away.</p>
+
+<a class="cta" href="/#compare">Open full ${esc(city)} comparison →</a>
+` + footer;
+};
+
+let catCityCount = 0;
+const SEO_CATEGORIES = [
+  { id: 'flower', name: 'Flower' },
+  { id: 'edible', name: 'Edibles' },
+  { id: 'cartridge', name: 'Vape Cartridges' },
+  { id: 'pre-roll', name: 'Pre-Rolls' },
+  { id: 'beverage', name: 'Beverages' },
+];
+SEO_CATEGORIES.forEach(cat => {
+  METRO_CITIES.forEach(city => {
+    const html = buildCheapestCategoryCity(cat.id, cat.name, city);
+    if (!html) return;
+    const path = `cheapest-${cat.id}-${slugify(city)}`;
+    writePage(`${path}/index.html`, html);
+    extraSitemap.push({ loc: `${SITE}/${path}/`, priority: '0.7', changefreq: 'daily' });
+    count++;
+    catCityCount++;
+  });
+});
+console.log(`Wrote ${catCityCount} category-by-city pages`);
+
+// ============================================================================
+// STRAIN × LOCATION PAGES
+// ============================================================================
+// Top strains × top cities. People search "blue dream in minneapolis" — we can
+// actually answer that with real prices and dispensary names.
+const getTopStrains = () => {
+  // Pull a list of real brand names to exclude (many product names START with the
+  // brand, which we don't want to treat as a strain).
+  const brandSet = new Set(
+    Object.values(TCC.products).reduce((acc, p) => {
+      if (p.brand) acc.push(p.brand.toLowerCase());
+      return acc;
+    }, [])
+  );
+  // Category / form words we don't want to treat as strains
+  const STRAIN_JUNK = new Set([
+    'flower', 'flowers', 'pre-roll', 'preroll', 'pre', 'roll', 'rolls',
+    'cartridge', 'cart', 'carts', 'vape', 'vapes', 'disposable', 'disposables',
+    'edible', 'edibles', 'gummy', 'gummies', 'chocolate', 'brownie', 'bar',
+    'beverage', 'beverages', 'drink', 'seltzer', 'soda', 'tonic',
+    'tincture', 'tinctures', 'topical', 'topicals', 'salve', 'balm',
+    'concentrate', 'concentrates', 'wax', 'shatter', 'rosin', 'hash',
+    'bag', 'pack', 'oz', 'gram', 'grams', 'indica', 'sativa', 'hybrid',
+    'true canna', 'unbound', 'house', 'craft', 'premium', 'select',
+    'packed', 'packaged', 'deli', 'bulk', 'co', 'collective', 'cannabis',
+  ]);
+  const looksLikeStrain = (name) => {
+    const n = name.toLowerCase().trim();
+    if (n.length < 5 || n.length > 30) return false;
+    if (brandSet.has(n)) return false;
+    if (STRAIN_JUNK.has(n)) return false;
+    // Exclude names that are just a category word + modifier
+    const words = n.split(/\s+/);
+    if (words.length < 2) return false; // strains usually have 2+ words: Blue Dream, Pine Soul
+    if (words.some(w => STRAIN_JUNK.has(w))) return false;
+    // Exclude anything starting with a number or containing mg
+    if (/^\d|\bmg\b|\boz\b|\bg\b/i.test(n)) return false;
+    return true;
+  };
+
+  const counts = {};
+  TCC.products.forEach(p => {
+    if (p.category !== 'flower' && p.category !== 'pre-roll' && p.category !== 'cartridge') return;
+    if (!p.name) return;
+    // Extract the segment between separators that looks most strain-like
+    const parts = p.name.split(/[\|\-]/).map(s => s.trim()).filter(Boolean);
+    for (const part of parts) {
+      if (looksLikeStrain(part)) {
+        // Normalize casing to title case for clean URLs
+        const norm = part.replace(/\b\w/g, c => c.toUpperCase());
+        counts[norm] = (counts[norm] || 0) + 1;
+        break; // only count first hit per product
+      }
+    }
+  });
+  return Object.entries(counts)
+    .filter(([, n]) => n >= 4)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 12)
+    .map(([name]) => name);
+};
+
+const buildStrainCityPage = (strain, city) => {
+  const citySlug2 = slugify(city);
+  const strainSlug = slugify(strain);
+  const dispensariesHere = TCC.dispensaries.filter(d => d.city === city);
+  if (dispensariesHere.length === 0) return null;
+  const dispIds = new Set(dispensariesHere.map(d => d.id));
+
+  const matches = TCC.products
+    .filter(p => isRealCannabisProduct(p) && p.name && p.name.toLowerCase().includes(strain.toLowerCase()))
+    .map(p => {
+      const offers = Object.entries(p.prices || {}).filter(([id]) => dispIds.has(id));
+      if (!offers.length) return null;
+      offers.sort((x, y) => x[1] - y[1]);
+      return { p, price: offers[0][1], dispensaryId: offers[0][0] };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.price - b.price);
+
+  if (matches.length < 2) return null;
+
+  const title = `${strain} in ${city} — Where to Buy & Real Prices | Twin City Cannabis`;
+  const description = `Find ${strain} at licensed ${city} cannabis dispensaries. Real prices, side-by-side, updated daily. ${matches.length} listings across ${dispensariesHere.length} shops.`;
+  const canonical = `${SITE}/${strainSlug}-${citySlug2}/`;
+
+  const rows = matches.slice(0, 15).map((o, i) => {
+    const store = TCC.dispensaries.find(d => d.id === o.dispensaryId);
+    return `<tr>
+  <td>${esc(o.p.name)}</td>
+  <td>${esc(o.p.category)}</td>
+  <td class="price">$${o.price.toFixed(2)}</td>
+  <td>${store ? `<a href="/dispensaries/${esc(store.id)}/">${esc(store.name)}</a>` : '—'}</td>
+</tr>`;
+  }).join('\n');
+
+  return headOpen({ title, description, canonical }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/${citySlug(city)}/">${esc(city)}</a> / ${esc(strain)}</div>
+<h1>${esc(strain)} in ${esc(city)}</h1>
+<p>Every listing of ${esc(strain)} at licensed cannabis dispensaries in ${esc(city)}. Includes flower, pre-rolls, and cartridges where available. Real prices, refreshed multiple times a day — last updated ${today}.</p>
+
+<table>
+<thead><tr><th>Product</th><th>Form</th><th>Price</th><th>Dispensary</th></tr></thead>
+<tbody>${rows}</tbody>
+</table>
+
+<h2>About this comparison</h2>
+<p>Twin City Cannabis scrapes live menus from every licensed dispensary in Minnesota and matches products by name. Prices shown are the current lowest available at each shop and may change as inventory moves. Always confirm stock with the dispensary before driving.</p>
+
+<a class="cta" href="/${citySlug(city)}/">See all ${esc(city)} dispensaries →</a>
+` + footer;
+};
+
+let strainCityCount = 0;
+const topStrains = getTopStrains();
+topStrains.forEach(strain => {
+  METRO_CITIES.forEach(city => {
+    const html = buildStrainCityPage(strain, city);
+    if (!html) return;
+    const p = `${slugify(strain)}-${slugify(city)}`;
+    writePage(`${p}/index.html`, html);
+    extraSitemap.push({ loc: `${SITE}/${p}/`, priority: '0.6', changefreq: 'daily' });
+    count++;
+    strainCityCount++;
+  });
+});
+console.log(`Wrote ${strainCityCount} strain-by-city pages`);
+
+// ============================================================================
+// MARKET INSIGHTS PAGE
+// ============================================================================
+// Single page that updates with every scrape. Biggest price drops, new product
+// launches, trending strains. Signals freshness to Google, gives consumers a
+// reason to return. Update-friendly — the Pi regenerates it on every cron run.
+const buildMarketInsightsPage = () => {
+  // Biggest price drops — products where priceHistory shows a meaningful decrease
+  const drops = TCC.products
+    .filter(p => p.priceHistory && p.priceHistory.length >= 2 && isRealCannabisProduct(p))
+    .map(p => {
+      const ph = p.priceHistory;
+      return { p, diff: ph[0] - ph[ph.length - 1], start: ph[0], now: ph[ph.length - 1] };
+    })
+    .filter(x => x.diff >= 3)
+    .sort((a, b) => b.diff - a.diff)
+    .slice(0, 10);
+
+  // Top carried products this week (most widely available)
+  const widespread = TCC.products
+    .filter(p => isRealCannabisProduct(p))
+    .map(p => ({ p, count: Object.keys(p.prices || {}).length }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10);
+
+  // Highest score dispensaries
+  const topDisps = TCC.dispensaries
+    .filter(d => d.tcc_score)
+    .sort((a, b) => b.tcc_score - a.tcc_score)
+    .slice(0, 8);
+
+  const title = `Minnesota Cannabis Market Insights — Price Drops & Trends | ${today}`;
+  const description = `This week's biggest cannabis price drops, most-carried products, and top-rated dispensaries in Minnesota. Updated daily from live menu data across 80+ shops.`;
+  const canonical = `${SITE}/market-insights/`;
+
+  const dropRows = drops.map(d => {
+    const store = Object.entries(d.p.prices).sort((a, b) => a[1] - b[1])[0];
+    const disp = TCC.dispensaries.find(x => x.id === store[0]);
+    return `<tr>
+  <td>${esc(d.p.name)}</td>
+  <td class="price">$${d.start.toFixed(2)}</td>
+  <td class="price" style="color:#22c55e;font-weight:700">$${d.now.toFixed(2)}</td>
+  <td style="color:#22c55e">−$${d.diff.toFixed(2)}</td>
+  <td>${disp ? `<a href="/dispensaries/${esc(disp.id)}/">${esc(disp.name)}</a>` : '—'}</td>
+</tr>`;
+  }).join('\n');
+
+  const widespreadRows = widespread.map((x, i) => `<tr>
+  <td>${i + 1}</td>
+  <td>${esc(x.p.name)}</td>
+  <td>${esc(x.p.category)}</td>
+  <td>${x.count} dispensar${x.count === 1 ? 'y' : 'ies'}</td>
+</tr>`).join('\n');
+
+  const dispRows = topDisps.map((d, i) => `<tr>
+  <td>${i + 1}</td>
+  <td><a href="/dispensaries/${esc(d.id)}/">${esc(d.name)}</a></td>
+  <td>${esc(d.city || '—')}</td>
+  <td>${d.tcc_score}</td>
+  <td>${d.google && d.google.rating ? `★ ${d.google.rating}` : '—'}</td>
+</tr>`).join('\n');
+
+  return headOpen({ title, description, canonical }) + `
+<div class="crumbs"><a href="/">Home</a> / Market Insights</div>
+<h1>Minnesota Cannabis Market Insights</h1>
+<p>Live trends from every licensed dispensary in Minnesota. Pulled from real menu data, refreshed multiple times daily. Last updated ${today}.</p>
+
+${drops.length > 0 ? `<h2>&#128200; This week's biggest price drops</h2>
+<p>Products where the lowest available price dropped the most across tracked dispensaries.</p>
+<table>
+<thead><tr><th>Product</th><th>Was</th><th>Now</th><th>Saved</th><th>At</th></tr></thead>
+<tbody>${dropRows}</tbody>
+</table>` : ''}
+
+<h2>&#127775; Most widely carried products</h2>
+<p>Products available at the most Minnesota dispensaries — strong signals of what's hot statewide.</p>
+<table>
+<thead><tr><th>#</th><th>Product</th><th>Category</th><th>Availability</th></tr></thead>
+<tbody>${widespreadRows}</tbody>
+</table>
+
+<h2>&#127942; Top-scored dispensaries</h2>
+<p>Ranked by TCC Score, combining pricing, selection, service, and lab testing.</p>
+<table>
+<thead><tr><th>#</th><th>Dispensary</th><th>City</th><th>TCC Score</th><th>Google</th></tr></thead>
+<tbody>${dispRows}</tbody>
+</table>
+
+<h2>How to use this page</h2>
+<p>Bookmark it. Prices change constantly as dispensaries adjust inventory, run promotions, and bring in new brands. This page regenerates automatically throughout the day, so it's always current. Share price drops with friends — if you know someone buying the same cart every week, check if theirs is on the list.</p>
+
+<a class="cta" href="/#compare">Open full comparison tool →</a>
+` + footer;
+};
+writePage('market-insights/index.html', buildMarketInsightsPage());
+extraSitemap.push({ loc: `${SITE}/market-insights/`, priority: '0.8', changefreq: 'daily' });
+count++;
+console.log('Wrote market-insights page');
+
 // Sitemap
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), buildSitemap(extraSitemap));
 
