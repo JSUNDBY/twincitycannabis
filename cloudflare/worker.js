@@ -874,6 +874,15 @@ function render(d) {
         <a class="btn ghost" href="https://twincitycannabis.com" target="_blank">View site</a>
       </div>
     </section>\`;
+
+  // Repopulate the pipeline table after each render (innerHTML reset wipes it).
+  // If we already have dispensary data cached, render instantly; otherwise
+  // kick off the fetch. Either way, the pipeline slot stays filled.
+  if (DISPENSARIES.length) {
+    renderPipeline();
+  } else {
+    loadPipeline();
+  }
 }
 
 // ─── Leads Pipeline ─────────────────────────────────────────────────
@@ -1026,9 +1035,9 @@ async function saveCrm(id, patch) {
   } catch (e) { /* silent */ }
 }
 
+// render() calls loadPipeline() after each update, so we just run load().
 load();
 setInterval(load, 30000);
-loadPipeline();
 </script>
 </body>
 </html>`;
