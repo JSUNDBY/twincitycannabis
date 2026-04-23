@@ -92,6 +92,10 @@ export default {
       return handleCrmUpdate(request, env, cors);
     }
 
+    if (url.pathname === '/admin/dispensaries' && request.method === 'GET') {
+      return handleAdminDispensaries(request, env, cors);
+    }
+
     if (url.pathname === '/track' && request.method === 'POST') {
       return handleTrack(request, env, cors);
     }
@@ -510,6 +514,76 @@ async function handleCrmRead(request, env, cors) {
   });
 }
 
+// Parse a slim dispensary list from the live data.js. Extracts each
+// dispensary object's id, name, city, neighborhood, tcc_score, phone,
+// website, region, tier — enough to render the CRM pipeline.
+async function handleAdminDispensaries(request, env, cors) {
+  if (!verifyAdminToken(request, env)) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401, headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+  try {
+    const r = await fetch('https://twincitycannabis.com/js/data.js', {
+      cf: { cacheTtl: 3600 },
+    });
+    if (!r.ok) throw new Error('fetch failed');
+    const text = await r.text();
+    // Grab the dispensaries array. It starts with `TCC.dispensaries = [` and
+    // ends at the matching `];`. We find the start, then walk the bracket depth.
+    const startMarker = 'TCC.dispensaries = [';
+    const start = text.indexOf(startMarker);
+    if (start < 0) throw new Error('dispensaries array not found');
+    let depth = 0, i = start + startMarker.length - 1, end = -1;
+    for (; i < text.length; i++) {
+      const c = text[i];
+      if (c === '[') depth++;
+      else if (c === ']') { depth--; if (depth === 0) { end = i; break; } }
+    }
+    if (end < 0) throw new Error('unterminated dispensaries array');
+    const arr = text.slice(start + startMarker.length - 1, end + 1);
+    // Per-field regex extraction to avoid eval — safer and bounds-checked.
+    // Split into object blocks by top-level `},`
+    const items = [];
+    let d = 0, objStart = -1;
+    for (let j = 0; j < arr.length; j++) {
+      const c = arr[j];
+      if (c === '{') { if (d === 0) objStart = j; d++; }
+      else if (c === '}') { d--; if (d === 0 && objStart >= 0) { items.push(arr.slice(objStart, j + 1)); objStart = -1; } }
+    }
+    const pickStr = (block, key) => {
+      const re = new RegExp("\\b" + key + "\\s*:\\s*(['\"`])((?:\\\\.|(?!\\1).)*)\\1", 'm');
+      const m = block.match(re);
+      return m ? m[2].replace(/\\(.)/g, '$1') : '';
+    };
+    const pickNum = (block, key) => {
+      const re = new RegExp("\\b" + key + "\\s*:\\s*(-?[\\d.]+)");
+      const m = block.match(re);
+      return m ? Number(m[1]) : null;
+    };
+    const dispensaries = items.map((block) => ({
+      id: pickStr(block, 'id'),
+      name: pickStr(block, 'name'),
+      city: pickStr(block, 'city'),
+      neighborhood: pickStr(block, 'neighborhood'),
+      region: pickStr(block, 'region'),
+      phone: pickStr(block, 'phone'),
+      website: pickStr(block, 'website'),
+      tier: pickStr(block, 'tier') || 'free',
+      tcc_score: pickNum(block, 'tcc_score'),
+    })).filter((d) => d.id);
+
+    return new Response(JSON.stringify({ dispensaries, count: dispensaries.length }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=1800', ...cors },
+    });
+  } catch (e) {
+    return new Response(JSON.stringify({ error: 'parse failed', detail: String(e) }), {
+      status: 500, headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+}
+
 async function handleCrmUpdate(request, env, cors) {
   if (!verifyAdminToken(request, env)) {
     return new Response(JSON.stringify({ error: 'unauthorized' }), {
@@ -651,8 +725,6 @@ function renderAdminHTML() {
 <footer>
   Internal dashboard · auto-refreshes every 30s
 </footer>
-<!-- Load dispensary list from main site so the CRM can show every shop -->
-<script src="https://twincitycannabis.com/js/data.js"></script>
 <script>
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -664,6 +736,7 @@ const STATUS_COLOR = {
   interested: '#fbbf24', signed: '#22c55e', passed: '#ef4444'
 };
 let CRM_DATA = {};
+let DISPENSARIES = [];
 let PIPELINE_FILTER = 'all';
 
 async function load() {
@@ -805,16 +878,29 @@ function render(d) {
 
 // ─── Leads Pipeline ─────────────────────────────────────────────────
 async function loadPipeline() {
-  if (!window.TCC || !window.TCC.dispensaries) { setTimeout(loadPipeline, 150); return; }
   const key = new URLSearchParams(location.search).get('key');
   if (!key) return;
   try {
-    const r = await fetch('/admin/crm?key=' + encodeURIComponent(key), { cache: 'no-store' });
-    if (!r.ok) return;
-    const data = await r.json();
-    CRM_DATA = data.crm || {};
+    const wrap = document.getElementById('pipe-table-wrap');
+    const [dispRes, crmRes] = await Promise.all([
+      fetch('/admin/dispensaries?key=' + encodeURIComponent(key), { cache: 'default' }),
+      fetch('/admin/crm?key=' + encodeURIComponent(key), { cache: 'no-store' }),
+    ]);
+    if (!dispRes.ok) {
+      wrap.innerHTML = '<div class="err">Couldn\\'t load dispensary list (HTTP ' + dispRes.status + ')</div>';
+      return;
+    }
+    const dispJson = await dispRes.json();
+    DISPENSARIES = dispJson.dispensaries || [];
+    if (crmRes.ok) {
+      const crmJson = await crmRes.json();
+      CRM_DATA = crmJson.crm || {};
+    }
     renderPipeline();
-  } catch (e) { /* silent */ }
+  } catch (e) {
+    const wrap = document.getElementById('pipe-table-wrap');
+    if (wrap) wrap.innerHTML = '<div class="err">Pipeline error: ' + esc(e.message) + '</div>';
+  }
 }
 
 function tccScoreColor(s) {
@@ -825,7 +911,7 @@ function tccScoreColor(s) {
 }
 
 function renderPipeline() {
-  const disps = (window.TCC && window.TCC.dispensaries) || [];
+  const disps = DISPENSARIES;
   if (!disps.length) return;
 
   // Count dispensaries by status
