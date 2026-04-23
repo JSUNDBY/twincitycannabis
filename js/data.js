@@ -1268,11 +1268,11 @@ TCC.dispensaries = [
         scores: { pricing: 78, selection: 75, service: 88, lab_testing: 80 },
         review_count: 1,
         verified: true,
-        features: ["Tribal-owned", "Just opened", "Cash only"],
+        features: ["Tribal-owned", "Cash only"],
         gradient: 'linear-gradient(135deg, #166534, #22c55e)',
         initial: 'NC',
-        opened_at: '2026-03-20',
-        img: null
+        img: null,
+        google: { rating: 5.0, review_count: 1, maps_url: 'https://maps.google.com/?cid=2735657228526054067', reviews: [{author: 'Brian', rating: 5, text: 'Went opening day. Super friendly staff. Grabbed a super lemon haze disposable. The opening day gift bag was a nice surprise - rolling tray, one hitter etc. very easy process and will be back.', time: 'in the last week'}] }
     },
     {
         id: 'leafline-labs-hibbing',
