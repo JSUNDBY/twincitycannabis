@@ -100,13 +100,15 @@ export default {
       return handleTrack(request, env, cors);
     }
 
+    // Order matters: /stats/list must be checked before the /stats/:slug
+    // regex, otherwise "list" gets captured as a slug.
+    if (url.pathname === '/stats/list' && request.method === 'GET') {
+      return handlePublicStatsList(request, env, cors);
+    }
+
     const statsMatch = url.pathname.match(/^\/stats\/([a-z0-9-]+)\/?$/i);
     if (statsMatch && request.method === 'GET') {
       return handlePublicStats(env, cors, statsMatch[1]);
-    }
-
-    if (url.pathname === '/stats/list' && request.method === 'GET') {
-      return handlePublicStatsList(request, env, cors);
     }
 
     if (url.pathname === '/contact' && request.method === 'POST') {
