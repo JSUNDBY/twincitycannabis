@@ -1360,7 +1360,12 @@
             if (!canvas || typeof Chart === 'undefined') return;
             if (App.chartInstance) App.chartInstance.destroy();
 
-            const days = Array.from({length: 30}, (_, i) => `${i + 1}`);
+            const today = new Date();
+            const days = Array.from({length: 30}, (_, i) => {
+                const d = new Date(today);
+                d.setDate(today.getDate() - (29 - i));
+                return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            });
             const viewData = days.map(() => Math.floor(baseViews / 30 * (0.7 + Math.random() * 0.6)));
 
             App.chartInstance = new Chart(canvas, {
