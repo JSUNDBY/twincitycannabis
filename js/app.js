@@ -1228,13 +1228,10 @@
             tierBadge.textContent = 'Free Tier';
         }
 
-        // Illustrative analytics — surfaced as "Sample" in the UI via the
-        // preview banner and metric tags. Replace when a real analytics
-        // pipeline is wired (page-view tracking + DB + auth).
-        const baseViews = d.review_count * 12 + d.tcc_score * 3;
-        const baseClicks = Math.floor(baseViews * 0.18);
-        document.getElementById('dash-views').textContent = baseViews.toLocaleString();
-        document.getElementById('dash-clicks').textContent = baseClicks.toLocaleString();
+        // Real analytics loaded asynchronously below; show a hyphen while
+        // fetching and fall back to zero on error rather than fabricating.
+        document.getElementById('dash-views').textContent = '—';
+        document.getElementById('dash-clicks').textContent = '—';
 
         // Score
         const scoreEl = document.getElementById('dash-score');
@@ -1356,24 +1353,44 @@
             };
         }
 
-        // Traffic chart
-        setTimeout(() => {
+        // Real analytics fetch: totals populate the Views / Clicks cards and
+        // the 30-day series renders into the chart. Fails softly to zero
+        // rather than inventing numbers.
+        (async () => {
+            let stats = null;
+            try {
+                const res = await fetch(`${TCC_WORKER_URL}/stats/${encodeURIComponent(d.id)}`, { cache: 'no-store' });
+                if (res.ok) stats = await res.json();
+            } catch (_) {}
+
+            const totals = (stats && stats.totals) || { view: 0, outbound: 0 };
+            document.getElementById('dash-views').textContent = (totals.view || 0).toLocaleString();
+            document.getElementById('dash-clicks').textContent = (totals.outbound || 0).toLocaleString();
+
             const canvas = document.getElementById('dash-traffic-chart');
             if (!canvas || typeof Chart === 'undefined') return;
             if (App.chartInstance) App.chartInstance.destroy();
 
-            const today = new Date();
-            const days = Array.from({length: 30}, (_, i) => {
-                const d = new Date(today);
-                d.setDate(today.getDate() - (29 - i));
-                return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const series = (stats && Array.isArray(stats.series_30d)) ? stats.series_30d : (() => {
+                // Empty 30-day frame if the API was unreachable — shows all zeros, honest.
+                const today = new Date();
+                return Array.from({ length: 30 }, (_, i) => {
+                    const dt = new Date(today);
+                    dt.setUTCDate(today.getUTCDate() - (29 - i));
+                    return { date: dt.toISOString().slice(0, 10), view: 0, outbound: 0 };
+                });
+            })();
+
+            const labels = series.map(row => {
+                const dt = new Date(row.date + 'T00:00:00Z');
+                return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
             });
-            const viewData = days.map(() => Math.floor(baseViews / 30 * (0.7 + Math.random() * 0.6)));
+            const viewData = series.map(row => row.view || 0);
 
             App.chartInstance = new Chart(canvas, {
                 type: 'bar',
                 data: {
-                    labels: days,
+                    labels,
                     datasets: [{
                         label: 'Profile Views',
                         data: viewData,
@@ -1389,11 +1406,11 @@
                     plugins: { legend: { display: false } },
                     scales: {
                         x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#555', font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 10 } },
-                        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#555', font: { size: 10 } }, beginAtZero: true }
+                        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#555', font: { size: 10 }, precision: 0 }, beginAtZero: true }
                     }
                 }
             });
-        }, 100);
+        })();
     }
 
     function renderCompare(productId) {

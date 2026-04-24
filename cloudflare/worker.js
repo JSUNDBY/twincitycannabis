@@ -100,6 +100,11 @@ export default {
       return handleTrack(request, env, cors);
     }
 
+    const statsMatch = url.pathname.match(/^\/stats\/([a-z0-9-]+)\/?$/i);
+    if (statsMatch && request.method === 'GET') {
+      return handlePublicStats(env, cors, statsMatch[1]);
+    }
+
     if (url.pathname === '/contact' && request.method === 'POST') {
       return handleContact(request, env, cors);
     }
@@ -1180,6 +1185,73 @@ function trackErr(cors) {
 async function fetchDispensaryStats(env, id) {
   const v = await env.TCC_OVERRIDES.get(`stats:${id}`, { type: 'json' });
   return v && v.totals ? v : { totals: {}, daily: {} };
+}
+
+// ─── /stats/:slug ────────────────────────────────────────────────────────────
+// Public GET endpoint. Returns aggregate analytics for one dispensary:
+//   - lifetime totals (views, outbound clicks)
+//   - last 7 days + % change vs prior 7
+//   - last 30 days as a daily series
+// Data exposed is anonymous aggregate counts only — same in character as a
+// shop's own Google Business profile visibility. Cached for 60s at the edge
+// so a refresh storm on a popular page can't hammer KV.
+async function handlePublicStats(env, cors, slug) {
+  const id = String(slug || '').replace(/[^a-z0-9-]/gi, '').toLowerCase();
+  if (!id) {
+    return new Response(JSON.stringify({ error: 'missing slug' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+
+  const stats = await fetchDispensaryStats(env, id);
+
+  const today = new Date();
+  const series = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(today);
+    d.setUTCDate(d.getUTCDate() - i);
+    const key = d.toISOString().slice(0, 10);
+    const row = stats.daily[key] || {};
+    series.push({
+      date: key,
+      view: row.view || 0,
+      outbound: row.outbound || 0,
+    });
+  }
+
+  const last7 = series.slice(-7);
+  const prev7 = series.slice(-14, -7);
+  const sum = (arr, k) => arr.reduce((s, x) => s + (x[k] || 0), 0);
+  const pct = (a, b) => (b === 0 ? (a > 0 ? 100 : 0) : Math.round(((a - b) / b) * 100));
+
+  // Earliest date in daily keys — when this shop started being tracked.
+  const dailyKeys = Object.keys(stats.daily || {}).sort();
+  const trackingStarted = dailyKeys.length ? dailyKeys[0] : null;
+
+  return new Response(JSON.stringify({
+    dispensary_id: id,
+    totals: {
+      view: stats.totals.view || 0,
+      outbound: stats.totals.outbound || 0,
+    },
+    last_7_days: {
+      view: sum(last7, 'view'),
+      outbound: sum(last7, 'outbound'),
+      view_change_pct: pct(sum(last7, 'view'), sum(prev7, 'view')),
+      outbound_change_pct: pct(sum(last7, 'outbound'), sum(prev7, 'outbound')),
+    },
+    series_30d: series,
+    tracking_started: trackingStarted,
+    generated_at: new Date().toISOString(),
+  }), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, max-age=60',
+      ...cors,
+    },
+  });
 }
 
 // ─── /dashboard ──────────────────────────────────────────────────────────────
