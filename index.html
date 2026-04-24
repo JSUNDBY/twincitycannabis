@@ -1976,6 +1976,16 @@
                 <a href="#dispensaries" style="color:var(--text-secondary);font-size:0.85rem">&larr; Back to directory</a>
             </div>
 
+            <!-- Preview banner: this dashboard is a sample for unclaimed shops -->
+            <div class="dash-preview-banner" role="note">
+                <span class="dash-preview-banner-tag">Preview</span>
+                <div class="dash-preview-banner-body">
+                    <strong>You&rsquo;re viewing a sample of your Featured dashboard.</strong>
+                    TCC Score and search rank are real. Profile Views, Website Clicks, and the 30-day chart are illustrative &mdash; your actual analytics start tracking the day you claim this listing.
+                </div>
+                <a href="#for-dispensaries-claim" class="btn btn-sm btn-primary dash-preview-banner-cta">Claim this listing</a>
+            </div>
+
             <!-- Dashboard Header -->
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1.5rem;margin-bottom:2rem">
                 <div>
@@ -1993,14 +2003,14 @@
             <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem" id="dash-stats">
                 <div class="card">
                     <div class="card-body-sm" style="text-align:center">
-                        <div class="text-xs text-muted uppercase" style="letter-spacing:1px">Profile Views</div>
+                        <div class="text-xs text-muted uppercase" style="letter-spacing:1px">Profile Views <span class="metric-sample-tag">Sample</span></div>
                         <div class="font-display font-bold text-2xl text-green" id="dash-views">--</div>
                         <div class="text-xs text-secondary">This month</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body-sm" style="text-align:center">
-                        <div class="text-xs text-muted uppercase" style="letter-spacing:1px">Website Clicks</div>
+                        <div class="text-xs text-muted uppercase" style="letter-spacing:1px">Website Clicks <span class="metric-sample-tag">Sample</span></div>
                         <div class="font-display font-bold text-2xl text-green" id="dash-clicks">--</div>
                         <div class="text-xs text-secondary">This month</div>
                     </div>
@@ -2052,7 +2062,7 @@
             <div class="card" style="margin-bottom:2rem">
                 <div class="card-body">
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-                        <div class="font-display font-semibold">Profile Views (30 days)</div>
+                        <div class="font-display font-semibold">Profile Views (30 days) <span class="metric-sample-tag">Sample</span></div>
                     </div>
                     <div style="height:200px;position:relative">
                         <canvas id="dash-traffic-chart"></canvas>

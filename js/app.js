@@ -1228,7 +1228,9 @@
             tierBadge.textContent = 'Free Tier';
         }
 
-        // Simulated analytics (based on score and reviews for demo)
+        // Illustrative analytics — surfaced as "Sample" in the UI via the
+        // preview banner and metric tags. Replace when a real analytics
+        // pipeline is wired (page-view tracking + DB + auth).
         const baseViews = d.review_count * 12 + d.tcc_score * 3;
         const baseClicks = Math.floor(baseViews * 0.18);
         document.getElementById('dash-views').textContent = baseViews.toLocaleString();
