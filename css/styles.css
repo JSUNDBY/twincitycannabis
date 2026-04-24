@@ -4276,3 +4276,167 @@ html[data-theme="light"] .kit-form-wrapper .formkit-submit * {
     .dash-preview-banner-body { font-size: 0.82rem; min-width: 100%; }
     .dash-preview-banner-cta { margin-top: 0.3rem; }
 }
+
+/* ============================================================
+   Shop Rotation — homepage "Three shops worth knowing" widget
+   and per-dispensary "More shops to explore" footer
+   ============================================================ */
+.rotation-section {
+    padding: 2.5rem 0 2rem;
+    position: relative;
+}
+
+.rotation-footer {
+    padding: 2.5rem 1.25rem 3rem;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+}
+
+.rotation-header {
+    max-width: 720px;
+    margin: 0 auto 1.6rem;
+    text-align: center;
+}
+
+.rotation-eyebrow {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 0.6rem;
+}
+
+.rotation-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.3rem, 2.8vw, 1.8rem);
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+}
+
+.rotation-sub {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin: 0;
+}
+
+.rotation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.95rem;
+    max-width: 1020px;
+    margin: 0 auto;
+}
+
+.rotation-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.95rem 1.1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: inherit;
+    transition:
+        transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.22s ease,
+        background 0.22s ease,
+        box-shadow 0.3s ease;
+}
+
+.rotation-card:hover {
+    border-color: rgba(34, 197, 94, 0.45);
+    background: var(--green-bg, rgba(34, 197, 94, 0.05));
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(34, 197, 94, 0.10);
+}
+
+.rotation-card-avatar {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+}
+
+.rotation-card-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rotation-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+}
+
+.rotation-card-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: -0.2px;
+    line-height: 1.25;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rotation-card-meta {
+    font-size: 0.76rem;
+    color: var(--text-secondary);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rotation-card-score {
+    flex-shrink: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.78rem;
+    padding: 0.25rem 0.55rem;
+    border-radius: var(--radius-full);
+    color: #fff;
+    min-width: 34px;
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .rotation-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 640px;
+    }
+}
+
+@media (max-width: 560px) {
+    .rotation-section { padding: 1.8rem 0 1.6rem; }
+    .rotation-footer { padding: 2rem 1rem 2.2rem; }
+    .rotation-header { margin-bottom: 1.3rem; }
+    .rotation-sub { font-size: 0.87rem; }
+    .rotation-grid {
+        grid-template-columns: 1fr;
+        max-width: 440px;
+        gap: 0.7rem;
+    }
+    .rotation-card { padding: 0.85rem 1rem; gap: 0.8rem; }
+    .rotation-card-avatar { width: 40px; height: 40px; font-size: 0.95rem; }
+}

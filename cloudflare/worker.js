@@ -105,6 +105,10 @@ export default {
       return handlePublicStats(env, cors, statsMatch[1]);
     }
 
+    if (url.pathname === '/stats/list' && request.method === 'GET') {
+      return handlePublicStatsList(request, env, cors);
+    }
+
     if (url.pathname === '/contact' && request.method === 'POST') {
       return handleContact(request, env, cors);
     }
@@ -1249,6 +1253,63 @@ async function handlePublicStats(env, cors, slug) {
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': 'public, max-age=60',
+      ...cors,
+    },
+  });
+}
+
+// ─── /stats/list?slugs=a,b,c ────────────────────────────────────────────────
+// Lightweight bulk endpoint used by the homepage Shop Rotation and the
+// detail-page "More shops to explore" widget. Returns last-7-day view counts
+// and lifetime totals for each requested slug, in one round trip.
+//
+// Capped at 200 slugs per call to keep any single request bounded. KV reads
+// are parallelized with Promise.all. The Cache-Control header gives a 5-min
+// edge cache, so bursts hit CF's cache rather than KV.
+async function handlePublicStatsList(request, env, cors) {
+  const url = new URL(request.url);
+  const raw = url.searchParams.get('slugs') || '';
+  const slugs = Array.from(new Set(
+    raw.split(',')
+      .map(s => s.trim().replace(/[^a-z0-9-]/gi, '').toLowerCase())
+      .filter(Boolean)
+  )).slice(0, 200);
+
+  if (slugs.length === 0) {
+    return new Response(JSON.stringify({ shops: [], generated_at: new Date().toISOString() }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+
+  const today = new Date();
+  const windowStart = new Date(today);
+  windowStart.setUTCDate(windowStart.getUTCDate() - 6);
+  const inWindow = (dateStr) => dateStr >= windowStart.toISOString().slice(0, 10);
+
+  const rows = await Promise.all(slugs.map(async (slug) => {
+    const v = await env.TCC_OVERRIDES.get(`stats:${slug}`, { type: 'json' });
+    const daily = (v && v.daily) || {};
+    let view7 = 0, outbound7 = 0;
+    for (const date of Object.keys(daily)) {
+      if (inWindow(date)) {
+        view7 += daily[date].view || 0;
+        outbound7 += daily[date].outbound || 0;
+      }
+    }
+    return {
+      slug,
+      view_7d: view7,
+      outbound_7d: outbound7,
+      view_total: (v && v.totals && v.totals.view) || 0,
+    };
+  }));
+
+  return new Response(JSON.stringify({ shops: rows, generated_at: new Date().toISOString() }), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, max-age=300',
       ...cors,
     },
   });

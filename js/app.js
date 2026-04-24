@@ -497,6 +497,7 @@
 
     // ---- RENDER: HOME ----
     function renderHome() {
+        renderShopRotation();
         renderFeaturedDispensaries();
         renderRecentlyOpened();
         renderTodaysDeals();
@@ -505,6 +506,134 @@
         renderMNBrands();
         renderComingSoon();
         renderShop();
+    }
+
+    // ─── Shop Rotation ──────────────────────────────────────────────────────
+    // Surfaces three shops per visit on the homepage, weighted INVERSELY to
+    // last-7-day view counts so under-seen shops get airtime. The same
+    // picker powers the "More shops to explore" footer on dispensary detail
+    // pages. Honest distribution mechanism — we're not inflating metrics,
+    // we're rebalancing attention across every licensed shop in the state.
+    App._viewCountsCache = null;
+    App._viewCountsPromise = null;
+    async function fetchViewCounts() {
+        if (App._viewCountsCache) return App._viewCountsCache;
+        if (App._viewCountsPromise) return App._viewCountsPromise;
+        const slugs = (TCC.dispensaries || []).map(d => d.id).filter(Boolean);
+        if (slugs.length === 0) return {};
+        App._viewCountsPromise = (async () => {
+            try {
+                const url = `${TCC_WORKER_URL}/stats/list?slugs=${encodeURIComponent(slugs.join(','))}`;
+                const res = await fetch(url, { cache: 'no-store' });
+                if (!res.ok) throw new Error('stats/list ' + res.status);
+                const data = await res.json();
+                const map = {};
+                for (const row of (data.shops || [])) {
+                    map[row.slug] = { view_7d: row.view_7d || 0, view_total: row.view_total || 0 };
+                }
+                App._viewCountsCache = map;
+                return map;
+            } catch (_) {
+                App._viewCountsCache = {};
+                return {};
+            } finally {
+                App._viewCountsPromise = null;
+            }
+        })();
+        return App._viewCountsPromise;
+    }
+
+    function pickShopsWeightedFair(count, opts) {
+        opts = opts || {};
+        const exclude = new Set(opts.exclude || []);
+        const viewMap = opts.viewMap || {};
+        let pool = (TCC.dispensaries || []).filter(d => d && d.id && !exclude.has(d.id));
+
+        // Same-city preference (used on detail page): if at least `count`
+        // shops share the city, restrict the pool to them. Otherwise fall
+        // back to statewide so the widget always fills.
+        if (opts.preferCity) {
+            const cityPool = pool.filter(d => d.city === opts.preferCity);
+            if (cityPool.length >= count) pool = cityPool;
+        }
+
+        if (pool.length === 0) return [];
+        if (pool.length <= count) return pool.slice();
+
+        // Weight inversely by last-7-day views (+1 to avoid divide-by-zero).
+        // Newer/under-seen shops get larger weights; high-traffic shops get
+        // small weights. A shop with 0 views in 7 days has weight 1.0;
+        // a shop with 100 views has weight 0.0099.
+        const weights = pool.map(d => 1 / (((viewMap[d.id] && viewMap[d.id].view_7d) || 0) + 1));
+        const picked = [];
+        const usedIdx = new Set();
+        for (let n = 0; n < count; n++) {
+            let totalW = 0;
+            for (let i = 0; i < pool.length; i++) if (!usedIdx.has(i)) totalW += weights[i];
+            if (totalW <= 0) break;
+            let r = Math.random() * totalW;
+            for (let i = 0; i < pool.length; i++) {
+                if (usedIdx.has(i)) continue;
+                r -= weights[i];
+                if (r <= 0) {
+                    usedIdx.add(i);
+                    picked.push(pool[i]);
+                    break;
+                }
+            }
+        }
+        return picked;
+    }
+
+    function rotationCardHTML(d) {
+        const scoreColor = TCC.getScoreColor(d.tcc_score);
+        const hasImg = d.img && d.img.length > 10 && !d.img.includes('placeholder');
+        const avatar = hasImg
+            ? `<img src="${esc(d.img)}" alt="" loading="lazy">`
+            : esc(d.initial || (d.name || '?').slice(0, 1));
+        const avatarStyle = hasImg ? '' : `background:${d.gradient || 'linear-gradient(135deg,#22c55e,#16a34a)'}`;
+        const loc = d.neighborhood && d.neighborhood !== d.city
+            ? `${esc(d.neighborhood)} · ${esc(d.city)}`
+            : esc(d.city || '');
+        return `<a class="rotation-card" href="#dispensary/${esc(d.id)}">
+            <span class="rotation-card-avatar" style="${avatarStyle}">${avatar}</span>
+            <span class="rotation-card-body">
+                <span class="rotation-card-name">${esc(d.name)}</span>
+                <span class="rotation-card-meta">${loc}</span>
+            </span>
+            <span class="rotation-card-score" style="background:${scoreColor}">${d.tcc_score}</span>
+        </a>`;
+    }
+
+    async function renderShopRotation() {
+        const grid = document.getElementById('shop-rotation-grid');
+        if (!grid || !TCC.dispensaries) return;
+        const viewMap = await fetchViewCounts();
+        const picks = pickShopsWeightedFair(3, { viewMap });
+        if (picks.length === 0) {
+            const section = document.getElementById('shop-rotation-section');
+            if (section) section.style.display = 'none';
+            return;
+        }
+        grid.innerHTML = picks.map(rotationCardHTML).join('');
+    }
+
+    async function renderMoreShops(currentId, currentCity) {
+        const grid = document.getElementById('detail-more-shops');
+        const wrap = document.getElementById('detail-more-shops-wrap');
+        if (!grid || !wrap) return;
+        const viewMap = await fetchViewCounts();
+        const picks = pickShopsWeightedFair(3, {
+            exclude: [currentId],
+            viewMap,
+            preferCity: currentCity,
+        });
+        if (picks.length === 0) {
+            wrap.style.display = 'none';
+            return;
+        }
+        grid.innerHTML = picks.map(rotationCardHTML).join('');
+        wrap.style.display = '';
     }
 
     function renderRecentlyOpened() {
@@ -1109,6 +1238,9 @@
 
         // Reset tabs
         switchDetailTab('products');
+
+        // Cross-link to other shops at the bottom of the page
+        renderMoreShops(d.id, d.city);
     }
 
     function switchDetailTab(tabName) {
