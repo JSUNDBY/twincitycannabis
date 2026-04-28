@@ -41,6 +41,12 @@ python3 scraper/price_tracker.py record
 # 7. Export price history
 python3 scraper/price_tracker.py export
 
+# 7.5. Pull menus from dispensary.shop platform (e.g. Fort Road Cannabis)
+#      and merge them into TCC.products with id prefix 'ds####'. Must run
+#      AFTER direct_menu_scrape.py since that step wipes TCC.products.
+python3 scraper/dispensary_shop_scrape.py
+python3 scraper/merge_dispensary_shop_data.py
+
 # 8. Rebuild static SEO pages (per-dispensary, per-category, sitemap.xml)
 #    These are crawler-facing pages with LocalBusiness/Product Schema.org markup
 #    so Google indexes every dispensary + category as its own URL.

@@ -45,11 +45,36 @@ jobs:
           python scraper/price_tracker.py export || true
         continue-on-error: true
 
+      - name: Pull menus from dispensary.shop platform
+        # direct_menu_scrape replaced TCC.products from Weedmaps; this
+        # appends shops on the dispensary.shop platform (e.g. Fort Road)
+        # with id prefix 'ds####'.
+        run: |
+          python scraper/dispensary_shop_scrape.py || true
+          python scraper/merge_dispensary_shop_data.py || true
+        continue-on-error: true
+
+      - name: Set up Node for SEO build
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Rebuild static SEO pages
+        run: node scripts/build_seo.js
+        continue-on-error: true
+
       - name: Commit and push if changed
         run: |
           git config user.name "TCC Scraper Bot"
           git config user.email "bot@twincitycannabis.com"
-          git add js/data.js scraper/data/price_history.json scraper/data/price_history_export.json scraper/data/dispensaries.json scraper/data/full_menu_products.json 2>/dev/null || true
+          git add js/data.js index.html sitemap.xml \
+            scraper/data/price_history.json scraper/data/price_history_export.json \
+            scraper/data/dispensaries.json scraper/data/full_menu_products.json \
+            scraper/data/dispensary_shop_products.json \
+            dispensaries products brands neighborhoods \
+            best-dispensaries-twin-cities cheapest-cannabis-twin-cities minnesota-cannabis-laws 2>/dev/null || true
+          # city landing pages (auto-generated, slug pattern: <city>-cannabis-dispensaries)
+          for d in *-cannabis-dispensaries; do [ -d "$d" ] && git add "$d"; done
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
