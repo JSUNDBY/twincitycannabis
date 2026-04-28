@@ -1,4 +1,4 @@
-// Last auto-updated: 2026-04-28 15:22
+// Last auto-updated: 2026-04-28 16:38
 // ============================================================
 // Twin City Cannabis — Data Layer
 // Real Twin Cities dispensary data + products + strains
@@ -1433,6 +1433,29 @@ TCC.dispensaries = [
         gradient: 'linear-gradient(135deg, #7c2d12, #f59e0b)',
         initial: 'FR',
         img: "/img/dispensary-logos/fort-road-cannabis.png"
+    },
+    {
+        id: 'lake-daze',
+        name: 'Lake Daze Dispensary',
+        tagline: 'Family-owned microbusiness in downtown Hopkins',
+        address: '502 Main St, Hopkins, MN 55343',
+        neighborhood: 'Hopkins',
+        city: 'Hopkins',
+        region: 'metro',
+        lat: 44.924336,
+        lng: -93.4268733,
+        phone: '(952) 855-7603',
+        hours: { weekday: 'Check website', weekend: 'Check website', note: 'Hours posted on lakedaze.com' },
+        website: 'https://lakedaze.com',
+        tier: 'free',
+        tcc_score: 78,
+        scores: { pricing: 75, selection: 75, service: 80, lab_testing: 78 },
+        review_count: 0,
+        verified: true,
+        features: ["Microbusiness", "Family-owned", "Curated menu", "Hopkins downtown", "Cannabis education focus"],
+        gradient: 'linear-gradient(135deg, #0c4a6e, #38bdf8)',
+        initial: 'LD',
+        img: "/img/dispensary-logos/lake-daze.png"
     },
     {
         id: 'green-goods-blaine',
