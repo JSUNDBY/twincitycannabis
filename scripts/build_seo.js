@@ -2421,6 +2421,22 @@ indexHtml = indexHtml.replace(/(id="proof-stat-products">)[\d,]+\+(<\/)/g, `$1${
 
 console.log(`Injected live counts: ${liveDispCount} dispensaries, ${liveProdLabel} products (${liveProdRaw} actual)`);
 
+// ---------- CACHE-BUST data.js + app.js ----------
+// Append ?v=<short content hash> to the script tags so any change to either
+// file invalidates browsers' caches automatically. Without this, returning
+// visitors silently keep stale dispensary data for hours after a deploy.
+const crypto = require('crypto');
+function fileHash(relPath) {
+  const buf = fs.readFileSync(path.join(ROOT, relPath));
+  return crypto.createHash('sha256').update(buf).digest('hex').slice(0, 8);
+}
+const dataHash = fileHash('js/data.js');
+const appHash  = fileHash('js/app.js');
+indexHtml = indexHtml
+  .replace(/(<script[^>]+src=)"js\/data\.js(?:\?v=[^"]*)?"/g, `$1"js/data.js?v=${dataHash}"`)
+  .replace(/(<script[^>]+src=)"js\/app\.js(?:\?v=[^"]*)?"/g,  `$1"js/app.js?v=${appHash}"`);
+console.log(`Cache-bust: data.js?v=${dataHash}, app.js?v=${appHash}`);
+
 fs.writeFileSync(indexPath, indexHtml);
 console.log('Injected internal crawl footer + fixed dead legal links into index.html');
 
