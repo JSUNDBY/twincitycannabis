@@ -15,6 +15,13 @@ echo "=========================================="
 echo "TCC Auto Scrape: $(date)"
 echo "=========================================="
 
+# 0. Sync repo state. Without this, the Pi runs whatever local copy of
+#    auto_scrape.sh it last had — so newly-added platform scrapers
+#    (e.g. dispensary.shop, Meadow) silently don't run, and the
+#    `direct_menu_scrape` step below wipes their products on every
+#    cycle. `git pull --rebase` keeps the Pi current with origin/main.
+git pull --rebase --quiet || echo "WARNING: git pull failed — running with local code"
+
 # 1. Scrape dispensary listings
 python3 scraper/scraper.py --export 2>/dev/null || echo "Dispensary scrape skipped"
 
