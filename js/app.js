@@ -1059,13 +1059,15 @@
         }
         trackServerEvent(id, 'view');
 
-        // Banner - show logo image if available
+        // Banner — uses uniform CSS background for visual consistency across
+        // all 85 dispensaries (no longer override with d.gradient, which
+        // routinely clashed with branded logos).
         const bannerEl = document.getElementById('detail-banner');
-        bannerEl.style.background = d.gradient;
+        bannerEl.style.background = '';
         const initialEl = document.getElementById('detail-banner-initial');
         const hasImg = d.img && d.img.length > 10 && !d.img.includes('placeholder');
         if (hasImg) {
-            initialEl.innerHTML = `<img src="${d.img}" alt="${esc(d.name)}" style="max-height:120px;max-width:280px;object-fit:contain;border-radius:12px">`;
+            initialEl.innerHTML = `<img src="${esc(d.img)}" alt="${esc(d.name)}" loading="lazy">`;
         } else {
             initialEl.textContent = d.initial;
         }
