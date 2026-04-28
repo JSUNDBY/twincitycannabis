@@ -46,6 +46,7 @@ def main():
     # Group by (name, weight, menu_type) so the same product across multiple
     # shops collapses into one TCC entry with a multi-shop prices dict.
     grouped = {}
+    excluded = 0
     for p in products:
         name = p["name"].strip()
         weight = (p.get("weight") or "").strip()
@@ -53,15 +54,16 @@ def main():
         brand = p.get("brand") or "House"
         raw_cat = p.get("category", "")
 
+        # Trust normalize.py: it knows about flower-named accessories (e.g.
+        # "Flower Mill" grinders incorrectly normalized as flower), donations,
+        # rolling supplies, etc. EXCLUDE wins — drop the product entirely.
         normalized = categorize_by_name(name, brand, raw_cat)
         valid = ("flower", "pre-roll", "cartridge", "edible", "concentrate",
                  "topical", "tincture", "beverage")
-        if normalized in valid:
-            cat = normalized
-        elif raw_cat:
-            cat = raw_cat
-        else:
-            cat = "edible"  # safe default for shops heavy on hemp-derived
+        if normalized == "EXCLUDE" or normalized not in valid:
+            excluded += 1
+            continue
+        cat = normalized
 
         key = f"{name}|||{brand}|||{weight}|||{menu_type}"
         if key not in grouped:
@@ -104,6 +106,9 @@ def main():
     products_text, old_count = _strip_entries_with_id_prefix(products_text, ID_PREFIX)
     if old_count:
         print(f"Removed {old_count} old dispensary.shop entries before re-adding")
+
+    if excluded:
+        print(f"Skipped {excluded} non-cannabis or unrecognized products")
 
     new_entries = []
     for key, p in grouped.items():

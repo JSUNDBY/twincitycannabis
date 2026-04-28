@@ -33,6 +33,32 @@ KNOWN_SHOPS = [
     ("fort-road-cannabis", "fortroadcannabis.dispensary.shop"),
 ]
 
+# dispensary.shop categories that are never cannabis products and should
+# be dropped at scrape time. Uses normalized lowercase comparison so
+# variants like "PIPES", "Water Pipes", "papers & lighters" all match.
+EXCLUDED_RAW_CATEGORY_TOKENS = (
+    "pipe", "pipes",
+    "seed", "seeds",
+    "merch", "apparel", "clothing",
+    "paper", "papers", "lighter", "lighters", "rolling paper",
+    "accessor",  # accessories / accessory
+    "grinder", "grinders",
+    "battery", "batteries",
+    "tray", "rolling tray",
+)
+
+
+def is_excluded_category(raw_category):
+    """True when the raw category string matches an excluded token."""
+    if not raw_category:
+        return False
+    norm = raw_category.lower()
+    for token in EXCLUDED_RAW_CATEGORY_TOKENS:
+        if token in norm:
+            return True
+    return False
+
+
 PROXY_URL = os.environ.get("PROXY_URL", "")
 PROXIES = {"http": PROXY_URL, "https": PROXY_URL} if PROXY_URL else None
 
@@ -108,6 +134,11 @@ def find_product_arrays(node):
 
 def normalize_product(raw, dispensary_id):
     """Convert one dispensary.shop product to TCC merger schema."""
+    # Drop non-cannabis categories at the door (pipes, seeds, merch, accessories,
+    # grinders, etc.) — these are sold by some shops but don't belong on TCC.
+    if is_excluded_category(raw.get("category", "")):
+        return None
+
     # Prices on dispensary.shop are integer cents.
     pretax = raw.get("pre_tax_price")
     posttax = raw.get("post_tax_price")
