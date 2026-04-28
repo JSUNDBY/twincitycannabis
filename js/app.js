@@ -90,7 +90,7 @@
     // Category-specific sanity: does the name actually look like its category?
     const _NOT_ANYTHING_CANNABIS_RE = /\b(book|handbook|field guide|guide to|coloring|foundation|fertilizer|soil\b|nutrient|rooting|grow tent|tent kit|field\s*guide|textbook|novel|story|bible)\b/i;
 
-    const _FLOWER_WEIGHT_RE = /\b(1\/8|1\/4|1\/2|eighth|quarter|half\s*oz|ounce|oz\b|\d+(?:\.\d+)?\s*g\b|mixed\s*bud|whole\s*flower|pre.?pack)\b/i;
+    const _FLOWER_WEIGHT_RE = /\b(1\/8|1\/4|1\/2|eighth|quarter|half\s*oz|ounce|oz\b|\d+(?:\.\d+)?\s*g(?:rams?)?\b|mixed\s*bud|whole\s*flower|pre.?pack)\b/i;
     const _FLOWER_KEYWORD_RE = /\b(flower|bud|nug|smalls|popcorn|ground\b|shake\b)\b/i;
     const _NOT_FLOWER_RE = /\b(cart(ridge)?|disposable|vape|shot|seltzer|soda|drink|tonic|lemonade|iced\s*tea|fl\s*oz|gummi|chocolate|candy|brownie|cookie|chew|mint|honey|lotion|balm|salve|bath\s*bomb|dab|wax|shatter|rosin|hash|tincture|dropper|capsule|softgel|book|bible|textbook|blend|deodorant|headband|blanket|guasha|bronners|soap\b|koozie|keychain|jewel|stoop|holiday|ornament|pack\b|box\b|scarf|buddy|pass\b|wash|immunity|mushroom|spirulina|wellness|roller|stik\b)\b/i;
     const _MG_RE = /\b\d+\s*mg\b/i;
@@ -119,17 +119,21 @@
 
     const looksLikeFlower = (p) => {
         const n = p.name || '';
+        const w = p.weight || '';
         if (_NOT_FLOWER_RE.test(n)) return false;
         if (_MG_RE.test(n)) return false;
         if (_NON_CANNABIS_SIGNAL_RE.test(n)) return false;
         if (hasBlockedSubstring(n)) return false;
-        // Whitelist: explicit flower weight or flower keyword
-        if (_FLOWER_WEIGHT_RE.test(n) || _FLOWER_KEYWORD_RE.test(n)) return true;
-        // Bare strain names: 1-3 words, letters only, no digits, no red flags
-        if (!/\d/.test(n)
-            && /^[A-Za-z][A-Za-z '&.-]*$/.test(n)
-            && n.split(/\s+/).filter(Boolean).length <= 3
-            && n.length >= 3) {
+        // Whitelist: explicit flower weight (in name OR weight field) or flower keyword
+        if (_FLOWER_WEIGHT_RE.test(n) || _FLOWER_WEIGHT_RE.test(w) || _FLOWER_KEYWORD_RE.test(n)) return true;
+        // Bare strain names: 1-3 words, letters only, no digits, no red flags.
+        // Strip parenthetical suffixes ("ZestyParm (Phylos)") before checking,
+        // since dispensary.shop wraps the genetics provider in parens.
+        const bare = n.replace(/\s*\([^)]*\)\s*/g, ' ').trim();
+        if (!/\d/.test(bare)
+            && /^[A-Za-z][A-Za-z '&.-]*$/.test(bare)
+            && bare.split(/\s+/).filter(Boolean).length <= 3
+            && bare.length >= 3) {
             return true;
         }
         return false;
