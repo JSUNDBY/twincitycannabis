@@ -1,0 +1,112 @@
+name: KV Backup
+
+# Daily snapshot of the Cloudflare KV namespace tcc-overrides.
+# Stored as a private GitHub Actions artifact (90-day retention) — NOT
+# committed to the repo, because the repo is public and KV holds PII
+# (contact-form leads, scraped outreach emails, etc.).
+#
+# Restore procedure: see RECOVERY.md.
+#
+# Required secret: CLOUDFLARE_API_TOKEN
+#   - Cloudflare dashboard → My Profile → API Tokens → Create Token
+#   - Permissions: Account → Workers KV Storage → Read
+#   - Account resources: limit to your own account
+#   - Save the token, then add it as a GitHub repo secret named
+#     CLOUDFLARE_API_TOKEN (Settings → Secrets and variables → Actions).
+
+on:
+  schedule:
+    - cron: '0 9 * * *'   # Daily at 9:00 UTC (4am Central)
+  workflow_dispatch:
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Snapshot KV
+        env:
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT_ID: 0672ae6f0ce7a86086cafbcba03ed68f
+          CF_KV_NAMESPACE: 71b77df77ea74522ab66c82e20cc9339
+          KV_NAMESPACE_TITLE: tcc-overrides
+        run: |
+          if [ -z "$CF_API_TOKEN" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN secret is not set. Add it under repo Settings → Secrets → Actions."
+            exit 1
+          fi
+          mkdir -p out
+          python3 - <<'PY'
+          import datetime, json, os, sys, urllib.parse, urllib.request
+
+          account = os.environ['CF_ACCOUNT_ID']
+          ns = os.environ['CF_KV_NAMESPACE']
+          token = os.environ['CF_API_TOKEN']
+          api = f"https://api.cloudflare.com/client/v4/accounts/{account}/storage/kv/namespaces/{ns}"
+          hdr = {"Authorization": f"Bearer {token}"}
+
+          def get(url, raw=False):
+              req = urllib.request.Request(url, headers=hdr)
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  body = r.read()
+              return body if raw else json.loads(body)
+
+          # Paginate all keys
+          keys, cursor = [], ''
+          while True:
+              qs = f"?limit=1000{'&cursor=' + urllib.parse.quote(cursor) if cursor else ''}"
+              resp = get(api + '/keys' + qs)
+              if not resp.get('success'):
+                  print('::error::list keys failed:', resp, file=sys.stderr)
+                  sys.exit(1)
+              keys.extend(k['name'] for k in resp['result'])
+              cursor = (resp.get('result_info') or {}).get('cursor') or ''
+              if not cursor:
+                  break
+
+          print(f"Found {len(keys)} keys")
+
+          # Fetch each value (raw bytes) and write a wrangler bulk-format file.
+          bulk = []
+          summary = {}
+          for k in keys:
+              url = api + '/values/' + urllib.parse.quote(k, safe='')
+              raw = get(url, raw=True)
+              text = raw.decode('utf-8', errors='replace')
+              bulk.append({"key": k, "value": text})
+              summary[k] = len(raw)
+
+          stamp = datetime.datetime.utcnow().strftime('%Y-%m-%d')
+          with open(f'out/kv-{os.environ["KV_NAMESPACE_TITLE"]}.json', 'w') as f:
+              json.dump(bulk, f, indent=2, ensure_ascii=False)
+
+          # Public summary: key names + byte sizes only, no values. Useful as a
+          # quick "did the data change shape" signal in the workflow log.
+          with open(f'out/kv-{os.environ["KV_NAMESPACE_TITLE"]}-summary.json', 'w') as f:
+              json.dump({
+                  'namespace_id': ns,
+                  'namespace_title': os.environ['KV_NAMESPACE_TITLE'],
+                  'exported_at': datetime.datetime.utcnow().isoformat() + 'Z',
+                  'key_count': len(keys),
+                  'total_bytes': sum(summary.values()),
+                  'keys': summary,
+              }, f, indent=2)
+
+          print('Backup written to out/')
+          PY
+
+      - name: Upload backup artifact (private)
+        uses: actions/upload-artifact@v4
+        with:
+          name: kv-tcc-overrides-${{ github.run_id }}
+          path: out/
+          retention-days: 90
+
+      - name: Print summary to log
+        run: |
+          echo "::notice::KV snapshot complete. Download from Actions → KV Backup → this run → Artifacts."
+          cat out/kv-tcc-overrides-summary.json | head -20 || true
