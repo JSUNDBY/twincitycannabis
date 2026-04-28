@@ -2077,6 +2077,192 @@ html[data-theme="light"] .detail-banner-initial {
     color: var(--text-primary);
 }
 
+/* ============================================================
+   Featured Dispensaries — "Be the first" pitch
+   Shown when no shop has Featured tier yet. Auto-hides when the
+   first paying customer lands. Two-column on desktop, stack on mobile.
+   ============================================================ */
+.featured-pitch {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 2.5rem;
+    align-items: center;
+    padding: 2.5rem;
+    background:
+        radial-gradient(ellipse at 20% 10%, rgba(34, 197, 94, 0.10), transparent 60%),
+        linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+    border: 1px solid rgba(34, 197, 94, 0.20);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 24px 80px rgba(34, 197, 94, 0.06);
+}
+
+.featured-pitch-eyebrow {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 0.7rem;
+}
+
+.featured-pitch-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+    letter-spacing: -1px;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin: 0 0 0.8rem;
+}
+
+.featured-pitch-sub {
+    color: var(--text-secondary);
+    font-size: 1.02rem;
+    line-height: 1.55;
+    margin: 0 0 1.4rem;
+}
+
+.featured-pitch-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.featured-pitch-list li {
+    position: relative;
+    padding-left: 1.6rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+}
+
+.featured-pitch-list li::before {
+    content: "\2713";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--green);
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.featured-pitch-cta {
+    margin-bottom: 0.6rem;
+    font-size: 1rem;
+    padding: 0.9rem 1.6rem;
+}
+
+.featured-pitch-fineprint {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    margin: 0;
+    line-height: 1.45;
+}
+
+/* Mock card — visual demo of what a Featured listing looks like */
+.featured-pitch-mock {
+    position: relative;
+    padding: 1.4rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    min-height: 220px;
+}
+
+.featured-pitch-mock-badge {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--green);
+    background: rgba(34, 197, 94, 0.14);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-full);
+}
+
+.featured-pitch-mock-body {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0.55;
+    margin-top: 1.2rem;
+}
+
+.featured-pitch-mock-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.18), rgba(34, 197, 94, 0.04));
+    border: 1.5px dashed rgba(34, 197, 94, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--green);
+    flex-shrink: 0;
+}
+
+.featured-pitch-mock-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin-bottom: 0.2rem;
+}
+
+.featured-pitch-mock-loc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.3rem;
+}
+
+.featured-pitch-mock-stars {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+}
+
+.featured-pitch-mock-overlay {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 0.95rem;
+    text-align: center;
+    background: linear-gradient(180deg, transparent, rgba(34, 197, 94, 0.12) 60%, rgba(34, 197, 94, 0.20) 100%);
+    color: var(--green);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+    border-top: 1px solid rgba(34, 197, 94, 0.18);
+}
+
+@media (max-width: 760px) {
+    .featured-pitch {
+        grid-template-columns: 1fr;
+        gap: 1.6rem;
+        padding: 1.6rem;
+    }
+    .featured-pitch-mock { min-height: 180px; }
+    .featured-pitch-mock-avatar { width: 52px; height: 52px; font-size: 1.4rem; }
+}
+
+html[data-theme="light"] .featured-pitch {
+    background:
+        radial-gradient(ellipse at 20% 10%, rgba(22, 163, 74, 0.08), transparent 60%),
+        linear-gradient(180deg, #ffffff 0%, var(--bg-secondary) 100%);
+    border-color: rgba(22, 163, 74, 0.25);
+}
+
 /* ============ AD BANNER SAMPLE ============ */
 .ad-banner-sample {
     position: relative;

@@ -663,6 +663,8 @@
     function renderFeaturedDispensaries() {
         const grid = document.getElementById('featured-dispensaries');
         const ctaEl = document.getElementById('featured-cta');
+        const activeEl = document.getElementById('featured-active');
+        const pitchEl = document.getElementById('featured-pitch');
 
         const paid = TCC.dispensaries
             .filter(d => d.tier !== 'free')
@@ -672,17 +674,18 @@
             })
             .slice(0, 6);
 
-        grid.innerHTML = paid.map(d => dispensaryCard(d, 'grid')).join('');
-
-        // Show the FOMO CTA if there is at least one paid dispensary
-        if (ctaEl) {
-            ctaEl.style.display = paid.length > 0 ? '' : 'none';
+        if (grid) {
+            grid.innerHTML = paid.map(d => dispensaryCard(d, 'grid')).join('');
         }
 
-        // Hide entire section if nothing to show
-        const section = document.getElementById('featured-section');
-        if (section) {
-            section.style.display = paid.length === 0 ? 'none' : '';
+        // Show real grid OR the "be the first" pitch — never both
+        if (activeEl && pitchEl) {
+            activeEl.style.display = paid.length > 0 ? '' : 'none';
+            pitchEl.style.display = paid.length > 0 ? 'none' : '';
+        }
+
+        if (ctaEl) {
+            ctaEl.style.display = paid.length > 0 ? '' : 'none';
         }
     }
 
