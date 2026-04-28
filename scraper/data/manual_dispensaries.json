@@ -1,66 +1,113 @@
 [
-  {
-    "id": "nativecare-west-st-paul",
-    "name": "NativeCare West St. Paul",
-    "tagline": "Red Lake Nation cannabis dispensary in West St. Paul",
-    "address": "2067 S Robert St, West St Paul, MN 55118",
-    "neighborhood": "West St. Paul",
-    "city": "West St. Paul",
-    "lat": 44.8839057,
-    "lng": -93.0833719,
-    "phone": "",
-    "hours": {
-      "weekday": "10:00am - 8:00pm",
-      "weekend": "10:00am - 8:00pm",
-      "note": "10:00am - 8:00pm"
+    {
+        "id": "nativecare-west-st-paul",
+        "name": "NativeCare West St. Paul",
+        "tagline": "Red Lake Nation cannabis dispensary in West St. Paul",
+        "address": "2067 S Robert St, West St Paul, MN 55118",
+        "neighborhood": "West St. Paul",
+        "city": "West St. Paul",
+        "lat": 44.8839057,
+        "lng": -93.0833719,
+        "phone": "",
+        "hours": {
+            "weekday": "10:00am - 8:00pm",
+            "weekend": "10:00am - 8:00pm",
+            "note": "10:00am - 8:00pm"
+        },
+        "website": "https://www.nativecare.com",
+        "tier": "free",
+        "tcc_score": 80,
+        "scores": {
+            "pricing": 78,
+            "selection": 75,
+            "service": 88,
+            "lab_testing": 80
+        },
+        "review_count": 1,
+        "verified": true,
+        "features": [
+            "Tribal-owned",
+            "Cash only"
+        ],
+        "gradient": "linear-gradient(135deg, #166534, #22c55e)",
+        "initial": "NC",
+        "img": "",
+        "manually_added": true
     },
-    "website": "https://www.nativecare.com",
-    "tier": "free",
-    "tcc_score": 80,
-    "scores": {
-      "pricing": 78,
-      "selection": 75,
-      "service": 88,
-      "lab_testing": 80
+    {
+        "id": "aurora-cannabis-prior-lake",
+        "name": "Aurora Cannabis MN",
+        "tagline": "Vertically-integrated micro cannabis dispensary in Prior Lake",
+        "address": "16535 Anna Trail SE, Prior Lake, MN 55372",
+        "neighborhood": "Prior Lake",
+        "city": "Prior Lake",
+        "lat": 44.7081,
+        "lng": -93.3952,
+        "phone": "",
+        "hours": {
+            "weekday": "12:00pm - close",
+            "weekend": "12:00pm - close",
+            "note": "Opens 12:00 PM daily; online ordering 10am-10pm weekdays, 24/7 weekends"
+        },
+        "website": "https://priorlakedispo.dispensary.shop/",
+        "tier": "free",
+        "tcc_score": 78,
+        "scores": {
+            "pricing": 75,
+            "selection": 82,
+            "service": 78,
+            "lab_testing": 78
+        },
+        "review_count": 0,
+        "verified": true,
+        "features": [
+            "Microbusiness",
+            "Grows their own",
+            "House brand",
+            "Online ordering",
+            "Seeds & clones"
+        ],
+        "gradient": "linear-gradient(135deg, #1e3a8a, #7c3aed)",
+        "initial": "AC",
+        "img": "",
+        "manually_added": true
     },
-    "review_count": 1,
-    "verified": true,
-    "features": ["Tribal-owned", "Cash only"],
-    "gradient": "linear-gradient(135deg, #166534, #22c55e)",
-    "initial": "NC",
-    "img": "",
-    "manually_added": true
-  },
-  {
-    "id": "aurora-cannabis-prior-lake",
-    "name": "Aurora Cannabis MN",
-    "tagline": "Vertically-integrated micro cannabis dispensary in Prior Lake",
-    "address": "16535 Anna Trail SE, Prior Lake, MN 55372",
-    "neighborhood": "Prior Lake",
-    "city": "Prior Lake",
-    "lat": 44.7081,
-    "lng": -93.3952,
-    "phone": "",
-    "hours": {
-      "weekday": "12:00pm - close",
-      "weekend": "12:00pm - close",
-      "note": "Opens 12:00 PM daily; online ordering 10am-10pm weekdays, 24/7 weekends"
-    },
-    "website": "https://priorlakedispo.dispensary.shop/",
-    "tier": "free",
-    "tcc_score": 78,
-    "scores": {
-      "pricing": 75,
-      "selection": 82,
-      "service": 78,
-      "lab_testing": 78
-    },
-    "review_count": 0,
-    "verified": true,
-    "features": ["Microbusiness", "Grows their own", "House brand", "Online ordering", "Seeds & clones"],
-    "gradient": "linear-gradient(135deg, #1e3a8a, #7c3aed)",
-    "initial": "AC",
-    "img": "",
-    "manually_added": true
-  }
+    {
+        "id": "fort-road-cannabis",
+        "name": "Fort Road Cannabis",
+        "tagline": "Boutique adult-use shop on West Seventh / Old Fort Road",
+        "address": "899 Randolph Ave, Saint Paul, MN 55102",
+        "neighborhood": "West Seventh",
+        "city": "Saint Paul",
+        "lat": 44.9269806,
+        "lng": -93.1380248,
+        "phone": "(651) 352-2663",
+        "hours": {
+            "weekday": "11:00am - 9:00pm",
+            "weekend": "11:00am - 10:00pm",
+            "note": "Tue–Thu 11am–9pm, Fri–Sat 11am–10pm, Sun 12–6pm; closed Mondays"
+        },
+        "website": "https://www.fortroadcannabis.com",
+        "tier": "free",
+        "tcc_score": 78,
+        "scores": {
+            "pricing": 75,
+            "selection": 75,
+            "service": 80,
+            "lab_testing": 78
+        },
+        "review_count": 0,
+        "verified": true,
+        "features": [
+            "Boutique",
+            "Minnesota-made focus",
+            "THC drinks & edibles",
+            "Seeds & accessories",
+            "Locally owned"
+        ],
+        "gradient": "linear-gradient(135deg, #7c2d12, #f59e0b)",
+        "initial": "FR",
+        "img": "",
+        "manually_added": true
+    }
 ]
