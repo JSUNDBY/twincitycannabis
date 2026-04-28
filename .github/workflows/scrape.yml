@@ -52,6 +52,8 @@ jobs:
         run: |
           python scraper/dispensary_shop_scrape.py || true
           python scraper/merge_dispensary_shop_data.py || true
+          python scraper/meadow_scrape.py || true
+          python scraper/merge_meadow_data.py || true
         continue-on-error: true
 
       - name: Set up Node for SEO build

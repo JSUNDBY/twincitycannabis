@@ -47,6 +47,11 @@ python3 scraper/price_tracker.py export
 python3 scraper/dispensary_shop_scrape.py
 python3 scraper/merge_dispensary_shop_data.py
 
+# 7.6. Pull menus from Meadow platform (e.g. Lake Daze).
+python3 scraper/meadow_scrape.py
+python3 scraper/merge_meadow_data.py
+
+
 # 8. Rebuild static SEO pages (per-dispensary, per-category, sitemap.xml)
 #    These are crawler-facing pages with LocalBusiness/Product Schema.org markup
 #    so Google indexes every dispensary + category as its own URL.
