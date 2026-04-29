@@ -92,8 +92,12 @@ _PATTERNS = {
 
     # Concentrates — STRONG signals: explicit extract format words. These are
     # never used for anything other than concentrates.
+    # Concentrates — explicit extract formats. "crumble" alone is too noisy
+    # (matches dessert "Apple Cinnamon Crumble"); require an extract qualifier.
+    # Same for bare "dab"/"dabs" — only match when the product clearly is a
+    # consumable extract; ACCESSORIES_EARLY already strips dab tools/kits/etc.
     'CONCENTRATE_STRONG': re.compile(
-        r'\b(shatter|crumble|budder|badder|terp\s*sauce|sugar\s*wax|crystalline|distillate\s*syringe|ho?nyc?omb|moonrock|moon\s*rock|cold\s*cure|temple\s*ball|bubble\s*hash|ice\s*water\s*hash|dry\s*sift|6\s*star|f1\s*hash|kief|hashish|hash\s*split|hash\s*splits|hash\s*rosin|cured\s*resin|hte|fse|full\s*spectrum\s*extract|diamond\s*sauce|diamonds\s*and\s*sauce|live\s*hash|frozen\s*flower\s*hash|dab\b|dabs|wax\s*concentrate|shatter\s*concentrate)\b',
+        r'\b(shatter|budder|badder|terp\s*sauce|sugar\s*wax|crystalline|distillate\s*syringe|ho?nyc?omb|moonrock|moon\s*rock|cold\s*cure|temple\s*ball|bubble\s*hash|ice\s*water\s*hash|dry\s*sift|6\s*star|f1\s*hash|kief|hashish|hash\s*split|hash\s*splits|hash\s*rosin|cured\s*resin|hte|fse|full\s*spectrum\s*extract|diamond\s*sauce|diamonds\s*and\s*sauce|live\s*hash|frozen\s*flower\s*hash|wax\s*concentrate|shatter\s*concentrate|(?:live|hash|rosin|wax|sugar|cured|frozen|dry|ice)\s+crumble)\b',
         re.IGNORECASE
     ),
 
@@ -129,8 +133,10 @@ _PATTERNS = {
         r'\b('
         # Rolling supplies
         r'grinder|lighter|rolling\s*papers?|rolling\s*kit|rolling\s*kits|hemp\s*rolling\s*kit|hemp\s*wraps?|blunt\s*wraps?|leaf\s*cones?|filter\s*tips?|stash\s*jar|cone\s*pack|empty\s*cones?|tea\s*leaf\s*cones?|pre[\s\-]?roll\s*tubes?|joint\s*tubes?|kief\s*box|debowler|herb\s*grinder|grinder\s*kit|grinder\s*card|rolling\s*trays?|ash\s*trays?|ashtrays?|dab\s*mat'
-        # Glassware / pipes
-        r'|pipe|bong|water\s*pipe|dab\s*rig|dab\s*nail|dab\s*tool|banger|torch|chillum|one[\s\-]?hitter|dugout|carb\s*cap|terp\s*pearl|silicone\s*container'
+        # Glassware / pipes / dab hardware
+        r'|pipe|bong|water\s*pipe|dab\s*rig|dab\s*nail|dab\s*tool|dab\s*tools?|dab\s*tray|dab\s*kit|dab\s*grab|nectar\s*collector|banger|torch|chillum|one[\s\-]?hitter|dugout|carb\s*cap|terp\s*pearl|silicone\s*container'
+        # Cannabis-themed novelty / merch labels (shop-branded swag)
+        r'|happy\s*kit|velcro\s*label|sticker\s*pack|patch\s*pack'
         # Vape hardware (devices, batteries, atomizers - NOT consumable vapes)
         r'|510\s*battery|510\s*thread\s*battery|vape\s*battery|battery\s*pack|thread\s*battery|variable\s*voltage.*battery|wax\s*coil|wax\s*coil\s*battery|wax\s*atomizer|atomizer|coil\s*battery|charger|vape\s*kit|cleaning\s*kit|sluggers?\s*battery'
         # Vaporizer DEVICES (not cartridges) — these are hardware
