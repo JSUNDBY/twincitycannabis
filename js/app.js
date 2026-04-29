@@ -282,6 +282,21 @@
         return !!(d.website && !d.website.includes('weedmaps.com'));
     }
 
+    // Identify the menu platform a shop uses, so the empty-menu state can
+    // label its outbound link more usefully. Returns one of:
+    //   'dutchie' | 'leafly' | 'weedmaps' | null
+    // Pulled from the shop's website URL — if the shop website itself is on
+    // a known platform's domain, that's a strong signal.
+    function detectMenuPlatform(d) {
+        const url = (d && d.website) || '';
+        if (!url) return null;
+        const u = url.toLowerCase();
+        if (u.includes('dutchie.com')) return 'dutchie';
+        if (u.includes('leafly.com')) return 'leafly';
+        if (u.includes('weedmaps.com')) return 'weedmaps';
+        return null;
+    }
+
     // Format Google rating as "★ 4.7 (234)" — shown on dispensary cards
     function googleRatingHtml(d) {
         if (!d || !d.google || !d.google.rating) return '';
@@ -1132,7 +1147,11 @@
         App._detailProducts = allProducts;
         App._detailDispId = id;
 
-        // If no products at all, show a friendly empty-menu state
+        // If no products at all, show a friendly empty-menu state.
+        // When the shop's website lives on a known menu platform (Dutchie,
+        // Leafly, Weedmaps), label the outbound link so visitors know where
+        // they're going. Eventually each platform either gets a TCC scraper
+        // or stays as an outbound link forever — both are honest.
         const productsContainer = document.getElementById('detail-products');
         const countEl = document.getElementById('detail-product-count');
         const catContainer = document.getElementById('detail-product-cats');
@@ -1140,14 +1159,24 @@
         if (allProducts.length === 0) {
             countEl.textContent = 'Menu coming soon';
             catContainer.innerHTML = '';
+            const platform = detectMenuPlatform(d);
+            const platformLabel = {
+                dutchie: 'Shop menu on Dutchie',
+                leafly:  'Shop menu on Leafly',
+                weedmaps:'Shop menu on Weedmaps',
+            }[platform] || (isOfficialWebsite(d) ? 'Visit Website' : 'Find on Google Maps');
+            const ctaCopy = platform
+                ? `${esc(d.name)} publishes their menu on ${platform[0].toUpperCase()+platform.slice(1)}. Tap through to see prices and order — or claim this listing to bring the menu directly into TCC for price comparison.`
+                : `We're working on getting ${esc(d.name)}'s full menu into TCC. In the meantime, you can visit their site or call ahead.`;
             productsContainer.innerHTML = `
                 <div class="empty-menu-state">
                     <div class="empty-menu-icon">${Icons.leafLine}</div>
-                    <div class="empty-menu-title">Menu data not yet available</div>
-                    <div class="empty-menu-desc">We're working on getting ${esc(d.name)}'s full menu into TCC. In the meantime, you can visit their site or call ahead.</div>
+                    <div class="empty-menu-title">Menu data not yet on TCC</div>
+                    <div class="empty-menu-desc">${ctaCopy}</div>
                     <div class="empty-menu-actions">
-                        <a href="${getDispensaryWebsite(d)}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">${isOfficialWebsite(d) ? 'Visit Website &rarr;' : 'Find on Google Maps &rarr;'}</a>
+                        <a href="${getDispensaryWebsite(d)}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">${platformLabel} &rarr;</a>
                         <a href="tel:${(d.phone||'').replace(/[^0-9+]/g,'')}" class="btn btn-secondary btn-sm">${Icons.phone} Call</a>
+                        ${platform ? `<a href="#for-dispensaries-claim" class="btn btn-secondary btn-sm">${Icons.verified || ''} Claim &amp; share menu</a>` : ''}
                     </div>
                 </div>`;
             // Skip the rest of product rendering
