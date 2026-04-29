@@ -405,8 +405,11 @@
 
     // ---- ROUTING ----
     function route() {
-        const hash = window.location.hash.slice(1) || 'home';
-        const parts = hash.split('/');
+        const hashRaw = window.location.hash.slice(1) || 'home';
+        // Strip ?query suffix and any trailing #fragment so deep-linked
+        // anchors like #menu-upload?slug=foo route correctly.
+        const hashClean = hashRaw.split('?')[0].split('#')[0];
+        const parts = hashClean.split('/');
         let page = parts[0];
         const param = parts[1] || null;
 
@@ -417,12 +420,12 @@
         const knownPages = new Set(['home','dispensaries','dispensary','dispensary-detail','deals','strains','strain','strain-detail','compare','learn','for-dispensaries','dashboard','welcome']);
         let anchorId = null;
         if (!knownPages.has(page)) {
-            const anchorEl = document.getElementById(hash);
+            const anchorEl = document.getElementById(hashClean);
             if (anchorEl) {
                 const parentPage = anchorEl.closest('.page');
                 if (parentPage) {
                     page = parentPage.id.replace(/^page-/, '');
-                    anchorId = hash;
+                    anchorId = hashClean;
                 }
             }
         }
