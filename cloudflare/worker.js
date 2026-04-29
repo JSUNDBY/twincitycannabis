@@ -115,6 +115,10 @@ export default {
       return handleContact(request, env, cors);
     }
 
+    if (url.pathname === '/menu-upload' && request.method === 'POST') {
+      return handleMenuUpload(request, env, cors);
+    }
+
     if (url.pathname === '/dashboard' && request.method === 'GET') {
       return handleDispensaryDashboardPage(request, env);
     }
@@ -1148,6 +1152,147 @@ async function sendLeadNotification(lead, env) {
   if (!r.ok) {
     const err = await r.text();
     throw new Error(`Resend API ${r.status}: ${err}`);
+  }
+}
+
+// ─── /menu-upload ─────────────────────────────────────────────────────────
+// A dispensary owner submits their own menu (CSV or pasted text) so TCC can
+// pull it into price comparison without scraping their POS platform. Stored
+// in KV under `menu-upload:<slug>:<timestamp>` for Josh to manually review,
+// then run scraper/import_uploaded_menu.py to merge into TCC.products.
+//
+// This is the consent-based path that complements the empty-menu state's
+// "Claim & share menu" button. Especially relevant for Dutchie shops, where
+// scraping isn't an option but a shop-supplied CSV is.
+//
+// Body (multipart/form-data):
+//   slug:        TCC dispensary id (e.g. "fort-road-cannabis")
+//   email:       contact email (required)
+//   contact:     contact name
+//   phone:       optional
+//   menu_text:   pasted CSV/JSON menu data
+//   menu_file:   uploaded CSV/JSON file (alternative to menu_text)
+//   notes:       freeform notes
+//   consent:     "yes" — must affirm authorization to share menu
+async function handleMenuUpload(request, env, cors) {
+  let form;
+  try {
+    form = await request.formData();
+  } catch (e) {
+    return new Response(JSON.stringify({ ok: false, error: 'invalid form data' }), {
+      status: 400, headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+
+  const get = (k) => String(form.get(k) || '').trim();
+  const slug    = get('slug').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 80);
+  const email   = get('email').slice(0, 200);
+  const contact = get('contact').slice(0, 200);
+  const phone   = get('phone').slice(0, 50);
+  const notes   = get('notes').slice(0, 2000);
+  const consent = get('consent');
+
+  if (!slug || !email || consent.toLowerCase() !== 'yes') {
+    return new Response(JSON.stringify({
+      ok: false,
+      error: 'slug, email, and consent are required',
+    }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+
+  // Pull menu text either from a file upload or a textarea paste.
+  let menuText = get('menu_text');
+  let filename = '';
+  const file = form.get('menu_file');
+  if (file && typeof file === 'object' && typeof file.text === 'function') {
+    try {
+      const fileText = await file.text();
+      if (fileText && fileText.length > 5) {
+        menuText = fileText;
+        filename = file.name || 'upload';
+      }
+    } catch (_) {}
+  }
+
+  if (!menuText || menuText.length < 5) {
+    return new Response(JSON.stringify({
+      ok: false,
+      error: 'menu_text or menu_file is required',
+    }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+
+  // Reasonable size cap — KV value limit is 25MB but we don't expect menus
+  // anywhere near that.
+  if (menuText.length > 1_000_000) {
+    return new Response(JSON.stringify({
+      ok: false,
+      error: 'menu data too large (max 1 MB)',
+    }), { status: 413, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+
+  const submission = {
+    slug, email, contact, phone, notes, filename,
+    menu_text: menuText,
+    submitted_at: new Date().toISOString(),
+    user_agent: request.headers.get('User-Agent') || '',
+  };
+
+  const ts = Date.now();
+  const key = `menu-upload:${slug}:${ts}`;
+  await env.TCC_OVERRIDES.put(key, JSON.stringify(submission));
+
+  // Track this in an index so the importer can list all pending uploads
+  // without doing a `kv list` (which has rate limits on the free tier).
+  const idx = (await env.TCC_OVERRIDES.get('index:menu-uploads', { type: 'json' })) || [];
+  idx.push({ key, slug, email, submitted_at: submission.submitted_at, processed: false });
+  if (idx.length > 1000) idx.splice(0, idx.length - 1000);
+  await env.TCC_OVERRIDES.put('index:menu-uploads', JSON.stringify(idx));
+
+  // Email Josh so he knows to import.
+  try { await sendMenuUploadNotification(submission, env); }
+  catch (e) { console.error('menu upload email failed:', e); }
+
+  return new Response(JSON.stringify({ ok: true, key }), {
+    status: 200, headers: { 'Content-Type': 'application/json', ...cors },
+  });
+}
+
+async function sendMenuUploadNotification(sub, env) {
+  if (!env.RESEND_API_KEY) return;
+  const escHtml = (s) => String(s || '').replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const preview = sub.menu_text.split('\n').slice(0, 8).join('\n');
+  const lineCount = sub.menu_text.split('\n').length;
+  const subject = `Menu uploaded: ${sub.slug}`;
+  const html = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:640px;margin:0 auto;padding:1.5rem;background:#0a1410;color:#e8e9eb;border-radius:12px">
+    <div style="color:#22c55e;font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:.5rem">TCC menu upload</div>
+    <h2 style="margin:0 0 1rem;color:#f5f6f8;font-size:1.3rem">${escHtml(sub.slug)} just submitted a menu</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:.95rem">
+      <tr><td style="color:#8b909a;padding:.3rem 0;width:120px">From</td><td style="padding:.3rem 0;color:#f5f6f8"><strong>${escHtml(sub.contact || sub.email)}</strong></td></tr>
+      <tr><td style="color:#8b909a;padding:.3rem 0">Email</td><td style="padding:.3rem 0"><a href="mailto:${escHtml(sub.email)}" style="color:#22c55e">${escHtml(sub.email)}</a></td></tr>
+      ${sub.phone ? `<tr><td style="color:#8b909a;padding:.3rem 0">Phone</td><td style="padding:.3rem 0;color:#f5f6f8">${escHtml(sub.phone)}</td></tr>` : ''}
+      ${sub.filename ? `<tr><td style="color:#8b909a;padding:.3rem 0">File</td><td style="padding:.3rem 0;color:#f5f6f8">${escHtml(sub.filename)}</td></tr>` : ''}
+      <tr><td style="color:#8b909a;padding:.3rem 0">Lines</td><td style="padding:.3rem 0;color:#f5f6f8">${lineCount}</td></tr>
+    </table>
+    ${sub.notes ? `<div style="margin-top:1.2rem;padding:1rem;background:rgba(255,255,255,.04);border-left:3px solid #22c55e;border-radius:0 8px 8px 0"><div style="color:#8b909a;font-size:.7rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem">Notes</div><div style="color:#f5f6f8;white-space:pre-wrap;line-height:1.5">${escHtml(sub.notes)}</div></div>` : ''}
+    <div style="margin-top:1rem;padding:1rem;background:rgba(0,0,0,.3);border-radius:8px;font-family:monospace;font-size:.78rem;color:#b8bcc4;white-space:pre-wrap;overflow-x:auto">${escHtml(preview)}${lineCount > 8 ? '\n... ' + (lineCount - 8) + ' more lines' : ''}</div>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.08);font-size:.85rem;color:#8b909a">
+      Run <code style="color:#22c55e">python3 scraper/import_uploaded_menu.py</code> to review and import.
+    </div>
+  </div>`;
+  const text = `New menu upload for ${sub.slug}\n\nFrom: ${sub.contact || sub.email} <${sub.email}>\n${sub.phone ? 'Phone: ' + sub.phone + '\n' : ''}${sub.filename ? 'File: ' + sub.filename + '\n' : ''}Lines: ${lineCount}\n${sub.notes ? '\nNotes:\n' + sub.notes + '\n' : ''}\nPreview:\n${preview}\n\nRun: python3 scraper/import_uploaded_menu.py to import.`;
+  const r = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: 'TCC Menus <notifications@send.twincitycannabis.com>',
+      to: ['hello@twincitycannabis.com'],
+      reply_to: sub.email,
+      subject, html, text,
+    }),
+  });
+  if (!r.ok) {
+    const err = await r.text();
+    throw new Error(`Resend ${r.status}: ${err}`);
   }
 }
 

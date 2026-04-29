@@ -1176,7 +1176,7 @@
                     <div class="empty-menu-actions">
                         <a href="${getDispensaryWebsite(d)}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">${platformLabel} &rarr;</a>
                         <a href="tel:${(d.phone||'').replace(/[^0-9+]/g,'')}" class="btn btn-secondary btn-sm">${Icons.phone} Call</a>
-                        ${platform ? `<a href="#for-dispensaries-claim" class="btn btn-secondary btn-sm">${Icons.verified || ''} Claim &amp; share menu</a>` : ''}
+                        ${platform ? `<a href="#menu-upload?slug=${encodeURIComponent(d.id)}" class="btn btn-secondary btn-sm">${Icons.verified || ''} Share your menu with TCC</a>` : ''}
                     </div>
                 </div>`;
             // Skip the rest of product rendering
@@ -2771,10 +2771,78 @@
         bindBrowseControls();
         bindEvents();
         bindSubscribeButtons();
+        bindMenuUploadForm();
         route();
         // Async post-init: load tier overrides + start the live counter
         loadTierOverrides();
         startActiveCounter();
+    }
+
+    // Wires the public menu-upload form on #menu-upload. Populates the shop
+    // dropdown from TCC.dispensaries, prefills from ?slug= in the hash if
+    // a visitor arrived via an empty-menu CTA, and POSTs FormData to the
+    // worker's /menu-upload endpoint. The worker stores the submission in
+    // KV and emails Josh; he runs scraper/import_uploaded_menu.py to merge
+    // approved menus into TCC.products.
+    function bindMenuUploadForm() {
+        const form = document.getElementById('menu-upload-form');
+        if (!form) return;
+        const slugSel = document.getElementById('menu-upload-slug');
+        const status  = document.getElementById('menu-upload-status');
+
+        // Populate dropdown — alphabetized by display name
+        if (slugSel && TCC.dispensaries) {
+            const sorted = [...TCC.dispensaries].sort((a, b) =>
+                (a.name || '').localeCompare(b.name || ''));
+            for (const d of sorted) {
+                const opt = document.createElement('option');
+                opt.value = d.id;
+                opt.textContent = `${d.name}${d.city ? ' — ' + d.city : ''}`;
+                slugSel.appendChild(opt);
+            }
+        }
+
+        // Prefill slug from hash query (e.g. #menu-upload?slug=fort-road-cannabis)
+        function prefillFromHash() {
+            const hash = window.location.hash || '';
+            const m = hash.match(/[?&]slug=([a-z0-9-]+)/i);
+            if (m && slugSel) slugSel.value = m[1];
+        }
+        prefillFromHash();
+        window.addEventListener('hashchange', prefillFromHash);
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            status.className = 'menu-upload-status';
+            status.textContent = '';
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const fd = new FormData(form);
+            // Sanity: require either a file OR pasted text
+            const file = fd.get('menu_file');
+            const text = (fd.get('menu_text') || '').toString().trim();
+            if ((!file || !file.size) && !text) {
+                status.className = 'menu-upload-status is-error';
+                status.textContent = 'Attach a file or paste your menu data first.';
+                return;
+            }
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
+            try {
+                const res = await fetch(`${TCC_WORKER_URL}/menu-upload`, { method: 'POST', body: fd });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || !data.ok) {
+                    throw new Error(data.error || `HTTP ${res.status}`);
+                }
+                status.className = 'menu-upload-status is-success';
+                status.textContent = 'Got it. We’ll review your menu and reach out within 24 hours to confirm before it goes live.';
+                form.reset();
+                trackEvent('menu_upload_submit', { slug: fd.get('slug') });
+            } catch (err) {
+                status.className = 'menu-upload-status is-error';
+                status.textContent = `Couldn't send right now (${err.message}). Email hello@twincitycannabis.com and we'll take it from there.`;
+            } finally {
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send menu →'; }
+            }
+        });
     }
 
     // Wires the Featured/Premium "Start Free Trial" / "Contact Us" buttons on
