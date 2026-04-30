@@ -725,71 +725,82 @@
         container.innerHTML = deals.map(d => dealCard(d)).join('');
     }
 
-    // ─── Staff Picks ──────────────────────────────────────────────────────
-    // Weekly product spotlights. Edit these to feature different products.
-    // Searches by name substring (case-insensitive), scoped to category.
-    const STAFF_PICKS = [
-        {
-            query: 'Watermelon Freeze',
-            category: 'flower',
-            label: 'Flower',
-            blurb: 'Watermelon Freeze is a sweet, fruity hybrid with a cooling finish — notes of ripe melon and bright citrus. Balanced and social, perfect for warm afternoons.',
-        },
-        {
-            query: 'Minny Grown',
-            category: 'edible',
-            label: 'Edible',
-            blurb: 'Minny Grown is a small local brand making 5mg nano gummies in flavors inspired by Minnesota — So Superior Clementine, St. Croix Tropical, Lake Superior Blue. Fast-acting, dialed-in microdose.',
-        },
-    ];
+    // ─── Today's Picks ────────────────────────────────────────────────────
+    // Auto-rotated daily. No editorial favoritism: products are scored by the
+    // dollar spread between the cheapest and most expensive dispensary, so
+    // every pick highlights real comparison value. One flower + one edible.
+    function pickTodaysProducts() {
+        const today = new Date();
+        const dayKey = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+        let dailySeed = 0;
+        for (let i = 0; i < dayKey.length; i++) {
+            dailySeed = ((dailySeed << 5) - dailySeed + dayKey.charCodeAt(i)) | 0;
+        }
+        dailySeed = Math.abs(dailySeed);
+
+        const pool = (category) => TCC.products
+            .map(p => {
+                if (p.category !== category) return null;
+                if (!p.image || p.image.length < 10) return null;
+                const validPrices = Object.entries(p.prices || {})
+                    .filter(([d, v]) => v > 0 && v <= 500 && TCC.dispensaries.find(x => x.id === d));
+                if (validPrices.length < 2) return null;
+                const prices = validPrices.map(([, v]) => v);
+                const lo = Math.min(...prices);
+                const hi = Math.max(...prices);
+                const spread = hi - lo;
+                if (spread < 5) return null;
+                return { product: p, lo, hi, spread, dispCount: validPrices.length };
+            })
+            .filter(Boolean)
+            .sort((a, b) => b.spread - a.spread)
+            .slice(0, 30);
+
+        const flowerPool = pool('flower');
+        const ediblePool = pool('edible');
+        const picks = [];
+        if (flowerPool.length) picks.push({ ...flowerPool[dailySeed % flowerPool.length], label: 'Flower' });
+        if (ediblePool.length) picks.push({ ...ediblePool[(dailySeed + 1) % ediblePool.length], label: 'Edible' });
+        return picks;
+    }
 
     function renderStaffPick() {
         const section = document.getElementById('staff-pick-section');
         const container = document.getElementById('staff-pick-card');
         if (!section || !container) return;
 
-        const cards = STAFF_PICKS.map(pick => {
-            const q = pick.query.toLowerCase();
-            const matches = TCC.products.filter(p =>
-                p.name.toLowerCase().includes(q) &&
-                (!pick.category || p.category === pick.category)
-            );
-            if (!matches.length) return '';
-
-            const locations = [];
-            matches.forEach(p => {
-                Object.entries(p.prices || {}).forEach(([dispId, price]) => {
-                    if (price > 500) return;
+        const picks = pickTodaysProducts();
+        const cards = picks.map(({ product, lo, hi, spread, dispCount, label }) => {
+            const locations = Object.entries(product.prices || {})
+                .filter(([d, v]) => v > 0 && v <= 500)
+                .map(([dispId, price]) => {
                     const disp = TCC.dispensaries.find(x => x.id === dispId);
-                    if (!disp) return;
-                    locations.push({ disp, price, product: p });
-                });
-            });
+                    return disp ? { disp, price } : null;
+                })
+                .filter(Boolean)
+                .sort((a, b) => a.price - b.price);
             if (!locations.length) return '';
 
-            locations.sort((a, b) => a.price - b.price);
-            const img = matches.find(m => m.image && m.image.length > 10) || {};
-            const priceRange = locations.length > 1
-                ? `$${locations[0].price} – $${locations[locations.length - 1].price}`
-                : `$${locations[0].price}`;
+            const priceRange = lo === hi ? `$${lo}` : `$${lo} – $${hi}`;
+            const savingsLabel = `Save up to $${spread.toFixed(2).replace(/\.00$/, '')}`;
 
             return `
-                <div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:1.2rem;padding:1.3rem;border-color:rgba(234,179,8,0.25);background:linear-gradient(135deg,rgba(234,179,8,0.04),transparent 60%)">
-                    ${img.image ? `<div style="width:120px;height:120px;border-radius:12px;overflow:hidden;background:var(--bg-secondary);flex-shrink:0;display:flex;align-items:center;justify-content:center">
-                        <img src="${esc(img.image)}" alt="${esc(pick.query)}" style="width:100%;height:100%;object-fit:cover">
-                    </div>` : `<div style="width:120px;height:120px;border-radius:12px;background:rgba(234,179,8,0.08);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:2.5rem">${pick.category === 'flower' ? '🌿' : '🍬'}</div>`}
+                <div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:1.2rem;padding:1.3rem;border-color:rgba(234,179,8,0.25);background:linear-gradient(135deg,rgba(234,179,8,0.04),transparent 60%);cursor:pointer" onclick="window.location.hash='compare/${esc(product.id)}'">
+                    <div style="width:120px;height:120px;border-radius:12px;overflow:hidden;background:var(--bg-secondary);flex-shrink:0;display:flex;align-items:center;justify-content:center">
+                        <img src="${esc(product.image)}" alt="${esc(product.name)}" style="width:100%;height:100%;object-fit:cover">
+                    </div>
                     <div style="min-width:0">
                         <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.3rem;flex-wrap:wrap">
-                            <span style="font-size:0.6rem;font-weight:700;color:#eab308;background:rgba(234,179,8,0.12);padding:0.15rem 0.55rem;border-radius:var(--radius-full);letter-spacing:1.2px">&#11088; STAFF PICK</span>
-                            <span class="tag tag-sm" style="background:rgba(34,197,94,0.1);color:var(--green)">${esc(pick.label)}</span>
+                            <span style="font-size:0.6rem;font-weight:700;color:#eab308;background:rgba(234,179,8,0.12);padding:0.15rem 0.55rem;border-radius:var(--radius-full);letter-spacing:1.2px">&#11088; TODAY'S PICK</span>
+                            <span class="tag tag-sm" style="background:rgba(34,197,94,0.1);color:var(--green)">${esc(label)}</span>
                         </div>
-                        <div class="font-display font-bold" style="font-size:1.1rem;margin-bottom:0.3rem">${esc(pick.query)}</div>
-                        <p class="text-sm text-secondary" style="margin-bottom:0.7rem;line-height:1.5">${esc(pick.blurb)}</p>
+                        <div class="font-display font-bold" style="font-size:1.1rem;margin-bottom:0.3rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(product.name)}</div>
+                        <p class="text-sm text-secondary" style="margin-bottom:0.7rem;line-height:1.5">${savingsLabel} by comparing prices across ${dispCount} dispensaries.</p>
                         <div style="font-size:1.15rem;font-weight:800;color:var(--green);margin-bottom:0.6rem">${priceRange}</div>
                         <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.4rem">At ${locations.length} dispensar${locations.length === 1 ? 'y' : 'ies'}:</div>
                         <div style="display:flex;flex-wrap:wrap;gap:0.35rem">
                             ${locations.slice(0, 5).map(l => `
-                                <a href="#dispensary/${esc(l.disp.id)}" class="tag tag-sm" style="text-decoration:none;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);cursor:pointer">
+                                <a href="#dispensary/${esc(l.disp.id)}" class="tag tag-sm" style="text-decoration:none;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);cursor:pointer" onclick="event.stopPropagation()">
                                     ${esc(l.disp.name)} <span style="color:var(--green);font-weight:700;margin-left:0.25rem">$${l.price}</span>
                                 </a>
                             `).join('')}
