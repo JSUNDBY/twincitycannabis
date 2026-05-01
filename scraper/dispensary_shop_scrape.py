@@ -31,6 +31,7 @@ OUT_FILE = DATA_DIR / "dispensary_shop_products.json"
 # Add new shops here when they come online.
 KNOWN_SHOPS = [
     ("fort-road-cannabis", "fortroadcannabis.dispensary.shop"),
+    ("twin-cities-cannabis-richfield", "twincitiescannabis.dispensary.shop"),
 ]
 
 # dispensary.shop categories that are never cannabis products and should
