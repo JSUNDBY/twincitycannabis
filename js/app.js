@@ -1678,6 +1678,15 @@
             list = list.filter(p => p.mg && p.mg >= lo && p.mg <= hi);
         }
 
+        // Parse THC% from string like "22.0%"; ignore mg-form THC (edibles/tinctures).
+        const thcPct = (p) => {
+            if (!p.thc) return null;
+            const s = String(p.thc).trim();
+            if (!s.endsWith('%')) return null;
+            const n = parseFloat(s);
+            return isFinite(n) ? n : null;
+        };
+
         // Sort
         switch (Browse.sort) {
             case 'price-asc':
@@ -1691,6 +1700,24 @@
                 break;
             case 'price-per-gram':
                 list.sort((a, b) => (a.pricePerGram || 9e9) - (b.pricePerGram || 9e9));
+                break;
+            case 'thc-desc':
+                list.sort((a, b) => {
+                    const ta = thcPct(a), tb = thcPct(b);
+                    if (ta == null && tb == null) return 0;
+                    if (ta == null) return 1;
+                    if (tb == null) return -1;
+                    return tb - ta;
+                });
+                break;
+            case 'thc-asc':
+                list.sort((a, b) => {
+                    const ta = thcPct(a), tb = thcPct(b);
+                    if (ta == null && tb == null) return 0;
+                    if (ta == null) return 1;
+                    if (tb == null) return -1;
+                    return ta - tb;
+                });
                 break;
             case 'mg-desc':
                 list.sort((a, b) => (b.mg || 0) - (a.mg || 0));
