@@ -2111,6 +2111,54 @@ const buildStrainCityPage = (strain, city) => {
   const description = `Find ${strain} at licensed ${city} cannabis dispensaries. Real prices, side-by-side, updated daily. ${matches.length} listings across ${dispensariesHere.length} shops.`;
   const canonical = `${SITE}/${strainSlug}-${citySlug2}/`;
 
+  const lowPrice = matches[0].price;
+  const highPrice = matches[matches.length - 1].price;
+  const offerCount = matches.length;
+  // Pick the dominant category across matches (flower/pre-roll/cartridge) so
+  // the schema can label the canonical form. Default to "Cannabis" if mixed.
+  const catTally = {};
+  matches.forEach(m => { const c = m.p.category; catTally[c] = (catTally[c] || 0) + 1; });
+  const dominantCat = Object.entries(catTally).sort((a, b) => b[1] - a[1])[0][0];
+  const schemaCategory = `Cannabis ${dominantCat[0].toUpperCase()}${dominantCat.slice(1)}`;
+
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: `${strain} in ${city}`,
+    description: `${strain} cannabis available at ${dispensariesHere.length} licensed ${city} dispensaries. ${offerCount} listings, prices from $${lowPrice.toFixed(2)} to $${highPrice.toFixed(2)}.`,
+    category: schemaCategory,
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'USD',
+      lowPrice: lowPrice.toFixed(2),
+      highPrice: highPrice.toFixed(2),
+      offerCount,
+      offers: matches.slice(0, 15).map(o => {
+        const store = TCC.dispensaries.find(d => d.id === o.dispensaryId);
+        return {
+          '@type': 'Offer',
+          price: o.price.toFixed(2),
+          priceCurrency: 'USD',
+          itemOffered: { '@type': 'Product', name: o.p.name },
+          availability: 'https://schema.org/InStock',
+          seller: store ? {
+            '@type': 'CannabisStore',
+            name: store.name,
+            url: `${SITE}/dispensaries/${store.id}/`
+          } : undefined
+        };
+      })
+    }
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE },
+      { '@type': 'ListItem', position: 2, name: city, item: `${SITE}/${citySlug(city)}/` },
+      { '@type': 'ListItem', position: 3, name: strain, item: canonical }
+    ]
+  }];
+
   const rows = matches.slice(0, 15).map((o, i) => {
     const store = TCC.dispensaries.find(d => d.id === o.dispensaryId);
     return `<tr>
@@ -2121,7 +2169,7 @@ const buildStrainCityPage = (strain, city) => {
 </tr>`;
   }).join('\n');
 
-  return headOpen({ title, description, canonical }) + `
+  return headOpen({ title, description, canonical, schema }) + `
 <div class="crumbs"><a href="/">Home</a> / <a href="/${citySlug(city)}/">${esc(city)}</a> / ${esc(strain)}</div>
 <h1>${esc(strain)} in ${esc(city)}</h1>
 <p>Every listing of ${esc(strain)} at licensed cannabis dispensaries in ${esc(city)}. Includes flower, pre-rolls, and cartridges where available. Real prices, refreshed multiple times a day — last updated ${today}.</p>
