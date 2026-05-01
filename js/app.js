@@ -1210,8 +1210,7 @@
                 btn.addEventListener('click', () => {
                     catContainer.querySelectorAll('.filter-toggle').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    App._detailSort = 'price';
-                    renderDetailProducts(btn.dataset.cat, 'price');
+                    renderDetailProducts(btn.dataset.cat, App._detailSort || 'price');
                 });
             });
         } else {
@@ -1240,7 +1239,8 @@
                 sortContainer.innerHTML = `
                     <span class="text-xs text-muted" style="align-self:center;margin-right:0.4rem">Sort:</span>
                     <button class="filter-toggle ${sortMode === 'price' ? 'active' : ''}" data-sort="price">Best price</button>
-                    <button class="filter-toggle ${sortMode === 'thc' ? 'active' : ''}" data-sort="thc">Highest THC %</button>`;
+                    <button class="filter-toggle ${sortMode === 'thc-desc' ? 'active' : ''}" data-sort="thc-desc">Highest THC %</button>
+                    <button class="filter-toggle ${sortMode === 'thc-asc' ? 'active' : ''}" data-sort="thc-asc">Lowest THC %</button>`;
                 sortContainer.querySelectorAll('.filter-toggle').forEach(btn => {
                     btn.addEventListener('click', () => {
                         App._detailSort = btn.dataset.sort;
@@ -1254,13 +1254,13 @@
 
             // Apply sort
             const sorted = [...filtered];
-            if (sortMode === 'thc') {
+            if (sortMode === 'thc-desc' || sortMode === 'thc-asc') {
                 sorted.sort((a, b) => {
                     const ta = thcPctOf(a), tb = thcPctOf(b);
                     if (ta == null && tb == null) return 0;
                     if (ta == null) return 1;
                     if (tb == null) return -1;
-                    return tb - ta;
+                    return sortMode === 'thc-asc' ? (ta - tb) : (tb - ta);
                 });
             } else {
                 sorted.sort((a, b) => (a.prices[id] || 9e9) - (b.prices[id] || 9e9));
@@ -1275,7 +1275,7 @@
                 const isLowest = lowest && lowest.dispensaryId === id;
                 const hasImg = p.image && p.image.length > 10;
                 const tPct = thcPctOf(p);
-                const thcBadgeStyle = sortMode === 'thc' && tPct != null
+                const thcBadgeStyle = (sortMode === 'thc-desc' || sortMode === 'thc-asc') && tPct != null
                     ? 'background:rgba(251,191,36,0.18);color:#fbbf24;font-weight:700'
                     : '';
                 return `<div class="card product-card" onclick="window.location.hash='compare/${p.id}'">
