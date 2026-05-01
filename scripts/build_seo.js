@@ -222,6 +222,13 @@ ${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</scri
   .cta{display:inline-block;background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;padding:.85rem 1.6rem;border-radius:10px;text-decoration:none;font-weight:600;margin:1rem 0}
   footer{border-top:1px solid rgba(255,255,255,0.06);padding:2rem 1.25rem;text-align:center;color:#8b909a;font-size:.85rem;margin-top:3rem}
   footer a{color:#22c55e}
+  .faq{margin:1rem 0 2rem}
+  .faq-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:.85rem 1.1rem;margin:.5rem 0}
+  .faq-item summary{cursor:pointer;font-weight:600;color:#f5f6f8;list-style:none;padding-right:1.5rem;position:relative}
+  .faq-item summary::-webkit-details-marker{display:none}
+  .faq-item summary::after{content:"+";position:absolute;right:0;top:0;color:#22c55e;font-size:1.2rem;line-height:1;font-weight:700}
+  .faq-item[open] summary::after{content:"−"}
+  .faq-item p{margin:.75rem 0 0;color:#b8bcc4}
 </style>
 </head>
 <body>
@@ -671,6 +678,76 @@ const buildCityPage = (cityName, slug) => {
 ` + footer;
 };
 
+// ---------- FAQ datasets ----------
+// Each Q&A renders as visible <details> + FAQPage JSON-LD. Questions are
+// phrased the way real Twin Cities cannabis shoppers Google them; answers
+// are factual, non-promotional, 2-4 sentences. Keep ≥8 per page so Google
+// has enough material to rotate across "People Also Ask" placements.
+const FAQ_BEST = [
+  { q: 'What is the best cannabis dispensary in Minneapolis?', a: 'It depends on what matters to you — price, brand selection, atmosphere, or location. Twin City Cannabis ranks every metro dispensary by real Google ratings and pulls live menus, so you can compare both vibe and value side by side.' },
+  { q: 'How does Twin City Cannabis rank dispensaries?', a: 'The ranking on this page is straight Google Maps ratings and review counts — no editorial picks, no paid placement. Free listings are ranked exactly the same as Featured listings.' },
+  { q: 'What is the difference between a Featured and a free dispensary listing?', a: 'Featured listings get a banner ad placement and priority in our directory; ranking on this page is unaffected. Featured shops do not get a TCC Score boost or better visibility in price comparisons.' },
+  { q: 'Are all licensed Minnesota dispensaries on Twin City Cannabis?', a: 'Yes — every dispensary licensed by the Minnesota Office of Cannabis Management is in our directory, and new shops are added within days of opening.' },
+  { q: 'How can I tell if a Minnesota dispensary is legitimate?', a: 'Check that they hold a current OCM (Office of Cannabis Management) license — every shop in our directory is verified against the official OCM list. Avoid grey-market vendors selling cannabis without a license.' },
+  { q: 'What is the TCC Score?', a: 'A 0-100 composite that combines pricing, selection breadth, customer service from Google reviews, and lab-testing transparency. It is our attempt to summarize whether a shop is worth your time in one number.' },
+  { q: 'Do Twin Cities dispensaries take credit cards?', a: 'Most are cash-only or use cashless ATM systems where you swipe a debit card, the system rounds up to the nearest five dollars in cash, and you hand the change back to the cashier. A few accept debit directly. Always check ahead.' },
+  { q: 'Can I order ahead at Minneapolis cannabis dispensaries?', a: 'Many shops let you place an order online via Dutchie, Jane, or their own platform and pick up in store. Each dispensary detail page on TCC links straight to its online ordering system when one exists.' },
+  { q: 'What ID do I need to buy cannabis at a Twin Cities dispensary?', a: 'A government-issued photo ID showing you are 21 or older. Out-of-state IDs are accepted; tribal IDs and active-duty military IDs work too. Expired IDs are not accepted.' },
+  { q: 'When do dispensaries close in the Twin Cities?', a: 'Most metro dispensaries are open 9-10 AM to 8-10 PM, but hours vary by shop. Check the specific dispensary detail page for current hours before you drive.' },
+  { q: 'What if a dispensary listing on Twin City Cannabis is wrong?', a: 'Owners can claim their listing to correct it. Shoppers who notice prices or details that look off can email hello@twincitycannabis.com — we fix it within a day.' },
+  { q: 'Can I trust the prices listed on Twin City Cannabis?', a: 'Yes — prices are scraped four times a day directly from each dispensary’s live menu. The timestamp at the top of every comparison page shows the last update. Always confirm before you drive, since stock can move quickly.' },
+];
+
+const FAQ_CHEAPEST = [
+  { q: 'How much do cannabis prices vary between Twin Cities dispensaries?', a: 'For the same product, we routinely see spreads of $5 to $30 on flower, $5 to $15 on edibles, and $10 to $25 on cartridges. The biggest gaps are between metro dispensaries with competition and shops that have a near-monopoly in smaller towns.' },
+  { q: 'Why are cannabis prices in Minnesota so different store to store?', a: 'Recreational sales are still new in Minnesota — legalized in August 2023 — so the supply chain is fragmented. Some shops focus on volume and undercut, others position around premium brands, atmosphere, or location. The market has not stabilized yet.' },
+  { q: 'What is the cheapest cannabis flower in the Twin Cities right now?', a: 'It changes daily. Our cheapest-flower category page tracks the lowest-priced eighths (3.5g) and quarters (7g) across every licensed metro dispensary. Bulk deals on quarters and ounces often beat eighth pricing on a per-gram basis.' },
+  { q: 'Are there cannabis deals or coupons in Minneapolis?', a: 'Yes — many dispensaries run weekly specials, first-time-customer discounts, and brand promos. Our deals page aggregates current promotions across the metro and is refreshed daily.' },
+  { q: 'Is the Minnesota cannabis tax included in the listed price?', a: 'No. Prices on TCC and at most dispensaries are pre-tax. Expect roughly 17 to 18 percent added at checkout — that is the 10 percent state cannabis tax plus regular metro sales tax of 7 to 8 percent.' },
+  { q: 'Do Minnesota dispensaries price-match competitors?', a: 'A few will informally match an identical product if you show them a competitor’s listing on your phone — call ahead and ask. There is no industry-wide policy yet.' },
+  { q: 'What is the difference between price per gram and total price on flower?', a: 'Total price is what you pay; price per gram normalizes across sizes so you can compare an eighth ($30 / 3.5g = $8.57/g) to a quarter ($55 / 7g = $7.86/g). Price per gram is the honest way to compare bulk against single-eighth pricing.' },
+  { q: 'Why does the same strain cost different prices at different dispensaries?', a: 'Even with matching strain names, the cultivator, batch, freshness, and packaging size can differ. Two shops listing "Blue Dream" might be carrying entirely different batches at different test results — the price gap reflects those variables.' },
+  { q: 'Is there cannabis delivery in the Twin Cities?', a: 'Not yet. As of 2026, Minnesota has not licensed retail cannabis delivery. All recreational purchases must be made in person at licensed retail dispensaries.' },
+  { q: 'Are medical-only menus cheaper than recreational menus?', a: 'Sometimes — a few dispensaries offer slightly lower medical pricing on the same products, and registered medical patients are exempt from some taxes. You need a Minnesota Medical Cannabis registration to access medical menus.' },
+  { q: 'How often do prices on Twin City Cannabis update?', a: 'Prices refresh four times a day directly from each dispensary’s live menu. The timestamp on every comparison page shows when it was last updated.' },
+  { q: 'What is the best day of the week to buy cannabis in the Twin Cities?', a: 'Many shops run mid-week specials — "Shatterday" on Saturdays, "Cart Wednesday," and similar. Tuesdays and Wednesdays tend to have the deepest discounts; weekends and holidays rarely have promos.' },
+];
+
+const FAQ_LAWS = [
+  { q: 'When did recreational cannabis become legal in Minnesota?', a: 'Possession was legalized on August 1, 2023. Adult-use retail sales began rolling out at licensed dispensaries through 2024 and 2025 as the state issued retail licenses.' },
+  { q: 'Can I smoke cannabis in public in Minnesota?', a: 'No. Public consumption is illegal — including parks, sidewalks, restaurants, bars, and anywhere tobacco smoking is banned. Use it on private property only, and only with the property owner’s permission.' },
+  { q: 'Can I bring cannabis on a plane from MSP airport?', a: 'No. Even though cannabis is legal in Minnesota, federal law (which governs airports and air travel) still classifies it as illegal. TSA does not search for it but will refer you to local police if they find it.' },
+  { q: 'Can I drive across state lines with Minnesota cannabis?', a: 'No. Crossing into Wisconsin, Iowa, North Dakota, South Dakota, or any other state with cannabis is a federal crime, even if both states have legalized it. The same applies to mailing or shipping it.' },
+  { q: 'Will my old Minnesota cannabis charge be expunged?', a: 'Minnesota is automatically expunging eligible low-level cannabis convictions through the Cannabis Expungement Board — most people do not need to apply. Felony-level charges may require a separate review.' },
+  { q: 'Can my employer fire me for using cannabis off the clock in Minnesota?', a: 'It depends on the role. As of 2024, Minnesota law restricts most employers from drug-testing for cannabis except in safety-sensitive positions. But federal contractors, DOT-regulated jobs, and certain professions can still test.' },
+  { q: 'Do I need a medical card to buy cannabis in Minnesota?', a: 'No. Anyone 21 or older with a valid ID can buy at a licensed recreational dispensary. A medical registration gives access to certain medical-only products and tax exemptions but is not required for adult-use purchases.' },
+  { q: 'Can I use cannabis in my apartment if I rent in Minnesota?', a: 'Only if your lease and landlord allow it. Landlords are within their rights to prohibit cannabis use on their property — check the lease before assuming you can smoke or vape inside.' },
+  { q: 'What happens if I get pulled over after using cannabis in Minnesota?', a: 'Minnesota has no per-se THC blood limit like alcohol’s 0.08 BAC — impairment is judged by the officer using field sobriety tests and observation. A DUI charge for cannabis impairment carries the same penalties as alcohol impairment.' },
+  { q: 'Can I buy cannabis in Minnesota with a non-resident ID?', a: 'Yes. Out-of-state IDs are accepted at all licensed Minnesota dispensaries as long as the visitor is 21 or older. The possession limits are the same for residents and visitors.' },
+  { q: 'Where can I see Minnesota’s official cannabis statute?', a: 'Minnesota Statutes Chapter 342 governs adult-use cannabis. The Minnesota Office of Cannabis Management at mn.gov/ocm publishes plain-language guidance and the official rules.' },
+  { q: 'Can I gift cannabis to a friend in Minnesota?', a: 'Yes — adults 21+ can gift up to 2 ounces of flower or its equivalent to another adult 21+ at no cost. Selling it without a license is still illegal regardless of how the transaction is described.' },
+];
+
+// Render FAQ as visible <details> accordion + FAQPage JSON-LD schema.
+// Returns { html, schema } so the caller can splice both into the page.
+const renderFAQ = (qas) => {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: qas.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a }
+    }))
+  };
+  const html = `
+<h2>Frequently asked questions</h2>
+<div class="faq">
+${qas.map(({ q, a }) => `<details class="faq-item"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('\n')}
+</div>`;
+  return { html, schema };
+};
+
 // ---------- BEST RATED ----------
 const buildBestRatedPage = () => {
   const ranked = TCC.dispensaries
@@ -685,6 +762,8 @@ const buildBestRatedPage = () => {
   const description = `The highest-rated recreational cannabis dispensaries in Minneapolis-Saint Paul, ranked by real Google reviews. Updated daily with verified ratings.`;
   const canonical = `${SITE}/best-dispensaries-twin-cities/`;
 
+  const { html: faqHtml, schema: faqSchema } = renderFAQ(FAQ_BEST);
+
   const rows = ranked.map((d, i) => `<tr>
   <td>${i + 1}</td>
   <td><a href="/dispensaries/${esc(d.id)}/">${esc(d.name)}</a></td>
@@ -693,7 +772,7 @@ const buildBestRatedPage = () => {
   <td style="text-align:right">${d.google.review_count}</td>
 </tr>`).join('\n');
 
-  return headOpen({ title, description, canonical }) + `
+  return headOpen({ title, description, canonical, schema: [faqSchema] }) + `
 <div class="crumbs"><a href="/">Home</a> / Best-rated dispensaries</div>
 <h1>Best-Rated Cannabis Dispensaries in the Twin Cities</h1>
 <p>Ranked by real Google reviews — no editorial picks, no pay-to-play. Pulled directly from Google Maps and refreshed weekly. Last updated ${today}.</p>
@@ -703,6 +782,7 @@ const buildBestRatedPage = () => {
 </table>
 <h2>How we rank</h2>
 <p>Every dispensary on Twin City Cannabis is matched against its Google Maps profile so the rating and review count you see are pulled from the source — not from our own opinion or paid placements. Free listings rank exactly the same as Featured listings.</p>
+${faqHtml}
 <a class="cta" href="/dispensaries/">See full dispensary directory →</a>
 ` + footer;
 };
@@ -712,6 +792,8 @@ const buildCheapestPage = () => {
   const title = 'Cheapest Cannabis in the Twin Cities — Best Deals by Category';
   const description = `The cheapest cannabis products at Minneapolis-Saint Paul dispensaries, by category. Real prices, updated daily. Save money before you shop.`;
   const canonical = `${SITE}/cheapest-cannabis-twin-cities/`;
+
+  const { html: faqHtml, schema: faqSchema } = renderFAQ(FAQ_CHEAPEST);
 
   const sections = TCC.categories.map(cat => {
     const top10 = TCC.products
@@ -739,13 +821,14 @@ const buildCheapestPage = () => {
 <p style="font-size:.9rem"><a href="/products/${esc(cat.id)}/">See all ${esc(cat.name.toLowerCase())} →</a></p>`;
   }).join('\n');
 
-  return headOpen({ title, description, canonical }) + `
+  return headOpen({ title, description, canonical, schema: [faqSchema] }) + `
 <div class="crumbs"><a href="/">Home</a> / Cheapest cannabis</div>
 <h1>Cheapest Cannabis in the Twin Cities</h1>
 <p>The lowest-priced products in every category, pulled from live menus across 33 Minneapolis-Saint Paul dispensaries. Prices update daily. Last refreshed ${today}.</p>
 ${sections}
 <h2>Why prices vary</h2>
 <p>Twin Cities cannabis is brand new — Minnesota only legalized recreational sales in August 2023. With dispensaries still ramping supply chains, the same product can cost $20 more at one store than another a few miles away. Twin City Cannabis is the only site that shows you the spread before you drive.</p>
+${faqHtml}
 <a class="cta" href="/#compare">Open interactive comparison →</a>
 ` + footer;
 };
@@ -1651,6 +1734,8 @@ const buildLawsPage = () => {
   const description = `Plain-English guide to Minnesota recreational cannabis laws: possession limits, where you can use it, driving, public consumption, and home growing. Updated 2026.`;
   const canonical = `${SITE}/minnesota-cannabis-laws/`;
 
+  const { html: faqHtml, schema: faqSchema } = renderFAQ(FAQ_LAWS);
+
   const schema = [{
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -1664,7 +1749,7 @@ const buildLawsPage = () => {
       logo: { '@type': 'ImageObject', url: `${SITE}/img/twin-city-cannabis-logo-512.png` }
     },
     mainEntityOfPage: canonical
-  }];
+  }, faqSchema];
 
   return headOpen({ title, description, canonical, schema }) + `
 <div class="crumbs"><a href="/">Home</a> / Minnesota cannabis laws</div>
@@ -1695,6 +1780,8 @@ const buildLawsPage = () => {
 
 <h2>Expungement</h2>
 <p>Minnesota is automatically expunging eligible low-level cannabis convictions. You don\u2019t need to apply — the state Cannabis Expungement Board is processing records on a rolling basis.</p>
+
+${faqHtml}
 
 <a class="cta" href="/dispensaries/">Browse Twin Cities dispensaries →</a>
 
