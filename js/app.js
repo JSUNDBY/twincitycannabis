@@ -1210,24 +1210,74 @@
                 btn.addEventListener('click', () => {
                     catContainer.querySelectorAll('.filter-toggle').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    renderDetailProducts(btn.dataset.cat);
+                    App._detailSort = 'price';
+                    renderDetailProducts(btn.dataset.cat, 'price');
                 });
             });
         } else {
             catContainer.innerHTML = '';
         }
-        renderDetailProducts('all');
+        App._detailSort = 'price';
+        renderDetailProducts('all', 'price');
 
-        function renderDetailProducts(catFilter) {
+        // Parse THC% from string like "22.0%". Returns null if not a percent.
+        function thcPctOf(p) {
+            if (!p.thc) return null;
+            const s = String(p.thc).trim();
+            if (!s.endsWith('%')) return null;
+            const n = parseFloat(s);
+            return isFinite(n) ? n : null;
+        }
+
+        function renderDetailProducts(catFilter, sortMode) {
             const filtered = catFilter === 'all' ? allProducts : allProducts.filter(p => p.category === catFilter);
-            const countElInner = document.getElementById('detail-product-count');
-            countElInner.textContent = `${filtered.length} product${filtered.length !== 1 ? 's' : ''}`;
 
-            document.getElementById('detail-products').innerHTML = filtered.length ? filtered.map(p => {
+            // Sort toggle: show only when at least 2 products in view have THC%
+            const sortContainer = document.getElementById('detail-product-sort');
+            const thcCount = filtered.filter(p => thcPctOf(p) != null).length;
+            if (thcCount >= 2) {
+                sortContainer.style.display = '';
+                sortContainer.innerHTML = `
+                    <span class="text-xs text-muted" style="align-self:center;margin-right:0.4rem">Sort:</span>
+                    <button class="filter-toggle ${sortMode === 'price' ? 'active' : ''}" data-sort="price">Best price</button>
+                    <button class="filter-toggle ${sortMode === 'thc' ? 'active' : ''}" data-sort="thc">Highest THC %</button>`;
+                sortContainer.querySelectorAll('.filter-toggle').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        App._detailSort = btn.dataset.sort;
+                        renderDetailProducts(catFilter, btn.dataset.sort);
+                    });
+                });
+            } else {
+                sortContainer.style.display = 'none';
+                sortContainer.innerHTML = '';
+            }
+
+            // Apply sort
+            const sorted = [...filtered];
+            if (sortMode === 'thc') {
+                sorted.sort((a, b) => {
+                    const ta = thcPctOf(a), tb = thcPctOf(b);
+                    if (ta == null && tb == null) return 0;
+                    if (ta == null) return 1;
+                    if (tb == null) return -1;
+                    return tb - ta;
+                });
+            } else {
+                sorted.sort((a, b) => (a.prices[id] || 9e9) - (b.prices[id] || 9e9));
+            }
+
+            const countElInner = document.getElementById('detail-product-count');
+            countElInner.textContent = `${sorted.length} product${sorted.length !== 1 ? 's' : ''}`;
+
+            document.getElementById('detail-products').innerHTML = sorted.length ? sorted.map(p => {
                 const price = p.prices[id];
                 const lowest = TCC.getLowestPrice(p);
                 const isLowest = lowest && lowest.dispensaryId === id;
                 const hasImg = p.image && p.image.length > 10;
+                const tPct = thcPctOf(p);
+                const thcBadgeStyle = sortMode === 'thc' && tPct != null
+                    ? 'background:rgba(251,191,36,0.18);color:#fbbf24;font-weight:700'
+                    : '';
                 return `<div class="card product-card" onclick="window.location.hash='compare/${p.id}'">
                     <div class="card-body-sm" style="display:flex;gap:0.8rem;align-items:flex-start">
                         ${hasImg ? `<div class="product-card-img" onclick="event.stopPropagation();openLightbox('${p.image}','${esc(p.name).replace(/'/g,"\\'")}','${esc(p.brand||"").replace(/'/g,"\\'")}','${TCC.formatPrice(TCC.getLowestPrice(p)?.price||0)}','${esc(p.category)}','${esc(p.thc||"")}')"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` : ''}
@@ -1244,7 +1294,7 @@
                             </div>
                             <div class="product-card-meta">
                                 <span class="tag tag-sm">${catIcons[p.category] || ''} ${esc(p.category)}</span>
-                                ${p.thc ? `<span class="tag tag-sm">THC ${esc(p.thc)}</span>` : ''}
+                                ${p.thc ? `<span class="tag tag-sm" style="${thcBadgeStyle}">THC ${esc(p.thc)}</span>` : ''}
                             </div>
                         </div>
                     </div>
