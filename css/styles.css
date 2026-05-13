@@ -1726,7 +1726,7 @@ html[data-theme="light"] body::after {
     background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-md);
-    max-height: 400px;
+    max-height: min(70vh, 640px);
     overflow-y: auto;
     z-index: 100;
     display: none;
@@ -1777,16 +1777,25 @@ html[data-theme="light"] body::after {
     flex-shrink: 0;
 }
 
-.search-dropdown-item-info { flex: 1; }
+.search-dropdown-item-info {
+    flex: 1;
+    min-width: 0;
+}
 
 .search-dropdown-item-name {
     font-size: 0.85rem;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .search-dropdown-item-detail {
     font-size: 0.7rem;
     color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .search-dropdown-item-price {
