@@ -1805,6 +1805,24 @@ html[data-theme="light"] body::after {
     font-size: 0.85rem;
 }
 
+.search-dropdown-footer {
+    display: block;
+    padding: 0.7rem 1rem;
+    background: rgba(34, 197, 94, 0.06);
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--green);
+    text-align: center;
+    text-decoration: none;
+    transition: background var(--transition-fast);
+    letter-spacing: 0.01em;
+}
+
+.search-dropdown-footer:hover {
+    background: rgba(34, 197, 94, 0.12);
+}
+
 /* ============ QUICK CATEGORIES ============ */
 .quick-cats {
     display: flex;

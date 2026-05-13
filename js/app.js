@@ -461,6 +461,16 @@
                     Browse.category = parts[2];
                     Browse.page = 1;
                     renderCompare();
+                } else if (parts[1] === 'search' && parts[2]) {
+                    Browse.query = decodeURIComponent(parts.slice(2).join('/'));
+                    Browse.category = 'all';
+                    Browse.page = 1;
+                    renderCompare();
+                    // Sync the visible Browse search input on next tick
+                    setTimeout(() => {
+                        const input = document.getElementById('browse-search-input');
+                        if (input) input.value = Browse.query;
+                    }, 0);
                 } else if (parts[1]) {
                     renderCompare(parts[1]);
                 } else {
@@ -2384,9 +2394,13 @@
             return;
         }
 
-        const dispensaries = TCC.searchDispensaries(query).slice(0, 3);
-        const products = TCC.searchProducts(query).slice(0, 3);
-        const strains = TCC.strains.filter(s => s.name.toLowerCase().includes(query.toLowerCase())).slice(0, 3);
+        const allDisp = TCC.searchDispensaries(query);
+        const allProducts = TCC.searchProducts(query);
+        const allStrains = TCC.strains.filter(s => s.name.toLowerCase().includes(query.toLowerCase()));
+        const dispensaries = allDisp.slice(0, 3);
+        const products = allProducts.slice(0, 3);
+        const strains = allStrains.slice(0, 3);
+        const totalMatches = allDisp.length + allProducts.length + allStrains.length;
 
         if (!dispensaries.length && !products.length && !strains.length) {
             dropdown.classList.remove('open');
@@ -2438,6 +2452,15 @@
                         </div>
                     </div>`).join('')}
             </div>`;
+        }
+
+        // Footer: link to the full Browse page filtered by this query.
+        // Always shown when there's any match so visitors can drill in.
+        const shownCount = dispensaries.length + products.length + strains.length;
+        if (totalMatches > shownCount || allProducts.length > 0) {
+            html += `<a class="search-dropdown-footer" href="#compare/search/${encodeURIComponent(query)}">
+                See all ${allProducts.length} product match${allProducts.length === 1 ? '' : 'es'} for "${esc(query)}" &rarr;
+            </a>`;
         }
 
         dropdown.innerHTML = html;
