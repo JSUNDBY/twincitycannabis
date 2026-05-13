@@ -2385,7 +2385,7 @@
         }
 
         const dispensaries = TCC.searchDispensaries(query).slice(0, 3);
-        const products = TCC.searchProducts(query).slice(0, 4);
+        const products = TCC.searchProducts(query).slice(0, 3);
         const strains = TCC.strains.filter(s => s.name.toLowerCase().includes(query.toLowerCase())).slice(0, 3);
 
         if (!dispensaries.length && !products.length && !strains.length) {
