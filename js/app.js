@@ -1562,7 +1562,7 @@
                     </div>
                     <div style="text-align:center;margin-top:1rem">
                         <p class="text-sm text-secondary">See full competitor breakdown: product-by-product pricing, market position, and weekly trends.</p>
-                        <a href="mailto:hello@twincitycannabis.com?subject=Premium%20Inquiry%20-%20Competitor%20Intel" class="btn btn-sm btn-primary" style="margin-top:0.5rem">Unlock with Premium ($599/mo)</a>
+                        <a href="#for-dispensaries-claim" class="btn btn-sm btn-primary" style="margin-top:0.5rem">Unlock with Premium ($599/mo)</a>
                     </div>
                 `;
             } else {
