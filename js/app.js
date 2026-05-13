@@ -417,7 +417,7 @@
         // find the page that contains it, navigate there, then scroll to the anchor.
         // (This makes #for-dispensaries-claim work — the form lives inside the
         // for-dispensaries page.)
-        const knownPages = new Set(['home','dispensaries','dispensary','dispensary-detail','deals','strains','strain','strain-detail','compare','learn','for-dispensaries','dashboard','welcome']);
+        const knownPages = new Set(['home','dispensaries','dispensary','dispensary-detail','deals','strains','strain','strain-detail','compare','learn','for-dispensaries','for-cultivators','dashboard','welcome']);
         let anchorId = null;
         if (!knownPages.has(page)) {
             const anchorEl = document.getElementById(hashClean);
@@ -433,7 +433,7 @@
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
 
-        const navMap = { home: 'nav-home', dispensaries: 'nav-dispensaries', deals: 'nav-deals', strains: 'nav-strains', compare: 'nav-compare', learn: 'nav-learn', 'for-dispensaries': 'nav-for-dispensaries' };
+        const navMap = { home: 'nav-home', dispensaries: 'nav-dispensaries', deals: 'nav-deals', strains: 'nav-strains', compare: 'nav-compare', learn: 'nav-learn', 'for-dispensaries': 'nav-for-dispensaries', 'for-cultivators': 'nav-for-cultivators' };
 
         switch (page) {
             case 'dispensary':

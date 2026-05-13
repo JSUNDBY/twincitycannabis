@@ -2439,6 +2439,7 @@ const seoFooter = `
               <li><a href="/dispensaries/" style="color:var(--text-secondary);text-decoration:none">All ${TCC.dispensaries.length} dispensaries</a></li>
               <li><a href="/products/" style="color:var(--text-secondary);text-decoration:none">All product categories</a></li>
               <li><a href="/brands/" style="color:var(--text-secondary);text-decoration:none">All cannabis brands</a></li>
+              <li><a href="/#for-cultivators" style="color:var(--text-secondary);text-decoration:none">For cultivators &amp; brands</a></li>
             </ul>
           </div>
 

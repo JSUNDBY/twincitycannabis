@@ -1823,6 +1823,47 @@ html[data-theme="light"] body::after {
     background: rgba(34, 197, 94, 0.12);
 }
 
+/* ============ FAQ ACCORDION (for-cultivators, for-dispensaries) ============ */
+.faq-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.9rem 1.1rem;
+    margin: 0.5rem 0;
+    transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+.faq-item:hover {
+    border-color: rgba(34, 197, 94, 0.25);
+}
+.faq-item summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-primary);
+    list-style: none;
+    padding-right: 1.5rem;
+    position: relative;
+    font-size: 0.95rem;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+    content: "+";
+    position: absolute;
+    right: 0;
+    top: -2px;
+    color: var(--green);
+    font-size: 1.3rem;
+    line-height: 1;
+    font-weight: 700;
+    transition: transform var(--transition-fast);
+}
+.faq-item[open] summary::after { content: "−"; }
+.faq-item p {
+    margin: 0.75rem 0 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
 /* ============ QUICK CATEGORIES ============ */
 .quick-cats {
     display: flex;
