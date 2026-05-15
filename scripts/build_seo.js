@@ -1736,6 +1736,147 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
 ` + footer;
 };
 
+// ---------- VAPORIZERS BUYER'S GUIDE (affiliate page) ----------
+// Editorial / affiliate content lives off the dispensary ranking layer
+// per the no-favorites rule. Affiliate links carry an `aff` query param
+// that needs to be replaced with real tracking IDs once programs are
+// approved. The disclosure banner satisfies FTC 16 CFR Part 255.
+const VAPORIZERS_AFFILIATE_IDS = {
+  storzBickel: 'tcc-placeholder',
+  pax: 'tcc-placeholder',
+  arizer: 'tcc-placeholder',
+  davinci: 'tcc-placeholder',
+  pov: 'tcc-placeholder',
+};
+
+const buildVaporizersGuide = () => {
+  const title = 'Best Cannabis Vaporizers for Minnesota Buyers (2026)';
+  const description = 'Honest comparison of the top dry-herb vaporizers worth buying in Minnesota right now. Volcano, Mighty+, PAX, Arizer, and DaVinci — what each is actually good at, and how much you save vs. disposables.';
+  const canonical = `${SITE}/best-cannabis-vaporizers-minnesota/`;
+
+  const PICKS = [
+    {
+      name: 'Storz & Bickel Volcano Hybrid',
+      bestFor: 'Best overall (desktop) — for home use and groups',
+      price: '$679',
+      pros: 'Convection heating, balloon AND whip delivery, basically lasts forever. German-built, runs for years.',
+      cons: 'Not portable. Expensive up-front.',
+      url: `https://www.storz-bickel.com/products/volcano-hybrid?aff=${VAPORIZERS_AFFILIATE_IDS.storzBickel}`,
+    },
+    {
+      name: 'Storz & Bickel Mighty+',
+      bestFor: 'Best portable — for daily use, long sessions',
+      price: '$349',
+      pros: 'Hybrid convection/conduction, USB-C charging, hot-swappable ceramic chamber. The portable Volcano.',
+      cons: 'Bigger than truly pocketable units. Charging from dead takes ~2 hours.',
+      url: `https://www.storz-bickel.com/products/mighty-plus?aff=${VAPORIZERS_AFFILIATE_IDS.storzBickel}`,
+    },
+    {
+      name: 'PAX Mini',
+      bestFor: 'Best budget portable — for discretion',
+      price: '$199',
+      pros: 'Tiny, magnetic oven lid, simple to use. Great battery life. Discreet form factor.',
+      cons: 'Conduction-only (less flavor). No precise temp control — four preset modes.',
+      url: `https://www.pax.com/products/pax-mini?aff=${VAPORIZERS_AFFILIATE_IDS.pax}`,
+    },
+    {
+      name: 'Arizer Solo 3',
+      bestFor: 'Best for flavor — for the connoisseur',
+      price: '$269',
+      pros: 'Pure convection, all-glass vapor path, exceptional taste preservation. Hybrid heater hits in under 10 seconds.',
+      cons: 'Glass stem is fragile in pockets. Less stealthy than PAX or Mighty.',
+      url: `https://arizer.com/product/solo-3/?aff=${VAPORIZERS_AFFILIATE_IDS.arizer}`,
+    },
+    {
+      name: 'DaVinci IQC',
+      bestFor: 'Best for precision — for temp-control nerds',
+      price: '$249',
+      pros: 'Smart-path temp curves, replaceable 18650 battery, zirconia mouthpiece. Build is gorgeous.',
+      cons: 'Learning curve on the app. Smaller bowl than the Mighty+.',
+      url: `https://davincivaporizer.com/products/iqc?aff=${VAPORIZERS_AFFILIATE_IDS.davinci}`,
+    },
+  ];
+
+  const faqs = [
+    { q: 'Are vaporizers actually worth it over disposable carts or pre-rolls?', a: 'For regular users, yes — within ~6 months. A Mighty+ at $349 versus burning through $20 carts every 5 days adds up fast. Vapor is also cleaner on the lungs than combustion smoke.' },
+    { q: 'Will any of these vapes hit dabs or concentrate?', a: 'Most dry-herb vaporizers in this guide can handle a small dab via a concentrate pad or insert (sold separately). For dab-first use, look at dedicated e-rigs like the Puffco Peak Pro — not covered here.' },
+    { q: 'Where do I buy these in the Twin Cities?', a: 'Smoke shops in Minneapolis and Saint Paul carry most of these brands at retail. Buying direct from the manufacturer (links above) often beats retail by $30-100 and ships free over $50. Returns are easier direct too.' },
+    { q: 'Does Twin City Cannabis make money if I buy through these links?', a: 'Yes — that\'s how this page stays free. We earn a small commission from the manufacturer at no cost to you. We only recommend products we actually rate, and the picks above are not pay-to-play.' },
+    { q: 'How long do these vapes last?', a: 'Storz & Bickel and Arizer units typically run 5-10 years with normal use. PAX and DaVinci batteries are 2-4 years before degradation. Most have replaceable batteries and serviceable parts.' },
+  ];
+
+  const { html: faqHtml, schema: faqSchema } = renderFAQ(faqs);
+
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: today,
+    dateModified: today,
+    author: { '@type': 'Organization', name: 'Twin City Cannabis' },
+    publisher: {
+      '@type': 'Organization', name: 'Twin City Cannabis',
+      logo: { '@type': 'ImageObject', url: `${SITE}/img/twin-city-cannabis-logo-512.png` }
+    },
+    mainEntityOfPage: canonical
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: PICKS.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: p.name,
+      url: p.url
+    }))
+  }, faqSchema];
+
+  const picksHtml = PICKS.map((p, i) => `
+<div class="pick">
+  <div class="pick-rank">#${i + 1}</div>
+  <h3 class="pick-name">${esc(p.name)}</h3>
+  <div class="pick-bestfor">${esc(p.bestFor)}</div>
+  <div class="pick-price">${esc(p.price)}</div>
+  <p><strong>What we like:</strong> ${esc(p.pros)}</p>
+  <p><strong>What's the catch:</strong> ${esc(p.cons)}</p>
+  <p><a href="${esc(p.url)}" rel="sponsored noopener" target="_blank" class="cta">Check current price &rarr;</a></p>
+</div>`).join('\n');
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / Best cannabis vaporizers</div>
+
+<div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.25);border-radius:10px;padding:.85rem 1.1rem;margin:1rem 0 1.5rem;font-size:.85rem;line-height:1.5;color:#b8bcc4">
+  <strong style="color:#22c55e">Affiliate disclosure:</strong> Twin City Cannabis earns a small commission when you buy through links on this page, at no extra cost to you. We only recommend products we'd buy ourselves; placement is not paid.
+</div>
+
+<h1>Best Cannabis Vaporizers for Minnesota Buyers (2026)</h1>
+<p>Honest take from the people who track every cannabis price in the metro: vaporizers pay for themselves fast if you smoke regularly, and the right one lasts 5+ years. Here are the five we actually recommend right now, with what each is good at and where to skip.</p>
+
+<style>
+  .pick { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 1.5rem; margin: 1.25rem 0; position: relative; }
+  .pick-rank { position: absolute; top: -12px; left: 1.5rem; background: #22c55e; color: #0a1410; font-weight: 800; padding: 0.25rem 0.7rem; border-radius: 999px; font-size: .85rem; }
+  .pick-name { font-size: 1.3rem; margin: .5rem 0 .15rem; color: #f5f6f8; }
+  .pick-bestfor { color: #22c55e; font-size: .9rem; font-weight: 600; margin-bottom: .3rem; }
+  .pick-price { color: #b8bcc4; font-size: .95rem; margin-bottom: .9rem; font-weight: 700; }
+  .pick p { margin: .4rem 0; }
+</style>
+
+<h2>Our picks</h2>
+${picksHtml}
+
+<h2>How we picked</h2>
+<p>We focus on dry-herb vaporizers because that's where Minnesota's recreational market lives — flower is the dominant category at every licensed dispensary. We weighed up-front cost against expected lifespan, vapor quality, ease of use, and how easy it is to get warranty service. We don't include disposables or budget no-name brands; the value isn't there once you account for replacement.</p>
+
+<h2>Vaporizer vs. carts vs. pre-rolls — the math</h2>
+<p>A typical recreational user burning through one half-gram cart per week at $35-50 is spending $140-200 a month. A Mighty+ at $349 pays for itself in 2-3 months versus carts. After that, you're buying flower at a fraction of the per-gram cost. Same flower, no combustion, longer-lasting hardware.</p>
+
+${faqHtml}
+
+<h2>Where to compare flower prices once you've got a vape</h2>
+<p>Pair your new vape with the cheapest flower in the metro. <a href="/cheapest-cannabis-twin-cities/">See current cheapest cannabis prices across every Twin Cities dispensary →</a></p>
+` + footer;
+};
+
 // ---------- LAWS PAGE ----------
 const buildLawsPage = () => {
   const title = 'Minnesota Cannabis Laws — What\u2019s Legal in 2026';
@@ -1882,6 +2023,9 @@ count++;
 writePage('cheapest-cannabis-twin-cities/index.html', buildCheapestPage());
 count++;
 writePage('minnesota-cannabis-laws/index.html', buildLawsPage());
+count++;
+writePage('best-cannabis-vaporizers-minnesota/index.html', buildVaporizersGuide());
+extraSitemap.push({ loc: `${SITE}/best-cannabis-vaporizers-minnesota/`, priority: '0.7', changefreq: 'monthly' });
 count++;
 writePage('events/index.html', buildEventsPage());
 count++;
@@ -2435,6 +2579,7 @@ const seoFooter = `
               <li><a href="/best-dispensaries-twin-cities/" style="color:var(--text-secondary);text-decoration:none">Best-rated dispensaries in the Twin Cities</a></li>
               <li><a href="/cheapest-cannabis-twin-cities/" style="color:var(--text-secondary);text-decoration:none">Cheapest cannabis in the Twin Cities</a></li>
               <li><a href="/minnesota-cannabis-laws/" style="color:var(--text-secondary);text-decoration:none">Minnesota cannabis laws</a></li>
+              <li><a href="/best-cannabis-vaporizers-minnesota/" style="color:var(--text-secondary);text-decoration:none">Best cannabis vaporizers in MN</a></li>
               <li><a href="/events/" style="color:var(--text-secondary);text-decoration:none">Cannabis events in Minnesota</a></li>
               <li><a href="/dispensaries/" style="color:var(--text-secondary);text-decoration:none">All ${TCC.dispensaries.length} dispensaries</a></li>
               <li><a href="/products/" style="color:var(--text-secondary);text-decoration:none">All product categories</a></li>
