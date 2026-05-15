@@ -157,6 +157,22 @@ def merge():
                 entry, count=1
             )
 
+        # Recompute tcc_score from Google rating + review volume so the visible
+        # score reflects a publicly verifiable source. Formula mirrors the
+        # Weedmaps one in scraper.py but sources from Google.
+        #   base = 55 + (rating * 7)   → 5.0 ≈ 90, 4.0 ≈ 83, 3.0 ≈ 76
+        #   volume bonus = min(review_count / 10, 5)
+        #   capped at 96
+        if rating and rating > 0:
+            base = 55 + (rating * 7)
+            volume_bonus = min((review_count or 0) / 10, 5)
+            new_tcc_score = min(int(base + volume_bonus), 96)
+            entry = re.sub(
+                r"tcc_score:\s*\d+",
+                f"tcc_score: {new_tcc_score}",
+                entry, count=1
+            )
+
         # Inject google field — insert before the closing brace of the entry
         if 'google:' not in entry:
             # Find the last field and append google after it

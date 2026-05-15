@@ -12,7 +12,24 @@ from datetime import datetime
 
 DISPENSARY_FILE = Path(__file__).parent / "data" / "dispensaries.json"
 MANUAL_DISPENSARY_FILE = Path(__file__).parent / "data" / "manual_dispensaries.json"
+TIER_OVERRIDES_FILE = Path(__file__).parent / "data" / "tier_overrides.json"
 DATA_JS = Path(__file__).parent.parent / "js" / "data.js"
+
+
+def load_tier_overrides():
+    """Returns dict mapping dispensary id -> tier. Empty dict if file missing."""
+    if not TIER_OVERRIDES_FILE.exists():
+        return {}
+    try:
+        with open(TIER_OVERRIDES_FILE) as f:
+            data = json.load(f)
+        # Strip the _comment key if present
+        return {k: v for k, v in data.items() if not k.startswith("_")}
+    except Exception:
+        return {}
+
+
+TIER_OVERRIDES = load_tier_overrides()
 
 # Twin Cities metro area bounding box (generous)
 METRO_BOUNDS = {
@@ -99,7 +116,7 @@ def build_dispensary_js(dispensaries):
         phone: '{d.get("phone", "")}',
         hours: {{ weekday: '{d.get("hours", {}).get("weekday", "10am-8pm")}', weekend: '{d.get("hours", {}).get("weekend", "10am-6pm")}', note: '{_esc(d.get("hours", {}).get("note", ""))}' }},
         website: '{d.get("website", "")}',
-        tier: '{d.get("tier", "free")}',
+        tier: '{TIER_OVERRIDES.get(d.get("id"), d.get("tier", "free"))}',
         tcc_score: {d.get("tcc_score", 70)},
         scores: {{ pricing: {scores.get("pricing", 70)}, selection: {scores.get("selection", 70)}, service: {scores.get("service", 70)}, lab_testing: {scores.get("lab_testing", 70)} }},
         review_count: {d.get("review_count", 0)},
