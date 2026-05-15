@@ -1155,16 +1155,9 @@
         // Dashboard link
         document.getElementById('detail-dashboard-link').href = `#dashboard/${d.id}`;
 
-        // Score bars
-        const scoreColors = { pricing: 'var(--green)', selection: 'var(--purple)', service: 'var(--amber)', lab_testing: 'var(--blue)' };
-        const scoreLabels = { pricing: 'Pricing', selection: 'Selection', service: 'Service', lab_testing: 'Lab Testing' };
-        document.getElementById('detail-score-bars').innerHTML = Object.entries(d.scores).map(([key, val]) =>
-            `<div class="score-bar-item">
-                <span class="score-bar-label">${scoreLabels[key]}</span>
-                <div class="score-bar-track"><div class="score-bar-fill" style="width:${val}%;background:${scoreColors[key]}"></div></div>
-                <span class="score-bar-value">${val}</span>
-            </div>`
-        ).join('');
+        // Score sub-bars removed — they were rendering hash-jittered noise,
+        // not real measurements. Re-introduce only when we have honest data
+        // sources for pricing / selection / service / testing transparency.
 
         // Products with category filtering
         const allProducts = TCC.getProductsForDispensary(id);
@@ -1488,26 +1481,9 @@
         const rank = sorted.findIndex(x => x.id === d.id) + 1;
         document.getElementById('dash-rank').textContent = '#' + rank;
 
-        // Score bars
-        const scoreColors = { pricing: 'var(--green)', selection: 'var(--purple)', service: 'var(--amber)', lab_testing: 'var(--blue)' };
-        const scoreLabels = { pricing: 'Pricing', selection: 'Selection', service: 'Service', lab_testing: 'Lab Testing' };
-        document.getElementById('dash-score-bars').innerHTML = Object.entries(d.scores).map(([key, val]) =>
-            `<div class="score-bar-item">
-                <span class="score-bar-label">${scoreLabels[key]}</span>
-                <div class="score-bar-track"><div class="score-bar-fill" style="width:${val}%;background:${scoreColors[key]}"></div></div>
-                <span class="score-bar-value">${val}</span>
-            </div>`
-        ).join('');
-
-        // Score improvement tip
-        const lowest = Object.entries(d.scores).sort((a, b) => a[1] - b[1])[0];
-        const tips = {
-            pricing: 'Competitive pricing boosts your score. Consider price-matching popular products or running weekly specials.',
-            selection: 'Expanding your product variety helps. Add more categories like edibles, beverages, or concentrates.',
-            service: 'Customer service matters. Respond to reviews, offer curbside pickup, and train staff on product knowledge.',
-            lab_testing: 'Transparency builds trust. Display lab results prominently and ensure all products have COAs available.',
-        };
-        document.getElementById('dash-score-tip').textContent = tips[lowest[0]] || 'Keep up the great work!';
+        // Score sub-bars + improvement tip removed — they were derived from
+        // hash-jittered scores, not real measurements, and the tip pretended
+        // to be actionable advice based on that fake signal.
 
         // Reviews
         const reviews = TCC.getReviewsForDispensary(d.id);
