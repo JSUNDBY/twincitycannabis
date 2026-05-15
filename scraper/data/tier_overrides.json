@@ -1,6 +1,3 @@
 {
-  "_comment": "Manual tier overrides applied by update_site.py. Maps dispensary id -> tier ('featured' | 'premium' | 'free'). Survives auto-scrapes because update_site.py reads this after merging Weedmaps/Google/manual data, so it's the final authority on tier.",
-  "legacy-cannabis": "featured",
-  "legacy-cannabis-1": "featured",
-  "legacy-cannabis-duluth": "featured"
+  "_comment": "Manual tier overrides applied by update_site.py. Maps dispensary id -> tier ('featured' | 'premium' | 'free'). Survives auto-scrapes because update_site.py reads this after merging Weedmaps/Google/manual data, so it's the final authority on tier. Only paying customers go here."
 }

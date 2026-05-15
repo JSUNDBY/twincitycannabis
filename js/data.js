@@ -1,4 +1,4 @@
-// Last auto-updated: 2026-05-14 21:58
+// Last auto-updated: 2026-05-14 22:50
 // ============================================================
 // Twin City Cannabis — Data Layer
 // Real Twin Cities dispensary data + products + strains
@@ -872,7 +872,7 @@ TCC.dispensaries = [
         phone: '(651) 421-4088',
         hours: { weekday: '10:00am -  9:00pm', weekend: '10:00am -  9:00pm', note: '10:00am -  9:00pm' },
         website: 'https://weedmaps.com/dispensaries/legacy-cannabis',
-        tier: 'featured',
+        tier: 'free',
         tcc_score: 88,
         scores: { pricing: 83, selection: 90, service: 92, lab_testing: 86 },
         review_count: 28,
@@ -964,7 +964,7 @@ TCC.dispensaries = [
         phone: '(218) 720-0747',
         hours: { weekday: '10:00am -  9:00pm', weekend: '10:00am -  9:00pm', note: '10:00am -  9:00pm' },
         website: 'https://weedmaps.com/dispensaries/legacy-cannabis-duluth',
-        tier: 'featured',
+        tier: 'free',
         tcc_score: 87,
         scores: { pricing: 89, selection: 86, service: 89, lab_testing: 85 },
         review_count: 14,
@@ -987,7 +987,7 @@ TCC.dispensaries = [
         phone: '(612) 418-1050',
         hours: { weekday: '10:00am -  9:00pm', weekend: '10:00am -  9:00pm', note: '10:00am -  9:00pm' },
         website: 'https://weedmaps.com/dispensaries/legacy-cannabis-1',
-        tier: 'featured',
+        tier: 'free',
         tcc_score: 86,
         scores: { pricing: 84, selection: 84, service: 91, lab_testing: 86 },
         review_count: 2,
