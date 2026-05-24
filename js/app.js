@@ -1268,7 +1268,8 @@
         }[tier] || '#94a3b8');
 
         // Phase 7b: tier-shaped SVG pins instead of generic circle markers.
-        function pinIcon(tier) {
+        // Phase 8: add a "pulse" class when the dispensary has recent price activity.
+        function pinIcon(tier, isActive) {
             const color = tierColor(tier);
             const size = tier === 'premium' ? 30 : (tier === 'featured' ? 28 : 22);
             const hCenter = size / 2;
@@ -1284,19 +1285,62 @@
             </svg>`;
             return L.divIcon({
                 html,
-                className: 'tcc-map-pin tcc-map-pin--' + tier,
+                className: 'tcc-map-pin tcc-map-pin--' + tier + (isActive ? ' tcc-map-pin--pulse' : ''),
                 iconSize: [size, size * 1.25],
                 iconAnchor: [hCenter, size * 1.25],
                 popupAnchor: [0, -size * 1.05],
             });
         }
 
+        // ── Phase 8a: density bloom — soft green circles under clusters. ──
+        // Pre-compute neighbor counts within ~3mi (5km), then drop one
+        // translucent green circle per dispensary with opacity scaled by
+        // count. Overlapping circles compound naturally into urban blooms.
+        const NEIGHBOR_RADIUS_KM = 5;
+        const NEIGHBOR_RADIUS_M = NEIGHBOR_RADIUS_KM * 1000;
+        const heatLayer = L.layerGroup().addTo(map);
+        const neighborCounts = new Map();
+        dispensaries.forEach(d => {
+            let count = 0;
+            dispensaries.forEach(o => {
+                if (o.id === d.id) return;
+                if (_haversine(d.lat, d.lng, o.lat, o.lng) <= NEIGHBOR_RADIUS_KM) count++;
+            });
+            neighborCounts.set(d.id, count);
+            // Even single shops drop a faint marker so the visual reads as
+            // a continuous gradient, not isolated dots.
+            const opacity = Math.min(0.18, 0.025 + count * 0.022);
+            L.circle([d.lat, d.lng], {
+                radius: NEIGHBOR_RADIUS_M * 0.65,  // ~2 miles
+                fillColor: '#22c55e',
+                color: 'transparent',
+                fillOpacity: opacity,
+                interactive: false,
+                pane: 'overlayPane',
+            }).addTo(heatLayer);
+        });
+
+        // ── Phase 8b: "recently active" detection. A dispensary is flagged
+        // when any of its products' priceHistory shows a change at the most
+        // recent step. Visual: a soft green pulse on the pin. ──────────────
+        const recentlyActive = new Set();
+        TCC.products.forEach(p => {
+            if (!p.priceHistory || p.priceHistory.length < 2) return;
+            const last = p.priceHistory[p.priceHistory.length - 1];
+            const prev = p.priceHistory[p.priceHistory.length - 2];
+            if (last === prev || last === 0) return;
+            Object.entries(p.prices || {}).forEach(([dispId, price]) => {
+                if (price === last) recentlyActive.add(dispId);
+            });
+        });
+
         const markers = new Map();
         const bounds = [];
         let activeId = null;
 
         dispensaries.forEach(d => {
-            const marker = L.marker([d.lat, d.lng], { icon: pinIcon(d.tier) }).addTo(map);
+            const isActive = recentlyActive.has(d.id);
+            const marker = L.marker([d.lat, d.lng], { icon: pinIcon(d.tier, isActive) }).addTo(map);
             marker.bindPopup(`
                 <div style="font-family:Inter,sans-serif;padding:0.25rem;min-width:180px">
                     <strong style="font-size:0.9rem;color:#0a1410">${esc(d.name)}</strong><br>

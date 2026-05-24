@@ -1924,6 +1924,28 @@ ul, ol { list-style: none; }
 /* Phase 7b: custom map pins + you-are-here marker */
 .tcc-map-pin { background: transparent !important; border: 0 !important; }
 .tcc-map-pin svg { display: block; }
+
+/* Phase 8: pulse on pins with recent price activity. Subtle — a halo
+   that breathes once every 3s, not a flashing alert. */
+.tcc-map-pin--pulse { position: relative; }
+.tcc-map-pin--pulse::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 35%;
+    transform: translate(-50%, -50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(34, 197, 94, 0.55);
+    animation: tcc-pin-breathe 3s ease-in-out infinite;
+    pointer-events: none;
+}
+@keyframes tcc-pin-breathe {
+    0%, 100% { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
+    40%      { opacity: 0.9; }
+    100%     { transform: translate(-50%, -50%) scale(1.4); opacity: 0; }
+}
 .tcc-map-you-wrap { background: transparent !important; border: 0 !important; }
 .tcc-map-you {
     width: 18px;
