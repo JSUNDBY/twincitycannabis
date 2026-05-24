@@ -2505,6 +2505,19 @@
             searchInput.addEventListener('focus', (e) => { if (e.target.value.length >= 2) handleSearch(e.target.value); });
         }
 
+        // Nav search icon → scroll home + focus search input
+        const navSearchEl = document.getElementById('nav-search');
+        if (navSearchEl) {
+            navSearchEl.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.hash = 'home';
+                setTimeout(() => {
+                    const input = document.getElementById('hero-search-input');
+                    if (input) { input.focus(); input.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+                }, 50);
+            });
+        }
+
         // Close search on click outside
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.hero-search-bar')) closeSearchDropdown();

@@ -1507,10 +1507,9 @@ html[data-theme="light"] body::after {
 
 /* ============ HERO SEARCH ============ */
 .hero-search {
-    padding: 5rem 0 3.5rem;
+    padding: 7rem 0 5rem;
     text-align: center;
     position: relative;
-    background: radial-gradient(ellipse at 50% 0%, rgba(34, 197, 94, 0.08) 0%, transparent 60%);
     overflow: hidden;
 }
 
@@ -1558,26 +1557,84 @@ html[data-theme="light"] body::after {
 
 .hero-search h1 {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 700;
-    letter-spacing: -1.5px;
-    line-height: 1.1;
-    margin-bottom: 1rem;
-}
-
-.hero-search h1 .highlight {
-    background: linear-gradient(135deg, #22c55e, #16a34a);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: clamp(2.4rem, 7vw, 5.2rem);
+    font-weight: 800;
+    letter-spacing: -2.5px;
+    line-height: 1.02;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
 }
 
 .hero-search-subtitle {
     color: var(--text-secondary);
-    font-size: 1.05rem;
-    max-width: 540px;
-    margin: 0 auto 0.5rem;
+    font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+    max-width: 620px;
+    margin: 0 auto 2rem;
     line-height: 1.5;
+    letter-spacing: -0.005em;
+}
+.hero-search-subtitle #hero-stat-products,
+.hero-search-subtitle #hero-stat-dispensaries {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+/* Hero CTAs — civic / infrastructural button treatment */
+.hero-ctas {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1.75rem;
+}
+.hero-cta {
+    padding: 0.85rem 1.5rem;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-full);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    transition: border-color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
+    background: rgba(255,255,255,0.02);
+}
+.hero-cta:hover {
+    border-color: var(--green);
+    background: rgba(34,197,94,0.06);
+    transform: translateY(-1px);
+}
+.hero-cta--primary {
+    background: var(--green);
+    color: #051a0c;
+    border-color: var(--green);
+}
+.hero-cta--primary:hover {
+    background: var(--green-bright, #4ade80);
+    border-color: var(--green-bright, #4ade80);
+    color: #051a0c;
+}
+
+/* Nav: right-side icon links + divider */
+.nav-divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255,255,255,0.12);
+    margin: 0 0.4rem;
+}
+.nav-icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border-radius: var(--radius-full);
+    color: var(--text-muted);
+}
+.nav-icon-link:hover {
+    color: var(--green);
+    background: rgba(34,197,94,0.08);
 }
 
 .hero-fresh-line {

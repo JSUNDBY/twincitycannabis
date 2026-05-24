@@ -301,14 +301,18 @@
     </a>
 
     <div class="nav-menu">
-        <a class="nav-link" id="nav-compare" href="#compare">Browse</a>
+        <a class="nav-link" id="nav-compare" href="#compare">Products</a>
         <a class="nav-link" id="nav-dispensaries" href="#dispensaries">Dispensaries</a>
         <a class="nav-link" id="nav-deals" href="#deals">Deals</a>
-        <a class="nav-link" href="/tax-calculator/">Tax Calc</a>
-        <a class="nav-link" href="/events/">Events</a>
+        <a class="nav-link" href="/brands/">Brands</a>
         <a class="nav-link" id="nav-learn" href="#learn">Learn</a>
-        <a class="nav-link" id="nav-for-dispensaries" href="#for-dispensaries" style="color:var(--amber-text)">For Dispensaries</a>
-        <a class="nav-link" id="nav-for-cultivators" href="#for-cultivators" style="color:var(--green)">For Brands</a>
+        <span class="nav-divider" aria-hidden="true"></span>
+        <a class="nav-link nav-icon-link" id="nav-search" href="#home" aria-label="Search" title="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </a>
+        <a class="nav-link nav-icon-link" href="#dispensaries" aria-label="Map view" title="Map view">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        </a>
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light or dark theme" title="Toggle theme">
             <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
             <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -334,130 +338,31 @@
 <!-- ================================================================ -->
 <div class="page active" id="page-home">
 
-    <!-- Hero Search -->
+    <!-- Hero — operating system for Minnesota cannabis -->
     <section class="hero-search">
         <div class="hero-grid-bg"></div>
         <div class="container">
-            <p class="hero-eyebrow"><span class="live-indicator"></span>Live menus &middot; Every licensed dispensary &middot; Refreshed throughout the day</p>
-            <h1>
-                Every shop. Every menu.<br>
-                <span class="highlight">Every answer.</span>
-            </h1>
-            <p class="hero-search-subtitle">Minnesota&rsquo;s home for cannabis &mdash; live menus, honest rankings, and answers you can trust. Whether you&rsquo;re brand new or on your weekly run, start here.</p>
+            <p class="hero-eyebrow"><span class="live-indicator"></span>Live · <!-- LAST_UPDATED_HERO --><span class="fresh-ts" data-fresh-ts="2026-05-15T04:03:36.124Z">Updated just now</span><!-- /LAST_UPDATED_HERO --></p>
+            <h1>Compare cannabis prices<br>across Minnesota.</h1>
+            <p class="hero-search-subtitle"><span id="hero-stat-products">3,200+</span> live products. <span id="hero-stat-dispensaries">135</span> licensed dispensaries. Refreshed throughout the day.</p>
 
             <div class="hero-search-bar">
                 <span class="search-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                 </span>
-                <input class="input" id="hero-search-input" type="text" placeholder="Search strains, products, or dispensaries...">
+                <input class="input" id="hero-search-input" type="text" placeholder="Search products, strains, or dispensaries">
                 <div class="search-dropdown" id="search-dropdown"></div>
             </div>
 
-            <div class="hero-search-suggestions">
-                <span class="tag search-suggestion" data-query="Blue Dream">Blue Dream</span>
-                <span class="tag search-suggestion" data-query="edible">Edibles</span>
-                <span class="tag search-suggestion" data-query="cartridge">Vapes</span>
-                <span class="tag search-suggestion" data-query="Minneapolis">Minneapolis shops</span>
-                <span class="tag search-suggestion" data-query="pre-roll">Pre-Rolls</span>
-            </div>
-
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <span class="hero-stat-number" id="hero-stat-dispensaries">80</span>
-                    <span class="hero-stat-label">Licensed Dispensaries</span>
-                </div>
-                <div class="hero-stat-divider"></div>
-                <div class="hero-stat">
-                    <span class="hero-stat-number" id="hero-stat-products">3,200+</span>
-                    <span class="hero-stat-label">Products Tracked</span>
-                </div>
-                <div class="hero-stat-divider"></div>
-                <div class="hero-stat">
-                    <span class="hero-stat-number">56</span>
-                    <span class="hero-stat-label">Cities Covered</span>
-                </div>
-                <div class="hero-stat-divider"></div>
-                <div class="hero-stat">
-                    <span class="hero-stat-number" style="font-size:clamp(1rem,2.5vw,1.3rem)"><!-- LAST_UPDATED_HERO --><span class="fresh-ts" data-fresh-ts="2026-05-15T04:03:36.124Z">Updated just now · May 14, 11:03 PM CDT</span><!-- /LAST_UPDATED_HERO --></span>
-                    <span class="hero-stat-label">Last Refresh</span>
-                </div>
+            <div class="hero-ctas">
+                <a class="hero-cta hero-cta--primary" href="#compare">Compare prices &rarr;</a>
+                <a class="hero-cta" href="#dispensaries">Find a dispensary</a>
+                <a class="hero-cta" href="#deals">Today&rsquo;s deals</a>
             </div>
         </div>
     </section>
 
-    <!-- Doors: pick your path -->
-    <section class="hero-doors-section">
-        <div class="container">
-            <p class="hero-doors-eyebrow">However you got here, there&rsquo;s a door for you.</p>
-            <div class="hero-doors">
-                <a class="hero-door" href="#learn">
-                    <span class="hero-door-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 8c4 0 7 3 7 7 0 3-2 6-7 7-5-1-7-4-7-7 0-4 3-7 7-7z"/><path d="M9 15c1 1 2 1.5 3 1.5s2-.5 3-1.5"/></svg>
-                    </span>
-                    <span class="hero-door-body">
-                        <span class="hero-door-title">New to cannabis?</span>
-                        <span class="hero-door-desc">A friendly primer &mdash; products, effects, and how to start low.</span>
-                    </span>
-                    <span class="hero-door-arrow" aria-hidden="true">&rarr;</span>
-                </a>
-
-                <a class="hero-door" href="#deals">
-                    <span class="hero-door-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.3"/></svg>
-                    </span>
-                    <span class="hero-door-body">
-                        <span class="hero-door-title">Today&rsquo;s deals</span>
-                        <span class="hero-door-desc">The best prices in the state right now &mdash; updated all day.</span>
-                    </span>
-                    <span class="hero-door-arrow" aria-hidden="true">&rarr;</span>
-                </a>
-
-                <a class="hero-door" href="#compare">
-                    <span class="hero-door-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M21 3l-7 7"/><path d="M8 21H3v-5"/><path d="M3 21l7-7"/></svg>
-                    </span>
-                    <span class="hero-door-body">
-                        <span class="hero-door-title">Compare prices</span>
-                        <span class="hero-door-desc">See which shop has the best price on what you&rsquo;re after.</span>
-                    </span>
-                    <span class="hero-door-arrow" aria-hidden="true">&rarr;</span>
-                </a>
-
-                <a class="hero-door" href="#dispensaries">
-                    <span class="hero-door-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    </span>
-                    <span class="hero-door-body">
-                        <span class="hero-door-title">Find a shop near you</span>
-                        <span class="hero-door-desc">Every licensed dispensary in Minnesota, mapped and ranked.</span>
-                    </span>
-                    <span class="hero-door-arrow" aria-hidden="true">&rarr;</span>
-                </a>
-
-                <a class="hero-door" href="/minnesota-cannabis-laws/">
-                    <span class="hero-door-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                    </span>
-                    <span class="hero-door-body">
-                        <span class="hero-door-title">Minnesota cannabis laws</span>
-                        <span class="hero-door-desc">What&rsquo;s legal, where, and how much &mdash; in plain English.</span>
-                    </span>
-                    <span class="hero-door-arrow" aria-hidden="true">&rarr;</span>
-                </a>
-
-                <a class="hero-door hero-door--amber" href="#for-dispensaries">
-                    <span class="hero-door-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><path d="M3 9h18"/><path d="M10 20v-5h4v5"/></svg>
-                    </span>
-                    <span class="hero-door-body">
-                        <span class="hero-door-title">Own a dispensary?</span>
-                        <span class="hero-door-desc">Claim your listing, respond to reviews, and reach more shoppers.</span>
-                    </span>
-                    <span class="hero-door-arrow" aria-hidden="true">&rarr;</span>
-                </a>
-            </div>
-        </div>
-    </section>
+    <!-- Doors section removed in Phase 1 — 3 hero CTAs now carry the same intent without the visual exhaustion. -->
 
     <!-- Quick Categories -->
     <section>
@@ -792,10 +697,14 @@
             <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
             <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-05-15T04:03:36.124Z">Live data · last refresh May 14, 11:03 PM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
             <div class="footer-links">
+                <a href="/tax-calculator/">Tax Calc</a>
+                <a href="/events/">Events</a>
+                <a href="/minnesota-cannabis-laws/">MN Laws</a>
+                <a href="#for-dispensaries">For Dispensaries</a>
+                <a href="#for-cultivators">For Brands</a>
                 <a href="/privacy/">Privacy</a>
                 <a href="/terms/">Terms</a>
                 <a href="/contact/">Contact</a>
-                <a href="#for-dispensaries">For Dispensaries</a>
             </div>
         </div>
     </footer>
