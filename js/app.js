@@ -2498,6 +2498,30 @@
                             <a href="#compare" class="btn btn-ghost text-sm">Back to Browse &rarr;</a>
                         </div>
                     </div>
+                    <!-- Phase 21: cross-device sync options panel — surfaces what works today + flags what's blocked. -->
+                    <div class="sync-options" id="sync-options">
+                        <div class="sync-option">
+                            <div class="sync-option-icon">${'\u{1F517}'}</div>
+                            <div class="sync-option-body">
+                                <div class="sync-option-title">Share URL <span class="sync-option-pill sync-option-pill--ok">Works today</span></div>
+                                <div class="sync-option-sub">Copy a link that imports your saved items on any device — no signup, no server. Tap "Share watchlist" above.</div>
+                            </div>
+                        </div>
+                        <div class="sync-option">
+                            <div class="sync-option-icon">${'\u{1F514}'}</div>
+                            <div class="sync-option-body">
+                                <div class="sync-option-title">Browser alerts <span class="sync-option-pill sync-option-pill--ok">Works today</span></div>
+                                <div class="sync-option-sub">Per-device notifications on return visits when something drops or hits your target. Enable above.</div>
+                            </div>
+                        </div>
+                        <div class="sync-option">
+                            <div class="sync-option-icon">${'\u{1F464}'}</div>
+                            <div class="sync-option-body">
+                                <div class="sync-option-title">Account sync <span class="sync-option-pill sync-option-pill--soon">Coming soon</span></div>
+                                <div class="sync-option-sub">Sign in once, watchlist follows you across browsers and devices. Needs server reactivation; not enabled yet.</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             `;
         }
