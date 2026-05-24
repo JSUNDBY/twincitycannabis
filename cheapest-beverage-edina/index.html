@@ -65,6 +65,17 @@
   .faq-item summary::after{content:"+";position:absolute;right:0;top:0;color:#22c55e;font-size:1.2rem;line-height:1;font-weight:700}
   .faq-item[open] summary::after{content:"−"}
   .faq-item p{margin:.75rem 0 0;color:#b8bcc4}
+  /* Phase 15: civic stat strip — homepage Bloomberg-style numerics, ported to SEO pages */
+  .seo-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);margin:1.5rem 0 2rem}
+  .seo-strip-cell{padding:1.2rem 1rem 1.2rem 0;border-left:1px solid rgba(255,255,255,0.08)}
+  .seo-strip-cell:first-child{border-left:0;padding-left:0}
+  .seo-strip-cell:not(:first-child){padding-left:1.25rem}
+  .seo-strip-value{font-family:Inter,system-ui,sans-serif;font-size:clamp(1.4rem,2.6vw,2rem);font-weight:800;letter-spacing:-1px;line-height:1;color:#f5f6f8;font-variant-numeric:tabular-nums}
+  .seo-strip-label{margin-top:.4rem;font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.6rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#8b909a}
+  .seo-strip-sub{margin-top:.3rem;color:#b8bcc4;font-size:.78rem;line-height:1.35}
+  .seo-section-label{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#22c55e;display:inline-flex;align-items:center;gap:.5rem;margin:1.5rem 0 .4rem}
+  .seo-section-label::before{content:'';width:14px;height:1px;background:#22c55e;opacity:.6}
+  @media (max-width:640px){.seo-strip{grid-template-columns:1fr 1fr}.seo-strip-cell:nth-child(3){border-left:0;padding-left:0}.seo-strip-cell:nth-child(n+3){border-top:1px solid rgba(255,255,255,0.08)}}
 </style>
 </head>
 <body>
@@ -80,122 +91,128 @@
 
 <div class="crumbs"><a href="/">Home</a> / <a href="/edina-cannabis-dispensaries/">Edina</a> / Cheapest beverages</div>
 <h1>Cheapest Beverages in Edina</h1>
-<p>The lowest-priced beverages at 3 licensed cannabis dispensaries in Edina, pulled from live menus. Updated 2026-05-15 — prices shift throughout the day as inventory moves.</p>
+<p>The lowest-priced beverages at 3 licensed cannabis dispensaries in Edina, pulled from live menus. Updated 2026-05-24 — prices shift throughout the day as inventory moves.</p>
 
 <table>
 <thead><tr><th>#</th><th>Product</th><th>Lowest price</th><th>At dispensary</th></tr></thead>
 <tbody><tr>
   <td>1</td>
-  <td>GRD Classic Lemonade Shot 10mg THC</td>
+  <td>BSD Blueberry Lemonade Shooter 10mg THC</td>
   <td class="price">$4.00</td>
   <td><a href="/dispensaries/edina-canna/">Edina Canna</a></td>
 </tr>
 <tr>
   <td>2</td>
-  <td>GRD Half and Half Lemonade Shot 10mg THC</td>
+  <td>GRD Classic Lemonade Shot 10mg THC</td>
   <td class="price">$4.00</td>
   <td><a href="/dispensaries/edina-canna/">Edina Canna</a></td>
 </tr>
 <tr>
   <td>3</td>
+  <td>GRD Half and Half Lemonade Shot 10mg THC</td>
+  <td class="price">$4.00</td>
+  <td><a href="/dispensaries/edina-canna/">Edina Canna</a></td>
+</tr>
+<tr>
+  <td>4</td>
   <td>ST IDES | Iced Tea Lemonade | Non-carbonated | 10mg | 355ml</td>
   <td class="price">$5.00</td>
   <td><a href="/dispensaries/edina-canna/">Edina Canna</a></td>
 </tr>
 <tr>
-  <td>4</td>
+  <td>5</td>
+  <td>BLNCD | Fuse 5mg THC Infusion | Unflavored</td>
+  <td class="price">$5.00</td>
+  <td><a href="/dispensaries/pot-mama-s-edina/">Pot Mama&#39;s - Edina</a></td>
+</tr>
+<tr>
+  <td>6</td>
+  <td>BSD Blueberry Lemonade Cooler 10mg THC</td>
+  <td class="price">$5.00</td>
+  <td><a href="/dispensaries/edina-canna/">Edina Canna</a></td>
+</tr>
+<tr>
+  <td>7</td>
   <td>HOH Lemonade Tea 10mg THC</td>
   <td class="price">$5.00</td>
   <td><a href="/dispensaries/edina-canna/">Edina Canna</a></td>
 </tr>
 <tr>
-  <td>5</td>
+  <td>8</td>
+  <td>BLNCD | Fuse 10mg THC Infusion | Unflavored</td>
+  <td class="price">$5.00</td>
+  <td><a href="/dispensaries/pot-mama-s-edina/">Pot Mama&#39;s - Edina</a></td>
+</tr>
+<tr>
+  <td>9</td>
+  <td>BLNCD | Levitate 10mg THC Infusion | Sativa</td>
+  <td class="price">$5.00</td>
+  <td><a href="/dispensaries/pot-mama-s-edina/">Pot Mama&#39;s - Edina</a></td>
+</tr>
+<tr>
+  <td>10</td>
   <td>HOH Tropical High Punch 10mg THC</td>
   <td class="price">$5.00</td>
   <td><a href="/dispensaries/edina-canna/">Edina Canna</a></td>
 </tr>
 <tr>
-  <td>6</td>
-  <td>20mg Grapefruit CBD:CBG Sparkling Water</td>
+  <td>11</td>
+  <td>Blueberry Pomegranate CBD:CBN Sparkling Water | 25mg:5mg | 12 fl oz</td>
   <td class="price">$6.00</td>
   <td><a href="/dispensaries/pot-mama-s-edina/">Pot Mama&#39;s - Edina</a></td>
 </tr>
 <tr>
-  <td>7</td>
-  <td>Blueberry Pomegranate CBD:CBN Sparkling Water | 25mg:5mg</td>
+  <td>12</td>
+  <td>Grapefruit CBD:CBG Sparkling Water | Carbonated | 20mg/10mg | 12 fl oz</td>
   <td class="price">$6.00</td>
   <td><a href="/dispensaries/pot-mama-s-edina/">Pot Mama&#39;s - Edina</a></td>
 </tr>
 <tr>
-  <td>8</td>
+  <td>13</td>
   <td>MNG Bluebeary Breeze Seltzer 10mg THC</td>
   <td class="price">$6.00</td>
   <td><a href="/dispensaries/edina-canna/">Edina Canna</a></td>
 </tr>
 <tr>
-  <td>9</td>
+  <td>14</td>
   <td>MNG Cool Cumber Lime Seltzer 10mg THC</td>
   <td class="price">$6.00</td>
   <td><a href="/dispensaries/edina-canna/">Edina Canna</a></td>
 </tr>
 <tr>
-  <td>10</td>
-  <td>Wyld | 1:1 THC:CBD Mango Sparkling Water 10 mg</td>
+  <td>15</td>
+  <td>WYLD | Mango Sparkling Water | Carbonated | 10mg | 12fl oz</td>
   <td class="price">$6.00</td>
   <td><a href="/dispensaries/pot-mama-s-edina/">Pot Mama&#39;s - Edina</a></td>
 </tr>
 <tr>
-  <td>11</td>
+  <td>16</td>
+  <td>BLNCD | 10mg THC Mocktail | Cranberry Pomegranate Mule</td>
+  <td class="price">$6.50</td>
+  <td><a href="/dispensaries/pot-mama-s-edina/">Pot Mama&#39;s - Edina</a></td>
+</tr>
+<tr>
+  <td>17</td>
+  <td>BLNCD | 10mg THC Mocktail | Prickly Pear Bee&#39;s Knees</td>
+  <td class="price">$6.50</td>
+  <td><a href="/dispensaries/pot-mama-s-edina/">Pot Mama&#39;s - Edina</a></td>
+</tr>
+<tr>
+  <td>18</td>
   <td>Retro Bakery | OG Lemonade 10mg | Hybrid</td>
   <td class="price">$6.50</td>
   <td><a href="/dispensaries/pot-mama-s-edina/">Pot Mama&#39;s - Edina</a></td>
 </tr>
 <tr>
-  <td>12</td>
+  <td>19</td>
   <td>Retro Bakery | Pink Lemonade 10mg | Hybrid</td>
   <td class="price">$6.50</td>
   <td><a href="/dispensaries/pot-mama-s-edina/">Pot Mama&#39;s - Edina</a></td>
 </tr>
 <tr>
-  <td>13</td>
+  <td>20</td>
   <td>Cocktail | Non-carbonated | 10mg | 12fl oz</td>
   <td class="price">$7.00</td>
-  <td><a href="/dispensaries/edina-canna/">Edina Canna</a></td>
-</tr>
-<tr>
-  <td>14</td>
-  <td>NBH Black Cherry Seltzer 10mg THC</td>
-  <td class="price">$7.00</td>
-  <td><a href="/dispensaries/edina-canna/">Edina Canna</a></td>
-</tr>
-<tr>
-  <td>15</td>
-  <td>NBH Fruit Punch Seltzer 10mg THC</td>
-  <td class="price">$7.00</td>
-  <td><a href="/dispensaries/edina-canna/">Edina Canna</a></td>
-</tr>
-<tr>
-  <td>16</td>
-  <td>Sleepy Time Cocktail | 10mg/ea</td>
-  <td class="price">$7.00</td>
-  <td><a href="/dispensaries/minnesota-canna/">Minnesota Canna</a></td>
-</tr>
-<tr>
-  <td>17</td>
-  <td>MINNELEAF | Spooky Drinks | Pixie Punch 10mg THC</td>
-  <td class="price">$7.00</td>
-  <td><a href="/dispensaries/pot-mama-s-edina/">Pot Mama&#39;s - Edina</a></td>
-</tr>
-<tr>
-  <td>18</td>
-  <td>NBH Pineapple Seltzer 10mg THC</td>
-  <td class="price">$7.00</td>
-  <td><a href="/dispensaries/edina-canna/">Edina Canna</a></td>
-</tr>
-<tr>
-  <td>19</td>
-  <td>MLC Wild Cherry Moonshot Drink 10mg THC + 10mg CBD</td>
-  <td class="price">$8.00</td>
   <td><a href="/dispensaries/edina-canna/">Edina Canna</a></td>
 </tr></tbody>
 </table>

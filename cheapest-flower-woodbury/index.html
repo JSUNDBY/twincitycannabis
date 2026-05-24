@@ -65,6 +65,17 @@
   .faq-item summary::after{content:"+";position:absolute;right:0;top:0;color:#22c55e;font-size:1.2rem;line-height:1;font-weight:700}
   .faq-item[open] summary::after{content:"−"}
   .faq-item p{margin:.75rem 0 0;color:#b8bcc4}
+  /* Phase 15: civic stat strip — homepage Bloomberg-style numerics, ported to SEO pages */
+  .seo-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);margin:1.5rem 0 2rem}
+  .seo-strip-cell{padding:1.2rem 1rem 1.2rem 0;border-left:1px solid rgba(255,255,255,0.08)}
+  .seo-strip-cell:first-child{border-left:0;padding-left:0}
+  .seo-strip-cell:not(:first-child){padding-left:1.25rem}
+  .seo-strip-value{font-family:Inter,system-ui,sans-serif;font-size:clamp(1.4rem,2.6vw,2rem);font-weight:800;letter-spacing:-1px;line-height:1;color:#f5f6f8;font-variant-numeric:tabular-nums}
+  .seo-strip-label{margin-top:.4rem;font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.6rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#8b909a}
+  .seo-strip-sub{margin-top:.3rem;color:#b8bcc4;font-size:.78rem;line-height:1.35}
+  .seo-section-label{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#22c55e;display:inline-flex;align-items:center;gap:.5rem;margin:1.5rem 0 .4rem}
+  .seo-section-label::before{content:'';width:14px;height:1px;background:#22c55e;opacity:.6}
+  @media (max-width:640px){.seo-strip{grid-template-columns:1fr 1fr}.seo-strip-cell:nth-child(3){border-left:0;padding-left:0}.seo-strip-cell:nth-child(n+3){border-top:1px solid rgba(255,255,255,0.08)}}
 </style>
 </head>
 <body>
@@ -80,7 +91,7 @@
 
 <div class="crumbs"><a href="/">Home</a> / <a href="/woodbury-cannabis-dispensaries/">Woodbury</a> / Cheapest flower</div>
 <h1>Cheapest Flower in Woodbury</h1>
-<p>The lowest-priced flower at 1 licensed cannabis dispensary in Woodbury, pulled from live menus. Updated 2026-05-15 — prices shift throughout the day as inventory moves.</p>
+<p>The lowest-priced flower at 1 licensed cannabis dispensary in Woodbury, pulled from live menus. Updated 2026-05-24 — prices shift throughout the day as inventory moves.</p>
 
 <table>
 <thead><tr><th>#</th><th>Product</th><th>Lowest price</th><th>At dispensary</th></tr></thead>
@@ -104,104 +115,104 @@
 </tr>
 <tr>
   <td>4</td>
-  <td>Fight Club | Big Buds | 4g</td>
+  <td>Donny Burger | Big Buds | 4g</td>
   <td class="price">$48.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>5</td>
-  <td>Purple Octane | Big Buds | 4g</td>
+  <td>Fight Club | Big Buds | 4g</td>
   <td class="price">$48.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>6</td>
-  <td>Poison Gushers | Big Buds | 4g</td>
+  <td>Grape Cream Cake | Big Buds | 4g</td>
   <td class="price">$48.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>7</td>
-  <td>egg roll | Big Buds | 4g</td>
+  <td>Poison Gushers | Big Buds | 4g</td>
   <td class="price">$48.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>8</td>
-  <td>Campfire Cannabis - 4g Flower - Mac Stomper (H)</td>
+  <td>Purple Octane | Big Buds | 4g</td>
   <td class="price">$48.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>9</td>
-  <td>Campfire Cannabis - 4g Flower - Pine Soul (I/H)</td>
+  <td>Campfire Cannabis - 4g Flower - Cap Junky (H)</td>
   <td class="price">$48.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>10</td>
-  <td>Native Cuts - 3.5g Flower - Buttery Nuttery Blintz (I/H)</td>
-  <td class="price">$50.00</td>
+  <td>Campfire Cannabis - 4g Flower - Guava (S/H)</td>
+  <td class="price">$48.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>11</td>
-  <td>Unbound - 3.5g - Jelolato (H)</td>
-  <td class="price">$50.00</td>
+  <td>Campfire Cannabis - 4g Flower - Mac Stomper (H)</td>
+  <td class="price">$48.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>12</td>
-  <td>Unbound - 3.5g - Papaya Fuel (I/H)</td>
-  <td class="price">$50.00</td>
+  <td>Campfire Cannabis - 4g Flower - Pine Soul (I/H)</td>
+  <td class="price">$48.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>13</td>
-  <td>Unbound - 3.5g - Purple Ice Water (I/H)</td>
-  <td class="price">$50.00</td>
+  <td>Campfire Cannabis - 4g Flower - Sunset Sherbert (I/H)</td>
+  <td class="price">$48.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>14</td>
-  <td>Unbound - 3.5g - Rosanna (I/H)</td>
-  <td class="price">$50.00</td>
+  <td>Campfire Cannabis - 4g Flower - Tropicana Cherry (S/H)</td>
+  <td class="price">$48.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>15</td>
-  <td>Waabigwan Mashkiki - 3.5g Flower - Biscotti (I/H)</td>
-  <td class="price">$50.00</td>
+  <td>egg roll | Big Buds | 4g</td>
+  <td class="price">$48.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>16</td>
-  <td>Waabigwan Mashkiki - 3.5g Flower - Mandarin Cookies (S/H)</td>
+  <td>Bud Doctor - 3.5g - Tropicana Cherry</td>
   <td class="price">$50.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>17</td>
-  <td>Grape Canyon Zkittlez | Big Buds | 4g</td>
-  <td class="price">$51.00</td>
+  <td>Native Cuts - 3.5g Flower - Buttery Nuttery Blintz (I/H)</td>
+  <td class="price">$50.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>18</td>
-  <td>Runtz | Big Buds | 4g</td>
-  <td class="price">$51.00</td>
+  <td>Unbound - 3.5g - Hawaiian Fanta (S/H)</td>
+  <td class="price">$50.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>19</td>
-  <td>Dizgo 3.5g - Orion (H)</td>
-  <td class="price">$53.00</td>
+  <td>Unbound - 3.5g - Jelolato (H)</td>
+  <td class="price">$50.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr>
 <tr>
   <td>20</td>
-  <td>Grasslandz - 3.5g Flower - Blueberry Muffin (H)</td>
-  <td class="price">$54.00</td>
+  <td>Unbound - 3.5g - Purple Ice Water (I/H)</td>
+  <td class="price">$50.00</td>
   <td><a href="/dispensaries/legacy-cannabis/">Legacy Cannabis Woodbury</a></td>
 </tr></tbody>
 </table>

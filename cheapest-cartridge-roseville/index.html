@@ -65,6 +65,17 @@
   .faq-item summary::after{content:"+";position:absolute;right:0;top:0;color:#22c55e;font-size:1.2rem;line-height:1;font-weight:700}
   .faq-item[open] summary::after{content:"−"}
   .faq-item p{margin:.75rem 0 0;color:#b8bcc4}
+  /* Phase 15: civic stat strip — homepage Bloomberg-style numerics, ported to SEO pages */
+  .seo-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);margin:1.5rem 0 2rem}
+  .seo-strip-cell{padding:1.2rem 1rem 1.2rem 0;border-left:1px solid rgba(255,255,255,0.08)}
+  .seo-strip-cell:first-child{border-left:0;padding-left:0}
+  .seo-strip-cell:not(:first-child){padding-left:1.25rem}
+  .seo-strip-value{font-family:Inter,system-ui,sans-serif;font-size:clamp(1.4rem,2.6vw,2rem);font-weight:800;letter-spacing:-1px;line-height:1;color:#f5f6f8;font-variant-numeric:tabular-nums}
+  .seo-strip-label{margin-top:.4rem;font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.6rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#8b909a}
+  .seo-strip-sub{margin-top:.3rem;color:#b8bcc4;font-size:.78rem;line-height:1.35}
+  .seo-section-label{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#22c55e;display:inline-flex;align-items:center;gap:.5rem;margin:1.5rem 0 .4rem}
+  .seo-section-label::before{content:'';width:14px;height:1px;background:#22c55e;opacity:.6}
+  @media (max-width:640px){.seo-strip{grid-template-columns:1fr 1fr}.seo-strip-cell:nth-child(3){border-left:0;padding-left:0}.seo-strip-cell:nth-child(n+3){border-top:1px solid rgba(255,255,255,0.08)}}
 </style>
 </head>
 <body>
@@ -80,7 +91,7 @@
 
 <div class="crumbs"><a href="/">Home</a> / <a href="/roseville-cannabis-dispensaries/">Roseville</a> / Cheapest vape cartridges</div>
 <h1>Cheapest Vape Cartridges in Roseville</h1>
-<p>The lowest-priced vape cartridges at 1 licensed cannabis dispensary in Roseville, pulled from live menus. Updated 2026-05-15 — prices shift throughout the day as inventory moves.</p>
+<p>The lowest-priced vape cartridges at 1 licensed cannabis dispensary in Roseville, pulled from live menus. Updated 2026-05-24 — prices shift throughout the day as inventory moves.</p>
 
 <table>
 <thead><tr><th>#</th><th>Product</th><th>Lowest price</th><th>At dispensary</th></tr></thead>
@@ -92,68 +103,68 @@
 </tr>
 <tr>
   <td>2</td>
-  <td>Nebula | Jet Fuel Odder Popz | Cartridge | 0.5g</td>
-  <td class="price">$39.99</td>
-  <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
-</tr>
-<tr>
-  <td>3</td>
-  <td>True Canna | Insane Punch | Cartridge | 1G</td>
-  <td class="price">$64.99</td>
-  <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
-</tr>
-<tr>
-  <td>4</td>
-  <td>True Canna | Super Jack | Cartridge | 1G</td>
-  <td class="price">$64.99</td>
-  <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
-</tr>
-<tr>
-  <td>5</td>
   <td>GL Cartridge | Banana Kush | 1g</td>
   <td class="price">$64.99</td>
   <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
 </tr>
 <tr>
-  <td>6</td>
+  <td>3</td>
   <td>GL Cartridge | Do-Si-Dos | 1g</td>
   <td class="price">$64.99</td>
   <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
 </tr>
 <tr>
+  <td>4</td>
+  <td>GL Cartridge | Girl Scout Cookies | 1g</td>
+  <td class="price">$64.99</td>
+  <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>GL Cartridge | Sour Apple | 1g</td>
+  <td class="price">$64.99</td>
+  <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
+</tr>
+<tr>
+  <td>6</td>
+  <td>GL Cartridge | Sour Diesel | 1g</td>
+  <td class="price">$64.99</td>
+  <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
+</tr>
+<tr>
   <td>7</td>
-  <td>GL Cartridge | Green Crack | 1g</td>
+  <td>GL Cartridge | White Widow | 1g</td>
   <td class="price">$64.99</td>
   <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
 </tr>
 <tr>
   <td>8</td>
+  <td>True Canna | Insane Punch | Cartridge | 1G</td>
+  <td class="price">$64.99</td>
+  <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
+</tr>
+<tr>
+  <td>9</td>
   <td>True Canna | Forbidden Fruit | Disposable | 1G</td>
   <td class="price">$69.99</td>
   <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
 </tr>
 <tr>
-  <td>9</td>
-  <td>Nebula | Romulan | Disposable | 1g</td>
-  <td class="price">$69.99</td>
-  <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
-</tr>
-<tr>
   <td>10</td>
-  <td>GL Disposable | OG Kush | 1g</td>
+  <td>GL Disposable | Sour Diesel | 1g</td>
   <td class="price">$69.99</td>
   <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
 </tr>
 <tr>
   <td>11</td>
-  <td>SG Disposable | Banana Zelato | 1g</td>
+  <td>Nebula | Romulan | Disposable | 1g</td>
   <td class="price">$69.99</td>
   <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
 </tr>
 <tr>
   <td>12</td>
-  <td>SG Disposable | Jokerz | 1g</td>
-  <td class="price">$69.99</td>
+  <td>DC Live Resin Disposable | Berry Bomb X Bourbon Berry | 1g</td>
+  <td class="price">$74.99</td>
   <td><a href="/dispensaries/frostbite-dispensary/">Frostbite Dispensary</a></td>
 </tr></tbody>
 </table>

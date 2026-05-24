@@ -229,6 +229,17 @@ ${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</scri
   .faq-item summary::after{content:"+";position:absolute;right:0;top:0;color:#22c55e;font-size:1.2rem;line-height:1;font-weight:700}
   .faq-item[open] summary::after{content:"−"}
   .faq-item p{margin:.75rem 0 0;color:#b8bcc4}
+  /* Phase 15: civic stat strip — homepage Bloomberg-style numerics, ported to SEO pages */
+  .seo-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);margin:1.5rem 0 2rem}
+  .seo-strip-cell{padding:1.2rem 1rem 1.2rem 0;border-left:1px solid rgba(255,255,255,0.08)}
+  .seo-strip-cell:first-child{border-left:0;padding-left:0}
+  .seo-strip-cell:not(:first-child){padding-left:1.25rem}
+  .seo-strip-value{font-family:Inter,system-ui,sans-serif;font-size:clamp(1.4rem,2.6vw,2rem);font-weight:800;letter-spacing:-1px;line-height:1;color:#f5f6f8;font-variant-numeric:tabular-nums}
+  .seo-strip-label{margin-top:.4rem;font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.6rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#8b909a}
+  .seo-strip-sub{margin-top:.3rem;color:#b8bcc4;font-size:.78rem;line-height:1.35}
+  .seo-section-label{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#22c55e;display:inline-flex;align-items:center;gap:.5rem;margin:1.5rem 0 .4rem}
+  .seo-section-label::before{content:'';width:14px;height:1px;background:#22c55e;opacity:.6}
+  @media (max-width:640px){.seo-strip{grid-template-columns:1fr 1fr}.seo-strip-cell:nth-child(3){border-left:0;padding-left:0}.seo-strip-cell:nth-child(n+3){border-top:1px solid rgba(255,255,255,0.08)}}
 </style>
 </head>
 <body>
@@ -603,17 +614,54 @@ const buildBrandPage = (brand) => {
 
   const dispLinks = dispensaries.map(d => `<a class="card" href="/dispensaries/${esc(d.id)}/"><p class="title">${esc(d.name)}</p><p class="sub">${esc(d.city || 'Twin Cities')}</p></a>`).join('\n');
 
+  // Phase 15: civic stat strip up top
+  const allPrices = [];
+  products.forEach(p => Object.values(p.prices || {}).forEach(v => { if (v > 0 && v <= 500) allPrices.push(v); }));
+  allPrices.sort((a, b) => a - b);
+  const median = allPrices.length ? allPrices[Math.floor(allPrices.length / 2)] : null;
+  const lo = allPrices.length ? allPrices[0] : null;
+  const hi = allPrices.length ? allPrices[allPrices.length - 1] : null;
+  const cats = new Set();
+  products.forEach(p => cats.add(p.category));
+
   return headOpen({ title, description, canonical, schema }) + `
 <div class="crumbs"><a href="/">Home</a> / <a href="/brands/">Brands</a> / ${esc(brand.name)}</div>
 <h1>${esc(brand.name)}</h1>
-<p>${esc(brand.name)} is a cannabis brand sold at ${dispensaries.length} Twin Cities dispensaries. We track ${products.length} ${esc(brand.name)} products with daily price updates so you can find the cheapest store carrying what you want.</p>
+
+<div class="seo-strip">
+  <div class="seo-strip-cell">
+    <div class="seo-strip-value">${products.length.toLocaleString()}</div>
+    <div class="seo-strip-label">Products tracked</div>
+    <div class="seo-strip-sub">${cats.size} categor${cats.size === 1 ? 'y' : 'ies'} carried</div>
+  </div>
+  <div class="seo-strip-cell">
+    <div class="seo-strip-value">${dispensaries.length.toLocaleString()}</div>
+    <div class="seo-strip-label">Dispensaries</div>
+    <div class="seo-strip-sub">Carrying ${esc(brand.name)} in MN</div>
+  </div>
+  <div class="seo-strip-cell">
+    <div class="seo-strip-value">${median != null ? '$' + Math.round(median) : '—'}</div>
+    <div class="seo-strip-label">Median price</div>
+    <div class="seo-strip-sub">Across ${allPrices.length} live listings</div>
+  </div>
+  <div class="seo-strip-cell">
+    <div class="seo-strip-value">${lo != null && hi != null && hi !== lo ? '$' + Math.round(lo) + '–$' + Math.round(hi) : (lo != null ? '$' + Math.round(lo) : '—')}</div>
+    <div class="seo-strip-label">Price range</div>
+    <div class="seo-strip-sub">Cheapest to priciest</div>
+  </div>
+</div>
+
 <a class="cta" href="/#compare">Compare ${esc(brand.name)} prices →</a>
-<h2>${esc(brand.name)} products &amp; prices</h2>
+
+<div class="seo-section-label">Catalog</div>
+<h2 style="margin-top:.4rem">${esc(brand.name)} products &amp; prices</h2>
 <table>
 <thead><tr><th>Product</th><th>Category</th><th style="text-align:right">Lowest</th><th style="text-align:right">Highest</th><th style="text-align:right">Stores</th></tr></thead>
 <tbody>${rows}</tbody>
 </table>
-<h2>Dispensaries carrying ${esc(brand.name)}</h2>
+
+<div class="seo-section-label">Distribution</div>
+<h2 style="margin-top:.4rem">Dispensaries carrying ${esc(brand.name)}</h2>
 <div class="grid">${dispLinks}</div>
 ` + footer;
 };
