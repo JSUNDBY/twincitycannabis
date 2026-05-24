@@ -3720,6 +3720,14 @@ html[data-theme="light"] .kit-form-wrapper .formkit-submit * {
     border-radius: var(--radius-lg);
 }
 
+/* Phase 7a: preopening variant — amber accent to signal "licensed, not open yet" */
+.empty-menu-state.preopening-state {
+    background: rgba(245, 158, 11, 0.04);
+    border: 1px solid rgba(245, 158, 11, 0.20);
+}
+.empty-menu-state.preopening-state .empty-menu-icon { opacity: 0.85; }
+.empty-menu-state.preopening-state .empty-menu-title { color: var(--amber); }
+
 .empty-menu-icon {
     width: 64px;
     height: 64px;

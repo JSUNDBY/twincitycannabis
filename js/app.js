@@ -932,8 +932,20 @@
         const container = document.getElementById('dispensary-list');
         let results = [...TCC.dispensaries];
 
+        // Phase 7a: hide preopening license holders from the default view
+        // unless the caller explicitly opts in.
+        if (!filters.includePreopening && filters.status !== 'preopening' && filters.status !== 'all') {
+            results = results.filter(isOperationalDispensary);
+        } else if (filters.status === 'preopening') {
+            results = results.filter(d => !isOperationalDispensary(d));
+        }
+
         if (filters.search) {
             results = TCC.searchDispensaries(filters.search);
+            // Re-apply operational filter after search (searchDispensaries doesn't know about it)
+            if (!filters.includePreopening && filters.status !== 'preopening' && filters.status !== 'all') {
+                results = results.filter(isOperationalDispensary);
+            }
         }
         if (filters.city && filters.city !== 'all') {
             const METRO_CITIES = new Set([
@@ -1129,8 +1141,11 @@
             App.mapPageInstance = null;
         }
 
-        const dispensaries = TCC.dispensaries.filter(d => d.lat && d.lng);
-        countEl.textContent = `${dispensaries.length} licensed dispensaries in Minnesota.`;
+        // Phase 7a: only plot operational shops on the map; pre-opening license
+        // holders without menu/hours/website would be misleading pins.
+        const dispensaries = TCC.dispensaries.filter(d => d.lat && d.lng && isOperationalDispensary(d));
+        const preopening = TCC.dispensaries.filter(d => !isOperationalDispensary(d)).length;
+        countEl.textContent = `${dispensaries.length} open dispensaries${preopening ? ` · ${preopening} more licensed but not yet selling` : ''}.`;
 
         const map = L.map('map-page-canvas', {
             scrollWheelZoom: true,
@@ -1302,28 +1317,45 @@
         const catContainer = document.getElementById('detail-product-cats');
 
         if (allProducts.length === 0) {
-            countEl.textContent = 'Menu coming soon';
-            catContainer.innerHTML = '';
-            const platform = detectMenuPlatform(d);
-            const platformLabel = {
-                dutchie: 'Shop menu on Dutchie',
-                leafly:  'Shop menu on Leafly',
-                weedmaps:'Shop menu on Weedmaps',
-            }[platform] || (isOfficialWebsite(d) ? 'Visit Website' : 'Find on Google Maps');
-            const ctaCopy = platform
-                ? `${esc(d.name)} publishes their menu on ${platform[0].toUpperCase()+platform.slice(1)}. Tap through to see prices and order — or claim this listing to bring the menu directly into TCC for price comparison.`
-                : `We're working on getting ${esc(d.name)}'s full menu into TCC. In the meantime, you can visit their site or call ahead.`;
-            productsContainer.innerHTML = `
-                <div class="empty-menu-state">
-                    <div class="empty-menu-icon">${Icons.leafLine}</div>
-                    <div class="empty-menu-title">Menu data not yet on TCC</div>
-                    <div class="empty-menu-desc">${ctaCopy}</div>
-                    <div class="empty-menu-actions">
-                        <a href="${getDispensaryWebsite(d)}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">${platformLabel} &rarr;</a>
-                        <a href="tel:${(d.phone||'').replace(/[^0-9+]/g,'')}" class="btn btn-secondary btn-sm">${Icons.phone} Call</a>
-                        ${platform ? `<a href="#menu-upload?slug=${encodeURIComponent(d.id)}" class="btn btn-secondary btn-sm">${Icons.verified || ''} Share your menu with TCC</a>` : ''}
-                    </div>
-                </div>`;
+            // Phase 7a: preopening (licensed but not yet selling) gets a clear,
+            // honest banner — distinct from "menu data not yet on TCC" which
+            // implies the shop is open and we just haven't scraped them yet.
+            if (!isOperationalDispensary(d)) {
+                countEl.textContent = 'Not yet open';
+                catContainer.innerHTML = '';
+                productsContainer.innerHTML = `
+                    <div class="empty-menu-state preopening-state">
+                        <div class="empty-menu-icon" style="color:var(--amber)">${Icons.clock || Icons.leafLine}</div>
+                        <div class="empty-menu-title">Not yet open</div>
+                        <div class="empty-menu-desc">${esc(d.name)} holds a Minnesota OCM cannabis license but has not yet published a menu, hours, or a website. We'll surface them in the main directory once they start selling.</div>
+                        <div class="empty-menu-actions">
+                            <a href="#dispensaries" class="btn btn-primary btn-sm">See open dispensaries &rarr;</a>
+                        </div>
+                    </div>`;
+            } else {
+                countEl.textContent = 'Menu coming soon';
+                catContainer.innerHTML = '';
+                const platform = detectMenuPlatform(d);
+                const platformLabel = {
+                    dutchie: 'Shop menu on Dutchie',
+                    leafly:  'Shop menu on Leafly',
+                    weedmaps:'Shop menu on Weedmaps',
+                }[platform] || (isOfficialWebsite(d) ? 'Visit Website' : 'Find on Google Maps');
+                const ctaCopy = platform
+                    ? `${esc(d.name)} publishes their menu on ${platform[0].toUpperCase()+platform.slice(1)}. Tap through to see prices and order — or claim this listing to bring the menu directly into TCC for price comparison.`
+                    : `We're working on getting ${esc(d.name)}'s full menu into TCC. In the meantime, you can visit their site or call ahead.`;
+                productsContainer.innerHTML = `
+                    <div class="empty-menu-state">
+                        <div class="empty-menu-icon">${Icons.leafLine}</div>
+                        <div class="empty-menu-title">Menu data not yet on TCC</div>
+                        <div class="empty-menu-desc">${ctaCopy}</div>
+                        <div class="empty-menu-actions">
+                            <a href="${getDispensaryWebsite(d)}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">${platformLabel} &rarr;</a>
+                            <a href="tel:${(d.phone||'').replace(/[^0-9+]/g,'')}" class="btn btn-secondary btn-sm">${Icons.phone} Call</a>
+                            ${platform ? `<a href="#menu-upload?slug=${encodeURIComponent(d.id)}" class="btn btn-secondary btn-sm">${Icons.verified || ''} Share your menu with TCC</a>` : ''}
+                        </div>
+                    </div>`;
+            }
             // Skip the rest of product rendering
             // (still continue to reviews/deals below)
         } else {
@@ -2395,6 +2427,41 @@
         </div>`;
     }
 
+    // ─── Phase 7a: Operational vs. preopening status ──────────────────────
+    // A dispensary is "operational" if any of these are true:
+    //   (1) has at least one product with a valid price in TCC.products
+    //   (2) has real hours (not the "Check website" / "Coming soon" placeholder)
+    //   (3) has a real website (not a Weedmaps fallback URL)
+    // Otherwise it's "preopening" — licensed by OCM but not yet selling.
+    // Default views (Dispensaries page, Map, Recently Opened) hide preopening
+    // shops; their detail pages still exist for SEO/completeness but show a
+    // clear "Not yet open" banner instead of an empty menu state.
+    let _operationalDispIds = null;
+    function getOperationalDispIds() {
+        if (_operationalDispIds) return _operationalDispIds;
+        _operationalDispIds = new Set();
+        if (TCC && TCC.products) {
+            TCC.products.forEach(p => {
+                if (!p.prices) return;
+                Object.entries(p.prices).forEach(([dispId, price]) => {
+                    if (price > 0) _operationalDispIds.add(dispId);
+                });
+            });
+        }
+        return _operationalDispIds;
+    }
+    function isOperationalDispensary(d) {
+        if (!d) return false;
+        if (getOperationalDispIds().has(d.id)) return true;
+        const note = (d.hours && d.hours.note) || '';
+        if (note && !/check|coming soon|not yet listed|not yet|TBD|n\/a/i.test(note)) return true;
+        if (d.website && !/weedmaps\.com/i.test(d.website)) return true;
+        return false;
+    }
+    function operationalDispensaryCount() {
+        return TCC.dispensaries.filter(isOperationalDispensary).length;
+    }
+
     // ─── Phase 5: Watchlist (localStorage-backed) ─────────────────────────
     // Lets visitors star products to revisit later. No accounts, no server —
     // pure localStorage. Survives page reloads but not device changes.
@@ -2981,7 +3048,11 @@
 
     function updateHeroCounts() {
         const pc = TCC.products ? TCC.products.length.toLocaleString() + '+' : '2,000+';
-        const dc = TCC.dispensaries ? TCC.dispensaries.length.toString() : '32';
+        // Phase 7a: hero shows OPEN dispensaries, with preopening count beside it
+        const openCount = TCC.dispensaries ? operationalDispensaryCount() : 0;
+        const totalCount = TCC.dispensaries ? TCC.dispensaries.length : 0;
+        const preopening = Math.max(0, totalCount - openCount);
+        const dc = openCount ? openCount.toString() : '32';
         // Hero + announcement bar + home stats bar + for-dispensaries proof stats
         const productIds = ['hero-stat-products', 'announce-product-count', 'stats-bar-products', 'proof-stat-products'];
         const dispIds = ['hero-stat-dispensaries', 'announce-disp-count', 'stats-bar-disps', 'proof-stat-disps'];
@@ -2993,6 +3064,11 @@
             const el = document.getElementById(id);
             if (el) el.textContent = dc;
         });
+        // Preopening: show count or hide the wrapper when zero
+        const preopEl = document.getElementById('hero-stat-preopening');
+        const preopWrap = document.getElementById('hero-stat-preopening-wrap');
+        if (preopEl) preopEl.textContent = preopening.toString();
+        if (preopWrap) preopWrap.style.display = preopening > 0 ? '' : 'none';
     }
 
     // Override TCC.getProductsByStrain with name-based matching since the
