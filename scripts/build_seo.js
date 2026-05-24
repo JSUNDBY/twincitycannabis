@@ -2656,7 +2656,8 @@ if (!indexHtml.includes('/* fresh-ts client */')) {
     if (diff < 3600)      return 'Updated ' + Math.floor(diff/60) + ' min ago';
     if (diff < 7200)      return 'Updated 1 hour ago';
     if (diff < 86400)     return 'Updated ' + Math.floor(diff/3600) + ' hours ago';
-    return 'Updated ' + Math.floor(diff/86400) + ' days ago';
+    if (diff < 86400 * 2) return 'Updated today';
+    return 'Live data';  // cap stale static timestamps — Pi cron refreshes data but doesn't always re-commit this
   }
   function tick(){
     document.querySelectorAll('.fresh-ts[data-fresh-ts]').forEach(function(el){

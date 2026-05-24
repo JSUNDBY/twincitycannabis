@@ -599,9 +599,12 @@
         // 3. Open dispensary count
         const openCount = operationalDispensaryCount();
 
-        // 4. Last refresh — pull from any existing freshness timestamp on page
+        // 4. Last refresh — pull from any existing freshness timestamp on page.
+        // The static timestamp can lag the actual Pi-cron data updates by days
+        // if build_seo.js hasn't re-run, so we cap the label to avoid the
+        // dishonest "9 days ago" when the data is in fact fresher than that.
         const freshEl = document.querySelector('.fresh-ts[data-fresh-ts]');
-        let freshLabel = 'now';
+        let freshLabel = 'today';
         if (freshEl) {
             const ts = freshEl.getAttribute('data-fresh-ts');
             const refreshedAt = new Date(ts);
@@ -609,7 +612,8 @@
             if (minsAgo < 1) freshLabel = 'just now';
             else if (minsAgo < 60) freshLabel = minsAgo + ' min ago';
             else if (minsAgo < 60 * 12) freshLabel = Math.round(minsAgo / 60) + ' hr ago';
-            else freshLabel = 'today';
+            else if (minsAgo < 60 * 48) freshLabel = 'today';
+            else freshLabel = 'this week';
         }
 
         const tiles = [
@@ -1357,7 +1361,8 @@
         const cats = new Set();
         products.forEach(p => cats.add(p.category));
 
-        // Last refresh from page-wide freshness timestamp
+        // Last refresh from page-wide freshness timestamp, capped to avoid
+        // a stale static timestamp claiming "9 days ago" when data IS fresh.
         const freshEl = document.querySelector('.fresh-ts[data-fresh-ts]');
         let freshLabel = 'today';
         if (freshEl) {
@@ -1366,6 +1371,8 @@
             if (minsAgo < 1) freshLabel = 'just now';
             else if (minsAgo < 60) freshLabel = minsAgo + ' min ago';
             else if (minsAgo < 60 * 12) freshLabel = Math.round(minsAgo / 60) + ' hr ago';
+            else if (minsAgo < 60 * 48) freshLabel = 'today';
+            else freshLabel = 'this week';
         }
 
         const tiles = [
