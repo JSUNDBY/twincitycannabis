@@ -11,7 +11,9 @@
 // scaffolded so adding that later is a small change, not a rewrite.
 
 // Bump CACHE_NAME on shell changes so the SW evicts the old cache on activate.
-const CACHE_NAME = 'tcc-shell-v2';
+// v3: evict the broken-app.js cache from the brief window when a top-level
+// ReferenceError was bricking the SPA boot.
+const CACHE_NAME = 'tcc-shell-v3';
 const SHELL_URLS = [
   '/',
   '/index.html',

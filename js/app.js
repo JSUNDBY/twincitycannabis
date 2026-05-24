@@ -2735,12 +2735,10 @@
             } catch (e) {}
         }, 1500);
     }
-    Watchlist.onChange(schedulePushSync);
-
-    // Phase 21: also push every Watchlist change up to Supabase if signed in
-    Watchlist.onChange(() => {
-        if (Sync.signedIn()) Sync.pushWatchlist().catch(() => {});
-    });
+    // Phase 24/21 listener registrations live in init() so they run AFTER
+    // Watchlist + Sync are defined (those modules sit further down in the
+    // file). Calling them at top-level here was a ReferenceError that broke
+    // the entire SPA boot.
 
     function maybeFireDropNotification() {
         if (!notifyAvailable() || Notification.permission !== 'granted') return;
@@ -4322,6 +4320,12 @@
     }
 
     function init() {
+        // Phase 24 + 21: wire Watchlist change listeners now that Watchlist
+        // and Sync are both defined (they live further down in the file).
+        Watchlist.onChange(schedulePushSync);
+        Watchlist.onChange(() => {
+            if (Sync.signedIn()) Sync.pushWatchlist().catch(() => {});
+        });
         installStrainMatching();
         updateHeroCounts();
         injectDataIcons();
