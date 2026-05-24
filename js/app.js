@@ -2653,11 +2653,94 @@
         if (!notifyAvailable()) return Promise.resolve('unsupported');
         try { localStorage.setItem(NOTIFY_OPT_IN_KEY, '1'); } catch (e) {}
         return Notification.requestPermission().then(state => {
-            if (state === 'granted') showToast('Drop alerts enabled', 'success');
-            else if (state === 'denied') showToast('Alerts blocked in browser settings', 'info');
+            if (state === 'granted') {
+                showToast('Drop alerts enabled', 'success');
+                // Phase 24: also subscribe to real Web Push so alerts fire
+                // even when no TCC tab is open. Silent on failure — the
+                // localStorage-based per-visit alerts still work as fallback.
+                subscribeToPush().catch(() => {});
+            } else if (state === 'denied') {
+                showToast('Alerts blocked in browser settings', 'info');
+            }
             return state;
         });
     }
+
+    // ─── Phase 24: Web Push subscription ────────────────────────────────
+    // Subscribes the browser via PushManager and uploads the subscription
+    // (plus current watchlist + thresholds) to the Cloudflare Worker. Pi
+    // cron triggers /push/trigger after each scrape; the worker fires the
+    // pushes. Resubscribes whenever the watchlist changes so the server
+    // copy of "what to push about" stays in sync.
+    const PUSH_API = 'https://dashboard.twincitycannabis.com';
+
+    function urlBase64ToUint8Array(b64) {
+        const pad = '='.repeat((4 - (b64.length % 4)) % 4);
+        const std = (b64 + pad).replace(/-/g, '+').replace(/_/g, '/');
+        const bin = atob(std);
+        const arr = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+        return arr;
+    }
+
+    async function subscribeToPush() {
+        if (!('serviceWorker' in navigator) || !('PushManager' in window)) return null;
+        const reg = await navigator.serviceWorker.ready;
+        let sub = await reg.pushManager.getSubscription();
+        if (!sub) {
+            const res = await fetch(PUSH_API + '/push/vapid-public-key');
+            if (!res.ok) throw new Error('VAPID key fetch failed');
+            const { publicKey } = await res.json();
+            if (!publicKey) throw new Error('No publicKey returned');
+            sub = await reg.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(publicKey),
+            });
+        }
+        // Upload subscription + current state so the server knows what to push about
+        await uploadSubscription(sub);
+        return sub;
+    }
+
+    async function uploadSubscription(sub) {
+        const payload = {
+            subscription: sub.toJSON(),
+            watchlist: Watchlist.all(),
+            thresholds: (() => {
+                const t = {};
+                Thresholds.all().forEach(id => { t[id] = Thresholds.get(id); });
+                return t;
+            })(),
+        };
+        try {
+            await fetch(PUSH_API + '/push/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+        } catch (e) {/* swallow — best-effort */}
+    }
+
+    // Re-upload subscription whenever watchlist or thresholds change so
+    // the server-side "what to push" mirror stays current.
+    let _pushSyncTimer = null;
+    function schedulePushSync() {
+        if (!notifyAvailable() || Notification.permission !== 'granted') return;
+        clearTimeout(_pushSyncTimer);
+        _pushSyncTimer = setTimeout(async () => {
+            try {
+                const reg = await navigator.serviceWorker.ready;
+                const sub = await reg.pushManager.getSubscription();
+                if (sub) uploadSubscription(sub);
+            } catch (e) {}
+        }, 1500);
+    }
+    Watchlist.onChange(schedulePushSync);
+
+    // Phase 21: also push every Watchlist change up to Supabase if signed in
+    Watchlist.onChange(() => {
+        if (Sync.signedIn()) Sync.pushWatchlist().catch(() => {});
+    });
 
     function maybeFireDropNotification() {
         if (!notifyAvailable() || Notification.permission !== 'granted') return;
@@ -3292,6 +3375,91 @@
     function operationalDispensaryCount() {
         return TCC.dispensaries.filter(isOperationalDispensary).length;
     }
+
+    // ─── Phase 21: Supabase auth + sync (scaffold) ──────────────────────
+    // Reads window.TCC_SUPABASE_CONFIG = { url, anonKey } if present and
+    // initializes a lazy Supabase client. When not configured, all sync
+    // operations no-op and the site continues to use localStorage as
+    // primary storage (same behavior as before). This means we can ship
+    // the wiring now and activate it later by:
+    //   1. Unpausing the Supabase project (kmlwlmrlmuioogbfwcqx)
+    //   2. Running cloudflare/supabase-schema.sql in the SQL editor
+    //   3. Setting window.TCC_SUPABASE_CONFIG in index.html
+    //   4. Including the supabase-js CDN script
+    const Sync = {
+        _client: null,
+        _enabled: false,
+        _userId: null,
+
+        config() { return (typeof window !== 'undefined' && window.TCC_SUPABASE_CONFIG) || null; },
+        isConfigured() {
+            const c = this.config();
+            return !!(c && c.url && c.anonKey && typeof window !== 'undefined' && window.supabase);
+        },
+        async client() {
+            if (!this.isConfigured()) return null;
+            if (!this._client) {
+                const c = this.config();
+                this._client = window.supabase.createClient(c.url, c.anonKey, {
+                    auth: { persistSession: true, autoRefreshToken: true },
+                });
+                const { data } = await this._client.auth.getSession();
+                this._userId = data?.session?.user?.id || null;
+                this._enabled = !!this._userId;
+            }
+            return this._client;
+        },
+        signedIn() { return this._enabled && !!this._userId; },
+
+        async signInWithEmail(email) {
+            const c = await this.client();
+            if (!c) return { error: 'not_configured' };
+            return c.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin } });
+        },
+        async signOut() {
+            const c = await this.client();
+            if (!c) return;
+            await c.auth.signOut();
+            this._userId = null;
+            this._enabled = false;
+        },
+
+        // Pull the server-side watchlist + thresholds and merge into local state
+        async pullWatchlist() {
+            const c = await this.client();
+            if (!c || !this._userId) return 0;
+            const { data, error } = await c.from('watchlist').select('product_id, threshold, last_seen_price').eq('user_id', this._userId);
+            if (error || !Array.isArray(data)) return 0;
+            data.forEach(row => {
+                if (!Watchlist.has(row.product_id)) {
+                    Watchlist.add(row.product_id, row.last_seen_price);
+                }
+                if (typeof row.threshold === 'number') Thresholds.set(row.product_id, row.threshold);
+            });
+            return data.length;
+        },
+
+        // Push local state up. Idempotent — uses upsert on (user_id, product_id).
+        async pushWatchlist() {
+            const c = await this.client();
+            if (!c || !this._userId) return 0;
+            const ids = Watchlist.all();
+            if (!ids.length) return 0;
+            const rows = ids.map(id => {
+                const seen = Watchlist.getSeen(id);
+                return {
+                    user_id: this._userId,
+                    product_id: id,
+                    last_seen_price: seen ? seen.price : null,
+                    last_seen_at: seen ? seen.ts : new Date().toISOString(),
+                    threshold: Thresholds.get(id),
+                };
+            });
+            const { error } = await c.from('watchlist').upsert(rows, { onConflict: 'user_id,product_id' });
+            return error ? 0 : rows.length;
+        },
+    };
+    window.TCCSync = Sync;  // expose for console debugging
 
     // ─── Phase 5: Watchlist (localStorage-backed) ─────────────────────────
     // Lets visitors star products to revisit later. No accounts, no server —

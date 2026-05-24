@@ -131,6 +131,24 @@ export default {
       return handleMonthlyReport(request, env);
     }
 
+    // ─── Phase 24: Web Push routes (delegate to push.js) ─────────────
+    if (url.pathname === '/push/vapid-public-key' && request.method === 'GET') {
+      const { handlePushVapidKey } = await import('./push.js');
+      return handlePushVapidKey(env, cors);
+    }
+    if (url.pathname === '/push/subscribe' && request.method === 'POST') {
+      const { handlePushSubscribe } = await import('./push.js');
+      return handlePushSubscribe(request, env, cors);
+    }
+    if (url.pathname === '/push/unsubscribe' && request.method === 'POST') {
+      const { handlePushUnsubscribe } = await import('./push.js');
+      return handlePushUnsubscribe(request, env, cors);
+    }
+    if (url.pathname === '/push/trigger' && request.method === 'POST') {
+      const { handlePushTrigger } = await import('./push.js');
+      return handlePushTrigger(request, env, cors);
+    }
+
     if (url.pathname === '/' || url.pathname === '/health') {
       return new Response('TCC Stripe webhook worker — alive', { status: 200 });
     }

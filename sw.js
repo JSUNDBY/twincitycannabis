@@ -102,36 +102,40 @@ self.addEventListener('fetch', (event) => {
 // open a fresh window. Always route to the watchlist filter.
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
+  const target = (event.notification.data && event.notification.data.url) || '/#watchlist';
   event.waitUntil(
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((all) => {
       // Try to focus an existing TCC tab
       for (const client of all) {
         if ('focus' in client) {
-          client.navigate('/#watchlist').catch(() => {});
+          client.navigate(target).catch(() => {});
           return client.focus();
         }
       }
       // No tab open → open a new one
       if (self.clients.openWindow) {
-        return self.clients.openWindow('/#watchlist');
+        return self.clients.openWindow(target);
       }
     })
   );
 });
 
-// Push: scaffold only. Real push needs VAPID + a push server. Leaving
-// the handler in place so wiring server-side push later is a one-file
-// change rather than a SW rewrite.
+// Push: receives encrypted payload from the Cloudflare Worker (push.js)
+// and displays a system notification even when no TCC tab is open.
 self.addEventListener('push', (event) => {
   let payload = {};
   try { payload = event.data ? event.data.json() : {}; } catch (e) {}
   const title = payload.title || 'Twin City Cannabis';
   const body = payload.body || 'A product you’re watching has moved.';
+  const url = payload.url || '/#watchlist';
   event.waitUntil(
     self.registration.showNotification(title, {
       body,
       icon: '/img/twin-city-cannabis-logo-192.png',
+      badge: '/img/twin-city-cannabis-logo-192.png',
       tag: payload.tag || 'tcc-watchlist-drop',
+      data: { url },
+      renotify: true,
     })
   );
 });

@@ -256,6 +256,17 @@ def main():
         # "Live · Updated X" eyebrow tracks the actual cron cadence even
         # when SEO rebuild is skipped.
         bump_freshness_timestamp()
+        # Phase 24: fire web push notifications for any consumer-relevant
+        # price drops detected in this scrape. Safe to call even when
+        # PUSH_TRIGGER_TOKEN isn't set — the script no-ops in that case.
+        try:
+            import subprocess
+            subprocess.run(
+                ["python3", str(Path(__file__).parent / "trigger_push.py")],
+                timeout=60, check=False,
+            )
+        except Exception as e:
+            print(f"Push trigger skipped: {e}")
         print(f"\nLive site will update on next GitHub Pages deploy.")
         # Print summary
         for d in metro:
