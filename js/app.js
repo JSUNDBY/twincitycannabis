@@ -473,6 +473,8 @@
                         if (input) input.value = Browse.query;
                     }, 0);
                 } else if (parts[1] === 'watchlist') {
+                    // Phase 19: if hash has ?import=, merge incoming IDs first
+                    maybeImportWatchlist();
                     Browse.watchlistOnly = true;
                     Browse.category = 'all';
                     Browse.query = '';
@@ -2468,18 +2470,42 @@
         const visible = filtered.slice(0, Browse.page * Browse.perPage);
         const hasMore = visible.length < total;
 
+        // Phase 17: dedicated watchlist-mode header so the page reads as
+        // "your saved products" instead of generic Browse.
+        let modeHeader = '';
+        if (Browse.watchlistOnly) {
+            const notifyState = notifyOptInState();
+            const notifyBtn = notifyState === 'unsupported' ? ''
+                : notifyState === 'granted' ? `<span class="btn btn-ghost text-sm" style="cursor:default;color:var(--green)">✓ Drop alerts on</span>`
+                : `<button type="button" class="btn btn-ghost text-sm" id="browse-watchlist-notify">Enable drop alerts</button>`;
+            modeHeader = `
+                <div class="browse-watchlist-header">
+                    <div class="section-label">Your watchlist</div>
+                    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap;margin-top:.4rem">
+                        <h2 class="section-title" style="margin:0">${total === 0 ? 'No saved products yet.' : `${total} saved product${total === 1 ? '' : 's'}.`}</h2>
+                        <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+                            ${notifyBtn}
+                            <button type="button" class="btn btn-ghost text-sm" id="browse-watchlist-share">Share watchlist</button>
+                            <a href="#compare" class="btn btn-ghost text-sm">Back to Browse &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
         // Render quick category pills (above grid)
         renderBrowsePills();
 
         container.innerHTML = `
+            ${modeHeader}
             <div class="browse-result-meta">
                 <span><strong>${total.toLocaleString()}</strong> ${total === 1 ? 'product' : 'products'}${Browse.query ? ` matching "${esc(Browse.query)}"` : ''}</span>
                 ${total > 0 ? `<span class="text-muted">Showing ${visible.length} of ${total}</span>` : ''}
             </div>
             ${total === 0 ? `
                 <div class="empty-state" style="padding:3rem 1rem;text-align:center">
-                    <div class="empty-state-title">No products found</div>
-                    <div class="empty-state-desc">Try a different category or search term.</div>
+                    <div class="empty-state-title">${Browse.watchlistOnly ? 'Nothing saved yet' : 'No products found'}</div>
+                    <div class="empty-state-desc">${Browse.watchlistOnly ? 'Tap the star on any product to save it here. We will surface drops since you saved.' : 'Try a different category or search term.'}</div>
                 </div>
             ` : `
                 <div class="home-grid-2" id="browse-grid">
@@ -2509,6 +2535,160 @@
                     }
                 }, 50);
             });
+        }
+
+        // Phase 18: enable drop alerts button → request Notification permission
+        const notifyBtn = document.getElementById('browse-watchlist-notify');
+        if (notifyBtn) {
+            notifyBtn.addEventListener('click', () => {
+                requestNotifyOptIn().then(() => renderCompareDefault());
+            });
+        }
+
+        // Phase 19: share watchlist button → copy import URL to clipboard
+        const shareBtn = document.getElementById('browse-watchlist-share');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', () => {
+                const url = buildWatchlistShareURL();
+                if (!url) {
+                    showToast('Watchlist is empty', 'info');
+                    return;
+                }
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(url).then(
+                        () => showToast('Share link copied', 'success'),
+                        () => fallbackCopy(url)
+                    );
+                } else {
+                    fallbackCopy(url);
+                }
+            });
+        }
+    }
+
+    // ─── Phase 18: browser notifications on return visits ──────────────
+    // When a returning visitor has watchlist items that have dropped, fire a
+    // system notification. No server, no push — just the browser's native
+    // Notifications API gated on the user opting in once.
+    const NOTIFY_OPT_IN_KEY = 'tcc.notifyOptIn.v1';
+    const NOTIFY_LAST_FIRED_KEY = 'tcc.notifyLastFired.v1';
+
+    function notifyAvailable() {
+        return typeof window !== 'undefined' && 'Notification' in window;
+    }
+    function notifyOptInState() {
+        if (!notifyAvailable()) return 'unsupported';
+        if (Notification.permission === 'granted') return 'granted';
+        if (Notification.permission === 'denied') return 'denied';
+        return 'default';
+    }
+    function requestNotifyOptIn() {
+        if (!notifyAvailable()) return Promise.resolve('unsupported');
+        try { localStorage.setItem(NOTIFY_OPT_IN_KEY, '1'); } catch (e) {}
+        return Notification.requestPermission().then(state => {
+            if (state === 'granted') showToast('Drop alerts enabled', 'success');
+            else if (state === 'denied') showToast('Alerts blocked in browser settings', 'info');
+            return state;
+        });
+    }
+
+    function maybeFireDropNotification() {
+        if (!notifyAvailable() || Notification.permission !== 'granted') return;
+        // Throttle to one notification per 6 hours so we don't spam returning visitors
+        try {
+            const last = parseInt(localStorage.getItem(NOTIFY_LAST_FIRED_KEY) || '0', 10);
+            if (Date.now() - last < 6 * 60 * 60 * 1000) return;
+        } catch (e) {}
+
+        // Compute drops since last-seen (same shape as renderWatchlistBanner)
+        const savedIds = Watchlist.all();
+        if (!savedIds.length) return;
+        let dropCount = 0;
+        let totalDelta = 0;
+        savedIds.forEach(id => {
+            const p = TCC.products.find(x => x.id === id);
+            if (!p) return;
+            const seen = Watchlist.getSeen(id);
+            if (!seen || typeof seen.price !== 'number') return;
+            const curLow = (TCC.getLowestPrice(p) || {}).price;
+            if (typeof curLow !== 'number') return;
+            if (curLow < seen.price - 0.5) {
+                dropCount++;
+                totalDelta += seen.price - curLow;
+            }
+        });
+        if (dropCount === 0) return;
+
+        try {
+            const n = new Notification('Twin City Cannabis — prices dropped', {
+                body: `${dropCount} of your saved product${dropCount === 1 ? '' : 's'} dropped. Saving you up to $${totalDelta.toFixed(0)}.`,
+                icon: '/img/twin-city-cannabis-logo-192.png',
+                tag: 'tcc-watchlist-drop',  // collapses repeated notifications into one
+            });
+            n.onclick = () => {
+                window.focus();
+                location.hash = 'compare/watchlist';
+            };
+            localStorage.setItem(NOTIFY_LAST_FIRED_KEY, String(Date.now()));
+        } catch (e) {}
+    }
+
+    // ─── Phase 19: shareable watchlist via URL ──────────────────────────
+    // Base64-encode the saved IDs into the URL hash so users can share or
+    // sync their watchlist across devices without auth. Token format:
+    //   #compare/watchlist?import=<base64(JSON.stringify([id1,id2,...]))>
+    function buildWatchlistShareURL() {
+        const ids = Watchlist.all();
+        if (!ids.length) return null;
+        try {
+            const token = btoa(JSON.stringify(ids));
+            return location.origin + location.pathname + '#compare/watchlist?import=' + token;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function fallbackCopy(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); showToast('Share link copied', 'success'); }
+        catch (e) { showToast('Copy failed — link in console', 'info'); console.log(text); }
+        document.body.removeChild(ta);
+    }
+
+    function maybeImportWatchlist() {
+        // Look for ?import=<token> in the hash
+        const hash = location.hash || '';
+        const m = hash.match(/[?&]import=([^&]+)/);
+        if (!m) return 0;
+        try {
+            const ids = JSON.parse(atob(decodeURIComponent(m[1])));
+            if (!Array.isArray(ids)) return 0;
+            let added = 0;
+            ids.forEach(id => {
+                if (typeof id !== 'string') return;
+                if (!Watchlist.has(id)) {
+                    const p = TCC.products.find(x => x.id === id);
+                    const low = p ? (TCC.getLowestPrice(p) || {}).price : null;
+                    Watchlist.add(id, typeof low === 'number' ? low : undefined);
+                    added++;
+                }
+            });
+            if (added > 0) {
+                updateWatchlistNav();
+                showToast(`${added} item${added === 1 ? '' : 's'} imported to watchlist`, 'success');
+            } else {
+                showToast('Already in your watchlist', 'info');
+            }
+            // Strip the import param from the hash so refresh doesn't re-import
+            history.replaceState(null, '', location.pathname + '#compare/watchlist');
+            return added;
+        } catch (e) {
+            return 0;
         }
     }
 
@@ -3809,6 +3989,7 @@
         updateHeroCounts();
         injectDataIcons();
         updateWatchlistNav();  // Phase 5: surface watchlist badge if any items saved
+        maybeFireDropNotification();  // Phase 18: notify returning visitors of drops
         renderHome();
         // renderStaffPick removed in Phase 2 — section culled from homepage
         renderDispensaries({ city: 'metro' });

@@ -14,6 +14,55 @@ DISPENSARY_FILE = Path(__file__).parent / "data" / "dispensaries.json"
 MANUAL_DISPENSARY_FILE = Path(__file__).parent / "data" / "manual_dispensaries.json"
 TIER_OVERRIDES_FILE = Path(__file__).parent / "data" / "tier_overrides.json"
 DATA_JS = Path(__file__).parent.parent / "js" / "data.js"
+INDEX_HTML = Path(__file__).parent.parent / "index.html"
+
+
+def bump_freshness_timestamp():
+    """Phase 16: stamp the LAST_UPDATED_HERO/FOOTER comment blocks in
+    index.html so the "Live · Updated X" eyebrow never lags the actual
+    Pi-cron data refresh by days. Idempotent — only writes if the
+    timestamp would actually change.
+
+    Independent of build_seo.js so the Pi can run this even when SEO
+    rebuild is skipped or fails.
+    """
+    if not INDEX_HTML.exists():
+        return False
+    now_utc = datetime.utcnow()
+    iso_utc = now_utc.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    # CDT label (best-effort; UTC-5 in summer)
+    cdt_offset_hours = 5
+    cdt = now_utc.replace(microsecond=0)
+    cdt_hour = (cdt.hour - cdt_offset_hours) % 24
+    am_pm = "AM" if cdt_hour < 12 else "PM"
+    cdt_hour_12 = cdt_hour % 12 or 12
+    human_cdt = cdt.strftime(f"%b %-d, {cdt_hour_12:d}:%M ") + am_pm + " CDT"
+
+    hero_fresh = (
+        f'<span class="fresh-ts" data-fresh-ts="{iso_utc}">'
+        f'Updated just now · {human_cdt}</span>'
+    )
+    footer_fresh = (
+        f'<span class="fresh-ts" data-fresh-ts="{iso_utc}">'
+        f'Live data · last refresh {human_cdt}</span>'
+    )
+
+    content = INDEX_HTML.read_text()
+    new_content = re.sub(
+        r"<!-- LAST_UPDATED_HERO -->[\s\S]*?<!-- /LAST_UPDATED_HERO -->",
+        f"<!-- LAST_UPDATED_HERO -->{hero_fresh}<!-- /LAST_UPDATED_HERO -->",
+        content,
+    )
+    new_content = re.sub(
+        r"<!-- LAST_UPDATED_FOOTER -->[\s\S]*?<!-- /LAST_UPDATED_FOOTER -->",
+        f"<!-- LAST_UPDATED_FOOTER -->{footer_fresh}<!-- /LAST_UPDATED_FOOTER -->",
+        new_content,
+    )
+    if new_content != content:
+        INDEX_HTML.write_text(new_content)
+        print(f"Bumped freshness timestamp → {iso_utc}")
+        return True
+    return False
 
 
 def load_tier_overrides():
@@ -203,6 +252,10 @@ def main():
     success = update_data_js(js)
 
     if success:
+        # Phase 16: stamp the freshness timestamp on index.html so the
+        # "Live · Updated X" eyebrow tracks the actual cron cadence even
+        # when SEO rebuild is skipped.
+        bump_freshness_timestamp()
         print(f"\nLive site will update on next GitHub Pages deploy.")
         # Print summary
         for d in metro:

@@ -1648,14 +1648,15 @@ ul, ol { list-style: none; }
     text-align: center;
 }
 
-/* Phase 5: star button on product cards */
+/* Phase 5: star button on product cards. Moved to top-LEFT in Phase 16 so
+   it stops crashing into the price column on the top-right. */
 .product-card { position: relative; }
 .product-card-star {
     position: absolute;
     top: 0.5rem;
-    right: 0.5rem;
-    width: 30px;
-    height: 30px;
+    left: 0.5rem;
+    width: 28px;
+    height: 28px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
