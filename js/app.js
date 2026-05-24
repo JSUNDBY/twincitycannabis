@@ -541,6 +541,7 @@
     // ---- RENDER: HOME ----
     function renderHome() {
         renderLiveMetrics();
+        renderPriceByCity();
         renderShopRotation();
         renderFeaturedDispensaries();
         renderRecentlyOpened();
@@ -649,6 +650,78 @@
                             <div class="live-metric-sub">${t.sub}</div>
                         </div>
                     `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    // ─── Phase 9: Avg flower 1/8 oz price by city (regional viz) ────────
+    // Horizontal bar chart of the top 8 cities by flower-eighth listing
+    // count. Each row: city name, bar scaled to relative price, dollar
+    // value. Surfaces geographic price variation at a glance.
+    function renderPriceByCity() {
+        const container = document.getElementById('price-by-city');
+        if (!container || !TCC.products || !TCC.dispensaries) return;
+
+        // Map dispensary id → city for fast lookup
+        const cityOf = {};
+        TCC.dispensaries.forEach(d => { cityOf[d.id] = d.city || 'Other'; });
+
+        // Collect all flower 1/8 oz prices by city
+        const byCity = {};
+        TCC.products.forEach(p => {
+            if (p.category !== 'flower') return;
+            const w = (p.weight || '').toLowerCase();
+            const isEighth = /1\/8|3\.5\s*g|3\.5g/.test(w) || p.grams === 3.5;
+            if (!isEighth) return;
+            Object.entries(p.prices || {}).forEach(([dispId, v]) => {
+                if (v <= 5 || v > 100) return;
+                const city = cityOf[dispId];
+                if (!city) return;
+                (byCity[city] = byCity[city] || []).push(v);
+            });
+        });
+
+        // Sort by sample count, top 8 with at least 4 listings
+        const rows = Object.entries(byCity)
+            .filter(([, prices]) => prices.length >= 4)
+            .map(([city, prices]) => {
+                const sorted = prices.slice().sort((a, b) => a - b);
+                const median = sorted[Math.floor(sorted.length / 2)];
+                return { city, median, count: prices.length };
+            })
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 8);
+
+        if (rows.length === 0) {
+            container.innerHTML = '';
+            return;
+        }
+
+        // Scale bars relative to the highest median price in the set
+        const maxMedian = Math.max(...rows.map(r => r.median));
+        const minMedian = Math.min(...rows.map(r => r.median));
+
+        container.innerHTML = `
+            <div class="container">
+                <div class="section-label fade-in">Regional pricing · Median eighth</div>
+                <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
+                    <h2 class="section-title fade-in">Where flower is cheapest right now.</h2>
+                    <a href="#compare/cat/flower" class="btn btn-ghost text-sm">All flower &rarr;</a>
+                </div>
+                <div class="price-by-city-list">
+                    ${rows.sort((a, b) => a.median - b.median).map(r => {
+                        const pct = ((r.median - minMedian) / (maxMedian - minMedian || 1)) * 100;
+                        const widthPct = 25 + (pct * 0.7); // 25–95% range so the cheapest still shows visible bar
+                        const isLowest = r.median === minMedian;
+                        return `
+                            <div class="price-by-city-row${isLowest ? ' is-lowest' : ''}">
+                                <span class="price-by-city-name">${esc(r.city)}</span>
+                                <span class="price-by-city-bar-wrap"><span class="price-by-city-bar" style="width:${widthPct}%"></span></span>
+                                <span class="price-by-city-value">$${Math.round(r.median)}</span>
+                                <span class="price-by-city-count">${r.count} listings</span>
+                            </div>`;
+                    }).join('')}
                 </div>
             </div>
         `;

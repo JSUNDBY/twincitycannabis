@@ -1746,6 +1746,68 @@ ul, ol { list-style: none; }
     .live-metric:nth-child(n+3) { border-top: 1px solid var(--border); }
 }
 
+/* Phase 9: regional pricing horizontal bars */
+.price-by-city-section { padding: 4rem 0; }
+.price-by-city-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+.price-by-city-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 60px 90px;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.65rem 0;
+    border-top: 1px solid rgba(255,255,255,0.04);
+}
+.price-by-city-row:first-child { border-top: 0; }
+.price-by-city-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    letter-spacing: -0.005em;
+}
+.price-by-city-bar-wrap {
+    height: 14px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.04);
+    overflow: hidden;
+    position: relative;
+}
+.price-by-city-bar {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(34,197,94,0.45), rgba(34,197,94,0.85));
+    transition: width 0.6s cubic-bezier(.22,.61,.36,1);
+}
+.price-by-city-row.is-lowest .price-by-city-bar {
+    background: linear-gradient(90deg, rgba(74,222,128,0.6), rgba(74,222,128,1));
+}
+.price-by-city-value {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+.price-by-city-row.is-lowest .price-by-city-value { color: var(--green-bright, #4ade80); }
+.price-by-city-count {
+    font-family: 'SF Mono', Menlo, Monaco, monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-align: right;
+}
+@media (max-width: 720px) {
+    .price-by-city-row {
+        grid-template-columns: 90px 1fr 50px;
+    }
+    .price-by-city-count { display: none; }
+}
+
 /* Phase 6: full-bleed map page */
 #page-map {
     padding: 0;
