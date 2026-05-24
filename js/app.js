@@ -532,12 +532,11 @@
         renderShopRotation();
         renderFeaturedDispensaries();
         renderRecentlyOpened();
-        renderTodaysDeals();
         renderTrendingProducts();
         renderPopularStrains();
         renderMNBrands();
-        renderComingSoon();
-        renderShop();
+        // Phase 2 removed: renderTodaysDeals, renderComingSoon, renderShop —
+        // their DOM containers no longer exist on the homepage.
     }
 
     // ─── Shop Rotation ──────────────────────────────────────────────────────
@@ -2866,7 +2865,7 @@
         updateHeroCounts();
         injectDataIcons();
         renderHome();
-        renderStaffPick();
+        // renderStaffPick removed in Phase 2 — section culled from homepage
         renderDispensaries({ city: 'metro' });
         renderDeals();
         renderStrains();

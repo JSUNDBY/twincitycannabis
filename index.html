@@ -364,97 +364,70 @@
 
     <!-- Doors section removed in Phase 1 — 3 hero CTAs now carry the same intent without the visual exhaustion. -->
 
-    <!-- Quick Categories -->
-    <section>
-        <div class="container">
-            <div class="quick-cats">
-                <div class="quick-cat" data-category="flower">
-                    <div class="quick-cat-icon" data-icon="leaf"></div>
-                    <span class="quick-cat-label">Flower</span>
-                </div>
-                <div class="quick-cat" data-category="pre-roll">
-                    <div class="quick-cat-icon" data-icon="joint"></div>
-                    <span class="quick-cat-label">Pre-Rolls</span>
-                </div>
-                <div class="quick-cat" data-category="cartridge">
-                    <div class="quick-cat-icon" data-icon="cart"></div>
-                    <span class="quick-cat-label">Carts</span>
-                </div>
-                <div class="quick-cat" data-category="edible">
-                    <div class="quick-cat-icon" data-icon="cookie"></div>
-                    <span class="quick-cat-label">Edibles</span>
-                </div>
-                <div class="quick-cat" data-category="concentrate">
-                    <div class="quick-cat-icon" data-icon="diamond"></div>
-                    <span class="quick-cat-label">Concentrates</span>
-                </div>
-                <div class="quick-cat" data-category="topical">
-                    <div class="quick-cat-icon" data-icon="drop"></div>
-                    <span class="quick-cat-label">Topicals</span>
-                </div>
-                <div class="quick-cat" data-category="tincture">
-                    <div class="quick-cat-icon" data-icon="bottle"></div>
-                    <span class="quick-cat-label">Tinctures</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Shop Rotation — three shops surfaced each visit, weighted to show
-         under-viewed shops more often. Our honest equity mechanism. -->
+    <!-- Today in Minnesota cannabis — 3 shops surfaced per visit, weighted to surface under-viewed shops. -->
     <section class="rotation-section" id="shop-rotation-section">
         <div class="container">
             <header class="rotation-header">
-                <span class="rotation-eyebrow">Discover</span>
-                <h2 class="rotation-title">Three shops worth knowing</h2>
-                <p class="rotation-sub">Refreshed every visit. Weighted to surface shops you probably haven&rsquo;t seen yet &mdash; so every licensed dispensary in Minnesota gets a turn.</p>
+                <span class="rotation-eyebrow">Today in Minnesota cannabis</span>
+                <h2 class="rotation-title">Three shops worth knowing.</h2>
             </header>
             <div class="rotation-grid" id="shop-rotation-grid"></div>
         </div>
     </section>
 
-    <!-- This Week on TCC — weekly editorial strip -->
-    <!-- UPDATE WEEKLY: edit the three cards below and bump the "Updated" date -->
-    <section class="tw-strip">
+    <!-- New shops — auto-hidden if no recent dispensaries -->
+    <section class="section recently-opened-section" id="recently-opened-section">
         <div class="container">
-            <header class="tw-header">
-                <span class="tw-eyebrow">From our desk</span>
-                <h2 class="tw-title">This Week on TCC</h2>
-                <p class="tw-sub">A short, hand-picked brief from our team &mdash; what we&rsquo;re watching, who we&rsquo;re visiting, and what&rsquo;s worth knowing.</p>
-            </header>
-            <div class="tw-grid">
-                <article class="tw-card">
-                    <span class="tw-card-kicker">New on TCC</span>
-                    <h3 class="tw-card-title">Fort Road Cannabis just opened</h3>
-                    <p class="tw-card-body">A boutique adult-use shop on West Seventh in Saint Paul, heavy on Minnesota-made drinks and edibles plus a small curated flower selection. Owned by brothers Phil and Ryan Springstead with Trevor Guest. Worth the trip if you&rsquo;re West End-curious.</p>
-                    <a class="tw-card-link" href="/dispensaries/fort-road-cannabis/">Visit their page <span aria-hidden="true">&rarr;</span></a>
-                </article>
-                <article class="tw-card">
-                    <span class="tw-card-kicker">Shop smart</span>
-                    <h3 class="tw-card-title">Today&rsquo;s deals refresh all day</h3>
-                    <p class="tw-card-body">Shop promotions turn over fast &mdash; daily specials, BOGOs, weekend drops. Our deals page pulls every active offer across the state and re-checks throughout the day. Worth a glance before you head out.</p>
-                    <a class="tw-card-link" href="#deals">See today&rsquo;s deals <span aria-hidden="true">&rarr;</span></a>
-                </article>
-                <article class="tw-card">
-                    <span class="tw-card-kicker">Good to know</span>
-                    <h3 class="tw-card-title">With edibles, start low and wait</h3>
-                    <p class="tw-card-body">Edibles can take ninety minutes to fully kick in. The most common rookie move is taking more before the first dose lands. Take the smallest serving on the package, wait two hours, then decide. You can always take more.</p>
-                    <a class="tw-card-link" href="#learn">Read the primer <span aria-hidden="true">&rarr;</span></a>
-                </article>
+            <div class="section-label fade-in">New shops</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
+                <h2 class="section-title fade-in">Recently opened.</h2>
+                <a href="#dispensaries" class="btn btn-ghost text-sm">All dispensaries &rarr;</a>
             </div>
-            <p class="tw-updated">Updated April 27, 2026</p>
+            <div class="dispensary-grid stagger" id="recently-opened-dispensaries"></div>
         </div>
     </section>
 
-    <!-- Featured Dispensaries
-         Two states, toggled by renderFeaturedDispensaries():
-         (1) #featured-active — the live grid when one or more shops have a
-             paid tier in TCC.dispensaries (or via the /overrides KV blob).
-         (2) #featured-pitch — a "be the first" demo + CTA, shown until the
-             first paying customer lands. -->
-    <section class="section" id="featured-section">
+    <!-- Biggest price drops — replaces both Today's Deals and Today's Picks (which overlapped). -->
+    <section class="section section-dark">
         <div class="container">
-            <!-- Live grid (revealed when a paid dispensary exists) -->
+            <div class="section-label fade-in">Biggest price drops</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
+                <h2 class="section-title fade-in">Trending down this week.</h2>
+                <a href="#compare" class="btn btn-ghost text-sm">Compare all &rarr;</a>
+            </div>
+            <div class="home-grid-2 stagger" id="trending-products"></div>
+        </div>
+    </section>
+
+    <!-- Trending this week — what shoppers are reaching for, by availability across the metro. -->
+    <section class="section">
+        <div class="container">
+            <div class="section-label fade-in">Trending this week</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
+                <h2 class="section-title fade-in">Most-stocked strains in Minnesota.</h2>
+                <a href="#strains" class="btn btn-ghost text-sm">All strains &rarr;</a>
+            </div>
+            <div class="home-grid-2 stagger" id="popular-strains"></div>
+        </div>
+    </section>
+
+    <!-- Brands to watch — Minnesota-licensed cultivators and craft brands. -->
+    <section class="section section-dark">
+        <div class="container">
+            <div class="section-label fade-in">Brands to watch</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
+                <h2 class="section-title fade-in">Minnesota-grown.</h2>
+                <a href="/brands/" class="btn btn-ghost text-sm">All brands &rarr;</a>
+            </div>
+            <div class="home-grid-2 stagger" id="mn-brands"></div>
+        </div>
+    </section>
+
+    <!-- Featured Dispensaries — only renders when one or more shops have a paid tier.
+         The "be the first" pitch fallback was removed in Phase 2: empty space beats
+         a fake placeholder. /for-dispensaries handles the sales pitch. -->
+    <section class="section" id="featured-section" style="display:none">
+        <div class="container">
             <div id="featured-active" style="display:none">
                 <div class="section-label fade-in">Featured Dispensaries</div>
                 <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
@@ -463,188 +436,18 @@
                 </div>
                 <div class="dispensary-grid stagger" id="featured-dispensaries"></div>
             </div>
-
-            <!-- "Be the first" pitch (default) -->
-            <div id="featured-pitch" class="featured-pitch">
-                <div class="featured-pitch-text">
-                    <span class="featured-pitch-eyebrow">Featured Dispensaries</span>
-                    <h2 class="featured-pitch-title">This spot is open.</h2>
-                    <p class="featured-pitch-sub">No dispensary holds the Featured spot in Minnesota yet. Claim it free for 30 days &mdash; we set up billing on a short call after.</p>
-                    <ul class="featured-pitch-list">
-                        <li>Your shop, surfaced first on the homepage carousel</li>
-                        <li>Real-time dashboard: profile views, clicks, deal performance</li>
-                        <li>Highlighted in Today&rsquo;s Deals across the site</li>
-                        <li>Founding Member rate locked at $299/mo for as long as you stay</li>
-                    </ul>
-                    <a href="#for-dispensaries-claim" class="btn btn-primary btn-lg featured-pitch-cta">Claim your 30 days &rarr;</a>
-                    <p class="featured-pitch-fineprint">15-minute call. ACH or check, no credit card. Cancel anytime.</p>
-                </div>
-
-                <div class="featured-pitch-mock" aria-hidden="true">
-                    <span class="featured-pitch-mock-badge">Featured</span>
-                    <div class="featured-pitch-mock-body">
-                        <div class="featured-pitch-mock-avatar">?</div>
-                        <div>
-                            <div class="featured-pitch-mock-name">Your Dispensary</div>
-                            <div class="featured-pitch-mock-loc">Your City &middot; Your menu</div>
-                            <div class="featured-pitch-mock-stars">&#9733; &#9733; &#9733; &#9733; &#9733;</div>
-                        </div>
-                    </div>
-                    <div class="featured-pitch-mock-overlay">
-                        Your shop here <span aria-hidden="true">&rarr;</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
-    <!-- Recently Opened — auto-hidden if no recent dispensaries -->
-    <section class="section recently-opened-section" id="recently-opened-section">
-        <div class="container">
-            <div class="section-label fade-in">&#10024; Just Opened</div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
-                <div>
-                    <h2 class="section-title fade-in">New in the metro</h2>
-                    <p class="section-desc fade-in">Brand new dispensaries that just opened their doors. Be one of the first to check them out.</p>
-                </div>
-                <a href="#dispensaries" class="btn btn-ghost text-sm">View all &rarr;</a>
-            </div>
-            <div class="dispensary-grid stagger" id="recently-opened-dispensaries"></div>
-        </div>
-    </section>
-
-    <!-- Today's Deals -->
-    <section class="section section-dark">
-        <div class="container">
-            <div class="section-label fade-in">&#128293; Today's Deals</div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
-                <h2 class="section-title fade-in">Don't miss these</h2>
-                <a href="#deals" class="btn btn-ghost text-sm">All deals &rarr;</a>
-            </div>
-            <div class="deals-grid stagger" id="todays-deals"></div>
-        </div>
-    </section>
-
-    <!-- Today's Picks -->
-    <section class="section" id="staff-pick-section" style="display:none">
-        <div class="container">
-            <div class="section-label fade-in">&#11088; Today's Picks</div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
-                <h2 class="section-title fade-in">Where today's biggest savings are</h2>
-            </div>
-            <div id="staff-pick-card"></div>
-        </div>
-    </section>
-
-    <!-- Trending Products (Biggest Price Drops) -->
+    <!-- Price alerts — single homepage conversion CTA. -->
     <section class="section">
-        <div class="container">
-            <div class="section-label fade-in">&#128200; Biggest Price Drops</div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
-                <h2 class="section-title fade-in">Trending down</h2>
-                <a href="#compare" class="btn btn-ghost text-sm">Compare all &rarr;</a>
-            </div>
-            <div class="home-grid-2 stagger" id="trending-products"></div>
-        </div>
-    </section>
-
-    <!-- Popular Strains (now with real product counts via name matching) -->
-    <section class="section section-dark">
-        <div class="container">
-            <div class="section-label fade-in">&#127807; Popular Strains</div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
-                <div>
-                    <h2 class="section-title fade-in">What's stocked in the metro</h2>
-                    <p class="section-desc fade-in">The most-carried strains across all 108 dispensaries, ranked by availability.</p>
-                </div>
-                <a href="#strains" class="btn btn-ghost text-sm">All strains &rarr;</a>
-            </div>
-            <div class="home-grid-2 stagger" id="popular-strains"></div>
-        </div>
-    </section>
-
-    <!-- Minnesota Grown -->
-    <section class="section">
-        <div class="container">
-            <div class="section-label fade-in">&#127470;&#127480; Minnesota Grown</div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
-                <div>
-                    <h2 class="section-title fade-in">Support local cultivators</h2>
-                    <p class="section-desc fade-in">Minnesota-licensed growers and craft brands making cannabis right here.</p>
-                </div>
-            </div>
-            <div class="home-grid-2 stagger" id="mn-brands"></div>
-        </div>
-    </section>
-
-    <!-- Coming Soon Dispensaries -->
-    <section class="section section-dark">
-        <div class="container">
-            <div class="section-label fade-in">&#128640; Coming Soon</div>
-            <h2 class="section-title fade-in">New dispensaries opening in 2026</h2>
-            <p class="section-desc fade-in" style="margin-bottom:1.5rem">Including Minnesota's first government-run cannabis stores.</p>
-            <div class="home-grid-2 stagger" id="coming-soon-dispensaries"></div>
-        </div>
-    </section>
-
-    <!-- Alert Signup -->
-    <section class="section" style="background:radial-gradient(ellipse at 50% 50%, rgba(34,197,94,0.06) 0%, transparent 60%)">
-        <div class="container" style="text-align:center">
-            <div class="section-label fade-in">&#128276; Price Alerts</div>
-            <h2 class="section-title fade-in" style="max-width:600px;margin:0 auto 0.5rem">Never miss a deal again</h2>
-            <p class="section-desc fade-in" style="max-width:500px;margin:0 auto 1.5rem">Get notified when prices drop on your favorite products and strains. Free forever.</p>
-            <!-- Kit consumer form embed (ee755f1be7) -->
-            <div class="kit-form-wrapper kit-form-minimal fade-in" style="max-width:480px;margin:0 auto">
+        <div class="container" style="text-align:center;max-width:560px;margin:0 auto">
+            <div class="section-label fade-in">Price alerts</div>
+            <h2 class="section-title fade-in" style="margin:0 auto 1.25rem">Get notified when prices drop.</h2>
+            <div class="kit-form-wrapper kit-form-minimal fade-in" style="max-width:460px;margin:0 auto">
                 <script async data-uid="ee755f1be7" src="https://superthoughts.kit.com/ee755f1be7/index.js"></script>
             </div>
             <p class="text-xs text-muted fade-in" style="margin-top:0.6rem">No spam. Unsubscribe anytime.</p>
-        </div>
-    </section>
-
-    <!-- Quiet line for dispensary owners -->
-    <section style="padding:2rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
-        <div class="container" style="text-align:center">
-            <p class="text-sm text-muted" style="margin:0">
-                Run a dispensary? <a href="#for-dispensaries" style="color:var(--green);font-weight:600">Claim your free listing &rarr;</a>
-            </p>
-        </div>
-    </section>
-
-    <!-- TCC Shop -->
-    <section class="section">
-        <div class="container">
-            <div class="section-label fade-in">&#128717; TCC Shop</div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem">
-                <div>
-                    <h2 class="section-title fade-in">Rep the Twin Cities</h2>
-                    <p class="section-desc fade-in">Premium cannabis lifestyle gear. No stoner cliches, just clean design.</p>
-                </div>
-            </div>
-            <div class="home-grid-2 stagger" id="tcc-shop"></div>
-        </div>
-    </section>
-
-    <!-- Stats Bar -->
-    <section class="section section-dark">
-        <div class="container">
-            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center" class="fade-in">
-                <div>
-                    <div class="font-display font-bold text-3xl text-green" id="stats-bar-disps">32</div>
-                    <div class="text-sm text-secondary">Dispensaries</div>
-                </div>
-                <div>
-                    <div class="font-display font-bold text-3xl text-green" id="stats-bar-products">3,200+</div>
-                    <div class="text-sm text-secondary">Products Tracked</div>
-                </div>
-                <div>
-                    <div class="font-display font-bold text-3xl text-green" id="stats-bar-updates">5x</div>
-                    <div class="text-sm text-secondary">Daily Updates</div>
-                </div>
-                <div>
-                    <div class="font-display font-bold text-3xl text-green" id="stats-bar-deals">Free</div>
-                    <div class="text-sm text-secondary">For Everyone</div>
-                </div>
-            </div>
         </div>
     </section>
 
