@@ -540,6 +540,7 @@
 
     // ---- RENDER: HOME ----
     function renderHome() {
+        renderLiveMetrics();
         renderShopRotation();
         renderFeaturedDispensaries();
         renderRecentlyOpened();
@@ -548,6 +549,109 @@
         renderMNBrands();
         // Phase 2 removed: renderTodaysDeals, renderComingSoon, renderShop —
         // their DOM containers no longer exist on the homepage.
+    }
+
+    // ─── Phase 7c: Live market metrics ──────────────────────────────────
+    // Civic, Bloomberg-style strip of four big numerics positioned between
+    // hero and the first content section. Pulled from real data:
+    //   1. Median flower 1/8 oz price (the canonical price anchor)
+    //   2. Biggest weekly drop in dollars (proves liveness)
+    //   3. Open dispensary count (proves scale, honest after Phase 7a)
+    //   4. Last refresh time (proves it's actually live)
+    function renderLiveMetrics() {
+        const container = document.getElementById('live-metrics');
+        if (!container || !TCC.products) return;
+
+        // 1. Median flower 1/8 oz price
+        const eighthPrices = [];
+        TCC.products.forEach(p => {
+            if (p.category !== 'flower') return;
+            const w = (p.weight || '').toLowerCase();
+            const isEighth = /1\/8|3\.5\s*g|3\.5g/.test(w) || p.grams === 3.5;
+            if (!isEighth) return;
+            Object.values(p.prices || {}).forEach(v => {
+                if (v > 5 && v <= 100) eighthPrices.push(v);
+            });
+        });
+        eighthPrices.sort((a, b) => a - b);
+        const median = eighthPrices.length
+            ? eighthPrices[Math.floor(eighthPrices.length / 2)]
+            : null;
+
+        // 2. Biggest weekly drop on a retail-priced item. Both ends of the
+        // history must sit in retail range (≤$80) so we're not surfacing a
+        // bulk-ounce reclassification or a unit-of-measure mix-up.
+        let biggestDrop = 0;
+        let biggestDropProduct = null;
+        TCC.products.forEach(p => {
+            if (!p.priceHistory || p.priceHistory.length < 2) return;
+            const ph = p.priceHistory;
+            const oldest = ph[0], newest = ph[ph.length - 1];
+            if (newest <= 0 || newest > 80 || oldest <= 0 || oldest > 80) return;
+            const drop = oldest - newest;
+            if (drop > biggestDrop) {
+                biggestDrop = drop;
+                biggestDropProduct = p;
+            }
+        });
+
+        // 3. Open dispensary count
+        const openCount = operationalDispensaryCount();
+
+        // 4. Last refresh — pull from any existing freshness timestamp on page
+        const freshEl = document.querySelector('.fresh-ts[data-fresh-ts]');
+        let freshLabel = 'now';
+        if (freshEl) {
+            const ts = freshEl.getAttribute('data-fresh-ts');
+            const refreshedAt = new Date(ts);
+            const minsAgo = Math.max(0, Math.round((Date.now() - refreshedAt.getTime()) / 60000));
+            if (minsAgo < 1) freshLabel = 'just now';
+            else if (minsAgo < 60) freshLabel = minsAgo + ' min ago';
+            else if (minsAgo < 60 * 12) freshLabel = Math.round(minsAgo / 60) + ' hr ago';
+            else freshLabel = 'today';
+        }
+
+        const tiles = [
+            {
+                value: median != null ? '$' + Math.round(median) : '—',
+                label: 'Median eighth',
+                sub: median != null ? `Across ${eighthPrices.length.toLocaleString()} flower listings` : 'Sampling…',
+            },
+            {
+                value: biggestDrop >= 1 ? '▼ $' + Math.round(biggestDrop) : '—',
+                label: 'Biggest weekly drop',
+                sub: biggestDropProduct ? esc(biggestDropProduct.name.split('|')[0].trim().slice(0, 32)) : 'No recent movement',
+                tone: biggestDrop >= 1 ? 'down' : 'flat',
+            },
+            {
+                value: openCount.toLocaleString(),
+                label: 'Open dispensaries',
+                sub: 'Statewide · refreshed 4×/day',
+            },
+            {
+                value: freshLabel,
+                label: 'Last refresh',
+                sub: 'Live menu data',
+                live: true,
+            },
+        ];
+
+        container.innerHTML = `
+            <div class="container">
+                <div class="live-metrics-header">
+                    <span class="section-label">Live market · Minnesota</span>
+                </div>
+                <div class="live-metrics-grid">
+                    ${tiles.map(t => `
+                        <div class="live-metric${t.tone === 'down' ? ' live-metric--down' : ''}${t.live ? ' live-metric--live' : ''}">
+                            <div class="live-metric-value">${t.value}</div>
+                            <div class="live-metric-label">${t.label}</div>
+                            <div class="live-metric-sub">${t.sub}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
     }
 
     // ─── Shop Rotation ──────────────────────────────────────────────────────

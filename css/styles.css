@@ -1686,6 +1686,66 @@ ul, ol { list-style: none; }
     margin-left: auto;
 }
 
+/* ============ PHASE 7c — LIVE MARKET METRICS ============
+   Civic, Bloomberg-style numerics row directly below the hero.
+   Bigger than card values, smaller than headlines. Reads as live data,
+   not a stat brag. */
+.live-metrics-section {
+    padding: 2rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+}
+.live-metrics-header {
+    margin-bottom: 1.25rem;
+}
+.live-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--border);
+}
+.live-metric {
+    padding: 1.5rem 1.25rem 1.5rem 0;
+    border-left: 1px solid var(--border);
+}
+.live-metric:first-child { border-left: 0; padding-left: 0; }
+.live-metric:not(:first-child) { padding-left: 1.5rem; }
+.live-metric-value {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+}
+.live-metric--down .live-metric-value { color: var(--green); }
+.live-metric--live .live-metric-value {
+    font-family: 'SF Mono', Menlo, Monaco, monospace;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    letter-spacing: -0.5px;
+    color: var(--green);
+}
+.live-metric-label {
+    margin-top: 0.45rem;
+    font-family: 'SF Mono', Menlo, Monaco, monospace;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+.live-metric-sub {
+    margin-top: 0.3rem;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    line-height: 1.35;
+}
+@media (max-width: 720px) {
+    .live-metrics-grid { grid-template-columns: 1fr 1fr; }
+    .live-metric:nth-child(3) { border-left: 0; padding-left: 0; }
+    .live-metric:nth-child(n+3) { border-top: 1px solid var(--border); }
+}
+
 /* Phase 6: full-bleed map page */
 #page-map {
     padding: 0;
