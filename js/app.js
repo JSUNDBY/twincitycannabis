@@ -478,6 +478,15 @@
                     Browse.query = '';
                     Browse.page = 1;
                     renderCompare();
+                    // Phase 12: visiting the watchlist resets each item's "last
+                    // seen" price so the drop banner only surfaces NEW movement.
+                    Watchlist.all().forEach(id => {
+                        const p = TCC.products.find(x => x.id === id);
+                        if (!p) return;
+                        const low = (TCC.getLowestPrice(p) || {}).price;
+                        if (typeof low === 'number') Watchlist.markSeen(id, low);
+                    });
+                    renderWatchlistBanner();
                 } else if (parts[1]) {
                     renderCompare(parts[1]);
                 } else {
@@ -540,6 +549,7 @@
 
     // ---- RENDER: HOME ----
     function renderHome() {
+        renderWatchlistBanner();  // Phase 12
         renderLiveMetrics();
         renderPriceByCity();
         renderShopRotation();
@@ -655,6 +665,53 @@
                         </div>
                     `).join('')}
                 </div>
+            </div>
+        `;
+    }
+
+    // ─── Phase 12: Watchlist banner — surfaces drops since last seen ────
+    // When any of the visitor's saved products has dropped in price since
+    // they last opened the watchlist (per Watchlist.getSeen), show a small
+    // banner above the homepage content. Civic, not pushy — single line,
+    // single CTA.
+    function renderWatchlistBanner() {
+        const container = document.getElementById('watchlist-banner');
+        if (!container) return;
+        const savedIds = Watchlist.all();
+        if (savedIds.length === 0) {
+            container.style.display = 'none';
+            container.innerHTML = '';
+            return;
+        }
+        let dropCount = 0;
+        let totalDelta = 0;
+        savedIds.forEach(id => {
+            const p = TCC.products.find(x => x.id === id);
+            if (!p) return;
+            const seen = Watchlist.getSeen(id);
+            if (!seen || typeof seen.price !== 'number') return;
+            const currentLow = (TCC.getLowestPrice(p) || {}).price;
+            if (typeof currentLow !== 'number') return;
+            if (currentLow < seen.price - 0.5) {
+                dropCount++;
+                totalDelta += (seen.price - currentLow);
+            }
+        });
+        if (dropCount === 0) {
+            container.style.display = 'none';
+            container.innerHTML = '';
+            return;
+        }
+        container.style.display = '';
+        container.innerHTML = `
+            <div class="container">
+                <a class="watchlist-banner-inner" href="#compare/watchlist">
+                    <span class="watchlist-banner-dot"></span>
+                    <span class="watchlist-banner-text">
+                        <strong>${dropCount}</strong> of your saved product${dropCount === 1 ? '' : 's'} dropped &mdash; saving you up to <strong>$${totalDelta.toFixed(0)}</strong>.
+                    </span>
+                    <span class="watchlist-banner-cta">See your watchlist &rarr;</span>
+                </a>
             </div>
         `;
     }
@@ -2883,24 +2940,47 @@
     // ─── Phase 5: Watchlist (localStorage-backed) ─────────────────────────
     // Lets visitors star products to revisit later. No accounts, no server —
     // pure localStorage. Survives page reloads but not device changes.
+    // Phase 12: also tracks per-product "last seen price" so we can surface
+    // drops since the user last looked.
     const WATCHLIST_KEY = 'tcc.watchlist.v1';
+    const WATCHLIST_SEEN_KEY = 'tcc.watchlist.seen.v1';
     const Watchlist = (function() {
         let ids = new Set();
+        let seen = {};  // { productId: { price: number, ts: ISO string } }
         try {
             ids = new Set(JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]'));
+        } catch (e) {}
+        try {
+            seen = JSON.parse(localStorage.getItem(WATCHLIST_SEEN_KEY) || '{}');
         } catch (e) {}
         const listeners = new Set();
         function persist() {
             try { localStorage.setItem(WATCHLIST_KEY, JSON.stringify([...ids])); } catch (e) {}
+            try { localStorage.setItem(WATCHLIST_SEEN_KEY, JSON.stringify(seen)); } catch (e) {}
             listeners.forEach(fn => { try { fn(); } catch (e) {} });
         }
         return {
             has: (id) => ids.has(id),
             count: () => ids.size,
             all: () => [...ids],
-            add: (id) => { ids.add(id); persist(); },
-            remove: (id) => { ids.delete(id); persist(); },
-            toggle: (id) => { if (ids.has(id)) ids.delete(id); else ids.add(id); persist(); return ids.has(id); },
+            add: (id, price) => {
+                ids.add(id);
+                if (typeof price === 'number') seen[id] = { price, ts: new Date().toISOString() };
+                persist();
+            },
+            remove: (id) => { ids.delete(id); delete seen[id]; persist(); },
+            toggle: (id, price) => {
+                if (ids.has(id)) { ids.delete(id); delete seen[id]; }
+                else { ids.add(id); if (typeof price === 'number') seen[id] = { price, ts: new Date().toISOString() }; }
+                persist();
+                return ids.has(id);
+            },
+            getSeen: (id) => seen[id] || null,
+            markSeen: (id, price) => {
+                if (typeof price !== 'number') return;
+                seen[id] = { price, ts: new Date().toISOString() };
+                persist();
+            },
             onChange: (fn) => { listeners.add(fn); return () => listeners.delete(fn); },
         };
     })();
@@ -2908,7 +2988,10 @@
     // Exposed for click-handler use from inline onclick attrs on product cards
     window.tccToggleWatch = function(id, ev) {
         if (ev) { ev.preventDefault(); ev.stopPropagation(); }
-        const nowOn = Watchlist.toggle(id);
+        // Phase 12: record current price so we can surface future drops
+        const product = TCC.products.find(p => p.id === id);
+        const currentLow = product ? (TCC.getLowestPrice(product) || {}).price : null;
+        const nowOn = Watchlist.toggle(id, currentLow);
         // Re-render every star button + card border for this product id across the page
         document.querySelectorAll('[data-watch-id="' + id + '"]').forEach(el => {
             el.classList.toggle('is-on', nowOn);
