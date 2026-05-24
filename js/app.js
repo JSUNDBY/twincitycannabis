@@ -1761,11 +1761,21 @@
         trackServerEvent(id, 'view');
         renderDispensaryIntelligence(d);
 
-        // Banner — uses uniform CSS background for visual consistency across
-        // all 85 dispensaries (no longer override with d.gradient, which
-        // routinely clashed with branded logos).
+        // Banner — uniform background by default, with a Phase 14 tier accent
+        // for paid placements (premium amber, featured green).
         const bannerEl = document.getElementById('detail-banner');
         bannerEl.style.background = '';
+        bannerEl.classList.remove('tier-premium', 'tier-featured', 'tier-free');
+        bannerEl.classList.add('tier-' + (d.tier || 'free'));
+        // Remove any prior tier tag
+        const oldTag = bannerEl.querySelector('.detail-banner-tier-tag');
+        if (oldTag) oldTag.remove();
+        if (d.tier === 'premium' || d.tier === 'featured') {
+            const tag = document.createElement('span');
+            tag.className = 'detail-banner-tier-tag';
+            tag.textContent = d.tier === 'premium' ? 'Premium · Paid' : 'Featured · Paid';
+            bannerEl.appendChild(tag);
+        }
         const initialEl = document.getElementById('detail-banner-initial');
         const hasImg = d.img && d.img.length > 10 && !d.img.includes('placeholder');
         if (hasImg) {
