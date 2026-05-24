@@ -1686,6 +1686,47 @@ ul, ol { list-style: none; }
     margin-left: auto;
 }
 
+/* Phase 11: saved-state card depth — a thin brand-green left edge marks
+   the card as in the watchlist without yelling. Subtle "market object"
+   treatment that survives across the homepage and Browse list. */
+.product-card.is-watched {
+    box-shadow: inset 3px 0 0 0 var(--green);
+}
+.product-card.is-watched .product-card-star {
+    background: rgba(34,197,94,0.15);
+    color: var(--green);
+    border-color: var(--green);
+}
+.product-card.is-watched .product-card-star svg { fill: currentColor; }
+
+/* Phase 11: civic toast for watchlist + future system feedback */
+.tcc-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 2rem;
+    transform: translateX(-50%) translateY(8px);
+    padding: 0.7rem 1.1rem;
+    background: rgba(10, 20, 16, 0.95);
+    color: var(--text-primary);
+    border: 1px solid var(--green);
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+    z-index: 9999;
+}
+.tcc-toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+.tcc-toast[data-tone="info"] { border-color: rgba(255,255,255,0.18); }
+
 /* ============ PHASE 7c — LIVE MARKET METRICS ============
    Civic, Bloomberg-style numerics row directly below the hero.
    Bigger than card values, smaller than headlines. Reads as live data,

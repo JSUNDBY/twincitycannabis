@@ -2902,15 +2902,40 @@
     window.tccToggleWatch = function(id, ev) {
         if (ev) { ev.preventDefault(); ev.stopPropagation(); }
         const nowOn = Watchlist.toggle(id);
-        // Re-render every star button for this product id across the page
+        // Re-render every star button + card border for this product id across the page
         document.querySelectorAll('[data-watch-id="' + id + '"]').forEach(el => {
             el.classList.toggle('is-on', nowOn);
             el.setAttribute('aria-pressed', nowOn ? 'true' : 'false');
             el.setAttribute('title', nowOn ? 'Saved to your watchlist' : 'Save to watchlist');
+            // Phase 11: card itself picks up an 'is-watched' marker so the
+            // saved state reads at a glance, not just from the corner star.
+            const card = el.closest('.product-card');
+            if (card) card.classList.toggle('is-watched', nowOn);
         });
-        // Update nav badge
         updateWatchlistNav();
+        showToast(nowOn ? 'Saved to watchlist' : 'Removed from watchlist', nowOn ? 'success' : 'info');
     };
+
+    // Phase 11: tiny civic toast for watchlist + future system feedback.
+    // Single transient element, no library. Fades in for 1.8s then out.
+    let _toastTimer = null;
+    function showToast(message, tone) {
+        let el = document.getElementById('tcc-toast');
+        if (!el) {
+            el = document.createElement('div');
+            el.id = 'tcc-toast';
+            el.className = 'tcc-toast';
+            el.setAttribute('aria-live', 'polite');
+            document.body.appendChild(el);
+        }
+        el.textContent = message;
+        el.dataset.tone = tone || 'info';
+        el.classList.add('is-visible');
+        clearTimeout(_toastTimer);
+        _toastTimer = setTimeout(() => {
+            el.classList.remove('is-visible');
+        }, 1800);
+    }
 
     function updateWatchlistNav() {
         const n = Watchlist.count();
@@ -2981,7 +3006,8 @@
             ? `<div class="product-card-img" onclick="event.stopPropagation();openLightbox('${p.image}','${esc(p.name).replace(/'/g,"\\'")}','${esc(p.brand||"").replace(/'/g,"\\'")}','${TCC.formatPrice(TCC.getLowestPrice(p)?.price||0)}','${esc(p.category)}','${esc(p.thc||"")}')"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'product-card-img-fallback\\'>${catEmoji}</div>'"></div>`
             : `<div class="product-card-img"><div class="product-card-img-fallback">${catEmoji}</div></div>`;
 
-        return `<div class="card product-card" onclick="window.location.hash='compare/${p.id}'">
+        const watchedClass = Watchlist.has(p.id) ? ' is-watched' : '';
+        return `<div class="card product-card${watchedClass}" onclick="window.location.hash='compare/${p.id}'">
             ${starButton(p.id)}
             <div class="card-body-sm" style="display:flex;gap:0.8rem;align-items:flex-start">
                 ${imgHtml}
