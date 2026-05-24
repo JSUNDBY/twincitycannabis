@@ -10,13 +10,23 @@
 // server endpoints to manage subscriptions). The handlers below are
 // scaffolded so adding that later is a small change, not a rewrite.
 
-const CACHE_NAME = 'tcc-shell-v1';
+// Bump CACHE_NAME on shell changes so the SW evicts the old cache on activate.
+const CACHE_NAME = 'tcc-shell-v2';
 const SHELL_URLS = [
   '/',
   '/index.html',
   '/css/styles.css',
+  // SPA runtime — without these, the cached HTML loads but the page is blank
+  // because the data + app code can't fetch from a dead network. Cached
+  // versions get evicted whenever the ?v= cache-buster in index.html changes.
+  '/js/data.js',
+  '/js/app.js',
+  '/img/twin-city-cannabis-logo-32.png',
+  '/img/twin-city-cannabis-logo-128.png',
   '/img/twin-city-cannabis-logo-192.png',
   '/img/twin-city-cannabis-logo-512.png',
+  '/img/twin-city-cannabis-brand-mark-512.png',
+  '/og-image.png',
 ];
 
 // Install: precache the shell
@@ -97,13 +107,13 @@ self.addEventListener('notificationclick', (event) => {
       // Try to focus an existing TCC tab
       for (const client of all) {
         if ('focus' in client) {
-          client.navigate('/#compare/watchlist').catch(() => {});
+          client.navigate('/#watchlist').catch(() => {});
           return client.focus();
         }
       }
       // No tab open → open a new one
       if (self.clients.openWindow) {
-        return self.clients.openWindow('/#compare/watchlist');
+        return self.clients.openWindow('/#watchlist');
       }
     })
   );

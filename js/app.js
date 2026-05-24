@@ -417,7 +417,7 @@
         // find the page that contains it, navigate there, then scroll to the anchor.
         // (This makes #for-dispensaries-claim work — the form lives inside the
         // for-dispensaries page.)
-        const knownPages = new Set(['home','dispensaries','dispensary','dispensary-detail','deals','strains','strain','strain-detail','compare','learn','for-dispensaries','for-cultivators','dashboard','welcome','map']);
+        const knownPages = new Set(['home','dispensaries','dispensary','dispensary-detail','deals','strains','strain','strain-detail','compare','learn','for-dispensaries','for-cultivators','dashboard','welcome','map','watchlist']);
         let anchorId = null;
         if (!knownPages.has(page)) {
             const anchorEl = document.getElementById(hashClean);
@@ -498,6 +498,23 @@
             case 'map':
                 showPage('map');
                 renderMapPage();
+                break;
+            case 'watchlist':
+                // Phase 23: clean top-level alias for #compare/watchlist
+                showPage('compare');
+                maybeImportWatchlist();
+                Browse.watchlistOnly = true;
+                Browse.category = 'all';
+                Browse.query = '';
+                Browse.page = 1;
+                renderCompare();
+                Watchlist.all().forEach(id => {
+                    const p = TCC.products.find(x => x.id === id);
+                    if (!p) return;
+                    const low = (TCC.getLowestPrice(p) || {}).price;
+                    if (typeof low === 'number') Watchlist.markSeen(id, low);
+                });
+                renderWatchlistBanner();
                 break;
             default:
                 showPage(page);
@@ -716,7 +733,7 @@
         container.style.display = '';
         container.innerHTML = `
             <div class="container">
-                <a class="watchlist-banner-inner" href="#compare/watchlist">
+                <a class="watchlist-banner-inner" href="#watchlist">
                     <span class="watchlist-banner-dot"></span>
                     <span class="watchlist-banner-text">
                         ${parts.join(' · ')} &mdash; saving you up to <strong>$${totalAmt.toFixed(0)}</strong>.
@@ -2681,7 +2698,7 @@
             });
             n.onclick = () => {
                 window.focus();
-                location.hash = 'compare/watchlist';
+                location.hash = 'watchlist';
             };
             localStorage.setItem(NOTIFY_LAST_FIRED_KEY, String(Date.now()));
         } catch (e) {}
@@ -2696,7 +2713,7 @@
         if (!ids.length) return null;
         try {
             const token = btoa(JSON.stringify(ids));
-            return location.origin + location.pathname + '#compare/watchlist?import=' + token;
+            return location.origin + location.pathname + '#watchlist?import=' + token;
         } catch (e) {
             return null;
         }
@@ -2739,7 +2756,7 @@
                 showToast('Already in your watchlist', 'info');
             }
             // Strip the import param from the hash so refresh doesn't re-import
-            history.replaceState(null, '', location.pathname + '#compare/watchlist');
+            history.replaceState(null, '', location.pathname + '#watchlist');
             return added;
         } catch (e) {
             return 0;
