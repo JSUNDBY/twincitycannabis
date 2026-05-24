@@ -417,7 +417,7 @@
         // find the page that contains it, navigate there, then scroll to the anchor.
         // (This makes #for-dispensaries-claim work — the form lives inside the
         // for-dispensaries page.)
-        const knownPages = new Set(['home','dispensaries','dispensary','dispensary-detail','deals','strains','strain','strain-detail','compare','learn','for-dispensaries','for-cultivators','dashboard','welcome']);
+        const knownPages = new Set(['home','dispensaries','dispensary','dispensary-detail','deals','strains','strain','strain-detail','compare','learn','for-dispensaries','for-cultivators','dashboard','welcome','map']);
         let anchorId = null;
         if (!knownPages.has(page)) {
             const anchorEl = document.getElementById(hashClean);
@@ -464,6 +464,7 @@
                 } else if (parts[1] === 'search' && parts[2]) {
                     Browse.query = decodeURIComponent(parts.slice(2).join('/'));
                     Browse.category = 'all';
+                    Browse.watchlistOnly = false;
                     Browse.page = 1;
                     renderCompare();
                     // Sync the visible Browse search input on next tick
@@ -471,11 +472,21 @@
                         const input = document.getElementById('browse-search-input');
                         if (input) input.value = Browse.query;
                     }, 0);
+                } else if (parts[1] === 'watchlist') {
+                    Browse.watchlistOnly = true;
+                    Browse.category = 'all';
+                    Browse.query = '';
+                    Browse.page = 1;
+                    renderCompare();
                 } else if (parts[1]) {
                     renderCompare(parts[1]);
                 } else {
                     renderCompare();
                 }
+                break;
+            case 'map':
+                showPage('map');
+                renderMapPage();
                 break;
             default:
                 showPage(page);
@@ -1095,6 +1106,124 @@
         }
     }
 
+    // ---- RENDER: MAP PAGE (Phase 6) ────────────────────────────────────
+    // Full-bleed map as a first-class navigation surface, separate from the
+    // embedded mini-map on the Dispensaries page. Side panel lists every
+    // licensed shop with TCC score; clicking either a marker or a list
+    // entry pans + opens the popup. Filter input narrows both views in sync.
+    function renderMapPage() {
+        const canvasEl = document.getElementById('map-page-canvas');
+        const listEl = document.getElementById('map-page-list');
+        const countEl = document.getElementById('map-page-count');
+        const filterEl = document.getElementById('map-page-filter');
+        if (!canvasEl || !listEl) return;
+        if (typeof L === 'undefined') {
+            // Leaflet hasn't loaded yet (defer script). Retry once shortly.
+            setTimeout(renderMapPage, 200);
+            return;
+        }
+
+        // Tear down any existing instance so re-entering the route gives a clean map
+        if (App.mapPageInstance) {
+            try { App.mapPageInstance.remove(); } catch (e) {}
+            App.mapPageInstance = null;
+        }
+
+        const dispensaries = TCC.dispensaries.filter(d => d.lat && d.lng);
+        countEl.textContent = `${dispensaries.length} licensed dispensaries in Minnesota.`;
+
+        const map = L.map('map-page-canvas', {
+            scrollWheelZoom: true,
+            attributionControl: true,
+            zoomControl: true,
+        }).setView([45.45, -94.0], 7);
+        App.mapPageInstance = map;
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">Carto</a>',
+        }).addTo(map);
+
+        const tierColor = (tier) => ({
+            premium: '#f59e0b',
+            featured: '#22c55e',
+            free: '#94a3b8',
+        }[tier] || '#94a3b8');
+
+        const markers = new Map();  // dispensary id → marker
+        const bounds = [];
+
+        dispensaries.forEach(d => {
+            const color = tierColor(d.tier);
+            const radius = d.tier === 'premium' ? 10 : (d.tier === 'featured' ? 8 : 6);
+            const marker = L.circleMarker([d.lat, d.lng], {
+                radius,
+                fillColor: color,
+                color: color,
+                weight: 2,
+                opacity: 0.9,
+                fillOpacity: d.tier === 'free' ? 0.35 : 0.55,
+            }).addTo(map);
+
+            marker.bindPopup(`
+                <div style="font-family:Inter,sans-serif;padding:0.25rem;min-width:180px">
+                    <strong style="font-size:0.9rem;color:#0a1410">${esc(d.name)}</strong><br>
+                    <span style="font-size:0.75rem;color:#666">${esc(d.city || d.neighborhood || '')}</span><br>
+                    <span style="font-size:0.85rem;color:${TCC.getScoreColor(d.tcc_score)};font-weight:700">TCC ${d.tcc_score}</span>
+                    <a href="#dispensary/${esc(d.id)}" style="display:block;margin-top:0.4rem;font-size:0.8rem;color:#22c55e;font-weight:600;text-decoration:none">Open dispensary &rarr;</a>
+                </div>
+            `);
+            markers.set(d.id, marker);
+            bounds.push([d.lat, d.lng]);
+        });
+
+        // Fit bounds so every shop is visible on first paint
+        if (bounds.length > 1) {
+            map.fitBounds(bounds, { padding: [40, 40], maxZoom: 11 });
+        } else if (bounds.length === 1) {
+            map.setView(bounds[0], 12);
+        }
+
+        // Side list — rendered once, filtered in place
+        function renderList(query) {
+            const q = (query || '').trim().toLowerCase();
+            const filtered = q
+                ? dispensaries.filter(d => `${d.name} ${d.city || ''} ${d.neighborhood || ''}`.toLowerCase().includes(q))
+                : dispensaries;
+            listEl.innerHTML = filtered.map(d => {
+                const color = tierColor(d.tier);
+                const scoreColor = TCC.getScoreColor(d.tcc_score);
+                return `<button type="button" class="map-page-list-item" data-disp-id="${esc(d.id)}">
+                    <span class="map-page-list-pin" style="background:${color}"></span>
+                    <span class="map-page-list-body">
+                        <span class="map-page-list-name">${esc(d.name)}</span>
+                        <span class="map-page-list-meta">${esc(d.city || d.neighborhood || '')}</span>
+                    </span>
+                    <span class="map-page-list-score" style="color:${scoreColor}">${d.tcc_score}</span>
+                </button>`;
+            }).join('') || '<div class="map-page-empty">No shops match.</div>';
+            // Wire clicks: pan to marker + open popup
+            listEl.querySelectorAll('.map-page-list-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    const id = el.dataset.dispId;
+                    const m = markers.get(id);
+                    if (!m) return;
+                    map.setView(m.getLatLng(), Math.max(map.getZoom(), 12), { animate: true });
+                    m.openPopup();
+                });
+            });
+        }
+        renderList('');
+
+        if (filterEl) {
+            filterEl.value = '';
+            filterEl.oninput = (e) => renderList(e.target.value);
+        }
+
+        // Fix Leaflet's "I rendered before container had a size" bug
+        setTimeout(() => map.invalidateSize(), 100);
+    }
+
     // ---- RENDER: DISPENSARY DETAIL ----
     function renderDispensaryDetail(id) {
         const d = TCC.getDispensary(id);
@@ -1677,6 +1806,7 @@
         perPage: 24,
         menuType: 'rec',  // 'rec', 'med', or 'all'
         dosage: 'all',    // edible/bev mg filter: 'all','1-5','6-10','11-25','26-50','51-100','100+'
+        watchlistOnly: false,  // Phase 5: filter to saved-only products
     };
 
     // Categories shown in the browse UI (excludes accessories/apparel/seeds/etc.)
@@ -1684,6 +1814,13 @@
 
     function getBrowseFiltered() {
         let list = TCC.products.filter(p => BROWSE_CATEGORIES.includes(p.category));
+
+        // Phase 5: watchlist-only mode for #compare/watchlist
+        if (Browse.watchlistOnly) {
+            const saved = new Set(Watchlist.all());
+            list = list.filter(p => saved.has(p.id));
+            return list;
+        }
 
         // Menu type filter: rec (default), med, or all
         const menuFilter = Browse.menuType || 'rec';
@@ -2258,6 +2395,88 @@
         </div>`;
     }
 
+    // ─── Phase 5: Watchlist (localStorage-backed) ─────────────────────────
+    // Lets visitors star products to revisit later. No accounts, no server —
+    // pure localStorage. Survives page reloads but not device changes.
+    const WATCHLIST_KEY = 'tcc.watchlist.v1';
+    const Watchlist = (function() {
+        let ids = new Set();
+        try {
+            ids = new Set(JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]'));
+        } catch (e) {}
+        const listeners = new Set();
+        function persist() {
+            try { localStorage.setItem(WATCHLIST_KEY, JSON.stringify([...ids])); } catch (e) {}
+            listeners.forEach(fn => { try { fn(); } catch (e) {} });
+        }
+        return {
+            has: (id) => ids.has(id),
+            count: () => ids.size,
+            all: () => [...ids],
+            add: (id) => { ids.add(id); persist(); },
+            remove: (id) => { ids.delete(id); persist(); },
+            toggle: (id) => { if (ids.has(id)) ids.delete(id); else ids.add(id); persist(); return ids.has(id); },
+            onChange: (fn) => { listeners.add(fn); return () => listeners.delete(fn); },
+        };
+    })();
+
+    // Exposed for click-handler use from inline onclick attrs on product cards
+    window.tccToggleWatch = function(id, ev) {
+        if (ev) { ev.preventDefault(); ev.stopPropagation(); }
+        const nowOn = Watchlist.toggle(id);
+        // Re-render every star button for this product id across the page
+        document.querySelectorAll('[data-watch-id="' + id + '"]').forEach(el => {
+            el.classList.toggle('is-on', nowOn);
+            el.setAttribute('aria-pressed', nowOn ? 'true' : 'false');
+            el.setAttribute('title', nowOn ? 'Saved to your watchlist' : 'Save to watchlist');
+        });
+        // Update nav badge
+        updateWatchlistNav();
+    };
+
+    function updateWatchlistNav() {
+        const n = Watchlist.count();
+        const badge = document.getElementById('nav-watchlist-count');
+        const link = document.getElementById('nav-watchlist');
+        if (badge) badge.textContent = n;
+        if (link) link.style.display = n > 0 ? '' : 'none';
+    }
+
+    function starButton(productId) {
+        const on = Watchlist.has(productId);
+        return `<button type="button" class="product-card-star${on ? ' is-on' : ''}"
+            data-watch-id="${esc(productId)}"
+            aria-pressed="${on}"
+            title="${on ? 'Saved to your watchlist' : 'Save to watchlist'}"
+            onclick="tccToggleWatch('${esc(productId)}', event)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>`;
+    }
+
+    // ─── Phase 5: Sparkline SVG ───────────────────────────────────────────
+    // Tiny inline SVG showing the price-history trend. Colored by direction:
+    // green = trending down (savings), red = up, neutral gray = flat.
+    function sparkline(priceHistory, opts) {
+        if (!priceHistory || priceHistory.length < 2) return '';
+        const w = (opts && opts.width) || 64;
+        const h = (opts && opts.height) || 18;
+        const pad = 1;
+        const min = Math.min(...priceHistory);
+        const max = Math.max(...priceHistory);
+        const range = max - min || 1;
+        const stepX = (w - pad * 2) / (priceHistory.length - 1);
+        const points = priceHistory.map((v, i) => {
+            const x = pad + i * stepX;
+            const y = h - pad - ((v - min) / range) * (h - pad * 2);
+            return x.toFixed(1) + ',' + y.toFixed(1);
+        }).join(' ');
+        const first = priceHistory[0], last = priceHistory[priceHistory.length - 1];
+        const stroke = (max - min < 1) ? 'var(--text-muted)' : (last < first ? 'var(--green)' : '#ef4444');
+        return `<svg class="product-sparkline" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true">
+            <polyline fill="none" stroke="${stroke}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="${points}"/>
+        </svg>`;
+    }
+
     function priceTrendTag(p) {
         if (!p.priceHistory || p.priceHistory.length < 2) return '';
         const ph = p.priceHistory;
@@ -2285,6 +2504,7 @@
             : `<div class="product-card-img"><div class="product-card-img-fallback">${catEmoji}</div></div>`;
 
         return `<div class="card product-card" onclick="window.location.hash='compare/${p.id}'">
+            ${starButton(p.id)}
             <div class="card-body-sm" style="display:flex;gap:0.8rem;align-items:flex-start">
                 ${imgHtml}
                 <div style="flex:1;min-width:0">
@@ -2296,6 +2516,7 @@
                         <div class="product-card-prices">
                             <div class="product-card-price-low">${TCC.formatPrice(range.low)}</div>
                             ${range.low !== range.high ? `<div class="product-card-price-range">to ${TCC.formatPrice(range.high)}</div>` : ''}
+                            ${sparkline(p.priceHistory)}
                         </div>
                     </div>
                     <div class="product-card-meta">
@@ -2936,6 +3157,7 @@
         installStrainMatching();
         updateHeroCounts();
         injectDataIcons();
+        updateWatchlistNav();  // Phase 5: surface watchlist badge if any items saved
         renderHome();
         // renderStaffPick removed in Phase 2 — section culled from homepage
         renderDispensaries({ city: 'metro' });

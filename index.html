@@ -320,8 +320,12 @@
         <a class="nav-link nav-icon-link" id="nav-search" href="#home" aria-label="Search" title="Search">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         </a>
-        <a class="nav-link nav-icon-link" href="#dispensaries" aria-label="Map view" title="Map view">
+        <a class="nav-link nav-icon-link" href="#map" aria-label="Map view" title="Map view">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        </a>
+        <a class="nav-link nav-icon-link" id="nav-watchlist" href="#compare/watchlist" aria-label="Your watchlist" title="Your watchlist" style="display:none;position:relative">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            <span class="nav-watchlist-count" id="nav-watchlist-count">0</span>
         </a>
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light or dark theme" title="Toggle theme">
             <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
@@ -1815,6 +1819,32 @@
             </div>
         </div>
     </footer>
+</div>
+
+
+<!-- ================================================================ -->
+<!-- PAGE: MAP (Phase 6)                                                -->
+<!-- ================================================================ -->
+<div class="page" id="page-map">
+    <div class="map-page-layout">
+        <aside class="map-page-aside">
+            <header class="map-page-header">
+                <span class="section-label">Map</span>
+                <h2 class="map-page-title">Every licensed shop in Minnesota.</h2>
+                <p class="map-page-sub" id="map-page-count">Loading…</p>
+                <div class="map-page-filter-wrap">
+                    <span class="map-page-filter-icon" aria-hidden="true">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    </span>
+                    <input type="text" id="map-page-filter" class="map-page-filter" placeholder="Filter shops…" autocomplete="off" spellcheck="false">
+                </div>
+            </header>
+            <div class="map-page-list" id="map-page-list"></div>
+        </aside>
+        <main class="map-page-main">
+            <div id="map-page-canvas"></div>
+        </main>
+    </div>
 </div>
 
 
