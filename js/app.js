@@ -1118,31 +1118,29 @@
         }
     }
 
-    // ---- RENDER: MAP PAGE (Phase 6) ────────────────────────────────────
-    // Full-bleed map as a first-class navigation surface, separate from the
-    // embedded mini-map on the Dispensaries page. Side panel lists every
-    // licensed shop with TCC score; clicking either a marker or a list
-    // entry pans + opens the popup. Filter input narrows both views in sync.
+    // ---- RENDER: MAP PAGE (Phase 6 + 7b) ───────────────────────────────
+    // Full-bleed map as a first-class spatial surface. Sidebar lists every
+    // operational dispensary, sorted by TCC score by default or by proximity
+    // when "Near Me" is active. Markers use civic tier-shaped pins, not
+    // generic circles. Clicking either a marker or a list entry pans and
+    // opens the popup; the chosen entry gets an active highlight.
     function renderMapPage() {
         const canvasEl = document.getElementById('map-page-canvas');
         const listEl = document.getElementById('map-page-list');
         const countEl = document.getElementById('map-page-count');
         const filterEl = document.getElementById('map-page-filter');
+        const nearMeBtn = document.getElementById('map-page-near-me');
         if (!canvasEl || !listEl) return;
         if (typeof L === 'undefined') {
-            // Leaflet hasn't loaded yet (defer script). Retry once shortly.
             setTimeout(renderMapPage, 200);
             return;
         }
 
-        // Tear down any existing instance so re-entering the route gives a clean map
         if (App.mapPageInstance) {
             try { App.mapPageInstance.remove(); } catch (e) {}
             App.mapPageInstance = null;
         }
 
-        // Phase 7a: only plot operational shops on the map; pre-opening license
-        // holders without menu/hours/website would be misleading pins.
         const dispensaries = TCC.dispensaries.filter(d => d.lat && d.lng && isOperationalDispensary(d));
         const preopening = TCC.dispensaries.filter(d => !isOperationalDispensary(d)).length;
         countEl.textContent = `${dispensaries.length} open dispensaries${preopening ? ` · ${preopening} more licensed but not yet selling` : ''}.`;
@@ -1165,21 +1163,36 @@
             free: '#94a3b8',
         }[tier] || '#94a3b8');
 
-        const markers = new Map();  // dispensary id → marker
+        // Phase 7b: tier-shaped SVG pins instead of generic circle markers.
+        function pinIcon(tier) {
+            const color = tierColor(tier);
+            const size = tier === 'premium' ? 30 : (tier === 'featured' ? 28 : 22);
+            const hCenter = size / 2;
+            const stroke = tier === 'premium' ? '#fef3c7' : (tier === 'featured' ? '#bbf7d0' : 'rgba(255,255,255,0.55)');
+            const inner = tier === 'premium'
+                ? `<circle cx="${hCenter}" cy="${size * 0.40}" r="${size * 0.13}" fill="${stroke}"/>`
+                : tier === 'featured'
+                ? `<circle cx="${hCenter}" cy="${size * 0.40}" r="${size * 0.11}" fill="${stroke}" opacity="0.9"/>`
+                : '';
+            const html = `<svg width="${size}" height="${size * 1.25}" viewBox="0 0 ${size} ${size * 1.25}" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">
+                <path d="M ${hCenter} 1 C ${size * 0.18} 1 1 ${size * 0.22} 1 ${size * 0.45} c0 ${size * 0.42} ${hCenter - 1} ${size * 0.8 - 1} ${hCenter - 1} ${size * 0.8 - 1} s${hCenter - 1} -${size * 0.38} ${hCenter - 1} -${size * 0.8 - 1} c0-${size * 0.23}-${size * 0.18 - 1}-${size * 0.45}-${hCenter - 1}-${size * 0.45}z" fill="${color}" stroke="${stroke}" stroke-width="1.4"/>
+                ${inner}
+            </svg>`;
+            return L.divIcon({
+                html,
+                className: 'tcc-map-pin tcc-map-pin--' + tier,
+                iconSize: [size, size * 1.25],
+                iconAnchor: [hCenter, size * 1.25],
+                popupAnchor: [0, -size * 1.05],
+            });
+        }
+
+        const markers = new Map();
         const bounds = [];
+        let activeId = null;
 
         dispensaries.forEach(d => {
-            const color = tierColor(d.tier);
-            const radius = d.tier === 'premium' ? 10 : (d.tier === 'featured' ? 8 : 6);
-            const marker = L.circleMarker([d.lat, d.lng], {
-                radius,
-                fillColor: color,
-                color: color,
-                weight: 2,
-                opacity: 0.9,
-                fillOpacity: d.tier === 'free' ? 0.35 : 0.55,
-            }).addTo(map);
-
+            const marker = L.marker([d.lat, d.lng], { icon: pinIcon(d.tier) }).addTo(map);
             marker.bindPopup(`
                 <div style="font-family:Inter,sans-serif;padding:0.25rem;min-width:180px">
                     <strong style="font-size:0.9rem;color:#0a1410">${esc(d.name)}</strong><br>
@@ -1188,36 +1201,73 @@
                     <a href="#dispensary/${esc(d.id)}" style="display:block;margin-top:0.4rem;font-size:0.8rem;color:#22c55e;font-weight:600;text-decoration:none">Open dispensary &rarr;</a>
                 </div>
             `);
+            marker.on('popupopen', () => setActive(d.id));
             markers.set(d.id, marker);
             bounds.push([d.lat, d.lng]);
         });
 
-        // Fit bounds so every shop is visible on first paint
         if (bounds.length > 1) {
             map.fitBounds(bounds, { padding: [40, 40], maxZoom: 11 });
         } else if (bounds.length === 1) {
             map.setView(bounds[0], 12);
         }
 
-        // Side list — rendered once, filtered in place
+        // ── Active-state syncing across list + markers ───────────────────
+        function setActive(id) {
+            activeId = id;
+            listEl.querySelectorAll('.map-page-list-item').forEach(el => {
+                el.classList.toggle('is-active', el.dataset.dispId === id);
+            });
+            // Scroll the active item into view in the sidebar
+            const activeEl = listEl.querySelector('.map-page-list-item.is-active');
+            if (activeEl) activeEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+
+        // ── "You are here" marker once geolocation is approved ───────────
+        let userMarker = null;
+        function dropUserMarker() {
+            if (_userLat == null || _userLng == null) return;
+            if (userMarker) try { userMarker.remove(); } catch (e) {}
+            const youIcon = L.divIcon({
+                html: '<div class="tcc-map-you"></div>',
+                className: 'tcc-map-you-wrap',
+                iconSize: [18, 18],
+                iconAnchor: [9, 9],
+            });
+            userMarker = L.marker([_userLat, _userLng], { icon: youIcon, zIndexOffset: 1000 }).addTo(map);
+            userMarker.bindTooltip('You are here', { direction: 'top', offset: [0, -8] });
+        }
+
+        // ── List rendering (filter + optional distance sort) ─────────────
         function renderList(query) {
             const q = (query || '').trim().toLowerCase();
-            const filtered = q
+            let filtered = q
                 ? dispensaries.filter(d => `${d.name} ${d.city || ''} ${d.neighborhood || ''}`.toLowerCase().includes(q))
-                : dispensaries;
+                : dispensaries.slice();
+            // When location is known, sort by proximity (default) and surface a distance label
+            const hasLoc = (_userLat != null && _userLng != null);
+            if (hasLoc) {
+                filtered = filtered
+                    .map(d => ({ d, dist: _distance(d) }))
+                    .sort((a, b) => (a.dist ?? 9e9) - (b.dist ?? 9e9))
+                    .map(x => x.d);
+            }
             listEl.innerHTML = filtered.map(d => {
                 const color = tierColor(d.tier);
                 const scoreColor = TCC.getScoreColor(d.tcc_score);
-                return `<button type="button" class="map-page-list-item" data-disp-id="${esc(d.id)}">
+                const dist = hasLoc ? _distance(d) : null;
+                const distLabel = dist != null
+                    ? `<span class="map-page-list-dist">${dist.toFixed(dist < 10 ? 1 : 0)} mi</span>`
+                    : '';
+                return `<button type="button" class="map-page-list-item${d.id === activeId ? ' is-active' : ''}" data-disp-id="${esc(d.id)}">
                     <span class="map-page-list-pin" style="background:${color}"></span>
                     <span class="map-page-list-body">
                         <span class="map-page-list-name">${esc(d.name)}</span>
-                        <span class="map-page-list-meta">${esc(d.city || d.neighborhood || '')}</span>
+                        <span class="map-page-list-meta">${esc(d.city || d.neighborhood || '')}${distLabel ? ' · ' : ''}${distLabel}</span>
                     </span>
                     <span class="map-page-list-score" style="color:${scoreColor}">${d.tcc_score}</span>
                 </button>`;
             }).join('') || '<div class="map-page-empty">No shops match.</div>';
-            // Wire clicks: pan to marker + open popup
             listEl.querySelectorAll('.map-page-list-item').forEach(el => {
                 el.addEventListener('click', () => {
                     const id = el.dataset.dispId;
@@ -1235,7 +1285,36 @@
             filterEl.oninput = (e) => renderList(e.target.value);
         }
 
-        // Fix Leaflet's "I rendered before container had a size" bug
+        // ── Near Me ──────────────────────────────────────────────────────
+        if (nearMeBtn) {
+            nearMeBtn.classList.toggle('is-on', _userLat != null);
+            nearMeBtn.onclick = async () => {
+                if (_userLat != null) {
+                    dropUserMarker();
+                    if (userMarker) map.setView(userMarker.getLatLng(), 11, { animate: true });
+                    renderList(filterEl ? filterEl.value : '');
+                    return;
+                }
+                nearMeBtn.disabled = true;
+                nearMeBtn.textContent = 'Locating…';
+                const ok = await _requestLocation();
+                nearMeBtn.disabled = false;
+                if (!ok) {
+                    nearMeBtn.textContent = 'Location unavailable';
+                    setTimeout(() => { nearMeBtn.textContent = 'Near me'; }, 1800);
+                    return;
+                }
+                nearMeBtn.textContent = 'Near me';
+                nearMeBtn.classList.add('is-on');
+                dropUserMarker();
+                map.setView([_userLat, _userLng], 11, { animate: true });
+                renderList(filterEl ? filterEl.value : '');
+            };
+            // If we already have location from an earlier "Near me" sort,
+            // drop the marker on first paint
+            if (_userLat != null) dropUserMarker();
+        }
+
         setTimeout(() => map.invalidateSize(), 100);
     }
 

@@ -1832,11 +1832,17 @@
                 <span class="section-label">Map</span>
                 <h2 class="map-page-title">Every licensed shop in Minnesota.</h2>
                 <p class="map-page-sub" id="map-page-count">Loading…</p>
-                <div class="map-page-filter-wrap">
-                    <span class="map-page-filter-icon" aria-hidden="true">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                    </span>
-                    <input type="text" id="map-page-filter" class="map-page-filter" placeholder="Filter shops…" autocomplete="off" spellcheck="false">
+                <div class="map-page-controls">
+                    <div class="map-page-filter-wrap">
+                        <span class="map-page-filter-icon" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                        </span>
+                        <input type="text" id="map-page-filter" class="map-page-filter" placeholder="Filter shops…" autocomplete="off" spellcheck="false">
+                    </div>
+                    <button type="button" id="map-page-near-me" class="map-page-near-me" title="Sort by your location">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:.35rem;flex-shrink:0"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+                        Near me
+                    </button>
                 </div>
             </header>
             <div class="map-page-list" id="map-page-list"></div>
