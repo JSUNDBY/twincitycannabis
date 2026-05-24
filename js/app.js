@@ -2575,6 +2575,23 @@
         }
     }
 
+    // ─── Phase 20: service worker registration ──────────────────────────
+    // Caches the homepage shell for offline use and gives us a single point
+    // to handle notification-click routing even when the tab is closed.
+    // Only registers in production-like contexts (HTTPS or localhost) so
+    // local development against file:// doesn't 404 on a missing SW.
+    function registerServiceWorker() {
+        if (!('serviceWorker' in navigator)) return;
+        const proto = location.protocol;
+        if (proto !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') return;
+        // Defer registration past first paint so it doesn't compete for resources
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(() => {/* registered */})
+                .catch(() => {/* fail silently — site still works without SW */});
+        });
+    }
+
     // ─── Phase 18: browser notifications on return visits ──────────────
     // When a returning visitor has watchlist items that have dropped, fire a
     // system notification. No server, no push — just the browser's native
@@ -4101,6 +4118,7 @@
         injectDataIcons();
         updateWatchlistNav();  // Phase 5: surface watchlist badge if any items saved
         maybeFireDropNotification();  // Phase 18: notify returning visitors of drops
+        registerServiceWorker();  // Phase 20: offline shell + notification routing
         renderHome();
         // renderStaffPick removed in Phase 2 — section culled from homepage
         renderDispensaries({ city: 'metro' });
