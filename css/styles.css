@@ -190,66 +190,9 @@ input, select { font-family: inherit; }
 img { max-width: 100%; display: block; }
 ul, ol { list-style: none; }
 
-/* ============ ANIMATED FOREST AURORA ============
-   A soft, slow-moving aurora effect made of two radial gradients orbiting
-   the page. Sits behind all content via fixed positioning + z-index: -1.
-   Subtle enough not to distract from product cards but adds organic life. */
-body::before {
-    content: '';
-    position: fixed;
-    inset: -10%;
-    z-index: -2;
-    pointer-events: none;
-    background:
-        radial-gradient(ellipse 60% 50% at 20% 30%, rgba(34, 197, 94, 0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 60% at 80% 70%, rgba(16, 185, 129, 0.10) 0%, transparent 55%),
-        radial-gradient(ellipse 40% 30% at 50% 90%, rgba(132, 204, 22, 0.08) 0%, transparent 60%);
-    animation: aurora-drift 30s ease-in-out infinite alternate;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-}
-
-body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-        radial-gradient(ellipse 50% 40% at 70% 20%, rgba(34, 197, 94, 0.08) 0%, transparent 65%),
-        radial-gradient(ellipse 40% 50% at 30% 80%, rgba(20, 184, 166, 0.07) 0%, transparent 60%);
-    animation: aurora-drift-2 45s ease-in-out infinite alternate;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-}
-
-@keyframes aurora-drift {
-    0%   { transform: translate(0%, 0%) scale(1); opacity: 0.9; }
-    50%  { transform: translate(3%, -2%) scale(1.05); opacity: 1; }
-    100% { transform: translate(-2%, 3%) scale(1.02); opacity: 0.85; }
-}
-
-@keyframes aurora-drift-2 {
-    0%   { transform: translate(0%, 0%) scale(1); opacity: 0.7; }
-    50%  { transform: translate(-3%, 2%) scale(1.08); opacity: 0.9; }
-    100% { transform: translate(2%, -3%) scale(1.03); opacity: 0.75; }
-}
-
-/* Disable aurora movement for users who prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-    body::before, body::after { animation: none !important; }
-}
-
-/* In light mode the aurora is much more subtle */
-html[data-theme="light"] body::before {
-    background:
-        radial-gradient(ellipse 60% 50% at 20% 30%, rgba(34, 197, 94, 0.06) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 60% at 80% 70%, rgba(16, 185, 129, 0.05) 0%, transparent 55%);
-}
-html[data-theme="light"] body::after {
-    background:
-        radial-gradient(ellipse 50% 40% at 70% 20%, rgba(34, 197, 94, 0.04) 0%, transparent 65%);
-}
+/* Phase 4: the animated aurora background was removed. Civic infrastructure
+   doesn't need a drifting glow, and the layer was the source of the lower-
+   right paint flicker on certain viewport widths. Backgrounds are now plain. */
 
 /* ============ TYPOGRAPHY ============ */
 .font-display { font-family: var(--font-display); }
@@ -469,57 +412,69 @@ html[data-theme="light"] body::after {
     display: block;
 }
 
-/* ============ SECTION ============ */
+/* ============ SECTION ============
+   Phase 4: more breathing room between sections; .section-dark drops the
+   fill in favor of a single hairline at the top — civic separator, not a
+   colored stripe. */
 .section {
-    padding: 4rem 0;
+    padding: 5rem 0;
 }
 
 .section-dark {
-    background: var(--bg-secondary);
+    background: transparent;
     border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
 }
 
 .section-label {
-    font-family: var(--font-display);
-    font-size: 0.7rem;
+    font-family: 'SF Mono', Menlo, Monaco, monospace;
+    font-size: 0.68rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 2.5px;
     color: var(--green);
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.section-label::before {
+    content: '';
+    width: 14px;
+    height: 1px;
+    background: var(--green);
+    opacity: 0.6;
 }
 
 .section-title {
     font-family: var(--font-display);
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
-    font-weight: 700;
-    letter-spacing: -1px;
-    line-height: 1.1;
-    margin-bottom: 0.8rem;
+    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: -1.2px;
+    line-height: 1.05;
+    margin-bottom: 0.6rem;
 }
 
 .section-desc {
     color: var(--text-secondary);
-    font-size: 1rem;
-    line-height: 1.6;
-    max-width: 550px;
+    font-size: 0.98rem;
+    line-height: 1.55;
+    max-width: 540px;
 }
 
-/* ============ CARDS ============ */
+/* ============ CARDS ============
+   Phase 4: cards are now editorial surfaces, not glassy floating tiles.
+   Border-color hover beats the old translate/shadow combo for "civic" feel. */
 .card {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    transition: border-color 0.18s ease, background 0.18s ease;
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .card:hover {
-    border-color: var(--border-hover);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(0, 0, 0, 0.1);
+    border-color: rgba(34, 197, 94, 0.35);
+    background: rgba(34, 197, 94, 0.02);
 }
 
 .card-body { padding: 1.5rem; }
@@ -1613,6 +1568,70 @@ html[data-theme="light"] body::after {
     background: var(--green-bright, #4ade80);
     border-color: var(--green-bright, #4ade80);
     color: #051a0c;
+}
+
+/* Nav sticky search — appears when hero search scrolls out (Phase 3) */
+.nav-search-sticky {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    max-width: 420px;
+    min-width: 0;
+    margin: 0 1.25rem;
+    padding: 0.45rem 0.7rem 0.45rem 0.85rem;
+    border-radius: var(--radius-full);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+    transition: opacity .25s ease, transform .25s ease, border-color .15s ease, background .15s ease;
+}
+.nav-search-sticky.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+.nav-search-sticky:focus-within {
+    border-color: var(--green);
+    background: rgba(34,197,94,0.05);
+}
+.nav-search-icon {
+    display: inline-flex;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+.nav-search-sticky:focus-within .nav-search-icon { color: var(--green); }
+.nav-search-input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-family: inherit;
+    letter-spacing: -0.005em;
+}
+.nav-search-input::placeholder { color: var(--text-muted); }
+.nav-search-kbd {
+    font-family: 'SF Mono', Menlo, Monaco, monospace;
+    font-size: 0.7rem;
+    padding: 0.12rem 0.42rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+.nav-search-sticky:focus-within .nav-search-kbd { display: none; }
+.nav-search-sticky .search-dropdown {
+    top: calc(100% + 6px);
+}
+@media (max-width: 880px) {
+    .nav-search-sticky { display: none !important; }
 }
 
 /* Nav: right-side icon links + divider */

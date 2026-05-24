@@ -2362,10 +2362,21 @@
     }
 
     // ---- SEARCH ----
+    // Phase 3: search has two dropdowns — the original hero dropdown and a
+    // sticky nav dropdown. Both render the same content so visitors get a
+    // consistent experience whether they're at the top or scrolled down.
+    function _allSearchDropdowns() {
+        return [
+            document.getElementById('search-dropdown'),
+            document.getElementById('nav-search-dropdown'),
+        ].filter(Boolean);
+    }
+
     function handleSearch(query) {
-        const dropdown = document.getElementById('search-dropdown');
+        const dropdowns = _allSearchDropdowns();
+        if (!dropdowns.length) return;
         if (!query || query.length < 2) {
-            dropdown.classList.remove('open');
+            dropdowns.forEach(d => d.classList.remove('open'));
             return;
         }
 
@@ -2378,7 +2389,7 @@
         const totalMatches = allDisp.length + allProducts.length + allStrains.length;
 
         if (!dispensaries.length && !products.length && !strains.length) {
-            dropdown.classList.remove('open');
+            dropdowns.forEach(d => d.classList.remove('open'));
             return;
         }
 
@@ -2438,13 +2449,14 @@
             </a>`;
         }
 
-        dropdown.innerHTML = html;
-        dropdown.classList.add('open');
+        dropdowns.forEach(d => {
+            d.innerHTML = html;
+            d.classList.add('open');
+        });
     }
 
     function closeSearchDropdown() {
-        const dd = document.getElementById('search-dropdown');
-        if (dd) dd.classList.remove('open');
+        _allSearchDropdowns().forEach(d => d.classList.remove('open'));
     }
 
     // ---- MOBILE MENU ----
@@ -2497,29 +2509,89 @@
             });
         }
 
-        // Global search
-        const searchInput = document.getElementById('hero-search-input');
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => handleSearch(e.target.value));
-            searchInput.addEventListener('focus', (e) => { if (e.target.value.length >= 2) handleSearch(e.target.value); });
+        // Global search — hero input + sticky nav input share state (Phase 3)
+        const heroInput = document.getElementById('hero-search-input');
+        const navInput = document.getElementById('nav-search-input');
+        const navSticky = document.getElementById('nav-search-sticky');
+        const heroBar = document.querySelector('.hero-search-bar');
+
+        function dispatchSearch(value) {
+            handleSearch(value);
+            // Keep both inputs in sync so the visible one always reflects the query.
+            if (heroInput && document.activeElement !== heroInput && heroInput.value !== value) heroInput.value = value;
+            if (navInput && document.activeElement !== navInput && navInput.value !== value) navInput.value = value;
         }
 
-        // Nav search icon → scroll home + focus search input
+        if (heroInput) {
+            heroInput.addEventListener('input', (e) => dispatchSearch(e.target.value));
+            heroInput.addEventListener('focus', (e) => { if (e.target.value.length >= 2) handleSearch(e.target.value); });
+        }
+        if (navInput) {
+            navInput.addEventListener('input', (e) => dispatchSearch(e.target.value));
+            navInput.addEventListener('focus', (e) => { if (e.target.value.length >= 2) handleSearch(e.target.value); });
+        }
+
+        // Enter on either input → go to /#compare/search/<query>
+        [heroInput, navInput].filter(Boolean).forEach(input => {
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && e.target.value.trim().length >= 2) {
+                    e.preventDefault();
+                    window.location.hash = 'compare/search/' + encodeURIComponent(e.target.value.trim());
+                    closeSearchDropdown();
+                    e.target.blur();
+                }
+            });
+        });
+
+        // Nav search icon → scroll home + focus the hero search input
         const navSearchEl = document.getElementById('nav-search');
         if (navSearchEl) {
             navSearchEl.addEventListener('click', (e) => {
                 e.preventDefault();
                 window.location.hash = 'home';
                 setTimeout(() => {
-                    const input = document.getElementById('hero-search-input');
-                    if (input) { input.focus(); input.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+                    if (heroInput) { heroInput.focus(); heroInput.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
                 }, 50);
             });
         }
 
-        // Close search on click outside
+        // IntersectionObserver: show sticky nav search when hero search scrolls out
+        if (heroBar && navSticky && 'IntersectionObserver' in window) {
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navSticky.classList.remove('is-visible');
+                        navSticky.setAttribute('aria-hidden', 'true');
+                    } else {
+                        navSticky.classList.add('is-visible');
+                        navSticky.setAttribute('aria-hidden', 'false');
+                    }
+                });
+            }, { rootMargin: '-80px 0px 0px 0px', threshold: 0 });
+            io.observe(heroBar);
+        }
+
+        // Global keyboard shortcuts (Phase 3): "/" focuses search, Esc closes it
+        document.addEventListener('keydown', (e) => {
+            const tag = (e.target && e.target.tagName) || '';
+            const inField = tag === 'INPUT' || tag === 'TEXTAREA' || (e.target && e.target.isContentEditable);
+            if (e.key === '/' && !inField && !e.metaKey && !e.ctrlKey && !e.altKey) {
+                e.preventDefault();
+                const target = (navSticky && navSticky.classList.contains('is-visible')) ? navInput : heroInput;
+                if (target) { target.focus(); target.select && target.select(); }
+            } else if (e.key === 'Escape') {
+                closeSearchDropdown();
+                if (document.activeElement === heroInput || document.activeElement === navInput) {
+                    document.activeElement.blur();
+                }
+            }
+        });
+
+        // Close search on click outside either search bar
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('.hero-search-bar')) closeSearchDropdown();
+            if (!e.target.closest('.hero-search-bar') && !e.target.closest('#nav-search-sticky')) {
+                closeSearchDropdown();
+            }
         });
 
         // Search suggestions
