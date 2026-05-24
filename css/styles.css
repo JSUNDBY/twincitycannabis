@@ -1719,6 +1719,7 @@ ul, ol { list-style: none; }
     font-variant-numeric: tabular-nums;
 }
 .live-metric--down .live-metric-value { color: var(--green); }
+.live-metric--up .live-metric-value { color: var(--amber, #f59e0b); }
 .live-metric--live .live-metric-value {
     font-family: 'SF Mono', Menlo, Monaco, monospace;
     font-size: clamp(1.1rem, 2vw, 1.5rem);
@@ -1745,6 +1746,15 @@ ul, ol { list-style: none; }
     .live-metric:nth-child(3) { border-left: 0; padding-left: 0; }
     .live-metric:nth-child(n+3) { border-top: 1px solid var(--border); }
 }
+
+/* Phase 10: dispensary detail intelligence strip reuses .live-metric */
+.detail-intelligence {
+    margin: 2.5rem 0 0;
+    padding: 1.5rem 0 0;
+    border-top: 1px solid var(--border);
+}
+.detail-intelligence .live-metric { padding-top: 1rem; padding-bottom: 1rem; }
+.detail-intelligence .live-metric-value { font-size: clamp(1.4rem, 3vw, 2rem); }
 
 /* Phase 9: regional pricing horizontal bars */
 .price-by-city-section { padding: 4rem 0; }

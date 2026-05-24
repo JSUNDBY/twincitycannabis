@@ -1295,6 +1295,116 @@
         }
     }
 
+    // ---- Phase 10: Dispensary intelligence strip ───────────────────────
+    // Civic-style stat row below the info block: scale (product count) +
+    // pricing position (median eighth vs metro) + freshness. Same visual
+    // language as the homepage live-metrics strip so the detail page reads
+    // as part of the same infrastructure rather than a legacy artifact.
+    function renderDispensaryIntelligence(d) {
+        const container = document.getElementById('detail-intelligence');
+        if (!container) return;
+        if (!isOperationalDispensary(d)) {
+            container.style.display = 'none';
+            container.innerHTML = '';
+            return;
+        }
+
+        const products = TCC.getProductsForDispensary(d.id);
+        const productCount = products.length;
+
+        // Shop's median flower 1/8 oz price
+        const shopEighths = [];
+        products.forEach(p => {
+            if (p.category !== 'flower') return;
+            const w = (p.weight || '').toLowerCase();
+            const isEighth = /1\/8|3\.5\s*g|3\.5g/.test(w) || p.grams === 3.5;
+            if (!isEighth) return;
+            const v = p.prices && p.prices[d.id];
+            if (v > 5 && v <= 100) shopEighths.push(v);
+        });
+        shopEighths.sort((a, b) => a - b);
+        const shopMedian = shopEighths.length ? shopEighths[Math.floor(shopEighths.length / 2)] : null;
+
+        // Metro-wide median eighth (same logic as renderLiveMetrics, lighter touch)
+        const allEighths = [];
+        TCC.products.forEach(p => {
+            if (p.category !== 'flower') return;
+            const w = (p.weight || '').toLowerCase();
+            if (!(/1\/8|3\.5\s*g|3\.5g/.test(w) || p.grams === 3.5)) return;
+            Object.values(p.prices || {}).forEach(v => { if (v > 5 && v <= 100) allEighths.push(v); });
+        });
+        allEighths.sort((a, b) => a - b);
+        const metroMedian = allEighths.length ? allEighths[Math.floor(allEighths.length / 2)] : null;
+
+        // Delta vs metro: negative = cheaper, positive = pricier
+        const delta = (shopMedian != null && metroMedian != null) ? shopMedian - metroMedian : null;
+        let deltaTile;
+        if (shopMedian == null || metroMedian == null) {
+            deltaTile = { value: '—', label: 'vs Metro median', sub: 'Need ≥1 eighth listed' };
+        } else if (Math.abs(delta) < 0.5) {
+            deltaTile = { value: 'At median', label: 'vs Metro median', sub: 'Matches statewide pace' };
+        } else {
+            const sign = delta < 0 ? '▼' : '▲';
+            deltaTile = {
+                value: `${sign} $${Math.abs(Math.round(delta))}`,
+                label: 'vs Metro median',
+                sub: delta < 0 ? 'Below average' : 'Above average',
+                tone: delta < 0 ? 'down' : 'up',
+            };
+        }
+
+        // Categories carried
+        const cats = new Set();
+        products.forEach(p => cats.add(p.category));
+
+        // Last refresh from page-wide freshness timestamp
+        const freshEl = document.querySelector('.fresh-ts[data-fresh-ts]');
+        let freshLabel = 'today';
+        if (freshEl) {
+            const refreshedAt = new Date(freshEl.getAttribute('data-fresh-ts'));
+            const minsAgo = Math.max(0, Math.round((Date.now() - refreshedAt.getTime()) / 60000));
+            if (minsAgo < 1) freshLabel = 'just now';
+            else if (minsAgo < 60) freshLabel = minsAgo + ' min ago';
+            else if (minsAgo < 60 * 12) freshLabel = Math.round(minsAgo / 60) + ' hr ago';
+        }
+
+        const tiles = [
+            {
+                value: productCount.toLocaleString(),
+                label: 'Products tracked',
+                sub: cats.size ? `${cats.size} categor${cats.size === 1 ? 'y' : 'ies'} carried` : 'Menu loading',
+            },
+            {
+                value: shopMedian != null ? '$' + Math.round(shopMedian) : '—',
+                label: 'Median eighth here',
+                sub: shopEighths.length ? `Across ${shopEighths.length} listings` : 'No eighths listed',
+            },
+            Object.assign({}, deltaTile),
+            {
+                value: freshLabel,
+                label: 'Menu refreshed',
+                sub: 'Live data',
+                live: true,
+            },
+        ];
+
+        container.style.display = '';
+        container.innerHTML = `
+            <div class="live-metrics-header">
+                <span class="section-label">Market signal · ${esc(d.city || d.neighborhood || 'Minnesota')}</span>
+            </div>
+            <div class="live-metrics-grid">
+                ${tiles.map(t => `
+                    <div class="live-metric${t.tone === 'down' ? ' live-metric--down' : ''}${t.tone === 'up' ? ' live-metric--up' : ''}${t.live ? ' live-metric--live' : ''}">
+                        <div class="live-metric-value">${t.value}</div>
+                        <div class="live-metric-label">${t.label}</div>
+                        <div class="live-metric-sub">${t.sub}</div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
     // ---- RENDER: MAP PAGE (Phase 6 + 7b) ───────────────────────────────
     // Full-bleed map as a first-class spatial surface. Sidebar lists every
     // operational dispensary, sorted by TCC score by default or by proximity
@@ -1547,6 +1657,7 @@
             return;
         }
         trackServerEvent(id, 'view');
+        renderDispensaryIntelligence(d);
 
         // Banner — uses uniform CSS background for visual consistency across
         // all 85 dispensaries (no longer override with d.gradient, which
