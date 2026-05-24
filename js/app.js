@@ -680,7 +680,9 @@
         const container = document.getElementById('watchlist-banner');
         if (!container) return;
         const savedIds = Watchlist.all();
-        if (savedIds.length === 0) {
+        // Phase 22: threshold hits also count, even if the product wasn't starred
+        const thresholdHits = getThresholdHits();
+        if (savedIds.length === 0 && thresholdHits.length === 0) {
             container.style.display = 'none';
             container.innerHTML = '';
             return;
@@ -699,18 +701,25 @@
                 totalDelta += (seen.price - currentLow);
             }
         });
-        if (dropCount === 0) {
+        const thresholdSavings = thresholdHits.reduce((s, h) => s + (h.target - h.current), 0);
+        const totalSignals = dropCount + thresholdHits.length;
+        if (totalSignals === 0) {
             container.style.display = 'none';
             container.innerHTML = '';
             return;
         }
+        // Build a single sentence reflecting both signals
+        let parts = [];
+        if (dropCount > 0) parts.push(`<strong>${dropCount}</strong> dropped`);
+        if (thresholdHits.length > 0) parts.push(`<strong>${thresholdHits.length}</strong> hit your target`);
+        const totalAmt = totalDelta + thresholdSavings;
         container.style.display = '';
         container.innerHTML = `
             <div class="container">
                 <a class="watchlist-banner-inner" href="#compare/watchlist">
                     <span class="watchlist-banner-dot"></span>
                     <span class="watchlist-banner-text">
-                        <strong>${dropCount}</strong> of your saved product${dropCount === 1 ? '' : 's'} dropped &mdash; saving you up to <strong>$${totalDelta.toFixed(0)}</strong>.
+                        ${parts.join(' · ')} &mdash; saving you up to <strong>$${totalAmt.toFixed(0)}</strong>.
                     </span>
                     <span class="watchlist-banner-cta">See your watchlist &rarr;</span>
                 </a>
@@ -2600,9 +2609,8 @@
             if (Date.now() - last < 6 * 60 * 60 * 1000) return;
         } catch (e) {}
 
-        // Compute drops since last-seen (same shape as renderWatchlistBanner)
+        // Compute drops since last-seen + threshold hits (Phase 22)
         const savedIds = Watchlist.all();
-        if (!savedIds.length) return;
         let dropCount = 0;
         let totalDelta = 0;
         savedIds.forEach(id => {
@@ -2617,13 +2625,18 @@
                 totalDelta += seen.price - curLow;
             }
         });
-        if (dropCount === 0) return;
+        const thresholdHits = getThresholdHits();
+        if (dropCount === 0 && thresholdHits.length === 0) return;
+
+        const parts = [];
+        if (dropCount > 0) parts.push(`${dropCount} dropped`);
+        if (thresholdHits.length > 0) parts.push(`${thresholdHits.length} at your target`);
 
         try {
-            const n = new Notification('Twin City Cannabis — prices dropped', {
-                body: `${dropCount} of your saved product${dropCount === 1 ? '' : 's'} dropped. Saving you up to $${totalDelta.toFixed(0)}.`,
+            const n = new Notification('Twin City Cannabis — prices moved', {
+                body: `${parts.join(' · ')}. Saving you up to $${(totalDelta + thresholdHits.reduce((s,h) => s + (h.target - h.current), 0)).toFixed(0)}.`,
                 icon: '/img/twin-city-cannabis-logo-192.png',
-                tag: 'tcc-watchlist-drop',  // collapses repeated notifications into one
+                tag: 'tcc-watchlist-drop',
             });
             n.onclick = () => {
                 window.focus();
@@ -2847,6 +2860,36 @@
                 </div>
             </div>
 
+            <!-- Phase 22: per-product alert threshold -->
+            <div class="threshold-row" id="threshold-row">
+                ${(() => {
+                    const current = Thresholds.get(product.id);
+                    const low = lowest ? lowest.price : null;
+                    const suggested = low ? Math.max(1, Math.floor(low * 0.9)) : 30;
+                    return `
+                    <div class="threshold-icon" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    </div>
+                    <div class="threshold-body">
+                        <div class="threshold-label">Alert me when this drops below</div>
+                        <div class="threshold-controls">
+                            <span class="threshold-dollar">$</span>
+                            <input type="number" min="1" step="1" id="threshold-input" value="${current != null ? current : suggested}">
+                            <button type="button" id="threshold-save" class="btn btn-sm btn-primary">${current != null ? 'Update' : 'Set alert'}</button>
+                            ${current != null ? `<button type="button" id="threshold-clear" class="btn btn-sm btn-ghost">Clear</button>` : ''}
+                        </div>
+                        <div class="threshold-status">
+                            ${current != null
+                                ? (low != null && low <= current
+                                    ? `<span style="color:var(--green);font-weight:600">✓ Below your target right now — best price is $${low.toFixed(2)}</span>`
+                                    : `Watching · current best is $${(low || 0).toFixed(2)}, your target is $${current}`)
+                                : 'Set a target and we’ll surface it on the homepage banner and (if enabled) by browser notification.'}
+                        </div>
+                    </div>
+                    `;
+                })()}
+            </div>
+
             <div class="compare-table-wrapper" style="margin-bottom:2rem">
                 <table class="compare-table">
                     <thead>
@@ -2900,6 +2943,33 @@
                     ${TCC.products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4).map(p => productCard(p)).join('')}
                 </div>
             </div>`;
+
+        // Phase 22: wire threshold input + buttons
+        const tInput = document.getElementById('threshold-input');
+        const tSave = document.getElementById('threshold-save');
+        const tClear = document.getElementById('threshold-clear');
+        if (tSave && tInput) {
+            tSave.addEventListener('click', () => {
+                const v = parseFloat(tInput.value);
+                if (!isFinite(v) || v <= 0) { showToast('Enter a valid amount', 'info'); return; }
+                Thresholds.set(product.id, v);
+                // Also star the product so it shows up in the watchlist
+                if (!Watchlist.has(product.id)) {
+                    const low = (TCC.getLowestPrice(product) || {}).price;
+                    Watchlist.add(product.id, typeof low === 'number' ? low : undefined);
+                    updateWatchlistNav();
+                }
+                showToast(`Alert set — we'll watch for $${v}`, 'success');
+                renderCompareProduct(product);  // re-render to update button state
+            });
+        }
+        if (tClear) {
+            tClear.addEventListener('click', () => {
+                Thresholds.clear(product.id);
+                showToast('Alert cleared', 'info');
+                renderCompareProduct(product);
+            });
+        }
 
         // Draw chart
         setTimeout(() => drawPriceChart(product), 100);
@@ -3233,6 +3303,47 @@
         updateWatchlistNav();
         showToast(nowOn ? 'Saved to watchlist' : 'Removed from watchlist', nowOn ? 'success' : 'info');
     };
+
+    // ─── Phase 22: per-product alert thresholds (localStorage) ──────────
+    // Lets users set a "notify me below $X" target per product. Stored in
+    // localStorage keyed by product id. maybeFireDropNotification + the
+    // homepage banner both honor these — a product crossing its threshold
+    // is treated like a watchlist drop even if the user didn't save it.
+    const THRESHOLD_KEY = 'tcc.thresholds.v1';
+    const Thresholds = (function() {
+        let map = {};
+        try { map = JSON.parse(localStorage.getItem(THRESHOLD_KEY) || '{}'); } catch (e) {}
+        function persist() {
+            try { localStorage.setItem(THRESHOLD_KEY, JSON.stringify(map)); } catch (e) {}
+        }
+        return {
+            get: (id) => (typeof map[id] === 'number' ? map[id] : null),
+            set: (id, price) => {
+                if (typeof price !== 'number' || !isFinite(price) || price <= 0) return;
+                map[id] = price;
+                persist();
+            },
+            clear: (id) => { delete map[id]; persist(); },
+            all: () => Object.keys(map),
+            has: (id) => typeof map[id] === 'number',
+        };
+    })();
+
+    // Used by maybeFireDropNotification + renderWatchlistBanner to detect
+    // products that have crossed their per-user alert threshold even if
+    // not on the watchlist proper.
+    function getThresholdHits() {
+        const hits = [];
+        Thresholds.all().forEach(id => {
+            const target = Thresholds.get(id);
+            const p = TCC.products.find(x => x.id === id);
+            if (!p) return;
+            const low = (TCC.getLowestPrice(p) || {}).price;
+            if (typeof low !== 'number') return;
+            if (low <= target) hits.push({ product: p, target, current: low });
+        });
+        return hits;
+    }
 
     // Phase 11: tiny civic toast for watchlist + future system feedback.
     // Single transient element, no library. Fades in for 1.8s then out.

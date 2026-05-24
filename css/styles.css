@@ -1739,6 +1739,81 @@ ul, ol { list-style: none; }
 }
 .watchlist-banner-inner:hover .watchlist-banner-cta { text-decoration: underline; }
 
+/* Phase 22: per-product alert threshold row on the compare detail view */
+.threshold-row {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+    background: rgba(34, 197, 94, 0.04);
+    border: 1px solid rgba(34, 197, 94, 0.18);
+    border-radius: var(--radius-lg);
+}
+.threshold-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(34, 197, 94, 0.12);
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.threshold-body { flex: 1; min-width: 0; }
+.threshold-label {
+    font-family: 'SF Mono', Menlo, Monaco, monospace;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+}
+.threshold-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.threshold-dollar {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+#threshold-input {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--text-primary);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-md);
+    width: 100px;
+    outline: 0;
+    font-variant-numeric: tabular-nums;
+}
+#threshold-input:focus {
+    border-color: var(--green);
+    background: rgba(34, 197, 94, 0.05);
+}
+#threshold-input::-webkit-outer-spin-button,
+#threshold-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.threshold-status {
+    margin-top: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    line-height: 1.4;
+}
+
 /* Phase 11: civic toast for watchlist + future system feedback */
 .tcc-toast {
     position: fixed;
