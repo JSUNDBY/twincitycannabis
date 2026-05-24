@@ -1633,12 +1633,24 @@
             userMarker.bindTooltip('You are here', { direction: 'top', offset: [0, -8] });
         }
 
-        // ── List rendering (filter + optional distance sort) ─────────────
+        // ── List rendering (filter + viewport + optional distance sort) ─
+        // Phase 13: list also constrains to the current map bounds, so the
+        // sidebar is always "shops visible in the current view" by default.
+        // Disable viewport filter when the map is showing all of MN (the
+        // initial fitBounds state) — filtering there matches the whole list.
+        let viewportEnabled = false;
         function renderList(query) {
             const q = (query || '').trim().toLowerCase();
             let filtered = q
                 ? dispensaries.filter(d => `${d.name} ${d.city || ''} ${d.neighborhood || ''}`.toLowerCase().includes(q))
                 : dispensaries.slice();
+
+            // Phase 13: viewport constraint
+            if (viewportEnabled) {
+                const b = map.getBounds();
+                filtered = filtered.filter(d => b.contains([d.lat, d.lng]));
+            }
+
             // When location is known, sort by proximity (default) and surface a distance label
             const hasLoc = (_userLat != null && _userLng != null);
             if (hasLoc) {
@@ -1646,6 +1658,12 @@
                     .map(d => ({ d, dist: _distance(d) }))
                     .sort((a, b) => (a.dist ?? 9e9) - (b.dist ?? 9e9))
                     .map(x => x.d);
+            }
+            // Update viewport count in header
+            if (viewportEnabled) {
+                countEl.textContent = `${filtered.length} shops in this view · ${dispensaries.length} statewide.`;
+            } else {
+                countEl.textContent = `${dispensaries.length} open dispensaries${preopening ? ` · ${preopening} more licensed but not yet selling` : ''}.`;
             }
             listEl.innerHTML = filtered.map(d => {
                 const color = tierColor(d.tier);
@@ -1709,6 +1727,26 @@
             // drop the marker on first paint
             if (_userLat != null) dropUserMarker();
         }
+
+        // Phase 13: enable viewport filter only after the user has actually
+        // moved/zoomed the map. The initial fitBounds shows all of MN, so
+        // filtering there would just match everything — meaningless.
+        // First user-initiated moveend turns viewport filtering on.
+        const initialBounds = map.getBounds();
+        const initialZoom = map.getZoom();
+        map.on('moveend', () => {
+            const curZoom = map.getZoom();
+            const curBounds = map.getBounds();
+            // Skip the initial settle (programmatic fitBounds/setView)
+            if (!viewportEnabled) {
+                if (curZoom <= initialZoom + 0.1 &&
+                    Math.abs(curBounds.getNorth() - initialBounds.getNorth()) < 0.5) {
+                    return;  // still at the wide-state, ignore
+                }
+                viewportEnabled = true;
+            }
+            renderList(filterEl ? filterEl.value : '');
+        });
 
         setTimeout(() => map.invalidateSize(), 100);
     }
