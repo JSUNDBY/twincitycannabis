@@ -334,22 +334,6 @@ ul, ol { list-style: none; }
     font-weight: 600;
 }
 
-.nav-cta-btn {
-    padding: 0.5rem 1.2rem;
-    background: linear-gradient(135deg, #22c55e, #16a34a);
-    color: var(--bg-primary);
-    font-size: 0.85rem;
-    font-weight: 600;
-    border-radius: var(--radius-sm);
-    margin-left: 0.5rem;
-    transition: all var(--transition-fast);
-}
-
-.nav-cta-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
-}
-
 .nav-mobile-toggle {
     display: none;
     flex-direction: column;
