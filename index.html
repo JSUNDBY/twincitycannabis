@@ -2305,6 +2305,15 @@
      ready. Order is preserved so app.js still runs after data.js. -->
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- Phase 21: Supabase cross-device watchlist sync. Anon visitors fall back
+     to localStorage; signed-in visitors get their watchlist synced server-side. -->
+<script>
+  window.TCC_SUPABASE_CONFIG = {
+    url: 'https://mxplunjfsbbyreqqqvvm.supabase.co',
+    anonKey: 'sb_publishable_u0rrtBf5D6JT0bHqRAn0Yw_UJruXk3M',
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script defer src="js/data.js?v=ec0d9c0d"></script>
 <script defer src="js/app.js?v=5ecfe7ae"></script>
 

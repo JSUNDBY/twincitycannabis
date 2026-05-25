@@ -72,15 +72,10 @@ Should return `{ "publicKey": "BD4Y7dz..." }`.
 
 ## Supabase sync (Phase 21)
 
-### Blocked on you
-
-The `tcc-analytics` Supabase project is **paused** (auto-paused after 7 days
-of inactivity per the email on 2026-05-02). I cannot unpause it from here.
-
 ### One-time setup
 
-1. **Unpause** `tcc-analytics` in the Supabase dashboard.
-2. **Run the schema** in the Supabase SQL editor:
+1. **Run the schema** in the Supabase SQL editor for the `tcc-sync` project
+   (https://mxplunjfsbbyreqqqvvm.supabase.co):
 
    ```bash
    cat cloudflare/supabase-schema.sql
@@ -94,8 +89,8 @@ of inactivity per the email on 2026-05-02). I cannot unpause it from here.
    ```html
    <script>
      window.TCC_SUPABASE_CONFIG = {
-       url: 'https://kmlwlmrlmuioogbfwcqx.supabase.co',
-       anonKey: 'sb_publishable_UNf4k93M2YX07okjy3BfbQ_HJA0OnnN',
+       url: 'https://mxplunjfsbbyreqqqvvm.supabase.co',
+       anonKey: 'sb_publishable_u0rrtBf5D6JT0bHqRAn0Yw_UJruXk3M',
      };
    </script>
    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>

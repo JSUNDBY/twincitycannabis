@@ -3,13 +3,14 @@
 -- Run this AFTER unpausing the tcc-analytics project. Order matters:
 -- tables → RLS → policies → triggers.
 --
--- Project: tcc-analytics  (paused as of 2026-05-02 per the Supabase email)
--- URL:     https://kmlwlmrlmuioogbfwcqx.supabase.co
+-- Project: tcc-sync (new org, replaced tcc-analytics which got wedged in
+--          a stuck PAUSING state on 2026-05-24 and couldn't be recovered).
+-- URL:     https://mxplunjfsbbyreqqqvvm.supabase.co
 --
 -- After running this, set the following client env vars in index.html or
 -- equivalent (publishable values only — never the service role key):
---   SUPABASE_URL              https://kmlwlmrlmuioogbfwcqx.supabase.co
---   SUPABASE_PUBLISHABLE_KEY  sb_publishable_UNf4k93M2YX07okjy3BfbQ_HJA0OnnN
+--   SUPABASE_URL              https://mxplunjfsbbyreqqqvvm.supabase.co
+--   SUPABASE_PUBLISHABLE_KEY  sb_publishable_u0rrtBf5D6JT0bHqRAn0Yw_UJruXk3M
 --
 -- Once configured, the client side (Phase 21 in js/app.js) will start
 -- syncing the watchlist + thresholds + notify preferences to Supabase
