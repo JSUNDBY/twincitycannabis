@@ -3552,10 +3552,15 @@
                     // Pull server-side watchlist + push local additions
                     await this.pullWatchlist();
                     await this.pushWatchlist();
-                    // Re-render the watchlist page so the auth panel updates
-                    if (typeof window.renderCompareDefault === 'function') {
+                    // Route to the watchlist page so the user lands on the
+                    // "Signed in — synced" confirmation panel instead of home.
+                    const onTopLevelHome = !location.hash || location.hash === '#' || location.hash === '#home';
+                    if (onTopLevelHome) {
+                        location.hash = 'watchlist';
+                    } else if (typeof window.renderCompareDefault === 'function') {
                         try { window.renderCompareDefault(); } catch (e) {}
                     }
+                    try { showToast('Signed in — your watchlist is now synced', 'success'); } catch (e) {}
                 }
                 if (event === 'SIGNED_OUT') {
                     this._userId = null;
@@ -4467,6 +4472,20 @@
     }
 
     function init() {
+        // Phase 21b: catch expired/used magic-link errors before the router
+        // runs. Supabase appends them as URL hash params (#error=...&error_code=otp_expired).
+        // Without this handler the SPA sees an unknown hash and renders blank.
+        if (typeof location !== 'undefined' && /[#&]error_code=/.test(location.hash)) {
+            const params = new URLSearchParams(location.hash.slice(1));
+            const code = params.get('error_code');
+            const msg = code === 'otp_expired'
+                ? 'That sign-in link has expired or already been used. Send a fresh one below.'
+                : 'Sign-in could not be completed. Try sending another link.';
+            // Defer toast until DOM is fully ready so showToast has a target
+            setTimeout(() => { try { showToast(msg, 'info'); } catch (e) {} }, 200);
+            // Clear the hash and route them to the watchlist so they see the form
+            history.replaceState(null, '', location.pathname + '#watchlist');
+        }
         // Phase 24 + 21: wire Watchlist change listeners now that Watchlist
         // and Sync are both defined (they live further down in the file).
         Watchlist.onChange(schedulePushSync);
