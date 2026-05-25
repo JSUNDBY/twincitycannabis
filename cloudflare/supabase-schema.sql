@@ -25,7 +25,14 @@ create table if not exists public.profiles (
     -- Visible-name shown in UI (optional)
     display_name text,
     -- Per-user notification preferences mirroring the localStorage flags
-    notify_drops boolean not null default false
+    notify_drops boolean not null default false,
+    -- Newsletter opt-in (separate from notify_drops — drops are transactional,
+    -- newsletter is marketing/curated content about new dispensaries, deals,
+    -- editorial updates). Collected via the sign-in form checkbox.
+    newsletter_optin boolean not null default false,
+    -- Cached email for newsletter export. auth.users has it too but RLS
+    -- forbids client access, so we mirror it here for profile-scope reads.
+    email text
 );
 
 alter table public.profiles enable row level security;
@@ -84,7 +91,8 @@ create policy "watchlist_self_delete"
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
-    insert into public.profiles (id) values (new.id) on conflict do nothing;
+    insert into public.profiles (id, email) values (new.id, new.email)
+        on conflict (id) do update set email = excluded.email;
     return new;
 end;
 $$;

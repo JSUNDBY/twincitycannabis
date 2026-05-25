@@ -2489,6 +2489,61 @@
         return list;
     }
 
+    // Phase 21b: auth panel on the watchlist page. Three states:
+    //   1. Not configured (Supabase missing): show same "Coming soon" copy
+    //      so the watchlist still renders cleanly in dev / offline.
+    //   2. Signed out: email + newsletter checkbox + magic-link button.
+    //   3. Signed in: confirmation + sign-out button.
+    function renderAuthPanel() {
+        if (!Sync.isConfigured()) {
+            return `
+                <div class="sync-option">
+                    <div class="sync-option-icon">${'\u{1F464}'}</div>
+                    <div class="sync-option-body">
+                        <div class="sync-option-title">Account sync <span class="sync-option-pill sync-option-pill--soon">Loading</span></div>
+                        <div class="sync-option-sub">Sign-in becomes available once the page finishes loading.</div>
+                    </div>
+                </div>
+            `;
+        }
+        if (Sync.signedIn()) {
+            const email = esc(Sync.userEmail() || 'your account');
+            return `
+                <div class="sync-option sync-option--signed-in">
+                    <div class="sync-option-icon">${'\u{2713}'}</div>
+                    <div class="sync-option-body">
+                        <div class="sync-option-title">Signed in <span class="sync-option-pill sync-option-pill--ok">Synced</span></div>
+                        <div class="sync-option-sub">${email} — watchlist syncs across every browser you sign in on.</div>
+                        <div style="margin-top:.6rem">
+                            <button type="button" class="btn btn-ghost text-sm" id="auth-sign-out">Sign out</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        // Signed out — show form
+        return `
+            <div class="sync-option sync-option--signin">
+                <div class="sync-option-icon">${'\u{1F464}'}</div>
+                <div class="sync-option-body">
+                    <div class="sync-option-title">Sync across devices</div>
+                    <div class="sync-option-sub">Sign in to keep your watchlist with you on every browser. We send a magic link — no password.</div>
+                    <form id="auth-signin-form" style="margin-top:.7rem;display:flex;flex-direction:column;gap:.6rem;max-width:24rem">
+                        <input type="email" required name="email" placeholder="you@example.com"
+                               autocomplete="email" inputmode="email"
+                               style="padding:.6rem .8rem;border:1px solid var(--border);border-radius:.4rem;background:var(--bg-input);color:var(--text-primary);font-size:.95rem">
+                        <label style="display:flex;gap:.5rem;align-items:flex-start;font-size:.85rem;color:var(--text-muted);cursor:pointer;line-height:1.4">
+                            <input type="checkbox" name="newsletter" style="margin-top:.18rem;flex-shrink:0">
+                            <span>Email me when new dispensaries open or notable drops hit the metro. Unsubscribe any time.</span>
+                        </label>
+                        <button type="submit" class="btn btn-primary text-sm" style="align-self:flex-start">Send magic link</button>
+                        <div id="auth-signin-status" style="font-size:.85rem;color:var(--text-muted);min-height:1.2em"></div>
+                    </form>
+                </div>
+            </div>
+        `;
+    }
+
     function renderCompareDefault() {
         const container = document.getElementById('compare-content');
         const filtered = getBrowseFiltered();
@@ -2531,13 +2586,7 @@
                                 <div class="sync-option-sub">Per-device notifications on return visits when something drops or hits your target. Enable above.</div>
                             </div>
                         </div>
-                        <div class="sync-option">
-                            <div class="sync-option-icon">${'\u{1F464}'}</div>
-                            <div class="sync-option-body">
-                                <div class="sync-option-title">Account sync <span class="sync-option-pill sync-option-pill--soon">Coming soon</span></div>
-                                <div class="sync-option-sub">Sign in once, watchlist follows you across browsers and devices. Needs server reactivation; not enabled yet.</div>
-                            </div>
-                        </div>
+                        ${renderAuthPanel()}
                     </div>
                 </div>
             `;
@@ -2592,6 +2641,44 @@
         if (notifyBtn) {
             notifyBtn.addEventListener('click', () => {
                 requestNotifyOptIn().then(() => renderCompareDefault());
+            });
+        }
+
+        // Phase 21b: sign-in form submit + sign-out button
+        const signinForm = document.getElementById('auth-signin-form');
+        if (signinForm) {
+            signinForm.addEventListener('submit', async (ev) => {
+                ev.preventDefault();
+                const status = document.getElementById('auth-signin-status');
+                const fd = new FormData(signinForm);
+                const email = (fd.get('email') || '').toString().trim();
+                const newsletter = fd.get('newsletter') === 'on';
+                if (!email) return;
+                if (status) status.textContent = 'Sending...';
+                signinForm.querySelector('button[type=submit]').disabled = true;
+                try {
+                    const res = await Sync.signInWithEmail(email, { newsletter });
+                    if (res && res.error) {
+                        if (status) status.textContent = 'Could not send link. Check the email and try again.';
+                        signinForm.querySelector('button[type=submit]').disabled = false;
+                        return;
+                    }
+                    signinForm.innerHTML = `
+                        <div style="padding:.7rem .9rem;background:var(--green-bg);border:1px solid var(--green);border-radius:.4rem;color:var(--green-text);font-size:.9rem">
+                            Check <strong>${esc(email)}</strong> — we sent a sign-in link. Click it to finish.
+                        </div>
+                    `;
+                } catch (e) {
+                    if (status) status.textContent = 'Something went wrong. Try again in a moment.';
+                    signinForm.querySelector('button[type=submit]').disabled = false;
+                }
+            });
+        }
+        const signOutBtn = document.getElementById('auth-sign-out');
+        if (signOutBtn) {
+            signOutBtn.addEventListener('click', async () => {
+                await Sync.signOut();
+                renderCompareDefault();
             });
         }
 
@@ -3399,20 +3486,34 @@
             if (!this._client) {
                 const c = this.config();
                 this._client = window.supabase.createClient(c.url, c.anonKey, {
-                    auth: { persistSession: true, autoRefreshToken: true },
+                    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
                 });
                 const { data } = await this._client.auth.getSession();
                 this._userId = data?.session?.user?.id || null;
+                this._email = data?.session?.user?.email || null;
                 this._enabled = !!this._userId;
+                this._bindAuthListener();
             }
             return this._client;
         },
         signedIn() { return this._enabled && !!this._userId; },
 
-        async signInWithEmail(email) {
+        async signInWithEmail(email, { newsletter = false } = {}) {
             const c = await this.client();
             if (!c) return { error: 'not_configured' };
-            return c.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin } });
+            // Stash newsletter pref + email so we can write them to profiles
+            // AFTER the magic link redirect lands and the session is live.
+            try {
+                localStorage.setItem('tcc.sync.pendingProfile.v1', JSON.stringify({
+                    email, newsletter, ts: Date.now(),
+                }));
+            } catch (e) {}
+            return c.auth.signInWithOtp({
+                email,
+                // emailRedirectTo: bring them back to /#watchlist so the page
+                // they were trying to sync to is the first thing they see.
+                options: { emailRedirectTo: location.origin + '/#watchlist' },
+            });
         },
         async signOut() {
             const c = await this.client();
@@ -3420,6 +3521,52 @@
             await c.auth.signOut();
             this._userId = null;
             this._enabled = false;
+            this._email = null;
+        },
+        userEmail() { return this._email || null; },
+
+        // Wire after first client() init. Idempotent — guards against double-
+        // binding when the form re-renders. Called from the auth UI render.
+        _bindAuthListener() {
+            if (this._listenerBound) return;
+            const c = this._client;
+            if (!c) return;
+            c.auth.onAuthStateChange(async (event, session) => {
+                if (event === 'SIGNED_IN' && session?.user) {
+                    this._userId = session.user.id;
+                    this._email = session.user.email || null;
+                    this._enabled = true;
+                    // Flush the pending newsletter/email pref to profiles
+                    try {
+                        const raw = localStorage.getItem('tcc.sync.pendingProfile.v1');
+                        if (raw) {
+                            const p = JSON.parse(raw);
+                            await c.from('profiles').upsert({
+                                id: session.user.id,
+                                email: session.user.email,
+                                newsletter_optin: !!p.newsletter,
+                            }, { onConflict: 'id' });
+                            localStorage.removeItem('tcc.sync.pendingProfile.v1');
+                        }
+                    } catch (e) {}
+                    // Pull server-side watchlist + push local additions
+                    await this.pullWatchlist();
+                    await this.pushWatchlist();
+                    // Re-render the watchlist page so the auth panel updates
+                    if (typeof window.renderCompareDefault === 'function') {
+                        try { window.renderCompareDefault(); } catch (e) {}
+                    }
+                }
+                if (event === 'SIGNED_OUT') {
+                    this._userId = null;
+                    this._email = null;
+                    this._enabled = false;
+                    if (typeof window.renderCompareDefault === 'function') {
+                        try { window.renderCompareDefault(); } catch (e) {}
+                    }
+                }
+            });
+            this._listenerBound = true;
         },
 
         // Pull the server-side watchlist + thresholds and merge into local state
@@ -4340,6 +4487,17 @@
         renderCompare();
         bindBrowseControls();
         bindEvents();
+        // Phase 21b: kick off Supabase client init (no-op if supabase-js
+        // hasn't loaded yet — DOMContentLoaded fires before <script defer>
+        // bodies finish executing). The auth listener picks up any existing
+        // session and re-renders the watchlist page if signed in.
+        if (Sync.isConfigured()) {
+            Sync.client().catch(() => {});
+        } else {
+            // supabase-js still loading — retry once after a beat
+            setTimeout(() => { if (Sync.isConfigured()) Sync.client().catch(() => {}); }, 800);
+        }
+        window.renderCompareDefault = renderCompareDefault;
         bindSubscribeButtons();
         bindMenuUploadForm();
         route();
