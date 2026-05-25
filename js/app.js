@@ -4288,6 +4288,37 @@
         });
     }
 
+    // Phase 22: surface the nearest upcoming event in a homepage banner.
+    // Hides itself entirely if no event sits within the next 30 days, so
+    // the banner is loud when there's something to attend and absent when
+    // the calendar is empty.
+    function renderEventBanner() {
+        const el = document.getElementById('event-banner');
+        if (!el || !TCC.events || !TCC.events.length) return;
+        const MS_DAY = 86400000;
+        const today = new Date(); today.setHours(0, 0, 0, 0);
+        const upcoming = TCC.events
+            .map(e => ({ ...e, when: new Date(e.date + 'T00:00:00') }))
+            .filter(e => !isNaN(e.when) && e.when >= today)
+            .sort((a, b) => a.when - b.when);
+        const next = upcoming[0];
+        if (!next) { el.style.display = 'none'; return; }
+        const days = Math.round((next.when - today) / MS_DAY);
+        if (days > 30) { el.style.display = 'none'; return; }
+        const when = days === 0 ? 'Today'
+            : days === 1 ? 'Tomorrow'
+            : `In ${days} days`;
+        const dateStr = next.when.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        el.innerHTML = `
+            <a class="event-banner-inner" href="/events/#event-submit" onclick="event.preventDefault();location.href='/events/'">
+                <span class="event-banner-eyebrow">${when} · ${dateStr}</span>
+                <span class="event-banner-title">${esc(next.name)}${next.city ? ` · ${esc(next.city)}` : ''}</span>
+                <span class="event-banner-cta">See details &rarr;</span>
+            </a>
+        `;
+        el.style.display = '';
+    }
+
     function updateHeroCounts() {
         const pc = TCC.products ? TCC.products.length.toLocaleString() + '+' : '2,000+';
         // Phase 7a: hero shows OPEN dispensaries, with preopening count beside it
@@ -4494,6 +4525,7 @@
         });
         installStrainMatching();
         updateHeroCounts();
+        renderEventBanner();
         injectDataIcons();
         updateWatchlistNav();  // Phase 5: surface watchlist badge if any items saved
         maybeFireDropNotification();  // Phase 18: notify returning visitors of drops

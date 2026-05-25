@@ -16348,6 +16348,17 @@ TCC.reviews = [
     { dispensaryId: 'nativecare-west-st-paul', author: 'Brian', date: 'in the last week', rating: 5, text: 'Went opening day. Super friendly staff. Grabbed a super lemon haze disposable. The opening day gift bag was a nice surprise - rolling tray, one hitter etc. very easy process and will be back.', source: 'google' }
 ];
 
+// ---- EVENTS ----
+// Mirror of the canonical events list at /events/. Kept here so the
+// homepage banner can pick the nearest upcoming event without fetching
+// or parsing /events/. Update both places when adding/removing events.
+TCC.events = [
+    { name: 'CannaFest 2026', date: '2026-04-16', city: 'St. Paul', url: 'https://events.humanitix.com/cannafest-2026' },
+    { name: 'Smokin on the Runway', date: '2026-05-03', city: 'Minneapolis', url: 'https://thehookmpls.com/event/smokin-on-the-runway/' },
+    { name: 'NECANN Minnesota', date: '2026-05-14', city: 'Minneapolis', url: 'https://necann.com/minnesota-convention/' },
+    { name: 'Legacy Cup Minnesota', date: '2026-09-26', city: 'Minneapolis', url: 'https://legacycupmn.com/' },
+];
+
 // ---- HELPER FUNCTIONS ----
 TCC.getDispensary = (id) => TCC.dispensaries.find(d => d.id === id);
 TCC.getProduct = (id) => TCC.products.find(p => p.id === id);

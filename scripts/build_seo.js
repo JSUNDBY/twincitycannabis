@@ -1711,12 +1711,24 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
   </div>
 </article>
 
-<div class="events-submit-cta">
-  <div class="events-submit-cta-text">
+<div class="events-submit-cta" id="event-submit">
+  <div class="events-submit-cta-text" style="flex:1 1 100%">
     <p class="events-submit-cta-title">Got an event? Tell us about it.</p>
-    <p class="events-submit-cta-desc">Hosting a cannabis event in Minnesota, or know about one we&rsquo;re missing? Send us the details and we&rsquo;ll add it to the calendar. Free, always.</p>
+    <p class="events-submit-cta-desc" style="margin-bottom:1.2rem">Hosting a cannabis event in Minnesota, or know about one we&rsquo;re missing? Send us the details and we&rsquo;ll add it to the calendar. Free, always.</p>
+    <form id="event-submit-form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.7rem;max-width:760px">
+      <input type="text" name="contact_name" required placeholder="Your name" style="padding:.7rem .9rem;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(0,0,0,.25);color:#f5f6f8;font-size:.92rem">
+      <input type="email" name="contact_email" required placeholder="Your email" style="padding:.7rem .9rem;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(0,0,0,.25);color:#f5f6f8;font-size:.92rem">
+      <input type="text" name="event_name" required placeholder="Event name" style="padding:.7rem .9rem;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(0,0,0,.25);color:#f5f6f8;font-size:.92rem">
+      <input type="text" name="event_date" placeholder="Date (e.g. June 14, 2026)" style="padding:.7rem .9rem;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(0,0,0,.25);color:#f5f6f8;font-size:.92rem">
+      <input type="text" name="event_location" placeholder="Location" style="padding:.7rem .9rem;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(0,0,0,.25);color:#f5f6f8;font-size:.92rem">
+      <input type="url" name="event_url" placeholder="Event URL (optional)" style="padding:.7rem .9rem;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(0,0,0,.25);color:#f5f6f8;font-size:.92rem">
+      <textarea name="event_notes" rows="3" placeholder="Anything else we should know" style="grid-column:1/-1;padding:.7rem .9rem;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(0,0,0,.25);color:#f5f6f8;font-size:.92rem;font-family:inherit;resize:vertical"></textarea>
+      <div style="grid-column:1/-1;display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+        <button type="submit" class="events-submit-cta-btn" style="margin:0">Send event &rarr;</button>
+        <span id="event-submit-status" style="font-size:.88rem;color:#b8bcc4;min-height:1em"></span>
+      </div>
+    </form>
   </div>
-  <a class="events-submit-cta-btn" href="mailto:hello@twincitycannabis.com?subject=Event%20Submission">Email hello@twincitycannabis.com &rarr;</a>
 </div>
 
 <div class="events-section-head">
@@ -1747,14 +1759,15 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
   <p><a class="cta" href="/dispensaries/">Browse all ${TCC.dispensaries.length} dispensaries &rarr;</a></p>
 
   <h2 style="margin-top:2rem">Know about an event we&rsquo;re missing?</h2>
-  <p>Email <a href="mailto:hello@twincitycannabis.com">hello@twincitycannabis.com</a> and we&rsquo;ll add it.</p>
+  <p>Use the <a href="#event-submit">submission form above</a> and we&rsquo;ll add it.</p>
 
   <h2 style="margin-top:2rem">Want to partner on an event?</h2>
   <p>Twin City Cannabis tracks ${TCC.products.length.toLocaleString()}+ products across ${TCC.dispensaries.length} dispensaries with real-time pricing. If you&rsquo;re organizing a cannabis event in Minnesota and want a data partner or media coverage, <a href="/contact/">get in touch</a>.</p>
 </div>
 
 <script>
-// Live countdown — re-renders every minute
+// Live countdown — re-renders every minute. Past events are hidden
+// entirely (not just dimmed) so the page reads as a forward calendar.
 (function(){
   var MS_DAY = 86400000;
   function tick(){
@@ -1764,10 +1777,11 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
       var when = new Date(card.getAttribute('data-event-date') + 'T00:00:00');
       var days = Math.round((when - now) / MS_DAY);
       var badge = card.querySelector('[data-countdown]');
+      if (days < 0) { card.style.display = 'none'; return; }
+      card.style.display = '';
       if (!badge) return;
-      badge.classList.remove('soon','today','past');
-      if (days < 0) { badge.textContent = 'Past'; badge.classList.add('past'); card.style.opacity = '0.55'; }
-      else if (days === 0) { badge.textContent = 'Today'; badge.classList.add('today'); upcoming++; }
+      badge.classList.remove('soon','today');
+      if (days === 0) { badge.textContent = 'Today'; badge.classList.add('today'); upcoming++; }
       else if (days === 1) { badge.textContent = 'Tomorrow'; badge.classList.add('soon'); upcoming++; }
       else if (days <= 14) { badge.textContent = 'In ' + days + ' days'; badge.classList.add('soon'); upcoming++; }
       else { badge.textContent = 'In ' + days + ' days'; upcoming++; }
@@ -1779,6 +1793,47 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
   }
   tick();
   setInterval(tick, 60000);
+})();
+
+// Phase 22: event submission form — posts to /contact worker endpoint
+// (same one used for dispensary leads), tagged role="Event submission"
+// so the inbox notification is unambiguous.
+(function(){
+  var form = document.getElementById('event-submit-form');
+  if (!form) return;
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var status = document.getElementById('event-submit-status');
+    var btn = form.querySelector('button[type=submit]');
+    var fd = new FormData(form);
+    var body = {
+      name: (fd.get('contact_name') || '').trim(),
+      email: (fd.get('contact_email') || '').trim(),
+      role: 'Event submission',
+      message: [
+        'Event: ' + (fd.get('event_name') || ''),
+        'Date: ' + (fd.get('event_date') || ''),
+        'Location: ' + (fd.get('event_location') || ''),
+        'URL: ' + (fd.get('event_url') || ''),
+        '',
+        (fd.get('event_notes') || '').toString().trim(),
+      ].join('\\n'),
+    };
+    if (!body.name || !body.email) return;
+    status.textContent = 'Sending...';
+    btn.disabled = true;
+    fetch('https://dashboard.twincitycannabis.com/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }).then(function(r){
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      form.innerHTML = '<div style="grid-column:1/-1;padding:1rem 1.2rem;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.4);border-radius:10px;color:#22c55e;font-size:.95rem">Got it &mdash; thanks for sending this our way. We will add it to the calendar.</div>';
+    }).catch(function(){
+      status.textContent = 'Could not send right now. Email hello@twincitycannabis.com and we will take it from there.';
+      btn.disabled = false;
+    });
+  });
 })();
 </script>
 ` + footer;
