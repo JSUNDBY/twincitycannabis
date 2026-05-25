@@ -4592,8 +4592,6 @@ html[data-theme="light"] .kit-form-wrapper .formkit-submit * {
     justify-content: center;
     align-items: center;
     gap: 0.85rem;
-    flex-wrap: wrap;
-    max-width: 600px;
     margin: 0 auto;
     text-align: center;
 }
@@ -4605,7 +4603,10 @@ html[data-theme="light"] .kit-form-wrapper .formkit-submit * {
 
 .footer-links {
     display: flex;
-    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem 1.2rem;
+    max-width: 760px;
 }
 
 .footer-links a {
