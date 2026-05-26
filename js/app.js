@@ -43,6 +43,7 @@
         'bowl', 'pipe', 'bong', '\\brig\\b', 'banger', 'nail\\b', 'carb cap', 'dabber',
         'dab tool', 'dab rag', 'rags?\\b', '\\btray', 'holder', '\\bcase\\b', '\\bjar\\b',
         'ashtray', 'grinder', 'lighter', 'matches?', 'torch', 'butane',
+        'mill plate', '\\bmill\\b', '\\bplate\\b', 'replacement plate',
         'battery', 'batteries', 'wick', '510 thread', 'mod\\b', '\\bcoil',
         'capsule', 'dosing capsule', 'humidor', 'boveda', 'humidipak',
         'cleaner', 'cleaning', 'cotton bud', 'cotton swab', 'q.?tip',
@@ -901,7 +902,6 @@
     }
 
     function rotationCardHTML(d) {
-        const scoreColor = TCC.getScoreColor(d.tcc_score);
         const hasImg = d.img && d.img.length > 10 && !d.img.includes('placeholder');
         const avatar = hasImg
             ? `<img src="${esc(d.img)}" alt="" loading="lazy">`
@@ -910,13 +910,18 @@
         const loc = d.neighborhood && d.neighborhood !== d.city
             ? `${esc(d.neighborhood)} · ${esc(d.city)}`
             : esc(d.city || '');
+        const gRating = d.google?.rating || 0;
+        const gCount = d.google?.review_count || 0;
+        const reviewBadge = gRating > 0
+            ? `<span class="rotation-card-rating">&#9733; ${gRating.toFixed(1)} <span class="rotation-card-rating-count">(${gCount.toLocaleString()})</span></span>`
+            : '';
         return `<a class="rotation-card" href="#dispensary/${esc(d.id)}">
             <span class="rotation-card-avatar" style="${avatarStyle}">${avatar}</span>
             <span class="rotation-card-body">
                 <span class="rotation-card-name">${esc(d.name)}</span>
                 <span class="rotation-card-meta">${loc}</span>
             </span>
-            <span class="rotation-card-score" style="background:${scoreColor}">${d.tcc_score}</span>
+            ${reviewBadge}
         </a>`;
     }
 
@@ -1372,11 +1377,16 @@
                 fillOpacity: 0.4,
             }).addTo(App.mapInstance);
 
+            const gRating = d.google?.rating || 0;
+            const gCount = d.google?.review_count || 0;
+            const reviewLine = gRating > 0
+                ? `<span style="font-size:0.78rem;color:#fbbf24">&#9733; ${gRating.toFixed(1)}</span> <span style="font-size:0.7rem;color:#888">(${gCount.toLocaleString()})</span>`
+                : '<span style="font-size:0.72rem;color:#888">No reviews yet</span>';
             marker.bindPopup(`
                 <div style="font-family:Inter,sans-serif;padding:0.3rem">
                     <strong style="font-size:0.85rem">${esc(d.name)}</strong><br>
                     <span style="font-size:0.75rem;color:#888">${esc(d.city || d.neighborhood)}</span><br>
-                    <span style="font-size:0.85rem;color:${color};font-weight:700">TCC ${d.tcc_score}</span>
+                    ${reviewLine}
                 </div>
             `);
 
@@ -1623,11 +1633,16 @@
         dispensaries.forEach(d => {
             const isActive = recentlyActive.has(d.id);
             const marker = L.marker([d.lat, d.lng], { icon: pinIcon(d.tier, isActive) }).addTo(map);
+            const gRating2 = d.google?.rating || 0;
+            const gCount2 = d.google?.review_count || 0;
+            const reviewLine2 = gRating2 > 0
+                ? `<span style="font-size:0.8rem;color:#d97706;font-weight:700">&#9733; ${gRating2.toFixed(1)}</span> <span style="font-size:0.72rem;color:#666">(${gCount2.toLocaleString()})</span>`
+                : '<span style="font-size:0.72rem;color:#888">No reviews yet</span>';
             marker.bindPopup(`
                 <div style="font-family:Inter,sans-serif;padding:0.25rem;min-width:180px">
                     <strong style="font-size:0.9rem;color:#0a1410">${esc(d.name)}</strong><br>
                     <span style="font-size:0.75rem;color:#666">${esc(d.city || d.neighborhood || '')}</span><br>
-                    <span style="font-size:0.85rem;color:${TCC.getScoreColor(d.tcc_score)};font-weight:700">TCC ${d.tcc_score}</span>
+                    ${reviewLine2}
                     <a href="#dispensary/${esc(d.id)}" style="display:block;margin-top:0.4rem;font-size:0.8rem;color:#22c55e;font-weight:600;text-decoration:none">Open dispensary &rarr;</a>
                 </div>
             `);
@@ -1702,10 +1717,13 @@
             }
             listEl.innerHTML = filtered.map(d => {
                 const color = tierColor(d.tier);
-                const scoreColor = TCC.getScoreColor(d.tcc_score);
                 const dist = hasLoc ? _distance(d) : null;
                 const distLabel = dist != null
                     ? `<span class="map-page-list-dist">${dist.toFixed(dist < 10 ? 1 : 0)} mi</span>`
+                    : '';
+                const gRating = d.google?.rating || 0;
+                const ratingLabel = gRating > 0
+                    ? `<span class="map-page-list-score" style="color:#fbbf24;font-weight:600">&#9733; ${gRating.toFixed(1)}</span>`
                     : '';
                 return `<button type="button" class="map-page-list-item${d.id === activeId ? ' is-active' : ''}" data-disp-id="${esc(d.id)}">
                     <span class="map-page-list-pin" style="background:${color}"></span>
@@ -1713,7 +1731,7 @@
                         <span class="map-page-list-name">${esc(d.name)}</span>
                         <span class="map-page-list-meta">${esc(d.city || d.neighborhood || '')}${distLabel ? ' · ' : ''}${distLabel}</span>
                     </span>
-                    <span class="map-page-list-score" style="color:${scoreColor}">${d.tcc_score}</span>
+                    ${ratingLabel}
                 </button>`;
             }).join('') || '<div class="map-page-empty">No shops match.</div>';
             listEl.querySelectorAll('.map-page-list-item').forEach(el => {
@@ -3407,9 +3425,6 @@
                             <div class="dispensary-card-name">${esc(d.name)}</div>
                             <div class="dispensary-card-loc">${Icons.pin} ${esc(d.neighborhood || d.city)}${d.neighborhood && d.neighborhood !== d.city ? ' &bull; ' + esc(d.city) : ''}${_getDistanceMi(d) != null ? ' &bull; <span style="color:var(--green)">' + _getDistanceMi(d) + ' mi</span>' : ''}</div>
                         </div>
-                        <div class="dispensary-card-score">
-                            <span class="dispensary-card-score-num" style="background:${scoreColor}">${d.tcc_score}</span>
-                        </div>
                     </div>
                     <div class="dispensary-card-rating">
                         ${gRating > 0 ? `<span class="stars">${stars}</span><span class="rating-num">${gRating.toFixed(1)}</span><span class="count">(${gCount.toLocaleString()})</span>` : '<span class="text-muted text-xs">No reviews yet</span>'}
@@ -3804,6 +3819,41 @@
         return `<span class="tag tag-sm" style="background:rgba(239,68,68,0.1);color:#ef4444" title="Price rose $${Math.abs(diff).toFixed(0)} recently">&uarr; $${Math.abs(diff).toFixed(0)}</span>`;
     }
 
+    // Memoized per-category price-percentile rank. Lazily computed on first
+    // call so renders that don't use it (e.g. dispensary pages) don't pay
+    // the cost. Lower price = lower rank number = better deal. Used to
+    // surface a small "Top X%" badge on cheap items in product cards.
+    let _priceRankCache = null;
+    function _buildPriceRanks() {
+        const byCat = {};
+        (TCC.products || []).forEach(p => {
+            const low = (TCC.getLowestPrice(p) || {}).price;
+            if (typeof low !== 'number' || !p.category) return;
+            (byCat[p.category] = byCat[p.category] || []).push({ id: p.id, low });
+        });
+        const out = {};
+        Object.entries(byCat).forEach(([, items]) => {
+            items.sort((a, b) => a.low - b.low);
+            const n = items.length;
+            items.forEach((it, i) => {
+                // Percentile: 0 = cheapest, 100 = most expensive. Use rank/N
+                // (not (rank-1)/(N-1)) so the cheapest item gets percentile 0.
+                out[it.id] = Math.round((i / Math.max(1, n - 1)) * 100);
+            });
+        });
+        _priceRankCache = out;
+    }
+    function priceRankBadge(p) {
+        if (!_priceRankCache) _buildPriceRanks();
+        const pct = _priceRankCache[p.id];
+        if (pct == null) return '';
+        // Only badge the top quartile so the page reads "these are the
+        // genuinely cheap ones" instead of being noise.
+        if (pct <= 10) return `<span class="tag tag-sm tag-green" title="Cheaper than 90% of ${esc(p.category)}">&#127942; Top 10% deal</span>`;
+        if (pct <= 25) return `<span class="tag tag-sm tag-green" title="Cheaper than 75% of ${esc(p.category)}">Top 25% deal</span>`;
+        return '';
+    }
+
     function productCard(p) {
         const range = TCC.getPriceRange(p);
         const strain = p.strain ? TCC.getStrain(p.strain) : null;
@@ -3845,6 +3895,7 @@
                         ${strainTag}
                         ${numDisps > 1 ? `<span class="tag tag-sm tag-blue">${numDisps} dispensaries</span>` : ''}
                         ${savings > 3 ? `<span class="tag tag-sm tag-green">Save $${savings.toFixed(0)}</span>` : ''}
+                        ${priceRankBadge(p)}
                         ${priceTrendTag(p)}
                     </div>
                 </div>
@@ -3935,14 +3986,20 @@
         if (dispensaries.length) {
             html += `<div class="search-dropdown-section">
                 <div class="search-dropdown-label">Dispensaries</div>
-                ${dispensaries.map(d => `
+                ${dispensaries.map(d => {
+                    const gRating = d.google?.rating || 0;
+                    const ratingFragment = gRating > 0
+                        ? ` &bull; <span style="color:#fbbf24">&#9733; ${gRating.toFixed(1)}</span>`
+                        : '';
+                    return `
                     <div class="search-dropdown-item" onclick="window.location.hash='dispensary/${d.id}'">
                         <div class="search-dropdown-item-icon" style="background:${d.gradient}">${esc(d.initial)}</div>
                         <div class="search-dropdown-item-info">
                             <div class="search-dropdown-item-name">${esc(d.name)}</div>
-                            <div class="search-dropdown-item-detail">${esc(d.neighborhood)} &bull; TCC ${d.tcc_score}</div>
+                            <div class="search-dropdown-item-detail">${esc(d.neighborhood || d.city || '')}${ratingFragment}</div>
                         </div>
-                    </div>`).join('')}
+                    </div>`;
+                }).join('')}
             </div>`;
         }
 

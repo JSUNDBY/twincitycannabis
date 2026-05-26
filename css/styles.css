@@ -5522,6 +5522,20 @@ html[data-theme="light"] .kit-form-wrapper .formkit-submit * {
     text-align: center;
 }
 
+.rotation-card-rating {
+    flex-shrink: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.78rem;
+    color: #fbbf24;
+    white-space: nowrap;
+}
+.rotation-card-rating-count {
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.72rem;
+}
+
 @media (max-width: 900px) {
     .rotation-grid {
         grid-template-columns: repeat(2, 1fr);

@@ -56,6 +56,7 @@ const ACCESSORY_RE = new RegExp(
     'bowl', 'pipe', 'bong', '\\brig\\b', 'banger', 'nail\\b', 'carb cap', 'dabber',
     'dab tool', 'dab rag', 'rags?\\b', '\\btray', 'holder', '\\bcase\\b', '\\bjar\\b',
     'ashtray', 'grinder', 'lighter', 'matches?', 'torch', 'butane',
+    'mill plate', '\\bmill\\b', '\\bplate\\b', 'replacement plate',
     'battery', 'batteries', 'wick', '510 thread', 'mod\\b', '\\bcoil',
     'capsule', 'dosing capsule', 'humidor', 'boveda', 'humidipak',
     'cleaner', 'cleaning', 'cotton bud', 'cotton swab', 'q.?tip',
