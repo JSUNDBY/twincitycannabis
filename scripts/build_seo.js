@@ -2288,8 +2288,12 @@ console.log(`Wrote ${comparePairs.length} dispensary comparison pages`);
 // ============================================================================
 // "/cheapest-flower-minneapolis/" type long-tail pages. High-volume searches
 // with essentially zero good results in the current landscape.
-const METRO_CITIES = ['Minneapolis', 'Saint Paul', 'Bloomington', 'Edina', 'Brooklyn Park',
-  'Blaine', 'Roseville', 'Eagan', 'Woodbury', 'Burnsville', 'Lakeville', 'Fridley', 'Anoka'];
+// Cities that get cheapest-<category>-<city>/ pages. Driven dynamically off
+// the live dispensary set so cities like "West St. Paul" or "Saint Cloud"
+// get pages too once they have enough shops listed. buildCheapestCategoryCity
+// already returns null when a city lacks 3+ priced products in the category,
+// so we don't generate thin pages — only cities with real data get a page.
+const METRO_CITIES = Array.from(new Set((TCC.dispensaries || []).map(d => d.city).filter(Boolean)));
 
 const buildCheapestCategoryCity = (catId, catName, city) => {
   const citySlug2 = slugify(city);

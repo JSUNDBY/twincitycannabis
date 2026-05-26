@@ -806,7 +806,10 @@
                         const pct = ((r.median - minMedian) / (maxMedian - minMedian || 1)) * 100;
                         const widthPct = 25 + (pct * 0.7); // 25–95% range so the cheapest still shows visible bar
                         const isLowest = r.median === minMedian;
-                        const slug = String(r.city).toLowerCase().replace(/\./g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                        // Slugify identically to scripts/build_seo.js so links land on
+                        // generated /cheapest-flower-<slug>/ pages. The builder strips
+                        // non-alphanumerics including periods.
+                        const slug = String(r.city).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
                         return `
                             <a class="price-by-city-row${isLowest ? ' is-lowest' : ''}" href="/cheapest-flower-${slug}/">
                                 <span class="price-by-city-name">${esc(r.city)}</span>
