@@ -459,6 +459,7 @@
                 }
                 if (parts[1] === 'cat' && parts[2]) {
                     Browse.category = parts[2];
+                    Browse.watchlistOnly = false;
                     Browse.page = 1;
                     renderCompare();
                 } else if (parts[1] === 'search' && parts[2]) {
@@ -490,8 +491,10 @@
                     });
                     renderWatchlistBanner();
                 } else if (parts[1]) {
+                    Browse.watchlistOnly = false;
                     renderCompare(parts[1]);
                 } else {
+                    Browse.watchlistOnly = false;
                     renderCompare();
                 }
                 break;
@@ -803,13 +806,14 @@
                         const pct = ((r.median - minMedian) / (maxMedian - minMedian || 1)) * 100;
                         const widthPct = 25 + (pct * 0.7); // 25–95% range so the cheapest still shows visible bar
                         const isLowest = r.median === minMedian;
+                        const slug = String(r.city).toLowerCase().replace(/\./g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
                         return `
-                            <div class="price-by-city-row${isLowest ? ' is-lowest' : ''}">
+                            <a class="price-by-city-row${isLowest ? ' is-lowest' : ''}" href="/cheapest-flower-${slug}/">
                                 <span class="price-by-city-name">${esc(r.city)}</span>
                                 <span class="price-by-city-bar-wrap"><span class="price-by-city-bar" style="width:${widthPct}%"></span></span>
                                 <span class="price-by-city-value">$${Math.round(r.median)}</span>
                                 <span class="price-by-city-count">${r.count} listings</span>
-                            </div>`;
+                            </a>`;
                     }).join('')}
                 </div>
             </div>

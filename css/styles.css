@@ -2018,10 +2018,18 @@ ul, ol { list-style: none; }
     grid-template-columns: 140px 1fr 60px 90px;
     align-items: center;
     gap: 1rem;
-    padding: 0.65rem 0;
+    padding: 0.65rem 0.6rem;
     border-top: 1px solid rgba(255,255,255,0.04);
+    border-radius: 8px;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
 }
 .price-by-city-row:first-child { border-top: 0; }
+.price-by-city-row:hover {
+    background: rgba(34,197,94,0.06);
+    transform: translateX(2px);
+}
 .price-by-city-name {
     font-family: var(--font-display);
     font-weight: 600;
