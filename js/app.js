@@ -1844,12 +1844,25 @@
         document.getElementById('detail-hours').innerHTML = `${Icons.clock} ${esc(d.hours.note || d.hours.weekday)}`;
         document.getElementById('detail-phone').innerHTML = `${Icons.phone} ${esc(d.phone)}`;
 
-        // Score
-        const scoreColor = TCC.getScoreColor(d.tcc_score);
-        document.getElementById('detail-score-num').textContent = d.tcc_score;
-        document.getElementById('detail-score-num').style.color = scoreColor;
-        document.getElementById('detail-score-text').textContent = TCC.getScoreLabel(d.tcc_score);
-        document.getElementById('detail-score-text').style.color = scoreColor;
+        // Detail hero side panel: show Google star rating + review count
+        // instead of the synthetic TCC Score. Falls back gracefully when a
+        // dispensary has no Google data yet.
+        const gRating = d.google?.rating || 0;
+        const gCount = d.google?.review_count || 0;
+        const scoreBox = document.getElementById('detail-score-box');
+        const scoreNum = document.getElementById('detail-score-num');
+        const scoreLabel = document.getElementById('detail-score-label');
+        const scoreText = document.getElementById('detail-score-text');
+        if (gRating > 0) {
+            scoreNum.textContent = gRating.toFixed(1);
+            scoreNum.style.color = '#fbbf24';
+            scoreLabel.textContent = 'Google rating';
+            scoreText.textContent = `${gCount.toLocaleString()} review${gCount === 1 ? '' : 's'}`;
+            scoreText.style.color = 'var(--text-muted)';
+            if (scoreBox) scoreBox.style.display = '';
+        } else if (scoreBox) {
+            scoreBox.style.display = 'none';
+        }
 
         // Tier badge
         const tierEl = document.getElementById('detail-tier');
