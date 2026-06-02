@@ -1692,7 +1692,7 @@
         function renderList(query) {
             const q = (query || '').trim().toLowerCase();
             let filtered = q
-                ? dispensaries.filter(d => `${d.name} ${d.city || ''} ${d.neighborhood || ''}`.toLowerCase().includes(q))
+                ? dispensaries.filter(d => `${d.name} ${d.brand || ''} ${(d.aliases || []).join(' ')} ${d.city || ''} ${d.neighborhood || ''}`.toLowerCase().includes(q))
                 : dispensaries.slice();
 
             // Phase 13: viewport constraint

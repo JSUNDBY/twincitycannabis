@@ -16262,6 +16262,8 @@ TCC.searchDispensaries = (query) => {
     const q = query.toLowerCase();
     return TCC.dispensaries.filter(d =>
         d.name.toLowerCase().includes(q) ||
+        (d.brand && d.brand.toLowerCase().includes(q)) ||
+        (Array.isArray(d.aliases) && d.aliases.some(a => a && a.toLowerCase().includes(q))) ||
         d.neighborhood.toLowerCase().includes(q) ||
         d.city.toLowerCase().includes(q)
     );
