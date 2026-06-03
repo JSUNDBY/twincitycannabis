@@ -13,7 +13,9 @@
 // Bump CACHE_NAME on shell changes so the SW evicts the old cache on activate.
 // v3: evict the broken-app.js cache from the brief window when a top-level
 // ReferenceError was bricking the SPA boot.
-const CACHE_NAME = 'tcc-shell-v3';
+// v4: ship the "Verified Owner" badge — new index.html shell (badge element)
+// + app.js (?v=ownerbadge). Bump forces clients off the stale cached shell.
+const CACHE_NAME = 'tcc-shell-v4';
 const SHELL_URLS = [
   '/',
   '/index.html',

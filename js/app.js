@@ -4523,6 +4523,12 @@
                 renderHome();
                 renderDispensaries();
                 renderCompare();
+                // If the visitor is currently viewing a dispensary's detail
+                // page, re-render it too so a freshly-applied tier / claimed
+                // flag shows without a manual reload.
+                if (App.currentPage === 'dispensary' && App.currentDispensary) {
+                    renderDispensaryDetail(App.currentDispensary);
+                }
             }
         } catch (err) {
             // Silent failure — overrides are optional, base experience still works
