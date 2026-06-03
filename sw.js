@@ -15,7 +15,7 @@
 // ReferenceError was bricking the SPA boot.
 // v4: ship the "Verified Owner" badge — new index.html shell (badge element)
 // + app.js (?v=ownerbadge). Bump forces clients off the stale cached shell.
-const CACHE_NAME = 'tcc-shell-v4';
+const CACHE_NAME = 'tcc-shell-v5';
 const SHELL_URLS = [
   '/',
   '/index.html',

@@ -1890,8 +1890,14 @@
             `<span class="tag tag-sm">${Icons.check} ${esc(f)}</span>`
         ).join('');
 
-        // Dashboard link
-        document.getElementById('detail-dashboard-link').href = `#dashboard/${d.id}`;
+        // Dashboard link — for a claimed shop the "Own this dispensary?" claim
+        // invite is wrong, but the dashboard is still where the verified owner
+        // manages their listing, so relabel rather than hide it.
+        const dashLink = document.getElementById('detail-dashboard-link');
+        dashLink.href = `#dashboard/${d.id}`;
+        dashLink.innerHTML = d.claimed
+            ? 'Manage your listing &rarr;'
+            : 'Own this dispensary? View Dashboard &rarr;';
 
         // Score sub-bars removed — they were rendering hash-jittered noise,
         // not real measurements. Re-introduce only when we have honest data
