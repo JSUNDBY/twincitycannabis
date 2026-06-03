@@ -327,6 +327,7 @@
         trending: svgIcon(14, '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>'),
         tag: svgIcon(14, '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>'),
         verified: '<svg width="14" height="14" viewBox="0 0 24 24" fill="var(--blue)" stroke="white" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>',
+        ownerVerified: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>',
 
         // ===== CATEGORY ICONS =====
         // Flat silhouettes, single color (currentColor), bold and obvious.
@@ -1878,6 +1879,11 @@
         // Verified
         const verEl = document.getElementById('detail-verified');
         verEl.style.display = d.verified ? 'inline-flex' : 'none';
+
+        // Verified Owner — set in admin once a claim is confirmed. Distinct
+        // from the review-count "Verified" above; means the shop manages it.
+        const ownerEl = document.getElementById('detail-owner-verified');
+        if (ownerEl) ownerEl.style.display = d.claimed ? 'inline-flex' : 'none';
 
         // Features
         document.getElementById('detail-features').innerHTML = d.features.map(f =>
@@ -3448,6 +3454,7 @@
                         <span>${Icons.clock} ${esc(d.hours?.note || d.hours?.weekday || 'Check hours')}</span>
                         ${productCount > 0 ? `<span>${Icons.leaf} ${productCount} products</span>` : ''}
                         ${d.verified ? `<span>${Icons.verified} Verified</span>` : ''}
+                        ${d.claimed ? `<span style="color:var(--green)">${Icons.ownerVerified} Verified Owner</span>` : ''}
                     </div>
                     ${dealHtml}
                     ${spotlightHtml}
@@ -4495,6 +4502,12 @@
                 const newTier = overrides[id] && overrides[id].tier;
                 if (newTier && d.tier !== newTier) {
                     d.tier = newTier;
+                    changed++;
+                }
+                // Owner-verified flag (set in admin once a claim is confirmed).
+                const claimed = !!(overrides[id] && overrides[id].claimed);
+                if (claimed !== !!d.claimed) {
+                    d.claimed = claimed;
                     changed++;
                 }
             }

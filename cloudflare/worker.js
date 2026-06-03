@@ -213,6 +213,18 @@ async function handleOverridesRead(env, cors) {
     overrides[id] = { tier: value.tier, valid_until: value.valid_until };
   }
 
+  // Owner-verified ("claimed") listings — manually flipped in the Leads
+  // Pipeline once Josh confirms the person actually represents the shop.
+  // Served here so the "Verified Owner" badge appears live, no rebuild
+  // (same delivery path as tier overrides). A claimed shop need not pay /
+  // have a tier, so this can add an id the tier loop above never touched.
+  const crm = (await env.TCC_OVERRIDES.get('index:crm', { type: 'json' })) || {};
+  for (const [id, rec] of Object.entries(crm)) {
+    if (rec && rec.claimed) {
+      overrides[id] = { ...(overrides[id] || {}), claimed: true };
+    }
+  }
+
   return new Response(JSON.stringify(overrides), {
     status: 200,
     headers: {
@@ -644,6 +656,7 @@ async function handleCrmUpdate(request, env, cors) {
   if (body.notes !== undefined) cur.notes = String(body.notes).slice(0, 2000);
   if (body.last_contacted !== undefined) cur.last_contacted = String(body.last_contacted).slice(0, 20);
   if (body.next_followup !== undefined) cur.next_followup = String(body.next_followup).slice(0, 20);
+  if (body.claimed !== undefined) cur.claimed = !!body.claimed;
   cur.updated_at = new Date().toISOString();
   idx[id] = cur;
 
@@ -738,6 +751,7 @@ function renderAdminHTML() {
   .pipe-disp a:hover { text-decoration:underline }
   .pipe-status { padding:.3rem .45rem; border-radius:6px; background:rgba(255,255,255,.04); border:1px solid var(--border); color:var(--text); font-size:.78rem; font-weight:600; width:100%; cursor:pointer; font-family:inherit }
   .pipe-status:focus { outline:2px solid var(--accent); outline-offset:1px }
+  .pipe-claimed { width:18px; height:18px; accent-color:var(--accent); cursor:pointer; margin-top:.3rem }
   .pipe-date { padding:.3rem .4rem; border-radius:6px; background:rgba(255,255,255,.04); border:1px solid var(--border); color:var(--text); font-size:.75rem; width:100%; font-family:inherit; font-variant-numeric:tabular-nums }
   .pipe-date:focus { outline:2px solid var(--accent); outline-offset:1px; border-color:var(--accent) }
   .pipe-notes { padding:.4rem .55rem; border-radius:6px; background:rgba(255,255,255,.03); border:1px solid var(--border); color:var(--text); font-size:.78rem; width:100%; font-family:inherit; min-height:32px; resize:vertical; line-height:1.4 }
@@ -1026,6 +1040,7 @@ function renderPipeline() {
         (phone ? '<div class="contact">' + esc(phone) + '</div>' : '') +
       '</td>' +
       '<td><span class="pipe-tcc" style="background:' + tccScoreColor(d.tcc_score) + '">' + (d.tcc_score || '—') + '</span></td>' +
+      '<td style="text-align:center"><input type="checkbox" class="pipe-claimed"' + (crm.claimed ? ' checked' : '') + ' title="Owner-verified — shows the Verified Owner badge on the live listing"></td>' +
       '<td><select class="pipe-status" style="color:' + color + ';border-color:' + color + '40">' +
         STATUS_ORDER.map(s => '<option value="' + s + '"' + (s === status ? ' selected' : '') + '>' + s + '</option>').join('') +
       '</select></td>' +
@@ -1037,8 +1052,8 @@ function renderPipeline() {
 
   document.getElementById('pipe-table-wrap').innerHTML =
     '<div style="overflow-x:auto"><table class="pipe-table">' +
-    '<colgroup><col style="width:26%"><col style="width:6%"><col style="width:13%"><col style="width:13%"><col style="width:13%"><col style="width:29%"></colgroup>' +
-    '<thead><tr><th>Dispensary · contact</th><th>TCC</th><th>Status</th><th>Last Contact</th><th>Next Followup</th><th>Notes</th></tr></thead>' +
+    '<colgroup><col style="width:25%"><col style="width:6%"><col style="width:6%"><col style="width:12%"><col style="width:12%"><col style="width:12%"><col style="width:27%"></colgroup>' +
+    '<thead><tr><th>Dispensary · contact</th><th>TCC</th><th>Owner</th><th>Status</th><th>Last Contact</th><th>Next Followup</th><th>Notes</th></tr></thead>' +
     '<tbody>' + rows + '</tbody></table></div>';
 
   // Wire inline edits
@@ -1046,6 +1061,8 @@ function renderPipeline() {
     const id = tr.dataset.id;
     const statusSel = tr.querySelector('.pipe-status');
     statusSel.addEventListener('change', () => saveCrm(id, { status: statusSel.value }));
+    const claimedBox = tr.querySelector('.pipe-claimed');
+    if (claimedBox) claimedBox.addEventListener('change', () => saveCrm(id, { claimed: claimedBox.checked }));
     tr.querySelectorAll('.pipe-date').forEach(inp => {
       inp.addEventListener('change', () => saveCrm(id, { [inp.dataset.field]: inp.value }));
     });
