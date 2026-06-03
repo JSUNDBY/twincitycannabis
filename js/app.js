@@ -1942,8 +1942,11 @@
                     leafly:  'Shop menu on Leafly',
                     weedmaps:'Shop menu on Weedmaps',
                 }[platform] || (isOfficialWebsite(d) ? 'Visit Website' : 'Find on Google Maps');
+                const menuToTcc = d.claimed
+                    ? 'share your menu to bring it directly into TCC for price comparison.'
+                    : 'claim this listing to bring the menu directly into TCC for price comparison.';
                 const ctaCopy = platform
-                    ? `${esc(d.name)} publishes their menu on ${platform[0].toUpperCase()+platform.slice(1)}. Tap through to see prices and order — or claim this listing to bring the menu directly into TCC for price comparison.`
+                    ? `${esc(d.name)} publishes their menu on ${platform[0].toUpperCase()+platform.slice(1)}. Tap through to see prices and order — or ${menuToTcc}`
                     : `We're working on getting ${esc(d.name)}'s full menu into TCC. In the meantime, you can visit their site or call ahead.`;
                 productsContainer.innerHTML = `
                     <div class="empty-menu-state">
@@ -2214,6 +2217,23 @@
         // Header
         document.getElementById('dash-name').textContent = d.name;
         document.getElementById('dash-address').textContent = d.address;
+
+        // Preview / "Claim this listing" banner — this is the unclaimed view.
+        // Once the shop is a verified owner, hide it (they've already claimed).
+        const previewBanner = document.getElementById('dash-preview-banner');
+        if (previewBanner) previewBanner.style.display = d.claimed ? 'none' : '';
+
+        // Contact/claim form — keep it for claimed shops (it's how a verified
+        // owner sends info-update requests) but drop the "verify you own this"
+        // claim framing in favor of update-oriented copy.
+        const claimTitle = document.getElementById('dash-claim-title');
+        const claimSubtitle = document.getElementById('dash-claim-subtitle');
+        if (claimTitle) claimTitle.textContent = d.claimed
+            ? 'Update Your Listing'
+            : 'Claim or Contact Us About This Listing';
+        if (claimSubtitle) claimSubtitle.textContent = d.claimed
+            ? "You're verified as the owner. Use this form to send listing updates or any questions — a real human replies within 24 hours."
+            : 'Verify you own this dispensary to update your info, respond to reviews, and access analytics. Or ask us anything.';
 
         // Tier badge
         const tierBadge = document.getElementById('dash-tier-badge');

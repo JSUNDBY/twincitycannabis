@@ -2063,7 +2063,7 @@
             <!-- Preview banner: analytics are real (anon aggregates), but
                  this is still an unclaimed listing view. After the claim
                  flow ships, this banner disappears for verified owners. -->
-            <div class="dash-preview-banner" role="note">
+            <div class="dash-preview-banner" id="dash-preview-banner" role="note">
                 <span class="dash-preview-banner-tag">Preview</span>
                 <div class="dash-preview-banner-body">
                     <strong>You&rsquo;re previewing your Featured dashboard.</strong>
@@ -2239,8 +2239,8 @@
             <!-- Contact / Claim Form -->
             <div class="card" id="dash-claim-section" style="margin-bottom:2rem">
                 <div class="card-body" style="padding:2rem">
-                    <div class="font-display font-bold text-xl" style="margin-bottom:0.5rem">Claim or Contact Us About This Listing</div>
-                    <p class="text-secondary text-sm" style="margin-bottom:1.5rem">Verify you own this dispensary to update your info, respond to reviews, and access analytics. Or ask us anything.</p>
+                    <div class="font-display font-bold text-xl" id="dash-claim-title" style="margin-bottom:0.5rem">Claim or Contact Us About This Listing</div>
+                    <p class="text-secondary text-sm" id="dash-claim-subtitle" style="margin-bottom:1.5rem">Verify you own this dispensary to update your info, respond to reviews, and access analytics. Or ask us anything.</p>
                     <form id="dash-contact-form" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
                         <div>
                             <label class="text-xs text-muted" style="display:block;margin-bottom:0.3rem">Your Name</label>
@@ -2325,7 +2325,7 @@
 </script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script defer src="js/data.js?v=51c0cfd9"></script>
-<script defer src="js/app.js?v=ownerbadge2"></script>
+<script defer src="js/app.js?v=ownerbadge3"></script>
 
 
 <script>/* fresh-ts client */
