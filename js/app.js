@@ -449,6 +449,7 @@
                 renderStrainDetail(param);
                 break;
             case 'dashboard':
+                App.currentDashboard = param;
                 showPage('dashboard');
                 renderDashboard(param);
                 break;
@@ -4554,6 +4555,11 @@
                 // flag shows without a manual reload.
                 if (App.currentPage === 'dispensary' && App.currentDispensary) {
                     renderDispensaryDetail(App.currentDispensary);
+                }
+                // Same for the owner dashboard — its claim banner / CTAs depend
+                // on the claimed flag, which often resolves after first render.
+                if (App.currentPage === 'dashboard' && App.currentDashboard) {
+                    renderDashboard(App.currentDashboard);
                 }
             }
         } catch (err) {
