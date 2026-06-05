@@ -35,13 +35,28 @@ const IGNORE_DOMAINS = [
   'google.com', 'facebook.com', 'squarespace.com', 'shopify.com',
   'gstatic.com', 'googleapis.com', 'cloudflare.com', 'weedmaps.com',
   'sentry.wixpress.com',
+  // Placeholder domains from unedited site templates
+  'mysite.com', 'email.com', 'domain.com', 'yourdomain.com', 'sentry-next.wixpress.com',
 ];
 const IGNORE_LOCAL_PARTS = [
   'no-reply', 'noreply', 'donotreply', 'do-not-reply',
   'abuse', 'postmaster', 'webmaster', 'admin@example',
+  // Placeholder local-parts from template scaffolding
+  'example', 'you', 'your', 'name', 'email', 'user', 'username', 'firstname', 'yourname',
 ];
 
 const EMAIL_RE = /\b([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})\b/g;
+
+// Reject obvious non-emails the regex/mailto scraping can pick up: image and
+// asset filenames (sprite@2x.png), template literals (${email}), retina asset
+// names. A real email never ends in an asset extension or contains code chars.
+const ASSET_EXT_RE = /\.(png|jpe?g|gif|svg|webp|css|js|ico|woff2?|ttf)$/i;
+function isAssetOrTemplate(email) {
+  if (!email || /[${}`<>()]/.test(email)) return true;
+  if (ASSET_EXT_RE.test(email)) return true;
+  if (/@\dx\./i.test(email) || /sprite/i.test(email)) return true;
+  return false;
+}
 
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140 Safari/537.36';
 
@@ -76,8 +91,9 @@ function scoreEmail(email, dispensary) {
   const domain = lower.split('@')[1] || '';
 
   // Ignore filter
+  if (isAssetOrTemplate(lower)) return -1;
   if (IGNORE_DOMAINS.some((d) => domain.endsWith(d))) return -1;
-  if (IGNORE_LOCAL_PARTS.some((p) => local.startsWith(p))) return -1;
+  if (IGNORE_LOCAL_PARTS.some((p) => local === p || local.startsWith(p + '@'))) return -1;
 
   let score = 0;
   // Domain matches dispensary website — strong signal
