@@ -68,6 +68,12 @@ python3 scraper/merge_meadow_data.py
 NODE_BIN="$(command -v node 2>/dev/null || echo /usr/local/bin/node)"
 "$NODE_BIN" scripts/build_seo.js
 
+# 8.5. Remove orphaned page directories the build no longer emits (stale
+#      strain/product/city pages from earlier runs). Uses git rm so the
+#      deletions are staged and pushed by the commit below. Self-guards and
+#      aborts without deleting anything if the sitemap looks broken.
+python3 scripts/prune_orphans.py --apply
+
 # 9. Git commit and push (include all generated SEO surfaces)
 git add js/data.js index.html sitemap.xml \
     scraper/data/price_history.json scraper/data/price_history_export.json \

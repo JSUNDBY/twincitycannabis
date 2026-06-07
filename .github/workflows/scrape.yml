@@ -65,6 +65,15 @@ jobs:
         run: node scripts/build_seo.js
         continue-on-error: true
 
+      - name: Prune orphaned pages
+        # Delete stale page directories the build no longer emits (old strain /
+        # product / city pages from earlier runs) so they stop being served with
+        # weeks-old prices and absent from the sitemap. Uses `git rm`, so the
+        # deletions are staged for the commit below. Has its own safety guards
+        # and aborts without deleting anything if the build looks broken.
+        run: python scripts/prune_orphans.py --apply
+        continue-on-error: true
+
       - name: Commit and push if changed
         run: |
           git config user.name "TCC Scraper Bot"
