@@ -1040,7 +1040,7 @@ function renderPipeline() {
         '<div class="sub">' + esc(d.city || d.neighborhood || '') + '</div>' +
         (email ? '<div class="contact"><a href="mailto:' + esc(email) + '">' + esc(email) + '</a></div>' : '') +
         (phone ? '<div class="contact">' + esc(phone) + '</div>' : '') +
-        (d.instagram ? '<div class="contact"><a href="' + esc(d.instagram) + '" target="_blank" rel="noopener">' + esc(d.instagram.replace(/^https?:\/\/(www\.)?instagram\.com\//, '@').replace(/\/$/, '')) + '</a></div>' : '') +
+        (d.instagram ? '<div class="contact"><a href="' + esc(d.instagram) + '" target="_blank" rel="noopener">@' + esc(d.instagram.split('/').filter(Boolean).pop()) + '</a></div>' : '') +
       '</td>' +
       '<td><span class="pipe-tcc" style="background:' + tccScoreColor(d.tcc_score) + '">' + (d.tcc_score || '—') + '</span></td>' +
       '<td style="text-align:center"><input type="checkbox" class="pipe-claimed"' + (crm.claimed ? ' checked' : '') + ' title="Owner-verified — shows the Verified Owner badge on the live listing"></td>' +
