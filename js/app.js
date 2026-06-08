@@ -2293,23 +2293,32 @@
         // Competitor Intel (real data, blurred for demo)
         const compContainer = document.getElementById('dash-competitors');
         if (compContainer) {
-            // Find dispensaries in the same city with overlapping products
+            // Nearby competitors that carry overlapping products, ranked by real
+            // distance (lat/lng). Exact same-city matching broke for the ~56
+            // cities that have only one dispensary, so use proximity across the
+            // whole set instead.
             const myProducts = TCC.getProductsForDispensary(d.id);
-            const myCats = new Set(myProducts.map(p => p.category));
-            const nearby = TCC.dispensaries.filter(nd =>
-                nd.id !== d.id && nd.city === d.city
-            ).slice(0, 5);
+            const nearby = TCC.dispensaries
+                .map(nd => {
+                    if (nd.id === d.id) return null;
+                    const shared = myProducts.filter(p =>
+                        p.prices && p.prices[d.id] !== undefined && p.prices[nd.id] !== undefined);
+                    if (shared.length === 0) return null;
+                    const dist = (d.lat != null && nd.lat != null)
+                        ? _haversine(d.lat, d.lng, nd.lat, nd.lng) : Infinity;
+                    return { nd, shared, dist };
+                })
+                .filter(Boolean)
+                .sort((a, b) => a.dist - b.dist)
+                .slice(0, 5);
 
             if (nearby.length > 0) {
-                // Calculate average prices for shared products
-                const compRows = nearby.map(nd => {
-                    const shared = myProducts.filter(p => p.prices[nd.id] !== undefined);
-                    if (shared.length === 0) return null;
+                // Average prices on shared products vs each nearby competitor.
+                const compRows = nearby.map(({ nd, shared }) => {
                     const myAvg = shared.reduce((s, p) => s + p.prices[d.id], 0) / shared.length;
                     const theirAvg = shared.reduce((s, p) => s + p.prices[nd.id], 0) / shared.length;
-                    const diff = theirAvg - myAvg;
-                    return { name: nd.name, shared: shared.length, theirAvg, diff };
-                }).filter(Boolean);
+                    return { name: nd.name, shared: shared.length, theirAvg, diff: theirAvg - myAvg };
+                });
 
                 compContainer.innerHTML = `
                     <div style="filter:blur(4px);pointer-events:none;user-select:none">
@@ -2333,7 +2342,7 @@
                     </div>
                 `;
             } else {
-                compContainer.innerHTML = '<p class="text-sm text-muted">No nearby competitors found with overlapping products.</p>';
+                compContainer.innerHTML = '<p class="text-sm text-muted">Your competitor pricing will appear here once your menu is live and shoppers can compare it against nearby shops.</p>';
             }
         }
 
@@ -2376,10 +2385,25 @@
 
             const totals = (stats && stats.totals) || { view: 0, outbound: 0 };
             document.getElementById('dash-views').textContent = (totals.view || 0).toLocaleString();
-            document.getElementById('dash-clicks').textContent = (totals.outbound || 0).toLocaleString();
+            // Show a dash rather than a stark "0" for metrics that have no data yet.
+            document.getElementById('dash-clicks').textContent = totals.outbound ? totals.outbound.toLocaleString() : '—';
 
             const canvas = document.getElementById('dash-traffic-chart');
             if (!canvas || typeof Chart === 'undefined') return;
+
+            // A near-empty 30-day chart (one or two lonely bars) reads as broken,
+            // not new. Hide the chart until there's enough traffic to show a real
+            // trend; surface a short, honest note in its place.
+            const chartCard = canvas.closest('.card') || canvas.parentElement;
+            const seriesTotal = (stats && Array.isArray(stats.series_30d))
+                ? stats.series_30d.reduce((s, r) => s + (r.view || 0), 0) : 0;
+            if (seriesTotal < 8 && chartCard) {
+                chartCard.innerHTML = '<div class="card-body">'
+                    + '<div class="font-display font-semibold" style="margin-bottom:.5rem">Profile Views (30 days)</div>'
+                    + '<p class="text-sm text-muted" style="margin:0">Your view trend will chart here as shoppers visit your listing. Tracking is live and counting now.</p>'
+                    + '</div>';
+                return;
+            }
             if (App.chartInstance) App.chartInstance.destroy();
 
             const series = (stats && Array.isArray(stats.series_30d)) ? stats.series_30d : (() => {
