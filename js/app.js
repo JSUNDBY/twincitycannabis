@@ -1845,6 +1845,15 @@
         document.getElementById('detail-address').innerHTML = `${Icons.pin} ${esc(d.address)}`;
         document.getElementById('detail-hours').innerHTML = `${Icons.clock} ${esc(d.hours.note || d.hours.weekday)}`;
         document.getElementById('detail-phone').innerHTML = `${Icons.phone} ${esc(d.phone)}`;
+        // Website link — always shown when the shop has a real (non-Weedmaps)
+        // site, not just in the empty-menu state. This is the link visitors
+        // (and owners checking their listing) expect to find.
+        const detailWebsite = document.getElementById('detail-website');
+        if (detailWebsite) {
+            detailWebsite.innerHTML = isOfficialWebsite(d)
+                ? `🌐 <a href="${esc(d.website)}" target="_blank" rel="noopener">Visit website &rarr;</a>`
+                : '';
+        }
 
         // Detail hero side panel: show Google star rating + review count
         // instead of the synthetic TCC Score. Falls back gracefully when a
