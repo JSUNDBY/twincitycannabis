@@ -373,12 +373,13 @@ ${d.google && d.google.maps_url ? `<p><a href="${esc(d.google.maps_url)}" rel="n
   ${d.address ? `<span>📍 ${esc(d.address)}</span>` : ''}
   ${d.phone ? `<span>📞 ${esc(d.phone)}</span>` : ''}
   ${d.hours && d.hours.note ? `<span>🕐 ${esc(d.hours.note)}</span>` : ''}
-  ${d.website ? `<span><a href="${esc(d.website)}" rel="nofollow noopener" target="_blank">Official site →</a></span>` : ''}
+  ${d.website ? `<span>🌐 <a href="${esc(d.website)}" rel="nofollow noopener" target="_blank">${d.website.includes('weedmaps.com') ? 'View on Weedmaps' : 'Visit website'} →</a></span>` : ''}
 </div>
 
 <p>${esc(d.name)} is a cannabis dispensary in ${esc(d.city || 'the Twin Cities')}, Minnesota. ${products.length > 0 ? `Below is the current menu (${products.length} products), with each price compared against every other dispensary in the metro. Prices update daily.` : 'This listing is being indexed — full menu data is on its way.'}</p>
 
 <a class="cta" href="/#dashboard/${esc(d.id)}">View interactive menu &amp; price compare →</a>
+${d.website && !d.website.includes('weedmaps.com') ? `<a class="cta" href="${esc(d.website)}" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit ${esc(d.name)}'s website →</a>` : ''}
 
 ${products.length > 0 ? `<h2>Full menu &amp; live prices</h2>${menuHtml}` : ''}
 

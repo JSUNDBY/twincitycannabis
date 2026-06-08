@@ -21,10 +21,55 @@ const OUT_DIR = path.join(ROOT, 'outreach');
 const OUT_FILE = path.join(OUT_DIR, 'dispensary-emails.json');
 
 const FORCE = process.argv.includes('--force');
+// --render: when the static fetch finds no email, re-fetch with a headless
+// browser so JS-rendered sites (Wix/Squarespace/React SPAs) expose their email.
+const RENDER = process.argv.includes('--render');
 
 global.window = {};
 require(path.join(ROOT, 'js/data.js'));
 const TCC = global.window.TCC || global.TCC;
+
+// ── Headless-browser rendering (lazy; only used with --render) ──────────────
+const MODULES_DIR = path.join(ROOT, 'node_modules');
+const CHROMIUM_PATHS = [
+  process.env.CHROMIUM_PATH,
+  '/usr/bin/chromium',
+  '/usr/bin/chromium-browser',
+  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+].filter(Boolean);
+function findChromium() {
+  for (const p of CHROMIUM_PATHS) { if (fs.existsSync(p)) return p; }
+  throw new Error('No Chromium/Chrome found for --render');
+}
+let _browser = null;
+async function getBrowser() {
+  if (_browser) return _browser;
+  const puppeteer = require(path.join(MODULES_DIR, 'puppeteer-extra'));
+  const Stealth = require(path.join(MODULES_DIR, 'puppeteer-extra-plugin-stealth'));
+  puppeteer.use(Stealth());
+  _browser = await puppeteer.launch({
+    executablePath: findChromium(),
+    headless: 'new',
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
+  });
+  return _browser;
+}
+async function fetchRendered(url) {
+  try {
+    const browser = await getBrowser();
+    const page = await browser.newPage();
+    await page.setUserAgent(UA);
+    try {
+      await page.goto(url, { waitUntil: 'networkidle2', timeout: 20000 });
+      await new Promise((r) => setTimeout(r, 1500)); // let late JS paint contact info
+      return await page.content();
+    } finally {
+      await page.close();
+    }
+  } catch (_) {
+    return null;
+  }
+}
 
 // Pages we try to fetch, relative to the dispensary homepage
 const CONTACT_PATHS = ['', '/contact', '/contact/', '/contact-us', '/contact-us/', '/about', '/about/'];
@@ -110,13 +155,16 @@ function scoreEmail(email, dispensary) {
   return score;
 }
 
-async function extractEmails(homepage, dispensary) {
+// Rendering is slow, so the browser pass only hits the highest-value pages.
+const RENDER_PATHS = ['', '/contact', '/contact-us'];
+
+async function extractEmails(homepage, dispensary, fetchFn = fetchText, paths = CONTACT_PATHS) {
   const found = new Set();
   let instagram = '';
 
-  for (const p of CONTACT_PATHS) {
+  for (const p of paths) {
     const url = homepage + p;
-    const html = await fetchText(url);
+    const html = await fetchFn(url);
     if (!html) continue;
 
     // mailto: links
@@ -177,7 +225,14 @@ async function main() {
       continue;
     }
     process.stdout.write(`  ${d.name}... `);
-    const result = await extractEmails(homepage, d);
+    let result = await extractEmails(homepage, d);
+    // Static fetch found nothing — try rendering the site with a real browser.
+    if (!result.best && RENDER) {
+      process.stdout.write(`(rendering) `);
+      const rendered = await extractEmails(homepage, d, fetchRendered, RENDER_PATHS);
+      if (rendered.best) result = rendered;
+      else if (rendered.instagram && !result.instagram) result.instagram = rendered.instagram;
+    }
     if (result.best) {
       cache[d.id] = {
         email: result.best,
@@ -201,6 +256,8 @@ async function main() {
       process.stdout.write(`no email found\n`);
     }
   }
+
+  if (_browser) await _browser.close();
 
   fs.writeFileSync(OUT_FILE, JSON.stringify(cache, null, 2));
   console.log();

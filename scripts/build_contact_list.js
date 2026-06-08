@@ -124,13 +124,13 @@ for (const [region, title] of groups) {
   if (!group.length) continue;
   mdLines.push(`## ${title} (${group.length})`);
   mdLines.push('');
-  mdLines.push('| Name | City | Phone | Website | Tier | Listing |');
-  mdLines.push('|---|---|---|---|---|---|');
+  mdLines.push('| Name | City | Email | Phone | Website | IG | Tier |');
+  mdLines.push('|---|---|---|---|---|---|---|');
   for (const r of group) {
     const site = r.website ? `[site](${r.website})` : '—';
-    const listing = `[view](${r.listing_url})`;
+    const ig = r.instagram ? `[IG](${r.instagram})` : '—';
     const tier = r.tier === 'free' ? '' : `**${r.tier}**`;
-    mdLines.push(`| ${r.name} | ${r.city} | ${r.phone || '—'} | ${site} | ${tier} | ${listing} |`);
+    mdLines.push(`| ${r.name} | ${r.city} | ${r.email || '—'} | ${r.phone || '—'} | ${site} | ${ig} | ${tier} |`);
   }
   mdLines.push('');
 }
@@ -139,9 +139,12 @@ mdLines.push('## Missing info');
 mdLines.push('');
 const noPhone = rows.filter((r) => !r.phone).length;
 const noSite = rows.filter((r) => !r.website).length;
+const withEmail = rows.filter((r) => r.email).length;
+const withIg = rows.filter((r) => r.instagram).length;
+mdLines.push(`- ${withEmail} dispensaries with an email · ${rows.length - withEmail} still missing one`);
+mdLines.push(`- ${withIg} have an Instagram handle (email often in the IG bio)`);
 mdLines.push(`- ${noPhone} dispensaries missing phone numbers`);
 mdLines.push(`- ${noSite} dispensaries missing websites`);
-mdLines.push(`- All 79 missing emails — fill in as you source them`);
 
 fs.writeFileSync(path.join(OUT_DIR, 'dispensary-contacts.md'), mdLines.join('\n'));
 

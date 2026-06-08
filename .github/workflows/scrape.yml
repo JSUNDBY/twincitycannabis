@@ -56,6 +56,18 @@ jobs:
           python scraper/merge_meadow_data.py || true
         continue-on-error: true
 
+      - name: Merge Google Places data + clean orphaned refs
+        # Overlays real dispensary websites, phones, ratings, and reviews from
+        # the committed Google Places cache onto the freshly-scraped dispensary
+        # set (the Weedmaps scrape only yields Weedmaps profile URLs), then drops
+        # any orphaned price/review refs. The local Pi pipeline always ran these;
+        # CI did not, so production kept showing Weedmaps links. Order matters:
+        # after the dispensary set is built, before the SEO pages are generated.
+        run: |
+          python scraper/merge_google_data.py || true
+          python scraper/clean_orphans.py || true
+        continue-on-error: true
+
       - name: Set up Node for SEO build
         uses: actions/setup-node@v4
         with:
