@@ -80,6 +80,8 @@ const IGNORE_DOMAINS = [
   'google.com', 'facebook.com', 'squarespace.com', 'shopify.com',
   'gstatic.com', 'googleapis.com', 'cloudflare.com', 'weedmaps.com',
   'sentry.wixpress.com',
+  // Font/library/asset vendor emails that leak from licenses & embedded CSS
+  'latofonts.com', 'fontawesome.com', 'jsdelivr.net', 'fonts.com', 'typekit.com',
   // Placeholder domains from unedited site templates
   'mysite.com', 'email.com', 'domain.com', 'yourdomain.com', 'sentry-next.wixpress.com',
 ];
