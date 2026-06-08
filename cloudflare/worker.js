@@ -606,8 +606,9 @@ async function handleAdminDispensaries(request, env, cors) {
       const m = block.match(re);
       return m ? Number(m[1]) : null;
     };
-    // Merge scraped emails from KV (not committed to repo for privacy)
+    // Merge scraped emails + socials from KV (not committed to repo for privacy)
     const emails = (await env.TCC_OVERRIDES.get('index:emails', { type: 'json' })) || {};
+    const social = (await env.TCC_OVERRIDES.get('index:social', { type: 'json' })) || {};
 
     const dispensaries = items.map((block) => {
       const id = pickStr(block, 'id');
@@ -620,6 +621,7 @@ async function handleAdminDispensaries(request, env, cors) {
         phone: pickStr(block, 'phone'),
         website: pickStr(block, 'website'),
         email: emails[id] || '',
+        instagram: (social[id] && social[id].instagram) || '',
         tier: pickStr(block, 'tier') || 'free',
         tcc_score: pickNum(block, 'tcc_score'),
       };
@@ -1038,6 +1040,7 @@ function renderPipeline() {
         '<div class="sub">' + esc(d.city || d.neighborhood || '') + '</div>' +
         (email ? '<div class="contact"><a href="mailto:' + esc(email) + '">' + esc(email) + '</a></div>' : '') +
         (phone ? '<div class="contact">' + esc(phone) + '</div>' : '') +
+        (d.instagram ? '<div class="contact"><a href="' + esc(d.instagram) + '" target="_blank" rel="noopener">' + esc(d.instagram.replace(/^https?:\/\/(www\.)?instagram\.com\//, '@').replace(/\/$/, '')) + '</a></div>' : '') +
       '</td>' +
       '<td><span class="pipe-tcc" style="background:' + tccScoreColor(d.tcc_score) + '">' + (d.tcc_score || '—') + '</span></td>' +
       '<td style="text-align:center"><input type="checkbox" class="pipe-claimed"' + (crm.claimed ? ' checked' : '') + ' title="Owner-verified — shows the Verified Owner badge on the live listing"></td>' +
