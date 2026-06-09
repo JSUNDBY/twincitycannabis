@@ -431,7 +431,7 @@
         // find the page that contains it, navigate there, then scroll to the anchor.
         // (This makes #for-dispensaries-claim work — the form lives inside the
         // for-dispensaries page.)
-        const knownPages = new Set(['home','dispensaries','dispensary','dispensary-detail','deals','strains','strain','strain-detail','compare','learn','for-dispensaries','for-cultivators','dashboard','welcome','map','watchlist']);
+        const knownPages = new Set(['home','dispensaries','dispensary','dispensary-detail','deals','strains','strain','strain-detail','compare','learn','for-dispensaries','for-cultivators','dashboard','welcome','map','watchlist','brand']);
         let anchorId = null;
         if (!knownPages.has(page)) {
             const anchorEl = document.getElementById(hashClean);
@@ -464,6 +464,10 @@
                 App.currentDashboard = param;
                 showPage('dashboard');
                 renderDashboard(param);
+                break;
+            case 'brand':
+                showPage('brand');
+                renderBrand(param);
                 break;
             case 'compare':
                 // Handle #compare, #compare/<productId>, and #compare/cat/<category>
@@ -2233,6 +2237,208 @@
 
     // ---- RENDER: COMPARE ----
     // ---- RENDER: DASHBOARD ----
+    // Brand-owner self-serve dashboard. Reached at #brand/<slug>. Shows the
+    // brand's catalog across every dispensary that carries it, where its prices
+    // sit vs the category, which products are missing photos, and a free claim
+    // form. Verified/claimed state comes from the worker's /brand-overrides.
+    function brandSlugify(s) {
+        return String(s).toLowerCase()
+            .replace(/&/g, 'and')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+    }
+
+    function renderBrand(slug) {
+        const host = document.getElementById('brand-page-content');
+        if (!host) return;
+        if (!slug) { navigate('compare'); return; }
+
+        // Resolve slug → brand name by scanning products (slugs are stable).
+        const nameForSlug = {};
+        TCC.products.forEach(p => { if (p.brand) nameForSlug[brandSlugify(p.brand)] = p.brand; });
+        const brandName = nameForSlug[slug];
+        if (!brandName) {
+            host.innerHTML = `<div style="padding:3rem 0;text-align:center">
+                <h1 class="font-display font-bold text-2xl" style="margin-bottom:.5rem">Brand not found</h1>
+                <p class="text-secondary">We couldn't find that brand. <a href="/brands/" style="color:var(--green)">Browse all brands →</a></p>
+            </div>`;
+            return;
+        }
+
+        const products = TCC.products.filter(p => p.brand === brandName);
+        const carriedBy = new Set();
+        products.forEach(p => Object.keys(p.prices || {}).forEach(id => carriedBy.add(id)));
+        const dispCount = carriedBy.size;
+
+        // Category-median lookup for price positioning. Built once per render.
+        const catPrices = {};
+        TCC.products.forEach(p => {
+            const lp = TCC.getLowestPrice(p);
+            if (!lp || !(lp.price > 0)) return;
+            (catPrices[p.category] = catPrices[p.category] || []).push(lp.price);
+        });
+        const catMedian = {};
+        Object.entries(catPrices).forEach(([c, arr]) => {
+            arr.sort((a, b) => a - b);
+            catMedian[c] = arr[Math.floor(arr.length / 2)];
+        });
+
+        const allLows = [];
+        products.forEach(p => { const lp = TCC.getLowestPrice(p); if (lp && lp.price > 0) allLows.push(lp.price); });
+        allLows.sort((a, b) => a - b);
+        const median = allLows.length ? allLows[Math.floor(allLows.length / 2)] : null;
+
+        const missing = products.filter(p => !p.image || p.image.length < 10);
+        const catName = (id) => (TCC.categories.find(c => c.id === id) || {}).name || id;
+
+        // Price-positioning rows: product, its lowest, category median, verdict.
+        const posRows = products
+            .map(p => {
+                const lp = TCC.getLowestPrice(p);
+                if (!lp || !(lp.price > 0)) return null;
+                const cm = catMedian[p.category];
+                const diff = cm ? lp.price - cm : 0;
+                return { p, low: lp.price, cm, diff, stores: Object.keys(p.prices || {}).length };
+            })
+            .filter(Boolean)
+            .sort((a, b) => a.low - b.low)
+            .slice(0, 40)
+            .map(r => {
+                const verdict = !r.cm ? '—'
+                    : r.diff < -1 ? `<span style="color:var(--green)">$${Math.abs(r.diff).toFixed(0)} below median</span>`
+                    : r.diff > 1 ? `<span style="color:var(--red,#ef4444)">$${r.diff.toFixed(0)} above median</span>`
+                    : '<span class="text-muted">at median</span>';
+                return `<tr>
+                    <td>${esc(r.p.name)}</td>
+                    <td class="text-muted">${esc(catName(r.p.category))}</td>
+                    <td style="text-align:right;color:var(--green);font-weight:600">$${r.low.toFixed(2)}</td>
+                    <td style="text-align:right">${r.cm ? '$' + r.cm.toFixed(2) : '—'}</td>
+                    <td style="text-align:right">${verdict}</td>
+                </tr>`;
+            }).join('');
+
+        const missingList = missing.length ? `
+            <div class="card" style="margin-top:1rem">
+                <div class="card-body">
+                    <div class="font-display font-semibold" style="margin-bottom:.5rem">${missing.length} product${missing.length === 1 ? '' : 's'} missing a photo</div>
+                    <p class="text-sm text-secondary" style="margin:0 0 .75rem">A blank image is a missed moment. Claim the brand and send us the real ones — we'll get them up.</p>
+                    <div style="display:flex;flex-wrap:wrap;gap:.4rem">
+                        ${missing.slice(0, 24).map(p => `<span class="tag">${esc(p.name)}</span>`).join('')}
+                        ${missing.length > 24 ? `<span class="tag text-muted">+${missing.length - 24} more</span>` : ''}
+                    </div>
+                </div>
+            </div>` : '';
+
+        host.innerHTML = `
+            <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:.4rem">
+                <h1 class="font-display font-bold text-3xl tracking-tight">${esc(brandName)}</h1>
+                <span class="tag" id="brand-verified-tag" style="display:none;color:var(--green);border-color:var(--green)">✓ Verified Brand</span>
+            </div>
+            <p class="text-secondary" id="brand-claim-status" style="max-width:62ch;margin-bottom:1.5rem">This page is live and working. If ${esc(brandName)} is yours, claim it below — it's free, and it puts you in control of what shoppers see.</p>
+
+            <div class="home-grid-4" style="margin-bottom:2rem">
+                <div class="card"><div class="card-body" style="text-align:center">
+                    <div class="font-display font-bold text-2xl text-green">${products.length}</div>
+                    <div class="text-xs text-muted uppercase" style="letter-spacing:1px">Products tracked</div>
+                </div></div>
+                <div class="card"><div class="card-body" style="text-align:center">
+                    <div class="font-display font-bold text-2xl">${dispCount}</div>
+                    <div class="text-xs text-muted uppercase" style="letter-spacing:1px">Dispensaries</div>
+                </div></div>
+                <div class="card"><div class="card-body" style="text-align:center">
+                    <div class="font-display font-bold text-2xl">${median != null ? '$' + Math.round(median) : '—'}</div>
+                    <div class="text-xs text-muted uppercase" style="letter-spacing:1px">Median price</div>
+                </div></div>
+                <div class="card"><div class="card-body" style="text-align:center">
+                    <div class="font-display font-bold text-2xl" style="color:${missing.length ? 'var(--red,#ef4444)' : 'var(--green)'}">${missing.length}</div>
+                    <div class="text-xs text-muted uppercase" style="letter-spacing:1px">Missing photos</div>
+                </div></div>
+            </div>
+
+            <h2 class="font-display font-semibold text-xl" style="margin-bottom:.75rem">Where your prices stand</h2>
+            <p class="text-sm text-secondary" style="margin-bottom:1rem">Your lowest live price on each product against the category median across every Twin Cities dispensary.</p>
+            <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:.92rem">
+                <thead><tr style="text-align:left">
+                    <th style="padding:.5rem;color:var(--text-muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.5px">Product</th>
+                    <th style="padding:.5rem;color:var(--text-muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.5px">Category</th>
+                    <th style="padding:.5rem;text-align:right;color:var(--text-muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.5px">Your low</th>
+                    <th style="padding:.5rem;text-align:right;color:var(--text-muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.5px">Cat. median</th>
+                    <th style="padding:.5rem;text-align:right;color:var(--text-muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.5px">Position</th>
+                </tr></thead>
+                <tbody>${posRows || '<tr><td colspan="5" class="text-muted" style="padding:1rem">No live prices yet.</td></tr>'}</tbody>
+            </table>
+            </div>
+
+            ${missingList}
+
+            <div class="card" id="brand-claim-card" style="margin-top:2.5rem;border-color:rgba(34,197,94,0.25)">
+                <div class="card-body">
+                    <h2 class="font-display font-semibold text-xl" style="margin-bottom:.4rem">Claim ${esc(brandName)}</h2>
+                    <p class="text-sm text-secondary" style="margin:0 0 1.25rem;max-width:60ch">No cost. Tell us who you are and we'll verify you, confirm your details, fix the photos, and get you the verified mark. A real human replies within 24 hours.</p>
+                    <form id="brand-claim-form" style="display:grid;gap:.85rem;max-width:480px">
+                        <input name="name" required placeholder="Your name" style="padding:.7rem .9rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-elevated,rgba(255,255,255,0.03));color:var(--text-primary)">
+                        <input name="email" type="email" required placeholder="Work email" style="padding:.7rem .9rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-elevated,rgba(255,255,255,0.03));color:var(--text-primary)">
+                        <input name="phone" placeholder="Phone (optional)" style="padding:.7rem .9rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-elevated,rgba(255,255,255,0.03));color:var(--text-primary)">
+                        <textarea name="message" rows="3" placeholder="Anything you'd like us to know (optional)" style="padding:.7rem .9rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-elevated,rgba(255,255,255,0.03));color:var(--text-primary);font-family:inherit"></textarea>
+                        <button type="submit" class="btn btn-primary" style="justify-self:start">Claim this brand</button>
+                    </form>
+                    <div id="brand-claim-success" style="display:none">
+                        <p style="color:var(--green);font-weight:600;margin:0">Got it. We'll be in touch within 24 hours to verify you. Be well.</p>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Wire the claim form → /contact with brand context (kind='brand').
+        const form = document.getElementById('brand-claim-form');
+        if (form) {
+            form.onsubmit = async (e) => {
+                e.preventDefault();
+                const data = Object.fromEntries(new FormData(form));
+                data.kind = 'brand';
+                data.brand = brandName;
+                data.brand_slug = slug;
+                data.role = 'brand';
+                const btn = form.querySelector('button[type="submit"]');
+                if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+                try {
+                    await fetch(`${TCC_WORKER_URL}/contact`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data),
+                    });
+                } catch (_) {}
+                trackEvent('generate_lead', { event_category: 'brand', event_label: 'brand_claim', brand: slug });
+                form.style.display = 'none';
+                document.getElementById('brand-claim-success').style.display = 'block';
+            };
+        }
+
+        // Overlay verified/claimed state from the worker (degrades silently).
+        (async () => {
+            try {
+                const res = await fetch(`${TCC_WORKER_URL}/brand-overrides`, { cache: 'no-store' });
+                if (!res.ok) return;
+                const m = await res.json();
+                const rec = m && m[slug];
+                if (!rec) return;
+                if (rec.verified) {
+                    const tag = document.getElementById('brand-verified-tag');
+                    if (tag) tag.style.display = '';
+                }
+                if (rec.claimed) {
+                    const status = document.getElementById('brand-claim-status');
+                    if (status) status.textContent = rec.verified
+                        ? `${brandName} keeps this page current. The prices below are live from the shops that carry it.`
+                        : `A claim is in for ${brandName}. We're verifying it now.`;
+                    const card = document.getElementById('brand-claim-card');
+                    if (card) card.style.display = 'none';
+                }
+            } catch (_) {}
+        })();
+    }
+
     function renderDashboard(dispensaryId) {
         const d = dispensaryId ? TCC.getDispensary(dispensaryId) : TCC.dispensaries[0];
         if (!d) { navigate('dispensaries'); return; }

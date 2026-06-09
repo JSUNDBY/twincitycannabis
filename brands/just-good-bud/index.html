@@ -77,6 +77,13 @@
   .seo-section-label{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#22c55e;display:inline-flex;align-items:center;gap:.5rem;margin:1.5rem 0 .4rem}
   .seo-section-label::before{content:'';width:14px;height:1px;background:#22c55e;opacity:.6}
   @media (max-width:640px){.seo-strip{grid-template-columns:1fr 1fr}.seo-strip-cell:nth-child(3){border-left:0;padding-left:0}.seo-strip-cell:nth-child(n+3){border-top:1px solid rgba(255,255,255,0.08)}}
+  /* Brand claim — calm, present invitation to the brand owner */
+  .brand-verified-badge{display:inline-block;vertical-align:middle;font-size:.7rem;font-weight:600;letter-spacing:.5px;color:#22c55e;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);border-radius:999px;padding:.25rem .7rem;margin-left:.6rem;white-space:nowrap}
+  .brand-claim{margin:1.25rem 0 2rem;border:1px solid rgba(34,197,94,0.18);background:linear-gradient(135deg,rgba(34,197,94,0.05),rgba(255,255,255,0.02));border-radius:14px}
+  .brand-claim-inner{padding:1.25rem 1.4rem}
+  .brand-claim-eyebrow{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#22c55e;margin:0 0 .5rem}
+  .brand-claim-line{color:#cdd2d8;font-size:.97rem;margin:0 0 1rem;max-width:62ch}
+  .brand-claim-cta{display:inline-block;background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;padding:.7rem 1.4rem;border-radius:10px;text-decoration:none;font-weight:600;font-size:.95rem}
 </style>
 </head>
 <body>
@@ -91,7 +98,42 @@
 <main class="seo-wrap">
 
 <div class="crumbs"><a href="/">Home</a> / <a href="/brands/">Brands</a> / Just Good Bud</div>
-<h1>Just Good Bud</h1>
+<h1>Just Good Bud <span id="brand-verified-badge" class="brand-verified-badge" hidden>✓ Verified Brand</span></h1>
+
+<div id="brand-claim" class="brand-claim" data-slug="just-good-bud">
+  <div class="brand-claim-inner">
+    <p class="brand-claim-eyebrow">This page is already live and working.</p>
+    <p class="brand-claim-line">If Just Good Bud is yours, claim it — confirm the details, and see where your prices stand across every shop that carries you. No cost to claim.</p>
+    <a class="brand-claim-cta" href="/#brand/just-good-bud">Claim Just Good Bud →</a>
+  </div>
+</div>
+<script>
+(function(){
+  var slug = "just-good-bud";
+  fetch("https://dashboard.twincitycannabis.com/brand-overrides", { cache: 'no-store' })
+    .then(function(r){ return r.ok ? r.json() : {}; })
+    .then(function(m){
+      var rec = m && m[slug];
+      if (!rec) return;
+      if (rec.verified) {
+        var b = document.getElementById('brand-verified-badge');
+        if (b) b.hidden = false;
+      }
+      if (rec.claimed) {
+        var c = document.getElementById('brand-claim');
+        if (c) {
+          c.querySelector('.brand-claim-eyebrow').textContent = 'Claimed by the brand.';
+          c.querySelector('.brand-claim-line').textContent = rec.verified
+            ? 'Just Good Bud keeps this page current. Prices below are live from the shops that carry it.'
+            : 'A claim is in for this page. Listings below stay live the whole time.';
+          var cta = c.querySelector('.brand-claim-cta');
+          if (cta) cta.remove();
+        }
+      }
+    })
+    .catch(function(){});
+})();
+</script>
 
 <div class="seo-strip">
   <div class="seo-strip-cell">
@@ -167,7 +209,7 @@
   <p><strong style="color:#f5f6f8">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Twin Cities dispensary.</p>
   <p><a href="/">Home</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/products/">Products</a> &middot; <a href="/events/">Events</a></p>
   <p><a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
-  <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a></p>
+  <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
 </footer>
 </body>

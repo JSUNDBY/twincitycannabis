@@ -65,6 +65,10 @@ export default {
       return handleOverridesRead(env, cors);
     }
 
+    if (url.pathname === '/brand-overrides' && request.method === 'GET') {
+      return handleBrandOverridesRead(env, cors);
+    }
+
     if (url.pathname === '/ping' && request.method === 'POST') {
       return new Response(JSON.stringify({ ok: true }), {
         status: 200,
@@ -90,6 +94,14 @@ export default {
 
     if (url.pathname === '/admin/crm/update' && request.method === 'POST') {
       return handleCrmUpdate(request, env, cors);
+    }
+
+    if (url.pathname === '/admin/brands' && request.method === 'GET') {
+      return handleAdminBrands(request, env, cors);
+    }
+
+    if (url.pathname === '/admin/brand/update' && request.method === 'POST') {
+      return handleBrandUpdate(request, env, cors);
     }
 
     if (url.pathname === '/admin/dispensaries' && request.method === 'GET') {
@@ -232,6 +244,72 @@ async function handleOverridesRead(env, cors) {
       'Cache-Control': 'public, max-age=300, s-maxage=300',
       ...cors,
     },
+  });
+}
+
+// ─── /brand-overrides ────────────────────────────────────────────────────────
+// Public, edge-cached. Serves brand claim/verify/tier status so the site can
+// show a "Verified Brand" badge + Featured placement without a rebuild. Shape:
+//   { "looner": { claimed:true, verified:true, tier:"featured" }, ... }
+async function handleBrandOverridesRead(env, cors) {
+  const brands = (await env.TCC_OVERRIDES.get('index:brands', { type: 'json' })) || {};
+  const out = {};
+  for (const [slug, rec] of Object.entries(brands)) {
+    if (!rec) continue;
+    const o = {};
+    if (rec.claimed) o.claimed = true;
+    if (rec.verified) o.verified = true;
+    if (rec.tier && !(rec.valid_until && Date.parse(rec.valid_until) < Date.now())) o.tier = rec.tier;
+    if (Object.keys(o).length) out[slug] = o;
+  }
+  return new Response(JSON.stringify(out), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300, s-maxage=300', ...cors },
+  });
+}
+
+// ─── /admin/brands + /admin/brand/update ─────────────────────────────────────
+// Single-owner brand CRM, parallel to the dispensary one. Gated by ADMIN_TOKEN.
+async function handleAdminBrands(request, env, cors) {
+  if (!verifyAdminToken(request, env)) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401, headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+  const brands = (await env.TCC_OVERRIDES.get('index:brands', { type: 'json' })) || {};
+  return new Response(JSON.stringify({ brands, generated_at: new Date().toISOString() }), {
+    status: 200, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...cors },
+  });
+}
+
+async function handleBrandUpdate(request, env, cors) {
+  if (!verifyAdminToken(request, env)) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401, headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+  let body;
+  try { body = await request.json(); } catch {
+    return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const slug = String(body.slug || '').replace(/[^a-z0-9-]/gi, '').toLowerCase();
+  if (!slug) return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+
+  const VALID_TIER = new Set(['', 'featured']);
+  const idx = (await env.TCC_OVERRIDES.get('index:brands', { type: 'json' })) || {};
+  const cur = idx[slug] || {};
+  if (body.claimed !== undefined) cur.claimed = !!body.claimed;
+  if (body.verified !== undefined) cur.verified = !!body.verified;
+  if (body.tier !== undefined) cur.tier = VALID_TIER.has(body.tier) ? body.tier : cur.tier;
+  if (body.official_name !== undefined) cur.official_name = String(body.official_name).slice(0, 120);
+  if (body.contact !== undefined) cur.contact = String(body.contact).slice(0, 200);
+  if (body.notes !== undefined) cur.notes = String(body.notes).slice(0, 2000);
+  cur.updated_at = new Date().toISOString();
+  idx[slug] = cur;
+  await env.TCC_OVERRIDES.put('index:brands', JSON.stringify(idx));
+
+  return new Response(JSON.stringify({ ok: true, slug, brand: cur }), {
+    status: 200, headers: { 'Content-Type': 'application/json', ...cors },
   });
 }
 
@@ -1127,6 +1205,10 @@ async function handleContact(request, env, cors) {
     role: String(body.role || '').slice(0, 50),
     dispensary: String(body.dispensary || '').slice(0, 200),
     dispensary_id: String(body.dispensary_id || '').slice(0, 100),
+    // Brand claims reuse this flow: kind='brand' + the brand name/slug.
+    kind: String(body.kind || 'dispensary').slice(0, 20),
+    brand: String(body.brand || '').slice(0, 200),
+    brand_slug: String(body.brand_slug || '').slice(0, 100),
     message: String(body.message || '').slice(0, 2000),
     submitted_at: new Date().toISOString(),
   };
@@ -1155,7 +1237,7 @@ async function handleContact(request, env, cors) {
 async function sendLeadNotification(lead, env) {
   if (!env.RESEND_API_KEY) return;
   const escHtml = (s) => String(s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const subject = `New lead: ${lead.name}${lead.dispensary ? ' — ' + lead.dispensary : ''}`;
+  const subject = `New ${lead.kind === 'brand' ? 'brand claim' : 'lead'}: ${lead.name}${lead.brand ? ' — ' + lead.brand : lead.dispensary ? ' — ' + lead.dispensary : ''}`;
   const adminLink = 'https://dashboard.twincitycannabis.com/admin?key=' + (env.ADMIN_TOKEN || '');
   const html = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:560px;margin:0 auto;padding:1.5rem;background:#0a1410;color:#e8e9eb;border-radius:12px">
     <div style="color:#22c55e;font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:.5rem">Twin City Cannabis</div>
@@ -1166,6 +1248,7 @@ async function sendLeadNotification(lead, env) {
       ${lead.phone ? `<tr><td style="color:#8b909a;padding:.3rem 0">Phone</td><td style="padding:.3rem 0;color:#f5f6f8">${escHtml(lead.phone)}</td></tr>` : ''}
       ${lead.role ? `<tr><td style="color:#8b909a;padding:.3rem 0">Role</td><td style="padding:.3rem 0;color:#f5f6f8">${escHtml(lead.role)}</td></tr>` : ''}
       ${lead.dispensary ? `<tr><td style="color:#8b909a;padding:.3rem 0">Dispensary</td><td style="padding:.3rem 0;color:#f5f6f8">${escHtml(lead.dispensary)}</td></tr>` : ''}
+      ${lead.brand ? `<tr><td style="color:#8b909a;padding:.3rem 0">Brand</td><td style="padding:.3rem 0;color:#f5f6f8"><strong>${escHtml(lead.brand)}</strong>${lead.brand_slug ? ` <span style="color:#8b909a">(${escHtml(lead.brand_slug)})</span>` : ''}</td></tr>` : ''}
     </table>
     ${lead.message ? `<div style="margin-top:1.2rem;padding:1rem;background:rgba(255,255,255,.04);border-left:3px solid #22c55e;border-radius:0 8px 8px 0"><div style="color:#8b909a;font-size:.7rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem">Message</div><div style="color:#f5f6f8;white-space:pre-wrap;line-height:1.5">${escHtml(lead.message)}</div></div>` : ''}
     <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.08);font-size:.82rem;color:#8b909a">

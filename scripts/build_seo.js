@@ -21,6 +21,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://twincitycannabis.com';
+const WORKER = 'https://dashboard.twincitycannabis.com';
 
 // ---------- Load data.js by shimming a browser window ----------
 global.window = {};
@@ -241,6 +242,13 @@ ${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</scri
   .seo-section-label{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#22c55e;display:inline-flex;align-items:center;gap:.5rem;margin:1.5rem 0 .4rem}
   .seo-section-label::before{content:'';width:14px;height:1px;background:#22c55e;opacity:.6}
   @media (max-width:640px){.seo-strip{grid-template-columns:1fr 1fr}.seo-strip-cell:nth-child(3){border-left:0;padding-left:0}.seo-strip-cell:nth-child(n+3){border-top:1px solid rgba(255,255,255,0.08)}}
+  /* Brand claim — calm, present invitation to the brand owner */
+  .brand-verified-badge{display:inline-block;vertical-align:middle;font-size:.7rem;font-weight:600;letter-spacing:.5px;color:#22c55e;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);border-radius:999px;padding:.25rem .7rem;margin-left:.6rem;white-space:nowrap}
+  .brand-claim{margin:1.25rem 0 2rem;border:1px solid rgba(34,197,94,0.18);background:linear-gradient(135deg,rgba(34,197,94,0.05),rgba(255,255,255,0.02));border-radius:14px}
+  .brand-claim-inner{padding:1.25rem 1.4rem}
+  .brand-claim-eyebrow{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#22c55e;margin:0 0 .5rem}
+  .brand-claim-line{color:#cdd2d8;font-size:.97rem;margin:0 0 1rem;max-width:62ch}
+  .brand-claim-cta{display:inline-block;background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;padding:.7rem 1.4rem;border-radius:10px;text-decoration:none;font-weight:600;font-size:.95rem}
 </style>
 </head>
 <body>
@@ -260,7 +268,7 @@ const footer = `</main>
   <p><strong style="color:#f5f6f8">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Twin Cities dispensary.</p>
   <p><a href="/">Home</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/products/">Products</a> &middot; <a href="/events/">Events</a></p>
   <p><a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
-  <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a></p>
+  <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
 </footer>
 </body>
@@ -636,9 +644,53 @@ const buildBrandPage = (brand) => {
   const cats = new Set();
   products.forEach(p => cats.add(p.category));
 
+  const missingPhotos = products.filter(p => !p.image || p.image.length < 10).length;
+  const slug = brand.slug;
+
+  // Brand claim block — calm, present, honest. The verified badge + "claimed"
+  // state are filled in client-side from /brand-overrides so a flip in the KV
+  // store shows up without a rebuild. Degrades to the open claim CTA if the
+  // endpoint is unreachable (e.g. worker not yet deployed).
+  const claimBlock = `
+<div id="brand-claim" class="brand-claim" data-slug="${esc(slug)}">
+  <div class="brand-claim-inner">
+    <p class="brand-claim-eyebrow">This page is already live and working.</p>
+    <p class="brand-claim-line">If ${esc(brand.name)} is yours, claim it — confirm the details, ${missingPhotos > 0 ? `add the ${missingPhotos} missing photo${missingPhotos === 1 ? '' : 's'}, ` : ''}and see where your prices stand across every shop that carries you. No cost to claim.</p>
+    <a class="brand-claim-cta" href="/#brand/${esc(slug)}">Claim ${esc(brand.name)} →</a>
+  </div>
+</div>`;
+
   return headOpen({ title, description, canonical, schema }) + `
 <div class="crumbs"><a href="/">Home</a> / <a href="/brands/">Brands</a> / ${esc(brand.name)}</div>
-<h1>${esc(brand.name)}</h1>
+<h1>${esc(brand.name)} <span id="brand-verified-badge" class="brand-verified-badge" hidden>✓ Verified Brand</span></h1>
+${claimBlock}
+<script>
+(function(){
+  var slug = ${JSON.stringify(slug)};
+  fetch(${JSON.stringify(WORKER + '/brand-overrides')}, { cache: 'no-store' })
+    .then(function(r){ return r.ok ? r.json() : {}; })
+    .then(function(m){
+      var rec = m && m[slug];
+      if (!rec) return;
+      if (rec.verified) {
+        var b = document.getElementById('brand-verified-badge');
+        if (b) b.hidden = false;
+      }
+      if (rec.claimed) {
+        var c = document.getElementById('brand-claim');
+        if (c) {
+          c.querySelector('.brand-claim-eyebrow').textContent = 'Claimed by the brand.';
+          c.querySelector('.brand-claim-line').textContent = rec.verified
+            ? '${esc(brand.name).replace(/'/g, "\\'")} keeps this page current. Prices below are live from the shops that carry it.'
+            : 'A claim is in for this page. Listings below stay live the whole time.';
+          var cta = c.querySelector('.brand-claim-cta');
+          if (cta) cta.remove();
+        }
+      }
+    })
+    .catch(function(){});
+})();
+</script>
 
 <div class="seo-strip">
   <div class="seo-strip-cell">
@@ -700,6 +752,7 @@ const buildBrandsIndex = (brands) => {
 <div class="crumbs"><a href="/">Home</a> / Brands</div>
 <h1>Cannabis Brands in the Twin Cities</h1>
 <p>${brands.length} brands carried across 33 Minneapolis-Saint Paul dispensaries, ranked by how many distinct products we track. Click any brand to see prices and which stores carry it.</p>
+<p style="font-size:.92rem">Run one of these brands? <a href="/for-brands/">Claim your page free →</a></p>
 <div class="grid">${cards}</div>
 ` + footer;
 };
@@ -2096,6 +2149,89 @@ ${faqHtml}
 ` + footer;
 };
 
+// ---------- FOR BRANDS (sales + SEO) ----------
+const buildForBrandsPage = () => {
+  const allBrands = getBrands();
+  const brandedProducts = TCC.products.filter(p => p.brand && isRealCannabisProduct(p));
+  const missingPhotos = brandedProducts.filter(p => !p.image || p.image.length < 10).length;
+  const dispCount = TCC.dispensaries.length;
+
+  const title = 'For Cannabis Brands — Claim Your Page on Twin City Cannabis';
+  const description = `Your brand is already listed across ${dispCount} Twin Cities dispensaries on Twin City Cannabis. Claim your page free: confirm details, add missing photos, see where your prices stand.`;
+  const canonical = `${SITE}/for-brands/`;
+
+  const faqs = [
+    ['Does it cost anything to claim my brand?', 'No. Claiming confirms a page that is already live, lets you fix details and photos, and shows you where your prices stand. Free.'],
+    ['How is my brand already on here?', `We track live menus from ${dispCount} licensed Twin Cities dispensaries. If a shop carries your products, your brand already has a page with current prices. Claiming just puts you in the driver's seat.`],
+    ['Do you sell my products?', 'No. Twin City Cannabis is a price-comparison guide. Shoppers find you here, then go to the dispensary that carries you. We never touch the sale.'],
+    ['What if my product photos are missing or wrong?', `Right now ${missingPhotos.toLocaleString()} branded products on the site are missing a photo. Claim your brand and send us the right images — we'll get them up.`],
+  ];
+  const faqHtml = `<div class="faq">${faqs.map(([q, a]) => `<details class="faq-item"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div>`;
+
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(([q, a]) => ({
+      '@type': 'Question', name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a }
+    }))
+  }];
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / For brands</div>
+<h1>Your brand is already here.</h1>
+<p style="font-size:1.05rem;max-width:62ch">Twin City Cannabis tracks live menus across ${dispCount} licensed Twin Cities dispensaries. If a shop carries you, you already have a page — current prices, every store that stocks you, all in one calm place. Claiming it is free, and it puts you in control of what people see.</p>
+
+<a class="cta" href="/brands/">Find your brand →</a>
+
+<div class="seo-strip">
+  <div class="seo-strip-cell">
+    <div class="seo-strip-value">${allBrands.length.toLocaleString()}</div>
+    <div class="seo-strip-label">Brands tracked</div>
+    <div class="seo-strip-sub">Already live on the site</div>
+  </div>
+  <div class="seo-strip-cell">
+    <div class="seo-strip-value">${brandedProducts.length.toLocaleString()}</div>
+    <div class="seo-strip-label">Branded products</div>
+    <div class="seo-strip-sub">With live, current prices</div>
+  </div>
+  <div class="seo-strip-cell">
+    <div class="seo-strip-value">${dispCount}</div>
+    <div class="seo-strip-label">Dispensaries</div>
+    <div class="seo-strip-sub">Twin Cities metro</div>
+  </div>
+  <div class="seo-strip-cell">
+    <div class="seo-strip-value">${missingPhotos.toLocaleString()}</div>
+    <div class="seo-strip-label">Missing photos</div>
+    <div class="seo-strip-sub">A page waiting for yours</div>
+  </div>
+</div>
+
+<div class="seo-section-label">What claiming does</div>
+<h2 style="margin-top:.4rem">Take the wheel, no cost</h2>
+<ul>
+  <li><strong>Confirm what shoppers see.</strong> Your name, your story, the details that are yours to set.</li>
+  <li><strong>Fix the photos.</strong> A blank image is a missed moment. Send us the real ones and we put them up.</li>
+  <li><strong>See where you stand.</strong> Your prices across every shop that carries you — the high, the low, the median. Honest, useful, yours.</li>
+  <li><strong>Get the verified mark.</strong> A quiet ✓ that tells shoppers the brand itself stands behind this page.</li>
+</ul>
+
+<div class="seo-section-label">How shoppers find you</div>
+<h2 style="margin-top:.4rem">One calm place, every price</h2>
+<p style="max-width:62ch">People come here to compare before they drive. They search a product, see who carries it and for how much, and go. When your page is claimed and complete — real photos, confirmed details — you are the easy yes.</p>
+
+<div class="seo-section-label">When you're ready for more</div>
+<h2 style="margin-top:.4rem">Featured placement, soon</h2>
+<p style="max-width:62ch">Claiming is the foundation, and it stays free. For brands that want to stand out — top of category, a spotlight on the pages shoppers already visit — a featured spot is coming. Claim your page now and you'll be first to know.</p>
+
+${faqHtml}
+
+<a class="cta" href="/brands/">Find your brand and claim it →</a>
+
+<p style="margin-top:2rem;font-size:.85rem;color:#8b909a">Be here now. Your products already are.</p>
+` + footer;
+};
+
 // ---------- SITEMAP ----------
 const buildSitemap = (extras = []) => {
   const urls = [
@@ -2161,6 +2297,9 @@ brands.forEach(b => {
   count++;
 });
 writePage('brands/index.html', buildBrandsIndex(brands));
+count++;
+writePage('for-brands/index.html', buildForBrandsPage());
+extraSitemap.push({ loc: `${SITE}/for-brands/`, priority: '0.7', changefreq: 'weekly' });
 count++;
 
 // City landing pages (auto-generated for every city with ≥1 dispensary)
