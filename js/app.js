@@ -4529,16 +4529,14 @@
         const taglineEl = document.getElementById('announce-tagline');
         if (taglineEl && !window._tccTicker) {
             const lines = [
-                'updated more often than your group chat',
-                'ope, prices just dropped again',
-                'the cheapest high in the metro, found for you',
-                'Minnesota nice, prices honest',
-                "we refresh prices so you don't overpay, you betcha",
-                'saving Minnesotans money one eighth at a time',
-                'fresher than a Juicy Lucy',
-                'no cap, just the lowest price',
-                'from the Cities to the Northwoods',
-                "comparing thousands of products so you don't have to",
+                'every dispensary, every price, one calm place',
+                'less time comparing, more time being',
+                'honest numbers, clear mind',
+                'find your medicine, we will find the price',
+                'the whole metro, gathered with care',
+                'no noise, no games, just the real number',
+                'be here now, the prices are handled',
+                'fair prices, good company',
             ];
             let i = 0;
             taglineEl.style.transition = 'opacity .4s ease';
