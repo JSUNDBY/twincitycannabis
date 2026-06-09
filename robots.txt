@@ -3,15 +3,29 @@ Allow: /
 Disallow: /scraper/
 Disallow: /scripts/
 Disallow: /docs/
+Disallow: /js/data.js
 
-# Be friendly to AI training crawlers — content is free to read & learn from
+# Search engines are welcome — that is how shoppers find us. But our price
+# comparison dataset is the product, not free training fuel or a competitor's
+# shortcut. Bulk data-harvesting and AI-training crawlers are not allowed.
+# (Note: app.js/CSS stay crawlable so Google can render the site.)
 User-agent: GPTBot
-Allow: /
+Disallow: /
+User-agent: ChatGPT-User
+Disallow: /
+User-agent: CCBot
+Disallow: /
 User-agent: ClaudeBot
-Allow: /
+Disallow: /
+User-agent: anthropic-ai
+Disallow: /
 User-agent: PerplexityBot
-Allow: /
+Disallow: /
 User-agent: Google-Extended
-Allow: /
+Disallow: /
+User-agent: Bytespider
+Disallow: /
+User-agent: Amazonbot
+Disallow: /
 
 Sitemap: https://twincitycannabis.com/sitemap.xml
