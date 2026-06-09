@@ -80,6 +80,17 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Brand data quality (consolidate + image backfill)
+        # Rewrites js/data.js, so guard: if it fails to parse afterward, revert
+        # to the pre-step copy so a broken data file never deploys.
+        run: |
+          cp js/data.js /tmp/tcc_data_prebrand.js
+          python scraper/consolidate_brands.py --apply || true
+          python scraper/backfill_images.py || true
+          node -e 'global.window={};require("./js/data.js")' 2>/dev/null \
+            || { echo "data.js broke — reverting"; cp /tmp/tcc_data_prebrand.js js/data.js; }
+        continue-on-error: true
+
       - name: Generate real price-drop deals
         # Turn detected price drops in priceHistory into the deals feed (no
         # invented promos; outlier drops >45% are rejected as data artifacts).

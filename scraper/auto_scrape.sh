@@ -63,6 +63,16 @@ python3 scraper/merge_meadow_data.py
 #      scrape didn't tag, using the dispensaries' own labels. Never invents one.
 python3 scraper/backfill_strain_type.py
 
+# 7.92. Brand data quality: consolidate fragmented brand names + backfill
+#       missing product images. These rewrite js/data.js, so guard: if the
+#       result fails to parse, revert to the pre-step copy (keeps fresh prices,
+#       never deploys a broken data file).
+cp js/data.js /tmp/tcc_data_prebrand.js
+python3 scraper/consolidate_brands.py --apply
+python3 scraper/backfill_images.py
+"$NODE_BIN" -e 'global.window={};require("./js/data.js")' 2>/dev/null \
+  || { echo "data.js failed to parse after brand steps — reverting"; cp /tmp/tcc_data_prebrand.js js/data.js; }
+
 # 7.95. Generate the real price-drop deals feed from priceHistory (no fakes).
 "$NODE_BIN" scraper/generate_deals.js
 
