@@ -401,6 +401,7 @@ ${reviewsHtml}
 <h2>More ways to shop the Twin Cities</h2>
 <ul>
   <li><a href="/cheapest-cannabis-twin-cities/">Cheapest cannabis in the Twin Cities</a> — lowest prices in every category, refreshed daily.</li>
+  <li><a href="/weed-deals-twin-cities/">Biggest weed price drops in the Twin Cities</a> — real products that just got cheaper, updated daily.</li>
   <li><a href="/best-dispensaries-twin-cities/">Best-rated dispensaries in the Twin Cities</a> — every metro shop ranked by real Google reviews.</li>
   <li><a href="/minnesota-cannabis-laws/">Minnesota cannabis laws</a> — possession limits, public-use rules, and travel restrictions.</li>
 </ul>
@@ -816,6 +817,48 @@ ${qas.map(({ q, a }) => `<details class="faq-item"><summary>${esc(q)}</summary><
 };
 
 // ---------- BEST RATED ----------
+// Offensive SEO surface: real price drops competitors can't fabricate.
+const buildPriceDropsPage = () => {
+  const deals = (TCC.deals || []).filter(d => d.type === 'price-drop' && d.salePrice && d.originalPrice);
+  const dispById = Object.fromEntries(TCC.dispensaries.map(d => [d.id, d]));
+  const title = `Biggest Cannabis Price Drops in the Twin Cities (${today.slice(0, 4)})`;
+  const description = `Live cannabis price drops across Minneapolis-Saint Paul dispensaries — real products that just got cheaper, with the store offering the lowest price. Updated multiple times daily.`;
+  const canonical = `${SITE}/weed-deals-twin-cities/`;
+
+  const rows = deals.map((d, i) => {
+    const disp = dispById[d.dispensaryId];
+    return `<tr>
+  <td>${i + 1}</td>
+  <td>${esc(d.title)}</td>
+  <td>${disp ? `<a href="/dispensaries/${esc(disp.id)}/">${esc(disp.name)}</a>` : '—'}</td>
+  <td style="text-align:right"><s>$${d.originalPrice.toFixed(2)}</s></td>
+  <td style="text-align:right" class="price">$${d.salePrice.toFixed(2)}</td>
+  <td style="text-align:right"><strong>-${d.discount}%</strong></td>
+</tr>`;
+  }).join('\n');
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: title,
+    numberOfItems: deals.length,
+    itemListElement: deals.slice(0, 25).map((d, i) => ({ '@type': 'ListItem', position: i + 1, name: d.title })),
+  };
+
+  return headOpen({ title, description, canonical, schema: [schema] }) + `
+<div class="crumbs"><a href="/">Home</a> / Weed deals &amp; price drops</div>
+<h1>Biggest Cannabis Price Drops in the Twin Cities</h1>
+<p>Real price drops, not coupons. These are products whose price actually fell across Minneapolis-Saint Paul dispensaries, shown with the store currently offering the lowest price. We track every menu multiple times a day, so this list stays fresh. Last updated ${today}.</p>
+${deals.length ? `<table>
+<thead><tr><th>#</th><th>Product</th><th>Cheapest at</th><th style="text-align:right">Was</th><th style="text-align:right">Now</th><th style="text-align:right">Drop</th></tr></thead>
+<tbody>${rows}</tbody>
+</table>` : '<p>No significant price drops at this moment — prices move daily, so check back soon.</p>'}
+<h2>How this works</h2>
+<p>Twin City Cannabis compares the same products across every dispensary in the metro and tracks how prices move over time. When a product falls below its recent price, it shows up here automatically. No pay-to-play, no fake markdowns, just the real number.</p>
+<a class="cta" href="/cheapest-cannabis-twin-cities/">See the cheapest cannabis in every category →</a>
+` + footer;
+};
+
 const buildBestRatedPage = () => {
   const ranked = TCC.dispensaries
     .filter(d => d.google && d.google.rating)
@@ -2136,6 +2179,9 @@ cities.forEach(city => {
 writePage('best-dispensaries-twin-cities/index.html', buildBestRatedPage());
 count++;
 writePage('cheapest-cannabis-twin-cities/index.html', buildCheapestPage());
+count++;
+writePage('weed-deals-twin-cities/index.html', buildPriceDropsPage());
+extraSitemap.push({ loc: `${SITE}/weed-deals-twin-cities/`, priority: '0.8', changefreq: 'daily' });
 count++;
 writePage('minnesota-cannabis-laws/index.html', buildLawsPage());
 count++;
