@@ -80,6 +80,12 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Generate real price-drop deals
+        # Turn detected price drops in priceHistory into the deals feed (no
+        # invented promos; outlier drops >45% are rejected as data artifacts).
+        run: node scraper/generate_deals.js || true
+        continue-on-error: true
+
       - name: Rebuild static SEO pages
         run: node scripts/build_seo.js
         continue-on-error: true

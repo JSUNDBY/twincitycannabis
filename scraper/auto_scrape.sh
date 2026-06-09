@@ -63,6 +63,9 @@ python3 scraper/merge_meadow_data.py
 #      scrape didn't tag, using the dispensaries' own labels. Never invents one.
 python3 scraper/backfill_strain_type.py
 
+# 7.95. Generate the real price-drop deals feed from priceHistory (no fakes).
+"$NODE_BIN" scraper/generate_deals.js
+
 # 8. Rebuild static SEO pages (per-dispensary, per-category, sitemap.xml)
 #    These are crawler-facing pages with LocalBusiness/Product Schema.org markup
 #    so Google indexes every dispensary + category as its own URL.
