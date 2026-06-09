@@ -53,7 +53,10 @@ def main():
 
     def brand_of(e):
         m = re.search(r"brand:\s*'((?:\\.|[^'])*)'", e)
-        return m.group(1) if m else ""
+        if not m:
+            return ""
+        # unescape the JS string so we don't re-escape an already-escaped value
+        return m.group(1).replace("\\'", "'").replace("\\\\", "\\")
 
     # tally brand strings and cluster by root
     from collections import Counter, defaultdict
@@ -103,7 +106,8 @@ def main():
         b = brand_of(e)
         if b in canon:
             esc = canon[b].replace("\\", "\\\\").replace("'", "\\'")
-            e = re.sub(r"brand:\s*'(?:\\.|[^'])*'", f"brand: '{esc}'", e, count=1)
+            # lambda replacement so re.sub doesn't interpret backslashes in esc
+            e = re.sub(r"brand:\s*'(?:\\.|[^'])*'", lambda _m: f"brand: '{esc}'", e, count=1)
             changed += 1
         out.append(e)
     DATA.write_text(content.replace(block, "".join(out), 1))

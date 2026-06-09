@@ -5047,7 +5047,7 @@ TCC.products = [
       image: "https://images.weedmaps.com/pictures/listings/429/872/005/442663846_PinkLemonade-56794a1c-ec5e-454c-9ca5-ef8b7e6a83a9.jpg",
       prices: { 'pot-mama-s': 6.5, 'pot-mama-s-edina': 6.5 },
       priceHistory: [6.5, 6.5, 6.5, 6.5, 6.5, 6.5, 6.5, 6.5] },
-{ id: 'p0528', name: 'S\'mores Pretzels | 50pk | 1mg/ea', brand: 'S\\'mores Pretzel', category: 'edible', strain: null, weight: 'each', thc: '1.0mg', cbd: '',
+{ id: 'p0528', name: 'S\'mores Pretzels | 50pk | 1mg/ea', brand: 'S\'mores Pretzel', category: 'edible', strain: null, weight: 'each', thc: '1.0mg', cbd: '',
       image: "https://images.weedmaps.com/products/002/358/094/avatar/1778548389-442499404_smores-pretzels-f99d7a75-dc27-47ab-8b89-27239b16e1ab.jpg",
       prices: { 'island-pezi': 21.38, 'the-stash-co': 20.0 },
       priceHistory: [20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0] },
