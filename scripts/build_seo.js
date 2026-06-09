@@ -267,6 +267,15 @@ const footer = `</main>
 </html>`;
 
 // ---------- DISPENSARY PAGES ----------
+// Small colored indica/sativa/hybrid label for menu tables. '' when untyped.
+const STRAIN_HEX = { indica: '#a855f7', sativa: '#f59e0b', hybrid: '#22c55e' };
+const strainTagHtml = (p) => {
+  const st = (p && p.strainType || '').toLowerCase();
+  return STRAIN_HEX[st]
+    ? ` <span style="font-size:0.72em;font-weight:700;color:${STRAIN_HEX[st]};text-transform:capitalize">${st}</span>`
+    : '';
+};
+
 const buildDispensaryPage = (d) => {
   const products = TCC.products
     .filter(p => p.prices && p.prices[d.id] != null && isRealCannabisProduct(p))
@@ -345,7 +354,7 @@ ${items.map(p => {
   const lo = lowestPrice(p);
   const isBest = here === lo;
   return `<tr>
-    <td><a href="/products/${esc(p.category)}/">${esc(p.name)}</a></td>
+    <td><a href="/products/${esc(p.category)}/">${esc(p.name)}</a>${strainTagHtml(p)}</td>
     <td>${esc(p.brand || '—')}</td>
     <td style="text-align:right" class="price">$${here.toFixed(2)}${isBest ? ' ✓' : ''}</td>
     <td style="text-align:right">$${lo.toFixed(2)}</td>
