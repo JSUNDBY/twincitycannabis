@@ -298,6 +298,18 @@
         return null;
     }
 
+    // Indica / sativa / hybrid badge. Returns '' when the product has no
+    // strain type (most edibles, beverages, topicals — and any flower a menu
+    // didn't tag), so nothing is shown rather than a guess.
+    const STRAIN_COLORS = { indica: '#a855f7', sativa: '#f59e0b', hybrid: '#22c55e' };
+    function strainBadge(p) {
+        const st = (p && p.strainType || '').toLowerCase();
+        const c = STRAIN_COLORS[st];
+        if (!c) return '';
+        const label = st.charAt(0).toUpperCase() + st.slice(1);
+        return `<span class="tag tag-sm" style="background:${c}26;color:${c};font-weight:600">${label}</span>`;
+    }
+
     // Format Google rating as "★ 4.7 (234)" — shown on dispensary cards
     function googleRatingHtml(d) {
         if (!d || !d.google || !d.google.rating) return '';
@@ -2071,6 +2083,7 @@
                             </div>
                             <div class="product-card-meta">
                                 <span class="tag tag-sm">${catIcons[p.category] || ''} ${esc(p.category)}</span>
+                                ${strainBadge(p)}
                                 ${p.thc ? `<span class="tag tag-sm" style="${thcBadgeStyle}">THC ${esc(p.thc)}</span>` : ''}
                             </div>
                         </div>
@@ -2493,6 +2506,7 @@
         perPage: 24,
         menuType: 'rec',  // 'rec', 'med', or 'all'
         dosage: 'all',    // edible/bev mg filter: 'all','1-5','6-10','11-25','26-50','51-100','100+'
+        strainType: 'all', // 'all','indica','sativa','hybrid'
         watchlistOnly: false,  // Phase 5: filter to saved-only products
     };
 
@@ -2520,6 +2534,10 @@
 
         if (Browse.category !== 'all') {
             list = list.filter(p => p.category === Browse.category);
+        }
+
+        if (Browse.strainType && Browse.strainType !== 'all') {
+            list = list.filter(p => p.strainType === Browse.strainType);
         }
 
         if (Browse.query.trim()) {
@@ -3042,10 +3060,23 @@
             id,
             name: TCC.categories?.find(c => c.id === id)?.name || id
         }))];
+        const strainTypes = [
+            { id: 'all', name: 'All types' },
+            { id: 'indica', name: 'Indica' },
+            { id: 'sativa', name: 'Sativa' },
+            { id: 'hybrid', name: 'Hybrid' },
+        ];
         pillsContainer.innerHTML = cats.map(c =>
             `<button class="browse-pill ${Browse.category === c.id ? 'active' : ''}" data-cat="${c.id}">${esc(c.name)}</button>`
-        ).join('');
-        pillsContainer.querySelectorAll('.browse-pill').forEach(btn => {
+        ).join('')
+            + '<span style="width:1px;background:var(--border);margin:0 0.35rem;align-self:stretch"></span>'
+            + strainTypes.map(s => {
+                const on = Browse.strainType === s.id;
+                const col = STRAIN_COLORS[s.id];
+                const style = on && col ? ` style="background:${col}26;color:${col};border-color:${col}"` : '';
+                return `<button class="browse-pill ${on ? 'active' : ''}" data-strain="${s.id}"${style}>${s.name}</button>`;
+            }).join('');
+        pillsContainer.querySelectorAll('.browse-pill[data-cat]').forEach(btn => {
             btn.addEventListener('click', () => {
                 Browse.category = btn.dataset.cat;
                 Browse.page = 1;
@@ -3057,6 +3088,13 @@
                     ds.style.display = show ? '' : 'none';
                     if (!show) { Browse.dosage = 'all'; ds.value = 'all'; }
                 }
+                renderCompareDefault();
+            });
+        });
+        pillsContainer.querySelectorAll('.browse-pill[data-strain]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                Browse.strainType = btn.dataset.strain;
+                Browse.page = 1;
                 renderCompareDefault();
             });
         });
@@ -3972,7 +4010,7 @@
                         ${p.mg ? `<span class="tag tag-sm" style="background:rgba(168,85,247,0.12);color:#a855f7">${p.mg}mg</span>` : ''}
                         ${p.pricePerMg ? `<span class="tag tag-sm" style="background:rgba(34,197,94,0.08);color:var(--green)">$${p.pricePerMg.toFixed(2)}/mg</span>` : ''}
                         ${p.thc && !p.mg ? `<span class="tag tag-sm" style="background:rgba(251,191,36,0.1);color:#fbbf24">THC ${esc(p.thc)}</span>` : ''}
-                        ${strainTag}
+                        ${strainBadge(p) || strainTag}
                         ${numDisps > 1 ? `<span class="tag tag-sm tag-blue">${numDisps} dispensaries</span>` : ''}
                         ${savings > 3 ? `<span class="tag tag-sm tag-green">Save $${savings.toFixed(0)}</span>` : ''}
                         ${priceRankBadge(p)}

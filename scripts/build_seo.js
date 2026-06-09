@@ -954,6 +954,7 @@ const buildProductPage = (p) => {
 <h1>${esc(p.name)}</h1>
 <div class="meta">
   ${p.brand ? `<span>Brand: <a href="/brands/${esc(slugify(p.brand))}/">${esc(p.brand)}</a></span>` : ''}
+  ${p.strainType ? `<span>Type: ${esc(p.strainType.charAt(0).toUpperCase() + p.strainType.slice(1))}</span>` : ''}
   ${p.thc ? `<span>THC: ${esc(p.thc)}</span>` : ''}
   ${p.cbd ? `<span>CBD: ${esc(p.cbd)}</span>` : ''}
   ${p.weight ? `<span>Size: ${esc(p.weight)}</span>` : ''}

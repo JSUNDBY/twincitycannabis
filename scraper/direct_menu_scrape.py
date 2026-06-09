@@ -267,8 +267,10 @@ def parse_menu_item(item, dispensary_slug):
     if not brand:
         brand = "House"
 
-    # Genetics / strain type
-    genetics = (item.get("genetics", "") or "").lower()
+    # Genetics / strain type. Weedmaps exposes this as `genetics_tag_name`
+    # (indica / sativa / hybrid); older field name was `genetics`.
+    genetics = (item.get("genetics_tag_name", "") or item.get("genetics", "") or "").lower()
+    genetics = genetics if genetics in ("indica", "sativa", "hybrid") else ""
 
     # Clean product name: strip trailing barcodes/UPCs (6-13 digit numbers
     # that some dispensaries append to their product names, e.g.
@@ -426,10 +428,12 @@ def update_data_js(comparison):
         name_esc = p["name"].replace("\\", "\\\\").replace("'", "\\'")
         brand_esc = p.get("brand", "Unknown").replace("\\", "\\\\").replace("'", "\\'")
         img = json.dumps(p.get("image", "") or "")
+        st = (p.get("strain_type", "") or "").strip().lower()
+        st = st if st in ("indica", "sativa", "hybrid") else ""
 
         lines.append(
             f"    {{ id: '{pid}', name: '{name_esc}', brand: '{brand_esc}', "
-            f"category: '{p['category']}', strain: null, "
+            f"category: '{p['category']}', strain: null, strainType: '{st}', "
             f"weight: '{p.get('weight', '')}', thc: '{p.get('thc', '')}', cbd: '{p.get('cbd', '')}',\n"
             f"      image: {img},\n"
             f"      prices: {{ {prices_js} }},\n"

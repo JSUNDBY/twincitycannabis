@@ -59,6 +59,10 @@ python3 scraper/meadow_scrape.py
 python3 scraper/merge_meadow_data.py
 
 
+# 7.9. Backfill strain type (indica/sativa/hybrid) onto any products the live
+#      scrape didn't tag, using the dispensaries' own labels. Never invents one.
+python3 scraper/backfill_strain_type.py
+
 # 8. Rebuild static SEO pages (per-dispensary, per-category, sitemap.xml)
 #    These are crawler-facing pages with LocalBusiness/Product Schema.org markup
 #    so Google indexes every dispensary + category as its own URL.

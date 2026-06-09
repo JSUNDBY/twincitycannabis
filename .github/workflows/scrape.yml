@@ -68,6 +68,13 @@ jobs:
           python scraper/clean_orphans.py || true
         continue-on-error: true
 
+      - name: Backfill strain type (indica/sativa/hybrid)
+        # The live scrape now captures strainType from Weedmaps; this fills
+        # remaining gaps using the dispensaries' own labels (explicit type words
+        # + learned strain phrases). Never invents a type. Skips already-tagged.
+        run: python scraper/backfill_strain_type.py || true
+        continue-on-error: true
+
       - name: Set up Node for SEO build
         uses: actions/setup-node@v4
         with:
