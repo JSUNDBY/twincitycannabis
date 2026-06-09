@@ -4571,12 +4571,10 @@
                     changed++;
                 }
             }
-            // Update Founding Member slot counter on pricing page
-            const slotsEl = document.getElementById('founding-slots-remaining');
-            if (slotsEl) {
-                const remaining = Math.max(0, 10 - Object.keys(overrides).length);
-                slotsEl.textContent = remaining;
-            }
+            // Update Founding Member slot counter wherever it appears (the For
+            // Dispensaries pricing page and the dashboard upgrade block).
+            const remaining = Math.max(0, 10 - Object.keys(overrides).length);
+            document.querySelectorAll('.founding-slots').forEach((el) => { el.textContent = remaining; });
             if (changed > 0) {
                 console.log(`[overrides] applied ${changed} tier override(s)`);
                 // Re-render anything that displays tier badges
