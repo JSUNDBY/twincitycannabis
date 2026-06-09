@@ -1323,8 +1323,8 @@
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">${Icons.search}</div>
-                    <div class="empty-state-title">No dispensaries found</div>
-                    <div class="empty-state-desc">Try adjusting your search or filters</div>
+                    <div class="empty-state-title">No shops match that one</div>
+                    <div class="empty-state-desc">Loosen up the filters and give it another go.</div>
                 </div>`;
             return;
         }
@@ -2089,7 +2089,7 @@
                         </div>
                     </div>
                 </div>`;
-            }).join('') : '<div class="empty-state"><div class="empty-state-desc">No products in this category</div></div>';
+            }).join('') : '<div class="empty-state"><div class="empty-state-desc">Nothing in this category yet. Even the best stashes run dry.</div></div>';
         }
         } // end else (allProducts.length > 0)
 
@@ -2126,7 +2126,7 @@
         // Deals
         const deals = TCC.getDealsForDispensary(id);
         document.getElementById('detail-deals').innerHTML = deals.length ? deals.map(dl => dealCard(dl)).join('') :
-            '<div class="empty-state"><div class="empty-state-desc">No active deals</div></div>';
+            '<div class="empty-state"><div class="empty-state-desc">No live price drops this second. They move daily, so swing back soon.</div></div>';
 
         // Reset tabs
         switchDetailTab('products');
@@ -2161,8 +2161,8 @@
         container.innerHTML = deals.length ? deals.map(d => dealCard(d)).join('') :
             `<div class="empty-state" style="grid-column:1/-1">
                 <div class="empty-state-icon">${Icons.deal}</div>
-                <div class="empty-state-title">No deals in this category</div>
-                <div class="empty-state-desc">Check back soon for new offers</div>
+                <div class="empty-state-title">No drops here yet</div>
+                <div class="empty-state-desc">Prices move daily. Swing back and something will be cheaper.</div>
             </div>`;
     }
 
@@ -4524,6 +4524,33 @@
         const preopWrap = document.getElementById('hero-stat-preopening-wrap');
         if (preopEl) preopEl.textContent = preopening.toString();
         if (preopWrap) preopWrap.style.display = preopening > 0 ? '' : 'none';
+
+        // Personality: rotate a fun Minnesota-cannabis tagline in the announce bar.
+        const taglineEl = document.getElementById('announce-tagline');
+        if (taglineEl && !window._tccTicker) {
+            const lines = [
+                'updated more often than your group chat',
+                'ope, prices just dropped again',
+                'the cheapest high in the metro, found for you',
+                'Minnesota nice, prices honest',
+                "we refresh prices so you don't overpay, you betcha",
+                'saving Minnesotans money one eighth at a time',
+                'fresher than a Juicy Lucy',
+                'no cap, just the lowest price',
+                'from the Cities to the Northwoods',
+                "comparing thousands of products so you don't have to",
+            ];
+            let i = 0;
+            taglineEl.style.transition = 'opacity .4s ease';
+            window._tccTicker = setInterval(() => {
+                taglineEl.style.opacity = '0';
+                setTimeout(() => {
+                    i = (i + 1) % lines.length;
+                    taglineEl.textContent = lines[i];
+                    taglineEl.style.opacity = '1';
+                }, 400);
+            }, 4500);
+        }
     }
 
     // Override TCC.getProductsByStrain with name-based matching since the
