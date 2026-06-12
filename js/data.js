@@ -1,4 +1,4 @@
-// Last auto-updated: 2026-06-12 00:59
+// Last auto-updated: 2026-06-12 06:24
 // ============================================================
 // Twin City Cannabis — Data Layer
 // Real Twin Cities dispensary data + products + strains
@@ -15670,14 +15670,14 @@ TCC.products = [
       image: "https://storage.googleapis.com/maui-prod-hyper-media-images/product_images_043ea7f2-0bad-4353-8cca-310f5bb790db_40f1e5b2-1ace-43fc-8c4e-d540dbc94c8d_original.png",
       prices: { 'twin-cities-cannabis-richfield': 46.0 },
       priceHistory: [46.0, 46.0, 46.0, 46.0, 46.0, 46.0, 46.0, 46.0] },
-{ id: 'ds0029', name: 'Block Party 3.5g', brand: 'Redwood County Weed Management', category: 'flower', strain: null, weight: '3.5 Grams', thc: '18.4%', cbd: '0.056%',
-      image: "https://storage.googleapis.com/maui-prod-hyper-media-images/product_images_326de859-d846-4194-a83f-60149b77db99_6684af23-97c7-41cf-b4f5-4d920cf9175e_original.png",
-      prices: { 'twin-cities-cannabis-richfield': 32.0 },
-      priceHistory: [32.0, 32.0, 32.0, 32.0, 32.0, 32.0, 32.0, 32.0] },
-{ id: 'ds0030', name: 'Unbound Mac V2 3.5g', brand: 'Unbound', category: 'flower', strain: null, weight: '3.5 Grams', thc: '25%', cbd: '',
+{ id: 'ds0029', name: 'Unbound Mac V2 3.5g', brand: 'Unbound', category: 'flower', strain: null, weight: '3.5 Grams', thc: '25%', cbd: '',
       image: "https://storage.googleapis.com/maui-prod-hyper-media-images/product_images_7100368e-80c7-449a-b521-f29db86020a9_097a0c7e-230a-43c6-b9ae-1fad6a437f72_original.png",
       prices: { 'twin-cities-cannabis-richfield': 44.72 },
       priceHistory: [44.72, 44.72, 44.72, 44.72, 44.72, 44.72, 44.72, 44.72] },
+{ id: 'ds0030', name: 'Block Party 3.5g', brand: 'Redwood County Weed Management', category: 'flower', strain: null, weight: '3.5 Grams', thc: '18.4%', cbd: '0.056%',
+      image: "https://storage.googleapis.com/maui-prod-hyper-media-images/product_images_326de859-d846-4194-a83f-60149b77db99_6684af23-97c7-41cf-b4f5-4d920cf9175e_original.png",
+      prices: { 'twin-cities-cannabis-richfield': 32.0 },
+      priceHistory: [32.0, 32.0, 32.0, 32.0, 32.0, 32.0, 32.0, 32.0] },
 { id: 'ds0031', name: 'Caramel Apple Alien Abduction', brand: 'Minny Grown', category: 'edible', strain: null, weight: '60 Grams', thc: '5mg', cbd: '5mg',
       image: "https://storage.googleapis.com/maui-prod-hyper-media-images/product_images_a74c9a99-8436-4360-8fd0-696cccdbfa36_1ac8a8f4-31d9-4b13-9862-ae68b5aae105_original.png",
       prices: { 'twin-cities-cannabis-richfield': 10.0 },
