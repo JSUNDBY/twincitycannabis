@@ -5722,3 +5722,15 @@ html[data-theme="light"] .kit-form-wrapper .formkit-submit * {
     .menu-upload-row { grid-template-columns: 1fr; }
     .menu-upload-form { padding: 1.2rem; }
 }
+
+/* ============ CALM ARRIVAL (Phase 5 signature) ============
+   Pages cross-fade into each other instead of snapping — a breath, not a
+   jump. Cross-document View Transitions: supported browsers get the fade,
+   everything else ignores this block entirely. Same-document hash routing
+   in the app is unaffected. */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation-duration: 0.3s; animation-timing-function: ease-out; }
+::view-transition-new(root) { animation-duration: 0.3s; animation-timing-function: ease-out; }
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+}

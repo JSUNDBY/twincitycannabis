@@ -164,6 +164,19 @@ const writePage = (relPath, html) => {
 const today = new Date().toISOString().slice(0, 10);
 
 // ---------- Shared chrome (nav/footer) ----------
+// THE site menu — single source of truth for both worlds. The app nav in
+// index.html (injected between <!-- NAV_LINKS --> markers below) and every
+// static page's nav render from this list, so the two can never drift apart
+// in sections, order, or labels again. appHref is the SPA route, staticHref
+// the crawlable hub; appId is what app.js binds to (null = no app binding).
+const NAV_SECTIONS = [
+  { label: 'Products',     appHref: '#compare',      appId: 'nav-compare',      staticHref: '/products/' },
+  { label: 'Dispensaries', appHref: '#dispensaries', appId: 'nav-dispensaries', staticHref: '/dispensaries/' },
+  { label: 'Deals',        appHref: '#deals',        appId: 'nav-deals',        staticHref: '/weed-deals-twin-cities/' },
+  { label: 'Brands',       appHref: '/brands/',      appId: null,               staticHref: '/brands/' },
+  { label: 'Learn',        appHref: '#learn',        appId: 'nav-learn',        staticHref: '/minnesota-cannabis-laws/' },
+];
+
 const headOpen = ({ title, description, canonical, ogImage = '/og-image.png', schema = [] }) => `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -210,6 +223,10 @@ ${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</scri
   body{background:var(--bg-primary,#0a1410);color:var(--text-primary,#f5f6f8);font-family:var(--font-body,-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif);margin:0;line-height:1.6}
   h1,h2,h3{font-family:var(--font-display,'Outfit',-apple-system,sans-serif)}
   .seo-wrap{max-width:920px;margin:0 auto;padding:2rem 1.25rem 4rem}
+  /* Calm arrival — content rises gently on entry, like an exhale. */
+  @keyframes seoArrive{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .seo-wrap{animation:seoArrive .5s cubic-bezier(0.25,0.1,0.25,1) both}
+  @media (prefers-reduced-motion:reduce){.seo-wrap{animation:none}}
   .seo-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border,rgba(255,255,255,0.06));background:var(--nav-bg,rgba(10,20,16,0.85));position:sticky;top:0;backdrop-filter:blur(10px);z-index:10}
   .seo-nav a.brand{display:flex;align-items:center;gap:.6rem;color:var(--text-primary,#f5f6f8);text-decoration:none;font-weight:700;white-space:nowrap;flex-shrink:0;font-family:var(--font-display,'Outfit',sans-serif)}
   .seo-nav a.brand img{height:36px;width:36px}
@@ -303,14 +320,8 @@ ${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</scri
 <body>
 <nav class="seo-nav">
   <a class="brand" href="/"><img src="/img/twin-city-cannabis-logo-192.png" alt="Twin City Cannabis logo"> Twin City <span class="accent">Cannabis</span></a>
-  <div class="links">${[
-    ['Products', '/products/'],
-    ['Dispensaries', '/dispensaries/'],
-    ['Deals', '/weed-deals-twin-cities/'],
-    ['Brands', '/brands/'],
-    ['Learn', '/minnesota-cannabis-laws/'],
-  ].map(([label, href]) =>
-    `<a href="${href}"${canonical.startsWith(SITE + href.replace(/\/$/, '')) ? ' class="active"' : ''}>${label}</a>`
+  <div class="links">${NAV_SECTIONS.map(({ label, staticHref }) =>
+    `<a href="${staticHref}"${canonical.startsWith(SITE + staticHref.replace(/\/$/, '')) ? ' class="active"' : ''}>${label}</a>`
   ).join('\n    ')}
   </div>
   <div class="seo-actions">
@@ -3160,6 +3171,17 @@ indexHtml = indexHtml
   .replace(/<a href="#">Privacy<\/a>/g,  '<a href="/privacy/">Privacy</a>')
   .replace(/<a href="#">Terms<\/a>/g,    '<a href="/terms/">Terms</a>')
   .replace(/<a href="#">Contact<\/a>/g,  '<a href="/contact/">Contact</a>');
+
+// ---------- INJECT THE SITE MENU (single source of truth) ----------
+// The app nav renders from the same NAV_SECTIONS list as every static page,
+// so the two menus are structurally incapable of drifting apart again.
+const appNavLinks = NAV_SECTIONS.map(({ label, appHref, appId }) =>
+  `        <a class="nav-link"${appId ? ` id="${appId}"` : ''} href="${appHref}">${label}</a>`
+).join('\n');
+indexHtml = indexHtml.replace(
+  /<!-- NAV_LINKS[\s\S]*?<!-- \/NAV_LINKS -->/,
+  `<!-- NAV_LINKS — generated from NAV_SECTIONS in scripts/build_seo.js; edit there, not here -->\n${appNavLinks}\n        <!-- /NAV_LINKS -->`
+);
 
 // ---------- INJECT LIVE DISPENSARY / PRODUCT COUNTS ----------
 // Replaces hardcoded counts like "35 dispensaries" and "1,500+ products" across
