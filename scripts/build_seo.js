@@ -2745,6 +2745,89 @@ topStrains.forEach(strain => {
 console.log(`Wrote ${strainCityCount} strain-by-city pages`);
 
 // ============================================================================
+// DISPENSARIES-NEAR-{SUBURB} PAGES
+// ============================================================================
+// Big-population suburbs with ZERO licensed dispensaries inside city limits.
+// People there search "dispensary near {city}" anyway — the honest, useful
+// answer is the closest licensed shops with real distances. Each page only
+// emits while the suburb has no dispensary of its own; the moment one opens,
+// the automatic city page takes over and prune_orphans retires this one.
+const NEAR_CITIES = [
+  { name: 'Bloomington', lat: 44.8408, lng: -93.2983 },
+  { name: 'Burnsville', lat: 44.7677, lng: -93.2777 },
+  { name: 'Eden Prairie', lat: 44.8547, lng: -93.4708 },
+  { name: 'Plymouth', lat: 45.0105, lng: -93.4555 },
+  { name: 'Minnetonka', lat: 44.9212, lng: -93.4687 },
+  { name: 'Apple Valley', lat: 44.7319, lng: -93.2177 },
+  { name: 'Rosemount', lat: 44.7394, lng: -93.1258 },
+  { name: 'Hibbing', lat: 47.4272, lng: -92.9377 },
+];
+
+const buildNearCityPage = (nc) => {
+  if (TCC.dispensaries.some(d => d.city === nc.name)) return null; // city has its own shops now
+  const near = TCC.dispensaries
+    .filter(d => d.lat && d.lng)
+    .map(d => ({ d, miles: haversineMiles(nc.lat, nc.lng, d.lat, d.lng) }))
+    .filter(x => x.miles <= 30)
+    .sort((a, b) => a.miles - b.miles)
+    .slice(0, 8);
+  if (near.length < 3) return null; // not enough genuinely-close options to be useful
+
+  const nearest = near[0];
+  const title = `Dispensaries Near ${nc.name}, MN — Closest Licensed Cannabis (${today.slice(0, 4)})`;
+  const description = `${nc.name} doesn't have a licensed recreational dispensary inside city limits yet. These are the closest licensed Minnesota dispensaries, with real distances and live menus.`;
+  const canonical = `${SITE}/dispensaries-near-${slugify(nc.name)}/`;
+
+  const { html: faqHtml, schema: faqSchema } = renderFAQ([
+    { q: `Are there any dispensaries in ${nc.name}, Minnesota?`, a: `Not inside ${nc.name} city limits yet. Minnesota's recreational licenses are still rolling out city by city. The closest licensed dispensary is ${nearest.d.name} in ${nearest.d.city || 'the metro'}, about ${nearest.miles.toFixed(1)} miles away.` },
+    { q: `What is the closest dispensary to ${nc.name}?`, a: `${nearest.d.name} in ${nearest.d.city || 'the metro'} is currently the closest licensed shop, roughly ${nearest.miles.toFixed(1)} miles from the center of ${nc.name}. ${near.length} licensed dispensaries are within 30 miles.` },
+    { q: `Will ${nc.name} get its own dispensary?`, a: `Likely, as Minnesota's Office of Cannabis Management continues issuing retail licenses. This page tracks live data — the day a licensed shop opens in ${nc.name}, it appears here automatically.` },
+  ]);
+
+  const rows = near.map((x, i) => `<tr>
+  <td>${i + 1}</td>
+  <td><a href="/dispensaries/${esc(x.d.id)}/">${esc(x.d.name)}</a></td>
+  <td>${esc(x.d.city || '—')}</td>
+  <td style="text-align:right">${x.miles.toFixed(1)} mi</td>
+  <td>${x.d.google && x.d.google.rating ? `<span class="stars">★</span> <strong>${x.d.google.rating}</strong> (${x.d.google.review_count || 0})` : '—'}</td>
+</tr>`).join('\n');
+
+  const listSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Licensed cannabis dispensaries near ${nc.name}, MN`,
+    numberOfItems: near.length,
+    itemListElement: near.map((x, i) => ({ '@type': 'ListItem', position: i + 1, name: x.d.name, url: `${SITE}/dispensaries/${x.d.id}/` })),
+  };
+
+  return headOpen({ title, description, canonical, schema: [listSchema, faqSchema] }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/dispensaries/">Dispensaries</a> / Near ${esc(nc.name)}</div>
+<h1>Dispensaries Near ${esc(nc.name)}, MN</h1>
+<p>The honest answer first: ${esc(nc.name)} doesn't have a licensed recreational dispensary inside city limits yet. No need to drive around guessing — these are the closest licensed shops, with real distances and live menus. Updated ${today}.</p>
+<table>
+<thead><tr><th>#</th><th>Dispensary</th><th>City</th><th style="text-align:right">Distance</th><th>Rating</th></tr></thead>
+<tbody>${rows}</tbody>
+</table>
+<h2>Worth the short drive</h2>
+<p>Every shop above is licensed by the Minnesota Office of Cannabis Management, and we track their menus multiple times a day. Same products can vary 20-50% in price between shops, so a few minutes comparing here usually pays for the gas.</p>
+${faqHtml}
+<a class="cta" href="/cheapest-cannabis-twin-cities/">Compare today's lowest prices →</a>
+` + footer;
+};
+
+let nearCityCount = 0;
+NEAR_CITIES.forEach(nc => {
+  const html = buildNearCityPage(nc);
+  if (!html) return;
+  const p = `dispensaries-near-${slugify(nc.name)}`;
+  writePage(`${p}/index.html`, html);
+  extraSitemap.push({ loc: `${SITE}/${p}/`, priority: '0.7', changefreq: 'weekly' });
+  count++;
+  nearCityCount++;
+});
+console.log(`Wrote ${nearCityCount} dispensaries-near pages`);
+
+// ============================================================================
 // MARKET INSIGHTS PAGE
 // ============================================================================
 // Single page that updates with every scrape. Biggest price drops, new product
