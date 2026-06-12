@@ -19,93 +19,144 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/img/twin-city-cannabis-logo-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/img/twin-city-cannabis-logo-192.png">
 <link rel="apple-touch-icon" href="/img/twin-city-cannabis-logo-192.png">
+<script>
+(function() {
+    try {
+        var saved = localStorage.getItem('tcc-theme');
+        var systemLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        var theme = saved || (systemLight ? 'light' : 'dark');
+        if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    } catch (e) {}
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/styles.css">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NEZH9HCSSH"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-NEZH9HCSSH');</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ItemList","name":"Pre-Rolls in the Twin Cities","numberOfItems":300,"itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"Product","name":"Fat California Wookie - Pre-Roll - 0.35g - 1ct - Herb Quest","brand":"Fat California Wookie","image":"https://images.weedmaps.com/pictures/listings/826/712/945/442550687_420default-Preroll.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":5,"highPrice":5,"offerCount":1}}},{"@type":"ListItem","position":2,"item":{"@type":"Product","name":"Fill-a Blunts Ceramic Tip","brand":"House","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":6,"highPrice":6,"offerCount":2}}},{"@type":"ListItem","position":3,"item":{"@type":"Product","name":"HiFlyer | .35g Pre Roll | 1ct","brand":"HiFlyer","image":"https://images.weedmaps.com/pictures/listings/110/986/613/443608389_product_images_4a0264b8-1e0f-4fcb-85d0-542c58a2b968_df9fa0cd-3148-40ee-8184-b228ba820d70_original.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":8.1,"highPrice":8.1,"offerCount":1}}},{"@type":"ListItem","position":4,"item":{"@type":"Product","name":"Citradelic Sunset - Pre-roll - 0.35g - 1ct - Flor","brand":"Citradelic Sunset","image":"https://images.weedmaps.com/pictures/listings/826/712/945/443496255_flor-preroll-b4f3b69c-6493-49ed-9b8a-497841ace652.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":8.99,"highPrice":8.99,"offerCount":1}}},{"@type":"ListItem","position":5,"item":{"@type":"Product","name":"FLÖR Zesty Parm Dogwalker Preroll","brand":"House","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":9,"highPrice":9,"offerCount":1}}},{"@type":"ListItem","position":6,"item":{"@type":"Product","name":"HiFlyer - Pre-roll - .35g - 1ct - Flor","brand":"HiFlyer","image":"https://images.weedmaps.com/pictures/listings/826/712/945/442550687_420default-Preroll.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":9.99,"highPrice":9.99,"offerCount":1}}},{"@type":"ListItem","position":7,"item":{"@type":"Product","name":"Bumper OG Pre-Roll- IV | FLÖR | Bumper OG | .35 g | 1 ct","brand":"Bumper OG Pre-Roll- IV","image":"https://images.weedmaps.com/pictures/listings/647/987/929/442877849_fd5546b6-5b80-4ee7-9f5e-a33796df200e.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":10,"highPrice":10,"offerCount":1}}},{"@type":"ListItem","position":8,"item":{"@type":"Product","name":"Pre-Roll | FLÖR | Citradelic Sunset Sativa Dominant Hybrid | .35g | 1 ct","brand":"Pre Roll","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":10,"highPrice":10,"offerCount":1}}},{"@type":"ListItem","position":9,"item":{"@type":"Product","name":"Pre-Roll | FLÖR | Hi-Flyer Sativa Dominant Hybrid | .35g | 1 ct","brand":"Pre Roll","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":10,"highPrice":10,"offerCount":1}}},{"@type":"ListItem","position":10,"item":{"@type":"Product","name":"RCWM Co. | 1g | Pre-roll - Sluricane","brand":"RCWM","image":"https://images.weedmaps.com/pictures/listings/286/198/846/442810900_678d6433-a8eb-44c7-a58f-c5151d73c8c9.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":10.8,"highPrice":10.8,"offerCount":1}}},{"@type":"ListItem","position":11,"item":{"@type":"Product","name":"Mobwife | 1g Preroll | Indica","brand":"Mobwife","image":"https://images.weedmaps.com/pictures/listings/764/561/187/443462712_product_images_353f89db-03a7-42bb-a34f-1582b9fe1633_56092b21-ae57-43aa-b6f3-393a3d5009c9_original.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":11.96,"highPrice":11.96,"offerCount":1}}},{"@type":"ListItem","position":12,"item":{"@type":"Product","name":"Redwood County Weed Managemen Slurricane Pre-Roll 1 G","brand":"House","image":"https://images.weedmaps.com/pictures/listings/126/214/371/443310652_1779044053_8430cacf-b295-4967-9090-dbb1dcf0ceb4.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":12,"highPrice":12,"offerCount":1}}},{"@type":"ListItem","position":13,"item":{"@type":"Product","name":"Redwood County Weed Management Jelly Breath Preroll 1g","brand":"Redwood County Weed Management","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":12,"highPrice":12,"offerCount":1}}},{"@type":"ListItem","position":14,"item":{"@type":"Product","name":"Unbound Preroll - Dark Rainbow, 1 gram","brand":"Unbound","image":"https://images.weedmaps.com/pictures/listings/444/181/071/443255127_2e47e52c669835d45ac56ea073f26d1985efb0e1.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":12.41,"highPrice":12.41,"offerCount":1}}},{"@type":"ListItem","position":15,"item":{"@type":"Product","name":"Unbound Preroll, MAC V2, 1 gram","brand":"House","image":"https://images.weedmaps.com/pictures/listings/444/181/071/443255127_2e47e52c669835d45ac56ea073f26d1985efb0e1.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":12.41,"highPrice":12.41,"offerCount":1}}},{"@type":"ListItem","position":16,"item":{"@type":"Product","name":"Unbound Preroll, OG Kush, 1 gram","brand":"House","image":"https://images.weedmaps.com/pictures/listings/444/181/071/443255127_2e47e52c669835d45ac56ea073f26d1985efb0e1.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":12.41,"highPrice":12.41,"offerCount":1}}},{"@type":"ListItem","position":17,"item":{"@type":"Product","name":"Unbound Prerolls, First Class Funk, 1 gram","brand":"House","image":"https://images.weedmaps.com/pictures/listings/444/181/071/443255127_2e47e52c669835d45ac56ea073f26d1985efb0e1.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":12.41,"highPrice":12.41,"offerCount":1}}},{"@type":"ListItem","position":18,"item":{"@type":"Product","name":"Dizgo Preroll - Blue Dream 2 Pack (.5g)","brand":"Dizgo","image":"https://images.weedmaps.com/pictures/listings/444/181/071/443270957_e20de879aa71f4b67a4e7d9bfb8fdceb381b8c3d.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":12.9,"highPrice":12.9,"offerCount":1}}},{"@type":"ListItem","position":19,"item":{"@type":"Product","name":"Dizgo Preroll - Medusa .5g Pack","brand":"Dizgo","image":"https://images.weedmaps.com/pictures/listings/444/181/071/443270957_e20de879aa71f4b67a4e7d9bfb8fdceb381b8c3d.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":12.9,"highPrice":12.9,"offerCount":1}}},{"@type":"ListItem","position":20,"item":{"@type":"Product","name":"Dizgo Preroll - Orion .5g Pack","brand":"Dizgo","image":"https://images.weedmaps.com/pictures/listings/444/181/071/443270957_e20de879aa71f4b67a4e7d9bfb8fdceb381b8c3d.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":12.9,"highPrice":12.9,"offerCount":1}}},{"@type":"ListItem","position":21,"item":{"@type":"Product","name":"Dizgo Preroll - Top Gun .5g Pack","brand":"Dizgo","image":"https://images.weedmaps.com/pictures/listings/444/181/071/443270956_9ca11ce2b680a994f0199aa24ed17d0ea9819542.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":12.9,"highPrice":12.9,"offerCount":1}}},{"@type":"ListItem","position":22,"item":{"@type":"Product","name":"Dizgo Preroll - Blue Dream 3 Pack (.35g each)","brand":"Dizgo","image":"https://images.weedmaps.com/pictures/listings/444/181/071/443285547_cf2ff78149eef2ab903507f16cbab1f45fba76f0.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":13.7,"highPrice":13.7,"offerCount":1}}},{"@type":"ListItem","position":23,"item":{"@type":"Product","name":"Cake Mix - 1g pre-roll","brand":"Cake Mix","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14,"highPrice":14,"offerCount":1}}},{"@type":"ListItem","position":24,"item":{"@type":"Product","name":"Dizgo - Blue Dream Preroll (2) 0.5g","brand":"Dizgo","image":"https://images.weedmaps.com/pictures/users/018/438/020/443507507_dizgo_blue_dream_preroll.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14,"highPrice":14,"offerCount":1}}},{"@type":"ListItem","position":25,"item":{"@type":"Product","name":"Dizgo - Orion Preroll (2) 0.5g","brand":"Dizgo","image":"https://images.weedmaps.com/pictures/users/018/438/020/443507517_dizgo_orion_preroll.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14,"highPrice":14,"offerCount":1}}},{"@type":"ListItem","position":26,"item":{"@type":"Product","name":"Dizgo - Top Gun Preroll (2) 0.5g","brand":"Dizgo","image":"https://images.weedmaps.com/pictures/users/018/438/020/443507502_dizgo_top_gun_preroll.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14,"highPrice":14,"offerCount":1}}},{"@type":"ListItem","position":27,"item":{"@type":"Product","name":"Dizgo Prerolls- Orion 1g","brand":"House","image":"https://images.weedmaps.com/pictures/listings/952/945/523/442798196_c0a7e257-4348-42cd-b426-9f50b100301b.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14,"highPrice":14,"offerCount":1}}},{"@type":"ListItem","position":28,"item":{"@type":"Product","name":"Halle Berry - 1g pre-roll","brand":"Halle Berry","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14,"highPrice":14,"offerCount":1}}},{"@type":"ListItem","position":29,"item":{"@type":"Product","name":"Jelly Breath - 1g pre-roll","brand":"Jelly Breath","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14,"highPrice":14,"offerCount":1}}},{"@type":"ListItem","position":30,"item":{"@type":"Product","name":"Packaged Pre-Roll-IX | Avion | Frodo Squeeze | 1 g | 1 ct","brand":"Packaged Pre-Roll-IX","image":"https://images.weedmaps.com/pictures/listings/425/100/445/443391605_IMG_7321-0e0f551b-d226-4454-a8f1-bea31923dfcb.jpeg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14,"highPrice":14,"offerCount":1}}},{"@type":"ListItem","position":31,"item":{"@type":"Product","name":"Packaged Pre-Roll-IX | Avion | Froot by the Foot | 1 g | 1 ct","brand":"Packaged Pre-Roll-IX","image":"https://images.weedmaps.com/pictures/listings/425/100/445/443391607_IMG_7321-7e6705f0-24d3-4f2c-bb2d-4cbe5f8285f5.jpeg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14,"highPrice":14,"offerCount":1}}},{"@type":"ListItem","position":32,"item":{"@type":"Product","name":"Packaged Pre-Roll-IX | Campfire | Gary Payton | 1 g | 1 ct","brand":"Packaged Pre-Roll-IX","image":"https://images.weedmaps.com/pictures/listings/425/100/445/443606724_Untitled-design--6--3e75eb37-10ad-403b-a7f9-d2d16bcbc177.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14,"highPrice":14,"offerCount":1}}},{"@type":"ListItem","position":33,"item":{"@type":"Product","name":"Packaged Pre-Roll-IX | Campfire | Sunset Sherbert | 1 g | 1 ct","brand":"Packaged Pre-Roll-IX","image":"https://images.weedmaps.com/pictures/listings/425/100/445/443606730_Untitled-design-9f5bd20e-9ccf-42e8-bb38-bac31417b321.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14,"highPrice":14,"offerCount":1}}},{"@type":"ListItem","position":34,"item":{"@type":"Product","name":"Mac Stomper | 1g Pre Roll","brand":"MAC Stomper","image":"https://images.weedmaps.com/pictures/listings/110/986/613/441722477_product_images_30ffda7a-859a-4ea9-beed-d30d531fa9c6_996221de-145a-49b1-8877-55443fb82418_original.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14.59,"highPrice":14.59,"offerCount":1}}},{"@type":"ListItem","position":35,"item":{"@type":"Product","name":"Orange Runtz | 1g Pre Roll","brand":"Orange Runtz","image":"https://images.weedmaps.com/pictures/listings/110/986/613/441722477_product_images_30ffda7a-859a-4ea9-beed-d30d531fa9c6_996221de-145a-49b1-8877-55443fb82418_original.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14.59,"highPrice":14.59,"offerCount":1}}},{"@type":"ListItem","position":36,"item":{"@type":"Product","name":"Purple Milk | 1g Pre Roll","brand":"Purple Milk","image":"https://images.weedmaps.com/pictures/listings/110/986/613/441722477_product_images_30ffda7a-859a-4ea9-beed-d30d531fa9c6_996221de-145a-49b1-8877-55443fb82418_original.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14.59,"highPrice":14.59,"offerCount":1}}},{"@type":"ListItem","position":37,"item":{"@type":"Product","name":"Sunset Sherbert | 1g Pre Roll","brand":"Sunset Sherbert","image":"https://images.weedmaps.com/pictures/listings/110/986/613/441722477_product_images_30ffda7a-859a-4ea9-beed-d30d531fa9c6_996221de-145a-49b1-8877-55443fb82418_original.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14.59,"highPrice":14.59,"offerCount":1}}},{"@type":"ListItem","position":38,"item":{"@type":"Product","name":"DZG Blue Dream Preroll 2pk 1g","brand":"House","image":"https://images.weedmaps.com/pictures/listings/322/515/960/443313618_ea91bcf6-4ff5-4257-b984-cac830030089.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":15,"highPrice":15,"offerCount":2}}},{"@type":"ListItem","position":39,"item":{"@type":"Product","name":"DZG Blue Dream Preroll 3pk 1g","brand":"House","image":"https://images.weedmaps.com/pictures/listings/322/515/960/443313618_ea91bcf6-4ff5-4257-b984-cac830030089.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":15,"highPrice":15,"offerCount":2}}},{"@type":"ListItem","position":40,"item":{"@type":"Product","name":"DZG Medusa Preroll 2pk 1g","brand":"House","image":"https://images.weedmaps.com/pictures/listings/322/515/960/443313619_6f933d4f-dde3-4957-af74-776d51307eb6.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":15,"highPrice":15,"offerCount":2}}},{"@type":"ListItem","position":41,"item":{"@type":"Product","name":"DZG Top Gun Preroll 2pk 1g","brand":"House","image":"https://images.weedmaps.com/pictures/listings/322/515/960/443313619_6f933d4f-dde3-4957-af74-776d51307eb6.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":15,"highPrice":15,"offerCount":2}}},{"@type":"ListItem","position":42,"item":{"@type":"Product","name":"Preroll-IX | RCWM | Slurricane | 1 g | 1 ct","brand":"Preroll-IX","image":"https://images.weedmaps.com/pictures/listings/907/009/259/442797344_product_images_d65c24a9-c464-47cd-9da0-e916d5c096d1_0ac3c3ad-7e01-4f0d-8ffb-64b8fdbebb31_original.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":15,"highPrice":19,"offerCount":2}}},{"@type":"ListItem","position":43,"item":{"@type":"Product","name":"Dizgo Prerolls- Medusa .5g (2 pack)","brand":"House","image":"https://images.weedmaps.com/pictures/listings/952/945/523/443461757_8668ffc5-2f36-4b27-b87b-ce3bd9ce9f7e.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":15,"highPrice":15,"offerCount":1}}},{"@type":"ListItem","position":44,"item":{"@type":"Product","name":"Dizgo Prerolls- Orion .5g (2pack)","brand":"House","image":"https://images.weedmaps.com/pictures/listings/952/945/523/442809733_fb36aa4e-9897-450c-80cb-b3457aeefbd7.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":15,"highPrice":15,"offerCount":1}}},{"@type":"ListItem","position":45,"item":{"@type":"Product","name":"Mimosa Ice - 1g Preroll","brand":"Mimosa Ice","image":"https://images.weedmaps.com/pictures/listings/299/657/508/442858595_d161e563-ada8-41cc-b2ff-4abc41cae1a8.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":15,"highPrice":15,"offerCount":1}}},{"@type":"ListItem","position":46,"item":{"@type":"Product","name":"Pre-Roll Gas & Glue 0.75g 26.6% THC","brand":"House","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":15,"highPrice":15,"offerCount":1}}},{"@type":"ListItem","position":47,"item":{"@type":"Product","name":"Redwood County Weed Co PR Early Lemon Berry PRE-ROLL 1 G","brand":"House","image":"https://images.weedmaps.com/pictures/listings/126/214/371/443310649_1779044042_5f078370-a9c0-4760-aaf4-210ff000abd0.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":15,"highPrice":15,"offerCount":1}}},{"@type":"ListItem","position":48,"item":{"@type":"Product","name":"Redwood County Weed Managemen Block Party Pre-Roll 1 G","brand":"House","image":"https://images.weedmaps.com/pictures/listings/126/214/371/443310652_1779044053_8430cacf-b295-4967-9090-dbb1dcf0ceb4.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":15,"highPrice":15,"offerCount":1}}},{"@type":"ListItem","position":49,"item":{"@type":"Product","name":"Redwood County Weed Managemen Cap Junky Pre-Roll 1 G","brand":"House","image":"https://images.weedmaps.com/pictures/listings/126/214/371/443310652_1779044053_8430cacf-b295-4967-9090-dbb1dcf0ceb4.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":15,"highPrice":15,"offerCount":1}}},{"@type":"ListItem","position":50,"item":{"@type":"Product","name":"Redwood County Weed Managemen Early Lemon Berry Pre-Roll 1 G","brand":"House","image":"https://images.weedmaps.com/pictures/listings/126/214/371/443310652_1779044053_8430cacf-b295-4967-9090-dbb1dcf0ceb4.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":15,"highPrice":15,"offerCount":1}}}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://twincitycannabis.com"},{"@type":"ListItem","position":2,"name":"Products","item":"https://twincitycannabis.com/products/"},{"@type":"ListItem","position":3,"name":"Pre-Rolls","item":"https://twincitycannabis.com/products/pre-roll/"}]}</script>
 <style>
-  body{background:var(--bg,#0a1410);color:var(--text-primary,#f5f6f8);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;margin:0;line-height:1.6}
+  /* Static pages speak the app's design tokens (css/styles.css :root +
+     [data-theme=light]) so light/dark and typography follow the visitor
+     between the app and these pages. Fallbacks preserve the dark look if
+     the stylesheet ever fails to load. */
+  body{background:var(--bg-primary,#0a1410);color:var(--text-primary,#f5f6f8);font-family:var(--font-body,-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif);margin:0;line-height:1.6}
+  h1,h2,h3{font-family:var(--font-display,'Outfit',-apple-system,sans-serif)}
   .seo-wrap{max-width:920px;margin:0 auto;padding:2rem 1.25rem 4rem}
-  .seo-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(10,20,16,0.85);position:sticky;top:0;backdrop-filter:blur(10px);z-index:10}
-  .seo-nav a.brand{display:flex;align-items:center;gap:.6rem;color:#f5f6f8;text-decoration:none;font-weight:700;white-space:nowrap;flex-shrink:0}
+  .seo-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border,rgba(255,255,255,0.06));background:var(--nav-bg,rgba(10,20,16,0.85));position:sticky;top:0;backdrop-filter:blur(10px);z-index:10}
+  .seo-nav a.brand{display:flex;align-items:center;gap:.6rem;color:var(--text-primary,#f5f6f8);text-decoration:none;font-weight:700;white-space:nowrap;flex-shrink:0;font-family:var(--font-display,'Outfit',sans-serif)}
   .seo-nav a.brand img{height:36px;width:36px}
-  .seo-nav .links{overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-left:1rem}
+  .seo-nav a.brand .accent{color:var(--green-text,#22c55e)}
+  .seo-nav .links{overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-left:1rem;flex:1;text-align:right}
   .seo-nav .links::-webkit-scrollbar{display:none}
-  .seo-nav .links a{color:#b8bcc4;text-decoration:none;margin-left:1.2rem;font-size:.95rem}
+  .seo-nav .links a{color:var(--text-secondary,#b8bcc4);text-decoration:none;margin-left:1.2rem;font-size:.95rem}
   .seo-nav .links a:first-child{margin-left:0}
-  .seo-nav .links a:hover{color:#22c55e}
-  .seo-nav .links a.active{color:#22c55e;font-weight:600}
+  .seo-nav .links a:hover{color:var(--green-text,#22c55e)}
+  .seo-nav .links a.active{color:var(--green-text,#22c55e);font-weight:600}
+  .seo-actions{display:flex;align-items:center;gap:.6rem;margin-left:1rem;flex-shrink:0}
+  .seo-search{display:flex;align-items:center;gap:.45rem;background:var(--bg-input,#142420);border:1px solid var(--border,rgba(255,255,255,0.08));border-radius:999px;padding:.35rem .4rem .35rem .75rem}
+  .seo-search:focus-within{border-color:var(--border-hover,#355544)}
+  .seo-search svg{color:var(--text-muted,#8b909a);flex-shrink:0}
+  .seo-search input{background:none;border:none;outline:none;color:var(--text-primary,#f5f6f8);font-family:inherit;font-size:.88rem;width:170px}
+  .seo-search input::placeholder{color:var(--text-muted,#8b909a)}
+  .seo-search kbd{font-size:.65rem;color:var(--text-muted,#8b909a);border:1px solid var(--border,rgba(255,255,255,0.1));border-radius:4px;padding:.05rem .35rem;font-family:inherit}
+  .seo-theme-toggle{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--border,rgba(255,255,255,0.08));background:none;color:var(--text-secondary,#b8bcc4);cursor:pointer;flex-shrink:0;padding:0}
+  .seo-theme-toggle:hover{color:var(--green-text,#22c55e);border-color:var(--border-hover,#355544)}
+  .seo-theme-toggle svg{width:16px;height:16px}
+  .seo-theme-toggle .icon-moon{display:none}
+  html[data-theme="light"] .seo-theme-toggle .icon-sun{display:none}
+  html[data-theme="light"] .seo-theme-toggle .icon-moon{display:block}
+  .seo-announce{padding:.45rem 1.25rem;background:var(--bg-secondary,#0d1a14);border-bottom:1px solid var(--border,rgba(255,255,255,0.06));font-size:.78rem;color:var(--text-secondary,#b8bcc4);text-align:center}
+  .seo-announce strong{color:var(--text-primary,#f5f6f8)}
+  .seo-announce .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green,#22c55e);margin-right:.4rem;vertical-align:middle;animation:seoPulse 2.4s ease-in-out infinite}
+  @keyframes seoPulse{0%,100%{opacity:1}50%{opacity:.35}}
+  @media (max-width:900px){.seo-search{display:none}}
   @media (max-width:640px){
     .seo-nav{padding:.75rem .9rem}
     .seo-nav a.brand img{height:30px;width:30px}
     .seo-nav .links{margin-left:.75rem}
     .seo-nav .links a{margin-left:.85rem;font-size:.88rem}
+    .seo-actions{margin-left:.6rem}
   }
   h1{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;margin:1.5rem 0 .5rem;letter-spacing:-.5px}
-  h2{font-size:1.4rem;margin:2.5rem 0 .75rem;color:#f5f6f8}
+  h2{font-size:1.4rem;margin:2.5rem 0 .75rem;color:var(--text-primary,#f5f6f8)}
   h3{font-size:1.05rem;margin:1.25rem 0 .25rem}
-  p,li{color:#b8bcc4}
-  a{color:#22c55e}
-  .crumbs{font-size:.85rem;color:#8b909a;margin-bottom:.5rem}
-  .crumbs a{color:#8b909a;text-decoration:none}
-  .crumbs a:hover{color:#22c55e}
-  .meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;color:#8b909a;font-size:.92rem;margin:.5rem 0 1.5rem}
-  .stars{color:#f59e0b}
+  p,li{color:var(--text-secondary,#b8bcc4)}
+  a{color:var(--green-text,#22c55e)}
+  .crumbs{font-size:.85rem;color:var(--text-muted,#8b909a);margin-bottom:.5rem}
+  .crumbs a{color:var(--text-muted,#8b909a);text-decoration:none}
+  .crumbs a:hover{color:var(--green-text,#22c55e)}
+  .meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;color:var(--text-muted,#8b909a);font-size:.92rem;margin:.5rem 0 1.5rem}
+  .stars{color:var(--amber-text,#f59e0b)}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin:1.5rem 0}
-  .card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.1rem 1.2rem;text-decoration:none;color:inherit;display:block;transition:border-color .2s,transform .2s}
-  .card:hover{border-color:rgba(34,197,94,0.4);transform:translateY(-2px)}
-  .card .title{color:#f5f6f8;font-weight:600;font-size:1rem;margin:0 0 .25rem}
-  .card .sub{color:#8b909a;font-size:.85rem;margin:0}
+  .card{background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,rgba(255,255,255,0.06));border-radius:12px;padding:1.1rem 1.2rem;text-decoration:none;color:inherit;display:block;transition:border-color .2s,transform .2s}
+  .card:hover{border-color:var(--green,rgba(34,197,94,0.4));transform:translateY(-2px)}
+  .card .title{color:var(--text-primary,#f5f6f8);font-weight:600;font-size:1rem;margin:0 0 .25rem}
+  .card .sub{color:var(--text-muted,#8b909a);font-size:.85rem;margin:0}
   table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.94rem}
-  th,td{text-align:left;padding:.6rem .5rem;border-bottom:1px solid rgba(255,255,255,0.06)}
-  th{color:#8b909a;font-weight:500;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px}
-  td a{color:#f5f6f8;text-decoration:none}
-  td a:hover{color:#22c55e}
-  .price{color:#22c55e;font-weight:600}
-  .review{background:rgba(255,255,255,0.03);border-left:3px solid #22c55e;padding:.85rem 1.1rem;border-radius:0 8px 8px 0;margin:.75rem 0}
-  .review .author{font-weight:600;color:#f5f6f8;font-size:.9rem}
-  .review .text{color:#b8bcc4;font-size:.92rem;margin:.35rem 0 0}
-  .cta{display:inline-block;background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;padding:.85rem 1.6rem;border-radius:10px;text-decoration:none;font-weight:600;margin:1rem 0}
-  footer{border-top:1px solid rgba(255,255,255,0.06);padding:2rem 1.25rem;text-align:center;color:#8b909a;font-size:.85rem;margin-top:3rem}
-  footer a{color:#22c55e}
+  th,td{text-align:left;padding:.6rem .5rem;border-bottom:1px solid var(--border,rgba(255,255,255,0.06))}
+  th{color:var(--text-muted,#8b909a);font-weight:500;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px}
+  td a{color:var(--text-primary,#f5f6f8);text-decoration:none}
+  td a:hover{color:var(--green-text,#22c55e)}
+  .price{color:var(--green-text,#22c55e);font-weight:600}
+  .review{background:var(--bg-card,rgba(255,255,255,0.03));border-left:3px solid var(--green,#22c55e);padding:.85rem 1.1rem;border-radius:0 8px 8px 0;margin:.75rem 0}
+  .review .author{font-weight:600;color:var(--text-primary,#f5f6f8);font-size:.9rem}
+  .review .text{color:var(--text-secondary,#b8bcc4);font-size:.92rem;margin:.35rem 0 0}
+  .cta{display:inline-block;background:linear-gradient(135deg,var(--green-dim,#16a34a),var(--green,#22c55e));color:#fff;padding:.85rem 1.6rem;border-radius:10px;text-decoration:none;font-weight:600;margin:1rem 0}
+  footer{border-top:1px solid var(--border,rgba(255,255,255,0.06));padding:2rem 1.25rem;text-align:center;color:var(--text-muted,#8b909a);font-size:.85rem;margin-top:3rem}
+  footer a{color:var(--green-text,#22c55e)}
+  footer .footer-brand{color:var(--text-primary,#f5f6f8)}
   .faq{margin:1rem 0 2rem}
-  .faq-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:.85rem 1.1rem;margin:.5rem 0}
-  .faq-item summary{cursor:pointer;font-weight:600;color:#f5f6f8;list-style:none;padding-right:1.5rem;position:relative}
+  .faq-item{background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,rgba(255,255,255,0.06));border-radius:10px;padding:.85rem 1.1rem;margin:.5rem 0}
+  .faq-item summary{cursor:pointer;font-weight:600;color:var(--text-primary,#f5f6f8);list-style:none;padding-right:1.5rem;position:relative}
   .faq-item summary::-webkit-details-marker{display:none}
-  .faq-item summary::after{content:"+";position:absolute;right:0;top:0;color:#22c55e;font-size:1.2rem;line-height:1;font-weight:700}
+  .faq-item summary::after{content:"+";position:absolute;right:0;top:0;color:var(--green-text,#22c55e);font-size:1.2rem;line-height:1;font-weight:700}
   .faq-item[open] summary::after{content:"−"}
-  .faq-item p{margin:.75rem 0 0;color:#b8bcc4}
+  .faq-item p{margin:.75rem 0 0;color:var(--text-secondary,#b8bcc4)}
   /* Phase 15: civic stat strip — homepage Bloomberg-style numerics, ported to SEO pages */
-  .seo-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);margin:1.5rem 0 2rem}
-  .seo-strip-cell{padding:1.2rem 1rem 1.2rem 0;border-left:1px solid rgba(255,255,255,0.08)}
+  .seo-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--border,rgba(255,255,255,0.08));border-bottom:1px solid var(--border,rgba(255,255,255,0.08));margin:1.5rem 0 2rem}
+  .seo-strip-cell{padding:1.2rem 1rem 1.2rem 0;border-left:1px solid var(--border,rgba(255,255,255,0.08))}
   .seo-strip-cell:first-child{border-left:0;padding-left:0}
   .seo-strip-cell:not(:first-child){padding-left:1.25rem}
-  .seo-strip-value{font-family:Inter,system-ui,sans-serif;font-size:clamp(1.4rem,2.6vw,2rem);font-weight:800;letter-spacing:-1px;line-height:1;color:#f5f6f8;font-variant-numeric:tabular-nums}
-  .seo-strip-label{margin-top:.4rem;font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.6rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#8b909a}
-  .seo-strip-sub{margin-top:.3rem;color:#b8bcc4;font-size:.78rem;line-height:1.35}
-  .seo-section-label{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#22c55e;display:inline-flex;align-items:center;gap:.5rem;margin:1.5rem 0 .4rem}
-  .seo-section-label::before{content:'';width:14px;height:1px;background:#22c55e;opacity:.6}
-  @media (max-width:640px){.seo-strip{grid-template-columns:1fr 1fr}.seo-strip-cell:nth-child(3){border-left:0;padding-left:0}.seo-strip-cell:nth-child(n+3){border-top:1px solid rgba(255,255,255,0.08)}}
+  .seo-strip-value{font-family:var(--font-display,'Outfit',system-ui,sans-serif);font-size:clamp(1.4rem,2.6vw,2rem);font-weight:800;letter-spacing:-1px;line-height:1;color:var(--text-primary,#f5f6f8);font-variant-numeric:tabular-nums}
+  .seo-strip-label{margin-top:.4rem;font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.6rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted,#8b909a)}
+  .seo-strip-sub{margin-top:.3rem;color:var(--text-secondary,#b8bcc4);font-size:.78rem;line-height:1.35}
+  .seo-section-label{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--green-text,#22c55e);display:inline-flex;align-items:center;gap:.5rem;margin:1.5rem 0 .4rem}
+  .seo-section-label::before{content:'';width:14px;height:1px;background:var(--green,#22c55e);opacity:.6}
+  @media (max-width:640px){.seo-strip{grid-template-columns:1fr 1fr}.seo-strip-cell:nth-child(3){border-left:0;padding-left:0}.seo-strip-cell:nth-child(n+3){border-top:1px solid var(--border,rgba(255,255,255,0.08))}}
   /* Brand claim — calm, present invitation to the brand owner */
-  .brand-verified-badge{display:inline-block;vertical-align:middle;font-size:.7rem;font-weight:600;letter-spacing:.5px;color:#22c55e;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);border-radius:999px;padding:.25rem .7rem;margin-left:.6rem;white-space:nowrap}
-  .brand-claim{margin:1.25rem 0 2rem;border:1px solid rgba(34,197,94,0.18);background:linear-gradient(135deg,rgba(34,197,94,0.05),rgba(255,255,255,0.02));border-radius:14px}
+  .brand-verified-badge{display:inline-block;vertical-align:middle;font-size:.7rem;font-weight:600;letter-spacing:.5px;color:var(--green-text,#22c55e);background:var(--green-bg,rgba(34,197,94,0.12));border:1px solid rgba(34,197,94,0.35);border-radius:999px;padding:.25rem .7rem;margin-left:.6rem;white-space:nowrap}
+  .brand-claim{margin:1.25rem 0 2rem;border:1px solid rgba(34,197,94,0.18);background:linear-gradient(135deg,var(--green-bg,rgba(34,197,94,0.05)),var(--bg-card,rgba(255,255,255,0.02)));border-radius:14px}
   .brand-claim-inner{padding:1.25rem 1.4rem}
-  .brand-claim-eyebrow{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#22c55e;margin:0 0 .5rem}
-  .brand-claim-line{color:#cdd2d8;font-size:.97rem;margin:0 0 1rem;max-width:62ch}
-  .brand-claim-cta{display:inline-block;background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;padding:.7rem 1.4rem;border-radius:10px;text-decoration:none;font-weight:600;font-size:.95rem}
+  .brand-claim-eyebrow{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--green-text,#22c55e);margin:0 0 .5rem}
+  .brand-claim-line{color:var(--text-secondary,#cdd2d8);font-size:.97rem;margin:0 0 1rem;max-width:62ch}
+  .brand-claim-cta{display:inline-block;background:linear-gradient(135deg,var(--green-dim,#16a34a),var(--green,#22c55e));color:#fff;padding:.7rem 1.4rem;border-radius:10px;text-decoration:none;font-weight:600;font-size:.95rem}
 </style>
 </head>
 <body>
 <nav class="seo-nav">
-  <a class="brand" href="/"><img src="/img/twin-city-cannabis-logo-192.png" alt="Twin City Cannabis logo"> Twin City <span style="color:#22c55e">Cannabis</span></a>
+  <a class="brand" href="/"><img src="/img/twin-city-cannabis-logo-192.png" alt="Twin City Cannabis logo"> Twin City <span class="accent">Cannabis</span></a>
   <div class="links"><a href="/products/" class="active">Products</a>
     <a href="/dispensaries/">Dispensaries</a>
     <a href="/weed-deals-twin-cities/">Deals</a>
     <a href="/brands/">Brands</a>
     <a href="/minnesota-cannabis-laws/">Learn</a>
   </div>
+  <div class="seo-actions">
+    <div class="seo-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="seo-search-input" type="search" placeholder="Search products, strains, shops" aria-label="Search products, strains, dispensaries" autocomplete="off" spellcheck="false">
+      <kbd aria-hidden="true">/</kbd>
+    </div>
+    <button class="seo-theme-toggle" id="seo-theme-toggle" aria-label="Toggle light or dark theme" title="Toggle theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
 </nav>
+<div class="seo-announce"><span class="dot" aria-hidden="true"></span><strong>3,100+</strong> products &middot; <strong>141</strong> dispensaries &middot; every dispensary, every price, one calm place</div>
 <main class="seo-wrap">
 
 <div class="crumbs"><a href="/">Home</a> / <a href="/products/">Products</a> / Pre-Rolls</div>
@@ -471,11 +522,39 @@
 <p style="color:#8b909a;font-size:.9rem">Showing top 50 of 300. <a href="/#compare">See all 300 on the comparison tool →</a></p>
 </main>
 <footer>
-  <p><strong style="color:#f5f6f8">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Twin Cities dispensary.</p>
+  <p><strong class="footer-brand">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Twin Cities dispensary.</p>
   <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a></p>
   <p><a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
   <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
 </footer>
+<script>
+(function () {
+  // Theme toggle — same data-theme + localStorage contract as the app.
+  var toggle = document.getElementById('seo-theme-toggle');
+  if (toggle) toggle.addEventListener('click', function () {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) { html.removeAttribute('data-theme'); } else { html.setAttribute('data-theme', 'light'); }
+    try { localStorage.setItem('tcc-theme', isLight ? 'dark' : 'light'); } catch (e) {}
+  });
+  // Search — hands off to the app's search deep link. "/" focuses, Enter goes.
+  var input = document.getElementById('seo-search-input');
+  if (input) {
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && input.value.trim()) {
+        window.location.href = '/#compare/search/' + encodeURIComponent(input.value.trim());
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === '/' && document.activeElement !== input &&
+          !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) {
+        e.preventDefault();
+        input.focus();
+      }
+    });
+  }
+})();
+</script>
 </body>
 </html>

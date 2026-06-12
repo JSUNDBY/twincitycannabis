@@ -19,93 +19,144 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/img/twin-city-cannabis-logo-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/img/twin-city-cannabis-logo-192.png">
 <link rel="apple-touch-icon" href="/img/twin-city-cannabis-logo-192.png">
+<script>
+(function() {
+    try {
+        var saved = localStorage.getItem('tcc-theme');
+        var systemLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        var theme = saved || (systemLight ? 'light' : 'dark');
+        if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    } catch (e) {}
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/styles.css">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NEZH9HCSSH"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-NEZH9HCSSH');</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ItemList","name":"Topicals in the Twin Cities","numberOfItems":63,"itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"Product","name":"Bath Bomb - Leaf","brand":"Bath Bomb","image":"https://images.weedmaps.com/pictures/listings/286/198/846/441350999_d3325231-480a-44f1-ac04-f26d86dfb449.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":8,"highPrice":8,"offerCount":1}}},{"@type":"ListItem","position":2,"item":{"@type":"Product","name":"Bath Bomb - Mushroom","brand":"Bath Bomb","image":"https://images.weedmaps.com/pictures/listings/286/198/846/441350997_d3325231-480a-44f1-ac04-f26d86dfb449.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":8,"highPrice":8,"offerCount":1}}},{"@type":"ListItem","position":3,"item":{"@type":"Product","name":"Topicals | Balms","brand":"Topicals","image":"https://images.weedmaps.com/products/002/373/469/avatar/1778549208-442858622_0cde5ab5-226e-46d4-b288-41bda04d1a73.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":9.99,"highPrice":9.99,"offerCount":1}}},{"@type":"ListItem","position":4,"item":{"@type":"Product","name":"küribl | CBD Bath Bomb | Citrus","brand":"küribl","image":"https://images.weedmaps.com/pictures/listings/425/100/445/441924660_cirtus-bath-bomb-374a0539-c0be-486d-b0a0-105ce1222b0f.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":9.99,"highPrice":9.99,"offerCount":1}}},{"@type":"ListItem","position":5,"item":{"@type":"Product","name":"küribl | CBD Bath Bomb | Eucalyptus","brand":"küribl","image":"https://images.weedmaps.com/pictures/listings/425/100/445/441924650_eucalyptus-bath-bomb-aace2f3a-c9a6-441d-97e9-bfde8a47139c.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":9.99,"highPrice":9.99,"offerCount":1}}},{"@type":"ListItem","position":6,"item":{"@type":"Product","name":"küribl | CBD Bath Bomb | Lavender","brand":"küribl","image":"https://images.weedmaps.com/pictures/listings/425/100/445/441924659_lavender-bath-bomb-f1e7350c-efbf-4f73-b2d3-f08a1cd8a5fd.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":9.99,"highPrice":9.99,"offerCount":1}}},{"@type":"ListItem","position":7,"item":{"@type":"Product","name":"Cause Medic | CBD Lip Balm","brand":"Cause Medic","image":"https://images.weedmaps.com/pictures/listings/983/521/649/442663867_CBD-body-cream-8oz-3aa898a7-54c4-4f28-b773-faf6b23b6e86.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":10,"highPrice":10,"offerCount":1}}},{"@type":"ListItem","position":8,"item":{"@type":"Product","name":"Fresh Air | CBD Lip Balm","brand":"Fresh Air","image":"https://images.weedmaps.com/pictures/listings/764/561/187/443462570_product_images_5761a30b-4436-4768-abc0-f228864f5b4f_5ed4b57b-cb13-4511-bc59-f3e111a8fe3d_original.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":11.96,"highPrice":11.96,"offerCount":1}}},{"@type":"ListItem","position":9,"item":{"@type":"Product","name":"JI Coconut Vanilla Body Lotion","brand":"House","image":"https://images.weedmaps.com/pictures/listings/614/456/301/442688139_f6f87854-3fa1-4030-b3cd-06ef4d0493c3.jpeg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14.99,"highPrice":14.99,"offerCount":1}}},{"@type":"ListItem","position":10,"item":{"@type":"Product","name":"JI Eucalyptus Mint Body Lotion","brand":"House","image":"https://images.weedmaps.com/pictures/listings/614/456/301/442688132_eae12035-4e2b-41da-b8a5-01618f112846.jpeg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14.99,"highPrice":14.99,"offerCount":1}}},{"@type":"ListItem","position":11,"item":{"@type":"Product","name":"JI Sweet Citrus Body Lotion","brand":"House","image":"https://images.weedmaps.com/pictures/listings/614/456/301/442688136_198f4d1a-cf59-4b39-9fe1-108c885027ab.jpeg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14.99,"highPrice":14.99,"offerCount":1}}},{"@type":"ListItem","position":12,"item":{"@type":"Product","name":"JI Tropical Paradise Body Lotion","brand":"House","image":"https://images.weedmaps.com/pictures/listings/614/456/301/442688140_cff46830-6fbe-4188-a942-16f1fce918ef.jpeg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14.99,"highPrice":14.99,"offerCount":1}}},{"@type":"ListItem","position":13,"item":{"@type":"Product","name":"JI Vanilla Mint Body Lotion","brand":"House","image":"https://images.weedmaps.com/pictures/listings/614/456/301/442688138_7af8d3e0-2bb9-4b10-bfe7-7ac72ffddb82.jpeg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14.99,"highPrice":14.99,"offerCount":1}}},{"@type":"ListItem","position":14,"item":{"@type":"Product","name":"NuQanna Myalgic Botanical Salve","brand":"House","image":"https://images.weedmaps.com/pictures/listings/826/712/945/442437455_Screenshot_20251017_144438_Samsung-Internet-a295c556-3ef3-4fcd-833a-dc9beac92d4f.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":14.99,"highPrice":14.99,"offerCount":1}}},{"@type":"ListItem","position":15,"item":{"@type":"Product","name":"BLNCD | Vital CBG Face Mist","brand":"BLNCD","image":"https://images.weedmaps.com/pictures/listings/429/872/005/443332757_BLNCD30mlFaceMist-66e0a267-cb3c-4eec-b13b-2c34394e9b39.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":15,"highPrice":15,"offerCount":2}}},{"@type":"ListItem","position":16,"item":{"@type":"Product","name":"Revive | Neroli + Vetiver | CBD Body Lotion","brand":"Revive","image":"https://images.weedmaps.com/pictures/listings/764/561/187/443462738_product_images_afe57a2c-680a-43df-a4f7-78a6ca23fadd_797c36e7-c6be-4310-85ef-13cfb3e78c19_original.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":19.98,"highPrice":19.98,"offerCount":1}}},{"@type":"ListItem","position":17,"item":{"@type":"Product","name":"Vital | CBD + CBG Face Mist","brand":"Vital","image":"https://images.weedmaps.com/pictures/listings/764/561/187/443462779_product_images_e4567ce0-d7e4-45dc-a79b-68f7c2e8a974_8d826427-2231-4ad4-b289-08525f17d029_original.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":19.98,"highPrice":19.98,"offerCount":1}}},{"@type":"ListItem","position":18,"item":{"@type":"Product","name":"Dr. Solomon's I Balm I 180mg I Unwind","brand":"House","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":20.12,"highPrice":20.12,"offerCount":1}}},{"@type":"ListItem","position":19,"item":{"@type":"Product","name":"BLNCD CBD Skincare - Vital CBG Face Mist - 100ml","brand":"BLNCD CBD Skincare","image":"https://images.weedmaps.com/pictures/listings/205/078/956/442265790_e133b3cd-26c5-4fe8-81ee-39697705aa84.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":22.49,"highPrice":22.49,"offerCount":1}}},{"@type":"ListItem","position":20,"item":{"@type":"Product","name":"küribl | CBD Body Lotion | Lavender","brand":"küribl","image":"https://images.weedmaps.com/pictures/listings/425/100/445/441924658_body-lotion-a50db67a-edde-46d1-812b-d62e1c0f4381.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":23.99,"highPrice":23.99,"offerCount":1}}},{"@type":"ListItem","position":21,"item":{"@type":"Product","name":"Heal | Soothing Lavender | CBD Salve","brand":"Heal","image":"https://images.weedmaps.com/pictures/listings/764/561/187/443462545_product_images_9fc10b75-ed88-4c12-ba26-de7e9e3a4f0e_aeec6cc1-0f3d-48d6-9396-8b36807de458_original.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":24.92,"highPrice":24.92,"offerCount":1}}},{"@type":"ListItem","position":22,"item":{"@type":"Product","name":"Topicals | Creams | 118ml","brand":"Topicals","image":"https://images.weedmaps.com/products/002/373/439/avatar/1778549206-442863085_308781ee-b83e-47ca-b671-4901110d9f89.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":24.99,"highPrice":24.99,"offerCount":1}}},{"@type":"ListItem","position":23,"item":{"@type":"Product","name":"Topicals | Creams | 4fl oz","brand":"Topicals","image":"https://images.weedmaps.com/products/002/373/458/avatar/1778549207-442863086_42a7d31b-11f0-4ab2-9310-93e684adb9d7.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":24.99,"highPrice":24.99,"offerCount":1}}},{"@type":"ListItem","position":24,"item":{"@type":"Product","name":"BLNCD | 1000mg CBD Salve | Heal","brand":"BLNCD","image":"https://images.weedmaps.com/pictures/listings/429/872/005/442663833_BLNCD_Heal_Salve_Thumbnail_5b3feb21-7a86-4d68-86be-a704ab5aaac9-446a75f8-b996-4c6c-b6bb-c402b24d75ca.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":30,"highPrice":30,"offerCount":2}}},{"@type":"ListItem","position":25,"item":{"@type":"Product","name":"Soothing CBD Body Oil 350 mg Full-Spectrum Roll-On","brand":"House","image":"https://images.weedmaps.com/pictures/listings/993/009/208/443521090_d699cb02-dff5-40b9-b490-c93bfee48fc5.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":30,"highPrice":30,"offerCount":1}}},{"@type":"ListItem","position":26,"item":{"@type":"Product","name":"CBD Cream","brand":"House","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":32,"highPrice":32,"offerCount":1}}},{"@type":"ListItem","position":27,"item":{"@type":"Product","name":"All Natural CBD Balm | Topical | 1000mg","brand":"All Natural CBD Balm","image":"https://images.weedmaps.com/pictures/listings/245/675/404/441771405_78e6b60b-010d-45b4-8663-6ff8e82f19b3.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":35,"highPrice":35,"offerCount":1}}},{"@type":"ListItem","position":28,"item":{"@type":"Product","name":"Minny Grown- 1000 MG CBD Pain Gel","brand":"House","image":"https://images.weedmaps.com/pictures/listings/117/770/410/442499475_Pain-Gel-9e04cd34-8540-4e89-812f-95efe5c5439e.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":35,"highPrice":35,"offerCount":1}}},{"@type":"ListItem","position":29,"item":{"@type":"Product","name":"Topicals | Balms | 2fl oz","brand":"Topicals","image":"https://images.weedmaps.com/products/002/460/640/avatar/1778624180-1774316768-442355523_product_images_6e3a47d7-9611-420e-87ce-f1e8a995e8e7_88ae76da-4914-4e80-859d-d15cdcb0b017_original.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":35,"highPrice":35,"offerCount":1}}},{"@type":"ListItem","position":30,"item":{"@type":"Product","name":"B. Good - Body Lotion","brand":"B. Good","image":"https://images.weedmaps.com/pictures/listings/614/456/301/442687810_92477509-6d7b-46d4-b152-d0652c365eb9.jpeg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":38.99,"highPrice":38.99,"offerCount":1}}},{"@type":"ListItem","position":31,"item":{"@type":"Product","name":"Natreum Quick Fix - Balm - 1oz","brand":"Natreum Quick Fix","image":"https://images.weedmaps.com/pictures/listings/591/871/967/442359027_36a34694-f562-44ec-8225-c85e3fe4ba87.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":39.99,"highPrice":39.99,"offerCount":2}}},{"@type":"ListItem","position":32,"item":{"@type":"Product","name":"Topicals | Creams","brand":"Topicals","image":"https://images.weedmaps.com/products/002/373/406/avatar/1778549205-442858596_34f46368-a258-422b-baa8-bd64ad851bca.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":39.99,"highPrice":44.98,"offerCount":2}}},{"@type":"ListItem","position":33,"item":{"@type":"Product","name":"Topicals | Balms | 118ml","brand":"Topicals","image":"https://images.weedmaps.com/products/002/373/493/avatar/1778549213-442863084_54e9f990-22a7-481b-b61b-034c04fdba3a.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":39.99,"highPrice":39.99,"offerCount":1}}},{"@type":"ListItem","position":34,"item":{"@type":"Product","name":"True Bloom Wellness CBD Relief - Lotion - 2000mg + 100mg CBG - 4oz","brand":"House","image":"https://images.weedmaps.com/pictures/listings/826/712/945/442369342_Screenshot_20251017_151316_Samsung-Internet-d4b038a8-55c7-4c29-bd76-0a93d78cb064.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":39.99,"highPrice":39.99,"offerCount":1}}},{"@type":"ListItem","position":35,"item":{"@type":"Product","name":"CBD Lotion with Aloe Vera - 2000mg CBD 100mg CBG - 4oz - Regular","brand":"House","image":"https://images.weedmaps.com/pictures/listings/355/413/804/440851770_product_images_f7992b3a-a31a-4d1d-bc5b-fab3bff3e7b9_a56a2712-791c-4124-b4d8-4181e5850bb7_original.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":40,"highPrice":40,"offerCount":1}}},{"@type":"ListItem","position":36,"item":{"@type":"Product","name":"Cause Medic | CBD Relief Cream 3.4OZ","brand":"Cause Medic","image":"https://images.weedmaps.com/pictures/listings/983/521/649/442663860_mini-CBD-relief-9572a636-54a4-4071-ab0d-0300d89fab87.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":40,"highPrice":40,"offerCount":1}}},{"@type":"ListItem","position":37,"item":{"@type":"Product","name":"Dr. Solomon's Rescue Lotion 200mg THC Rich","brand":"House","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":40,"highPrice":40,"offerCount":1}}},{"@type":"ListItem","position":38,"item":{"@type":"Product","name":"Loon Labs | CBD Hemp Lotion | 1000mg","brand":"Loon Labs","image":"https://images.weedmaps.com/pictures/listings/425/100/445/441863432_LoonLab-jpg-1--1048a96a-2cc3-4a15-9868-e8bb080421e5.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":40,"highPrice":40,"offerCount":1}}},{"@type":"ListItem","position":39,"item":{"@type":"Product","name":"Relief Lotion","brand":"House","image":"https://images.weedmaps.com/pictures/listings/930/513/529/443292393_8f80f62b-05e4-45b6-9e75-521bcd99cde1.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":40,"highPrice":40,"offerCount":1}}},{"@type":"ListItem","position":40,"item":{"@type":"Product","name":"Roll on - Topical - Beez wax","brand":"Roll on","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":40,"highPrice":40,"offerCount":1}}},{"@type":"ListItem","position":41,"item":{"@type":"Product","name":"The Balm","brand":"House","image":"https://images.weedmaps.com/pictures/listings/614/456/301/442687609_898f86dd-fa8f-424a-90e1-c3a998c3996f.jpeg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":40,"highPrice":40,"offerCount":1}}},{"@type":"ListItem","position":42,"item":{"@type":"Product","name":"BLNCD | 1000mg CBD Salve | Relief","brand":"BLNCD","image":"https://images.weedmaps.com/pictures/listings/429/872/005/443332754_BLNCD-Relief-CBD_Salve-deb85586-6dce-4b3b-b429-14cae3a8e753.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":42.5,"highPrice":42.5,"offerCount":2}}},{"@type":"ListItem","position":43,"item":{"@type":"Product","name":"BLNCD | CBD Face Oil","brand":"BLNCD","image":"https://images.weedmaps.com/pictures/listings/429/872/005/443332762_BLNCD_Vital_Face_Oil_Thumbnail-238bd0a0-7218-4eba-87f1-a8d5c2d03e93.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":42.5,"highPrice":42.5,"offerCount":2}}},{"@type":"ListItem","position":44,"item":{"@type":"Product","name":"Canviva - CBD Massage Oil","brand":"Canviva","image":"https://images.weedmaps.com/pictures/listings/614/456/301/442687613_d213b5db-18bd-4824-a4b4-a7309d95fc1e.jpeg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":42.99,"highPrice":42.99,"offerCount":1}}},{"@type":"ListItem","position":45,"item":{"@type":"Product","name":"Loon Labs Hemp Lotion 1000MG","brand":"House","image":"https://images.weedmaps.com/pictures/listings/425/100/445/441863432_LoonLab-jpg-1--1048a96a-2cc3-4a15-9868-e8bb080421e5.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":45,"highPrice":45,"offerCount":1}}},{"@type":"ListItem","position":46,"item":{"@type":"Product","name":"Cornell Topicals - Hemp Cream (Citrus Mint)","brand":"Cornell Topicals","image":"https://images.weedmaps.com/pictures/listings/614/456/301/442687611_ebb32ee9-1726-4724-9037-445e69743e13.jpeg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":46.99,"highPrice":46.99,"offerCount":1}}},{"@type":"ListItem","position":47,"item":{"@type":"Product","name":"Loon Labs - CBD Hemp Lotion 1000mg CBD","brand":"Loon Labs","image":"https://images.weedmaps.com/pictures/listings/491/778/265/441024170_LL-HEMPLOTION-d004a080-74ec-48a2-98e4-fa1868455cf6.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":49.99,"highPrice":49.99,"offerCount":1}}},{"@type":"ListItem","position":48,"item":{"@type":"Product","name":"Pure Relief Balm","brand":"House","image":"https://images.weedmaps.com/pictures/listings/952/945/523/443375642_08ec975e-f55a-4373-be80-0cbccb21f5b3.jpg","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":50,"highPrice":50,"offerCount":1}}},{"@type":"ListItem","position":49,"item":{"@type":"Product","name":"Relief CBD Salve | Topical | 1000mg","brand":"Relief CBD Salve","image":"https://images.weedmaps.com/pictures/listings/245/675/404/441771618_27c1134f-c396-4c96-a54f-2c15e59c4ce5.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":50,"highPrice":50,"offerCount":1}}},{"@type":"ListItem","position":50,"item":{"@type":"Product","name":"Organic THC-Free CBD Salve (1oz/500mg)","brand":"House","image":"https://images.weedmaps.com/pictures/listings/993/009/208/442484978_34901fb2-0680-4fff-863d-a88305fcb3e8.png","offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":54.95,"highPrice":54.95,"offerCount":1}}}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://twincitycannabis.com"},{"@type":"ListItem","position":2,"name":"Products","item":"https://twincitycannabis.com/products/"},{"@type":"ListItem","position":3,"name":"Topicals","item":"https://twincitycannabis.com/products/topical/"}]}</script>
 <style>
-  body{background:var(--bg,#0a1410);color:var(--text-primary,#f5f6f8);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;margin:0;line-height:1.6}
+  /* Static pages speak the app's design tokens (css/styles.css :root +
+     [data-theme=light]) so light/dark and typography follow the visitor
+     between the app and these pages. Fallbacks preserve the dark look if
+     the stylesheet ever fails to load. */
+  body{background:var(--bg-primary,#0a1410);color:var(--text-primary,#f5f6f8);font-family:var(--font-body,-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif);margin:0;line-height:1.6}
+  h1,h2,h3{font-family:var(--font-display,'Outfit',-apple-system,sans-serif)}
   .seo-wrap{max-width:920px;margin:0 auto;padding:2rem 1.25rem 4rem}
-  .seo-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(10,20,16,0.85);position:sticky;top:0;backdrop-filter:blur(10px);z-index:10}
-  .seo-nav a.brand{display:flex;align-items:center;gap:.6rem;color:#f5f6f8;text-decoration:none;font-weight:700;white-space:nowrap;flex-shrink:0}
+  .seo-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border,rgba(255,255,255,0.06));background:var(--nav-bg,rgba(10,20,16,0.85));position:sticky;top:0;backdrop-filter:blur(10px);z-index:10}
+  .seo-nav a.brand{display:flex;align-items:center;gap:.6rem;color:var(--text-primary,#f5f6f8);text-decoration:none;font-weight:700;white-space:nowrap;flex-shrink:0;font-family:var(--font-display,'Outfit',sans-serif)}
   .seo-nav a.brand img{height:36px;width:36px}
-  .seo-nav .links{overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-left:1rem}
+  .seo-nav a.brand .accent{color:var(--green-text,#22c55e)}
+  .seo-nav .links{overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-left:1rem;flex:1;text-align:right}
   .seo-nav .links::-webkit-scrollbar{display:none}
-  .seo-nav .links a{color:#b8bcc4;text-decoration:none;margin-left:1.2rem;font-size:.95rem}
+  .seo-nav .links a{color:var(--text-secondary,#b8bcc4);text-decoration:none;margin-left:1.2rem;font-size:.95rem}
   .seo-nav .links a:first-child{margin-left:0}
-  .seo-nav .links a:hover{color:#22c55e}
-  .seo-nav .links a.active{color:#22c55e;font-weight:600}
+  .seo-nav .links a:hover{color:var(--green-text,#22c55e)}
+  .seo-nav .links a.active{color:var(--green-text,#22c55e);font-weight:600}
+  .seo-actions{display:flex;align-items:center;gap:.6rem;margin-left:1rem;flex-shrink:0}
+  .seo-search{display:flex;align-items:center;gap:.45rem;background:var(--bg-input,#142420);border:1px solid var(--border,rgba(255,255,255,0.08));border-radius:999px;padding:.35rem .4rem .35rem .75rem}
+  .seo-search:focus-within{border-color:var(--border-hover,#355544)}
+  .seo-search svg{color:var(--text-muted,#8b909a);flex-shrink:0}
+  .seo-search input{background:none;border:none;outline:none;color:var(--text-primary,#f5f6f8);font-family:inherit;font-size:.88rem;width:170px}
+  .seo-search input::placeholder{color:var(--text-muted,#8b909a)}
+  .seo-search kbd{font-size:.65rem;color:var(--text-muted,#8b909a);border:1px solid var(--border,rgba(255,255,255,0.1));border-radius:4px;padding:.05rem .35rem;font-family:inherit}
+  .seo-theme-toggle{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--border,rgba(255,255,255,0.08));background:none;color:var(--text-secondary,#b8bcc4);cursor:pointer;flex-shrink:0;padding:0}
+  .seo-theme-toggle:hover{color:var(--green-text,#22c55e);border-color:var(--border-hover,#355544)}
+  .seo-theme-toggle svg{width:16px;height:16px}
+  .seo-theme-toggle .icon-moon{display:none}
+  html[data-theme="light"] .seo-theme-toggle .icon-sun{display:none}
+  html[data-theme="light"] .seo-theme-toggle .icon-moon{display:block}
+  .seo-announce{padding:.45rem 1.25rem;background:var(--bg-secondary,#0d1a14);border-bottom:1px solid var(--border,rgba(255,255,255,0.06));font-size:.78rem;color:var(--text-secondary,#b8bcc4);text-align:center}
+  .seo-announce strong{color:var(--text-primary,#f5f6f8)}
+  .seo-announce .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green,#22c55e);margin-right:.4rem;vertical-align:middle;animation:seoPulse 2.4s ease-in-out infinite}
+  @keyframes seoPulse{0%,100%{opacity:1}50%{opacity:.35}}
+  @media (max-width:900px){.seo-search{display:none}}
   @media (max-width:640px){
     .seo-nav{padding:.75rem .9rem}
     .seo-nav a.brand img{height:30px;width:30px}
     .seo-nav .links{margin-left:.75rem}
     .seo-nav .links a{margin-left:.85rem;font-size:.88rem}
+    .seo-actions{margin-left:.6rem}
   }
   h1{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;margin:1.5rem 0 .5rem;letter-spacing:-.5px}
-  h2{font-size:1.4rem;margin:2.5rem 0 .75rem;color:#f5f6f8}
+  h2{font-size:1.4rem;margin:2.5rem 0 .75rem;color:var(--text-primary,#f5f6f8)}
   h3{font-size:1.05rem;margin:1.25rem 0 .25rem}
-  p,li{color:#b8bcc4}
-  a{color:#22c55e}
-  .crumbs{font-size:.85rem;color:#8b909a;margin-bottom:.5rem}
-  .crumbs a{color:#8b909a;text-decoration:none}
-  .crumbs a:hover{color:#22c55e}
-  .meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;color:#8b909a;font-size:.92rem;margin:.5rem 0 1.5rem}
-  .stars{color:#f59e0b}
+  p,li{color:var(--text-secondary,#b8bcc4)}
+  a{color:var(--green-text,#22c55e)}
+  .crumbs{font-size:.85rem;color:var(--text-muted,#8b909a);margin-bottom:.5rem}
+  .crumbs a{color:var(--text-muted,#8b909a);text-decoration:none}
+  .crumbs a:hover{color:var(--green-text,#22c55e)}
+  .meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;color:var(--text-muted,#8b909a);font-size:.92rem;margin:.5rem 0 1.5rem}
+  .stars{color:var(--amber-text,#f59e0b)}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin:1.5rem 0}
-  .card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.1rem 1.2rem;text-decoration:none;color:inherit;display:block;transition:border-color .2s,transform .2s}
-  .card:hover{border-color:rgba(34,197,94,0.4);transform:translateY(-2px)}
-  .card .title{color:#f5f6f8;font-weight:600;font-size:1rem;margin:0 0 .25rem}
-  .card .sub{color:#8b909a;font-size:.85rem;margin:0}
+  .card{background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,rgba(255,255,255,0.06));border-radius:12px;padding:1.1rem 1.2rem;text-decoration:none;color:inherit;display:block;transition:border-color .2s,transform .2s}
+  .card:hover{border-color:var(--green,rgba(34,197,94,0.4));transform:translateY(-2px)}
+  .card .title{color:var(--text-primary,#f5f6f8);font-weight:600;font-size:1rem;margin:0 0 .25rem}
+  .card .sub{color:var(--text-muted,#8b909a);font-size:.85rem;margin:0}
   table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.94rem}
-  th,td{text-align:left;padding:.6rem .5rem;border-bottom:1px solid rgba(255,255,255,0.06)}
-  th{color:#8b909a;font-weight:500;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px}
-  td a{color:#f5f6f8;text-decoration:none}
-  td a:hover{color:#22c55e}
-  .price{color:#22c55e;font-weight:600}
-  .review{background:rgba(255,255,255,0.03);border-left:3px solid #22c55e;padding:.85rem 1.1rem;border-radius:0 8px 8px 0;margin:.75rem 0}
-  .review .author{font-weight:600;color:#f5f6f8;font-size:.9rem}
-  .review .text{color:#b8bcc4;font-size:.92rem;margin:.35rem 0 0}
-  .cta{display:inline-block;background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;padding:.85rem 1.6rem;border-radius:10px;text-decoration:none;font-weight:600;margin:1rem 0}
-  footer{border-top:1px solid rgba(255,255,255,0.06);padding:2rem 1.25rem;text-align:center;color:#8b909a;font-size:.85rem;margin-top:3rem}
-  footer a{color:#22c55e}
+  th,td{text-align:left;padding:.6rem .5rem;border-bottom:1px solid var(--border,rgba(255,255,255,0.06))}
+  th{color:var(--text-muted,#8b909a);font-weight:500;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px}
+  td a{color:var(--text-primary,#f5f6f8);text-decoration:none}
+  td a:hover{color:var(--green-text,#22c55e)}
+  .price{color:var(--green-text,#22c55e);font-weight:600}
+  .review{background:var(--bg-card,rgba(255,255,255,0.03));border-left:3px solid var(--green,#22c55e);padding:.85rem 1.1rem;border-radius:0 8px 8px 0;margin:.75rem 0}
+  .review .author{font-weight:600;color:var(--text-primary,#f5f6f8);font-size:.9rem}
+  .review .text{color:var(--text-secondary,#b8bcc4);font-size:.92rem;margin:.35rem 0 0}
+  .cta{display:inline-block;background:linear-gradient(135deg,var(--green-dim,#16a34a),var(--green,#22c55e));color:#fff;padding:.85rem 1.6rem;border-radius:10px;text-decoration:none;font-weight:600;margin:1rem 0}
+  footer{border-top:1px solid var(--border,rgba(255,255,255,0.06));padding:2rem 1.25rem;text-align:center;color:var(--text-muted,#8b909a);font-size:.85rem;margin-top:3rem}
+  footer a{color:var(--green-text,#22c55e)}
+  footer .footer-brand{color:var(--text-primary,#f5f6f8)}
   .faq{margin:1rem 0 2rem}
-  .faq-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:.85rem 1.1rem;margin:.5rem 0}
-  .faq-item summary{cursor:pointer;font-weight:600;color:#f5f6f8;list-style:none;padding-right:1.5rem;position:relative}
+  .faq-item{background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,rgba(255,255,255,0.06));border-radius:10px;padding:.85rem 1.1rem;margin:.5rem 0}
+  .faq-item summary{cursor:pointer;font-weight:600;color:var(--text-primary,#f5f6f8);list-style:none;padding-right:1.5rem;position:relative}
   .faq-item summary::-webkit-details-marker{display:none}
-  .faq-item summary::after{content:"+";position:absolute;right:0;top:0;color:#22c55e;font-size:1.2rem;line-height:1;font-weight:700}
+  .faq-item summary::after{content:"+";position:absolute;right:0;top:0;color:var(--green-text,#22c55e);font-size:1.2rem;line-height:1;font-weight:700}
   .faq-item[open] summary::after{content:"−"}
-  .faq-item p{margin:.75rem 0 0;color:#b8bcc4}
+  .faq-item p{margin:.75rem 0 0;color:var(--text-secondary,#b8bcc4)}
   /* Phase 15: civic stat strip — homepage Bloomberg-style numerics, ported to SEO pages */
-  .seo-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);margin:1.5rem 0 2rem}
-  .seo-strip-cell{padding:1.2rem 1rem 1.2rem 0;border-left:1px solid rgba(255,255,255,0.08)}
+  .seo-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--border,rgba(255,255,255,0.08));border-bottom:1px solid var(--border,rgba(255,255,255,0.08));margin:1.5rem 0 2rem}
+  .seo-strip-cell{padding:1.2rem 1rem 1.2rem 0;border-left:1px solid var(--border,rgba(255,255,255,0.08))}
   .seo-strip-cell:first-child{border-left:0;padding-left:0}
   .seo-strip-cell:not(:first-child){padding-left:1.25rem}
-  .seo-strip-value{font-family:Inter,system-ui,sans-serif;font-size:clamp(1.4rem,2.6vw,2rem);font-weight:800;letter-spacing:-1px;line-height:1;color:#f5f6f8;font-variant-numeric:tabular-nums}
-  .seo-strip-label{margin-top:.4rem;font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.6rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#8b909a}
-  .seo-strip-sub{margin-top:.3rem;color:#b8bcc4;font-size:.78rem;line-height:1.35}
-  .seo-section-label{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#22c55e;display:inline-flex;align-items:center;gap:.5rem;margin:1.5rem 0 .4rem}
-  .seo-section-label::before{content:'';width:14px;height:1px;background:#22c55e;opacity:.6}
-  @media (max-width:640px){.seo-strip{grid-template-columns:1fr 1fr}.seo-strip-cell:nth-child(3){border-left:0;padding-left:0}.seo-strip-cell:nth-child(n+3){border-top:1px solid rgba(255,255,255,0.08)}}
+  .seo-strip-value{font-family:var(--font-display,'Outfit',system-ui,sans-serif);font-size:clamp(1.4rem,2.6vw,2rem);font-weight:800;letter-spacing:-1px;line-height:1;color:var(--text-primary,#f5f6f8);font-variant-numeric:tabular-nums}
+  .seo-strip-label{margin-top:.4rem;font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.6rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted,#8b909a)}
+  .seo-strip-sub{margin-top:.3rem;color:var(--text-secondary,#b8bcc4);font-size:.78rem;line-height:1.35}
+  .seo-section-label{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--green-text,#22c55e);display:inline-flex;align-items:center;gap:.5rem;margin:1.5rem 0 .4rem}
+  .seo-section-label::before{content:'';width:14px;height:1px;background:var(--green,#22c55e);opacity:.6}
+  @media (max-width:640px){.seo-strip{grid-template-columns:1fr 1fr}.seo-strip-cell:nth-child(3){border-left:0;padding-left:0}.seo-strip-cell:nth-child(n+3){border-top:1px solid var(--border,rgba(255,255,255,0.08))}}
   /* Brand claim — calm, present invitation to the brand owner */
-  .brand-verified-badge{display:inline-block;vertical-align:middle;font-size:.7rem;font-weight:600;letter-spacing:.5px;color:#22c55e;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);border-radius:999px;padding:.25rem .7rem;margin-left:.6rem;white-space:nowrap}
-  .brand-claim{margin:1.25rem 0 2rem;border:1px solid rgba(34,197,94,0.18);background:linear-gradient(135deg,rgba(34,197,94,0.05),rgba(255,255,255,0.02));border-radius:14px}
+  .brand-verified-badge{display:inline-block;vertical-align:middle;font-size:.7rem;font-weight:600;letter-spacing:.5px;color:var(--green-text,#22c55e);background:var(--green-bg,rgba(34,197,94,0.12));border:1px solid rgba(34,197,94,0.35);border-radius:999px;padding:.25rem .7rem;margin-left:.6rem;white-space:nowrap}
+  .brand-claim{margin:1.25rem 0 2rem;border:1px solid rgba(34,197,94,0.18);background:linear-gradient(135deg,var(--green-bg,rgba(34,197,94,0.05)),var(--bg-card,rgba(255,255,255,0.02)));border-radius:14px}
   .brand-claim-inner{padding:1.25rem 1.4rem}
-  .brand-claim-eyebrow{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#22c55e;margin:0 0 .5rem}
-  .brand-claim-line{color:#cdd2d8;font-size:.97rem;margin:0 0 1rem;max-width:62ch}
-  .brand-claim-cta{display:inline-block;background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;padding:.7rem 1.4rem;border-radius:10px;text-decoration:none;font-weight:600;font-size:.95rem}
+  .brand-claim-eyebrow{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.65rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--green-text,#22c55e);margin:0 0 .5rem}
+  .brand-claim-line{color:var(--text-secondary,#cdd2d8);font-size:.97rem;margin:0 0 1rem;max-width:62ch}
+  .brand-claim-cta{display:inline-block;background:linear-gradient(135deg,var(--green-dim,#16a34a),var(--green,#22c55e));color:#fff;padding:.7rem 1.4rem;border-radius:10px;text-decoration:none;font-weight:600;font-size:.95rem}
 </style>
 </head>
 <body>
 <nav class="seo-nav">
-  <a class="brand" href="/"><img src="/img/twin-city-cannabis-logo-192.png" alt="Twin City Cannabis logo"> Twin City <span style="color:#22c55e">Cannabis</span></a>
+  <a class="brand" href="/"><img src="/img/twin-city-cannabis-logo-192.png" alt="Twin City Cannabis logo"> Twin City <span class="accent">Cannabis</span></a>
   <div class="links"><a href="/products/" class="active">Products</a>
     <a href="/dispensaries/">Dispensaries</a>
     <a href="/weed-deals-twin-cities/">Deals</a>
     <a href="/brands/">Brands</a>
     <a href="/minnesota-cannabis-laws/">Learn</a>
   </div>
+  <div class="seo-actions">
+    <div class="seo-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="seo-search-input" type="search" placeholder="Search products, strains, shops" aria-label="Search products, strains, dispensaries" autocomplete="off" spellcheck="false">
+      <kbd aria-hidden="true">/</kbd>
+    </div>
+    <button class="seo-theme-toggle" id="seo-theme-toggle" aria-label="Toggle light or dark theme" title="Toggle theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
 </nav>
+<div class="seo-announce"><span class="dot" aria-hidden="true"></span><strong>3,100+</strong> products &middot; <strong>141</strong> dispensaries &middot; every dispensary, every price, one calm place</div>
 <main class="seo-wrap">
 
 <div class="crumbs"><a href="/">Home</a> / <a href="/products/">Products</a> / Topicals</div>
@@ -471,11 +522,39 @@
 <p style="color:#8b909a;font-size:.9rem">Showing top 50 of 63. <a href="/#compare">See all 63 on the comparison tool →</a></p>
 </main>
 <footer>
-  <p><strong style="color:#f5f6f8">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Twin Cities dispensary.</p>
+  <p><strong class="footer-brand">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Twin Cities dispensary.</p>
   <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a></p>
   <p><a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
   <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
 </footer>
+<script>
+(function () {
+  // Theme toggle — same data-theme + localStorage contract as the app.
+  var toggle = document.getElementById('seo-theme-toggle');
+  if (toggle) toggle.addEventListener('click', function () {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) { html.removeAttribute('data-theme'); } else { html.setAttribute('data-theme', 'light'); }
+    try { localStorage.setItem('tcc-theme', isLight ? 'dark' : 'light'); } catch (e) {}
+  });
+  // Search — hands off to the app's search deep link. "/" focuses, Enter goes.
+  var input = document.getElementById('seo-search-input');
+  if (input) {
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && input.value.trim()) {
+        window.location.href = '/#compare/search/' + encodeURIComponent(input.value.trim());
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === '/' && document.activeElement !== input &&
+          !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) {
+        e.preventDefault();
+        input.focus();
+      }
+    });
+  }
+})();
+</script>
 </body>
 </html>
