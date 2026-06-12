@@ -100,7 +100,9 @@ python3 scripts/prune_orphans.py --apply
 #    never appear in the pushed sitemap without its HTML being pushed too.
 git add js/data.js index.html sitemap.xml \
     scraper/data/price_history.json scraper/data/price_history_export.json \
-    scraper/data/full_menu_products.json scraper/data/last_weedmaps_scrape.txt
+    scraper/data/full_menu_products.json scraper/data/last_weedmaps_scrape.txt \
+    scraper/data/dispensaries.json scraper/data/dispensaries_export.json \
+    scraper/data/dispensary_shop_products.json scraper/data/meadow_products.json
 grep -o '<loc>https://twincitycannabis.com/[^<]*</loc>' sitemap.xml \
   | sed 's|<loc>https://twincitycannabis.com/||;s|</loc>||;s|/$||' \
   | while read -r p; do
