@@ -112,7 +112,11 @@ def main():
 
     removed = 0
     for p in orphans:
-        r = subprocess.run(["git", "rm", "-r", "-q", "--", p],
+        # -f: a tracked orphan with unstaged modifications (e.g. a manual build
+        # re-dated it) must still be removed — without -f, git rm refuses, the
+        # shutil fallback deletes it from disk only, and the deletion is never
+        # staged or pushed, leaving the stale page live and outside the sitemap.
+        r = subprocess.run(["git", "rm", "-r", "-f", "-q", "--", p],
                            cwd=ROOT, capture_output=True, text=True)
         if r.returncode != 0:
             # Untracked (never committed) — git rm won't touch it, delete directly.
