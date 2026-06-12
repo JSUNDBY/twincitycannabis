@@ -17,7 +17,7 @@ import json
 import os
 import time
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
@@ -518,7 +518,6 @@ def main():
 
     # Freshness marker: committed alongside the data so CI can alarm when
     # Weedmaps menus go stale, regardless of WHERE the scrape ran (Mac or CI).
-    from datetime import datetime, timezone
     (DATA_DIR / "last_weedmaps_scrape.txt").write_text(
         datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ") + "\n")
 

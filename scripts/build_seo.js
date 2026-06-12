@@ -164,6 +164,30 @@ const writePage = (relPath, html) => {
 const today = new Date().toISOString().slice(0, 10);
 
 // ---------- Shared chrome (nav/footer) ----------
+// "Open" vs "tracked" — mirrors isOperationalDispensary() in js/app.js; keep
+// the two in sync. A dispensary is OPEN (actually selling) when it has a
+// priced product, real listed hours, or a real (non-Weedmaps) website.
+// Everything else is licensed-but-preopening. We track 'em all; we only call
+// the open ones open. Three different honest numbers killed trust when they
+// appeared unlabeled (141 tracked vs 91 open vs 42 metro-filtered).
+const operationalDispIds = (() => {
+  const ids = new Set();
+  (TCC.products || []).forEach(p => {
+    if (!p.prices) return;
+    Object.entries(p.prices).forEach(([dispId, price]) => { if (price > 0) ids.add(dispId); });
+  });
+  return ids;
+})();
+const isOperationalDispensary = (d) => {
+  if (!d) return false;
+  if (operationalDispIds.has(d.id)) return true;
+  const note = (d.hours && d.hours.note) || '';
+  if (note && !/check|coming soon|not yet listed|not yet|TBD|n\/a/i.test(note)) return true;
+  if (d.website && !/weedmaps\.com/i.test(d.website)) return true;
+  return false;
+};
+const openDispCount = (TCC.dispensaries || []).filter(isOperationalDispensary).length;
+
 // THE site menu — single source of truth for both worlds. The app nav in
 // index.html (injected between <!-- NAV_LINKS --> markers below) and every
 // static page's nav render from this list, so the two can never drift apart
@@ -336,7 +360,7 @@ ${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</scri
     </button>
   </div>
 </nav>
-<div class="seo-announce"><span class="dot" aria-hidden="true"></span><strong>${(Math.floor((TCC.products || []).length / 100) * 100).toLocaleString('en-US')}+</strong> products &middot; <strong>${(TCC.dispensaries || []).length}</strong> dispensaries &middot; every dispensary, every price, one calm place</div>
+<div class="seo-announce"><span class="dot" aria-hidden="true"></span><strong>${(Math.floor((TCC.products || []).length / 100) * 100).toLocaleString('en-US')}+</strong> products &middot; <strong>${(TCC.dispensaries || []).length}</strong> dispensaries tracked &middot; every dispensary, every price, one calm place</div>
 <main class="seo-wrap">
 `;
 
@@ -524,7 +548,7 @@ ${reviewsHtml}
 // ---------- DISPENSARIES INDEX ----------
 const buildDispensariesIndex = () => {
   const title = 'All Twin Cities Cannabis Dispensaries — Menus, Prices & Reviews';
-  const description = `Every cannabis dispensary in the Minneapolis-Saint Paul metro. ${TCC.dispensaries.length} dispensaries with real Google ratings, live menus, and daily price comparisons.`;
+  const description = `Every licensed cannabis dispensary in Minnesota — Twin Cities metro and beyond. ${TCC.dispensaries.length} tracked, ${openDispCount} open now, with real Google ratings, live menus, and daily price comparisons.`;
   const canonical = `${SITE}/dispensaries/`;
 
   const schema = [{
@@ -540,7 +564,16 @@ const buildDispensariesIndex = () => {
 
   const cards = TCC.dispensaries
     .slice()
-    .sort((a, b) => (b.tcc_score || 0) - (a.tcc_score || 0))
+    .sort((a, b) => {
+      // tcc_score first; rating then review depth break the frequent score
+      // ties so a 5.0-with-800-reviews metro shop never sits below an
+      // unrated shop that happens to come first in the data.
+      const score = (b.tcc_score || 0) - (a.tcc_score || 0);
+      if (score) return score;
+      const rating = ((b.google && b.google.rating) || 0) - ((a.google && a.google.rating) || 0);
+      if (rating) return rating;
+      return ((b.google && b.google.review_count) || 0) - ((a.google && a.google.review_count) || 0);
+    })
     .map(d => {
       const rating = d.google && d.google.rating;
       const rc = (d.google && d.google.review_count) || d.review_count || 0;
@@ -553,7 +586,7 @@ const buildDispensariesIndex = () => {
   return headOpen({ title, description, canonical, schema }) + `
 <div class="crumbs"><a href="/">Home</a> / Dispensaries</div>
 <h1>Every Twin Cities Cannabis Dispensary</h1>
-<p>Real menus, real Google reviews, real prices — every recreational cannabis dispensary in the Minneapolis-Saint Paul metro area, all in one place. ${TCC.dispensaries.length} dispensaries tracked, prices updated daily.</p>
+<p>Real menus, real Google reviews, real prices — every licensed recreational dispensary in Minnesota, Twin Cities metro and beyond, all in one place. ${TCC.dispensaries.length} tracked &middot; ${openDispCount} open now &middot; the rest licensed and opening soon. Prices updated daily.</p>
 <a class="cta" href="/#dispensaries">Open interactive map &amp; filters →</a>
 <div class="grid">
 ${cards}
@@ -3192,16 +3225,19 @@ const liveProdRaw   = TCC.products.length;
 const liveProdRound = Math.floor(liveProdRaw / 100) * 100;
 const liveProdLabel = liveProdRound.toLocaleString('en-US') + '+';
 
-// "33 Twin Cities dispensaries" pattern (number + city name + dispensaries) — must run before plain pattern
-indexHtml = indexHtml.replace(/\b\d{2}\s+Twin Cities\s+dispensaries\b/g, `${liveDispCount} Twin Cities dispensaries`);
+// "33 Twin Cities dispensaries" pattern (number + city name + dispensaries) — must run before plain pattern.
+// \d{1,4} not \d{2}: the original 2-digit patterns silently stopped matching
+// the day the count hit 100, leaving stale numbers baked into the shell.
+indexHtml = indexHtml.replace(/\b\d{1,4}\s+Twin Cities\s+dispensaries\b/g, `${liveDispCount} Twin Cities dispensaries`);
 
-// Any 2-digit number + " dispensaries" (e.g. "33 dispensaries", "37 dispensaries")
+// Number + " dispensaries" (e.g. "33 dispensaries", "141 dispensaries")
 // Negative lookbehind skips "First 10 dispensaries" and similar — those are
 // Founding Member copy where the number is intentional, not a stale count.
-indexHtml = indexHtml.replace(/(?<!first\s|First\s)\b\d{2}\s+dispensaries\b/g, `${liveDispCount} dispensaries`);
+indexHtml = indexHtml.replace(/(?<!first\s|First\s)\b\d{1,4}\s+dispensaries\b/g, `${liveDispCount} dispensaries`);
 
-// Dispensary count inside HTML tags: >33</strong> dispensaries, >33</span> dispensaries
-indexHtml = indexHtml.replace(/(id="announce-disp-count">)\d{2}(<\/)/g, `$1${liveDispCount}$2`);
+// Announce bar gets the OPEN count (app.js hydrates it with the same
+// operational figure), so the shell and the live app never disagree there.
+indexHtml = indexHtml.replace(/(id="announce-disp-count">)[\d,]+(<\/)/g, `$1${openDispCount}$2`);
 
 // Any formatted number + "+ products" (e.g. "1,500+ products", "2,000+ products")
 indexHtml = indexHtml.replace(/[\d,]+\+\s*products/g, `${liveProdLabel} products`);
