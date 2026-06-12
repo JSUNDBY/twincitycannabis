@@ -8,7 +8,13 @@
 
 set -e
 
-cd /Users/joshsundby/twincitycannabis
+# Run against whichever clone this script lives in (Pi: ~/twincitycannabis,
+# Mac: ~/Code/apps/twincitycannabis) instead of a hardcoded path.
+cd "$(cd "$(dirname "$0")/.." && pwd)"
+
+# Node path resolved up front (cron/launchd PATH lacks /usr/local/bin) —
+# needed by the brand-quality and deals steps below, not just build_seo.
+NODE_BIN="$(command -v node 2>/dev/null || echo /usr/local/bin/node)"
 
 echo ""
 echo "=========================================="
@@ -79,10 +85,6 @@ python3 scraper/backfill_images.py
 # 8. Rebuild static SEO pages (per-dispensary, per-category, sitemap.xml)
 #    These are crawler-facing pages with LocalBusiness/Product Schema.org markup
 #    so Google indexes every dispensary + category as its own URL.
-#    Use absolute path because cron's PATH doesn't include /usr/local/bin
-#    on macOS — without this, step 8 silently fails and the live site never
-#    gets rebuilt with fresh prices.
-NODE_BIN="$(command -v node 2>/dev/null || echo /usr/local/bin/node)"
 "$NODE_BIN" scripts/build_seo.js
 
 # 8.5. Remove orphaned page directories the build no longer emits (stale
@@ -91,14 +93,18 @@ NODE_BIN="$(command -v node 2>/dev/null || echo /usr/local/bin/node)"
 #      aborts without deleting anything if the sitemap looks broken.
 python3 scripts/prune_orphans.py --apply
 
-# 9. Git commit and push (include all generated SEO surfaces)
+# 9. Git commit and push. The sitemap is the manifest: stage every page the
+#    build just declared in it, so no generated surface (compare/, cheapest-
+#    {category}-{city}, strain-city, calculators, market-insights, ...) is
+#    ever silently left behind serving stale prices, and a brand-new page can
+#    never appear in the pushed sitemap without its HTML being pushed too.
 git add js/data.js index.html sitemap.xml \
-    scraper/data/price_history.json scraper/data/price_history_export.json \
-    dispensaries products brands neighborhoods \
-    best-dispensaries-twin-cities cheapest-cannabis-twin-cities minnesota-cannabis-laws \
-    terms privacy contact
-# city landing pages (auto-generated, slug pattern: <city>-cannabis-dispensaries)
-for d in *-cannabis-dispensaries; do [ -d "$d" ] && git add "$d"; done
+    scraper/data/price_history.json scraper/data/price_history_export.json
+grep -o '<loc>https://twincitycannabis.com/[^<]*</loc>' sitemap.xml \
+  | sed 's|<loc>https://twincitycannabis.com/||;s|</loc>||;s|/$||' \
+  | while read -r p; do
+      [ -n "$p" ] && [ -f "$p/index.html" ] && git add "$p" || true
+    done
 if git diff --staged --quiet; then
     echo "No changes to commit"
 else

@@ -24,6 +24,7 @@ jobs:
         run: pip install -r scraper/requirements.txt
 
       - name: Scrape dispensary listings
+        id: listings
         env:
           PROXY_URL: ${{ secrets.PROXY_URL }}
         run: python scraper/scraper.py --export
@@ -34,6 +35,7 @@ jobs:
         continue-on-error: true
 
       - name: Scrape ALL menus (full product data)
+        id: menus
         env:
           PROXY_URL: ${{ secrets.PROXY_URL }}
         run: python scraper/direct_menu_scrape.py --update-site
@@ -117,14 +119,31 @@ jobs:
           git add js/data.js index.html sitemap.xml \
             scraper/data/price_history.json scraper/data/price_history_export.json \
             scraper/data/dispensaries.json scraper/data/full_menu_products.json \
-            scraper/data/dispensary_shop_products.json \
-            dispensaries products brands neighborhoods \
-            best-dispensaries-twin-cities cheapest-cannabis-twin-cities minnesota-cannabis-laws 2>/dev/null || true
-          # city landing pages (auto-generated, slug pattern: <city>-cannabis-dispensaries)
-          for d in *-cannabis-dispensaries; do [ -d "$d" ] && git add "$d"; done
+            scraper/data/dispensary_shop_products.json 2>/dev/null || true
+          # The sitemap is the manifest: stage every page the build just
+          # declared in it, so no generated surface (compare/, cheapest-
+          # {category}-{city}, strain-city, calculators, ...) is silently
+          # left behind serving stale prices, and a new page can never hit
+          # the pushed sitemap without its HTML being pushed too.
+          grep -o '<loc>https://twincitycannabis.com/[^<]*</loc>' sitemap.xml \
+            | sed 's|<loc>https://twincitycannabis.com/||;s|</loc>||;s|/$||' \
+            | while read -r p; do
+                [ -n "$p" ] && [ -f "$p/index.html" ] && git add "$p" || true
+              done
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
             git commit -m "Auto-update: $(date -u +%Y-%m-%d\ %H:%M) - fresh prices & menus"
             git push
           fi
+
+      - name: Fail loudly if the Weedmaps scrape broke
+        # Runs AFTER the commit so partial updates (dispensary.shop, Meadow)
+        # still deploy — but the run goes red and GitHub emails the owner.
+        # A green run must mean fresh Weedmaps menus, nothing less. This was
+        # silently broken for 2+ weeks (expired PROXY_URL proxy credentials,
+        # 407s swallowed by continue-on-error) before being caught 2026-06-12.
+        if: steps.menus.outcome == 'failure' || steps.listings.outcome == 'failure'
+        run: |
+          echo "::error::Weedmaps scrape FAILED — likely a dead/expired PROXY_URL secret. Live menus are going stale. listings=${{ steps.listings.outcome }} menus=${{ steps.menus.outcome }}"
+          exit 1
