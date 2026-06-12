@@ -28,10 +28,20 @@
   body{background:var(--bg,#0a1410);color:var(--text-primary,#f5f6f8);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;margin:0;line-height:1.6}
   .seo-wrap{max-width:920px;margin:0 auto;padding:2rem 1.25rem 4rem}
   .seo-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(10,20,16,0.85);position:sticky;top:0;backdrop-filter:blur(10px);z-index:10}
-  .seo-nav a.brand{display:flex;align-items:center;gap:.6rem;color:#f5f6f8;text-decoration:none;font-weight:700}
+  .seo-nav a.brand{display:flex;align-items:center;gap:.6rem;color:#f5f6f8;text-decoration:none;font-weight:700;white-space:nowrap;flex-shrink:0}
   .seo-nav a.brand img{height:36px;width:36px}
+  .seo-nav .links{overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-left:1rem}
+  .seo-nav .links::-webkit-scrollbar{display:none}
   .seo-nav .links a{color:#b8bcc4;text-decoration:none;margin-left:1.2rem;font-size:.95rem}
+  .seo-nav .links a:first-child{margin-left:0}
   .seo-nav .links a:hover{color:#22c55e}
+  .seo-nav .links a.active{color:#22c55e;font-weight:600}
+  @media (max-width:640px){
+    .seo-nav{padding:.75rem .9rem}
+    .seo-nav a.brand img{height:30px;width:30px}
+    .seo-nav .links{margin-left:.75rem}
+    .seo-nav .links a{margin-left:.85rem;font-size:.88rem}
+  }
   h1{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;margin:1.5rem 0 .5rem;letter-spacing:-.5px}
   h2{font-size:1.4rem;margin:2.5rem 0 .75rem;color:#f5f6f8}
   h3{font-size:1.05rem;margin:1.25rem 0 .25rem}
@@ -89,10 +99,11 @@
 <body>
 <nav class="seo-nav">
   <a class="brand" href="/"><img src="/img/twin-city-cannabis-logo-192.png" alt="Twin City Cannabis logo"> Twin City <span style="color:#22c55e">Cannabis</span></a>
-  <div class="links">
-    <a href="/">Home</a>
-    <a href="/dispensaries/">Dispensaries</a>
-    <a href="/products/">Products</a>
+  <div class="links"><a href="/products/">Products</a>
+    <a href="/dispensaries/" class="active">Dispensaries</a>
+    <a href="/weed-deals-twin-cities/">Deals</a>
+    <a href="/brands/">Brands</a>
+    <a href="/minnesota-cannabis-laws/">Learn</a>
   </div>
 </nav>
 <main class="seo-wrap">
@@ -632,7 +643,7 @@
 </main>
 <footer>
   <p><strong style="color:#f5f6f8">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Twin Cities dispensary.</p>
-  <p><a href="/">Home</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/products/">Products</a> &middot; <a href="/events/">Events</a></p>
+  <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a></p>
   <p><a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
   <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
