@@ -99,7 +99,8 @@ python3 scripts/prune_orphans.py --apply
 #    ever silently left behind serving stale prices, and a brand-new page can
 #    never appear in the pushed sitemap without its HTML being pushed too.
 git add js/data.js index.html sitemap.xml \
-    scraper/data/price_history.json scraper/data/price_history_export.json
+    scraper/data/price_history.json scraper/data/price_history_export.json \
+    scraper/data/full_menu_products.json scraper/data/last_weedmaps_scrape.txt
 grep -o '<loc>https://twincitycannabis.com/[^<]*</loc>' sitemap.xml \
   | sed 's|<loc>https://twincitycannabis.com/||;s|</loc>||;s|/$||' \
   | while read -r p; do

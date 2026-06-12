@@ -119,7 +119,8 @@ jobs:
           git add js/data.js index.html sitemap.xml \
             scraper/data/price_history.json scraper/data/price_history_export.json \
             scraper/data/dispensaries.json scraper/data/full_menu_products.json \
-            scraper/data/dispensary_shop_products.json 2>/dev/null || true
+            scraper/data/dispensary_shop_products.json \
+            scraper/data/last_weedmaps_scrape.txt 2>/dev/null || true
           # The sitemap is the manifest: stage every page the build just
           # declared in it, so no generated surface (compare/, cheapest-
           # {category}-{city}, strain-city, calculators, ...) is silently
@@ -137,13 +138,25 @@ jobs:
             git push
           fi
 
-      - name: Fail loudly if the Weedmaps scrape broke
-        # Runs AFTER the commit so partial updates (dispensary.shop, Meadow)
-        # still deploy — but the run goes red and GitHub emails the owner.
-        # A green run must mean fresh Weedmaps menus, nothing less. This was
-        # silently broken for 2+ weeks (expired PROXY_URL proxy credentials,
-        # 407s swallowed by continue-on-error) before being caught 2026-06-12.
-        if: steps.menus.outcome == 'failure' || steps.listings.outcome == 'failure'
+      - name: Fail if Weedmaps menu data has gone stale
+        # The Weedmaps source of truth is the Mac's launchd scrape (residential
+        # IP, no proxy needed) — CI's own Weedmaps steps are expected to fail
+        # from datacenter IPs unless a working PROXY_URL secret is set, and
+        # that's fine. What is NOT fine is the DATA going stale: the scraper
+        # stamps scraper/data/last_weedmaps_scrape.txt on every successful menu
+        # scrape (Mac or CI), and this gate turns the run red + emails the
+        # owner if no fresh stamp has landed in 48h. Menus froze silently for
+        # 2+ weeks (May 26 - Jun 12, 2026) before this existed.
         run: |
-          echo "::error::Weedmaps scrape FAILED — likely a dead/expired PROXY_URL secret. Live menus are going stale. listings=${{ steps.listings.outcome }} menus=${{ steps.menus.outcome }}"
-          exit 1
+          marker=scraper/data/last_weedmaps_scrape.txt
+          if [ ! -f "$marker" ]; then
+            echo "::warning::No freshness marker yet — first run after this gate shipped."
+            exit 0
+          fi
+          last=$(date -d "$(cat "$marker")" +%s)
+          age=$(( ( $(date +%s) - last ) / 3600 ))
+          echo "Weedmaps menus last scraped ${age}h ago ($(cat "$marker"))"
+          if [ "$age" -gt 48 ]; then
+            echo "::error::Weedmaps menus are ${age}h stale — the Mac scraper (launchd com.twincitycannabis.scrape) hasn't pushed fresh data. Check scraper/data/auto_scrape.err on the Mac, or whether the Mac has been off/asleep."
+            exit 1
+          fi
