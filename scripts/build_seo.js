@@ -191,8 +191,16 @@ const openDispCount = (TCC.dispensaries || []).filter(isOperationalDispensary).l
 // THE site menu — single source of truth for both worlds. The app nav in
 // index.html (injected between <!-- NAV_LINKS --> markers below) and every
 // static page's nav render from this list, so the two can never drift apart
-// in sections, order, or labels again. appHref is the SPA route, staticHref
-// the crawlable hub; appId is what app.js binds to (null = no app binding).
+// in sections, order, or labels again.
+//
+// THE FLOW RULE: nav links ALWAYS point to the interactive app, from
+// everywhere. Static pages are landing mats for Google and search visitors —
+// the moment a human clicks the menu they get the real experience (map,
+// search, filters), never a deeper static mirror. The static hubs
+// (staticHref) stay crawlable via the footer, the sitemap, and in-content
+// links; they are no longer nav destinations. staticHref also drives the
+// nav's active-state highlight so visitors can see where they are.
+// appId is what app.js binds to (null = no app binding).
 const NAV_SECTIONS = [
   { label: 'Products',     appHref: '#compare',      appId: 'nav-compare',      staticHref: '/products/' },
   { label: 'Dispensaries', appHref: '#dispensaries', appId: 'nav-dispensaries', staticHref: '/dispensaries/' },
@@ -344,8 +352,9 @@ ${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</scri
 <body>
 <nav class="seo-nav">
   <a class="brand" href="/"><img src="/img/twin-city-cannabis-logo-192.png" alt="Twin City Cannabis logo"> Twin City <span class="accent">Cannabis</span></a>
-  <div class="links">${NAV_SECTIONS.map(({ label, staticHref }) =>
-    `<a href="${staticHref}"${canonical.startsWith(SITE + staticHref.replace(/\/$/, '')) ? ' class="active"' : ''}>${label}</a>`
+  <div class="links"><a href="/">Home</a>
+    ${NAV_SECTIONS.map(({ label, appHref, staticHref }) =>
+    `<a href="${appHref.startsWith('#') ? '/' + appHref : appHref}"${canonical.startsWith(SITE + staticHref.replace(/\/$/, '')) ? ' class="active"' : ''}>${label}</a>`
   ).join('\n    ')}
   </div>
   <div class="seo-actions">
