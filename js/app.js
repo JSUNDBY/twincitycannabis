@@ -4284,6 +4284,27 @@
         ].filter(Boolean);
     }
 
+    // Brand search index — unique brands derived from products, with the same
+    // slug the brand pages use, sorted by how many products we track for them.
+    // Built once on first search, then reused.
+    let _brandIndex = null;
+    function _getBrandIndex() {
+        if (_brandIndex) return _brandIndex;
+        const counts = {};
+        TCC.products.forEach(p => {
+            if (!p.brand) return;
+            counts[p.brand] = (counts[p.brand] || 0) + 1;
+        });
+        _brandIndex = Object.entries(counts)
+            .map(([name, count]) => ({ name, count, slug: brandSlugify(name) }))
+            .sort((a, b) => b.count - a.count);
+        return _brandIndex;
+    }
+    function searchBrands(query) {
+        const q = query.toLowerCase();
+        return _getBrandIndex().filter(b => b.name.toLowerCase().includes(q));
+    }
+
     function handleSearch(query) {
         const dropdowns = _allSearchDropdowns();
         if (!dropdowns.length) return;
@@ -4293,14 +4314,16 @@
         }
 
         const allDisp = TCC.searchDispensaries(query);
+        const allBrands = searchBrands(query);
         const allProducts = TCC.searchProducts(query);
         const allStrains = TCC.strains.filter(s => s.name.toLowerCase().includes(query.toLowerCase()));
         const dispensaries = allDisp.slice(0, 3);
+        const brands = allBrands.slice(0, 3);
         const products = allProducts.slice(0, 3);
         const strains = allStrains.slice(0, 3);
-        const totalMatches = allDisp.length + allProducts.length + allStrains.length;
+        const totalMatches = allDisp.length + allBrands.length + allProducts.length + allStrains.length;
 
-        if (!dispensaries.length && !products.length && !strains.length) {
+        if (!dispensaries.length && !brands.length && !products.length && !strains.length) {
             dropdowns.forEach(d => d.classList.remove('open'));
             return;
         }
@@ -4324,6 +4347,20 @@
                         </div>
                     </div>`;
                 }).join('')}
+            </div>`;
+        }
+
+        if (brands.length) {
+            html += `<div class="search-dropdown-section">
+                <div class="search-dropdown-label">Brands</div>
+                ${brands.map(b => `
+                    <div class="search-dropdown-item" onclick="window.location.hash='brand/${b.slug}'">
+                        <div class="search-dropdown-item-icon" style="background:rgba(168,85,247,0.12);border:1px solid rgba(168,85,247,0.3);color:#a855f7">${esc((b.name[0] || '?').toUpperCase())}</div>
+                        <div class="search-dropdown-item-info">
+                            <div class="search-dropdown-item-name">${esc(b.name)}</div>
+                            <div class="search-dropdown-item-detail">${b.count} product${b.count === 1 ? '' : 's'} tracked</div>
+                        </div>
+                    </div>`).join('')}
             </div>`;
         }
 
@@ -4360,7 +4397,7 @@
 
         // Footer: link to the full Browse page filtered by this query.
         // Always shown when there's any match so visitors can drill in.
-        const shownCount = dispensaries.length + products.length + strains.length;
+        const shownCount = dispensaries.length + brands.length + products.length + strains.length;
         if (totalMatches > shownCount || allProducts.length > 0) {
             html += `<a class="search-dropdown-footer" href="#compare/search/${encodeURIComponent(query)}">
                 See all ${allProducts.length} product match${allProducts.length === 1 ? '' : 'es'} for "${esc(query)}" &rarr;
