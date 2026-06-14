@@ -547,6 +547,14 @@ ${d.google && d.google.maps_url ? `<p><a href="${esc(d.google.maps_url)}" rel="n
   ${d.website ? `<span>🌐 <a href="${esc(d.website)}" rel="nofollow noopener" target="_blank">${d.website.includes('weedmaps.com') ? 'View on Weedmaps' : 'Visit website'} →</a></span>` : ''}
 </div>
 
+<div class="brand-claim">
+  <div class="brand-claim-inner">
+    <p class="brand-claim-eyebrow">Run ${esc(d.name)}?</p>
+    <p class="brand-claim-line">${rating ? `Your ${rating}★ from ${reviewCount} Google reviews is already shining here, and shoppers across the metro can find you.` : `You're already listed here, and shoppers across the metro can find you.`} This page is yours, free. Confirm your details, add your deals, and shape what people see when they're deciding where to go.</p>
+    <a class="brand-claim-cta" href="/#for-dispensaries">Claim ${esc(d.name)} →</a>
+  </div>
+</div>
+
 <p>${esc(d.name)} is a cannabis dispensary in ${esc(d.city || 'the Twin Cities')}, Minnesota. ${products.length > 0 ? `Below is the current menu (${products.length} products), with each price compared against every other dispensary in the metro. Prices update daily.` : 'This listing is being indexed — full menu data is on its way.'}</p>
 
 <a class="cta" href="/#dashboard/${esc(d.id)}">View interactive menu &amp; price compare →</a>
