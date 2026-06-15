@@ -116,4 +116,13 @@ else
     echo "Pushed fresh data"
 fi
 
+# Heartbeat: ping the uptime monitor. set -e means we only reach here on a
+# fully successful run, so a failed/aborted scrape never pings -> monitor goes
+# red. URL is supplied via env (TCC_HEARTBEAT_URL) so the push token stays out
+# of this public repo.
+if [ -n "$TCC_HEARTBEAT_URL" ]; then
+    curl -fsS --max-time 10 "$TCC_HEARTBEAT_URL" >/dev/null 2>&1 \
+      && echo "Heartbeat sent" || echo "Heartbeat failed (non-fatal)"
+fi
+
 echo "Done: $(date)"
