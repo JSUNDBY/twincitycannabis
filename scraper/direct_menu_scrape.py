@@ -20,7 +20,21 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
-import requests
+# Weedmaps fingerprints the TLS handshake (JA3) and returns 406 to non-browser
+# clients. curl_cffi presents a real Chrome TLS fingerprint, so the scrape works
+# regardless of the local OpenSSL version. (Plain `requests` only worked by luck
+# on macOS's old LibreSSL build; it 406s on modern OpenSSL — e.g. Linux/the Pi.)
+try:
+    from curl_cffi import requests as _cffi
+
+    class _WMRequests:
+        def get(self, *args, **kwargs):
+            kwargs.setdefault("impersonate", "chrome")
+            return _cffi.get(*args, **kwargs)
+
+    requests = _WMRequests()
+except ImportError:
+    import requests
 
 DATA_DIR = Path(__file__).parent / "data"
 DATA_DIR.mkdir(exist_ok=True)
