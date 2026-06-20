@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cricket Zones — Ambient Cricket Sounds</title>
+<meta name="description" content="A simple ambient cricket sound player. Pick a zone and relax to procedurally generated cricket chirps and night soundscapes. No downloads, runs in your browser.">
+<link rel="canonical" href="https://twincitycannabis.com/cricket-zones/">
+<meta property="og:title" content="Cricket Zones — Ambient Cricket Sounds">
+<meta property="og:description" content="Pick a zone and relax to procedurally generated cricket chirps and night soundscapes.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://twincitycannabis.com/cricket-zones/">
+<meta property="og:image" content="https://twincitycannabis.com/og-image.png">
+<meta property="og:site_name" content="Twin City Cannabis">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/twin-city-cannabis-logo-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/img/twin-city-cannabis-logo-192.png">
+<link rel="apple-touch-icon" href="/img/twin-city-cannabis-logo-192.png">
+<link rel="stylesheet" href="/css/styles.css">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NEZH9HCSSH"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-NEZH9HCSSH');</script>
+<style>
+  :root{--bg:#0a1410;--green:#22c55e;--text:#f5f6f8;--muted:#b8bcc4}
+  *{box-sizing:border-box}
+  body{background:radial-gradient(1200px 800px at 50% -10%,#11241b 0%,#0a1410 60%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;margin:0;line-height:1.6;min-height:100vh}
+  .seo-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(10,20,16,0.85);position:sticky;top:0;backdrop-filter:blur(10px);z-index:10}
+  .seo-nav a.brand{display:flex;align-items:center;gap:.6rem;color:#f5f6f8;text-decoration:none;font-weight:700}
+  .seo-nav a.brand img{height:36px;width:36px}
+  .seo-nav .links a{color:#b8bcc4;text-decoration:none;margin-left:1.2rem;font-size:.95rem}
+  .seo-nav .links a:hover{color:var(--green)}
+  .wrap{max-width:640px;margin:0 auto;padding:2.5rem 1.25rem 4rem;text-align:center}
+  .eyebrow{color:var(--green);font-size:.78rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;margin:0 0 .6rem}
+  h1{font-size:clamp(2rem,6vw,3rem);line-height:1.1;margin:.2rem 0 .4rem;letter-spacing:-.5px}
+  .sub{color:var(--muted);margin:0 auto 2rem;max-width:34rem}
+  /* play button */
+  .play{position:relative;width:148px;height:148px;border-radius:50%;border:none;cursor:pointer;margin:1rem auto 1.5rem;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,#1e3a2a,#0d1d14);color:var(--green);box-shadow:0 0 0 1px rgba(34,197,94,.3),0 18px 50px rgba(0,0,0,.5);transition:transform .15s ease}
+  .play:hover{transform:scale(1.03)}
+  .play:active{transform:scale(.98)}
+  .play svg{width:54px;height:54px;margin-left:4px}
+  .play.on svg{margin-left:0}
+  .play.on{box-shadow:0 0 0 1px rgba(34,197,94,.6),0 0 60px rgba(34,197,94,.25),0 18px 50px rgba(0,0,0,.5)}
+  .pulse{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(34,197,94,.5);opacity:0;pointer-events:none}
+  .play.on .pulse{animation:pulse 2.4s ease-out infinite}
+  @keyframes pulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.6);opacity:0}}
+  .status{color:var(--muted);font-size:.95rem;min-height:1.4rem;margin-bottom:2rem}
+  .status b{color:var(--text)}
+  /* zone grid */
+  .zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:.75rem;margin:0 0 2rem}
+  .zone{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:1rem .75rem;cursor:pointer;text-align:center;transition:border-color .15s,background .15s,transform .1s;color:var(--text)}
+  .zone:hover{border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.06)}
+  .zone.active{border-color:var(--green);background:rgba(34,197,94,.12);box-shadow:0 0 0 1px var(--green) inset}
+  .zone .emoji{font-size:1.6rem;display:block;margin-bottom:.35rem}
+  .zone .name{font-weight:600;font-size:.95rem}
+  .zone .desc{color:var(--muted);font-size:.78rem;margin-top:.2rem}
+  /* volume */
+  .vol{display:flex;align-items:center;gap:.75rem;max-width:340px;margin:0 auto 2.5rem;color:var(--muted)}
+  .vol input[type=range]{flex:1;accent-color:var(--green)}
+  .note{color:#8b909a;font-size:.82rem;max-width:34rem;margin:0 auto}
+  .note a{color:var(--green)}
+  footer{border-top:1px solid rgba(255,255,255,.06);padding:1.5rem;text-align:center;color:#8b909a;font-size:.85rem}
+  footer a{color:#8b909a;text-decoration:none}
+</style>
+</head>
+<body>
+<nav class="seo-nav">
+  <a class="brand" href="/"><img src="/img/twin-city-cannabis-logo-32.png" alt="Twin City Cannabis" onerror="this.style.display='none'">Twin City Cannabis</a>
+  <div class="links"><a href="/">Home</a></div>
+</nav>
+
+<main class="wrap">
+  <p class="eyebrow">Ambient Player</p>
+  <h1>Cricket Zones</h1>
+  <p class="sub">Tap play and pick a zone. Each one is a different cricket soundscape, generated live in your browser — no files, no downloads, just chirps.</p>
+
+  <button id="play" class="play" aria-label="Play cricket sounds">
+    <span class="pulse"></span>
+    <svg id="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+  </button>
+  <p class="status" id="status">Paused</p>
+
+  <div class="zones" id="zones"></div>
+
+  <div class="vol">
+    <span aria-hidden="true">🔈</span>
+    <input id="vol" type="range" min="0" max="100" value="60" aria-label="Volume">
+    <span aria-hidden="true">🔊</span>
+  </div>
+
+  <p class="note">Sounds are synthesized with the Web Audio API, so no two minutes are ever quite the same. Best with headphones. Leave it running in a background tab.</p>
+</main>
+
+<footer>
+  <a href="/">Twin City Cannabis</a> · A little side project · Made for relaxing
+</footer>
+
+<script>
+(function(){
+  // ---- Zone definitions: each tweaks the cricket synthesis + ambience ----
+  var ZONES = [
+    {id:'meadow', emoji:'🌾', name:'Summer Meadow', desc:'Warm daytime crickets',
+      chirpFreq:4500, rate:2.2, density:6, jitter:.25, hiss:0.0008, bg:'#13261b'},
+    {id:'forest', emoji:'🌲', name:'Forest Night', desc:'Dense, layered chorus',
+      chirpFreq:4000, rate:1.6, density:11, jitter:.4, hiss:0.0016, bg:'#0f1f17'},
+    {id:'pond', emoji:'🪷', name:'Pond Edge', desc:'Crickets + low water hum',
+      chirpFreq:3600, rate:1.9, density:7, jitter:.3, hiss:0.0024, drone:90, bg:'#0d1d20'},
+    {id:'desert', emoji:'🏜️', name:'Desert Dusk', desc:'Sparse, distant chirps',
+      chirpFreq:5200, rate:1.2, density:4, jitter:.5, hiss:0.0006, bg:'#1c1813'},
+    {id:'porch', emoji:'🏡', name:'Back Porch', desc:'A few close, lazy crickets',
+      chirpFreq:4200, rate:1.4, density:3, jitter:.35, hiss:0.0010, bg:'#161d16'},
+    {id:'storm', emoji:'⛈️', name:'After the Rain', desc:'Crickets over soft rainfall',
+      chirpFreq:4300, rate:2.0, density:8, jitter:.3, hiss:0.006, bg:'#101a1d'}
+  ];
+
+  var ctx=null, master=null, hissNode=null, droneNode=null, droneGain=null;
+  var timer=null, playing=false, current=ZONES[0], volume=0.6;
+
+  var playBtn=document.getElementById('play');
+  var icon=document.getElementById('icon');
+  var statusEl=document.getElementById('status');
+  var zonesEl=document.getElementById('zones');
+  var volEl=document.getElementById('vol');
+
+  // Build zone cards
+  ZONES.forEach(function(z){
+    var b=document.createElement('button');
+    b.className='zone'+(z.id===current.id?' active':'');
+    b.dataset.id=z.id;
+    b.innerHTML='<span class="emoji">'+z.emoji+'</span><span class="name">'+z.name+'</span><div class="desc">'+z.desc+'</div>';
+    b.addEventListener('click',function(){ selectZone(z); });
+    zonesEl.appendChild(b);
+  });
+
+  function ensureCtx(){
+    if(ctx) return;
+    ctx=new (window.AudioContext||window.webkitAudioContext)();
+    master=ctx.createGain();
+    master.gain.value=volume;
+    master.connect(ctx.destination);
+  }
+
+  // One cricket chirp: a short pulse train of a high tone, gently enveloped
+  function chirp(zone){
+    if(!ctx) return;
+    var t=ctx.currentTime;
+    var base=zone.chirpFreq*(0.92+Math.random()*0.16);
+    var osc=ctx.createOscillator();
+    osc.type='square';
+    var g=ctx.createGain();
+    var pan=ctx.createStereoPanner?ctx.createStereoPanner():null;
+    if(pan){ pan.pan.value=(Math.random()*2-1)*0.8; osc.connect(g); g.connect(pan); pan.connect(master); }
+    else { osc.connect(g); g.connect(master); }
+
+    // amplitude trill — crickets pulse ~ a dozen times per chirp
+    var pulses=4+Math.floor(Math.random()*5);
+    var pw=0.012+Math.random()*0.006; // pulse width
+    var gap=pw*0.9;
+    g.gain.setValueAtTime(0,t);
+    osc.frequency.setValueAtTime(base,t);
+    var cursor=t;
+    for(var i=0;i<pulses;i++){
+      g.gain.linearRampToValueAtTime(0.18,cursor+pw*0.4);
+      g.gain.linearRampToValueAtTime(0.0001,cursor+pw);
+      cursor+=pw+gap;
+    }
+    osc.frequency.linearRampToValueAtTime(base*1.02,cursor);
+    osc.start(t);
+    osc.stop(cursor+0.05);
+  }
+
+  function scheduleLoop(){
+    if(!playing) return;
+    var z=current;
+    // fire a burst of chirps from "different" crickets
+    var n=1+Math.floor(Math.random()*Math.max(1,z.density/3));
+    for(var i=0;i<n;i++){ setTimeout(function(){ if(playing) chirp(z); }, Math.random()*400); }
+    var base=1000/ (z.rate*(z.density/5));
+    var wait=base*(1+(Math.random()*2-1)*z.jitter);
+    timer=setTimeout(scheduleLoop, Math.max(120,wait));
+  }
+
+  // Background bed: filtered noise (hiss/rain) + optional low drone
+  function startBed(z){
+    stopBed();
+    // noise buffer
+    var len=ctx.sampleRate*2;
+    var buf=ctx.createBuffer(1,len,ctx.sampleRate);
+    var d=buf.getChannelData(0);
+    for(var i=0;i<len;i++){ d[i]=Math.random()*2-1; }
+    var src=ctx.createBufferSource();
+    src.buffer=buf; src.loop=true;
+    var filt=ctx.createBiquadFilter();
+    filt.type = z.hiss>0.003 ? 'bandpass' : 'highpass';
+    filt.frequency.value = z.hiss>0.003 ? 1200 : 6000;
+    var g=ctx.createGain();
+    g.gain.value=z.hiss;
+    src.connect(filt); filt.connect(g); g.connect(master);
+    src.start();
+    hissNode={src:src,gain:g};
+
+    if(z.drone){
+      var osc=ctx.createOscillator();
+      osc.type='sine'; osc.frequency.value=z.drone;
+      var dg=ctx.createGain(); dg.gain.value=0.04;
+      osc.connect(dg); dg.connect(master); osc.start();
+      droneNode=osc; droneGain=dg;
+    }
+  }
+  function stopBed(){
+    if(hissNode){ try{hissNode.src.stop();}catch(e){} hissNode=null; }
+    if(droneNode){ try{droneNode.stop();}catch(e){} droneNode=null; }
+  }
+
+  function start(){
+    ensureCtx();
+    if(ctx.state==='suspended') ctx.resume();
+    playing=true;
+    playBtn.classList.add('on');
+    icon.innerHTML='<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>';
+    document.body.style.background='radial-gradient(1200px 800px at 50% -10%,'+current.bg+' 0%,#0a1410 60%)';
+    statusEl.innerHTML='Playing <b>'+current.name+'</b>';
+    startBed(current);
+    scheduleLoop();
+  }
+  function stop(){
+    playing=false;
+    if(timer){ clearTimeout(timer); timer=null; }
+    stopBed();
+    playBtn.classList.remove('on');
+    icon.innerHTML='<path d="M8 5v14l11-7z"/>';
+    statusEl.textContent='Paused';
+  }
+  function toggle(){ playing?stop():start(); }
+
+  function selectZone(z){
+    current=z;
+    Array.prototype.forEach.call(zonesEl.children,function(c){
+      c.classList.toggle('active', c.dataset.id===z.id);
+    });
+    if(playing){ stop(); start(); }
+    else { statusEl.innerHTML='Ready: <b>'+z.name+'</b>'; document.body.style.background='radial-gradient(1200px 800px at 50% -10%,'+z.bg+' 0%,#0a1410 60%)'; }
+  }
+
+  playBtn.addEventListener('click',toggle);
+  volEl.addEventListener('input',function(){
+    volume=this.value/100;
+    if(master) master.gain.setTargetAtTime(volume, ctx.currentTime, 0.05);
+  });
+  // spacebar toggles
+  document.addEventListener('keydown',function(e){
+    if(e.code==='Space' && e.target.tagName!=='INPUT'){ e.preventDefault(); toggle(); }
+  });
+})();
+</script>
+</body>
+</html>
