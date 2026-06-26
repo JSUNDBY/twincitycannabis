@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --check scripts/scrape_dispensary_emails.js)",
+      "Bash(python3 -c \"import csv;rows=[r for r in csv.DictReader\\(open\\('outreach/dispensary-contacts.csv'\\)\\) if r.get\\('email',''\\).strip\\(\\)];print\\(len\\(rows\\),'dispensaries with an email'\\)\")",
+      "Bash(awk '/class=\"page\"[^>]*id=\"dashboard\"/{f=1} f{print} /id=\"dash-claim-section\"/{exit}' index.html)",
+      "Bash(mkdir -p .trash)",
+      "Bash(mv raw/*.md .trash/)",
+      "WebFetch(domain:midmnseptic.com)",
+      "WebFetch(domain:cambridgeseptic.com)",
+      "WebFetch(domain:cambridgemnseptic.com)",
+      "WebFetch(domain:septiccambridgemn.com)"
+    ]
+  }
+}

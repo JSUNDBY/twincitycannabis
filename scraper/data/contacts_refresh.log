@@ -1,0 +1,152 @@
+==== refresh start: Sun Jun 14 05:00:05 CDT 2026 ====
+Scraping 44 dispensaries for emails...
+(previously-found emails are cached; pass --force to re-scrape)
+
+  ANANG Native Cannabis Co.... (rendering) TargetCloseError: Protocol error (Page.addScriptToEvaluateOnNewDocument): Target closed
+    at CallbackRegistry.clear (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:82:36)
+    at CdpCDPSession.onClosed (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/CdpSession.js:115:25)
+    at #onClose (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Connection.js:190:21)
+    at WebSocket.<anonymous> (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/node/NodeWebSocketTransport.js:48:30)
+    at callListener (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/ws/lib/event-target.js:290:14)
+    at WebSocket.onClose (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/ws/lib/event-target.js:220:9)
+    at WebSocket.emit (node:events:524:28)
+    at WebSocket.emitClose (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/ws/lib/websocket.js:273:10)
+    at Socket.socketOnClose (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/ws/lib/websocket.js:1346:15)
+    at Socket.emit (node:events:524:28) {
+  cause: ProtocolError
+      at <instance_members_initializer> (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:103:14)
+      at new Callback (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:107:16)
+      at CallbackRegistry.create (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:25:26)
+      at Connection._rawSend (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Connection.js:108:26)
+      at CdpCDPSession.send (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/CdpSession.js:74:33)
+      at next (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-extra-plugin-stealth/evasions/sourceurl/index.js:34:41)
+      at CdpCDPSession.send (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-extra-plugin-stealth/evasions/sourceurl/index.js:67:18)
+      at FrameManager.evaluateOnNewDocument (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/FrameManager.js:232:14)
+      at CdpPage.evaluateOnNewDocument (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Page.js:813:41)
+      at Object.evaluateOnNewDocument (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-extra-plugin-stealth/evasions/_utils/withUtils.js:33:17)
+}
+no email (IG: https://instagram.com/anangnativeco)
+  Wildflower North Loop... /Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:82
+            this._reject(callback, new Errors_js_1.TargetCloseError('Target closed'));
+                                   ^
+
+TargetCloseError: Protocol error (Network.setUserAgentOverride): Target closed
+    at CallbackRegistry.clear (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:82:36)
+    at CdpCDPSession.onClosed (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/CdpSession.js:115:25)
+    at #onClose (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Connection.js:190:21)
+    at WebSocket.<anonymous> (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/node/NodeWebSocketTransport.js:48:30)
+    at callListener (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/ws/lib/event-target.js:290:14)
+    at WebSocket.onClose (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/ws/lib/event-target.js:220:9)
+    at WebSocket.emit (node:events:524:28)
+    at WebSocket.emitClose (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/ws/lib/websocket.js:273:10)
+    at Socket.socketOnClose (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/ws/lib/websocket.js:1346:15)
+    at Socket.emit (node:events:524:28) {
+  cause: ProtocolError
+      at <instance_members_initializer> (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:103:14)
+      at new Callback (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:107:16)
+      at CallbackRegistry.create (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:25:26)
+      at Connection._rawSend (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Connection.js:108:26)
+      at CdpCDPSession.send (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/CdpSession.js:74:33)
+      at next (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-extra-plugin-stealth/evasions/sourceurl/index.js:34:41)
+      at CdpCDPSession.send (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-extra-plugin-stealth/evasions/sourceurl/index.js:67:18)
+      at Plugin.onPageCreated (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-extra-plugin-stealth/evasions/user-agent-override/index.js:182:12)
+      at async Plugin._onTargetCreated (/Users/joshsundby/Code/apps/twincitycannabis/node_modules/puppeteer-extra-plugin/dist/index.cjs.js:496:21)
+}
+
+Node.js v22.13.1
+[warn] scrape step failed
+Generated contact list:
+  CSV:      outreach/dispensary-contacts.csv
+  Markdown: outreach/dispensary-contacts.md
+  141 dispensaries (66 metro, 75 greater MN)
+  With phone: 87
+  With website: 91
+emails: 59 · social(IG): 60
+
+ ⛅️ wrangler 4.100.0
+────────────────────
+Resource location: remote 
+
+Writing the contents of /Users/joshsundby/Code/apps/twincitycannabis/.kv-index_emails.json to the key "index:emails" on namespace id: "71b77df77ea74522ab66c82e20cc9339".
+
+ ⛅️ wrangler 4.100.0
+────────────────────
+Resource location: remote 
+
+Writing the contents of /Users/joshsundby/Code/apps/twincitycannabis/.kv-index_social.json to the key "index:social" on namespace id: "71b77df77ea74522ab66c82e20cc9339".
+Synced contacts to KV. Refresh the admin dashboard to see them.
+==== refresh done:  Sun Jun 14 05:00:25 CDT 2026 ====
+==== refresh start: Sun Jun 21 05:00:05 CDT 2026 ====
+Scraping 44 dispensaries for emails...
+(previously-found emails are cached; pass --force to re-scrape)
+
+  ANANG Native Cannabis Co.... (rendering) no email (IG: https://instagram.com/anangnativeco)
+  Wildflower North Loop... (rendering) no email (IG: https://instagram.com/wildflower_stores)
+  Unanimous Cannabis... (rendering) no email found
+  MnLooN - St. Paul... (rendering) no email found
+  Edina Canna... (rendering) no email found
+  Feelin' MN... (rendering) no email (IG: https://instagram.com/feelinmndispensary)
+  The Cannabis Co.... (rendering) no email found
+  Northern Crown Cannabis... (rendering) no email found
+  Hempire LLC... (rendering) no email (IG: https://instagram.com/hempirerochester)
+  Lake Leaf Dispensary... (rendering) no email found
+  Lake Leaf Dispensary... (rendering) no email found
+  Winona Dispensary... (rendering) no email (IG: https://instagram.com/winonadispensary)
+  Farmer’s Cannabis Co.... (rendering) no email (IG: https://instagram.com/farmerscannabisco)
+  skip (weedmaps): ANANG Tasting Lounge & Dispensary
+  North Shore Dispensary... (rendering) no email (IG: https://instagram.com/northshoredispensary)
+  Lake Superior Dispensary... lemonad@jovanny.ru
+  High Fidelity... (rendering) no email found
+  Wildflower... (rendering) no email (IG: https://instagram.com/wildflower_stores)
+  BlooMn... (rendering) no email (IG: https://instagram.com/bloomn.mpls)
+  Fridley Dispensary... (rendering) no email found
+  Minnesota Canna... (rendering) no email found
+  The Stash & Co... (rendering) no email (IG: https://instagram.com/thestashnco)
+  higherplace... (rendering) no email found
+  Anoka Cannabis Company... (rendering) no email (IG: https://instagram.com/anokadispo)
+  La Canna... (rendering) no email found
+  Lake Leaf Dispensary... (rendering) no email found
+  MN Roots Alexandria... (rendering) no email found
+  MnLooN - Minneapolis... (rendering) no email found
+  Aurora Cannabis MN... (rendering) no email found
+  Fort Road Cannabis... (rendering) no email found
+  Twin Cities Cannabis... (rendering) no email found
+  skip (weedmaps): Cali Cannabis Dispensary Uptown
+  skip (weedmaps): Watchtower Dispensary
+  skip (weedmaps): Potshotz
+  skip (weedmaps): Holy Smokes Cannabis
+  skip (weedmaps): Fullmelt Factory
+  Litt Dispensaries LLC... (rendering) no email (IG: https://instagram.com/squarespace)
+  skip (weedmaps): Grazzhopper
+  skip (weedmaps): O'Buds Dispensary
+  MN Roots Jenkins... (rendering) no email found
+  Ishkode Dispensary... (rendering) no email found
+  Pot Mama's - Edina... (rendering) no email (IG: https://instagram.com/potmamasboutique)
+  Verist Fields... (rendering) no email (IG: https://instagram.com/veristfields)
+  Pot Mama's... (rendering) no email (IG: https://instagram.com/potmamasboutique)
+
+Done. 1/44 new emails found.
+Cache: outreach/dispensary-emails.json
+
+Next: re-run build_contact_list.js to update the CSV/markdown.
+Generated contact list:
+  CSV:      outreach/dispensary-contacts.csv
+  Markdown: outreach/dispensary-contacts.md
+  141 dispensaries (66 metro, 75 greater MN)
+  With phone: 87
+  With website: 91
+emails: 60 · social(IG): 61
+
+ ⛅️ wrangler 4.103.0
+────────────────────
+Resource location: remote 
+
+Writing the contents of /Users/joshsundby/Code/apps/twincitycannabis/.kv-index_emails.json to the key "index:emails" on namespace id: "71b77df77ea74522ab66c82e20cc9339".
+
+ ⛅️ wrangler 4.103.0
+────────────────────
+Resource location: remote 
+
+Writing the contents of /Users/joshsundby/Code/apps/twincitycannabis/.kv-index_social.json to the key "index:social" on namespace id: "71b77df77ea74522ab66c82e20cc9339".
+Synced contacts to KV. Refresh the admin dashboard to see them.
+==== refresh done:  Sun Jun 21 05:35:49 CDT 2026 ====

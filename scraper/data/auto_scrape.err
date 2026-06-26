@@ -1,0 +1,84 @@
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+Traceback (most recent call last):
+  File "/Users/joshsundby/Code/apps/twincitycannabis/scraper/direct_menu_scrape.py", line 530, in <module>
+    main()
+  File "/Users/joshsundby/Code/apps/twincitycannabis/scraper/direct_menu_scrape.py", line 477, in main
+    print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+UnboundLocalError: local variable 'datetime' referenced before assignment
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+To https://github.com/JSUNDBY/twincitycannabis.git
+   ce79ca06..ea5133b4  main -> main
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+To https://github.com/JSUNDBY/twincitycannabis.git
+ ! [rejected]          main -> main (fetch first)
+error: failed to push some refs to 'https://github.com/JSUNDBY/twincitycannabis.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+error: could not apply 1adfb6a6... Auto-update: 2026-06-13 09:04 - fresh prices
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm <conflicted_files>", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+Could not apply 1adfb6a6... Auto-update: 2026-06-13 09:04 - fresh prices
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/joshsundby/Code/apps/twincitycannabis/js/data.js:1
+<<<<<<< HEAD
+^^
+
+SyntaxError: Unexpected token '<<'
+    at wrapSafe (node:internal/modules/cjs/loader:1512:18)
+    at Module._compile (node:internal/modules/cjs/loader:1534:20)
+    at Object..js (node:internal/modules/cjs/loader:1699:10)
+    at Module.load (node:internal/modules/cjs/loader:1313:32)
+    at Function._load (node:internal/modules/cjs/loader:1123:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:217:24)
+    at Module.require (node:internal/modules/cjs/loader:1335:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (/Users/joshsundby/Code/apps/twincitycannabis/scraper/generate_deals.js:22:1)
+
+Node.js v22.13.1
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+To https://github.com/JSUNDBY/twincitycannabis.git
+   c428a0f5..8c93306f  main -> main
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+To https://github.com/JSUNDBY/twincitycannabis.git
+   af4f080b..a2f46e8d  main -> main
+Updating files:  51% (146/285)Updating files:  52% (149/285)Updating files:  53% (152/285)Updating files:  54% (154/285)Updating files:  55% (157/285)Updating files:  56% (160/285)Updating files:  57% (163/285)Updating files:  58% (166/285)Updating files:  59% (169/285)Updating files:  60% (171/285)Updating files:  61% (174/285)Updating files:  62% (177/285)Updating files:  63% (180/285)Updating files:  64% (183/285)Updating files:  65% (186/285)Updating files:  66% (189/285)Updating files:  67% (191/285)Updating files:  68% (194/285)Updating files:  69% (197/285)Updating files:  70% (200/285)Updating files:  71% (203/285)Updating files:  72% (206/285)Updating files:  73% (209/285)Updating files:  74% (211/285)Updating files:  75% (214/285)Updating files:  76% (217/285)Updating files:  77% (220/285)Updating files:  78% (223/285)Updating files:  79% (226/285)Updating files:  80% (228/285)Updating files:  81% (231/285)Updating files:  82% (234/285)Updating files:  83% (237/285)Updating files:  84% (240/285)Updating files:  85% (243/285)Updating files:  86% (246/285)Updating files:  87% (248/285)Updating files:  88% (251/285)Updating files:  89% (254/285)Updating files:  90% (257/285)Updating files:  91% (260/285)Updating files:  92% (263/285)Updating files:  93% (266/285)Updating files:  94% (268/285)Updating files:  95% (271/285)Updating files:  96% (274/285)Updating files:  97% (277/285)Updating files:  98% (280/285)Updating files:  99% (283/285)Updating files: 100% (285/285)Updating files: 100% (285/285), done.
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/joshsundby/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+To https://github.com/JSUNDBY/twincitycannabis.git
+   4b6dfb43..bb5bd265  main -> main
