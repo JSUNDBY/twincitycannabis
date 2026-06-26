@@ -2325,7 +2325,7 @@ ${faqHtml}
 // traffic is young — a believer's price, not the eventual one. Change this one
 // number to reprice; the page copy reads from it. Billing is manual-first
 // (Stripe payment link) until enough brands say yes to justify automating it.
-const FEATURED_PRICE = 99;
+const FEATURED_PRICE = 249;
 const FEATURED_FOUNDING_SLOTS = 10;
 
 const buildForBrandsPage = () => {
