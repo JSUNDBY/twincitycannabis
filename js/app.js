@@ -1223,6 +1223,22 @@
         `).join('');
     }
 
+    // Deterministic per-day shuffle key. Stable within a day (no flicker when
+    // the list re-renders), but rotates at local midnight so the default
+    // dispensary order changes daily and no single shop is permanently pinned
+    // to the top — every shop gets time near the top over a week. FNV-1a hash
+    // seeded by date + id.
+    function dailyShuffleKey(id) {
+        const d = new Date();
+        const seed = String(id) + '|' + d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+        let h = 2166136261;
+        for (let i = 0; i < seed.length; i++) {
+            h ^= seed.charCodeAt(i);
+            h = Math.imul(h, 16777619);
+        }
+        return h >>> 0;
+    }
+
     // ---- RENDER: DISPENSARIES ----
     function renderDispensaries(filters = {}) {
         const container = document.getElementById('dispensary-list');
@@ -1282,32 +1298,43 @@
             }
         }
 
-        // Region grouping: metro first, then a divider, then greater MN.
-        // Within each group, paid tiers pin to the top, then by score.
+        // Region grouping: metro first, then greater MN.
+        // Default ("Best Match"): paid tiers pin to the top (labeled placement),
+        // then a DAILY ROTATION so the same shop is never permanently #1 — the
+        // order reshuffles each day and every shop gets time near the top.
+        // Explicit sorts (Most Reviews, name, Nearest) do exactly what they say,
+        // with no paid override — honest numbers, clear mind.
         const tierOrder = { platinum: 0, premium: 1, featured: 2, free: 3 };
         const regionOrder = { metro: 0, 'greater-mn': 1 };
         const isNearMe = filters.sort === 'near-me';
-        const sortFn = filters.sort
-            ? ({
-                score: (a, b) => b.tcc_score - a.tcc_score,
-                name: (a, b) => a.name.localeCompare(b.name),
-                reviews: (a, b) => b.review_count - a.review_count,
-                'near-me': (a, b) => (_getDistanceMi(a) ?? 9999) - (_getDistanceMi(b) ?? 9999),
-            })[filters.sort]
-            : null;
+        // 'score' (Best Match) intentionally has NO sortFn so it falls through
+        // to the tier + daily-rotation path below.
+        const sortFn = ({
+            name: (a, b) => a.name.localeCompare(b.name),
+            reviews: (a, b) => b.review_count - a.review_count,
+            'near-me': (a, b) => (_getDistanceMi(a) ?? 9999) - (_getDistanceMi(b) ?? 9999),
+        })[filters.sort] || null;
         if (isNearMe) {
             // Skip region grouping when sorting by distance
             results.sort((a, b) => (_getDistanceMi(a) ?? 9999) - (_getDistanceMi(b) ?? 9999));
-        } else {
+        } else if (sortFn) {
+            // Explicit factual sort — region group, then exactly what was asked.
             results.sort((a, b) => {
                 const ra = regionOrder[a.region] ?? 1;
                 const rb = regionOrder[b.region] ?? 1;
                 if (ra !== rb) return ra - rb;
-                if (sortFn) return sortFn(a, b);
+                return sortFn(a, b);
+            });
+        } else {
+            // Best Match — region, paid tiers up, then daily rotation.
+            results.sort((a, b) => {
+                const ra = regionOrder[a.region] ?? 1;
+                const rb = regionOrder[b.region] ?? 1;
+                if (ra !== rb) return ra - rb;
                 const ta = tierOrder[a.tier] ?? 3;
                 const tb = tierOrder[b.tier] ?? 3;
                 if (ta !== tb) return ta - tb;
-                return b.tcc_score - a.tcc_score;
+                return dailyShuffleKey(a.id) - dailyShuffleKey(b.id);
             });
         }
 
