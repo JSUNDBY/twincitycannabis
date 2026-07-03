@@ -517,6 +517,19 @@
                     renderCompare();
                 }
                 break;
+            case 'deals': {
+                // #deals or #deals/<filter> — deep-linkable, reload-safe filters
+                showPage('deals');
+                if (navMap[page]) {
+                    const navEl = document.getElementById(navMap[page]);
+                    if (navEl) navEl.classList.add('active');
+                }
+                const dealFilter = param || 'all';
+                renderDeals(dealFilter);
+                document.querySelectorAll('.deal-filter-tab').forEach(t =>
+                    t.classList.toggle('active', t.dataset.filter === dealFilter));
+                break;
+            }
             case 'map':
                 showPage('map');
                 renderMapPage();
@@ -2260,6 +2273,47 @@
         document.getElementById('strain-detail-products').innerHTML = products.length ?
             products.map(p => productCard(p)).join('') :
             '<div class="empty-state"><div class="empty-state-desc">No products found for this strain</div></div>';
+
+        // Where to get it — the conversion path off this page. Every shop
+        // carrying this strain with its cheapest matching product, cheapest
+        // first (a factual sort, no paid influence). Turns the strain page
+        // from a dead-end read into "here's your strain, here's your shop."
+        const whereWrap = document.getElementById('strain-detail-where-wrap');
+        const whereEl = document.getElementById('strain-detail-where');
+        if (whereWrap && whereEl) {
+            const byDisp = {};
+            products.forEach(p => {
+                Object.entries(p.prices || {}).forEach(([dispId, price]) => {
+                    if (!(price > 0)) return;
+                    const cur = byDisp[dispId];
+                    if (!cur) byDisp[dispId] = { price, product: p, count: 1 };
+                    else {
+                        cur.count++;
+                        if (price < cur.price) { cur.price = price; cur.product = p; }
+                    }
+                });
+            });
+            const rows = Object.entries(byDisp)
+                .map(([dispId, info]) => ({ d: TCC.dispensaries.find(x => x.id === dispId), ...info }))
+                .filter(r => r.d)
+                .sort((a, b) => a.price - b.price)
+                .slice(0, 9);
+            if (!rows.length) {
+                whereWrap.style.display = 'none';
+            } else {
+                whereWrap.style.display = '';
+                whereEl.innerHTML = rows.map((r, i) => `
+                    <a class="card" href="#dispensary/${esc(r.d.id)}" style="text-decoration:none;color:inherit;display:block">
+                        <div class="card-body-sm">
+                            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:0.5rem">
+                                <div class="font-display font-semibold" style="font-size:0.95rem">${esc(r.d.name)}</div>
+                                <div class="font-display font-bold text-green" style="white-space:nowrap">${TCC.formatPrice(r.price)}</div>
+                            </div>
+                            <div class="text-sm text-muted" style="margin-top:0.25rem">${esc(r.d.city || 'Twin Cities')} &middot; ${r.count} product${r.count === 1 ? '' : 's'} with this strain${i === 0 ? ' &middot; <span style="color:var(--green)">lowest price</span>' : ''}</div>
+                        </div>
+                    </a>`).join('');
+            }
+        }
     }
 
     // ---- RENDER: COMPARE ----
@@ -2473,6 +2527,14 @@
         // Header
         document.getElementById('dash-name').textContent = d.name;
         document.getElementById('dash-address').textContent = d.address;
+
+        // Context-aware back link: you almost always arrive here from this
+        // shop's detail page, so go back THERE, not to the full directory.
+        const backLink = document.getElementById('dashboard-back-link');
+        if (backLink) {
+            backLink.href = `#dispensary/${d.id}`;
+            backLink.innerHTML = `&larr; Back to ${esc(d.name)}`;
+        }
 
         // Preview / "Claim this listing" banner — this is the unclaimed view.
         // Once the shop is a verified owner, hide it (they've already claimed).
@@ -2953,7 +3015,8 @@
         container.innerHTML = `
             ${modeHeader}
             <div class="browse-result-meta">
-                <span><strong>${total.toLocaleString()}</strong> ${total === 1 ? 'product' : 'products'}${Browse.query ? ` matching "${esc(Browse.query)}"` : ''}</span>
+                <span><strong>${total.toLocaleString()}</strong> ${total === 1 ? 'product' : 'products'}${Browse.query ? ` matching "${esc(Browse.query)}"` : ''}${!Browse.watchlistOnly && Browse.category !== 'all' ? ` in ${esc((TCC.categories.find(c => c.id === Browse.category) || {}).name || Browse.category)}` : ''}</span>
+                ${!Browse.watchlistOnly && (Browse.query || Browse.category !== 'all') ? `<button type="button" class="btn btn-ghost btn-sm" id="browse-clear-filters" style="padding:0.15rem 0.6rem">&#10005; Clear filters</button>` : ''}
                 ${total > 0 ? `<span class="text-muted">Showing ${visible.length} of ${total}</span>` : ''}
             </div>
             ${total === 0 ? `
@@ -2974,6 +3037,23 @@
                 ` : ''}
             `}
         `;
+
+        // Clear-filters chip: one tap back to the unfiltered browse, with the
+        // hash, search input, and category select all reset in sync.
+        const clearBtn = document.getElementById('browse-clear-filters');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                Browse.query = '';
+                Browse.category = 'all';
+                Browse.page = 1;
+                const input = document.getElementById('browse-search-input');
+                if (input) input.value = '';
+                const catSel = document.getElementById('browse-category');
+                if (catSel) catSel.value = 'all';
+                history.replaceState(null, '', '#compare');
+                renderCompareDefault();
+            });
+        }
 
         // Wire up Load More
         const loadMoreBtn = document.getElementById('browse-load-more');
@@ -3321,6 +3401,7 @@
                     ds.style.display = show ? '' : 'none';
                     if (!show) { Browse.dosage = 'all'; ds.value = 'all'; }
                 }
+                syncBrowseHash();
                 renderCompareDefault();
             });
         });
@@ -3331,6 +3412,18 @@
                 renderCompareDefault();
             });
         });
+    }
+
+    // Keep the hash in sync with browse state (replaceState = no re-route,
+    // no scroll jump) so any filtered view survives reload and can be shared.
+    function syncBrowseHash() {
+        if (Browse.watchlistOnly) return;
+        const h = Browse.query.trim()
+            ? `#compare/search/${encodeURIComponent(Browse.query.trim())}`
+            : (Browse.category !== 'all' ? `#compare/cat/${Browse.category}` : '#compare');
+        if (window.location.hash.startsWith('#compare') || window.location.hash === '') {
+            history.replaceState(null, '', h);
+        }
     }
 
     function bindBrowseControls() {
@@ -3345,6 +3438,7 @@
             searchTimer = setTimeout(() => {
                 Browse.query = e.target.value;
                 Browse.page = 1;
+                syncBrowseHash();
                 renderCompareDefault();
             }, 200);
         });
@@ -3363,6 +3457,7 @@
             Browse.category = e.target.value;
             Browse.page = 1;
             updateDosageVisibility();
+            syncBrowseHash();
             renderCompareDefault();
         });
 
@@ -4616,12 +4711,16 @@
             });
         });
 
-        // Deal filter tabs
+        // Deal filter tabs. The chosen filter is written into the hash
+        // (#deals/bogo) via replaceState — no re-route, no scroll jump — so a
+        // reload or a shared link lands on the same filtered view.
         document.querySelectorAll('.deal-filter-tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.deal-filter-tab').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
-                renderDeals(tab.dataset.filter);
+                const f = tab.dataset.filter;
+                history.replaceState(null, '', f === 'all' ? '#deals' : `#deals/${f}`);
+                renderDeals(f);
             });
         });
 
