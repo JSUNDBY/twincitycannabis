@@ -3215,6 +3215,128 @@ if (cityMedians.length >= 3) {
   });
 }
 
+// ============================================================================
+// OPEN NOW — the comparative hours surface no single dispensary can own
+// ============================================================================
+// "dispensary open now / open late near me" is high-intent local search that
+// individual shops rank for one at a time. A directory answers it BETTER:
+// every shop's hours on one crawlable page, with client-side JS marking
+// who's open at this minute (Central time). Static hours = SEO content;
+// live open/closed = the reason shoppers come back.
+const parseHours = (s) => {
+  const m = String(s || '').match(/(\d{1,2}):?(\d{2})?\s*(am|pm)\s*-\s*(\d{1,2}):?(\d{2})?\s*(am|pm)/i);
+  if (!m) return null;
+  const toMin = (h, mm, ap) => {
+    let H = parseInt(h, 10) % 12;
+    if (/pm/i.test(ap)) H += 12;
+    return H * 60 + (mm ? parseInt(mm, 10) : 0);
+  };
+  return { open: toMin(m[1], m[2], m[3]), close: toMin(m[4], m[5], m[6]) };
+};
+const hoursShops = openShops
+  .map(d => {
+    const wd = parseHours(d.hours && d.hours.weekday);
+    const we = parseHours(d.hours && d.hours.weekend);
+    return (wd || we) ? {
+      id: d.id, name: d.name, city: d.city || '', region: d.region,
+      wdText: (d.hours.weekday || '').trim(), weText: (d.hours.weekend || '').trim(),
+      wd: wd || we, we: we || wd,
+    } : null;
+  })
+  .filter(Boolean)
+  .sort((a, b) => (b.we.close - a.we.close) || a.name.localeCompare(b.name));
+
+{
+  const canonical = `${SITE}/open-now/`;
+  const rowsHtml = hoursShops.map(s => `<tr data-wd="${s.wd.open},${s.wd.close}" data-we="${s.we.open},${s.we.close}">
+    <td><span class="open-dot" aria-hidden="true"></span><a href="/dispensaries/${esc(s.id)}/">${esc(s.name)}</a></td>
+    <td>${esc(s.city)}</td>
+    <td>${esc(s.wdText)}</td>
+    <td>${esc(s.weText)}</td>
+    <td class="open-state" style="font-weight:700">—</td>
+  </tr>`).join('\n');
+  const html = headOpen({
+    title: `Dispensaries Open Now in Minnesota — Live Hours (${today.slice(0, 4)})`,
+    description: `Which Minnesota dispensaries are open right now? Live open/closed status and hours for ${hoursShops.length} licensed dispensaries — Minneapolis, St. Paul, and statewide. Updated twice daily.`,
+    canonical,
+    schema: [{
+      '@context': 'https://schema.org', '@type': 'FAQPage',
+      mainEntity: [{ '@type': 'Question', name: 'Which dispensaries are open right now in Minnesota?', acceptedAnswer: { '@type': 'Answer', text: `Twin City Cannabis tracks live hours for ${hoursShops.length} open Minnesota dispensaries. This page shows exactly which are open at this minute, Central time, with each shop's weekday and weekend hours.` } }],
+    }],
+  }) + `
+<div class="crumbs"><a href="/">Home</a> / Open now</div>
+<h1>Dispensaries open right now</h1>
+<p style="max-width:64ch">Live open/closed status for ${hoursShops.length} licensed Minnesota dispensaries, computed from each shop's posted hours in Central time. Open shops rise to the top. Hours change on holidays — call ahead if it's one.</p>
+<style>
+  .open-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--text-muted,#8b909a);margin-right:.5rem;vertical-align:middle}
+  tr.is-open .open-dot{background:var(--green,#22c55e)}
+  tr.is-open .open-state{color:var(--green-text,#22c55e)}
+  tr.closing-soon .open-state{color:var(--amber-text,#f59e0b)}
+  tr.is-closed{opacity:.65}
+</style>
+<table id="open-now-table">
+<thead><tr><th>Dispensary</th><th>City</th><th>Mon–Fri</th><th>Sat–Sun</th><th>Status</th></tr></thead>
+<tbody>
+${rowsHtml}
+</tbody>
+</table>
+<script>
+(function(){
+  var now = new Date(new Date().toLocaleString('en-US',{timeZone:'America/Chicago'}));
+  var day = now.getDay(); // 0 Sun, 6 Sat
+  var isWeekend = (day === 0 || day === 6);
+  var mins = now.getHours()*60 + now.getMinutes();
+  var rows = Array.prototype.slice.call(document.querySelectorAll('#open-now-table tbody tr'));
+  rows.forEach(function(tr){
+    var range = (isWeekend ? tr.dataset.we : tr.dataset.wd).split(',').map(Number);
+    var open = mins >= range[0] && mins < range[1];
+    var closingSoon = open && (range[1] - mins) <= 60;
+    tr.classList.add(open ? 'is-open' : 'is-closed');
+    if (closingSoon) tr.classList.add('closing-soon');
+    tr.querySelector('.open-state').textContent = !open ? 'Closed' : closingSoon ? 'Closing soon' : 'Open';
+    tr.dataset.sort = open ? (closingSoon ? 1 : 0) : 2;
+  });
+  var tbody = document.querySelector('#open-now-table tbody');
+  rows.sort(function(a,b){ return a.dataset.sort - b.dataset.sort; }).forEach(function(tr){ tbody.appendChild(tr); });
+})();
+</script>
+<p style="margin-top:1.5rem"><a class="cta" href="/#dispensaries">Open the live map &amp; filters →</a></p>
+` + footer;
+  writePage('open-now/index.html', html);
+  extraSitemap.push({ loc: canonical, priority: '0.8', changefreq: 'daily' });
+  count++;
+  console.log(`Wrote open-now page (${hoursShops.length} shops with hours)`);
+}
+
+// Late-night answer — 31 shops open 9pm or later is a real differentiator
+{
+  const late = hoursShops
+    .filter(s => Math.max(s.wd.close, s.we.close) >= 21 * 60)
+    .sort((a, b) => Math.max(b.wd.close, b.we.close) - Math.max(a.wd.close, a.we.close));
+  if (late.length >= 5) {
+    const fmtT = (m) => {
+      const h = Math.floor(m / 60), mm = m % 60;
+      const H = ((h + 11) % 12) + 1;
+      return `${H}${mm ? ':' + String(mm).padStart(2, '0') : ''}${h >= 12 ? 'pm' : 'am'}`;
+    };
+    writeAnswer({
+      slug: 'dispensaries-open-late-minnesota',
+      question: 'Which Minnesota dispensaries are open late?',
+      answer: `As of ${todayHuman}, ${late.length} Minnesota dispensaries stay open until 9pm or later — the latest closing at ${fmtT(Math.max(late[0].wd.close, late[0].we.close))}. Most shops in the state close by 8pm, so plan your evening run from the list below.`,
+      bodyHtml: `
+<h2>Open 9pm or later</h2>
+<table>
+<thead><tr><th>Dispensary</th><th>City</th><th>Mon–Fri</th><th>Sat–Sun</th></tr></thead>
+<tbody>${late.map(s => `<tr><td><a href="/dispensaries/${esc(s.id)}/">${esc(s.name)}</a></td><td>${esc(s.city)}</td><td>${esc(s.wdText)}</td><td>${esc(s.weText)}</td></tr>`).join('\n')}</tbody>
+</table>
+<p><a href="/open-now/">See who's open right now (live) →</a></p>`,
+      extraFaqs: [
+        ['What time do dispensaries close in Minnesota?', 'Most Minnesota dispensaries close between 8pm and 10pm. Closing times are set by each shop within state rules — the table above shows the late crowd.'],
+      ],
+    });
+  }
+}
+
 // Answers hub — the quiet front door
 {
   const canonical = `${SITE}/answers/`;
