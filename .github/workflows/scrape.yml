@@ -120,7 +120,8 @@ jobs:
             scraper/data/price_history.json scraper/data/price_history_export.json \
             scraper/data/dispensaries.json scraper/data/full_menu_products.json \
             scraper/data/dispensary_shop_products.json \
-            scraper/data/last_weedmaps_scrape.txt 2>/dev/null || true
+            scraper/data/last_weedmaps_scrape.txt \
+            llms.txt 2>/dev/null || true
           # The sitemap is the manifest: stage every page the build just
           # declared in it, so no generated surface (compare/, cheapest-
           # {category}-{city}, strain-city, calculators, ...) is silently

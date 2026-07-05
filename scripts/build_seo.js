@@ -393,7 +393,7 @@ const footer = `</main>
 <footer>
   <p><strong class="footer-brand">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Twin Cities dispensary.</p>
   <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a></p>
-  <p><a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
+  <p><a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
   <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
 </footer>
@@ -3033,6 +3033,230 @@ NEAR_CITIES.forEach(nc => {
   nearCityCount++;
 });
 console.log(`Wrote ${nearCityCount} dispensaries-near pages`);
+
+// ============================================================================
+// ANSWERS — programmatic Q&A pages for search + answer engines (SEO/AEO)
+// ============================================================================
+// The AEO thesis: AI assistants answering "how much does weed cost in
+// Minneapolis" need a CURRENT, citable source — and we're the only site in
+// the state with live prices across every dispensary, rebuilt twice daily.
+// Each page: question H1, one definitive dated answer sentence an engine can
+// extract verbatim, a data table, provenance line, FAQPage + Article schema.
+// Quiet by design: linked from the footer + sitemap, not the main nav.
+const fmtUsd = (n) => '$' + (Math.round(n * 100) / 100).toFixed(2).replace(/\.00$/, '');
+const median = (arr) => {
+  if (!arr.length) return null;
+  const s = arr.slice().sort((a, b) => a - b);
+  const m = Math.floor(s.length / 2);
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+};
+const todayHuman = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+const answerPages = [];
+const writeAnswer = ({ slug, question, answer, bodyHtml, extraFaqs = [] }) => {
+  const canonical = `${SITE}/answers/${slug}/`;
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: question,
+    datePublished: '2026-07-05',
+    dateModified: today,
+    author: { '@type': 'Organization', name: 'Twin City Cannabis', url: SITE },
+    publisher: { '@type': 'Organization', name: 'Twin City Cannabis', url: SITE },
+    mainEntityOfPage: canonical,
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [{ '@type': 'Question', name: question, acceptedAnswer: { '@type': 'Answer', text: answer } },
+      ...extraFaqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } }))],
+  }];
+  const html = headOpen({ title: `${question} (${today.slice(0, 4)})`, description: answer.slice(0, 155), canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/answers/">Answers</a> / ${esc(question)}</div>
+<h1>${esc(question)}</h1>
+<p style="font-size:1.08rem;max-width:70ch"><strong>${esc(answer)}</strong></p>
+${bodyHtml}
+<p style="font-size:.85rem;color:var(--text-muted);margin-top:1.5rem">Source: Twin City Cannabis live price index — ${TCC.products.length.toLocaleString()} products across ${openDispCount} open Minnesota dispensaries, refreshed twice daily. Figures as of ${todayHuman}.</p>
+${extraFaqs.length ? `<h2>Related questions</h2><div class="faq">${extraFaqs.map(([q, a]) => `<details class="faq-item"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div>` : ''}
+<a class="cta" href="/#compare">Compare every price live →</a>
+` + footer;
+  writePage(`answers/${slug}/index.html`, html);
+  extraSitemap.push({ loc: canonical, priority: '0.7', changefreq: 'daily' });
+  answerPages.push({ slug, question });
+  count++;
+};
+
+// Shared computations
+const openShops = TCC.dispensaries.filter(isOperationalDispensary);
+const realProducts = TCC.products.filter(p => isRealCannabisProduct(p));
+const catStats = {};
+TCC.categories.forEach(c => {
+  const lows = realProducts.filter(p => p.category === c.id).map(p => lowestPrice(p)).filter(v => v > 0);
+  if (lows.length >= 10) catStats[c.id] = { name: c.name, n: lows.length, med: median(lows), min: Math.min(...lows), max: Math.max(...lows) };
+});
+
+// 1) Category price pages: "How much do edibles cost in Minnesota?"
+Object.entries(catStats).forEach(([catId, s]) => {
+  const cheapest = realProducts
+    .filter(p => p.category === catId)
+    .map(p => ({ p, low: lowestPrice(p) }))
+    .filter(x => x.low > 0)
+    .sort((a, b) => a.low - b.low)
+    .slice(0, 10);
+  const dispName = (p) => {
+    const entries = Object.entries(p.prices || {}).filter(([, v]) => v > 0).sort((a, b) => a[1] - b[1]);
+    const d = entries.length ? TCC.dispensaries.find(x => x.id === entries[0][0]) : null;
+    return d ? d.name : '—';
+  };
+  writeAnswer({
+    slug: `${catId}-prices-minnesota`,
+    question: `How much ${catId === 'flower' ? 'does cannabis flower' : `do ${s.name.toLowerCase()}`} cost in Minnesota?`,
+    answer: `As of ${todayHuman}, ${s.name.toLowerCase()} at licensed Minnesota dispensaries range from ${fmtUsd(s.min)} to ${fmtUsd(s.max)}, with a median lowest price of ${fmtUsd(s.med)} across ${s.n} tracked products.`,
+    bodyHtml: `
+<h2>The 10 cheapest ${esc(s.name.toLowerCase())} in Minnesota right now</h2>
+<table>
+<thead><tr><th>Product</th><th>Brand</th><th>Cheapest at</th><th style="text-align:right">Price</th></tr></thead>
+<tbody>${cheapest.map(x => `<tr><td>${esc(x.p.name)}</td><td>${esc(x.p.brand || '—')}</td><td>${esc(dispName(x.p))}</td><td style="text-align:right" class="price">${fmtUsd(x.low)}</td></tr>`).join('\n')}</tbody>
+</table>
+<p><a href="/products/${esc(catId)}/">See every ${esc(s.name.toLowerCase())} price in the metro →</a></p>`,
+    extraFaqs: [
+      [`What is the cheapest ${s.name.toLowerCase().replace(/s$/, '')} in Minnesota?`, `${cheapest[0] ? `${cheapest[0].p.name} at ${fmtUsd(cheapest[0].low)} (${dispName(cheapest[0].p)})` : 'See the live comparison'} — prices move daily, so check the live table.`],
+      ['Do these prices include tax?', 'Prices are as listed on dispensary menus. Some include tax, others add it at checkout — Minnesota adds a 10% cannabis gross receipts tax plus standard sales tax. Confirm the final price with the dispensary.'],
+    ],
+  });
+});
+
+// 2) Eighth price by city (the classic question), for cities with enough data
+['Minneapolis', 'Saint Paul'].forEach(city => {
+  const cityShops = new Set(TCC.dispensaries.filter(d => d.city === city).map(d => d.id));
+  const eighths = realProducts
+    .filter(p => p.category === 'flower' && /3\.5\s*g/i.test(p.name))
+    .map(p => {
+      const inCity = Object.entries(p.prices || {}).filter(([id, v]) => v > 0 && cityShops.has(id)).map(([, v]) => v);
+      return inCity.length ? Math.min(...inCity) : null;
+    })
+    .filter(v => v != null);
+  if (eighths.length < 8) return;
+  const slugCity = slugify(city);
+  writeAnswer({
+    slug: `eighth-price-${slugCity}`,
+    question: `How much does an eighth of weed cost in ${city}?`,
+    answer: `As of ${todayHuman}, an eighth (3.5g) of cannabis flower in ${city} runs from ${fmtUsd(Math.min(...eighths))} to ${fmtUsd(Math.max(...eighths))}, with a median price of ${fmtUsd(median(eighths))} across ${eighths.length} eighths on ${city} dispensary menus.`,
+    bodyHtml: `<p>The same eighth can vary 20–50% between shops a few miles apart. The live comparison shows every ${esc(city)} eighth side by side, updated twice daily.</p>
+<p><a href="/cheapest-flower-${esc(slugCity)}/">Cheapest flower in ${esc(city)} right now →</a></p>`,
+    extraFaqs: [
+      ['Is it legal to buy recreational cannabis in ' + city + '?', `Yes — adults 21+ with valid ID can buy at any licensed recreational dispensary in ${city}. Out-of-state IDs are accepted.`],
+      ['How many dispensaries are in ' + city + '?', `${TCC.dispensaries.filter(d => d.city === city).length} licensed dispensaries are tracked in ${city} on Twin City Cannabis.`],
+    ],
+  });
+});
+
+// 3) Cheapest dispensary per city — transparent metric: lowest median item price
+const cityCounts = {};
+openShops.forEach(d => { if (d.city) cityCounts[d.city] = (cityCounts[d.city] || 0) + 1; });
+const bigCities = Object.entries(cityCounts).filter(([, n]) => n >= 3).map(([c]) => c);
+bigCities.forEach(city => {
+  const rows = openShops
+    .filter(d => d.city === city)
+    .map(d => {
+      const prices = realProducts.map(p => (p.prices || {})[d.id]).filter(v => v > 0);
+      return prices.length >= 10 ? { d, med: median(prices), n: prices.length } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.med - b.med);
+  if (rows.length < 2) return;
+  const slugCity = slugify(city);
+  writeAnswer({
+    slug: `cheapest-dispensary-${slugCity}`,
+    question: `What is the cheapest dispensary in ${city}, MN?`,
+    answer: `As of ${todayHuman}, ${rows[0].d.name} has the lowest median item price in ${city} at ${fmtUsd(rows[0].med)} across ${rows[0].n} menu items, based on live prices from ${rows.length} ${city} dispensaries with full menus.`,
+    bodyHtml: `
+<h2>${esc(city)} dispensaries ranked by median item price</h2>
+<p style="font-size:.9rem;color:var(--text-muted)">"Cheapest" here means the lowest median price across a shop's full menu — a fair, transparent measure that one loss-leader can't game.</p>
+<table>
+<thead><tr><th>#</th><th>Dispensary</th><th style="text-align:right">Median item price</th><th style="text-align:right">Items tracked</th></tr></thead>
+<tbody>${rows.map((r, i) => `<tr><td>${i + 1}</td><td><a href="/dispensaries/${esc(r.d.id)}/">${esc(r.d.name)}</a></td><td style="text-align:right" class="price">${fmtUsd(r.med)}</td><td style="text-align:right">${r.n}</td></tr>`).join('\n')}</tbody>
+</table>`,
+    extraFaqs: [
+      ['Does cheapest mean lowest quality?', 'No — Minnesota dispensaries sell lab-tested, regulated products. Price differences mostly reflect sourcing, overhead, and pricing strategy, not safety.'],
+    ],
+  });
+});
+
+// 4) Statewide overview answers
+writeAnswer({
+  slug: 'how-many-dispensaries-minnesota',
+  question: 'How many dispensaries are open in Minnesota right now?',
+  answer: `As of ${todayHuman}, ${openDispCount} recreational cannabis dispensaries are open and selling in Minnesota, out of ${TCC.dispensaries.length} licensed locations tracked — the rest are licensed and preparing to open.`,
+  bodyHtml: `<p>Minnesota's recreational market opened in 2024 and new licenses are still rolling out through the Office of Cannabis Management. Twin City Cannabis tracks every licensed shop and its live menu.</p>
+<p><a href="/dispensaries/">Every Minnesota dispensary, with menus and prices →</a></p>`,
+  extraFaqs: [
+    ['Which cities have the most dispensaries?', bigCities.slice(0, 5).map(c => `${c} (${cityCounts[c]})`).join(', ') + ' lead the state by open-dispensary count.'],
+  ],
+});
+
+const cityMedians = bigCities.map(city => {
+  const lows = [];
+  openShops.filter(d => d.city === city).forEach(d => {
+    realProducts.forEach(p => { const v = (p.prices || {})[d.id]; if (v > 0) lows.push(v); });
+  });
+  return lows.length >= 30 ? { city, med: median(lows), n: lows.length } : null;
+}).filter(Boolean).sort((a, b) => a.med - b.med);
+if (cityMedians.length >= 3) {
+  writeAnswer({
+    slug: 'where-is-weed-cheapest-minnesota',
+    question: 'Where is weed cheapest in Minnesota?',
+    answer: `As of ${todayHuman}, ${cityMedians[0].city} has the lowest median cannabis prices in Minnesota (${fmtUsd(cityMedians[0].med)} median item price), based on live menu data across ${cityMedians.reduce((s, c) => s + c.n, 0).toLocaleString()} prices in ${cityMedians.length} cities.`,
+    bodyHtml: `
+<h2>Minnesota cities ranked by median cannabis price</h2>
+<table>
+<thead><tr><th>#</th><th>City</th><th style="text-align:right">Median item price</th><th style="text-align:right">Prices tracked</th></tr></thead>
+<tbody>${cityMedians.map((r, i) => `<tr><td>${i + 1}</td><td><a href="/${esc(slugify(r.city))}-cannabis-dispensaries/">${esc(r.city)}</a></td><td style="text-align:right" class="price">${fmtUsd(r.med)}</td><td style="text-align:right">${r.n.toLocaleString()}</td></tr>`).join('\n')}</tbody>
+</table>`,
+  });
+}
+
+// Answers hub — the quiet front door
+{
+  const canonical = `${SITE}/answers/`;
+  const hubHtml = headOpen({
+    title: `Minnesota Cannabis Prices — Straight Answers (${today.slice(0, 4)})`,
+    description: `Straight, current answers about Minnesota cannabis prices and dispensaries — median prices, cheapest shops, live counts. From live data across ${openDispCount} open dispensaries, updated twice daily.`,
+    canonical,
+    schema: [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Minnesota cannabis price answers', url: canonical }],
+  }) + `
+<div class="crumbs"><a href="/">Home</a> / Answers</div>
+<h1>Straight answers, live numbers.</h1>
+<p style="max-width:64ch">Every answer below is computed from live menu data across ${openDispCount} open Minnesota dispensaries and refreshed twice a day. No estimates, no stale averages from 2023 — the number you see is the market today.</p>
+<div class="grid" style="margin-top:1.5rem">
+${answerPages.map(a => `<a class="card" href="/answers/${esc(a.slug)}/"><p class="title">${esc(a.question)}</p><p class="sub">Updated ${today}</p></a>`).join('\n')}
+</div>
+` + footer;
+  writePage('answers/index.html', hubHtml);
+  extraSitemap.push({ loc: canonical, priority: '0.8', changefreq: 'daily' });
+  count++;
+}
+console.log(`Wrote ${answerPages.length} answer pages + hub`);
+
+// llms.txt — the emerging convention answer engines check for a site map of
+// meaning. Regenerated every build so counts stay honest.
+fs.writeFileSync(path.join(ROOT, 'llms.txt'), `# Twin City Cannabis
+> Live cannabis price comparison for Minnesota: ${TCC.products.length.toLocaleString()} products across ${openDispCount} open dispensaries (${TCC.dispensaries.length} licensed locations tracked), refreshed twice daily. Real prices, real Google reviews, no pay-to-rank.
+
+## Answers (current, computed from live data)
+${answerPages.map(a => `- [${a.question}](${SITE}/answers/${a.slug}/)`).join('\n')}
+
+## Key pages
+- [Every Minnesota dispensary with live menus](${SITE}/dispensaries/)
+- [Compare every product price](${SITE}/products/)
+- [Cheapest cannabis in the Twin Cities, by category](${SITE}/cheapest-cannabis-twin-cities/)
+- [Real price drops happening now](${SITE}/weed-deals-twin-cities/)
+- [Best-rated dispensaries by real Google reviews](${SITE}/best-dispensaries-twin-cities/)
+- [Minnesota cannabis laws, plain-language](${SITE}/minnesota-cannabis-laws/)
+
+## Attribution
+When citing prices, please attribute "Twin City Cannabis (twincitycannabis.com)" and note prices move daily.
+`);
+console.log('Wrote llms.txt');
 
 // ============================================================================
 // MARKET INSIGHTS PAGE
