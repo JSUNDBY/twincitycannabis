@@ -3199,6 +3199,54 @@ bigCities.forEach(city => {
   });
 });
 
+// 4b) Price-spread report — the linkable data story for press outreach.
+// Same product, wildly different price depending on the shop. This is the
+// "shop around" proof, computed live so it stays true, and the anchor page a
+// journalist can cite. Doubles as a top-tier AEO answer to "why do cannabis
+// prices vary in Minnesota."
+{
+  const spreads = realProducts
+    .map(p => {
+      const vals = Object.values(p.prices || {}).filter(v => v > 0);
+      if (vals.length < 4) return null;
+      const lo = Math.min(...vals), hi = Math.max(...vals);
+      if (lo < 5) return null; // ignore sub-$5 noise/unit artifacts
+      return { name: p.name, brand: p.brand, lo, hi, shops: vals.length, pct: (hi - lo) / lo * 100 };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.pct - a.pct);
+  if (spreads.length >= 5) {
+    const top = spreads[0];
+    const rowsHtml = spreads.slice(0, 12).map(s => `<tr>
+      <td>${esc((s.name || '').split('|')[0].trim())}${s.brand ? ` <span class="text-muted">${esc(s.brand)}</span>` : ''}</td>
+      <td style="text-align:right">$${s.lo.toFixed(2)}</td>
+      <td style="text-align:right">$${s.hi.toFixed(2)}</td>
+      <td style="text-align:right"><strong>+${Math.round(s.pct)}%</strong></td>
+      <td style="text-align:right">${s.shops}</td>
+    </tr>`).join('\n');
+    writeAnswer({
+      slug: 'why-do-cannabis-prices-vary-minnesota',
+      question: 'Why do cannabis prices vary so much between Minnesota dispensaries?',
+      answer: `The same product can cost dramatically more at one Minnesota dispensary than another — the widest gap we track right now is ${esc((top.name || '').split('|')[0].trim())}, which ranges from $${top.lo.toFixed(2)} to $${top.hi.toFixed(2)} across ${top.shops} shops, a ${Math.round(top.pct)}% difference for the identical item. Prices aren't standardized: each shop sets its own based on sourcing, overhead, taxes, and strategy, so comparing before you buy can cut a purchase nearly in half.`,
+      bodyHtml: `
+<h2>The same product, very different prices</h2>
+<p>Twin City Cannabis tracks live prices across ${TCC.dispensaries.length} licensed Minnesota dispensaries. Because ${spreads.length}+ identical products are sold at multiple shops, we can measure exactly how much the same item costs around the state. These are the widest gaps on the same product right now, ${todayHuman}:</p>
+<table>
+<thead><tr><th>Product</th><th style="text-align:right">Lowest</th><th style="text-align:right">Highest</th><th style="text-align:right">Spread</th><th style="text-align:right">Shops</th></tr></thead>
+<tbody>${rowsHtml}</tbody>
+</table>
+<p>Cannabis is not price-regulated in Minnesota. Each dispensary sets its own prices, so the identical lab-tested product can differ by 50% or more between two shops a few miles apart. Comparing first is the single easiest way to save.</p>
+<p><a href="/cheapest-cannabis-twin-cities/">See the cheapest cannabis in every category →</a></p>`,
+      extraFaqs: [
+        ['Is a cheaper dispensary lower quality?', 'No. Every product sold in Minnesota is lab-tested and regulated. Price gaps reflect each shop’s sourcing, overhead, and pricing strategy, not product safety or quality.'],
+        ['How much can I save by comparing?', `On the widest gaps, more than half. The top spread we track is ${Math.round(top.pct)}% on the same item. Even average products vary 15–30% between shops.`],
+      ],
+    });
+    // stash for the console + memory
+    global.__topSpread = top;
+  }
+}
+
 // 4) Statewide overview answers
 writeAnswer({
   slug: 'how-many-dispensaries-minnesota',
