@@ -67,6 +67,7 @@ jobs:
         # after the dispensary set is built, before the SEO pages are generated.
         run: |
           python scraper/merge_google_data.py || true
+          python scraper/merge_website_overrides.py || true
           python scraper/clean_orphans.py || true
         continue-on-error: true
 

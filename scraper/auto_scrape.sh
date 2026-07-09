@@ -45,6 +45,9 @@ python3 scraper/direct_menu_scrape.py --update-site
 #    weekly by a separate cron (or manually via google_places.py --fetch).
 python3 scraper/merge_google_data.py
 
+# 4b. Apply manual website overrides for shops Google Places misses
+python3 scraper/merge_website_overrides.py
+
 # 5. Drop orphaned product price refs and reviews after metro filtering
 python3 scraper/clean_orphans.py
 
