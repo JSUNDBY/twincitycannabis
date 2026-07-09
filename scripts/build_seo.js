@@ -452,8 +452,25 @@ const buildDispensaryPage = (d) => {
   const rating = d.google && d.google.rating;
   const reviewCount = (d.google && d.google.review_count) || d.review_count || 0;
 
-  const title = `${d.name} — Menu, Prices & Reviews | ${d.city}, MN`;
-  const description = `${d.name} in ${d.city}, MN. ${products.length > 0 ? `${products.length} products on the menu.` : 'Cannabis dispensary.'} ${rating ? `${rating}\u2605 from ${reviewCount} Google reviews.` : ''} Compare prices with every other Twin Cities dispensary on Twin City Cannabis.`.trim();
+  // Title + description tuned for CTR on shop-name queries — GSC (2026-07)
+  // shows these pages ranking pos 5-9 for dispensary names with thousands of
+  // impressions and near-zero clicks. The snippet has to offer what the
+  // shop's own result above us can't: today's full menu, real prices from a
+  // real dollar figure, deal count, and the comparison. Concrete numbers in
+  // the meta description are the CTR lever.
+  const lowestItem = products.length ? products[0] : null;
+  const dealCount = (TCC.deals || []).filter(x => x.dispensaryId === d.id && x.type === 'price-drop').length;
+  const title = `${d.name} — Today's Menu & Prices | ${d.city}, MN`;
+  const descBits = [];
+  if (products.length > 0) {
+    descBits.push(`${products.length} products on today's menu${lowestItem && lowestItem.prices[d.id] > 0 ? ` from $${lowestItem.prices[d.id].toFixed(0)}` : ''}`);
+  } else {
+    descBits.push('Licensed cannabis dispensary');
+  }
+  if (dealCount > 0) descBits.push(`${dealCount} live price drop${dealCount === 1 ? '' : 's'}`);
+  if (rating) descBits.push(`${rating}\u2605 (${reviewCount} Google reviews)`);
+  descBits.push('every price compared with every MN dispensary, updated twice daily');
+  const description = `${d.name}, ${d.city}, MN — ${descBits.join(' · ')}.`;
   const canonical = `${SITE}/dispensaries/${d.id}/`;
 
   // Schema.org LocalBusiness — the big SEO unlock
