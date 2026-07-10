@@ -79,8 +79,12 @@ python3 scraper/backfill_strain_type.py
 cp js/data.js /tmp/tcc_data_prebrand.js
 python3 scraper/consolidate_brands.py --apply
 python3 scraper/backfill_images.py
+# Re-categorize by name + weight and drop non-cannabis. Fixes platform
+# scrapers (dispensary.shop / Meadow) that dump every product into "flower"
+# (flavor-named gummies, beverages, even toothpaste/pipes leaked in).
+python3 scraper/recategorize_data_js.py
 "$NODE_BIN" -e 'global.window={};require("./js/data.js")' 2>/dev/null \
-  || { echo "data.js failed to parse after brand steps — reverting"; cp /tmp/tcc_data_prebrand.js js/data.js; }
+  || { echo "data.js failed to parse after data-quality steps — reverting"; cp /tmp/tcc_data_prebrand.js js/data.js; }
 
 # 7.95. Generate the real price-drop deals feed from priceHistory (no fakes).
 "$NODE_BIN" scraper/generate_deals.js

@@ -57,7 +57,7 @@ def main():
         # Trust normalize.py: it knows about flower-named accessories (e.g.
         # "Flower Mill" grinders incorrectly normalized as flower), donations,
         # rolling supplies, etc. EXCLUDE wins — drop the product entirely.
-        normalized = categorize_by_name(name, brand, raw_cat)
+        normalized = categorize_by_name(name, brand, raw_cat, weight)
         valid = ("flower", "pre-roll", "cartridge", "edible", "concentrate",
                  "topical", "tincture", "beverage")
         if normalized == "EXCLUDE" or normalized not in valid:

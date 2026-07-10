@@ -90,6 +90,7 @@ jobs:
           cp js/data.js /tmp/tcc_data_prebrand.js
           python scraper/consolidate_brands.py --apply || true
           python scraper/backfill_images.py || true
+          python scraper/recategorize_data_js.py || true
           node -e 'global.window={};require("./js/data.js")' 2>/dev/null \
             || { echo "data.js broke — reverting"; cp /tmp/tcc_data_prebrand.js js/data.js; }
         continue-on-error: true

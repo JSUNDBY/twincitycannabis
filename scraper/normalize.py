@@ -33,7 +33,12 @@ _PATTERNS = {
         r'|stash\s*jar|smell\s*proof|dugout|one\s*hitter|chillum|pipe\s*screen'
         r'|bong|rig\s*mat|torch|hemp\s*wick|filter\s*tip|joint\s*holder'
         r'|doob\s*tube|clipper|blazy\s*susan|bic\s+lighter'
-        r'|pulsar\s*scribe|tronian|battery\s*\d|button\s*battery)\b',
+        r'|pulsar\s*scribe|tronian|battery\s*\d|button\s*battery'
+        # Non-cannabis retail that platform scrapers dump into "flower":
+        # toiletries, wellness services, glassware bowls, non-THC coffee.
+        r'|tooth\s*paste|toothpaste|whitening|mouthwash|massage\s*certificate'
+        r'|massager|pressure\s*point|gift\s*certificate|healing\s*clay|clay\s*mask'
+        r'|mushroom\s*coffee|flower\s*bowl|\b1[048]\s*mm\b|face\s*wash)\b',
         re.IGNORECASE
     ),
 
@@ -160,7 +165,7 @@ _PATTERNS = {
 }
 
 
-def categorize_by_name(name, brand='', original_category=''):
+def categorize_by_name(name, brand='', original_category='', weight=''):
     """
     Determine the true category of a product based on its name.
 
@@ -183,7 +188,10 @@ def categorize_by_name(name, brand='', original_category=''):
     if not name:
         return original_category or 'flower'
 
-    text = f"{name} {brand}"
+    # Include the weight field: real flower carries a gram/oz weight there even
+    # when the name doesn't (e.g. name "Unbound Rosanna", weight "1/8 oz"), so
+    # FLOWER_ONLY_WEIGHT / BEVERAGE_SIZE can see it.
+    text = f"{name} {brand} {weight}"
 
     # 1) Reject non-products outright (donations, fees)
     if _PATTERNS['EXCLUDE_NOT_PRODUCT'].search(text):
@@ -257,10 +265,23 @@ def categorize_by_name(name, brand='', original_category=''):
     # "Indica" / "Sativa" / "Hybrid", that's flower. Some dispensaries (Sweetleaves)
     # list strain-name flower with no weight/keywords, so this is the only signal.
     orig = (original_category or '').strip().lower()
+    # Strain-type buckets are a strong flower signal (Sweetleaves lists
+    # strain-name flower with no weight, relying only on this).
     if orig in ('indica', 'sativa', 'hybrid'):
         return 'flower'
+    # A source that merely says "flower" is NOT trustworthy on its own — the
+    # platform scrapers (dispensary.shop / Meadow) dump every product into
+    # "flower" by default, so flavor-named gummies like "Skal Watermelon"
+    # (weight "each", no grams) arrive tagged flower. By this point every
+    # flower weight/keyword check above has already failed, meaning there is
+    # no gram/oz weight and no flower word anywhere. Real flower never lands
+    # here (it always carries a weight). So reclassify by best guess instead
+    # of trusting the mislabel: bottle sizes → beverage, everything else →
+    # edible (the dominant no-weight, flavor-named format).
     if orig == 'flower':
-        return 'flower'
+        if _PATTERNS['BEVERAGE_SIZE'].search(text) or re.search(r'\bfl\s*oz\b', text, re.IGNORECASE):
+            return 'beverage'
+        return 'edible'
 
     # NO fallback to other original categories — they're unreliable. Drop
     # unrecognized products. Accuracy > completeness.

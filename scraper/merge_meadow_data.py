@@ -53,7 +53,7 @@ def main():
         brand = p.get("brand") or "House"
         raw_cat = p.get("category", "")
 
-        normalized = categorize_by_name(name, brand, raw_cat)
+        normalized = categorize_by_name(name, brand, raw_cat, weight)
         valid = ("flower", "pre-roll", "cartridge", "edible", "concentrate",
                  "topical", "tincture", "beverage")
         if normalized == "EXCLUDE" or normalized not in valid:

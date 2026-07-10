@@ -49,6 +49,7 @@ def main():
         name_m = re.search(r"name:\s*'((?:[^'\\]|\\.)*)'", entry)
         brand_m = re.search(r"brand:\s*'((?:[^'\\]|\\.)*)'", entry)
         cat_m = re.search(r"category:\s*'([^']+)'", entry)
+        weight_m = re.search(r"weight:\s*'((?:[^'\\]|\\.)*)'", entry)
         if not (name_m and cat_m):
             kept.append(entry)
             continue
@@ -56,8 +57,9 @@ def main():
         name = name_m.group(1).replace("\\'", "'").replace('\\\\', '\\')
         brand = brand_m.group(1) if brand_m else ''
         old_cat = cat_m.group(1)
+        weight = weight_m.group(1) if weight_m else ''
 
-        new_cat = categorize_by_name(name, brand, old_cat)
+        new_cat = categorize_by_name(name, brand, old_cat, weight)
         if new_cat == 'EXCLUDE':
             excluded_count += 1
             continue

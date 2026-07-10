@@ -377,7 +377,7 @@ def build_price_comparison(products):
     cleaned = []
     excluded = 0
     for p in grouped.values():
-        new_cat = _smart_categorize(p["name"], p.get("brand", ""), p.get("category", ""))
+        new_cat = _smart_categorize(p["name"], p.get("brand", ""), p.get("category", ""), p.get("weight", ""))
         if new_cat == 'EXCLUDE':
             excluded += 1
             continue
