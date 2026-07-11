@@ -3753,10 +3753,12 @@ function fileHash(relPath) {
 }
 const dataHash = fileHash('js/data.js');
 const appHash  = fileHash('js/app.js');
+const cssHash  = fileHash('css/styles.css');
 indexHtml = indexHtml
   .replace(/(<script[^>]+src=)"js\/data\.js(?:\?v=[^"]*)?"/g, `$1"js/data.js?v=${dataHash}"`)
-  .replace(/(<script[^>]+src=)"js\/app\.js(?:\?v=[^"]*)?"/g,  `$1"js/app.js?v=${appHash}"`);
-console.log(`Cache-bust: data.js?v=${dataHash}, app.js?v=${appHash}`);
+  .replace(/(<script[^>]+src=)"js\/app\.js(?:\?v=[^"]*)?"/g,  `$1"js/app.js?v=${appHash}"`)
+  .replace(/(<link[^>]+href=)"css\/styles\.css(?:\?v=[^"]*)?"/g, `$1"css/styles.css?v=${cssHash}"`);
+console.log(`Cache-bust: data.js?v=${dataHash}, app.js?v=${appHash}, styles.css?v=${cssHash}`);
 
 fs.writeFileSync(indexPath, indexHtml);
 console.log('Injected internal crawl footer + fixed dead legal links into index.html');
