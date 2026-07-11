@@ -30,8 +30,9 @@ OUT_FILE = DATA_DIR / "dispensary_shop_products.json"
 # Map TCC dispensary id -> dispensary.shop hostname.
 # Add new shops here when they come online.
 KNOWN_SHOPS = [
-    ("fort-road-cannabis", "fortroadcannabis.dispensary.shop"),
+    ("fort-road-cannabis-llc", "fortroadcannabis.dispensary.shop"),
     ("twin-cities-cannabis-richfield", "twincitiescannabis.dispensary.shop"),
+    ("aurora-cannabis-prior-lake", "priorlakedispo.dispensary.shop"),
 ]
 
 # dispensary.shop categories that are never cannabis products and should
