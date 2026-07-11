@@ -21,6 +21,16 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://twincitycannabis.com';
+
+// Inline line-icons (Lucide-style) replacing emoji: self-hosted, monochrome,
+// theme-aware via currentColor, sized at 1em. Consistent stroke = calm + clean.
+const ICONS = {
+  pin: '<path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/>',
+  phone: '<path d="M21 16.5v2.6a1.8 1.8 0 0 1-2 1.8 17.8 17.8 0 0 1-7.8-2.8 17.5 17.5 0 0 1-5.4-5.4A17.8 17.8 0 0 1 3 4.9 1.8 1.8 0 0 1 4.8 3h2.6a1.8 1.8 0 0 1 1.8 1.5c.1.9.3 1.7.6 2.5a1.8 1.8 0 0 1-.4 1.9L8.3 9.6a14 14 0 0 0 5.4 5.4l1.2-1.1a1.8 1.8 0 0 1 1.9-.4c.8.3 1.6.5 2.5.6a1.8 1.8 0 0 1 1.7 1.9z"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.4 2.4 3.8 5.6 3.8 9s-1.4 6.6-3.8 9c-2.4-2.4-3.8-5.6-3.8-9S9.6 5.4 12 3z"/>',
+};
+const icon = (name) => `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ''}</svg>`;
 const WORKER = 'https://dashboard.twincitycannabis.com';
 
 // ---------- Load data.js by shimming a browser window ----------
@@ -255,6 +265,8 @@ ${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</scri
   body{background:var(--bg-primary,#0a1410);color:var(--text-primary,#f5f6f8);font-family:var(--font-body,-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif);margin:0;line-height:1.6}
   h1,h2,h3{font-family:var(--font-display,'Outfit',-apple-system,sans-serif)}
   .seo-wrap{max-width:920px;margin:0 auto;padding:2rem 1.25rem 4rem}
+  .ic{width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0}
+  .meta .ic{color:var(--text-muted,#8b909a)}
   /* Calm arrival — content rises gently on entry, like an exhale. */
   @keyframes seoArrive{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
   .seo-wrap{animation:seoArrive .5s cubic-bezier(0.25,0.1,0.25,1) both}
@@ -558,10 +570,10 @@ ${d.google && d.google.maps_url ? `<p><a href="${esc(d.google.maps_url)}" rel="n
 <h1>${esc(d.name)}</h1>
 <div class="meta">
   ${starRow ? `<span>${starRow}</span>` : ''}
-  ${d.address ? `<span>📍 ${esc(d.address)}</span>` : ''}
-  ${d.phone ? `<span>📞 ${esc(d.phone)}</span>` : ''}
-  ${d.hours && d.hours.note ? `<span>🕐 ${esc(d.hours.note)}</span>` : ''}
-  ${d.website ? `<span>🌐 <a href="${esc(d.website)}" rel="nofollow noopener" target="_blank">${d.website.includes('weedmaps.com') ? 'View on Weedmaps' : 'Visit website'} →</a></span>` : ''}
+  ${d.address ? `<span>${icon('pin')} ${esc(d.address)}</span>` : ''}
+  ${d.phone ? `<span>${icon('phone')} ${esc(d.phone)}</span>` : ''}
+  ${d.hours && d.hours.note ? `<span>${icon('clock')} ${esc(d.hours.note)}</span>` : ''}
+  ${d.website ? `<span>${icon('globe')} <a href="${esc(d.website)}" rel="nofollow noopener" target="_blank">${d.website.includes('weedmaps.com') ? 'View on Weedmaps' : 'Visit website'} →</a></span>` : ''}
 </div>
 
 <div class="brand-claim">

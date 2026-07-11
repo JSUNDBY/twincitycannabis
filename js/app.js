@@ -1907,7 +1907,7 @@
         const detailWebsite = document.getElementById('detail-website');
         if (detailWebsite) {
             detailWebsite.innerHTML = isOfficialWebsite(d)
-                ? `🌐 <a href="${esc(d.website)}" target="_blank" rel="noopener">Visit website &rarr;</a>`
+                ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;opacity:.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.4 2.4 3.8 5.6 3.8 9s-1.4 6.6-3.8 9c-2.4-2.4-3.8-5.6-3.8-9S9.6 5.4 12 3z"/></svg> <a href="${esc(d.website)}" target="_blank" rel="noopener">Visit website &rarr;</a>`
                 : '';
         }
 
