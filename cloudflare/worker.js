@@ -1067,16 +1067,23 @@ function renderPipeline() {
   if (!disps.length) return;
 
   // Count dispensaries by status
-  const counts = { all: disps.length };
+  const hasSite = d => d.website && !/weedmaps/i.test(d.website);
+  const isFormTarget = d => !d.email && hasSite(d);
+  const isWebTarget = d => !hasSite(d);
+  const counts = { all: disps.length, form: 0, web: 0 };
   STATUS_ORDER.forEach(s => counts[s] = 0);
   disps.forEach(d => {
     const s = (CRM_DATA[d.id] && CRM_DATA[d.id].status) || 'cold';
     counts[s] = (counts[s] || 0) + 1;
+    if (isFormTarget(d)) counts.form++;
+    if (isWebTarget(d)) counts.web++;
   });
 
   // Tabs
   const tabs = [
     { id: 'all', label: 'All' },
+    { id: 'form', label: 'Form outreach' },
+    { id: 'web', label: 'Web services' },
     ...STATUS_ORDER.map(s => ({ id: s, label: s.charAt(0).toUpperCase() + s.slice(1) }))
   ];
   document.getElementById('pipe-tabs').innerHTML = tabs.map(t =>
@@ -1096,7 +1103,11 @@ function renderPipeline() {
 
   // Filter + sort (interested/signed first, then by tcc_score desc)
   let filtered = disps.slice();
-  if (PIPELINE_FILTER !== 'all') {
+  if (PIPELINE_FILTER === 'form') {
+    filtered = filtered.filter(isFormTarget);
+  } else if (PIPELINE_FILTER === 'web') {
+    filtered = filtered.filter(isWebTarget);
+  } else if (PIPELINE_FILTER !== 'all') {
     filtered = filtered.filter(d => {
       const s = (CRM_DATA[d.id] && CRM_DATA[d.id].status) || 'cold';
       return s === PIPELINE_FILTER;
@@ -1137,6 +1148,14 @@ function renderPipeline() {
                 ? '<span style="color:#f59e0b;font-size:0.72rem">menu dark — missing out</span>'
                 : '') +
           '</div>' : '') +
+        (d.website && !/weedmaps/i.test(d.website) ?
+          '<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">' +
+            '<a href="' + esc(d.website) + '" target="_blank" rel="noopener" style="font-size:0.72rem;font-weight:600;color:#22c55e;text-decoration:none;border:1px solid #22c55e40;border-radius:6px;padding:2px 8px">Visit site ↗</a>' +
+            (d.email ? '' :
+              '<button type="button" class="pipe-msg" data-v="link" style="font-size:0.72rem;font-weight:600;color:#e5e7eb;background:transparent;border:1px solid #444;border-radius:6px;padding:2px 8px;cursor:pointer">Copy message</button>' +
+              '<button type="button" class="pipe-msg" data-v="nolink" title="For forms that reject links" style="font-size:0.72rem;font-weight:600;color:#9ca3af;background:transparent;border:1px solid #333;border-radius:6px;padding:2px 8px;cursor:pointer">No-link</button>') +
+          '</div>' :
+          '<div style="margin-top:6px"><button type="button" class="pipe-web" title="No website — pitch a Storefront build" style="font-size:0.72rem;font-weight:600;color:#c084fc;background:transparent;border:1px solid #7c3aed66;border-radius:6px;padding:2px 8px;cursor:pointer">Copy web pitch</button></div>') +
       '</td>' +
       '<td><span class="pipe-tcc" style="background:' + tccScoreColor(d.tcc_score) + '">' + (d.tcc_score || '—') + '</span></td>' +
       '<td style="text-align:center"><input type="checkbox" class="pipe-claimed"' + (crm.claimed ? ' checked' : '') + ' title="Owner-verified — shows the Verified Owner badge on the live listing"></td>' +
@@ -1172,6 +1191,26 @@ function renderPipeline() {
       notesTimer = setTimeout(() => saveCrm(id, { notes: notes.value }), 600);
     });
     notes.addEventListener('blur', () => { clearTimeout(notesTimer); saveCrm(id, { notes: notes.value }); });
+    // Two message variants per shop: "Copy message" includes their listing
+    // link; "No-link" strips it for contact forms that reject URLs as spam.
+    // Both route the menu ask to hello@twincitycannabis.com (not a link).
+    tr.querySelectorAll('.pipe-msg').forEach(msgBtn => {
+      msgBtn.addEventListener('click', () => {
+        const dd = DISPENSARIES.find(x => x.id === id) || {};
+        const withLink = msgBtn.dataset.v === 'link';
+        const link = withLink ? ' here: https://twincitycannabis.com/dispensaries/' + id + '/' : '';
+        const msg = (dd.menu === 'LIVE')
+          ? "Hi! I'm Josh with Twin City Cannabis, a free guide that lists every licensed Minnesota dispensary so shoppers can compare menus and prices before they visit. " + dd.name + " is already on it with your live menu" + link + ". It's free to claim your listing so you can keep your menu and deals accurate. Any questions or updates, just email me at hello@twincitycannabis.com. Not interested? No problem, let me know and I'll remove it. Thanks! — Josh"
+          : "Hi! I'm Josh with Twin City Cannabis, a free guide that lists every licensed Minnesota dispensary so shoppers can compare menus and prices before they visit. " + dd.name + " is already listed" + link + ", but we don't have your menu yet. It's free, and it sends you customers. The easy way to get it up: just email your menu to hello@twincitycannabis.com — a PDF, a photo, even a screenshot of your menu board is perfect and I'll get it live. Not interested? No problem, just let me know. Thanks! — Josh";
+        navigator.clipboard.writeText(msg).then(() => { const o = msgBtn.textContent; msgBtn.textContent = 'Copied ✓'; setTimeout(() => { msgBtn.textContent = o; }, 1500); });
+      });
+    });
+    const webBtn = tr.querySelector('.pipe-web');
+    if (webBtn) webBtn.addEventListener('click', () => {
+      const dd = DISPENSARIES.find(x => x.id === id) || {};
+      const msg = "Hi! I'm Josh with Twin City Cannabis, a free guide that lists every licensed Minnesota dispensary so shoppers can compare menus and prices. Two quick things: " + dd.name + " is already listed on our site for free, and separately — I noticed you don't have your own website yet. I build simple, clean websites for Minnesota dispensaries with your live menu built right in, so customers can easily find your hours, menu, and directions. If you'd like one, just reply or email hello@twincitycannabis.com and I'll show you what it could look like. Thanks! — Josh";
+      navigator.clipboard.writeText(msg).then(() => { const o = webBtn.textContent; webBtn.textContent = 'Copied ✓'; setTimeout(() => { webBtn.textContent = o; }, 1500); });
+    });
   });
 }
 
