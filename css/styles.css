@@ -3718,9 +3718,18 @@ html[data-theme="light"] .featured-pitch {
     margin-bottom: 0.5rem;
 }
 
+.ic {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: -0.14em;
+    flex-shrink: 0;
+}
+
 .legal-card-icon {
     font-size: 1.6rem;
     margin-bottom: 0.5rem;
+    color: var(--green);
 }
 
 .legal-card-title {
@@ -3819,6 +3828,7 @@ html[data-theme="light"] .featured-pitch {
     font-size: 2rem;
     margin-bottom: 0.75rem;
     line-height: 1;
+    color: var(--green);
 }
 
 .culture-card-title {
@@ -3851,6 +3861,7 @@ html[data-theme="light"] .featured-pitch {
     font-size: 2rem;
     flex-shrink: 0;
     line-height: 1;
+    color: var(--green);
 }
 
 @media (max-width: 768px) {

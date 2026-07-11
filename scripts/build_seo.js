@@ -1930,12 +1930,12 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
     <span class="event-countdown" data-countdown>&nbsp;</span>
   </div>
   <div class="event-body">
-    <div class="event-type">&#127863; Product Showcase</div>
+    <div class="event-type"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 22h8"/><path d="M7 10h10"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-5-8-4.5 4-5 6-5 8a5 5 0 0 0 5 5z"/></svg> Product Showcase</div>
     <div class="event-title">CannaFest 2026</div>
     <div class="event-meta">
-      <span>&#128337; Thu 6:00 &ndash; 9:00 PM</span>
-      <span>&#128205; The Lowlands, St. Paul</span>
-      <span>&#127915; $40</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/></svg> Thu 6:00 &ndash; 9:00 PM</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></svg> The Lowlands, St. Paul</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M13 5v14"/></svg> $40</span>
     </div>
     <p class="event-desc">Premium product showcase in a meet-the-makers format. Talk directly with Minnesota cannabis brands, sample products, and connect with the community.</p>
     <p class="event-audience">Good for consumers who want to explore products and meet brands face-to-face.</p>
@@ -1953,12 +1953,12 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
     <span class="event-countdown" data-countdown>&nbsp;</span>
   </div>
   <div class="event-body">
-    <div class="event-type">&#128092; Fashion &middot; Culture</div>
+    <div class="event-type"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 4 6v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6l-2-4z"/><path d="M4 6h16"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Fashion &middot; Culture</div>
     <div class="event-title">Smokin on the Runway</div>
     <p class="event-tagline">MN&rsquo;s Canna Fashion Show &mdash; &ldquo;Together Again, Rooted in Community&rdquo;</p>
     <div class="event-meta">
-      <span>&#128337; Sun 4:00 &ndash; 10:00 PM</span>
-      <span>&#128205; The Hook &amp; Ladder, 3010 Minnehaha Ave, Minneapolis</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/></svg> Sun 4:00 &ndash; 10:00 PM</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></svg> The Hook &amp; Ladder, 3010 Minnehaha Ave, Minneapolis</span>
     </div>
     <p class="event-desc">Cannabis meets fashion on the runway. A night of live shows, local cannabis culture, and community connection.</p>
     <div class="event-sponsors">
@@ -1986,11 +1986,11 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
     <span class="event-countdown" data-countdown>&nbsp;</span>
   </div>
   <div class="event-body">
-    <div class="event-type">&#127970; B2B Convention</div>
+    <div class="event-type"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg> B2B Convention</div>
     <div class="event-title">NECANN Minnesota Cannabis Convention</div>
     <div class="event-meta">
-      <span>&#128197; Two-day convention</span>
-      <span>&#128205; Minneapolis Convention Center</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Two-day convention</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></svg> Minneapolis Convention Center</span>
     </div>
     <p class="event-desc">The biggest B2B cannabis event in the state. 120+ exhibitors, 60+ speakers, thousands of attendees. Networking, education, and industry deals.</p>
     <p class="event-audience">Good for dispensary owners, industry professionals, and anyone building a cannabis business in Minnesota.</p>
@@ -2007,11 +2007,11 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
     <span class="event-countdown" data-countdown>&nbsp;</span>
   </div>
   <div class="event-body">
-    <div class="event-type">&#127881; Festival</div>
+    <div class="event-type"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 3v4M17 5h4M5 17v2M4 18h2"/></svg> Festival</div>
     <div class="event-title">Legacy Cup Minnesota</div>
     <div class="event-meta">
-      <span>&#128197; Saturday, all-day</span>
-      <span>&#128205; Surly Festival Field, Minneapolis</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Saturday, all-day</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></svg> Surly Festival Field, Minneapolis</span>
     </div>
     <p class="event-desc">Minnesota&rsquo;s first licensed cannabis festival. Flower competition, live music (past headliners include Killer Mike and Lupe Fiasco), skate demos, art, food. Running annually since 2019.</p>
     <p class="event-audience">Good for everyone. The big consumer-facing event of the year.</p>
@@ -3524,21 +3524,21 @@ const buildMarketInsightsPage = () => {
 <h1>Minnesota Cannabis Market Insights</h1>
 <p>Live trends from every licensed dispensary in Minnesota. Pulled from real menu data, refreshed multiple times daily. Last updated ${today}.</p>
 
-${drops.length > 0 ? `<h2>&#128200; This week's biggest price drops</h2>
+${drops.length > 0 ? `<h2><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></svg> This week's biggest price drops</h2>
 <p>Products where the lowest available price dropped the most across tracked dispensaries.</p>
 <table>
 <thead><tr><th>Product</th><th>Was</th><th>Now</th><th>Saved</th><th>At</th></tr></thead>
 <tbody>${dropRows}</tbody>
 </table>` : ''}
 
-<h2>&#127775; Most widely carried products</h2>
+<h2><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.2 6.6 20.2l1.2-6.1L3.2 9.9l6.2-.7z"/></svg> Most widely carried products</h2>
 <p>Products available at the most Minnesota dispensaries — strong signals of what's hot statewide.</p>
 <table>
 <thead><tr><th>#</th><th>Product</th><th>Category</th><th>Availability</th></tr></thead>
 <tbody>${widespreadRows}</tbody>
 </table>
 
-<h2>&#127942; Top-scored dispensaries</h2>
+<h2><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Top-scored dispensaries</h2>
 <p>Ranked by TCC Score, combining pricing, selection, service, and lab testing.</p>
 <table>
 <thead><tr><th>#</th><th>Dispensary</th><th>City</th><th>TCC Score</th><th>Google</th></tr></thead>

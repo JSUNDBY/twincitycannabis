@@ -1120,7 +1120,7 @@
                     </div>
                     <div style="min-width:0">
                         <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.3rem;flex-wrap:wrap">
-                            <span style="font-size:0.6rem;font-weight:700;color:#eab308;background:rgba(234,179,8,0.12);padding:0.15rem 0.55rem;border-radius:var(--radius-full);letter-spacing:1.2px">&#11088; TODAY'S PICK</span>
+                            <span style="font-size:0.6rem;font-weight:700;color:#eab308;background:rgba(234,179,8,0.12);padding:0.15rem 0.55rem;border-radius:var(--radius-full);letter-spacing:1.2px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.2 6.6 20.2l1.2-6.1L3.2 9.9l6.2-.7z"/></svg> TODAY'S PICK</span>
                             <span class="tag tag-sm" style="background:rgba(34,197,94,0.1);color:var(--green)">${esc(label)}</span>
                         </div>
                         <div class="font-display font-bold" style="font-size:1.1rem;margin-bottom:0.3rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(product.name)}</div>
@@ -3626,7 +3626,7 @@
                 ${hasRealHistory
                     ? '<div style="position:relative;height:220px"><canvas id="price-chart"></canvas></div>'
                     : `<div style="text-align:center;padding:2rem;color:var(--text-muted)">
-                        <div style="font-size:1.5rem;margin-bottom:0.5rem">&#128200;</div>
+                        <div style="font-size:1.5rem;margin-bottom:0.5rem"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></svg></div>
                         <div style="font-size:0.9rem">Price tracking just started. Check back in a few days for real trend data.</div>
                         <div style="font-size:0.8rem;margin-top:0.3rem;color:var(--text-muted)">Current lowest: ${TCC.formatPrice(lowest.price)}</div>
                        </div>`
@@ -3744,7 +3744,7 @@
     function dispensaryCard(d, variant) {
         const scoreColor = TCC.getScoreColor(d.tcc_score);
         const justOpenedBadge = isRecentlyOpened(d)
-            ? '<span class="dispensary-card-new">&#10024; Just Opened</span>'
+            ? '<span class="dispensary-card-new"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 3v4M17 5h4M5 17v2M4 18h2"/></svg> Just Opened</span>'
             : '';
 
         // Real Google rating with star rendering
@@ -4295,7 +4295,7 @@
         if (pct == null) return '';
         // Only badge the top quartile so the page reads "these are the
         // genuinely cheap ones" instead of being noise.
-        if (pct <= 10) return `<span class="tag tag-sm tag-green" title="Cheaper than 90% of ${esc(p.category)}">&#127942; Top 10% deal</span>`;
+        if (pct <= 10) return `<span class="tag tag-sm tag-green" title="Cheaper than 90% of ${esc(p.category)}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Top 10% deal</span>`;
         if (pct <= 25) return `<span class="tag tag-sm tag-green" title="Cheaper than 75% of ${esc(p.category)}">Top 25% deal</span>`;
         return '';
     }
