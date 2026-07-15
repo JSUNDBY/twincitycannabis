@@ -3879,7 +3879,7 @@
                     <div class="dispensary-card-meta">
                         <span>${Icons.clock} ${esc(d.hours?.note || d.hours?.weekday || 'Check hours')}</span>
                         ${productCount > 0 ? `<span>${Icons.leaf} ${productCount} products</span>` : ''}
-                        ${d.verified ? `<span>${Icons.verified} Verified</span>` : ''}
+                        ${d.verified ? `<span>${Icons.verified} Confirmed</span>` : ''}
                         ${d.claimed ? `<span style="color:var(--green)">${Icons.ownerVerified} Verified Owner</span>` : ''}
                     </div>
                     ${dealHtml}
