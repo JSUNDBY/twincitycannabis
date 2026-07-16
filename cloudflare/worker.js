@@ -230,9 +230,13 @@ async function handleOverridesRead(env, cors) {
   // Served here so the "Verified Owner" badge appears live, no rebuild
   // (same delivery path as tier overrides). A claimed shop need not pay /
   // have a tier, so this can add an id the tier loop above never touched.
+  const CLAIM_OK_STATUS = new Set(['replied', 'interested', 'signed']);
   const crm = (await env.TCC_OVERRIDES.get('index:crm', { type: 'json' })) || {};
   for (const [id, rec] of Object.entries(crm)) {
-    if (rec && rec.claimed) {
+    // Defense in depth: only serve the "Verified Owner" badge when the record
+    // is both claimed AND its status shows a real reply. A stray claimed flag
+    // on an outbound-only record won't light up the badge.
+    if (rec && rec.claimed && CLAIM_OK_STATUS.has(rec.status)) {
       overrides[id] = { ...(overrides[id] || {}), claimed: true };
     }
   }
@@ -739,13 +743,27 @@ async function handleCrmUpdate(request, env, cors) {
   if (!id) return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
 
   const VALID_STATUS = new Set(['cold', 'emailed', 'replied', 'interested', 'signed', 'passed']);
+  // A listing can only be "claimed" (owner-verified) once there's a real
+  // two-way interaction on record. Outbound-only states (cold/emailed) don't
+  // qualify — that's how three shops got a badge nobody asked for. To claim,
+  // the effective status must show the owner actually engaged.
+  const CLAIM_OK_STATUS = new Set(['replied', 'interested', 'signed']);
   const idx = (await env.TCC_OVERRIDES.get('index:crm', { type: 'json' })) || {};
   const cur = idx[id] || {};
   if (body.status !== undefined) cur.status = VALID_STATUS.has(body.status) ? body.status : 'cold';
   if (body.notes !== undefined) cur.notes = String(body.notes).slice(0, 2000);
   if (body.last_contacted !== undefined) cur.last_contacted = String(body.last_contacted).slice(0, 20);
   if (body.next_followup !== undefined) cur.next_followup = String(body.next_followup).slice(0, 20);
-  if (body.claimed !== undefined) cur.claimed = !!body.claimed;
+  if (body.claimed !== undefined) {
+    if (body.claimed && !CLAIM_OK_STATUS.has(cur.status)) {
+      return new Response(JSON.stringify({
+        ok: false,
+        error: 'claim_requires_reply',
+        message: `Can't mark ${id} claimed while status is "${cur.status || 'cold'}". Set status to replied, interested, or signed first — claimed means the owner actually confirmed.`,
+      }), { status: 409, headers: { 'Content-Type': 'application/json', ...cors } });
+    }
+    cur.claimed = !!body.claimed;
+  }
   cur.updated_at = new Date().toISOString();
   idx[id] = cur;
 
@@ -1217,14 +1235,24 @@ function renderPipeline() {
 async function saveCrm(id, patch) {
   const key = new URLSearchParams(location.search).get('key');
   if (!key) return;
+  // Snapshot so we can roll back if the server rejects (e.g. the claim guard).
+  const prior = { ...(CRM_DATA[id] || {}) };
   // Update local cache immediately so tabs/counts update
-  CRM_DATA[id] = { ...(CRM_DATA[id] || {}), ...patch };
+  CRM_DATA[id] = { ...prior, ...patch };
   try {
-    await fetch('/admin/crm/update?key=' + encodeURIComponent(key), {
+    const r = await fetch('/admin/crm/update?key=' + encodeURIComponent(key), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id, ...patch }),
     });
+    if (!r.ok) {
+      // Rejected (guard or auth). Roll back the optimistic change and tell why.
+      const err = await r.json().catch(() => ({}));
+      CRM_DATA[id] = prior;
+      renderPipeline();
+      alert(err.message || ('Update rejected (' + r.status + ').'));
+      return;
+    }
     // If status changed, re-render so the dispensary moves to the correct tab
     if (patch.status !== undefined) renderPipeline();
   } catch (e) { /* silent */ }
