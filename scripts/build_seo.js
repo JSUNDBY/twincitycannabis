@@ -38,6 +38,19 @@ global.window = {};
 require(path.join(ROOT, 'js/data.js'));
 const TCC = global.window.TCC || global.TCC;
 
+// Normalize city-name spelling variants so one city = one bucket. Otherwise
+// "St. Paul" and "Saint Paul" split the same city into two, fragmenting the
+// city pages and their ranking authority. Applied to the in-memory copy used
+// for all generated pages.
+if (TCC && Array.isArray(TCC.dispensaries)) {
+  const CITY_ALIASES = { 'st. paul': 'Saint Paul', 'st paul': 'Saint Paul', 'saint paul': 'Saint Paul' };
+  TCC.dispensaries.forEach(d => {
+    if (!d.city) return;
+    const canon = CITY_ALIASES[d.city.trim().toLowerCase()];
+    if (canon) d.city = canon;
+  });
+}
+
 if (!TCC || !TCC.dispensaries || !TCC.products) {
   console.error('Failed to load TCC data');
   process.exit(1);
@@ -3154,8 +3167,11 @@ Object.entries(catStats).forEach(([catId, s]) => {
   });
 });
 
-// 2) Eighth price by city (the classic question), for cities with enough data
-['Minneapolis', 'Saint Paul'].forEach(city => {
+// 2) Eighth price by city (the classic question). Auto-generates for every
+// city with enough flower data — the eighths.length < 8 guard keeps it from
+// producing thin pages for cities we don't have real menus in.
+const allCities = [...new Set(TCC.dispensaries.filter(d => d.city).map(d => d.city))];
+allCities.forEach(city => {
   const cityShops = new Set(TCC.dispensaries.filter(d => d.city === city).map(d => d.id));
   const eighths = realProducts
     .filter(p => p.category === 'flower' && /3\.5\s*g/i.test(p.name))
@@ -3164,7 +3180,12 @@ Object.entries(catStats).forEach(([catId, s]) => {
       return inCity.length ? Math.min(...inCity) : null;
     })
     .filter(v => v != null);
-  if (eighths.length < 8) return;
+  // Require 2+ shops with eighth data so the page is a real comparison, not
+  // one store dressed up as a city-wide range.
+  const eighthShops = new Set();
+  realProducts.filter(p => p.category === 'flower' && /3\.5\s*g/i.test(p.name))
+    .forEach(p => Object.entries(p.prices || {}).forEach(([id, v]) => { if (v > 0 && cityShops.has(id)) eighthShops.add(id); }));
+  if (eighths.length < 8 || eighthShops.size < 2) return;
   const slugCity = slugify(city);
   writeAnswer({
     slug: `eighth-price-${slugCity}`,
