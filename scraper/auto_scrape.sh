@@ -28,6 +28,15 @@ echo "=========================================="
 #    cycle. `git pull --rebase` keeps the Pi current with origin/main.
 git pull --rebase --quiet || echo "WARNING: git pull failed — running with local code"
 
+# Guard: a prior hard-reset or checkout can strand the repo on a detached HEAD.
+# The scrape still runs and commits, but the final `git push` then fails with
+# "not currently on a branch" — so fresh data silently never ships and the site
+# goes stale. Force back onto main (synced to origin) before doing any work.
+if ! git symbolic-ref -q HEAD >/dev/null; then
+    echo "Detached HEAD detected — reattaching to main"
+    git fetch origin main --quiet && git checkout -B main origin/main
+fi
+
 # 1. Scrape dispensary listings
 python3 scraper/scraper.py --export 2>/dev/null || echo "Dispensary scrape skipped"
 
