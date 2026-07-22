@@ -966,6 +966,15 @@ const buildBrandsIndex = (brands) => {
 <h1>Cannabis Brands in the Twin Cities</h1>
 <p>${brands.length} brands carried across 33 Minneapolis-Saint Paul dispensaries, ranked by how many distinct products we track. Click any brand to see prices and which stores carry it.</p>
 <p style="font-size:.92rem">Run one of these brands? <a href="/for-brands/">Claim your page free →</a></p>
+<div id="featured-brand-rail" style="display:none;margin:0 0 1.75rem">
+  <div style="font-size:.66rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-text,#22c55e);margin:0 0 .6rem">Featured Brand</div>
+  <a id="fb-card" href="/brands/" style="position:relative;display:flex;align-items:center;gap:1rem;padding:1.35rem 1.5rem;border:1px solid rgba(34,197,94,0.4);border-radius:16px;background:linear-gradient(160deg,rgba(34,197,94,0.08),rgba(255,255,255,0.02));box-shadow:0 0 40px rgba(34,197,94,0.08);text-decoration:none">
+    <span style="position:absolute;top:-.7rem;left:1.4rem;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#16a34a,#22c55e);padding:.3rem .7rem;border-radius:999px">★ Featured</span>
+    <span style="flex:1;min-width:0"><span class="fb-name" style="display:block;font-weight:700;font-size:1.25rem;color:var(--text-primary,#f5f6f8)"></span><span class="fb-meta" style="display:block;font-size:.9rem;color:var(--text-secondary,#b8bcc4);margin-top:.15rem"></span></span>
+    <span style="color:var(--green-text,#22c55e);font-weight:600;font-size:.92rem;white-space:nowrap">View brand →</span>
+  </a>
+</div>
+<script>(function(){fetch(${JSON.stringify(WORKER + '/brand-overrides')},{cache:'no-store'}).then(function(r){return r.ok?r.json():{};}).then(function(m){var slug=Object.keys(m).find(function(s){return m[s]&&m[s].tier==='featured';});if(!slug)return;var link=document.querySelector('a.card[href="/brands/'+slug+'/"]');var name=link?(link.querySelector('.title')||{}).textContent:slug;var meta=link?(link.querySelector('.sub')||{}).textContent:'';var card=document.getElementById('fb-card');card.href='/brands/'+slug+'/';card.querySelector('.fb-name').textContent=name||slug;card.querySelector('.fb-meta').textContent=meta||'';document.getElementById('featured-brand-rail').style.display='';}).catch(function(){});})();</script>
 <div class="grid">${cards}</div>
 ` + footer;
 };

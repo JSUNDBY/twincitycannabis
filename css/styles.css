@@ -3726,6 +3726,47 @@ html[data-theme="light"] .featured-pitch {
     flex-shrink: 0;
 }
 
+/* Featured Brand spotlight (homepage) + featured badge (brand page/rail) */
+.featured-brand-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.5rem 1.6rem;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    border-radius: 16px;
+    background: linear-gradient(160deg, rgba(34, 197, 94, 0.08), rgba(255, 255, 255, 0.02));
+    box-shadow: 0 0 44px rgba(34, 197, 94, 0.08);
+    text-decoration: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+.featured-brand-card:hover {
+    border-color: rgba(34, 197, 94, 0.7);
+    box-shadow: 0 0 60px rgba(34, 197, 94, 0.14);
+}
+.featured-brand-badge {
+    position: absolute;
+    top: -0.7rem;
+    left: 1.4rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(135deg, var(--green-dim, #16a34a), var(--green, #22c55e));
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+}
+.featured-brand-body { flex: 1; min-width: 0; }
+.featured-brand-name { font-size: 1.35rem; color: var(--text-primary); letter-spacing: -0.5px; }
+.featured-brand-meta { margin-top: 0.2rem; }
+.featured-brand-cta { color: var(--green); font-weight: 600; font-size: 0.95rem; white-space: nowrap; }
+.brand-featured-tag {
+    color: #fff;
+    background: linear-gradient(135deg, var(--green-dim, #16a34a), var(--green, #22c55e));
+    border-color: transparent !important;
+}
+
 .legal-card-icon {
     font-size: 1.6rem;
     margin-bottom: 0.5rem;

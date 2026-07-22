@@ -608,6 +608,7 @@
         renderPriceByCity();
         renderShopRotation();
         renderFeaturedDispensaries();
+        renderFeaturedBrand();
         renderRecentlyOpened();
         renderTrendingProducts();
         renderPopularStrains();
@@ -1193,6 +1194,37 @@
                 </div>
             </div>
         `).join('');
+    }
+
+    // Featured brand — one paid/trial brand promoted on the homepage. Slug +
+    // tier come from the worker's /brand-overrides (tier=featured, auto-expires
+    // via valid_until). Cached so the brands page + brand page reuse one fetch.
+    let _brandOverridesCache = null;
+    async function getBrandOverrides() {
+        if (_brandOverridesCache) return _brandOverridesCache;
+        try {
+            const r = await fetch(`${TCC_WORKER_URL}/brand-overrides`, { cache: 'no-store' });
+            _brandOverridesCache = r.ok ? await r.json() : {};
+        } catch (_) { _brandOverridesCache = {}; }
+        return _brandOverridesCache;
+    }
+    async function renderFeaturedBrand() {
+        const section = document.getElementById('featured-brand-section');
+        if (!section) return;
+        const ov = await getBrandOverrides();
+        const slug = Object.keys(ov).find(s => ov[s] && ov[s].tier === 'featured');
+        const b = slug ? _getBrandIndex().find(x => x.slug === slug) : null;
+        if (!b) { section.style.display = 'none'; return; }
+        const carriers = new Set();
+        TCC.products.forEach(p => {
+            if (brandSlugify(p.brand || '') !== slug) return;
+            Object.entries(p.prices || {}).forEach(([id, v]) => { if (v > 0) carriers.add(id); });
+        });
+        section.querySelector('.featured-brand-name').textContent = b.name;
+        section.querySelector('.featured-brand-meta').textContent =
+            `${b.count} product${b.count === 1 ? '' : 's'} · carried at ${carriers.size} dispensar${carriers.size === 1 ? 'y' : 'ies'}`;
+        document.getElementById('featured-brand-link').setAttribute('href', `#brand/${slug}`);
+        section.style.display = '';
     }
 
     function renderComingSoon() {
@@ -2414,6 +2446,7 @@
             <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:.4rem">
                 <h1 class="font-display font-bold text-3xl tracking-tight">${esc(brandName)}</h1>
                 <span class="tag" id="brand-verified-tag" style="display:none;color:var(--green);border-color:var(--green)">✓ Verified Brand</span>
+                <span class="tag brand-featured-tag" id="brand-featured-tag" style="display:none">★ Featured</span>
             </div>
             <p class="text-secondary" id="brand-claim-status" style="max-width:62ch;margin-bottom:1.5rem">This page is live and working. If ${esc(brandName)} is yours, claim it below — it's free, and it puts you in control of what shoppers see.</p>
 
@@ -2507,6 +2540,10 @@
                 if (rec.verified) {
                     const tag = document.getElementById('brand-verified-tag');
                     if (tag) tag.style.display = '';
+                }
+                if (rec.tier === 'featured') {
+                    const ft = document.getElementById('brand-featured-tag');
+                    if (ft) ft.style.display = '';
                 }
                 if (rec.claimed) {
                     const status = document.getElementById('brand-claim-status');
