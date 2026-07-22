@@ -33,6 +33,18 @@ const ICONS = {
 const icon = (name) => `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ''}</svg>`;
 const WORKER = 'https://dashboard.twincitycannabis.com';
 
+// Featured-partner brand themes (mirror of FEATURED_THEMES in js/app.js) so the
+// static /brands/ rail and /featured/ page can render a brand takeover. Keyed
+// by brand slug. Embedded into client scripts as JSON.
+const FEATURED_THEMES_JSON = JSON.stringify({
+  avion: {
+    name: 'Avió Supply Co',
+    logo: '/assets/brands/avio-wordmark.png',
+    accent: '#c34632', accent2: '#e0a32e', warm: 'rgba(195,70,50,0.12)',
+    reach: 'Available at 34+ Minnesota retailers',
+  },
+});
+
 // ---------- Load data.js by shimming a browser window ----------
 global.window = {};
 require(path.join(ROOT, 'js/data.js'));
@@ -228,6 +240,7 @@ const NAV_SECTIONS = [
   { label: 'Products',     appHref: '#compare',      appId: 'nav-compare',      staticHref: '/products/' },
   { label: 'Dispensaries', appHref: '#dispensaries', appId: 'nav-dispensaries', staticHref: '/dispensaries/' },
   { label: 'Deals',        appHref: '#deals',        appId: 'nav-deals',        staticHref: '/weed-deals-twin-cities/' },
+  { label: 'Featured',     appHref: '/featured/',    appId: null,               staticHref: '/featured/' },
   { label: 'Brands',       appHref: '/brands/',      appId: null,               staticHref: '/brands/' },
   { label: 'Learn',        appHref: '#learn',        appId: 'nav-learn',        staticHref: '/minnesota-cannabis-laws/' },
 ];
@@ -967,14 +980,32 @@ const buildBrandsIndex = (brands) => {
 <p>${brands.length} brands carried across 33 Minneapolis-Saint Paul dispensaries, ranked by how many distinct products we track. Click any brand to see prices and which stores carry it.</p>
 <p style="font-size:.92rem">Run one of these brands? <a href="/for-brands/">Claim your page free →</a></p>
 <div id="featured-brand-rail" style="display:none;margin:0 0 1.75rem">
-  <div style="font-size:.66rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-text,#22c55e);margin:0 0 .6rem">Featured Brand</div>
-  <a id="fb-card" href="/brands/" style="position:relative;display:flex;align-items:center;gap:1rem;padding:1.35rem 1.5rem;border:1px solid rgba(34,197,94,0.4);border-radius:16px;background:linear-gradient(160deg,rgba(34,197,94,0.08),rgba(255,255,255,0.02));box-shadow:0 0 40px rgba(34,197,94,0.08);text-decoration:none">
-    <span style="position:absolute;top:-.7rem;left:1.4rem;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#16a34a,#22c55e);padding:.3rem .7rem;border-radius:999px">★ Featured</span>
+  <div style="font-size:.66rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-text,#22c55e);margin:0 0 .6rem" id="fb-eyebrow">Featured Brand</div>
+  <a id="fb-card" href="/brands/" style="position:relative;display:flex;align-items:center;gap:1rem;padding:1.35rem 1.5rem;border:1px solid rgba(34,197,94,0.4);border-radius:16px;background:linear-gradient(160deg,rgba(34,197,94,0.08),rgba(255,255,255,0.02));box-shadow:0 0 40px rgba(34,197,94,0.08);text-decoration:none;overflow:hidden">
+    <span style="position:absolute;top:-.7rem;left:1.4rem;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#16a34a,#22c55e);padding:.3rem .7rem;border-radius:999px">★ <span id="fb-badge-text">Featured</span></span>
+    <img id="fb-logo" alt="" style="height:46px;width:auto;display:none">
     <span style="flex:1;min-width:0"><span class="fb-name" style="display:block;font-weight:700;font-size:1.25rem;color:var(--text-primary,#f5f6f8)"></span><span class="fb-meta" style="display:block;font-size:.9rem;color:var(--text-secondary,#b8bcc4);margin-top:.15rem"></span></span>
-    <span style="color:var(--green-text,#22c55e);font-weight:600;font-size:.92rem;white-space:nowrap">View brand →</span>
+    <span id="fb-cta" style="color:var(--green-text,#22c55e);font-weight:600;font-size:.92rem;white-space:nowrap">View brand →</span>
   </a>
 </div>
-<script>(function(){fetch(${JSON.stringify(WORKER + '/brand-overrides')},{cache:'no-store'}).then(function(r){return r.ok?r.json():{};}).then(function(m){var slug=Object.keys(m).find(function(s){return m[s]&&m[s].tier==='featured';});if(!slug)return;var link=document.querySelector('a.card[href="/brands/'+slug+'/"]');var name=link?(link.querySelector('.title')||{}).textContent:slug;var meta=link?(link.querySelector('.sub')||{}).textContent:'';var card=document.getElementById('fb-card');card.href='/brands/'+slug+'/';card.querySelector('.fb-name').textContent=name||slug;card.querySelector('.fb-meta').textContent=meta||'';document.getElementById('featured-brand-rail').style.display='';}).catch(function(){});})();</script>
+<script>(function(){
+  var THEMES = ${FEATURED_THEMES_JSON};
+  fetch(${JSON.stringify(WORKER + '/brand-overrides')},{cache:'no-store'}).then(function(r){return r.ok?r.json():{};}).then(function(m){
+    var slug=Object.keys(m).find(function(s){return m[s]&&m[s].tier==='featured';});if(!slug)return;
+    var t=THEMES[slug]||{};
+    var link=document.querySelector('a.card[href="/brands/'+slug+'/"]');
+    var name=link?(link.querySelector('.title')||{}).textContent:slug;
+    var meta=link?(link.querySelector('.sub')||{}).textContent:'';
+    var card=document.getElementById('fb-card');card.href='/brands/'+slug+'/';
+    if(t.logo){var l=document.getElementById('fb-logo');l.src=t.logo;l.alt=t.name||name;l.style.display='';card.querySelector('.fb-name').style.display='none';}
+    else{card.querySelector('.fb-name').textContent=t.name||name||slug;}
+    card.querySelector('.fb-meta').textContent=t.reach||meta||'';
+    if(t.accent){card.style.borderColor=t.accent;}
+    if(t.warm){card.style.background='radial-gradient(120% 140% at 88% 20%,'+t.warm+',transparent 60%),linear-gradient(150deg,rgba(26,21,18,0.9),rgba(18,15,13,0.5))';}
+    if(t.accent2){document.getElementById('fb-cta').style.color=t.accent2;document.getElementById('fb-cta').textContent='Explore '+(t.name||name)+' →';document.getElementById('fb-badge-text').textContent='Featured Partner';}
+    document.getElementById('featured-brand-rail').style.display='';
+  }).catch(function(){});
+})();</script>
 <div class="grid">${cards}</div>
 ` + footer;
 };
@@ -2554,10 +2585,58 @@ brands.forEach(b => {
   extraSitemap.push({ loc: `${SITE}/brands/${b.slug}/`, priority: '0.6', changefreq: 'weekly' });
   count++;
 });
+const buildFeaturedPage = () => {
+  const title = 'Featured Partners — Twin City Cannabis';
+  const description = 'Featured cannabis brands on Twin City Cannabis — premium partner spotlights across the site. See who is featured, and feature your brand.';
+  const canonical = `${SITE}/featured/`;
+  return headOpen({ title, description, canonical }) + `
+<div class="crumbs"><a href="/">Home</a> / Featured</div>
+<h1>Featured on Twin City Cannabis</h1>
+<p>A featured partner gets their own spotlight across the site: the homepage, the brands directory, and a full takeover on their brand page. It is the most visible placement we offer, and it looks like this:</p>
+<div style="margin:1.5rem 0 2rem">
+  <p class="text-muted" id="fp-empty" style="font-size:.92rem">No featured partner right now.</p>
+  <a id="fp-card" href="#" style="display:none;position:relative;align-items:center;gap:1.25rem;padding:1.6rem 1.8rem;border:1px solid rgba(195,70,50,0.45);border-radius:16px;background:radial-gradient(120% 140% at 88% 20%,rgba(195,70,50,0.14),transparent 60%),linear-gradient(150deg,rgba(26,21,18,0.9),rgba(18,15,13,0.5));text-decoration:none;overflow:hidden">
+    <span style="position:absolute;top:-.7rem;left:1.4rem;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#16a34a,#22c55e);padding:.3rem .7rem;border-radius:999px">★ Featured Partner</span>
+    <img id="fp-logo" alt="" style="height:64px;width:auto;display:none">
+    <span id="fp-name" style="font-family:var(--font-display,sans-serif);font-weight:800;font-size:1.6rem;color:var(--text-primary,#f5f6f8)"></span>
+    <span style="flex:1"></span>
+    <span id="fp-cta" style="color:#e0a32e;font-weight:600;white-space:nowrap">Explore →</span>
+  </a>
+  <p id="fp-reach" class="text-secondary" style="display:none;font-size:.92rem;margin-top:.75rem"></p>
+</div>
+<div style="border:1px solid rgba(34,197,94,0.25);border-radius:14px;padding:1.5rem 1.6rem;background:rgba(34,197,94,0.04);margin-top:2rem">
+  <div style="font-family:var(--font-display,sans-serif);font-weight:700;font-size:1.15rem;margin-bottom:.4rem">Want your brand featured?</div>
+  <p class="text-secondary" style="font-size:.95rem;margin:0 0 1rem;max-width:60ch">Featured placement puts your brand in front of every shopper comparing prices in Minnesota: the homepage spotlight, the brands directory, and your own branded page. A limited number of slots.</p>
+  <a class="cta" href="/for-brands/">Feature your brand →</a>
+</div>
+<script>(function(){
+  var THEMES = ${FEATURED_THEMES_JSON};
+  fetch(${JSON.stringify(WORKER + '/brand-overrides')}, {cache:'no-store'}).then(function(r){return r.ok?r.json():{};}).then(function(m){
+    var slug = Object.keys(m).find(function(s){return m[s]&&m[s].tier==='featured';});
+    if(!slug) return;
+    var t = THEMES[slug] || {};
+    var card = document.getElementById('fp-card');
+    card.href = '/brands/'+slug+'/';
+    if(t.logo){ var l=document.getElementById('fp-logo'); l.src=t.logo; l.alt=t.name||slug; l.style.display=''; }
+    else { document.getElementById('fp-name').textContent = t.name || slug; }
+    if(t.accent){ card.style.borderColor = t.accent; }
+    if(t.accent2){ document.getElementById('fp-cta').style.color = t.accent2; }
+    document.getElementById('fp-cta').textContent = 'Explore ' + (t.name || slug) + ' →';
+    card.style.display='flex';
+    document.getElementById('fp-empty').style.display='none';
+    if(t.reach){ var rn=document.getElementById('fp-reach'); rn.textContent=t.reach+'.'; rn.style.display=''; }
+  }).catch(function(){});
+})();</script>
+` + footer;
+};
+
 writePage('brands/index.html', buildBrandsIndex(brands));
 count++;
 writePage('for-brands/index.html', buildForBrandsPage());
 extraSitemap.push({ loc: `${SITE}/for-brands/`, priority: '0.7', changefreq: 'weekly' });
+count++;
+writePage('featured/index.html', buildFeaturedPage());
+extraSitemap.push({ loc: `${SITE}/featured/`, priority: '0.6', changefreq: 'weekly' });
 count++;
 
 // City landing pages (auto-generated for every city with ≥1 dispensary)

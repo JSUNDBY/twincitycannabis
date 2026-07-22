@@ -1553,8 +1553,8 @@ ul, ol { list-style: none; }
     font-family: var(--font-display);
     font-size: clamp(2.4rem, 7vw, 5.2rem);
     font-weight: 800;
-    letter-spacing: -2.5px;
-    line-height: 1.02;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
     margin-bottom: 1.5rem;
     color: var(--text-primary);
 }
@@ -3726,23 +3726,78 @@ html[data-theme="light"] .featured-pitch {
     flex-shrink: 0;
 }
 
-/* Featured Brand spotlight (homepage) + featured badge (brand page/rail) */
+/* Featured Brand spotlight (homepage) + featured badge (brand page/rail).
+   Themeable per brand via --fb-accent / --fb-accent2 (default = TCC green). */
 .featured-brand-card {
+    --fb-accent: #22c55e;
+    --fb-accent2: #16a34a;
+    --fb-warm: rgba(34, 197, 94, 0.08);
     position: relative;
     display: flex;
     align-items: center;
-    gap: 1.25rem;
-    padding: 1.5rem 1.6rem;
-    border: 1px solid rgba(34, 197, 94, 0.4);
+    gap: 1.5rem;
+    padding: 1.6rem 1.8rem;
+    border: 1px solid color-mix(in srgb, var(--fb-accent) 42%, transparent);
     border-radius: 16px;
-    background: linear-gradient(160deg, rgba(34, 197, 94, 0.08), rgba(255, 255, 255, 0.02));
-    box-shadow: 0 0 44px rgba(34, 197, 94, 0.08);
+    background: linear-gradient(150deg, var(--fb-warm), rgba(255, 255, 255, 0.015));
+    box-shadow: 0 0 44px color-mix(in srgb, var(--fb-accent) 9%, transparent);
     text-decoration: none;
-    transition: border-color .15s ease, box-shadow .15s ease;
+    overflow: hidden;
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
 }
 .featured-brand-card:hover {
-    border-color: rgba(34, 197, 94, 0.7);
-    box-shadow: 0 0 60px rgba(34, 197, 94, 0.14);
+    border-color: color-mix(in srgb, var(--fb-accent) 75%, transparent);
+    box-shadow: 0 0 64px color-mix(in srgb, var(--fb-accent) 16%, transparent);
+    transform: translateY(-2px);
+}
+/* Brand-takeover variant: the featured brand's own identity owns the card. */
+.featured-brand-card.is-takeover {
+    background:
+        radial-gradient(120% 140% at 88% 20%, color-mix(in srgb, var(--fb-accent) 14%, transparent), transparent 60%),
+        linear-gradient(150deg, rgba(26, 21, 18, 0.9), rgba(18, 15, 13, 0.6));
+    gap: 1.75rem;
+    padding: 1.7rem 2rem;
+}
+.featured-brand-logo { height: 62px; width: auto; flex-shrink: 0; position: relative; z-index: 2; }
+.featured-brand-plane {
+    position: absolute; right: 150px; bottom: -18px; height: 128px; width: auto;
+    opacity: 0.14; transform: rotate(-8deg); pointer-events: none; z-index: 1;
+    transition: transform .4s ease, opacity .3s ease;
+}
+.featured-brand-card:hover .featured-brand-plane { transform: rotate(-8deg) translate(10px, -6px); opacity: 0.2; }
+.featured-brand-card.is-takeover .featured-brand-cta { color: var(--fb-accent2); }
+.featured-brand-card.is-takeover .featured-brand-badge {
+    background: linear-gradient(135deg, var(--fb-accent2), var(--fb-accent));
+}
+/* Slow gold shimmer sweep on the takeover border — the signature detail. */
+.featured-brand-card.is-takeover::after {
+    content: ""; position: absolute; inset: 0; border-radius: 16px; pointer-events: none; z-index: 3;
+    background: linear-gradient(105deg, transparent 40%, color-mix(in srgb, var(--fb-accent2) 22%, transparent) 50%, transparent 60%);
+    background-size: 240% 100%;
+    animation: fbShimmer 6s ease-in-out 1.2s 1 both;
+}
+@keyframes fbShimmer { 0% { background-position: 160% 0; } 100% { background-position: -60% 0; } }
+@media (prefers-reduced-motion: reduce) { .featured-brand-card.is-takeover::after { animation: none; } }
+
+/* Slim variant — a low banner (~1/3 height) that sits below the hero. */
+.featured-brand-card--slim { gap: 1rem; padding: 0.55rem 1.1rem; border-radius: 12px; }
+.featured-brand-card--slim.is-takeover { padding: 0.6rem 1.2rem; }
+.featured-brand-card--slim .featured-brand-badge {
+    position: static; top: auto; left: auto; align-self: center; white-space: nowrap;
+    font-size: 0.56rem; padding: 0.22rem 0.55rem;
+}
+.featured-brand-card--slim .featured-brand-logo { height: 34px; }
+.featured-brand-card--slim .featured-brand-plane { height: 66px; right: 128px; bottom: -10px; opacity: 0.11; }
+.featured-brand-card--slim .featured-brand-name { font-size: 1.05rem; }
+.featured-brand-card--slim .featured-brand-body { display: flex; align-items: baseline; gap: 0.6rem; }
+.featured-brand-card--slim .featured-brand-meta { font-size: 0.82rem; margin-top: 0; white-space: nowrap; }
+.featured-brand-card--slim .featured-brand-cta { font-size: 0.88rem; }
+@media (max-width: 640px) {
+    .featured-brand-card--slim { gap: 0.7rem; padding: 0.5rem 0.9rem; }
+    .featured-brand-card--slim .featured-brand-logo { height: 28px; }
+    .featured-brand-card--slim .featured-brand-plane { display: none !important; }
+    .featured-brand-card--slim .featured-brand-cta { font-size: 0.8rem; }
+    .featured-brand-card--slim .featured-brand-meta { font-size: 0.76rem; }
 }
 .featured-brand-badge {
     position: absolute;
@@ -3765,6 +3820,30 @@ html[data-theme="light"] .featured-pitch {
     color: #fff;
     background: linear-gradient(135deg, var(--green-dim, #16a34a), var(--green, #22c55e));
     border-color: transparent !important;
+}
+/* Brand page: shopper "where to buy" product grid */
+.brand-buy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+    margin: 0 0 1rem;
+}
+.brand-buy-card {
+    display: flex; flex-direction: column;
+    padding: 0.9rem 1rem; text-decoration: none;
+    border: 1px solid var(--border, rgba(255,255,255,0.08)); border-radius: 12px;
+    background: var(--bg-card, rgba(255,255,255,0.02));
+    transition: border-color .15s ease, transform .15s ease;
+}
+.brand-buy-card:hover { border-color: var(--green, #22c55e); transform: translateY(-2px); }
+.brand-buy-name { font-size: 0.95rem; line-height: 1.3; }
+.brand-buy-foot { margin-top: auto; display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
+.brand-buy-price { font-family: var(--font-display, sans-serif); font-weight: 700; font-size: 1.15rem; color: var(--green, #22c55e); }
+/* Brand page: featured-partner takeover header (logo + brand accent) */
+.brand-hero--takeover {
+    padding: 1.1rem 1.3rem; border-radius: 14px;
+    border: 1px solid color-mix(in srgb, var(--fb-accent, #c34632) 45%, transparent);
+    background: radial-gradient(120% 160% at 90% 10%, color-mix(in srgb, var(--fb-accent, #c34632) 12%, transparent), transparent 62%);
 }
 
 .legal-card-icon {

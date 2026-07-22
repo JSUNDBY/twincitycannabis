@@ -816,7 +816,7 @@
                 return { city, median, count: prices.length };
             })
             .sort((a, b) => b.count - a.count)
-            .slice(0, 8);
+            .slice(0, 5);
 
         if (rows.length === 0) {
             container.innerHTML = '';
@@ -1208,6 +1208,22 @@
         } catch (_) { _brandOverridesCache = {}; }
         return _brandOverridesCache;
     }
+    // Per-brand takeover themes: a featured brand can bring its own identity
+    // (logo, accent colors, art) so the slot feels like a premium partner, not
+    // a green card. Keyed by brand slug. Add an entry to feature a new brand rich.
+    const FEATURED_THEMES = {
+        avion: {
+            name: 'Avió Supply Co',
+            logo: 'assets/brands/avio-wordmark.png',
+            plane: 'assets/brands/avio-plane.png',
+            accent: '#c34632', accent2: '#e0a32e', warm: 'rgba(195,70,50,0.10)',
+            cta: 'Explore Avió',
+            // Brand-provided reach. TCC only scrapes live menus at ~47 shops, so
+            // our tracked shop count undercounts a brand's real retail footprint —
+            // for a featured partner we show their true reach, not our sample.
+            reach: 'Available at 34+ Minnesota retailers',
+        },
+    };
     async function renderFeaturedBrand() {
         const section = document.getElementById('featured-brand-section');
         if (!section) return;
@@ -1220,9 +1236,29 @@
             if (brandSlugify(p.brand || '') !== slug) return;
             Object.entries(p.prices || {}).forEach(([id, v]) => { if (v > 0) carriers.add(id); });
         });
-        section.querySelector('.featured-brand-name').textContent = b.name;
-        section.querySelector('.featured-brand-meta').textContent =
-            `${b.count} product${b.count === 1 ? '' : 's'} · carried at ${carriers.size} dispensar${carriers.size === 1 ? 'y' : 'ies'}`;
+        const meta = `${b.count} product${b.count === 1 ? '' : 's'} · ${carriers.size} shop${carriers.size === 1 ? '' : 's'}`;
+        const card = section.querySelector('.featured-brand-card');
+        const logo = document.getElementById('featured-brand-logo');
+        const plane = document.getElementById('featured-brand-plane');
+        const nameEl = section.querySelector('.featured-brand-name');
+        const theme = FEATURED_THEMES[slug];
+        if (theme) {
+            card.classList.add('is-takeover');
+            card.style.setProperty('--fb-accent', theme.accent);
+            card.style.setProperty('--fb-accent2', theme.accent2);
+            card.style.setProperty('--fb-warm', theme.warm);
+            logo.src = theme.logo; logo.alt = theme.name; logo.style.display = '';
+            if (theme.plane) { plane.src = theme.plane; plane.style.display = ''; }
+            nameEl.style.display = 'none';
+            document.getElementById('featured-brand-cta').innerHTML = (theme.cta || 'View brand') + ' &rarr;';
+            const badgeText = document.getElementById('featured-brand-badge-text');
+            if (badgeText) badgeText.textContent = 'Featured Partner';
+        } else {
+            nameEl.textContent = b.name; nameEl.style.display = '';
+        }
+        // A featured partner shows brand-provided reach (our scrape undercounts);
+        // everyone else shows what we actually track.
+        section.querySelector('.featured-brand-meta').textContent = (theme && theme.reach) ? theme.reach : meta;
         document.getElementById('featured-brand-link').setAttribute('href', `#brand/${slug}`);
         section.style.display = '';
     }
@@ -2442,13 +2478,38 @@
                 </div>
             </div>` : '';
 
+        // Shopper-facing "where to buy": every product, cheapest price first,
+        // and the shop that has it — each row links to that dispensary. This is
+        // what a shopper needs; the owner-facing stats live further down.
+        const buyRows = products.map(p => {
+            const offers = Object.entries(p.prices || {}).filter(([, v]) => v > 0).sort((a, b) => a[1] - b[1]);
+            if (!offers.length) return null;
+            const [cheapId, cheapPrice] = offers[0];
+            return { p, price: cheapPrice, d: TCC.getDispensary(cheapId), stores: offers.length };
+        }).filter(Boolean).sort((a, b) => a.price - b.price);
+        const buySection = buyRows.length ? `
+            <h2 class="font-display font-semibold text-xl" id="brand-buy-title" style="margin:.5rem 0 .35rem">Where to buy ${esc(brandName)}</h2>
+            <p class="text-sm text-secondary" id="brand-buy-note" style="margin:0 0 1rem">${buyRows.length} product${buyRows.length === 1 ? '' : 's'}, cheapest price first, and the shop that has it. Tap any to see the menu.</p>
+            <div class="brand-buy-grid">
+                ${buyRows.map(r => `<a class="card brand-buy-card" href="${r.d ? '#dispensary/' + esc(r.d.id) : '#compare'}">
+                    <div class="brand-buy-name font-display font-semibold">${esc(r.p.name)}</div>
+                    <div class="text-xs text-muted" style="margin:.15rem 0 .6rem">${esc(catName(r.p.category))}</div>
+                    <div class="brand-buy-foot">
+                        <span class="brand-buy-price">$${r.price.toFixed(2)}</span>
+                        <span class="text-xs text-secondary">at ${r.d ? esc(r.d.name) : '—'}${r.stores > 1 ? ` · +${r.stores - 1} more` : ''}</span>
+                    </div>
+                </a>`).join('')}
+            </div>` : '';
+
         host.innerHTML = `
-            <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:.4rem">
-                <h1 class="font-display font-bold text-3xl tracking-tight">${esc(brandName)}</h1>
+            <div class="brand-hero" id="brand-hero" style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:.4rem">
+                <img id="brand-hero-logo" alt="" style="display:none;height:56px;width:auto">
+                <h1 class="font-display font-bold text-3xl tracking-tight" id="brand-hero-name">${esc(brandName)}</h1>
                 <span class="tag" id="brand-verified-tag" style="display:none;color:var(--green);border-color:var(--green)">✓ Verified Brand</span>
-                <span class="tag brand-featured-tag" id="brand-featured-tag" style="display:none">★ Featured</span>
+                <span class="tag brand-featured-tag" id="brand-featured-tag" style="display:none">★ Featured Partner</span>
             </div>
-            <p class="text-secondary" id="brand-claim-status" style="max-width:62ch;margin-bottom:1.5rem">This page is live and working. If ${esc(brandName)} is yours, claim it below — it's free, and it puts you in control of what shoppers see.</p>
+            ${buySection}
+            <p class="text-secondary" id="brand-claim-status" style="max-width:62ch;margin:1.75rem 0 1.5rem">This page is live and working. If ${esc(brandName)} is yours, claim it below — it's free, and it puts you in control of what shoppers see.</p>
 
             <div class="home-grid-4" style="margin-bottom:2rem">
                 <div class="card"><div class="card-body" style="text-align:center">
@@ -2544,6 +2605,27 @@
                 if (rec.tier === 'featured') {
                     const ft = document.getElementById('brand-featured-tag');
                     if (ft) ft.style.display = '';
+                    const theme = FEATURED_THEMES[slug];
+                    if (theme) {
+                        const hero = document.getElementById('brand-hero');
+                        const logo = document.getElementById('brand-hero-logo');
+                        const name = document.getElementById('brand-hero-name');
+                        if (logo && theme.logo) { logo.src = theme.logo; logo.alt = theme.name; logo.style.display = ''; }
+                        if (name) name.style.display = 'none';
+                        if (hero) {
+                            hero.classList.add('brand-hero--takeover');
+                            hero.style.setProperty('--fb-accent', theme.accent);
+                            hero.style.setProperty('--fb-accent2', theme.accent2);
+                        }
+                        if (theme.name) {
+                            const title = document.getElementById('brand-buy-title');
+                            if (title) title.textContent = `Where to buy ${theme.name}`;
+                        }
+                        if (theme.reach) {
+                            const note = document.getElementById('brand-buy-note');
+                            if (note) note.innerHTML = `${theme.reach}. Below are the shops we track live prices for right now — <a href="#compare" style="color:var(--fb-accent2,#e0a32e)">more carry ${esc(theme.name || brandName)}</a>.`;
+                        }
+                    }
                 }
                 if (rec.claimed) {
                     const status = document.getElementById('brand-claim-status');
