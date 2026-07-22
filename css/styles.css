@@ -3786,7 +3786,7 @@ html[data-theme="light"] .featured-pitch {
     position: static; top: auto; left: auto; align-self: center; white-space: nowrap;
     font-size: 0.56rem; padding: 0.22rem 0.55rem;
 }
-.featured-brand-card--slim .featured-brand-logo { height: 34px; }
+.featured-brand-card--slim .featured-brand-logo { height: 48px; }
 .featured-brand-card--slim .featured-brand-plane { height: 66px; right: 128px; bottom: -10px; opacity: 0.11; }
 .featured-brand-card--slim .featured-brand-name { font-size: 1.05rem; }
 .featured-brand-card--slim .featured-brand-body { display: flex; align-items: baseline; gap: 0.6rem; }
@@ -3802,7 +3802,7 @@ html[data-theme="light"] .featured-pitch {
         row-gap: 0.5rem;
     }
     .featured-brand-card--slim .featured-brand-badge { order: 1; font-size: 0.5rem; padding: 0.22rem 0.45rem; }
-    .featured-brand-card--slim .featured-brand-logo { order: 2; height: 24px; }
+    .featured-brand-card--slim .featured-brand-logo { order: 2; height: 42px; }
     .featured-brand-card--slim .featured-brand-body { order: 3; flex: 1 1 60%; min-width: 0; }
     .featured-brand-card--slim .featured-brand-cta { order: 4; font-size: 0.82rem; white-space: nowrap; }
     .featured-brand-card--slim .featured-brand-meta { font-size: 0.8rem; white-space: normal; }
