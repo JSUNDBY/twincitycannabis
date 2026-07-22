@@ -3793,11 +3793,20 @@ html[data-theme="light"] .featured-pitch {
 .featured-brand-card--slim .featured-brand-meta { font-size: 0.82rem; margin-top: 0; white-space: nowrap; }
 .featured-brand-card--slim .featured-brand-cta { font-size: 0.88rem; }
 @media (max-width: 640px) {
-    .featured-brand-card--slim { gap: 0.7rem; padding: 0.5rem 0.9rem; }
-    .featured-brand-card--slim .featured-brand-logo { height: 28px; }
+    /* Two rows on phones: [badge · logo · CTA] on top, reach line below.
+       The single row overflows and overlaps at ~375px. */
+    .featured-brand-card--slim {
+        flex-wrap: wrap;
+        gap: 0.55rem 0.7rem;
+        padding: 0.9rem 1rem;
+        row-gap: 0.5rem;
+    }
+    .featured-brand-card--slim .featured-brand-badge { order: 1; font-size: 0.5rem; padding: 0.22rem 0.45rem; }
+    .featured-brand-card--slim .featured-brand-logo { order: 2; height: 24px; }
+    .featured-brand-card--slim .featured-brand-body { order: 3; flex: 1 1 60%; min-width: 0; }
+    .featured-brand-card--slim .featured-brand-cta { order: 4; font-size: 0.82rem; white-space: nowrap; }
+    .featured-brand-card--slim .featured-brand-meta { font-size: 0.8rem; white-space: normal; }
     .featured-brand-card--slim .featured-brand-plane { display: none !important; }
-    .featured-brand-card--slim .featured-brand-cta { font-size: 0.8rem; }
-    .featured-brand-card--slim .featured-brand-meta { font-size: 0.76rem; }
 }
 .featured-brand-badge {
     position: absolute;
