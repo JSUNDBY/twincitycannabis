@@ -1,4 +1,4 @@
-// Last auto-updated: 2026-07-22 23:03
+// Last auto-updated: 2026-07-23 07:03
 // ============================================================
 // Twin City Cannabis — Data Layer
 // Real Twin Cities dispensary data + products + strains
@@ -424,7 +424,7 @@ TCC.dispensaries = [
         lat: 45.196687,
         lng: -93.170298,
         phone: '(763) 703-4202',
-        hours: { weekday: '10:00am -  9:00pm', weekend: '10:00am -  9:00pm', note: '9:00 AM – 9:00 PM' },
+        hours: { weekday: '10:00am -  9:00pm', weekend: '10:00am -  9:00pm', note: '9:00 AM – 10:00 PM' },
         website: 'https://blainedispensary.com/',
         tier: 'free',
         tcc_score: 93,
@@ -757,7 +757,7 @@ TCC.dispensaries = [
         lat: 46.648832,
         lng: -94.336809,
         phone: '(218) 568-1061',
-        hours: { weekday: '10:00am -  9:00pm', weekend: '10:00am -  9:00pm', note: '10:00 AM – 9:00 PM' },
+        hours: { weekday: '10:00am -  9:00pm', weekend: '10:00am -  9:00pm', note: '9:00 AM – 9:00 PM' },
         website: 'http://www.mnrootsdispensary.com/',
         tier: 'free',
         tcc_score: 84,
@@ -1213,7 +1213,7 @@ TCC.dispensaries = [
         lat: 44.989754,
         lng: -93.280123,
         phone: '(612) 688-9333',
-        hours: { weekday: ' 9:00am - 10:00pm', weekend: ' 9:00am - 10:00pm', note: '10:00 AM – 9:00 PM' },
+        hours: { weekday: ' 9:00am - 10:00pm', weekend: ' 9:00am - 10:00pm', note: '10:00 AM – 10:00 PM' },
         website: 'https://sweetleavesnorthloop.com/',
         tier: 'free',
         tcc_score: 94,
@@ -3720,7 +3720,7 @@ TCC.products = [
 { id: 'p0068', name: 'Donny Burger | Big Buds | 4g', brand: 'Donny Burger', category: 'flower', strain: null, strainType: '', weight: 'each', thc: '23.4%', cbd: '0.07%',
       image: "https://images.weedmaps.com/products/002/404/732/avatar/1778619613-1774324887-440852459_5c496397-caec-464c-9d05-0c971d7590d0.png",
       prices: { 'frostbite-dispensary': 54.99, 'legacy-cannabis-1': 48.0, 'wildflower-5': 51.0 },
-      priceHistory: [48.0, 48.0, 48.0, 48.0, 48.0, 48.0, 48.0, 55.0] },
+      priceHistory: [48.0, 48.0, 48.0, 48.0, 48.0, 48.0, 48.0, 48.0] },
 { id: 'p0069', name: 'Fight Club | Big Buds | 4g', brand: 'Fight Club', category: 'flower', strain: null, strainType: '', weight: 'each', thc: '22.0%', cbd: '0.04%',
       image: "https://images.weedmaps.com/products/002/403/044/avatar/1778619467-1774324885-441322656_33a9892b-e6e0-4fc6-922b-c7f727785bd3.jpg",
       prices: { 'feelin-mn': 57.99, 'legacy-cannabis': 48.0, 'legacy-cannabis-1': 48.0 },
@@ -6880,7 +6880,7 @@ TCC.products = [
 { id: 'p0869', name: 'Campfire Cannabis Cap Junky Flower 4g', brand: 'House', category: 'flower', strain: null, strainType: '', weight: '4 g', thc: '27.8%', cbd: '0.11%',
       image: "https://images.weedmaps.com/pictures/listings/126/214/371/442747304_1776125748_1967fee6-b134-46df-be58-112f3ed44b4f.jpg",
       prices: { 'dinky-dope-dispensary': 48.0 },
-      priceHistory: [48.0, 48.0, 48.0, 48.0, 48.0, 48.0, 48.0, 48.0] },
+      priceHistory: [55.0, 55.0, 55.0, 55.0, 55.0, 55.0, 55.0, 48.0] },
 { id: 'p0870', name: 'Campfire Cannabis Fight Club Flower 4g', brand: 'House', category: 'flower', strain: null, strainType: '', weight: '4 g', thc: '21.1%', cbd: '',
       image: "https://images.weedmaps.com/pictures/listings/126/214/371/442906264_1774281040_b505596f-d02f-4ca3-b4a5-e3d47eff38eb.jpg",
       prices: { 'legit-cannabis': 48.0 },
@@ -7271,8 +7271,8 @@ TCC.products = [
       priceHistory: [48.0, 48.0, 48.0, 48.0, 48.0, 48.0, 48.0, 48.0] },
 { id: 'p0973', name: 'Concentrate Labs LLC-Live Rosin | Super Boof | INDICA | 0.5g', brand: 'Concentrate Labs LLC-Live Rosin', category: 'concentrate', strain: null, strainType: '', weight: '1/2 g', thc: '', cbd: '',
       image: "https://images.weedmaps.com/pictures/listings/354/221/970/443493243_IMG_1675.jpeg",
-      prices: { 'fullmelt-factory': 44.0 },
-      priceHistory: [44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0] },
+      prices: { 'fullmelt-factory': 42.0 },
+      priceHistory: [42.0, 42.0, 42.0, 42.0, 42.0, 42.0, 42.0, 42.0] },
 { id: 'p0974', name: 'Concord Grape | THC + CBG + Caffeine Beverage', brand: 'Concord Grape', category: 'beverage', strain: null, strainType: '', weight: 'each', thc: '10.0mg', cbd: '',
       image: "https://images.weedmaps.com/pictures/listings/764/561/187/443462466_product_images_d1e279cf-3bea-451f-bdd7-006f1b3d96e8_f63ec1c6-8ad3-4fbe-aba0-2d9b2e75a3e5_original.png",
       prices: { 'green-canopy-inc': 6.97 },
