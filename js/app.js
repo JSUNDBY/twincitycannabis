@@ -1227,8 +1227,11 @@
             name: 'Verist Fields',
             logo: 'assets/brands/verist-wordmark.webp',
             accent: '#ec0b1d', accent2: '#ff5a4d', warm: 'rgba(236,11,29,0.10)',
-            cta: 'Explore Verist Fields',
+            cta: 'Visit Verist Fields',
             reach: 'Craft cannabis dispensary · South Minneapolis',
+            // They're a dispensary — send shoppers to their store page, not the
+            // brand page. Overrides the default #brand/<slug> link.
+            link: '#dispensary/verist-fields',
         },
     };
     async function renderFeaturedBrand() {
@@ -1275,7 +1278,7 @@
         // A featured partner shows brand-provided reach (our scrape undercounts);
         // everyone else shows what we actually track.
         section.querySelector('.featured-brand-meta').textContent = (theme && theme.reach) ? theme.reach : meta;
-        document.getElementById('featured-brand-link').setAttribute('href', `#brand/${slug}`);
+        document.getElementById('featured-brand-link').setAttribute('href', (theme && theme.link) ? theme.link : `#brand/${slug}`);
         section.style.display = '';
     }
 
@@ -5144,7 +5147,11 @@
             // owner-claim (claimed:true, no tier) must not count, or the
             // scarcity number lies.
             const paidCount = Object.values(overrides).filter(o => o && o.tier).length;
-            const remaining = Math.max(0, 10 - paidCount);
+            // Featured brands flagged as a founding slot also fill one (e.g.
+            // Verist Fields for their trial). Auto-frees when the trial expires.
+            const brandOv = await getBrandOverrides();
+            const foundingBrands = Object.values(brandOv).filter(o => o && o.foundingSlot).length;
+            const remaining = Math.max(0, 10 - paidCount - foundingBrands);
             document.querySelectorAll('.founding-slots').forEach((el) => { el.textContent = remaining; });
             if (changed > 0) {
                 console.log(`[overrides] applied ${changed} tier override(s)`);

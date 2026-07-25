@@ -48,6 +48,8 @@ const FEATURED_THEMES_JSON = JSON.stringify({
     logo: '/assets/brands/verist-wordmark.webp',
     accent: '#ec0b1d', accent2: '#ff5a4d', warm: 'rgba(236,11,29,0.12)',
     reach: 'Craft cannabis dispensary · South Minneapolis',
+    cta: 'Visit Verist Fields',
+    link: '/#dispensary/verist-fields',
   },
 });
 
@@ -1003,7 +1005,7 @@ const buildBrandsIndex = (brands) => {
     var link=document.querySelector('a.card[href="/brands/'+slug+'/"]');
     var name=link?(link.querySelector('.title')||{}).textContent:slug;
     var meta=link?(link.querySelector('.sub')||{}).textContent:'';
-    var card=document.getElementById('fb-card');card.href='/brands/'+slug+'/';
+    var card=document.getElementById('fb-card');card.href=t.link||('/brands/'+slug+'/');
     if(t.logo){var l=document.getElementById('fb-logo');l.src=t.logo;l.alt=t.name||name;l.style.display='';card.querySelector('.fb-name').style.display='none';}
     else{card.querySelector('.fb-name').textContent=t.name||name||slug;}
     card.querySelector('.fb-meta').textContent=t.reach||meta||'';
@@ -2618,7 +2620,7 @@ const buildFeaturedPage = () => {
     slugs.forEach(function(slug){
       var t = THEMES[slug] || {};
       var card = document.createElement('a');
-      card.href = '/brands/'+slug+'/';
+      card.href = t.link || ('/brands/'+slug+'/');
       var bg = t.warm ? 'radial-gradient(120% 140% at 88% 20%,'+t.warm+',transparent 60%),linear-gradient(150deg,rgba(26,21,18,0.9),rgba(18,15,13,0.5))' : 'linear-gradient(150deg,rgba(34,197,94,0.08),rgba(255,255,255,0.02))';
       card.style.cssText = 'position:relative;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;padding:1.5rem 1.7rem;border:1px solid '+(t.accent||'rgba(34,197,94,0.45)')+';border-radius:16px;background:'+bg+';text-decoration:none';
       var logo = t.logo ? '<img src="'+t.logo+'" alt="'+(t.name||slug)+'" style="max-height:52px;max-width:230px;width:auto">' : '<span style="font-family:var(--font-display,sans-serif);font-weight:800;font-size:1.5rem;color:#f5f6f8">'+(t.name||slug)+'</span>';

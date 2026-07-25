@@ -263,7 +263,12 @@ async function handleBrandOverridesRead(env, cors) {
     const o = {};
     if (rec.claimed) o.claimed = true;
     if (rec.verified) o.verified = true;
-    if (rec.tier && !(rec.valid_until && Date.parse(rec.valid_until) < Date.now())) o.tier = rec.tier;
+    const tierValid = rec.tier && !(rec.valid_until && Date.parse(rec.valid_until) < Date.now());
+    if (tierValid) o.tier = rec.tier;
+    // A featured brand can be marked a "founding slot" so it fills one of the
+    // 10 founding-member slots on the pricing page. Gated by the same expiry as
+    // the tier, so it frees up automatically when the trial ends.
+    if (rec.foundingSlot && tierValid) o.foundingSlot = true;
     if (Object.keys(o).length) out[slug] = o;
   }
   return new Response(JSON.stringify(out), {

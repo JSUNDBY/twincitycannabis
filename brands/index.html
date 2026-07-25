@@ -196,7 +196,7 @@
   </a>
 </div>
 <script>(function(){
-  var THEMES = {"avion":{"name":"Avió Supply Co","logo":"/assets/brands/avio-wordmark.png","accent":"#c34632","accent2":"#e0a32e","warm":"rgba(195,70,50,0.12)","reach":"Available at 34+ Minnesota retailers"},"verist-fields":{"name":"Verist Fields","logo":"/assets/brands/verist-wordmark.webp","accent":"#ec0b1d","accent2":"#ff5a4d","warm":"rgba(236,11,29,0.12)","reach":"Craft cannabis dispensary · South Minneapolis"}};
+  var THEMES = {"avion":{"name":"Avió Supply Co","logo":"/assets/brands/avio-wordmark.png","accent":"#c34632","accent2":"#e0a32e","warm":"rgba(195,70,50,0.12)","reach":"Available at 34+ Minnesota retailers"},"verist-fields":{"name":"Verist Fields","logo":"/assets/brands/verist-wordmark.webp","accent":"#ec0b1d","accent2":"#ff5a4d","warm":"rgba(236,11,29,0.12)","reach":"Craft cannabis dispensary · South Minneapolis","cta":"Visit Verist Fields","link":"/#dispensary/verist-fields"}};
   fetch("https://dashboard.twincitycannabis.com/brand-overrides",{cache:'no-store'}).then(function(r){return r.ok?r.json():{};}).then(function(m){
     var fs=Object.keys(m).filter(function(s){return m[s]&&m[s].tier==='featured';});if(!fs.length)return;
     var slug=fs[Math.floor(Math.random()*fs.length)];
@@ -204,7 +204,7 @@
     var link=document.querySelector('a.card[href="/brands/'+slug+'/"]');
     var name=link?(link.querySelector('.title')||{}).textContent:slug;
     var meta=link?(link.querySelector('.sub')||{}).textContent:'';
-    var card=document.getElementById('fb-card');card.href='/brands/'+slug+'/';
+    var card=document.getElementById('fb-card');card.href=t.link||('/brands/'+slug+'/');
     if(t.logo){var l=document.getElementById('fb-logo');l.src=t.logo;l.alt=t.name||name;l.style.display='';card.querySelector('.fb-name').style.display='none';}
     else{card.querySelector('.fb-name').textContent=t.name||name||slug;}
     card.querySelector('.fb-meta').textContent=t.reach||meta||'';
