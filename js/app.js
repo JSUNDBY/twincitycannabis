@@ -1252,6 +1252,12 @@
         const plane = document.getElementById('featured-brand-plane');
         const nameEl = section.querySelector('.featured-brand-name');
         const theme = FEATURED_THEMES[slug];
+        // Reset — renders rotate between partners, so never leak one brand's
+        // art (e.g. Avio's plane) onto another that doesn't have it.
+        card.classList.remove('is-takeover');
+        logo.style.display = 'none';
+        plane.style.display = 'none';
+        nameEl.style.display = '';
         if (theme) {
             card.classList.add('is-takeover');
             card.style.setProperty('--fb-accent', theme.accent);

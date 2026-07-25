@@ -987,7 +987,7 @@ const buildBrandsIndex = (brands) => {
 <p style="font-size:.92rem">Run one of these brands? <a href="/for-brands/">Claim your page free →</a></p>
 <div id="featured-brand-rail" style="display:none;margin:0 0 1.75rem">
   <div style="font-size:.66rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-text,#22c55e);margin:0 0 .6rem" id="fb-eyebrow">Featured Brand</div>
-  <a id="fb-card" href="/brands/" style="position:relative;display:flex;align-items:center;gap:1rem;padding:1.35rem 1.5rem;border:1px solid rgba(34,197,94,0.4);border-radius:16px;background:linear-gradient(160deg,rgba(34,197,94,0.08),rgba(255,255,255,0.02));box-shadow:0 0 40px rgba(34,197,94,0.08);text-decoration:none;overflow:hidden">
+  <a id="fb-card" href="/brands/" style="position:relative;display:flex;align-items:center;gap:1rem;padding:1.35rem 1.5rem;border:1px solid rgba(34,197,94,0.4);border-radius:16px;background:linear-gradient(160deg,rgba(34,197,94,0.08),rgba(255,255,255,0.02));box-shadow:0 0 40px rgba(34,197,94,0.08);text-decoration:none">
     <span style="position:absolute;top:-.7rem;left:1.4rem;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#16a34a,#22c55e);padding:.3rem .7rem;border-radius:999px">★ <span id="fb-badge-text">Featured</span></span>
     <img id="fb-logo" alt="" style="height:46px;width:auto;display:none">
     <span style="flex:1;min-width:0"><span class="fb-name" style="display:block;font-weight:700;font-size:1.25rem;color:var(--text-primary,#f5f6f8)"></span><span class="fb-meta" style="display:block;font-size:.9rem;color:var(--text-secondary,#b8bcc4);margin-top:.15rem"></span></span>
@@ -2620,7 +2620,7 @@ const buildFeaturedPage = () => {
       var card = document.createElement('a');
       card.href = '/brands/'+slug+'/';
       var bg = t.warm ? 'radial-gradient(120% 140% at 88% 20%,'+t.warm+',transparent 60%),linear-gradient(150deg,rgba(26,21,18,0.9),rgba(18,15,13,0.5))' : 'linear-gradient(150deg,rgba(34,197,94,0.08),rgba(255,255,255,0.02))';
-      card.style.cssText = 'position:relative;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;padding:1.5rem 1.7rem;border:1px solid '+(t.accent||'rgba(34,197,94,0.45)')+';border-radius:16px;background:'+bg+';text-decoration:none;overflow:hidden';
+      card.style.cssText = 'position:relative;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;padding:1.5rem 1.7rem;border:1px solid '+(t.accent||'rgba(34,197,94,0.45)')+';border-radius:16px;background:'+bg+';text-decoration:none';
       var logo = t.logo ? '<img src="'+t.logo+'" alt="'+(t.name||slug)+'" style="max-height:52px;max-width:230px;width:auto">' : '<span style="font-family:var(--font-display,sans-serif);font-weight:800;font-size:1.5rem;color:#f5f6f8">'+(t.name||slug)+'</span>';
       card.innerHTML = '<span style="position:absolute;top:-.7rem;left:1.4rem;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#16a34a,#22c55e);padding:.3rem .7rem;border-radius:999px">★ Featured Partner</span>'
         + logo
