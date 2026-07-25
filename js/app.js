@@ -1232,6 +1232,8 @@
             // They're a dispensary — send shoppers to their store page, not the
             // brand page. Overrides the default #brand/<slug> link.
             link: '#dispensary/verist-fields',
+            // Live deal promoted in the banner (the Premium-tier perk).
+            deal: '15% off all White Meridian, Sour Luxxe & Platinum Jesus · in-store now',
         },
     };
     // Render ALL active featured partners as stacked slim banners — featured =
@@ -1262,9 +1264,12 @@
             const brandLabel = (theme && theme.logo)
                 ? `<img class="featured-brand-logo" src="${theme.logo}" alt="${esc(theme.name || '')}">`
                 : `<span class="featured-brand-name font-display font-bold">${esc((theme && theme.name) || (b && b.name) || slug)}</span>`;
+            const bodyInner = (theme && theme.deal)
+                ? `<span class="featured-brand-deal"><span class="fb-deal-tag">Limited deal</span>${esc(theme.deal)}</span>`
+                : `<div class="featured-brand-meta text-sm text-secondary">${esc(meta)}</div>`;
             a.innerHTML = `<span class="featured-brand-badge">${star} Featured Partner</span>`
                 + brandLabel
-                + `<div class="featured-brand-body"><div class="featured-brand-meta text-sm text-secondary">${esc(meta)}</div></div>`
+                + `<div class="featured-brand-body">${bodyInner}</div>`
                 + `<span class="featured-brand-cta">${esc((theme && theme.cta) || 'View brand')} &rarr;</span>`
                 + ((theme && theme.plane) ? `<img class="featured-brand-plane" src="${theme.plane}" alt="">` : '');
             list.appendChild(a);

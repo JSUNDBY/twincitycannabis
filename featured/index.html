@@ -194,7 +194,7 @@
   <a class="cta" href="/for-brands/">Feature your brand →</a>
 </div>
 <script>(function(){
-  var THEMES = {"avion":{"name":"Avió Supply Co","logo":"/assets/brands/avio-wordmark.png","accent":"#c34632","accent2":"#e0a32e","warm":"rgba(195,70,50,0.12)","reach":"Available at 34+ Minnesota retailers"},"verist-fields":{"name":"Verist Fields","logo":"/assets/brands/verist-wordmark.webp","accent":"#ec0b1d","accent2":"#ff5a4d","warm":"rgba(236,11,29,0.12)","reach":"Craft cannabis dispensary · South Minneapolis","cta":"Visit Verist Fields","link":"/#dispensary/verist-fields"}};
+  var THEMES = {"avion":{"name":"Avió Supply Co","logo":"/assets/brands/avio-wordmark.png","accent":"#c34632","accent2":"#e0a32e","warm":"rgba(195,70,50,0.12)","reach":"Available at 34+ Minnesota retailers"},"verist-fields":{"name":"Verist Fields","logo":"/assets/brands/verist-wordmark.webp","accent":"#ec0b1d","accent2":"#ff5a4d","warm":"rgba(236,11,29,0.12)","reach":"Craft cannabis dispensary · South Minneapolis","cta":"Visit Verist Fields","link":"/#dispensary/verist-fields","deal":"15% off all White Meridian, Sour Luxxe & Platinum Jesus · in-store now"}};
   fetch("https://dashboard.twincitycannabis.com/brand-overrides", {cache:'no-store'}).then(function(r){return r.ok?r.json():{};}).then(function(m){
     var slugs = Object.keys(m).filter(function(s){return m[s]&&m[s].tier==='featured';});
     if(!slugs.length) return;
@@ -209,7 +209,7 @@
       var logo = t.logo ? '<img src="'+t.logo+'" alt="'+(t.name||slug)+'" style="max-height:52px;max-width:230px;width:auto">' : '<span style="font-family:var(--font-display,sans-serif);font-weight:800;font-size:1.5rem;color:#f5f6f8">'+(t.name||slug)+'</span>';
       card.innerHTML = '<span style="position:absolute;top:-.7rem;left:1.4rem;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#16a34a,#22c55e);padding:.3rem .7rem;border-radius:999px">★ Featured Partner</span>'
         + logo
-        + '<span style="flex:1;min-width:120px;color:#b8bcc4;font-size:.9rem">'+(t.reach||'')+'</span>'
+        + '<span style="flex:1;min-width:120px;color:#e6e8ec;font-size:.9rem">'+(t.deal ? ('<span style="display:inline-block;font-size:.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:'+(t.accent||'#22c55e')+';border-radius:999px;padding:.16rem .5rem;margin-right:.5rem;vertical-align:.08em">Limited deal</span>'+t.deal) : (t.reach||''))+'</span>'
         + '<span style="color:'+(t.accent2||'#22c55e')+';font-weight:600;white-space:nowrap">'+(t.cta||('Explore '+(t.name||slug)))+' →</span>';
       list.appendChild(card);
     });

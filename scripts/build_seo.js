@@ -50,6 +50,7 @@ const FEATURED_THEMES_JSON = JSON.stringify({
     reach: 'Craft cannabis dispensary · South Minneapolis',
     cta: 'Visit Verist Fields',
     link: '/#dispensary/verist-fields',
+    deal: '15% off all White Meridian, Sour Luxxe & Platinum Jesus · in-store now',
   },
 });
 
@@ -1008,7 +1009,8 @@ const buildBrandsIndex = (brands) => {
     var card=document.getElementById('fb-card');card.href=t.link||('/brands/'+slug+'/');
     if(t.logo){var l=document.getElementById('fb-logo');l.src=t.logo;l.alt=t.name||name;l.style.display='';card.querySelector('.fb-name').style.display='none';}
     else{card.querySelector('.fb-name').textContent=t.name||name||slug;}
-    card.querySelector('.fb-meta').textContent=t.reach||meta||'';
+    if(t.deal){card.querySelector('.fb-meta').innerHTML='<span style="display:inline-block;font-size:.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:'+(t.accent||'#22c55e')+';border-radius:999px;padding:.16rem .5rem;margin-right:.5rem;vertical-align:.08em">Limited deal</span>'+t.deal;}
+    else{card.querySelector('.fb-meta').textContent=t.reach||meta||'';}
     if(t.accent){card.style.borderColor=t.accent;}
     if(t.warm){card.style.background='radial-gradient(120% 140% at 88% 20%,'+t.warm+',transparent 60%),linear-gradient(150deg,rgba(26,21,18,0.9),rgba(18,15,13,0.5))';}
     if(t.accent2){document.getElementById('fb-cta').style.color=t.accent2;document.getElementById('fb-cta').textContent='Explore '+(t.name||name)+' →';document.getElementById('fb-badge-text').textContent='Featured Partner';}
@@ -2626,7 +2628,7 @@ const buildFeaturedPage = () => {
       var logo = t.logo ? '<img src="'+t.logo+'" alt="'+(t.name||slug)+'" style="max-height:52px;max-width:230px;width:auto">' : '<span style="font-family:var(--font-display,sans-serif);font-weight:800;font-size:1.5rem;color:#f5f6f8">'+(t.name||slug)+'</span>';
       card.innerHTML = '<span style="position:absolute;top:-.7rem;left:1.4rem;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#16a34a,#22c55e);padding:.3rem .7rem;border-radius:999px">★ Featured Partner</span>'
         + logo
-        + '<span style="flex:1;min-width:120px;color:#b8bcc4;font-size:.9rem">'+(t.reach||'')+'</span>'
+        + '<span style="flex:1;min-width:120px;color:#e6e8ec;font-size:.9rem">'+(t.deal ? ('<span style="display:inline-block;font-size:.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:'+(t.accent||'#22c55e')+';border-radius:999px;padding:.16rem .5rem;margin-right:.5rem;vertical-align:.08em">Limited deal</span>'+t.deal) : (t.reach||''))+'</span>'
         + '<span style="color:'+(t.accent2||'#22c55e')+';font-weight:600;white-space:nowrap">'+(t.cta||('Explore '+(t.name||slug)))+' →</span>';
       list.appendChild(card);
     });

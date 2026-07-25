@@ -3766,6 +3766,13 @@ html[data-theme="light"] .featured-pitch {
 }
 .featured-brand-card:hover .featured-brand-plane { transform: rotate(-8deg) translate(10px, -6px); opacity: 0.2; }
 .featured-brand-card.is-takeover .featured-brand-cta { color: var(--fb-accent2); }
+/* Live deal promoted in a featured banner (Premium perk) */
+.featured-brand-deal { font-size: 0.86rem; color: var(--text-primary, #f5f6f8); line-height: 1.35; }
+.fb-deal-tag {
+    display: inline-block; font-size: 0.55rem; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: #fff; background: var(--fb-accent, #22c55e);
+    border-radius: 999px; padding: 0.16rem 0.5rem; margin-right: 0.55rem; vertical-align: 0.08em;
+}
 .featured-brand-card.is-takeover .featured-brand-badge {
     background: linear-gradient(135deg, var(--fb-accent2), var(--fb-accent));
 }
