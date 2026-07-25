@@ -1234,52 +1234,43 @@
             link: '#dispensary/verist-fields',
         },
     };
+    // Render ALL active featured partners as stacked slim banners — featured =
+    // always visible, not rotated. Each carries its own brand takeover theme.
     async function renderFeaturedBrand() {
         const section = document.getElementById('featured-brand-section');
-        if (!section) return;
+        const list = document.getElementById('featured-brand-list');
+        if (!section || !list) return;
         const ov = await getBrandOverrides();
-        // Multiple featured partners rotate on the homepage (one per load) so
-        // each gets impressions; the /featured page shows them all.
-        const featuredSlugs = Object.keys(ov).filter(s => ov[s] && ov[s].tier === 'featured');
-        const slug = featuredSlugs.length ? featuredSlugs[Math.floor(Math.random() * featuredSlugs.length)] : null;
-        const b = slug ? _getBrandIndex().find(x => x.slug === slug) : null;
-        if (!b) { section.style.display = 'none'; return; }
-        const carriers = new Set();
-        TCC.products.forEach(p => {
-            if (brandSlugify(p.brand || '') !== slug) return;
-            Object.entries(p.prices || {}).forEach(([id, v]) => { if (v > 0) carriers.add(id); });
+        const slugs = Object.keys(ov).filter(s => ov[s] && ov[s].tier === 'featured');
+        const star = '<svg viewBox="0 0 24 24" fill="currentColor" style="width:.85em;height:.85em;vertical-align:-0.1em" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.2 6.6 20.2l1.2-6.1L3.2 9.9l6.2-.7z"/></svg>';
+        list.innerHTML = '';
+        let shown = 0;
+        slugs.forEach((slug) => {
+            const b = _getBrandIndex().find(x => x.slug === slug);
+            const theme = FEATURED_THEMES[slug];
+            if (!b && !theme) return;
+            let meta = (theme && theme.reach) ? theme.reach : '';
+            if (!meta && b) {
+                const carriers = new Set();
+                TCC.products.forEach(p => { if (brandSlugify(p.brand || '') === slug) Object.entries(p.prices || {}).forEach(([id, v]) => { if (v > 0) carriers.add(id); }); });
+                meta = `${b.count} product${b.count === 1 ? '' : 's'} · ${carriers.size} shop${carriers.size === 1 ? '' : 's'}`;
+            }
+            const a = document.createElement('a');
+            a.className = 'featured-brand-card featured-brand-card--slim fade-in' + (theme ? ' is-takeover' : '');
+            if (theme) { a.style.setProperty('--fb-accent', theme.accent); a.style.setProperty('--fb-accent2', theme.accent2); a.style.setProperty('--fb-warm', theme.warm); }
+            a.href = (theme && theme.link) ? theme.link : `#brand/${slug}`;
+            const brandLabel = (theme && theme.logo)
+                ? `<img class="featured-brand-logo" src="${theme.logo}" alt="${esc(theme.name || '')}">`
+                : `<span class="featured-brand-name font-display font-bold">${esc((theme && theme.name) || (b && b.name) || slug)}</span>`;
+            a.innerHTML = `<span class="featured-brand-badge">${star} Featured Partner</span>`
+                + brandLabel
+                + `<div class="featured-brand-body"><div class="featured-brand-meta text-sm text-secondary">${esc(meta)}</div></div>`
+                + `<span class="featured-brand-cta">${esc((theme && theme.cta) || 'View brand')} &rarr;</span>`
+                + ((theme && theme.plane) ? `<img class="featured-brand-plane" src="${theme.plane}" alt="">` : '');
+            list.appendChild(a);
+            shown++;
         });
-        const meta = `${b.count} product${b.count === 1 ? '' : 's'} · ${carriers.size} shop${carriers.size === 1 ? '' : 's'}`;
-        const card = section.querySelector('.featured-brand-card');
-        const logo = document.getElementById('featured-brand-logo');
-        const plane = document.getElementById('featured-brand-plane');
-        const nameEl = section.querySelector('.featured-brand-name');
-        const theme = FEATURED_THEMES[slug];
-        // Reset — renders rotate between partners, so never leak one brand's
-        // art (e.g. Avio's plane) onto another that doesn't have it.
-        card.classList.remove('is-takeover');
-        logo.style.display = 'none';
-        plane.style.display = 'none';
-        nameEl.style.display = '';
-        if (theme) {
-            card.classList.add('is-takeover');
-            card.style.setProperty('--fb-accent', theme.accent);
-            card.style.setProperty('--fb-accent2', theme.accent2);
-            card.style.setProperty('--fb-warm', theme.warm);
-            logo.src = theme.logo; logo.alt = theme.name; logo.style.display = '';
-            if (theme.plane) { plane.src = theme.plane; plane.style.display = ''; }
-            nameEl.style.display = 'none';
-            document.getElementById('featured-brand-cta').innerHTML = (theme.cta || 'View brand') + ' &rarr;';
-            const badgeText = document.getElementById('featured-brand-badge-text');
-            if (badgeText) badgeText.textContent = 'Featured Partner';
-        } else {
-            nameEl.textContent = b.name; nameEl.style.display = '';
-        }
-        // A featured partner shows brand-provided reach (our scrape undercounts);
-        // everyone else shows what we actually track.
-        section.querySelector('.featured-brand-meta').textContent = (theme && theme.reach) ? theme.reach : meta;
-        document.getElementById('featured-brand-link').setAttribute('href', (theme && theme.link) ? theme.link : `#brand/${slug}`);
-        section.style.display = '';
+        section.style.display = shown ? '' : 'none';
     }
 
     function renderComingSoon() {
