@@ -43,6 +43,12 @@ const FEATURED_THEMES_JSON = JSON.stringify({
     accent: '#c34632', accent2: '#e0a32e', warm: 'rgba(195,70,50,0.12)',
     reach: 'Available at 34+ Minnesota retailers',
   },
+  'verist-fields': {
+    name: 'Verist Fields',
+    logo: '/assets/brands/verist-wordmark.webp',
+    accent: '#ec0b1d', accent2: '#ff5a4d', warm: 'rgba(236,11,29,0.12)',
+    reach: 'Craft cannabis dispensary · South Minneapolis',
+  },
 });
 
 // ---------- Load data.js by shimming a browser window ----------
@@ -991,7 +997,8 @@ const buildBrandsIndex = (brands) => {
 <script>(function(){
   var THEMES = ${FEATURED_THEMES_JSON};
   fetch(${JSON.stringify(WORKER + '/brand-overrides')},{cache:'no-store'}).then(function(r){return r.ok?r.json():{};}).then(function(m){
-    var slug=Object.keys(m).find(function(s){return m[s]&&m[s].tier==='featured';});if(!slug)return;
+    var fs=Object.keys(m).filter(function(s){return m[s]&&m[s].tier==='featured';});if(!fs.length)return;
+    var slug=fs[Math.floor(Math.random()*fs.length)];
     var t=THEMES[slug]||{};
     var link=document.querySelector('a.card[href="/brands/'+slug+'/"]');
     var name=link?(link.querySelector('.title')||{}).textContent:slug;
@@ -2593,16 +2600,8 @@ const buildFeaturedPage = () => {
 <div class="crumbs"><a href="/">Home</a> / Featured</div>
 <h1>Featured on Twin City Cannabis</h1>
 <p>A featured partner gets their own spotlight across the site: the homepage, the brands directory, and a full takeover on their brand page. It is the most visible placement we offer, and it looks like this:</p>
-<div style="margin:1.5rem 0 2rem">
+<div id="fp-list" style="margin:1.5rem 0 2rem;display:flex;flex-direction:column;gap:1.25rem">
   <p class="text-muted" id="fp-empty" style="font-size:.92rem">No featured partner right now.</p>
-  <a id="fp-card" href="#" style="display:none;position:relative;align-items:center;gap:1.25rem;padding:1.6rem 1.8rem;border:1px solid rgba(195,70,50,0.45);border-radius:16px;background:radial-gradient(120% 140% at 88% 20%,rgba(195,70,50,0.14),transparent 60%),linear-gradient(150deg,rgba(26,21,18,0.9),rgba(18,15,13,0.5));text-decoration:none;overflow:hidden">
-    <span style="position:absolute;top:-.7rem;left:1.4rem;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#16a34a,#22c55e);padding:.3rem .7rem;border-radius:999px">★ Featured Partner</span>
-    <img id="fp-logo" alt="" style="height:64px;width:auto;display:none">
-    <span id="fp-name" style="font-family:var(--font-display,sans-serif);font-weight:800;font-size:1.6rem;color:var(--text-primary,#f5f6f8)"></span>
-    <span style="flex:1"></span>
-    <span id="fp-cta" style="color:#e0a32e;font-weight:600;white-space:nowrap">Explore →</span>
-  </a>
-  <p id="fp-reach" class="text-secondary" style="display:none;font-size:.92rem;margin-top:.75rem"></p>
 </div>
 <div style="border:1px solid rgba(34,197,94,0.25);border-radius:14px;padding:1.5rem 1.6rem;background:rgba(34,197,94,0.04);margin-top:2rem">
   <div style="font-family:var(--font-display,sans-serif);font-weight:700;font-size:1.15rem;margin-bottom:.4rem">Want your brand featured?</div>
@@ -2612,19 +2611,23 @@ const buildFeaturedPage = () => {
 <script>(function(){
   var THEMES = ${FEATURED_THEMES_JSON};
   fetch(${JSON.stringify(WORKER + '/brand-overrides')}, {cache:'no-store'}).then(function(r){return r.ok?r.json():{};}).then(function(m){
-    var slug = Object.keys(m).find(function(s){return m[s]&&m[s].tier==='featured';});
-    if(!slug) return;
-    var t = THEMES[slug] || {};
-    var card = document.getElementById('fp-card');
-    card.href = '/brands/'+slug+'/';
-    if(t.logo){ var l=document.getElementById('fp-logo'); l.src=t.logo; l.alt=t.name||slug; l.style.display=''; }
-    else { document.getElementById('fp-name').textContent = t.name || slug; }
-    if(t.accent){ card.style.borderColor = t.accent; }
-    if(t.accent2){ document.getElementById('fp-cta').style.color = t.accent2; }
-    document.getElementById('fp-cta').textContent = 'Explore ' + (t.name || slug) + ' →';
-    card.style.display='flex';
+    var slugs = Object.keys(m).filter(function(s){return m[s]&&m[s].tier==='featured';});
+    if(!slugs.length) return;
     document.getElementById('fp-empty').style.display='none';
-    if(t.reach){ var rn=document.getElementById('fp-reach'); rn.textContent=t.reach+'.'; rn.style.display=''; }
+    var list = document.getElementById('fp-list');
+    slugs.forEach(function(slug){
+      var t = THEMES[slug] || {};
+      var card = document.createElement('a');
+      card.href = '/brands/'+slug+'/';
+      var bg = t.warm ? 'radial-gradient(120% 140% at 88% 20%,'+t.warm+',transparent 60%),linear-gradient(150deg,rgba(26,21,18,0.9),rgba(18,15,13,0.5))' : 'linear-gradient(150deg,rgba(34,197,94,0.08),rgba(255,255,255,0.02))';
+      card.style.cssText = 'position:relative;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;padding:1.5rem 1.7rem;border:1px solid '+(t.accent||'rgba(34,197,94,0.45)')+';border-radius:16px;background:'+bg+';text-decoration:none;overflow:hidden';
+      var logo = t.logo ? '<img src="'+t.logo+'" alt="'+(t.name||slug)+'" style="max-height:52px;max-width:230px;width:auto">' : '<span style="font-family:var(--font-display,sans-serif);font-weight:800;font-size:1.5rem;color:#f5f6f8">'+(t.name||slug)+'</span>';
+      card.innerHTML = '<span style="position:absolute;top:-.7rem;left:1.4rem;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#16a34a,#22c55e);padding:.3rem .7rem;border-radius:999px">★ Featured Partner</span>'
+        + logo
+        + '<span style="flex:1;min-width:120px;color:#b8bcc4;font-size:.9rem">'+(t.reach||'')+'</span>'
+        + '<span style="color:'+(t.accent2||'#22c55e')+';font-weight:600;white-space:nowrap">'+(t.cta||('Explore '+(t.name||slug)))+' →</span>';
+      list.appendChild(card);
+    });
   }).catch(function(){});
 })();</script>
 ` + footer;

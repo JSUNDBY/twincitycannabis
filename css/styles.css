@@ -3758,7 +3758,7 @@ html[data-theme="light"] .featured-pitch {
     gap: 1.75rem;
     padding: 1.7rem 2rem;
 }
-.featured-brand-logo { height: 62px; width: auto; flex-shrink: 0; position: relative; z-index: 2; }
+.featured-brand-logo { max-height: 62px; max-width: 270px; width: auto; height: auto; flex-shrink: 0; position: relative; z-index: 2; }
 .featured-brand-plane {
     position: absolute; right: 150px; bottom: -18px; height: 128px; width: auto;
     opacity: 0.14; transform: rotate(-8deg); pointer-events: none; z-index: 1;
@@ -3786,7 +3786,7 @@ html[data-theme="light"] .featured-pitch {
     position: static; top: auto; left: auto; align-self: center; white-space: nowrap;
     font-size: 0.56rem; padding: 0.22rem 0.55rem;
 }
-.featured-brand-card--slim .featured-brand-logo { height: 48px; }
+.featured-brand-card--slim .featured-brand-logo { max-height: 48px; max-width: 240px; }
 .featured-brand-card--slim .featured-brand-plane { height: 66px; right: 128px; bottom: -10px; opacity: 0.11; }
 .featured-brand-card--slim .featured-brand-name { font-size: 1.05rem; }
 .featured-brand-card--slim .featured-brand-body { display: flex; align-items: baseline; gap: 0.6rem; }
@@ -3802,7 +3802,7 @@ html[data-theme="light"] .featured-pitch {
         row-gap: 0.5rem;
     }
     .featured-brand-card--slim .featured-brand-badge { order: 1; font-size: 0.5rem; padding: 0.22rem 0.45rem; }
-    .featured-brand-card--slim .featured-brand-logo { order: 2; height: 42px; }
+    .featured-brand-card--slim .featured-brand-logo { order: 2; max-height: 40px; max-width: 175px; }
     .featured-brand-card--slim .featured-brand-body { order: 3; flex: 1 1 60%; min-width: 0; }
     .featured-brand-card--slim .featured-brand-cta { order: 4; font-size: 0.82rem; white-space: nowrap; }
     .featured-brand-card--slim .featured-brand-meta { font-size: 0.8rem; white-space: normal; }

@@ -1223,12 +1223,22 @@
             // for a featured partner we show their true reach, not our sample.
             reach: 'Available at 34+ Minnesota retailers',
         },
+        'verist-fields': {
+            name: 'Verist Fields',
+            logo: 'assets/brands/verist-wordmark.webp',
+            accent: '#ec0b1d', accent2: '#ff5a4d', warm: 'rgba(236,11,29,0.10)',
+            cta: 'Explore Verist Fields',
+            reach: 'Craft cannabis dispensary · South Minneapolis',
+        },
     };
     async function renderFeaturedBrand() {
         const section = document.getElementById('featured-brand-section');
         if (!section) return;
         const ov = await getBrandOverrides();
-        const slug = Object.keys(ov).find(s => ov[s] && ov[s].tier === 'featured');
+        // Multiple featured partners rotate on the homepage (one per load) so
+        // each gets impressions; the /featured page shows them all.
+        const featuredSlugs = Object.keys(ov).filter(s => ov[s] && ov[s].tier === 'featured');
+        const slug = featuredSlugs.length ? featuredSlugs[Math.floor(Math.random() * featuredSlugs.length)] : null;
         const b = slug ? _getBrandIndex().find(x => x.slug === slug) : null;
         if (!b) { section.style.display = 'none'; return; }
         const carriers = new Set();
@@ -5124,7 +5134,11 @@
             }
             // Update Founding Member slot counter wherever it appears (the For
             // Dispensaries pricing page and the dashboard upgrade block).
-            const remaining = Math.max(0, 10 - Object.keys(overrides).length);
+            // Only PAID tiers (featured/premium) fill a founding slot — a free
+            // owner-claim (claimed:true, no tier) must not count, or the
+            // scarcity number lies.
+            const paidCount = Object.values(overrides).filter(o => o && o.tier).length;
+            const remaining = Math.max(0, 10 - paidCount);
             document.querySelectorAll('.founding-slots').forEach((el) => { el.textContent = remaining; });
             if (changed > 0) {
                 console.log(`[overrides] applied ${changed} tier override(s)`);
