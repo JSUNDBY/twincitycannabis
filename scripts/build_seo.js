@@ -1014,6 +1014,9 @@ const buildBrandsIndex = (brands) => {
     if(t.accent){card.style.borderColor=t.accent;}
     if(t.warm){card.style.background='radial-gradient(120% 140% at 88% 20%,'+t.warm+',transparent 60%),linear-gradient(150deg,rgba(26,21,18,0.9),rgba(18,15,13,0.5))';}
     if(t.accent2){document.getElementById('fb-cta').style.color=t.accent2;document.getElementById('fb-cta').textContent='Explore '+(t.name||name)+' →';document.getElementById('fb-badge-text').textContent='Featured Partner';}
+    var _tk=${JSON.stringify(WORKER + '/track')};
+    function fpTrack(sl,ev,dd){try{if(dd){var k='fpv:'+sl;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');}fetch(_tk,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:sl,event:ev}),keepalive:true}).catch(function(){});}catch(e){}}
+    fpTrack(slug,'featured_view',true);card.addEventListener('click',function(){fpTrack(slug,'featured_click',false);});
     document.getElementById('featured-brand-rail').style.display='';
   }).catch(function(){});
 })();</script>
@@ -2619,6 +2622,8 @@ const buildFeaturedPage = () => {
     if(!slugs.length) return;
     document.getElementById('fp-empty').style.display='none';
     var list = document.getElementById('fp-list');
+    var _tk=${JSON.stringify(WORKER + '/track')};
+    function fpTrack(sl,ev,dd){try{if(dd){var k='fpv:'+sl;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');}fetch(_tk,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:sl,event:ev}),keepalive:true}).catch(function(){});}catch(e){}}
     slugs.forEach(function(slug){
       var t = THEMES[slug] || {};
       var card = document.createElement('a');
@@ -2631,6 +2636,8 @@ const buildFeaturedPage = () => {
         + '<span style="flex:1;min-width:120px;color:#e6e8ec;font-size:.9rem">'+(t.deal ? ('<span style="display:inline-block;font-size:.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:'+(t.accent||'#22c55e')+';border-radius:999px;padding:.16rem .5rem;margin-right:.5rem;vertical-align:.08em">Limited deal</span>'+t.deal) : (t.reach||''))+'</span>'
         + '<span style="color:'+(t.accent2||'#22c55e')+';font-weight:600;white-space:nowrap">'+(t.cta||('Explore '+(t.name||slug)))+' →</span>';
       list.appendChild(card);
+      fpTrack(slug,'featured_view',true);
+      card.addEventListener('click',(function(s){return function(){fpTrack(s,'featured_click',false);};})(slug));
     });
   }).catch(function(){});
 })();</script>

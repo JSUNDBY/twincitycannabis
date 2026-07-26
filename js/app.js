@@ -1274,6 +1274,9 @@
                 + ((theme && theme.plane) ? `<img class="featured-brand-plane" src="${theme.plane}" alt="">` : '');
             list.appendChild(a);
             shown++;
+            // Impression once per session; every click counted.
+            trackServerEvent(slug, 'featured_view');
+            a.addEventListener('click', () => trackServerEvent(slug, 'featured_click', { dedupe: false }));
         });
         section.style.display = shown ? '' : 'none';
     }

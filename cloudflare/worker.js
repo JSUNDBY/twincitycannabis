@@ -118,6 +118,12 @@ export default {
       return handlePublicStatsList(request, env, cors);
     }
 
+    // Featured-placement performance, one HTML table for Josh: impressions,
+    // clicks, CTR per active featured partner.
+    if (url.pathname === '/stats/featured' && request.method === 'GET') {
+      return handleFeaturedStats(env, cors);
+    }
+
     const statsMatch = url.pathname.match(/^\/stats\/([a-z0-9-]+)\/?$/i);
     if (statsMatch && request.method === 'GET') {
       return handlePublicStats(env, cors, statsMatch[1]);
@@ -1278,7 +1284,7 @@ setInterval(load, 30000);
 // KV key scheme:
 //   stat:<id>:<event>:d<YYYY-MM-DD>   daily counter (95-day TTL)
 //   stat:<id>:<event>:total            lifetime counter (no TTL)
-const TRACK_EVENTS = new Set(['view', 'outbound', 'search_hit']);
+const TRACK_EVENTS = new Set(['view', 'outbound', 'search_hit', 'featured_view', 'featured_click']);
 
 // ─── /contact ────────────────────────────────────────────────────────────────
 // Receives claim/inquiry form submissions, stores in KV, shows on /admin.
@@ -1549,6 +1555,35 @@ async function fetchDispensaryStats(env, id) {
   return v && v.totals ? v : { totals: {}, daily: {} };
 }
 
+// Featured-placement performance as a small HTML table. Public (no sensitive
+// data) so Josh can just bookmark /stats/featured.
+async function handleFeaturedStats(env, cors) {
+  const brands = (await env.TCC_OVERRIDES.get('index:brands', { type: 'json' })) || {};
+  const now = Date.now();
+  const featured = Object.entries(brands).filter(([, r]) => r && r.tier === 'featured' && !(r.valid_until && Date.parse(r.valid_until) < now));
+  const days7 = [];
+  for (let i = 0; i < 7; i++) { const d = new Date(); d.setUTCDate(d.getUTCDate() - i); days7.push(d.toISOString().slice(0, 10)); }
+  const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const rows = [];
+  for (const [slug, rec] of featured) {
+    const s = await fetchDispensaryStats(env, slug);
+    const t = s.totals || {};
+    const imp = t.featured_view || 0, clk = t.featured_click || 0;
+    let imp7 = 0, clk7 = 0;
+    for (const d of days7) { const day = (s.daily && s.daily[d]) || {}; imp7 += day.featured_view || 0; clk7 += day.featured_click || 0; }
+    rows.push({
+      name: rec.official_name || slug, imp, clk, imp7, clk7,
+      ctr: imp ? Math.round((clk / imp) * 1000) / 10 : 0,
+      ctr7: imp7 ? Math.round((clk7 / imp7) * 1000) / 10 : 0,
+      views: t.view || 0,
+    });
+  }
+  rows.sort((a, b) => b.clk - a.clk);
+  const tr = rows.map((r) => `<tr><td>${esc(r.name)}</td><td class="n">${r.imp7}</td><td class="n">${r.clk7}</td><td class="n">${r.ctr7}%</td><td class="n">${r.imp}</td><td class="n">${r.clk}</td><td class="n">${r.ctr}%</td><td class="n">${r.views}</td></tr>`).join('');
+  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Featured performance — TCC</title><style>body{font-family:-apple-system,system-ui,sans-serif;background:#0d100d;color:#e6e8ec;padding:2rem 1.25rem;max-width:820px;margin:0 auto}h1{font-size:1.4rem;font-weight:700;margin:0 0 .3rem}p{color:#9aa0a6;font-size:.88rem;line-height:1.5}table{width:100%;border-collapse:collapse;margin-top:1.25rem;font-size:.9rem}th,td{text-align:left;padding:.6rem .5rem;border-bottom:1px solid rgba(255,255,255,.08)}th{color:#22c55e;font-size:.64rem;text-transform:uppercase;letter-spacing:1px}td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}</style></head><body><h1>Featured placement performance</h1><p>Live counts across every featured surface (homepage banner, brands rail, /featured page). Impressions dedupe once per visitor session; clicks count every tap. Updated ${new Date().toISOString().slice(0, 16).replace('T', ' ')} UTC.</p>${rows.length ? `<table><thead><tr><th>Partner</th><th class="n">Impr 7d</th><th class="n">Clicks 7d</th><th class="n">CTR 7d</th><th class="n">Impr all</th><th class="n">Clicks all</th><th class="n">CTR all</th><th class="n">Page views</th></tr></thead><tbody>${tr}</tbody></table>` : '<p>No featured partners active.</p>'}</body></html>`;
+  return new Response(html, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=60', ...cors } });
+}
+
 // ─── /stats/:slug ────────────────────────────────────────────────────────────
 // Public GET endpoint. Returns aggregate analytics for one dispensary:
 //   - lifetime totals (views, outbound clicks)
@@ -1596,10 +1631,14 @@ async function handlePublicStats(env, cors, slug) {
     totals: {
       view: stats.totals.view || 0,
       outbound: stats.totals.outbound || 0,
+      featured_view: stats.totals.featured_view || 0,
+      featured_click: stats.totals.featured_click || 0,
     },
     last_7_days: {
       view: sum(last7, 'view'),
       outbound: sum(last7, 'outbound'),
+      featured_view: sum(last7, 'featured_view'),
+      featured_click: sum(last7, 'featured_click'),
       view_change_pct: pct(sum(last7, 'view'), sum(prev7, 'view')),
       outbound_change_pct: pct(sum(last7, 'outbound'), sum(prev7, 'outbound')),
     },

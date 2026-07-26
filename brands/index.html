@@ -212,6 +212,9 @@
     if(t.accent){card.style.borderColor=t.accent;}
     if(t.warm){card.style.background='radial-gradient(120% 140% at 88% 20%,'+t.warm+',transparent 60%),linear-gradient(150deg,rgba(26,21,18,0.9),rgba(18,15,13,0.5))';}
     if(t.accent2){document.getElementById('fb-cta').style.color=t.accent2;document.getElementById('fb-cta').textContent='Explore '+(t.name||name)+' →';document.getElementById('fb-badge-text').textContent='Featured Partner';}
+    var _tk="https://dashboard.twincitycannabis.com/track";
+    function fpTrack(sl,ev,dd){try{if(dd){var k='fpv:'+sl;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');}fetch(_tk,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:sl,event:ev}),keepalive:true}).catch(function(){});}catch(e){}}
+    fpTrack(slug,'featured_view',true);card.addEventListener('click',function(){fpTrack(slug,'featured_click',false);});
     document.getElementById('featured-brand-rail').style.display='';
   }).catch(function(){});
 })();</script>
