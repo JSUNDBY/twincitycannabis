@@ -121,7 +121,7 @@ export default {
     // Featured-placement performance, one HTML table for Josh: impressions,
     // clicks, CTR per active featured partner.
     if (url.pathname === '/stats/featured' && request.method === 'GET') {
-      return handleFeaturedStats(env, cors);
+      return handleFeaturedStats(env, cors, url);
     }
 
     const statsMatch = url.pathname.match(/^\/stats\/([a-z0-9-]+)\/?$/i);
@@ -1555,33 +1555,54 @@ async function fetchDispensaryStats(env, id) {
   return v && v.totals ? v : { totals: {}, daily: {} };
 }
 
-// Featured-placement performance as a small HTML table. Public (no sensitive
-// data) so Josh can just bookmark /stats/featured.
-async function handleFeaturedStats(env, cors) {
+// Featured-placement performance — a live, animated dashboard. GET /stats/featured
+// serves the dashboard; ?json=1 serves the data it polls. Public (promo data Josh
+// wants to screen-share to partners), no auth.
+const DASH_THEMES = {
+  'avion': { name: 'Avió Supply Co', kind: 'Brand', accent: '#e0a32e', logo: 'https://twincitycannabis.com/assets/brands/avio-wordmark.png' },
+  'verist-fields': { name: 'Verist Fields', kind: 'Dispensary', accent: '#ec0b1d', logo: 'https://twincitycannabis.com/assets/brands/verist-wordmark.webp' },
+};
+
+async function computeFeaturedData(env) {
   const brands = (await env.TCC_OVERRIDES.get('index:brands', { type: 'json' })) || {};
   const now = Date.now();
   const featured = Object.entries(brands).filter(([, r]) => r && r.tier === 'featured' && !(r.valid_until && Date.parse(r.valid_until) < now));
-  const days7 = [];
-  for (let i = 0; i < 7; i++) { const d = new Date(); d.setUTCDate(d.getUTCDate() - i); days7.push(d.toISOString().slice(0, 10)); }
-  const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const rows = [];
+  const dayKey = (off) => { const d = new Date(); d.setUTCDate(d.getUTCDate() - off); return d.toISOString().slice(0, 10); };
+  const last30 = []; for (let i = 29; i >= 0; i--) last30.push(dayKey(i));
+  const last7 = []; for (let i = 0; i < 7; i++) last7.push(dayKey(i));
+  const prev7 = []; for (let i = 7; i < 14; i++) prev7.push(dayKey(i));
+  const partners = [];
   for (const [slug, rec] of featured) {
     const s = await fetchDispensaryStats(env, slug);
-    const t = s.totals || {};
-    const imp = t.featured_view || 0, clk = t.featured_click || 0;
-    let imp7 = 0, clk7 = 0;
-    for (const d of days7) { const day = (s.daily && s.daily[d]) || {}; imp7 += day.featured_view || 0; clk7 += day.featured_click || 0; }
-    rows.push({
-      name: rec.official_name || slug, imp, clk, imp7, clk7,
-      ctr: imp ? Math.round((clk / imp) * 1000) / 10 : 0,
-      ctr7: imp7 ? Math.round((clk7 / imp7) * 1000) / 10 : 0,
-      views: t.view || 0,
+    const daily = s.daily || {}, totals = s.totals || {};
+    const sum = (days, ev) => days.reduce((a, d) => a + ((daily[d] && daily[d][ev]) || 0), 0);
+    const pct = (cur, prev) => prev > 0 ? Math.round(((cur - prev) / prev) * 100) : (cur > 0 ? 100 : 0);
+    const th = DASH_THEMES[slug] || { name: rec.official_name || slug, kind: 'Partner', accent: '#22c55e', logo: null };
+    partners.push({
+      slug, name: th.name, kind: th.kind, accent: th.accent, logo: th.logo,
+      valid_until: rec.valid_until || null,
+      m7: {
+        impressions: sum(last7, 'featured_view'), clicks: sum(last7, 'featured_click'), views: sum(last7, 'view'),
+        impressions_chg: pct(sum(last7, 'featured_view'), sum(prev7, 'featured_view')),
+        clicks_chg: pct(sum(last7, 'featured_click'), sum(prev7, 'featured_click')),
+        views_chg: pct(sum(last7, 'view'), sum(prev7, 'view')),
+      },
+      totals: { impressions: totals.featured_view || 0, clicks: totals.featured_click || 0, views: totals.view || 0 },
+      series: { views: last30.map((d) => (daily[d] && daily[d].view) || 0), clicks: last30.map((d) => (daily[d] && daily[d].featured_click) || 0) },
     });
   }
-  rows.sort((a, b) => b.clk - a.clk);
-  const tr = rows.map((r) => `<tr><td>${esc(r.name)}</td><td class="n">${r.imp7}</td><td class="n">${r.clk7}</td><td class="n">${r.ctr7}%</td><td class="n">${r.imp}</td><td class="n">${r.clk}</td><td class="n">${r.ctr}%</td><td class="n">${r.views}</td></tr>`).join('');
-  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Featured performance — TCC</title><style>body{font-family:-apple-system,system-ui,sans-serif;background:#0d100d;color:#e6e8ec;padding:2rem 1.25rem;max-width:820px;margin:0 auto}h1{font-size:1.4rem;font-weight:700;margin:0 0 .3rem}p{color:#9aa0a6;font-size:.88rem;line-height:1.5}table{width:100%;border-collapse:collapse;margin-top:1.25rem;font-size:.9rem}th,td{text-align:left;padding:.6rem .5rem;border-bottom:1px solid rgba(255,255,255,.08)}th{color:#22c55e;font-size:.64rem;text-transform:uppercase;letter-spacing:1px}td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}</style></head><body><h1>Featured placement performance</h1><p>Live counts across every featured surface (homepage banner, brands rail, /featured page). Impressions dedupe once per visitor session; clicks count every tap. Updated ${new Date().toISOString().slice(0, 16).replace('T', ' ')} UTC.</p>${rows.length ? `<table><thead><tr><th>Partner</th><th class="n">Impr 7d</th><th class="n">Clicks 7d</th><th class="n">CTR 7d</th><th class="n">Impr all</th><th class="n">Clicks all</th><th class="n">CTR all</th><th class="n">Page views</th></tr></thead><tbody>${tr}</tbody></table>` : '<p>No featured partners active.</p>'}</body></html>`;
-  return new Response(html, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=60', ...cors } });
+  partners.sort((a, b) => b.totals.clicks - a.totals.clicks);
+  return { partners, generated_at: new Date().toISOString() };
+}
+
+const DASHBOARD_HTML = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Featured Performance — Twin City Cannabis</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Outfit,system-ui,-apple-system,sans-serif;background:radial-gradient(1200px 600px at 72% -12%,#10231a,#070a08 62%);color:#e8ebe9;min-height:100vh;padding:2.5rem 1.5rem 4rem;-webkit-font-smoothing:antialiased}.wrap{max-width:1000px;margin:0 auto}.head{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2.25rem}.head h1{font-size:2.1rem;font-weight:800;letter-spacing:-1.2px;background:linear-gradient(92deg,#fff,#7fe0b6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}.head .sub{color:#8b9490;font-size:.9rem;margin-top:.3rem;max-width:56ch;line-height:1.5}.live{display:flex;align-items:center;gap:.5rem;font-size:.76rem;color:#22c55e;font-weight:600;white-space:nowrap}.live .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite}@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}.card{position:relative;border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:1.7rem 1.85rem;margin-bottom:1.5rem;background:linear-gradient(160deg,rgba(255,255,255,.035),rgba(255,255,255,.006));overflow:hidden;opacity:0;transform:translateY(14px);animation:rise .55s cubic-bezier(.2,.7,.2,1) forwards}@keyframes rise{to{opacity:1;transform:none}}.card::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--acc)}.card::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:var(--acc);opacity:.07;filter:blur(22px)}.chead{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;position:relative;z-index:1}.logo{max-height:38px;max-width:180px;width:auto}.nm{font-size:1.3rem;font-weight:700}.kind{font-size:.58rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#0a0d0a;background:var(--acc);padding:.28rem .6rem;border-radius:999px}.until{margin-left:auto;font-size:.74rem;color:#8b9490}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-bottom:1.4rem;position:relative;z-index:1}@media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}.head h1{font-size:1.7rem}}.stat .num{font-size:2.05rem;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums;line-height:1}.stat .lbl{font-size:.66rem;text-transform:uppercase;letter-spacing:1px;color:#8b9490;margin-top:.4rem}.chg{display:inline-block;font-size:.66rem;font-weight:700;margin-top:.35rem}.chg.up{color:#4ade80}.chg.down{color:#f87171}.chg.flat{color:#6b7280}.chart{display:block;width:100%;height:88px;margin:.25rem 0 0}.foot{margin-top:1.1rem;font-size:.74rem;color:#6b7280;position:relative;z-index:1}.empty{text-align:center;color:#8b9490;padding:5rem 0;font-size:1rem}</style></head><body><div class="wrap"><div class="head"><div><h1>Featured Performance</h1><div class="sub">Live across the homepage banner, brands rail, and featured page. Impressions count once per visitor session; clicks count every tap.</div></div><div class="live"><span class="dot"></span><span id="upd">connecting</span></div></div><div id="app"><div class="empty">Loading</div></div></div><script>(function(){var first=true;function f(n){return (Number(n)||0).toLocaleString();}function chg(p){if(!p)return '<span class="chg flat">no change vs prior 7d</span>';var up=p>0;return '<span class="chg '+(up?'up':'down')+'">'+(up?String.fromCharCode(9650)+' ':String.fromCharCode(9660)+' ')+Math.abs(p)+'% vs prior 7d</span>';}function area(vals,acc){var w=600,h=88,max=1,i;for(i=0;i<vals.length;i++){if(vals[i]>max)max=vals[i];}var n=vals.length||1;var line='';for(i=0;i<vals.length;i++){var x=(n>1?(i/(n-1)):0)*w;var y=h-(vals[i]/max)*(h-12)-6;line+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' ';}var ar=line+'L'+w+' '+h+' L0 '+h+' Z';var id='g'+Math.floor(Math.random()*1e6);return '<svg class="chart" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><defs><linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+acc+'" stop-opacity="0.45"/><stop offset="1" stop-color="'+acc+'" stop-opacity="0"/></linearGradient></defs><path d="'+ar+'" fill="url(#'+id+')"/><path d="'+line+'" fill="none" stroke="'+acc+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/></svg>';}function tile(lbl,val,ch,suf){return '<div class="stat"><div class="num" data-to="'+val+'"'+(suf?' data-suf="'+suf+'"':'')+'>0'+(suf||'')+'</div><div class="lbl">'+lbl+'</div>'+(ch===null?'':chg(ch))+'</div>';}function fmt(v,suf){return (suf?(Math.round(v*10)/10):Math.round(v)).toLocaleString()+suf;}function setNum(el){var to=parseFloat(el.getAttribute('data-to'))||0;el.textContent=fmt(to,el.getAttribute('data-suf')||'');}function anim(el){var to=parseFloat(el.getAttribute('data-to'))||0;var suf=el.getAttribute('data-suf')||'';var dur=950,st=null,done=false;function fin(){if(done)return;done=true;el.textContent=fmt(to,suf);}function tk(ts){if(done)return;if(!st)st=ts;var t=Math.min(1,(ts-st)/dur);var e=1-Math.pow(1-t,3);el.textContent=fmt(to*e,suf);if(t<1)requestAnimationFrame(tk);else fin();}requestAnimationFrame(tk);setTimeout(fin,dur+320);}function render(d){var app=document.getElementById('app');var ps=(d&&d.partners)||[];if(!ps.length){app.innerHTML='<div class="empty">No featured partners active right now.</div>';return;}var html='',i;for(i=0;i<ps.length;i++){var p=ps[i];var acc=p.accent||'#22c55e';var brand=p.logo?'<img class="logo" src="'+p.logo+'" alt="'+p.name+'">':'<span class="nm">'+p.name+'</span>';var until=p.valid_until?'<span class="until">Featured until '+p.valid_until.slice(0,10)+'</span>':'';var ctr=p.m7.impressions?Math.round((p.m7.clicks/p.m7.impressions)*1000)/10:0;html+='<div class="card" style="--acc:'+acc+';animation-delay:'+(i*0.09)+'s"><div class="chead">'+brand+'<span class="kind">'+p.kind+' '+String.fromCharCode(183)+' Featured</span>'+until+'</div><div class="stats">'+tile('Impressions 7d',p.m7.impressions,p.m7.impressions_chg,'')+tile('Clicks 7d',p.m7.clicks,p.m7.clicks_chg,'')+tile('Click rate',ctr,null,'%')+tile('Page views 7d',p.m7.views,p.m7.views_chg,'')+'</div>'+area(p.series.views,acc)+'<div class="foot">30-day page-view trend '+String.fromCharCode(183)+' all time: '+f(p.totals.impressions)+' impressions, '+f(p.totals.clicks)+' clicks, '+f(p.totals.views)+' page views</div></div>';}app.innerHTML=html;var ns=app.querySelectorAll('.num[data-to]');for(i=0;i<ns.length;i++){if(first)anim(ns[i]);else setNum(ns[i]);}first=false;}function load(){fetch('/stats/featured?json=1',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){render(d);document.getElementById('upd').textContent='live '+String.fromCharCode(183)+' updated just now';}).catch(function(){document.getElementById('upd').textContent='offline';});}load();setInterval(load,45000);})();</script></body></html>`;
+
+async function handleFeaturedStats(env, cors, url) {
+  if (url && url.searchParams.get('json') === '1') {
+    const data = await computeFeaturedData(env);
+    return new Response(JSON.stringify(data), { status: 200, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=20', ...cors } });
+  }
+  return new Response(DASHBOARD_HTML, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=120', ...cors } });
 }
 
 // ─── /stats/:slug ────────────────────────────────────────────────────────────
