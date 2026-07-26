@@ -2431,6 +2431,9 @@
             </div>`;
             return;
         }
+        // Count a page view for the brand (parity with dispensary pages), so
+        // /stats/<slug> and the featured report show brand-page traffic too.
+        trackServerEvent(slug, 'view');
 
         const products = TCC.products.filter(p => p.brand === brandName);
         const carriedBy = new Set();
