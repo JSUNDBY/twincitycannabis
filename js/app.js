@@ -1233,7 +1233,7 @@
             // brand page. Overrides the default #brand/<slug> link.
             link: '#dispensary/verist-fields',
             // Live deal promoted in the banner (the Premium-tier perk).
-            deal: '15% off all White Meridian, Sour Luxxe & Platinum Jesus · in-store now',
+            deal: '25% off all White Meridian, Sour Luxxe & Platinum Jesus · in-store thru 8/4',
         },
     };
     // Render ALL active featured partners as stacked slim banners — featured =
@@ -1264,8 +1264,11 @@
             const brandLabel = (theme && theme.logo)
                 ? `<img class="featured-brand-logo" src="${theme.logo}" alt="${esc(theme.name || '')}">`
                 : `<span class="featured-brand-name font-display font-bold">${esc((theme && theme.name) || (b && b.name) || slug)}</span>`;
+            const dealHtml = (theme && theme.deal)
+                ? esc(theme.deal).replace(/^(\d+%\s*off)/i, '<b class="fb-deal-pct">$1</b>')
+                : '';
             const bodyInner = (theme && theme.deal)
-                ? `<span class="featured-brand-deal"><span class="fb-deal-tag">Limited deal</span>${esc(theme.deal)}</span>`
+                ? `<span class="featured-brand-deal"><span class="fb-deal-tag">Limited deal</span>${dealHtml}</span>`
                 : `<div class="featured-brand-meta text-sm text-secondary">${esc(meta)}</div>`;
             a.innerHTML = `<span class="featured-brand-badge">${star} Featured Partner</span>`
                 + brandLabel

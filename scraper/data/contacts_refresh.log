@@ -419,3 +419,99 @@ Resource location: remote
 Writing the contents of /Users/joshsundby/Code/apps/twincitycannabis/.kv-index_social.json to the key "index:social" on namespace id: "71b77df77ea74522ab66c82e20cc9339".
 Synced contacts to KV. Refresh the admin dashboard to see them.
 ==== refresh done:  Sun Jul 19 09:59:03 CDT 2026 ====
+==== refresh start: Sun Jul 26 05:07:31 CDT 2026 ====
+Scraping 66 dispensaries for emails...
+(previously-found emails are cached; pass --force to re-scrape)
+
+  ANANG Native Cannabis Co.... (rendering) no email (IG: https://instagram.com/anangnativeco)
+  Unanimous Cannabis... (rendering) no email found
+  BlooMn... (rendering) no email (IG: https://instagram.com/bloomn.mpls)
+  Lake Leaf Dispensary... (rendering) no email found
+  MnLooN - St. Paul... (rendering) no email found
+  Edina Canna... (rendering) no email found
+  Feelin' MN... (rendering) no email (IG: https://instagram.com/feelinmndispensary)
+  skip (weedmaps): marawanna
+  skip (weedmaps): HighRx
+  skip (weedmaps): Fullmelt Factory
+  skip (weedmaps): Waabigwan Mashkiki - Chanhassen
+  The Cannabis Co.... (rendering) no email found
+  Northern Crown Cannabis... (rendering) no email found
+  skip (weedmaps): Mary Jane Hut
+  Hempire LLC... (rendering) no email (IG: https://instagram.com/hempirerochester)
+  Winona Dispensary... (rendering) no email (IG: https://instagram.com/winonadispensary)
+  Farmer’s Cannabis Co.... (rendering) no email (IG: https://instagram.com/farmerscannabisco)
+  skip (weedmaps): ANANG Tasting Lounge & Dispensary
+  MN Roots Jenkins... (rendering) no email found
+  North Shore Dispensary... (rendering) no email (IG: https://instagram.com/northshoredispensary)
+  High Fidelity... (rendering) no email found
+  Fridley Dispensary... (rendering) no email found
+  Minnesota Canna... (rendering) no email found
+  The Stash & Co... (rendering) no email (IG: https://instagram.com/thestashnco)
+  higherplace... (rendering) no email found
+  MnLooN - Minneapolis... (rendering) no email found
+  Lake Leaf Dispensary... (rendering) no email found
+  La Canna... (rendering) no email found
+  MN Roots Alexandria... (rendering) no email found
+  Pot Mama's - Edina... (rendering) no email (IG: https://instagram.com/potmamasboutique)
+  Anoka Cannabis Company... (rendering) no email (IG: https://instagram.com/anokadispo)
+  Aurora Cannabis MN... (rendering) no email found
+  Fort Road Cannabis... (rendering) no email found
+  Pot Mama's... (rendering) no email (IG: https://instagram.com/potmamasboutique)
+  Silver Therapeutics Cannabis Company... (rendering) no email (IG: https://instagram.com/silvertheraofficial)
+  Midway Cannabis... (rendering) no email found
+  Feelin MN LLC... (rendering) no email (IG: https://instagram.com/feelinmndispensary)
+  The Lakes Dispensary... (rendering) no email found
+  Vibes... (rendering) no email found
+  Da Spot Dispensary & Wellness... (rendering) no email found
+  Litt Dispensaries LLC L.L.C... (rendering) no email (IG: https://instagram.com/squarespace)
+  Green Leaf Depot... (rendering) no email (IG: https://instagram.com/official_gl_depot)
+  ABC Cannabis Co. LLP... (rendering) no email (IG: https://instagram.com/wix)
+  Deep Roots LLC... (rendering) no email found
+  Farmer's Cannabis Company... (rendering) no email (IG: https://instagram.com/farmerscannabisco)
+  The Flower Shop MN LLC... (rendering) no email (IG: https://instagram.com/flowershopdispomn)
+  The Cannabis Co.... (rendering) no email found
+  Voyager Cannabis Co... (rendering) no email (IG: https://instagram.com/voyagercannabisco)
+  The Smoking Tree... (rendering) no email (IG: https://instagram.com/shopsmokingtree)
+  Twin Cities Cannabis... (rendering) no email found
+  skip (weedmaps): Cali Cannabis Dispensary Uptown
+  skip (weedmaps): Watchtower Dispensary
+  skip (weedmaps): Flipside Dispensary & Music
+  CannaJoyMN... (rendering) no email found
+  skip (weedmaps): Potshotz
+  skip (weedmaps): Holy Smokes Cannabis
+  skip (weedmaps): URBAN GREEN Dispensary
+  skip (weedmaps): Splitrock Farms
+  Litt Dispensaries LLC... (rendering) no email (IG: https://instagram.com/squarespace)
+  skip (weedmaps): Deep Roots Dispensary
+  skip (weedmaps): Grazzhopper
+  skip (weedmaps): O'Buds Dispensary
+  skip (weedmaps): MN Grass Hero
+  Lake Leaf Dispensary... (rendering) no email found
+  skip (weedmaps): Green Apple Cannabis
+  Verist Fields... (rendering) no email (IG: https://instagram.com/veristfields)
+
+Done. 0/66 new emails found.
+Cache: outreach/dispensary-emails.json
+
+Next: re-run build_contact_list.js to update the CSV/markdown.
+Generated contact list:
+  CSV:      outreach/dispensary-contacts.csv
+  Markdown: outreach/dispensary-contacts.md
+  144 dispensaries (70 metro, 74 greater MN)
+  With phone: 93
+  With website: 126
+emails: 77 · social(IG): 76
+
+ ⛅️ wrangler 4.114.0
+────────────────────
+Resource location: remote 
+
+Writing the contents of /Users/joshsundby/Code/apps/twincitycannabis/.kv-index_emails.json to the key "index:emails" on namespace id: "71b77df77ea74522ab66c82e20cc9339".
+
+ ⛅️ wrangler 4.114.0
+────────────────────
+Resource location: remote 
+
+Writing the contents of /Users/joshsundby/Code/apps/twincitycannabis/.kv-index_social.json to the key "index:social" on namespace id: "71b77df77ea74522ab66c82e20cc9339".
+Synced contacts to KV. Refresh the admin dashboard to see them.
+==== refresh done:  Sun Jul 26 09:36:39 CDT 2026 ====

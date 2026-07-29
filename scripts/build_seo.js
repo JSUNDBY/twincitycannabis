@@ -50,7 +50,7 @@ const FEATURED_THEMES_JSON = JSON.stringify({
     reach: 'Craft cannabis dispensary · South Minneapolis',
     cta: 'Visit Verist Fields',
     link: '/#dispensary/verist-fields',
-    deal: '15% off all White Meridian, Sour Luxxe & Platinum Jesus · in-store now',
+    deal: '25% off all White Meridian, Sour Luxxe & Platinum Jesus · in-store thru 8/4',
   },
 });
 
@@ -1009,11 +1009,11 @@ const buildBrandsIndex = (brands) => {
     var card=document.getElementById('fb-card');card.href=t.link||('/brands/'+slug+'/');
     if(t.logo){var l=document.getElementById('fb-logo');l.src=t.logo;l.alt=t.name||name;l.style.display='';card.querySelector('.fb-name').style.display='none';}
     else{card.querySelector('.fb-name').textContent=t.name||name||slug;}
-    if(t.deal){card.querySelector('.fb-meta').innerHTML='<span style="display:inline-block;font-size:.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:'+(t.accent||'#22c55e')+';border-radius:999px;padding:.16rem .5rem;margin-right:.5rem;vertical-align:.08em">Limited deal</span>'+t.deal;}
+    if(t.deal){var _dh=t.deal.replace(/^(\d+% ?off)/i,'<b style="font-weight:800;color:#fff">$1</b>');card.querySelector('.fb-meta').innerHTML='<span style="display:inline-block;font-size:.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:'+(t.accent||'#22c55e')+';border-radius:999px;padding:.2rem .55rem;margin-right:.55rem;vertical-align:.08em">Limited deal</span><span style="color:#fff;font-weight:500">'+_dh+'</span>';}
     else{card.querySelector('.fb-meta').textContent=t.reach||meta||'';}
     if(t.accent){card.style.borderColor=t.accent;}
-    if(t.warm){card.style.background='radial-gradient(120% 140% at 88% 20%,'+t.warm+',transparent 60%),linear-gradient(150deg,rgba(26,21,18,0.9),rgba(18,15,13,0.5))';}
-    if(t.accent2){document.getElementById('fb-cta').style.color=t.accent2;document.getElementById('fb-cta').textContent='Explore '+(t.name||name)+' →';document.getElementById('fb-badge-text').textContent='Featured Partner';}
+    if(t.warm){card.style.background='radial-gradient(120% 140% at 88% 20%,'+t.warm+',transparent 60%),linear-gradient(150deg,rgba(24,19,16,0.96),rgba(15,12,11,0.92))';}
+    if(t.accent2){var _cta=document.getElementById('fb-cta');_cta.style.color='#fff';_cta.style.background=t.accent||'#22c55e';_cta.style.padding='.5rem 1rem';_cta.style.borderRadius='999px';_cta.style.fontWeight='700';_cta.textContent='Explore '+(t.name||name)+' →';document.getElementById('fb-badge-text').textContent='Featured Partner';}
     var _tk=${JSON.stringify(WORKER + '/track')};
     function fpTrack(sl,ev,dd){try{if(dd){var k='fpv:'+sl;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');}fetch(_tk,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:sl,event:ev}),keepalive:true}).catch(function(){});}catch(e){}}
     fpTrack(slug,'featured_view',true);card.addEventListener('click',function(){fpTrack(slug,'featured_click',false);});
@@ -2628,13 +2628,14 @@ const buildFeaturedPage = () => {
       var t = THEMES[slug] || {};
       var card = document.createElement('a');
       card.href = t.link || ('/brands/'+slug+'/');
-      var bg = t.warm ? 'radial-gradient(120% 140% at 88% 20%,'+t.warm+',transparent 60%),linear-gradient(150deg,rgba(26,21,18,0.9),rgba(18,15,13,0.5))' : 'linear-gradient(150deg,rgba(34,197,94,0.08),rgba(255,255,255,0.02))';
+      var bg = t.warm ? 'radial-gradient(120% 140% at 88% 20%,'+t.warm+',transparent 58%),linear-gradient(150deg,rgba(24,19,16,0.96),rgba(15,12,11,0.93))' : 'linear-gradient(150deg,rgba(34,197,94,0.08),rgba(255,255,255,0.02))';
       card.style.cssText = 'position:relative;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;padding:1.5rem 1.7rem;border:1px solid '+(t.accent||'rgba(34,197,94,0.45)')+';border-radius:16px;background:'+bg+';text-decoration:none';
       var logo = t.logo ? '<img src="'+t.logo+'" alt="'+(t.name||slug)+'" style="max-height:52px;max-width:230px;width:auto">' : '<span style="font-family:var(--font-display,sans-serif);font-weight:800;font-size:1.5rem;color:#f5f6f8">'+(t.name||slug)+'</span>';
+      var _dh = t.deal ? t.deal.replace(/^(\d+% ?off)/i,'<b style="font-weight:800;color:#fff">$1</b>') : '';
       card.innerHTML = '<span style="position:absolute;top:-.7rem;left:1.4rem;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#16a34a,#22c55e);padding:.3rem .7rem;border-radius:999px">★ Featured Partner</span>'
         + logo
-        + '<span style="flex:1;min-width:120px;color:#e6e8ec;font-size:.9rem">'+(t.deal ? ('<span style="display:inline-block;font-size:.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:'+(t.accent||'#22c55e')+';border-radius:999px;padding:.16rem .5rem;margin-right:.5rem;vertical-align:.08em">Limited deal</span>'+t.deal) : (t.reach||''))+'</span>'
-        + '<span style="color:'+(t.accent2||'#22c55e')+';font-weight:600;white-space:nowrap">'+(t.cta||('Explore '+(t.name||slug)))+' →</span>';
+        + '<span style="flex:1;min-width:120px;color:#fff;font-size:.95rem;font-weight:500">'+(t.deal ? ('<span style="display:inline-block;font-size:.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:'+(t.accent||'#22c55e')+';border-radius:999px;padding:.2rem .55rem;margin-right:.55rem;vertical-align:.08em">Limited deal</span>'+_dh) : (t.reach||''))+'</span>'
+        + '<span style="color:#fff;font-weight:700;white-space:nowrap;background:'+(t.accent||'#22c55e')+';padding:.5rem 1rem;border-radius:999px">'+(t.cta||('Explore '+(t.name||slug)))+' →</span>';
       list.appendChild(card);
       fpTrack(slug,'featured_view',true);
       card.addEventListener('click',(function(s){return function(){fpTrack(s,'featured_click',false);};})(slug));

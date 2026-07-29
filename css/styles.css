@@ -3753,11 +3753,12 @@ html[data-theme="light"] .featured-pitch {
 /* Brand-takeover variant: the featured brand's own identity owns the card. */
 .featured-brand-card.is-takeover {
     background:
-        radial-gradient(120% 140% at 88% 20%, color-mix(in srgb, var(--fb-accent) 14%, transparent), transparent 60%),
-        linear-gradient(150deg, rgba(26, 21, 18, 0.9), rgba(18, 15, 13, 0.6));
+        radial-gradient(120% 140% at 88% 20%, color-mix(in srgb, var(--fb-accent) 11%, transparent), transparent 58%),
+        linear-gradient(150deg, rgba(24, 19, 16, 0.96), rgba(15, 12, 11, 0.93));
     gap: 1.75rem;
     padding: 1.7rem 2rem;
 }
+.featured-brand-card.is-takeover .featured-brand-meta { color: rgba(255, 255, 255, 0.9); }
 .featured-brand-logo { max-height: 62px; max-width: 270px; width: auto; height: auto; flex-shrink: 0; position: relative; z-index: 2; }
 .featured-brand-plane {
     position: absolute; right: 150px; bottom: -18px; height: 128px; width: auto;
@@ -3765,13 +3766,14 @@ html[data-theme="light"] .featured-pitch {
     transition: transform .4s ease, opacity .3s ease;
 }
 .featured-brand-card:hover .featured-brand-plane { transform: rotate(-8deg) translate(10px, -6px); opacity: 0.2; }
-.featured-brand-card.is-takeover .featured-brand-cta { color: var(--fb-accent2); }
+.featured-brand-card.is-takeover .featured-brand-cta { color: #fff; }
 /* Live deal promoted in a featured banner (Premium perk) */
-.featured-brand-deal { font-size: 0.86rem; color: var(--text-primary, #f5f6f8); line-height: 1.35; }
+.featured-brand-deal { font-size: 0.95rem; color: #fff; font-weight: 500; line-height: 1.35; }
+.fb-deal-pct { color: #fff; font-weight: 800; }
 .fb-deal-tag {
-    display: inline-block; font-size: 0.55rem; font-weight: 700; letter-spacing: 1px;
+    display: inline-block; font-size: 0.62rem; font-weight: 700; letter-spacing: 1px;
     text-transform: uppercase; color: #fff; background: var(--fb-accent, #22c55e);
-    border-radius: 999px; padding: 0.16rem 0.5rem; margin-right: 0.55rem; vertical-align: 0.08em;
+    border-radius: 999px; padding: 0.2rem 0.55rem; margin-right: 0.55rem; vertical-align: 0.08em;
 }
 .featured-brand-card.is-takeover .featured-brand-badge {
     background: linear-gradient(135deg, var(--fb-accent2), var(--fb-accent));
@@ -3798,7 +3800,7 @@ html[data-theme="light"] .featured-pitch {
 .featured-brand-card--slim .featured-brand-name { font-size: 1.05rem; }
 .featured-brand-card--slim .featured-brand-body { display: flex; align-items: baseline; gap: 0.6rem; }
 .featured-brand-card--slim .featured-brand-meta { font-size: 0.82rem; margin-top: 0; white-space: nowrap; }
-.featured-brand-card--slim .featured-brand-cta { font-size: 0.88rem; }
+.featured-brand-card--slim .featured-brand-cta { font-size: 0.88rem; padding: 0.4rem 0.85rem; }
 @media (max-width: 640px) {
     /* Two rows on phones: [badge · logo · CTA] on top, reach line below.
        The single row overflows and overlaps at ~375px. */
@@ -3831,7 +3833,12 @@ html[data-theme="light"] .featured-pitch {
 .featured-brand-body { flex: 1; min-width: 0; }
 .featured-brand-name { font-size: 1.35rem; color: var(--text-primary); letter-spacing: -0.5px; }
 .featured-brand-meta { margin-top: 0.2rem; }
-.featured-brand-cta { color: var(--green); font-weight: 600; font-size: 0.95rem; white-space: nowrap; }
+.featured-brand-cta {
+    color: #fff; font-weight: 700; font-size: 0.95rem; white-space: nowrap;
+    background: var(--fb-accent, #22c55e); padding: 0.5rem 1rem; border-radius: 999px;
+    flex-shrink: 0; transition: filter .15s ease;
+}
+.featured-brand-card:hover .featured-brand-cta { filter: brightness(1.12); }
 .brand-featured-tag {
     color: #fff;
     background: linear-gradient(135deg, var(--green-dim, #16a34a), var(--green, #22c55e));
