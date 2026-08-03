@@ -4843,7 +4843,45 @@
 
         if (dispSearch) dispSearch.addEventListener('input', () => applyDispFilters());
         if (dispCity) dispCity.addEventListener('change', () => applyDispFilters());
-        if (dispSort) dispSort.addEventListener('change', () => applyDispFilters());
+
+        // "Dispensaries near me" — a discoverable front door to the near-me sort
+        // that used to be buried in the dropdown. Requests the browser location,
+        // then sorts the list by distance (cards show a "X mi" label).
+        const dispNearMe = document.getElementById('disp-near-me');
+        const dispNearMsg = document.getElementById('disp-near-me-msg');
+        function syncNearMeBtn() {
+            if (!dispNearMe) return;
+            const on = dispSort && dispSort.value === 'near-me';
+            dispNearMe.classList.toggle('active', on);
+            dispNearMe.setAttribute('aria-pressed', on ? 'true' : 'false');
+        }
+        if (dispSort) dispSort.addEventListener('change', () => { syncNearMeBtn(); applyDispFilters(); });
+        if (dispNearMe) {
+            dispNearMe.addEventListener('click', async () => {
+                if (dispNearMsg) dispNearMsg.textContent = '';
+                const label = dispNearMe.querySelector('.near-me-label');
+                // Already sorting by distance → toggle back to Best Match.
+                if (dispNearMe.classList.contains('active')) {
+                    if (dispSort) dispSort.value = 'score';
+                    syncNearMeBtn();
+                    applyDispFilters();
+                    return;
+                }
+                const orig = label ? label.textContent : '';
+                if (label) label.textContent = 'Locating…';
+                dispNearMe.classList.add('loading');
+                const ok = await _requestLocation();
+                dispNearMe.classList.remove('loading');
+                if (label) label.textContent = orig;
+                if (!ok) {
+                    if (dispNearMsg) dispNearMsg.textContent = 'Turn on location access to sort by distance.';
+                    return;
+                }
+                if (dispSort) dispSort.value = 'near-me';
+                syncNearMeBtn();
+                applyDispFilters();
+            });
+        }
 
         // Dispensary filter toggles
         document.querySelectorAll('#disp-toggles .filter-toggle').forEach(btn => {

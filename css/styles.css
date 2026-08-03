@@ -3726,6 +3726,23 @@ html[data-theme="light"] .featured-pitch {
     flex-shrink: 0;
 }
 
+/* "Dispensaries near me" — one-tap proximity sort on the dispensaries page. */
+.near-me-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font: inherit; font-weight: 600; font-size: 0.95rem;
+    color: var(--green, #22c55e);
+    background: color-mix(in srgb, var(--green, #22c55e) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--green, #22c55e) 45%, transparent);
+    border-radius: 999px; padding: 0.6rem 1.1rem; margin-bottom: 0.9rem;
+    cursor: pointer; transition: background .15s ease, border-color .15s ease, transform .1s ease;
+}
+.near-me-btn:hover { background: color-mix(in srgb, var(--green, #22c55e) 20%, transparent); border-color: var(--green, #22c55e); }
+.near-me-btn:active { transform: translateY(1px); }
+.near-me-btn.active { background: var(--green, #22c55e); color: #0a0d0a; border-color: var(--green, #22c55e); }
+.near-me-btn.loading { opacity: 0.7; pointer-events: none; }
+.near-me-btn svg { flex-shrink: 0; }
+.near-me-msg { margin-left: 0.7rem; font-size: 0.85rem; color: var(--text-secondary, #9aa0a6); }
+
 /* Featured Brand spotlight (homepage) + featured badge (brand page/rail).
    Themeable per brand via --fb-accent / --fb-accent2 (default = TCC green). */
 .featured-brand-card {

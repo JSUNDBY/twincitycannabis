@@ -570,6 +570,13 @@
             <h1 class="section-title">Every dispensary in the Twin Cities</h1>
             <p class="section-desc" style="margin-bottom:1rem">Browse, compare, and find your perfect dispensary.</p>
 
+            <!-- Near me: one-tap proximity sort (uses the browser's location) -->
+            <button type="button" id="disp-near-me" class="near-me-btn" aria-pressed="false">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                <span class="near-me-label">Dispensaries near me</span>
+            </button>
+            <span id="disp-near-me-msg" class="near-me-msg" role="status"></span>
+
             <!-- Search -->
             <div class="filter-bar" style="margin-bottom:0.8rem">
                 <div class="search-box" style="flex:1;min-width:200px">
