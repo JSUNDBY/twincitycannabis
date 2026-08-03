@@ -358,7 +358,9 @@ ${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</scri
   .post{max-width:44rem}
   .post-meta{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.68rem;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-muted,#8b909a);margin-bottom:.6rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
   .post-cat{color:var(--green-text,#22c55e)}
-  .post-dek{font-size:1.15rem;line-height:1.55;color:var(--text-secondary,#cdd2d8);margin:.4rem 0 1.75rem;font-weight:400}
+  .post-dek{font-size:1.15rem;line-height:1.55;color:var(--text-secondary,#cdd2d8);margin:.4rem 0 1.5rem;font-weight:400}
+  .post-hero{width:100%;height:auto;aspect-ratio:1200/820;object-fit:cover;border-radius:16px;margin:0 0 1.75rem;display:block}
+  .bc-thumb{width:100%;height:auto;aspect-ratio:600/410;object-fit:cover;display:block;background:var(--bg-card,rgba(255,255,255,0.03))}
   .post h2{margin-top:2rem}
   .post p,.post li{font-size:1.02rem;line-height:1.7}
   .post-related{margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--border,rgba(255,255,255,0.08))}
@@ -366,8 +368,9 @@ ${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</scri
   .post-related ul{list-style:none;padding:0;margin:0}
   .post-related li{margin:.35rem 0}
   .blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin:1.5rem 0}
-  .blog-card{display:block;text-decoration:none;border:1px solid var(--border,rgba(255,255,255,0.08));border-radius:14px;padding:1.3rem 1.4rem;background:var(--bg-card,rgba(255,255,255,0.02));transition:border-color .15s ease,transform .15s ease}
+  .blog-card{display:block;text-decoration:none;border:1px solid var(--border,rgba(255,255,255,0.08));border-radius:14px;overflow:hidden;background:var(--bg-card,rgba(255,255,255,0.02));transition:border-color .15s ease,transform .15s ease}
   .blog-card:hover{border-color:var(--green,#22c55e);transform:translateY(-2px)}
+  .blog-card .bc-body{padding:1.2rem 1.3rem 1.35rem}
   .blog-card .bc-meta{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.62rem;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--green-text,#22c55e);margin-bottom:.5rem}
   .blog-card .bc-title{font-family:var(--font-display,'Outfit',sans-serif);font-weight:700;font-size:1.12rem;line-height:1.25;color:var(--text-primary,#f5f6f8);margin-bottom:.4rem;letter-spacing:-.3px}
   .blog-card .bc-dek{color:var(--text-secondary,#b8bcc4);font-size:.9rem;line-height:1.5}
@@ -2602,11 +2605,13 @@ const buildBlogPost = (post, allPosts) => {
   const canonical = `${SITE}/blog/${post.slug}/`;
   const title = `${post.title} | Twin City Cannabis`;
   const description = post.dek;
+  const imgPath = `/assets/blog/${post.slug}.jpg`;
   const schema = [{
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.dek,
+    image: `${SITE}${imgPath}`,
     datePublished: post.date,
     dateModified: post.updated || post.date,
     author: { '@type': 'Organization', name: 'Twin City Cannabis', url: SITE },
@@ -2618,12 +2623,13 @@ const buildBlogPost = (post, allPosts) => {
     articleSection: post.category,
   }];
   const related = (post.related || []).map(r => `<li><a href="${r.href}">${esc(r.label)}</a></li>`).join('');
-  return headOpen({ title, description, canonical, schema }) + `
+  return headOpen({ title, description, canonical, ogImage: imgPath, schema }) + `
 <div class="crumbs"><a href="/">Home</a> / <a href="/blog/">Guides</a> / ${esc(post.title)}</div>
 <article class="post">
   <div class="post-meta"><span class="post-cat">${esc(post.category)}</span> <time datetime="${post.date}">${humanDate(post.date)}</time> · ${post.read} min read</div>
   <h1>${esc(post.title)}</h1>
   <p class="post-dek">${esc(post.dek)}</p>
+  <img class="post-hero" src="${imgPath}" alt="${esc(post.title)}" width="1200" height="820" loading="eager">
   ${post.body}
   ${related ? `<div class="post-related"><h3>Keep reading</h3><ul>${related}</ul></div>` : ''}
   <a class="cta" href="/dispensaries/" style="margin-top:2rem">Compare prices at every Twin Cities dispensary →</a>
@@ -2647,10 +2653,13 @@ const buildBlogIndex = (posts) => {
     })),
   }];
   const cards = posts.map(p => `<a class="blog-card" href="/blog/${p.slug}/">
-    <div class="bc-meta">${esc(p.category)}</div>
-    <div class="bc-title">${esc(p.title)}</div>
-    <div class="bc-dek">${esc(p.dek)}</div>
-    <div class="bc-date">${humanDate(p.date)} · ${p.read} min read</div>
+    <img class="bc-thumb" src="/assets/blog/${p.slug}.jpg" alt="${esc(p.title)}" width="600" height="410" loading="lazy">
+    <div class="bc-body">
+      <div class="bc-meta">${esc(p.category)}</div>
+      <div class="bc-title">${esc(p.title)}</div>
+      <div class="bc-dek">${esc(p.dek)}</div>
+      <div class="bc-date">${humanDate(p.date)} · ${p.read} min read</div>
+    </div>
   </a>`).join('\n');
   return headOpen({ title, description, canonical, schema }) + `
 <div class="crumbs"><a href="/">Home</a> / Guides</div>
