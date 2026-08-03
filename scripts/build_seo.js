@@ -2605,13 +2605,15 @@ const buildBlogPost = (post, allPosts) => {
   const canonical = `${SITE}/blog/${post.slug}/`;
   const title = `${post.title} | Twin City Cannabis`;
   const description = post.dek;
+  // Hero image is optional: only used if the asset actually exists on disk, so a
+  // post can ship text-first and get a reviewed image added later (no broken img).
   const imgPath = `/assets/blog/${post.slug}.jpg`;
-  const schema = [{
+  const hasImg = fs.existsSync(path.join(ROOT, 'assets', 'blog', `${post.slug}.jpg`));
+  const schema = [Object.assign({
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.dek,
-    image: `${SITE}${imgPath}`,
     datePublished: post.date,
     dateModified: post.updated || post.date,
     author: { '@type': 'Organization', name: 'Twin City Cannabis', url: SITE },
@@ -2621,15 +2623,15 @@ const buildBlogPost = (post, allPosts) => {
     },
     mainEntityOfPage: canonical,
     articleSection: post.category,
-  }];
+  }, hasImg ? { image: `${SITE}${imgPath}` } : {})];
   const related = (post.related || []).map(r => `<li><a href="${r.href}">${esc(r.label)}</a></li>`).join('');
-  return headOpen({ title, description, canonical, ogImage: imgPath, schema }) + `
+  return headOpen({ title, description, canonical, ogImage: hasImg ? imgPath : '/og-image.png', schema }) + `
 <div class="crumbs"><a href="/">Home</a> / <a href="/blog/">Guides</a> / ${esc(post.title)}</div>
 <article class="post">
   <div class="post-meta"><span class="post-cat">${esc(post.category)}</span> <time datetime="${post.date}">${humanDate(post.date)}</time> · ${post.read} min read</div>
   <h1>${esc(post.title)}</h1>
   <p class="post-dek">${esc(post.dek)}</p>
-  <img class="post-hero" src="${imgPath}" alt="${esc(post.title)}" width="1200" height="820" loading="eager">
+  ${hasImg ? `<img class="post-hero" src="${imgPath}" alt="${esc(post.title)}" width="1200" height="820" loading="eager">` : ''}
   ${post.body}
   ${related ? `<div class="post-related"><h3>Keep reading</h3><ul>${related}</ul></div>` : ''}
   <a class="cta" href="/dispensaries/" style="margin-top:2rem">Compare prices at every Twin Cities dispensary →</a>
@@ -2652,15 +2654,18 @@ const buildBlogIndex = (posts) => {
       datePublished: p.date, dateModified: p.updated || p.date,
     })),
   }];
-  const cards = posts.map(p => `<a class="blog-card" href="/blog/${p.slug}/">
-    <img class="bc-thumb" src="/assets/blog/${p.slug}.jpg" alt="${esc(p.title)}" width="600" height="410" loading="lazy">
+  const cards = posts.map(p => {
+    const hasImg = fs.existsSync(path.join(ROOT, 'assets', 'blog', `${p.slug}.jpg`));
+    return `<a class="blog-card${hasImg ? '' : ' no-thumb'}" href="/blog/${p.slug}/">
+    ${hasImg ? `<img class="bc-thumb" src="/assets/blog/${p.slug}.jpg" alt="${esc(p.title)}" width="600" height="410" loading="lazy">` : ''}
     <div class="bc-body">
       <div class="bc-meta">${esc(p.category)}</div>
       <div class="bc-title">${esc(p.title)}</div>
       <div class="bc-dek">${esc(p.dek)}</div>
       <div class="bc-date">${humanDate(p.date)} · ${p.read} min read</div>
     </div>
-  </a>`).join('\n');
+  </a>`;
+  }).join('\n');
   return headOpen({ title, description, canonical, schema }) + `
 <div class="crumbs"><a href="/">Home</a> / Guides</div>
 <h1>Minnesota cannabis guides</h1>
