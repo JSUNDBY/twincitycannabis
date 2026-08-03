@@ -95,19 +95,28 @@ def main():
             return phrase_map[ph]
         return ""
 
-    # rewrite each product entry, inserting strainType after `strain: null,`
+    # Fill strainType on each product. Products now always carry the field
+    # (scrapers emit `strainType: ''` when the source menu has no genetics),
+    # so skip only entries that ALREADY have a NON-EMPTY value — otherwise the
+    # empty-but-present field would make this a no-op (it did, for months).
     entries = re.split(r"(?=\{ id: 'p\d)", block)
     counts = {"indica": 0, "sativa": 0, "hybrid": 0}
     changed = 0
     out = []
     for e in entries:
-        if "strainType:" in e or "id: 'p" not in e:
+        if "id: 'p" not in e:
+            out.append(e)
+            continue
+        if re.search(r"strainType: '[^']", e):  # already has a real value
             out.append(e)
             continue
         nm = re.search(r"name: '((?:\\.|[^'])*)'", e)
         t = classify(nm.group(1)) if nm else ""
         if t:
-            e = e.replace("strain: null,", f"strain: null, strainType: '{t}',", 1)
+            if "strainType:" in e:  # field exists but empty — fill in place
+                e = e.replace("strainType: ''", f"strainType: '{t}'", 1)
+            else:  # legacy entry with no field — insert after strain
+                e = e.replace("strain: null,", f"strain: null, strainType: '{t}',", 1)
             counts[t] += 1
             changed += 1
         out.append(e)
