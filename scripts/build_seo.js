@@ -33,6 +33,10 @@ const ICONS = {
 const icon = (name) => `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ''}</svg>`;
 const WORKER = 'https://dashboard.twincitycannabis.com';
 
+// Hand-written editorial blog posts (the layer competitors' programmatic-only
+// pages can't match). Data lives in scripts/blog_posts.js.
+const BLOG_POSTS = require('./blog_posts.js');
+
 // Featured-partner brand themes (mirror of FEATURED_THEMES in js/app.js) so the
 // static /brands/ rail and /featured/ page can render a brand takeover. Keyed
 // by brand slug. Embedded into client scripts as JSON.
@@ -251,6 +255,7 @@ const NAV_SECTIONS = [
   { label: 'Deals',        appHref: '#deals',        appId: 'nav-deals',        staticHref: '/weed-deals-twin-cities/' },
   { label: 'Featured',     appHref: '/featured/',    appId: null,               staticHref: '/featured/' },
   { label: 'Brands',       appHref: '/brands/',      appId: null,               staticHref: '/brands/' },
+  { label: 'Guides',       appHref: '/blog/',        appId: null,               staticHref: '/blog/' },
   { label: 'Learn',        appHref: '#learn',        appId: 'nav-learn',        staticHref: '/minnesota-cannabis-laws/' },
 ];
 
@@ -349,6 +354,24 @@ ${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</scri
   .crumbs{font-size:.85rem;color:var(--text-muted,#8b909a);margin-bottom:.5rem}
   .crumbs a{color:var(--text-muted,#8b909a);text-decoration:none}
   .crumbs a:hover{color:var(--green-text,#22c55e)}
+  /* Blog / Guides */
+  .post{max-width:44rem}
+  .post-meta{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.68rem;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-muted,#8b909a);margin-bottom:.6rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+  .post-cat{color:var(--green-text,#22c55e)}
+  .post-dek{font-size:1.15rem;line-height:1.55;color:var(--text-secondary,#cdd2d8);margin:.4rem 0 1.75rem;font-weight:400}
+  .post h2{margin-top:2rem}
+  .post p,.post li{font-size:1.02rem;line-height:1.7}
+  .post-related{margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--border,rgba(255,255,255,0.08))}
+  .post-related h3{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted,#8b909a);margin:0 0 .6rem}
+  .post-related ul{list-style:none;padding:0;margin:0}
+  .post-related li{margin:.35rem 0}
+  .blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin:1.5rem 0}
+  .blog-card{display:block;text-decoration:none;border:1px solid var(--border,rgba(255,255,255,0.08));border-radius:14px;padding:1.3rem 1.4rem;background:var(--bg-card,rgba(255,255,255,0.02));transition:border-color .15s ease,transform .15s ease}
+  .blog-card:hover{border-color:var(--green,#22c55e);transform:translateY(-2px)}
+  .blog-card .bc-meta{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.62rem;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--green-text,#22c55e);margin-bottom:.5rem}
+  .blog-card .bc-title{font-family:var(--font-display,'Outfit',sans-serif);font-weight:700;font-size:1.12rem;line-height:1.25;color:var(--text-primary,#f5f6f8);margin-bottom:.4rem;letter-spacing:-.3px}
+  .blog-card .bc-dek{color:var(--text-secondary,#b8bcc4);font-size:.9rem;line-height:1.5}
+  .blog-card .bc-date{color:var(--text-muted,#8b909a);font-size:.75rem;margin-top:.7rem}
   .meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;color:var(--text-muted,#8b909a);font-size:.92rem;margin:.5rem 0 1.5rem}
   .stars{color:var(--amber-text,#f59e0b)}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin:1.5rem 0}
@@ -440,7 +463,7 @@ const footer = `</main>
 <footer>
   <p><strong class="footer-brand">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Twin Cities dispensary.</p>
   <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a></p>
-  <p><a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
+  <p><a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
   <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
 </footer>
@@ -2572,6 +2595,74 @@ ${urls.map(u => `  <url>
 `;
 };
 
+// ---------- Blog / Guides ----------
+const humanDate = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+const buildBlogPost = (post, allPosts) => {
+  const canonical = `${SITE}/blog/${post.slug}/`;
+  const title = `${post.title} | Twin City Cannabis`;
+  const description = post.dek;
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.dek,
+    datePublished: post.date,
+    dateModified: post.updated || post.date,
+    author: { '@type': 'Organization', name: 'Twin City Cannabis', url: SITE },
+    publisher: {
+      '@type': 'Organization', name: 'Twin City Cannabis',
+      logo: { '@type': 'ImageObject', url: `${SITE}/img/twin-city-cannabis-logo-512.png` },
+    },
+    mainEntityOfPage: canonical,
+    articleSection: post.category,
+  }];
+  const related = (post.related || []).map(r => `<li><a href="${r.href}">${esc(r.label)}</a></li>`).join('');
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/blog/">Guides</a> / ${esc(post.title)}</div>
+<article class="post">
+  <div class="post-meta"><span class="post-cat">${esc(post.category)}</span> <time datetime="${post.date}">${humanDate(post.date)}</time> · ${post.read} min read</div>
+  <h1>${esc(post.title)}</h1>
+  <p class="post-dek">${esc(post.dek)}</p>
+  ${post.body}
+  ${related ? `<div class="post-related"><h3>Keep reading</h3><ul>${related}</ul></div>` : ''}
+  <a class="cta" href="/dispensaries/" style="margin-top:2rem">Compare prices at every Twin Cities dispensary →</a>
+</article>
+` + footer;
+};
+
+const buildBlogIndex = (posts) => {
+  const canonical = `${SITE}/blog/`;
+  const title = 'Cannabis Guides for Minnesota — Twin City Cannabis';
+  const description = 'Plain-English guides to buying, dosing, saving, and understanding cannabis in Minnesota. Written by people who track every dispensary price in the metro.';
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'Twin City Cannabis Guides',
+    description,
+    url: canonical,
+    blogPost: posts.map(p => ({
+      '@type': 'BlogPosting', headline: p.title, url: `${SITE}/blog/${p.slug}/`,
+      datePublished: p.date, dateModified: p.updated || p.date,
+    })),
+  }];
+  const cards = posts.map(p => `<a class="blog-card" href="/blog/${p.slug}/">
+    <div class="bc-meta">${esc(p.category)}</div>
+    <div class="bc-title">${esc(p.title)}</div>
+    <div class="bc-dek">${esc(p.dek)}</div>
+    <div class="bc-date">${humanDate(p.date)} · ${p.read} min read</div>
+  </a>`).join('\n');
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / Guides</div>
+<h1>Minnesota cannabis guides</h1>
+<p class="post-dek">No hype, no filler. Straight guidance on buying, dosing, saving, and understanding cannabis in Minnesota, from the team that tracks every dispensary price in the metro.</p>
+<div class="blog-grid">
+${cards}
+</div>
+<a class="cta" href="/cheapest-cannabis-twin-cities/">See where cannabis is cheapest right now →</a>
+` + footer;
+};
+
 // ---------- BUILD ----------
 let count = 0;
 const extraSitemap = [];
@@ -3679,6 +3770,18 @@ writePage('market-insights/index.html', buildMarketInsightsPage());
 extraSitemap.push({ loc: `${SITE}/market-insights/`, priority: '0.8', changefreq: 'daily' });
 count++;
 console.log('Wrote market-insights page');
+
+// Blog / Guides — newest first
+const blogSorted = BLOG_POSTS.slice().sort((a, b) => (a.date < b.date ? 1 : -1));
+blogSorted.forEach((p) => {
+  writePage(`blog/${p.slug}/index.html`, buildBlogPost(p, blogSorted));
+  extraSitemap.push({ loc: `${SITE}/blog/${p.slug}/`, priority: '0.7', changefreq: 'monthly' });
+  count++;
+});
+writePage('blog/index.html', buildBlogIndex(blogSorted));
+extraSitemap.push({ loc: `${SITE}/blog/`, priority: '0.8', changefreq: 'weekly' });
+count++;
+console.log(`Wrote ${blogSorted.length} blog posts + index`);
 
 // Sitemap
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), buildSitemap(extraSitemap));
