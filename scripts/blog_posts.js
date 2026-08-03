@@ -278,4 +278,289 @@ module.exports = [
       { href: '/blog/cannabis-for-sleep-minnesota/', label: 'Cannabis for sleep' },
     ],
   },
+
+  {
+    slug: 'cbd-vs-thc-minnesota',
+    title: 'CBD vs THC: what is the difference and which one do you want?',
+    dek: 'Two letters apart, worlds apart in how they feel. A plain-English guide to the two compounds you keep seeing on Minnesota labels.',
+    date: '2026-04-19',
+    updated: '2026-04-19',
+    category: 'Getting started',
+    read: 5,
+    body: `
+<p>Every product on a Minnesota shelf lists two numbers that matter most: THC and CBD. If those letters are a blur to you, here is the short, honest version so you can read a label and know what you are actually buying.</p>
+
+<h2>THC is the one that gets you high</h2>
+<p>THC is the compound responsible for the classic cannabis feeling: euphoria, relaxation, the head-and-body change most people mean when they say "high." More THC, stronger effect, up to a point. It is what recreational products are built around.</p>
+
+<h2>CBD does not get you high</h2>
+<p>CBD is the calm cousin. On its own it will not make you feel intoxicated. People reach for it for a sense of ease, for winding down, and for taking the edge off without the head change. You will see CBD-only products and CBD-heavy tinctures marketed for exactly that.</p>
+
+<h2>They work well together</h2>
+<p>Here is the useful part: CBD tends to soften THC. A product with some CBD alongside the THC often feels smoother, less racy, and less likely to tip into anxiety. If THC alone has ever made you feel wound up, a more balanced THC-to-CBD product is worth trying. Our <a href="/blog/cannabis-for-anxiety-minnesota/">anxiety guide</a> gets into this.</p>
+
+<h2>How to read the ratio</h2>
+<p>Labels often show a ratio like 1:1 (equal THC and CBD), 2:1, or high-THC with little CBD. A rough guide:</p>
+<ul>
+  <li><strong>High THC, low CBD:</strong> strongest classic high. Standard recreational flower and most edibles.</li>
+  <li><strong>Balanced (1:1 or 2:1):</strong> gentler, more functional, good for newer users.</li>
+  <li><strong>High CBD, low THC:</strong> calm and clear-headed, minimal intoxication.</li>
+</ul>
+
+<h2>Which do you want?</h2>
+<p>If you want the full cannabis experience, THC-forward. If you want to feel calmer while staying clear, lean toward balanced or CBD-forward. There is no wrong answer, just the one that fits your evening. Not sure what to grab? Compare what is in stock and what it costs on our <a href="/products/">product pages</a> before you buy, and a good budtender will point you the right way.</p>
+`,
+    related: [
+      { href: '/blog/first-time-dispensary-guide-minnesota/', label: 'Your first dispensary visit' },
+      { href: '/blog/cannabis-for-anxiety-minnesota/', label: 'Cannabis for anxiety' },
+      { href: '/products/', label: 'Browse products' },
+    ],
+  },
+
+  {
+    slug: 'indica-sativa-hybrid-minnesota',
+    title: 'Indica, sativa, hybrid: does the label actually mean anything?',
+    dek: 'Every menu sorts weed into three buckets. The truth about what those words tell you, and what they do not.',
+    date: '2026-05-03',
+    updated: '2026-05-03',
+    category: 'Buying smart',
+    read: 6,
+    body: `
+<p>Walk into any dispensary and everything is sorted into indica, sativa, or hybrid. Shoppers treat it like gospel: indica for the couch, sativa for energy. The reality is messier, and knowing the truth will make you a better, cheaper shopper.</p>
+
+<h2>The classic shorthand</h2>
+<ul>
+  <li><strong>Indica:</strong> marketed as relaxing, body-heavy, good for night and sleep.</li>
+  <li><strong>Sativa:</strong> marketed as uplifting, heady, good for daytime and doing things.</li>
+  <li><strong>Hybrid:</strong> a blend of both, which in practice is almost everything now.</li>
+</ul>
+<p>As a loose starting point, this shorthand is fine. If you want to wind down, the indica shelf is a reasonable place to look.</p>
+
+<h2>Why it is only half true</h2>
+<p>Here is what the budtender may not stress: the indica-versus-sativa split is more about the plant's shape and lineage than a promise of how it will feel. Modern cannabis is so crossbred that almost everything is a hybrid, and two "indicas" can feel completely different. The actual experience comes from the specific chemistry of that batch plus your own body and dose, not the category label.</p>
+
+<h2>What predicts the feeling better</h2>
+<p>If you want a better guess than the three-bucket label, look at the whole picture: the specific strain's reputation, the terpene profile if the shop lists it, the THC and CBD balance (see our <a href="/blog/cbd-vs-thc-minnesota/">CBD vs THC guide</a>), and honestly, what has worked for you before. Your own track record beats the label every time.</p>
+
+<h2>How to actually use it</h2>
+<p>Use the indica/sativa label as a rough filter, not a guarantee. Tell the budtender the effect you want ("relaxed but not asleep") instead of just asking for an indica. And do not pay a premium chasing a category. Compare prices on the same shelf, because the label does not justify a higher price. Our <a href="/cheapest-flower-minneapolis/">cheapest flower</a> pages help you find the value.</p>
+`,
+    related: [
+      { href: '/blog/thc-percentage-myth-minnesota/', label: 'The THC percentage myth' },
+      { href: '/blog/cbd-vs-thc-minnesota/', label: 'CBD vs THC' },
+      { href: '/cheapest-flower-minneapolis/', label: 'Cheapest flower' },
+    ],
+  },
+
+  {
+    slug: 'flower-vapes-edibles-minnesota',
+    title: 'Flower, vapes, or edibles: which is right for you?',
+    dek: 'Same plant, three very different experiences. Here is how to pick the format that fits what you actually want.',
+    date: '2026-05-24',
+    updated: '2026-05-24',
+    category: 'Getting started',
+    read: 6,
+    body: `
+<p>New shoppers often fixate on strains when the bigger decision is the format. Flower, a vape, or an edible will shape your night more than the name on the jar. Here is how the three actually differ.</p>
+
+<h2>Flower</h2>
+<p>The classic: dried cannabis you grind and smoke. Effects arrive in minutes and fade over an hour or two, which makes it easy to control. The tradeoff is the smoke and the smell. Good for people who want the ritual and quick, adjustable effects. It is also usually the best value per dose. See our <a href="/blog/thc-percentage-myth-minnesota/">guide to reading a flower menu</a>.</p>
+
+<h2>Vapes</h2>
+<p>A cartridge or disposable that heats cannabis oil into vapor. Like flower, it hits fast and fades in an hour or so, but it is discreet, nearly odorless, and portable. The tradeoff is that you are buying processed oil, and quality varies, so buy from licensed shops. Good for convenience and discretion.</p>
+
+<h2>Edibles</h2>
+<p>Gummies, chocolates, drinks. The big difference: they take 45 minutes to 2 hours to kick in and last much longer, often several hours. They are smoke-free and easy, but they are also where beginners get in trouble by taking too much too soon. If you go this route, read our <a href="/blog/edibles-dosing-guide-minnesota/">edibles dosing guide</a> first, and respect the two-hour rule.</p>
+
+<h2>Quick picker</h2>
+<ul>
+  <li><strong>Want control and value?</strong> Flower.</li>
+  <li><strong>Want discreet and portable?</strong> Vape.</li>
+  <li><strong>Want smoke-free and long-lasting?</strong> Edible, dosed low.</li>
+</ul>
+<p>Most people end up keeping a couple of formats around for different moods. Start with one, keep the dose modest, and compare what each costs across shops on our <a href="/cheapest-cannabis-twin-cities/">price pages</a> before you commit.</p>
+`,
+    related: [
+      { href: '/blog/edibles-dosing-guide-minnesota/', label: 'Edibles dosing guide' },
+      { href: '/blog/first-time-dispensary-guide-minnesota/', label: 'Your first dispensary visit' },
+      { href: '/cheapest-cannabis-twin-cities/', label: 'Compare prices' },
+    ],
+  },
+
+  {
+    slug: 'cannabis-for-anxiety-minnesota',
+    title: 'Cannabis for anxiety in Minnesota: what helps and what backfires',
+    dek: 'Cannabis can calm anxiety or cause it, and the difference is mostly dose and chemistry. An honest guide to staying on the calm side.',
+    date: '2026-06-14',
+    updated: '2026-06-14',
+    category: 'Wellness',
+    read: 7,
+    body: `
+<p>A lot of people try cannabis hoping it will quiet their anxiety, and for many it does. But cannabis is genuinely two-faced here: the same plant that relaxes one person at one dose can spike another person into a racing-heart spiral. The good news is the difference is mostly predictable. Here is how to land on the calm side.</p>
+
+<h2>The core rule: low and slow</h2>
+<p>Most cannabis-induced anxiety comes from too much THC, too fast. High doses can flip relaxation into paranoia and a pounding heart. If anxiety is your concern, start with the lowest reasonable dose and give it time. With edibles that means 2.5mg and the <a href="/blog/edibles-dosing-guide-minnesota/">two-hour wait</a>. With flower or a vape, one small amount and pause.</p>
+
+<h2>Let CBD do the work</h2>
+<p>CBD tends to take the edge off THC and reduce the racy feeling. For anxiety, a balanced product (some CBD alongside the THC) or a CBD-forward one is often far more comfortable than high-THC anything. Our <a href="/blog/cbd-vs-thc-minnesota/">CBD vs THC guide</a> explains the ratios to look for.</p>
+
+<h2>What tends to backfire</h2>
+<ul>
+  <li><strong>Chasing high THC.</strong> The big number is the fast track to anxiety for sensitive people.</li>
+  <li><strong>Redosing edibles early.</strong> The delay tricks people into doubling up. Do not.</li>
+  <li><strong>Mixing with a lot of caffeine or alcohol.</strong> Both can sharpen the jittery side.</li>
+  <li><strong>A stressful setting.</strong> Set and setting are real. Start somewhere you feel safe.</li>
+</ul>
+
+<h2>If anxiety hits anyway</h2>
+<p>It passes, always. Find a calm spot, slow your breathing, drink water, remind yourself you are safe and this is temporary. It will fade as the dose wears off.</p>
+
+<h2>The honest caveat</h2>
+<p>For some people, especially with heavy use, cannabis makes baseline anxiety worse over time, not better. It can be a helpful tool for the occasional rough evening, but it is not a treatment for an anxiety disorder. If anxiety is running your life, that is a conversation for a doctor, not a dispensary. Used thoughtfully and in small amounts, though, a lot of Minnesotans find it genuinely settling.</p>
+`,
+    related: [
+      { href: '/blog/cbd-vs-thc-minnesota/', label: 'CBD vs THC' },
+      { href: '/blog/edibles-dosing-guide-minnesota/', label: 'Edibles dosing guide' },
+      { href: '/blog/cannabis-for-sleep-minnesota/', label: 'Cannabis for sleep' },
+    ],
+  },
+
+  {
+    slug: 'how-much-does-weed-cost-minnesota',
+    title: 'How much does weed actually cost in Minnesota?',
+    dek: 'A real, plain-numbers breakdown of what you pay for flower, edibles, and carts in the Twin Cities, and why the same product swings so much.',
+    date: '2026-07-05',
+    updated: '2026-07-05',
+    category: 'Saving money',
+    read: 6,
+    body: `
+<p>People ask this constantly and get vague answers. Since we track prices across the metro every day, here is a straight look at what cannabis actually costs in Minnesota and where your money goes.</p>
+
+<h2>The rough going rates</h2>
+<p>Prices move daily and vary by shop, but as a ballpark for the Twin Cities market:</p>
+<ul>
+  <li><strong>An eighth of flower (3.5g):</strong> commonly lands in the low-to-mid tens of dollars, with budget and premium ends well outside that.</li>
+  <li><strong>Larger flower (quarter, half, ounce):</strong> cheaper per gram the more you buy.</li>
+  <li><strong>Edibles:</strong> a pack of gummies is typically an affordable single purchase, priced by total milligrams.</li>
+  <li><strong>Vape carts:</strong> priced by size and quality, usually a mid-range single-item buy.</li>
+</ul>
+<p>For the actual current numbers, do not trust a blog's ballpark, check the live board. Our <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a> and pages like <a href="/cheapest-flower-minneapolis/">cheapest flower in Minneapolis</a> show real prices updated daily.</p>
+
+<h2>Why the same product costs different amounts</h2>
+<p>Two shops can price the identical jar 20 to 40 percent apart. It comes down to their supplier deals, their margins, their location, and how aggressively they are competing. This is the single biggest reason to compare before you buy, and the reason this whole site exists.</p>
+
+<h2>Do not forget the tax</h2>
+<p>Minnesota adds a cannabis tax on top of regular sales tax, so the shelf price is not the register price. It is the same everywhere, so it does not change which shop is cheapest, but it does change your total. Our <a href="/tax-calculator/">tax calculator</a> gives you the real out-the-door number.</p>
+
+<h2>The takeaway</h2>
+<p>There is no single price for weed in Minnesota, there is a range, and where you land in that range is mostly up to whether you compared first. Two minutes on the price pages routinely saves more than the coffee you would grab on the way. For the full playbook, see <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money at Minnesota dispensaries</a>.</p>
+`,
+    related: [
+      { href: '/cheapest-cannabis-twin-cities/', label: 'Cheapest cannabis tracker' },
+      { href: '/blog/how-to-save-money-minnesota-dispensaries/', label: 'How to save money' },
+      { href: '/tax-calculator/', label: 'Tax calculator' },
+    ],
+  },
+
+  {
+    slug: 'can-you-get-fired-cannabis-minnesota',
+    title: 'Can you get fired for legal cannabis in Minnesota?',
+    dek: 'It is legal, but your job has its own rules. A plain-English look at what Minnesota protects, what it does not, and where the gray areas are.',
+    date: '2026-07-12',
+    updated: '2026-07-12',
+    category: 'Laws & basics',
+    read: 6,
+    body: `
+<p>Cannabis is legal for adults in Minnesota, but "legal" and "your boss is fine with it" are two different things. This is one of the most-searched cannabis questions in the state, and the honest answer is: it depends, and there are real gray areas. Here is the plain version.</p>
+
+<h2>Off-the-clock use has some protection</h2>
+<p>Minnesota law generally treats lawful cannabis use on your own time, off company property, more like a legal off-duty activity than automatic grounds for firing. In broad strokes, using legally on a Saturday is not, by itself, something most employers can treat as misconduct.</p>
+
+<h2>But work impairment is not protected</h2>
+<p>Being impaired at work, using on the job, or possessing cannabis on company property is a different story, and employers can act on that. The protection is for what you do on your own time, not for showing up affected.</p>
+
+<h2>The big exceptions</h2>
+<ul>
+  <li><strong>Safety-sensitive jobs</strong> (driving, heavy equipment, certain medical and safety roles) have much stricter rules.</li>
+  <li><strong>Federal employers and federally regulated work</strong> still follow federal law, where cannabis remains illegal.</li>
+  <li><strong>Jobs with federal contracts or funding</strong> may enforce their own drug-free policies.</li>
+</ul>
+
+<h2>The testing gray area</h2>
+<p>Drug tests detect cannabis for days or weeks after use, long after any impairment is gone. That gap is exactly where disputes happen, and the rules continue to evolve. If your job drug tests, know your employer's written policy before you assume you are covered.</p>
+
+<h2>The practical advice</h2>
+<p>Know your workplace policy, never use or be impaired on the job, and be especially careful in safety-sensitive or federally connected roles. This is general information, not legal advice, and if your job is genuinely on the line, talk to an employment attorney. For what is legal in the state generally, see our <a href="/minnesota-cannabis-laws/">Minnesota cannabis laws</a> page.</p>
+`,
+    related: [
+      { href: '/minnesota-cannabis-laws/', label: 'Minnesota cannabis laws' },
+      { href: '/blog/cannabis-and-driving-minnesota/', label: 'Cannabis and driving' },
+      { href: '/blog/medical-card-vs-recreational-minnesota/', label: 'Medical card vs recreational' },
+    ],
+  },
+
+  {
+    slug: 'cannabis-and-driving-minnesota',
+    title: 'Cannabis and driving in Minnesota: the law and the reality',
+    dek: 'There is no breathalyzer for weed, but there is a DUI. What the law says, how it is enforced, and how to stay safe and legal.',
+    date: '2026-07-26',
+    updated: '2026-07-26',
+    category: 'Laws & basics',
+    read: 5,
+    body: `
+<p>Legal cannabis has not changed one thing: driving impaired is still a crime in Minnesota, and cannabis counts. This is where a fun night turns into a serious legal problem fast, so it is worth being clear-eyed about.</p>
+
+<h2>The law</h2>
+<p>It is illegal to drive under the influence of cannabis in Minnesota, full stop. Unlike alcohol, there is no simple per-se number like a 0.08 blood level. Impairment is judged by the officer, field sobriety tests, and evidence, which actually makes it less predictable, not more forgiving.</p>
+
+<h2>Why the "how much is too much" question has no clean answer</h2>
+<p>THC affects people differently and lingers in the body long after the high fades, so a blood test does not cleanly prove impairment the way a breathalyzer does for alcohol. That means there is no safe number to point to. The only reliable rule is: if you have used, do not drive.</p>
+
+<h2>It is not just the driver</h2>
+<p>Open cannabis in the vehicle is not allowed, and that includes passengers using in the car. Keep product sealed and stored, treat it like an open-container situation, and do not consume on the road.</p>
+
+<h2>The safe move</h2>
+<ul>
+  <li>Do not drive after using. Give it real time, and remember edibles last for hours.</li>
+  <li>Keep cannabis sealed and out of reach while driving, ideally in the trunk.</li>
+  <li>Line up a ride the way you would after drinking. Same principle, same stakes.</li>
+</ul>
+<p>Legalization made buying easy. It did not make driving high okay. Plan the ride home before you use, and the rest of it stays fun. For the full set of state rules, see our <a href="/minnesota-cannabis-laws/">Minnesota cannabis laws</a> page.</p>
+`,
+    related: [
+      { href: '/minnesota-cannabis-laws/', label: 'Minnesota cannabis laws' },
+      { href: '/blog/can-you-get-fired-cannabis-minnesota/', label: 'Can you get fired for cannabis?' },
+      { href: '/blog/edibles-dosing-guide-minnesota/', label: 'Edibles dosing guide' },
+    ],
+  },
+
+  {
+    slug: 'minnesota-cannabis-market-mid-2026',
+    title: 'Minnesota’s cannabis market in mid-2026: where things stand',
+    dek: 'A snapshot of the state’s young adult-use market: more shops opening, prices settling, and what it means for shoppers right now.',
+    date: '2026-08-03',
+    updated: '2026-08-03',
+    category: 'Market watch',
+    read: 5,
+    body: `
+<p>Minnesota's adult-use market is still young, and it is moving fast. Here is a plain snapshot of where things stand in the middle of 2026 and what it means for you as a shopper. We will keep updating this beat as the market grows.</p>
+
+<h2>More shops, more competition</h2>
+<p>New licensed dispensaries keep opening across the metro and greater Minnesota, and more competition is good news for shoppers: it pushes prices down and deals up. We track every licensed dispensary we can find on our <a href="/dispensaries/">dispensary directory</a>, and the list keeps growing.</p>
+
+<h2>Prices are still all over the map</h2>
+<p>In a maturing market, prices for the same product still swing a lot between shops as everyone figures out their footing. That volatility is exactly why comparing pays off right now more than it will once the market settles. Our <a href="/cheapest-cannabis-twin-cities/">price tracker</a> follows the daily movement.</p>
+
+<h2>Selection is widening</h2>
+<p>The range of products on shelves keeps expanding, from basic flower and gummies to a growing variety of vapes, drinks, and specialty edibles. More choice is great, but it also makes it easier to overpay or over-buy, so the fundamentals still apply: start low, compare prices, ignore the THC ego number.</p>
+
+<h2>What it means for you</h2>
+<p>Right now is a shopper-friendly moment: lots of competition, frequent deals, and prices that reward anyone willing to look before they buy. The single best habit in this market is comparing first. See <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a> and check <a href="/weed-deals-twin-cities/">today's deals</a> before your next trip.</p>
+`,
+    related: [
+      { href: '/cheapest-cannabis-twin-cities/', label: 'Price tracker' },
+      { href: '/weed-deals-twin-cities/', label: 'Today’s deals' },
+      { href: '/dispensaries/', label: 'Dispensary directory' },
+    ],
+  },
 ];
