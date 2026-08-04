@@ -563,4 +563,221 @@ module.exports = [
       { href: '/dispensaries/', label: 'Dispensary directory' },
     ],
   },
+
+  {
+    slug: 'where-can-you-use-cannabis-minnesota',
+    title: 'Where you can (and can’t) legally use cannabis in Minnesota',
+    dek: 'It’s legal to buy, but not legal to use just anywhere. Here’s the plain map of where you’re fine, where you’re not, and the gray areas in between.',
+    date: '2026-04-15',
+    updated: '2026-04-15',
+    category: 'Laws & basics',
+    read: 5,
+    body: `
+<p>Buying cannabis in Minnesota is the easy part now. Using it is where people get tripped up, because "legal" does not mean "anywhere." The rules are mostly common sense once you see them laid out, so here is the honest map.</p>
+
+<h2>Where you're fine</h2>
+<p>The main one, really the heart of it, is <strong>private property with the owner's okay</strong>. Your own home, your own yard, a friend's place if they're good with it. If you own it or you're welcome there, you're on solid ground.</p>
+
+<h2>Where you're not</h2>
+<ul>
+  <li><strong>In public.</strong> Sidewalks, parks, streets, sitting in your parked car downtown. Public use is not allowed, same spirit as an open container of alcohol.</li>
+  <li><strong>In a vehicle, ever.</strong> Not as the driver, not as a passenger, not even parked. Keep it sealed and stored. More on that in our <a href="/blog/cannabis-and-driving-minnesota/">cannabis and driving guide</a>.</li>
+  <li><strong>Anywhere smoking is already banned.</strong> Bars, restaurants, most workplaces, indoor public spaces. If you couldn't light a cigarette there, you can't light a joint.</li>
+  <li><strong>On federal land.</strong> The one people forget. National parks and federal buildings still follow federal law, where cannabis is illegal. Voyageurs National Park counts.</li>
+  <li><strong>On school grounds.</strong> No surprise there.</li>
+</ul>
+
+<h2>The renter gray area</h2>
+<p>If you rent, your lease can prohibit smoking, and landlords are allowed to say no to smoking cannabis on the property. A lot of them are fine with edibles or a vape and less fine with smoke and smell. Read your lease, and when in doubt, ask. This is a big reason edibles and <a href="/blog/cannabis-tinctures-minnesota/">tinctures</a> are so popular with apartment dwellers: they sidestep the whole smoke question.</p>
+
+<h2>Hotels and events</h2>
+<p>Hotels almost always ban smoking of any kind, cannabis included, and will charge you for it. Outdoor events and festivals set their own rules. The theme just repeats: private and permitted is your green light, public or someone else's "no" is your red light.</p>
+
+<h2>The rule to remember</h2>
+<p>If you're somewhere private and the person in charge is okay with it, you're good. If you're in public, in a car, or on federal ground, you're not. Everything else is a version of those two. For the full set of state limits, our <a href="/minnesota-cannabis-laws/">Minnesota cannabis laws</a> page has the numbers.</p>
+`,
+    related: [
+      { href: '/minnesota-cannabis-laws/', label: 'Minnesota cannabis laws' },
+      { href: '/blog/cannabis-and-driving-minnesota/', label: 'Cannabis and driving' },
+      { href: '/blog/first-time-dispensary-guide-minnesota/', label: 'Your first dispensary visit' },
+    ],
+  },
+
+  {
+    slug: 'concentrates-dabs-minnesota',
+    title: 'Concentrates and dabs, explained without the intimidation',
+    dek: 'Wax, shatter, rosin, live resin. The strongest stuff in the shop looks scary and isn’t, once someone explains it plainly. Here’s that explanation.',
+    date: '2026-05-10',
+    updated: '2026-05-10',
+    category: 'Getting started',
+    read: 6,
+    body: `
+<p>Walk past the concentrate case and it can feel like a different world: little jars of amber goo, words like shatter and live rosin, and prices that make flower look cheap. Concentrates are just cannabis with everything but the good part stripped away. Strong, yes. Complicated, no.</p>
+
+<h2>What a concentrate actually is</h2>
+<p>Take cannabis flower, pull out the resin, the sticky part loaded with THC and terpenes, and leave the plant material behind. What's left is a concentrate. Because you've removed the filler, what remains is far more potent by weight, often several times stronger than flower. That's the whole idea, and the whole reason to respect it.</p>
+
+<h2>The types, quickly</h2>
+<ul>
+  <li><strong>Shatter, wax, budder:</strong> different textures of the same basic idea. Shatter is glassy, wax is soft, budder is creamy. Effect-wise they're similar.</li>
+  <li><strong>Live resin:</strong> made from fresh-frozen plants instead of dried, which keeps more of the aromatic terpenes. Fuller flavor, and a favorite for exactly that reason.</li>
+  <li><strong>Rosin and live rosin:</strong> made with just heat and pressure, no solvents at all. The clean, premium end of the shelf, and priced like it.</li>
+</ul>
+
+<h2>How people use it</h2>
+<p>The classic method is dabbing: a tiny amount vaporized on a hot surface and inhaled. It hits fast and hard. If dabbing sounds like a lot of gear, the easier on-ramp is a <strong>concentrate vape cartridge</strong>, the same potency idea in a pocket-friendly form. Our <a href="/blog/flower-vapes-edibles-minnesota/">flower vs vapes vs edibles guide</a> covers where carts fit.</p>
+
+<h2>Start smaller than you think</h2>
+<p>This is the one rule that matters. A dab the size of a crumb can equal a whole bowl of flower. If you're coming from flower, a concentrate will surprise you. Take the smallest amount, wait, and go from there. Overdoing it won't hurt you, but it can turn into a very heavy, couch-locked hour you didn't plan on.</p>
+
+<h2>Is it worth it?</h2>
+<p>For experienced users, concentrates are efficient and flavorful, and rosin in particular is a genuine craft product. For a beginner, they're not the place to start, flower or a low edible is friendlier. But once you know your tolerance, a good live rosin is one of the nicer things in the shop. Compare what's in stock and what it costs on our <a href="/products/concentrate/">concentrates page</a>, since prices swing a lot.</p>
+`,
+    related: [
+      { href: '/blog/flower-vapes-edibles-minnesota/', label: 'Flower, vapes, or edibles' },
+      { href: '/blog/thc-percentage-myth-minnesota/', label: 'The THC percentage myth' },
+      { href: '/products/concentrate/', label: 'Browse concentrates' },
+    ],
+  },
+
+  {
+    slug: 'tolerance-break-minnesota',
+    title: 'How to take a tolerance break (without white-knuckling it)',
+    dek: 'If it takes more and more to feel less and less, your tolerance is the problem, not the weed. Here’s how to reset it, painlessly.',
+    date: '2026-05-31',
+    updated: '2026-05-31',
+    category: 'Wellness',
+    read: 5,
+    body: `
+<p>Here's a pattern a lot of regular users notice and few talk about: the amount that used to feel great now barely registers, so you use more, and the ceiling just keeps climbing. That's tolerance, and the fix isn't stronger weed. It's a break.</p>
+
+<h2>Why it climbs</h2>
+<p>Use THC often enough and your body quietly turns down the receptors it acts on. Nothing is wrong with you, it's just adaptation. The good news is it reverses, and faster than people expect.</p>
+
+<h2>How long a reset takes</h2>
+<p>You do not need a month of misery. Most people feel a real difference after <strong>48 to 72 hours</strong>, and a week resets you most of the way. Two weeks and you're close to a clean slate. Even a couple of days off makes your next session noticeably better, which is the part that surprises people.</p>
+
+<h2>Making it easier</h2>
+<ul>
+  <li><strong>Pick your window on purpose.</strong> A busy stretch, a work trip, anything that fills the evenings you'd normally use. Idle time is the enemy.</li>
+  <li><strong>Swap the ritual, not just the substance.</strong> If your habit is "unwind at nine," give nine something else to do: a walk, tea, a show, the sauna. The routine is half of it.</li>
+  <li><strong>Expect sleep to get weird for a few nights.</strong> Vivid dreams and lighter sleep are common early and pass. It's your REM sleep coming back, which is honestly a sign it's working. See our <a href="/blog/cannabis-for-sleep-minnesota/">sleep guide</a>.</li>
+  <li><strong>Go all the way to zero.</strong> Cutting down to a little bit keeps the receptors engaged and drags the whole thing out. A clean break is shorter than a half one.</li>
+</ul>
+
+<h2>Coming back</h2>
+<p>The mistake is picking up right where you left off. Your tolerance dropped, so your old dose is now a big dose. Start low, the way a beginner would, and enjoy how little it takes. That's the entire payoff: the same feeling for a fraction of the cannabis, which is easier on your body and your wallet. Do this every so often and you'll quietly spend less, which pairs well with our <a href="/blog/how-to-save-money-minnesota-dispensaries/">saving-money guide</a>.</p>
+`,
+    related: [
+      { href: '/blog/how-to-save-money-minnesota-dispensaries/', label: 'How to save money' },
+      { href: '/blog/cannabis-for-sleep-minnesota/', label: 'Cannabis for sleep' },
+      { href: '/blog/edibles-dosing-guide-minnesota/', label: 'Edibles dosing guide' },
+    ],
+  },
+
+  {
+    slug: 'cannabis-for-pain-minnesota',
+    title: 'Cannabis for pain in Minnesota: an honest look',
+    dek: 'A lot of people are trading the pill bottle for the dispensary. Here’s what tends to help, what to stay realistic about, and how to start.',
+    date: '2026-06-21',
+    updated: '2026-06-21',
+    category: 'Wellness',
+    read: 7,
+    body: `
+<p>Pain is one of the biggest reasons people walk into a dispensary now, especially folks who'd rather not lean on prescription painkillers. Cannabis genuinely helps a lot of them. It's also oversold, so here's the honest, non-hype version.</p>
+
+<h2>What it tends to help with</h2>
+<p>Cannabis has the most real-world traction with <strong>chronic pain</strong>: the ongoing kind from arthritis, old injuries, nerve pain, tight muscles, and inflammation. It's less of a fit for sharp, acute pain, a broken bone is not a job for a gummy. But for the dull, all-day ache that wears you down, a lot of people find it takes the edge off and, maybe just as important, makes the pain easier to live with.</p>
+
+<h2>What to reach for</h2>
+<ul>
+  <li><strong>A balanced THC-to-CBD product.</strong> CBD is the piece most tied to the anti-inflammatory, body-calming side, and it softens THC's head change. Many people managing pain prefer a 1:1 over high-THC anything. See our <a href="/blog/cbd-vs-thc-minnesota/">CBD vs THC guide</a>.</li>
+  <li><strong>Edibles or tinctures for all-day coverage.</strong> They last for hours, which suits pain that doesn't clock out. Read the <a href="/blog/edibles-dosing-guide-minnesota/">dosing guide</a> first.</li>
+  <li><strong>Topicals for one spot.</strong> A cannabis balm rubbed on a sore knee or shoulder works locally and won't get you high at all. Underrated for joint and muscle pain.</li>
+</ul>
+
+<h2>Start low, and be patient</h2>
+<p>Managing pain is a dialing-in process, not a one-shot. Start with a low dose, give it real time, and notice what actually changes. Chasing a high is not the goal here, steady low-level relief is, and that usually comes from modest doses used consistently rather than big ones.</p>
+
+<h2>The honest part</h2>
+<p>Cannabis is a tool for living with pain, not a cure for what's causing it. For some people it's a real alternative to heavier medication. For others it's one piece alongside physical therapy, movement, and a doctor's guidance. If your pain is serious or new, that's a conversation for a doctor, not just a budtender. Used realistically, though, plenty of Minnesotans have found it genuinely changes their day. Compare products and prices on our <a href="/products/">product pages</a> before you settle on one.</p>
+`,
+    related: [
+      { href: '/blog/cbd-vs-thc-minnesota/', label: 'CBD vs THC' },
+      { href: '/blog/cannabis-tinctures-minnesota/', label: 'Cannabis tinctures' },
+      { href: '/blog/cannabis-for-sleep-minnesota/', label: 'Cannabis for sleep' },
+    ],
+  },
+
+  {
+    slug: 'cannabis-tinctures-minnesota',
+    title: 'What cannabis tinctures are, and who they’re actually for',
+    dek: 'The little bottle with the dropper is one of the most useful products in the shop, and one of the most overlooked. Here’s the case for it.',
+    date: '2026-07-02',
+    updated: '2026-07-02',
+    category: 'Getting started',
+    read: 5,
+    body: `
+<p>Tinctures are the quiet workhorse of the dispensary. No smoke, no gummy sugar, no gear. Just a small bottle of cannabis-infused liquid and a dropper. They don't get the attention flower and edibles do, and that's a shame, because for a lot of people they're the most practical thing on the shelf.</p>
+
+<h2>What a tincture is</h2>
+<p>Cannabis extract in a carrier liquid, usually an oil, dosed out by the drop or the dropper. You measure a small amount, and that's your dose. The appeal is <strong>control</strong>: you can take a precise, low amount and nudge it up over time, which is harder to do with a gummy you have to cut in half.</p>
+
+<h2>Two ways to take it, two different speeds</h2>
+<ul>
+  <li><strong>Under the tongue:</strong> hold it there for a minute before swallowing and some absorbs directly, so it can kick in faster than an edible, often within 15 to 45 minutes.</li>
+  <li><strong>Swallowed or in a drink:</strong> now it behaves like an edible, slower to start and longer to last, so the same two-hour patience rule applies. See the <a href="/blog/edibles-dosing-guide-minnesota/">dosing guide</a>.</li>
+</ul>
+
+<h2>Who they're for</h2>
+<p>Tinctures shine for a few kinds of people. Anyone who doesn't want to smoke but wants more precision than a fixed-dose gummy. Anyone managing something all day, like <a href="/blog/cannabis-for-pain-minnesota/">pain</a> or <a href="/blog/cannabis-for-anxiety-minnesota/">anxiety</a>, who wants to fine-tune a low steady dose. And beginners, honestly, because starting at two or three drops is about as gentle and controllable as cannabis gets.</p>
+
+<h2>The catch</h2>
+<p>They're understated. No ritual, no flavor of the week, just a calm, functional product. If you want the experience of cannabis, flower delivers that. If you want the effect with the least fuss, a tincture is hard to beat. Browse what's in stock and compare prices on our <a href="/products/tincture/">tinctures page</a>.</p>
+`,
+    related: [
+      { href: '/blog/edibles-dosing-guide-minnesota/', label: 'Edibles dosing guide' },
+      { href: '/blog/cannabis-for-pain-minnesota/', label: 'Cannabis for pain' },
+      { href: '/blog/cbd-vs-thc-minnesota/', label: 'CBD vs THC' },
+    ],
+  },
+
+  {
+    slug: 'how-to-store-cannabis-minnesota',
+    title: 'How to store your cannabis so it doesn’t go stale',
+    dek: 'You paid good money for it. A few small habits keep flower fresh for months instead of letting it dry into harsh dust.',
+    date: '2026-07-30',
+    updated: '2026-07-30',
+    category: 'Buying smart',
+    read: 4,
+    body: `
+<p>Cannabis is a plant product, and like anything from a plant, it degrades. Light, air, heat, and humidity are what get it. Store it carelessly and in a few weeks good flower turns dry, harsh, and weaker. Store it right and it holds up for months. The fixes are cheap and easy.</p>
+
+<h2>The four enemies</h2>
+<ul>
+  <li><strong>Light:</strong> UV breaks down the potency. Keep it in the dark.</li>
+  <li><strong>Air:</strong> oxygen dries it out and degrades it. Keep it sealed.</li>
+  <li><strong>Heat:</strong> warmth dries and damages it. Keep it cool.</li>
+  <li><strong>Humidity:</strong> too dry and it's harsh, too damp and you risk mold. Aim for the middle.</li>
+</ul>
+
+<h2>What to actually do</h2>
+<p>The single best upgrade is an <strong>airtight glass container kept somewhere cool and dark</strong>, a cabinet or a drawer, not a sunny windowsill. Glass beats plastic, which can hold static and pull at the trichomes. That one move solves most of it.</p>
+<p>For the humidity piece, drop a small <strong>two-way humidity pack</strong> (the little packets sold at any dispensary) into the jar. It holds flower right at the sweet spot so it never dries to dust or gets damp. A couple of dollars, and it's the difference between flower that's smooth in a month and flower that's harsh.</p>
+
+<h2>What not to do</h2>
+<ul>
+  <li><strong>Don't freeze it.</strong> The cold makes the trichomes brittle and they snap off, and that's where the good stuff lives. The fridge isn't great either, too much humidity swing.</li>
+  <li><strong>Don't leave it in the grinder or a baggie.</strong> Both dry it out fast.</li>
+  <li><strong>Don't store it in the car.</strong> Heat aside, loose cannabis in a vehicle is its own legal headache, see our <a href="/blog/cannabis-and-driving-minnesota/">driving guide</a>.</li>
+</ul>
+
+<p>Do the simple version, a sealed glass jar with a humidity pack in a cool dark spot, and the cannabis you bought is still good the last week you use it. That's money saved, which is the whole spirit of our <a href="/blog/how-to-save-money-minnesota-dispensaries/">saving-money guide</a>.</p>
+`,
+    related: [
+      { href: '/blog/how-to-save-money-minnesota-dispensaries/', label: 'How to save money' },
+      { href: '/blog/thc-percentage-myth-minnesota/', label: 'The THC percentage myth' },
+      { href: '/blog/cannabis-and-driving-minnesota/', label: 'Cannabis and driving' },
+    ],
+  },
 ];
