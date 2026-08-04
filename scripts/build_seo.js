@@ -18,6 +18,7 @@
 
 const fs   = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://twincitycannabis.com';
@@ -2600,6 +2601,14 @@ ${urls.map(u => `  <url>
 
 // ---------- Blog / Guides ----------
 const humanDate = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+// Content-hash cache-buster for blog images. Images are referenced by a fixed
+// path, so swapping a file (same name) would otherwise serve stale for hours
+// (GitHub Pages sets max-age on assets). A ?v=<hash> makes swaps propagate now.
+const imgVer = (slug) => {
+  const p = path.join(ROOT, 'assets', 'blog', `${slug}.jpg`);
+  if (!fs.existsSync(p)) return '';
+  return '?v=' + crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex').slice(0, 8);
+};
 
 const buildBlogPost = (post, allPosts) => {
   const canonical = `${SITE}/blog/${post.slug}/`;
@@ -2631,7 +2640,7 @@ const buildBlogPost = (post, allPosts) => {
   <div class="post-meta"><span class="post-cat">${esc(post.category)}</span> <time datetime="${post.date}">${humanDate(post.date)}</time> · ${post.read} min read</div>
   <h1>${esc(post.title)}</h1>
   <p class="post-dek">${esc(post.dek)}</p>
-  ${hasImg ? `<img class="post-hero" src="${imgPath}" alt="${esc(post.title)}" width="1200" height="820" loading="eager">` : ''}
+  ${hasImg ? `<img class="post-hero" src="${imgPath}${imgVer(post.slug)}" alt="${esc(post.title)}" width="1200" height="820" loading="eager">` : ''}
   ${post.body}
   ${related ? `<div class="post-related"><h3>Keep reading</h3><ul>${related}</ul></div>` : ''}
   <a class="cta" href="/dispensaries/" style="margin-top:2rem">Compare prices at every Twin Cities dispensary →</a>
@@ -2657,7 +2666,7 @@ const buildBlogIndex = (posts) => {
   const cards = posts.map(p => {
     const hasImg = fs.existsSync(path.join(ROOT, 'assets', 'blog', `${p.slug}.jpg`));
     return `<a class="blog-card${hasImg ? '' : ' no-thumb'}" href="/blog/${p.slug}/">
-    ${hasImg ? `<img class="bc-thumb" src="/assets/blog/${p.slug}.jpg" alt="${esc(p.title)}" width="600" height="410" loading="lazy">` : ''}
+    ${hasImg ? `<img class="bc-thumb" src="/assets/blog/${p.slug}.jpg${imgVer(p.slug)}" alt="${esc(p.title)}" width="600" height="410" loading="lazy">` : ''}
     <div class="bc-body">
       <div class="bc-meta">${esc(p.category)}</div>
       <div class="bc-title">${esc(p.title)}</div>
@@ -3987,7 +3996,6 @@ console.log(`Injected live counts: ${liveDispCount} dispensaries, ${liveProdLabe
 // Append ?v=<short content hash> to the script tags so any change to either
 // file invalidates browsers' caches automatically. Without this, returning
 // visitors silently keep stale dispensary data for hours after a deploy.
-const crypto = require('crypto');
 function fileHash(relPath) {
   const buf = fs.readFileSync(path.join(ROOT, relPath));
   return crypto.createHash('sha256').update(buf).digest('hex').slice(0, 8);
