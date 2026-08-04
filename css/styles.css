@@ -3726,6 +3726,33 @@ html[data-theme="light"] .featured-pitch {
     flex-shrink: 0;
 }
 
+/* Event promo strip (homepage) — slim, calm, auto-retires after the event. */
+.event-promo {
+    display: flex; align-items: center; gap: 1.1rem;
+    padding: 0.7rem 1.2rem; border-radius: 12px; text-decoration: none;
+    border: 1px solid color-mix(in srgb, var(--green, #22c55e) 38%, transparent);
+    background: linear-gradient(150deg, rgba(34, 197, 94, 0.08), rgba(255, 255, 255, 0.015));
+    transition: border-color .15s ease, transform .15s ease, box-shadow .2s ease;
+}
+.event-promo:hover { border-color: var(--green, #22c55e); transform: translateY(-2px); box-shadow: 0 0 40px rgba(34, 197, 94, 0.10); }
+.event-promo-date {
+    display: flex; flex-direction: column; align-items: center; flex-shrink: 0;
+    min-width: 52px; padding: 0.35rem 0.6rem; border-radius: 9px;
+    background: color-mix(in srgb, var(--green, #22c55e) 14%, transparent);
+}
+.event-promo-date .ep-month { font-family: 'SF Mono', Menlo, monospace; font-size: 0.58rem; font-weight: 700; letter-spacing: 1.5px; color: var(--green-text, #22c55e); }
+.event-promo-date .ep-day { font-family: var(--font-display, 'Outfit', sans-serif); font-size: 1.35rem; font-weight: 800; line-height: 1.1; color: var(--text-primary, #f5f6f8); }
+.event-promo-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+.event-promo-title { font-family: var(--font-display, 'Outfit', sans-serif); font-weight: 700; font-size: 1rem; color: var(--text-primary, #f5f6f8); letter-spacing: -0.2px; }
+.event-promo-sub { font-size: 0.82rem; color: var(--text-secondary, #b8bcc4); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.event-promo-cta { flex-shrink: 0; color: #fff; font-weight: 700; font-size: 0.88rem; white-space: nowrap; background: var(--green, #22c55e); padding: 0.45rem 0.95rem; border-radius: 999px; }
+@media (max-width: 640px) {
+    .event-promo { flex-wrap: wrap; gap: 0.6rem 0.8rem; }
+    .event-promo-body { flex: 1 1 60%; }
+    .event-promo-sub { white-space: normal; }
+    .event-promo-cta { margin-left: auto; }
+}
+
 /* "Dispensaries near me" — one-tap proximity sort on the dispensaries page. */
 .near-me-btn {
     display: inline-flex; align-items: center; gap: 0.5rem;
