@@ -3795,7 +3795,14 @@ count++;
 console.log('Wrote market-insights page');
 
 // Blog / Guides — newest first
-const blogSorted = BLOG_POSTS.slice().sort((a, b) => (a.date < b.date ? 1 : -1));
+// Drip publishing: posts dated in the future are queued, not built. The Pi
+// rebuilds this script 5x/day (auto_scrape.sh), so a future-dated post goes
+// live automatically the first build on/after its date — the existing scrape
+// cron IS the publishing scheduler. Write posts ahead, date them, done.
+const blogLive = BLOG_POSTS.filter((p) => p.date <= today);
+const blogQueued = BLOG_POSTS.length - blogLive.length;
+if (blogQueued) console.log(`Blog: ${blogQueued} future-dated post(s) queued, publishing on their dates`);
+const blogSorted = blogLive.sort((a, b) => (a.date < b.date ? 1 : -1));
 blogSorted.forEach((p) => {
   writePage(`blog/${p.slug}/index.html`, buildBlogPost(p, blogSorted));
   extraSitemap.push({ loc: `${SITE}/blog/${p.slug}/`, priority: '0.7', changefreq: 'monthly' });

@@ -780,4 +780,272 @@ module.exports = [
       { href: '/blog/cannabis-and-driving-minnesota/', label: 'Cannabis and driving' },
     ],
   },
+
+  {
+    slug: 'cannabis-topicals-minnesota',
+    title: 'Cannabis topicals: relief for the body without the high',
+    dek: 'Balms, lotions, and patches you rub on instead of ingest. The most underrated shelf in the dispensary, especially if you don’t want to feel high at all.',
+    date: '2026-04-22',
+    updated: '2026-04-22',
+    category: 'Getting started',
+    read: 5,
+    body: `
+<p>There's a whole shelf at the dispensary for people who don't want to get high. That sounds like a joke, but topicals, the balms, lotions, and patches you apply to your skin, are exactly that: cannabis for your body with your head left completely out of it.</p>
+
+<h2>How they work</h2>
+<p>Rub a cannabis balm into a sore shoulder and the cannabinoids work locally, right where you put them, interacting with receptors in the skin and tissue. They don't reach your bloodstream in any meaningful way, which means <strong>no high, no impairment, nothing to schedule your day around</strong>. It's the reason topicals are the one product category people share with their skeptical parents.</p>
+
+<h2>What they're good for</h2>
+<ul>
+  <li><strong>Sore muscles and joints.</strong> The classic use: knees, shoulders, lower backs, hands. Massage it in, relief settles in over half an hour or so.</li>
+  <li><strong>Localized aches</strong> from workouts, yard work, or just being a person over forty.</li>
+  <li><strong>Skin comfort.</strong> Many are built like quality lotions with cannabinoids added, and some people use them for general skin irritation.</li>
+</ul>
+<p>For deeper or all-over pain, a topical alone usually isn't enough, that's where the ingestible route comes in. Our <a href="/blog/cannabis-for-pain-minnesota/">cannabis for pain guide</a> covers how people combine the two.</p>
+
+<h2>Reading the options</h2>
+<p>You'll see THC topicals, CBD topicals, and blends, plus warming or cooling versions with menthol or arnica along for the ride. The honest truth: for a rub-on product, the THC-vs-CBD question matters less than it does for anything you ingest, since neither is getting to your head. Pick by feel, scent, and price. And prices vary plenty, so check the <a href="/products/topical/">topicals shelf</a> across shops before you buy.</p>
+
+<h2>Who should start here</h2>
+<p>If you're cannabis-curious but wary, a topical is the softest possible entry: zero high, zero dosing anxiety, just a balm that may genuinely help your sore spots. Worst case, you own a nice lotion. Best case, it becomes the thing you reach for before bed instead of another pill.</p>
+`,
+    related: [
+      { href: '/blog/cannabis-for-pain-minnesota/', label: 'Cannabis for pain' },
+      { href: '/products/topical/', label: 'Browse topicals' },
+      { href: '/blog/cbd-vs-thc-minnesota/', label: 'CBD vs THC' },
+    ],
+  },
+
+  {
+    slug: 'pre-rolls-minnesota',
+    title: 'Pre-rolls: what you’re actually buying (and how not to buy a dud)',
+    dek: 'The grab-and-go joint is the easiest purchase in the shop, and the easiest place to get mediocre flower. Here’s how to tell the good ones from the shake.',
+    date: '2026-06-10',
+    updated: '2026-06-10',
+    category: 'Buying smart',
+    read: 5,
+    body: `
+<p>A pre-roll is exactly what it sounds like: a joint someone else rolled, ready to light. No grinder, no papers, no skill required. It's the single easiest way to buy cannabis, and it's also, historically, where dispensaries have hidden their least impressive flower. Both things are true, so here's how to buy the good kind.</p>
+
+<h2>The honest reputation problem</h2>
+<p>In a lot of markets, pre-rolls got a reputation as the hot-dog of cannabis: made from trim and shake, the leftovers from processing flower. Some still are. But the category has genuinely improved, and plenty of shops now roll pre-rolls from the same whole flower they sell in jars. Your job is telling one from the other.</p>
+
+<h2>What separates a good pre-roll</h2>
+<ul>
+  <li><strong>"Whole flower" on the label.</strong> That's the phrase you want. It means ground buds, not floor sweepings.</li>
+  <li><strong>A named strain.</strong> A pre-roll labeled with the same strain as the jar next to it is a good sign. A vague "hybrid blend" is a shrug in label form.</li>
+  <li><strong>Even, firm packing.</strong> A quality roll feels consistent, not pinched at one end with a loose paper cone of dust at the other.</li>
+  <li><strong>Freshness.</strong> Pre-rolls dry out faster than jarred flower because they're already ground. A shop that moves inventory beats a dusty display case.</li>
+</ul>
+
+<h2>The infused ones</h2>
+<p>You'll also see infused pre-rolls, coated or filled with concentrate. They're significantly stronger than they look, closer to <a href="/blog/concentrates-dabs-minnesota/">dab territory</a> than a casual joint. Great value per session for experienced users, a lot for a newcomer. Know which one you're picking up.</p>
+
+<h2>When a pre-roll is the right call</h2>
+<p>Sharing at a gathering, trying a strain without committing to an eighth, or just wanting zero friction on a Friday. For regular use, buying flower and rolling your own is cheaper per gram, that's just math. Compare <a href="/cheapest-pre-roll-minneapolis/">pre-roll prices across the metro</a> and you'll see the spread is real.</p>
+`,
+    related: [
+      { href: '/cheapest-pre-roll-minneapolis/', label: 'Cheapest pre-rolls' },
+      { href: '/blog/thc-percentage-myth-minnesota/', label: 'The THC percentage myth' },
+      { href: '/blog/concentrates-dabs-minnesota/', label: 'Concentrates and dabs' },
+    ],
+  },
+
+  {
+    slug: 'thc-drinks-minnesota',
+    title: 'THC drinks: why Minnesota fell in love with the cannabis seltzer',
+    dek: 'Nowhere in America drinks its weed quite like Minnesota. How THC beverages became the state’s signature product, and how to drink them smart.',
+    date: '2026-06-24',
+    updated: '2026-06-24',
+    category: 'Getting started',
+    read: 6,
+    body: `
+<p>Every legal state has a personality, and Minnesota's is carbonated. Thanks to our unusual head start, hemp-derived THC drinks were legal here before full legalization even arrived, and this state built a beverage culture nobody else has. Breweries pivoted, liquor stores stocked seltzers, and "want a THC seltzer?" became a normal thing to hear at a lake cabin. It's the most Minnesota thing about Minnesota cannabis.</p>
+
+<h2>Why drinks hit different</h2>
+<p>A THC beverage is an edible you sip. It goes through your digestive system like a gummy, but because it's liquid, many people feel it a bit sooner, often within 15 to 45 minutes, and the social ritual matters as much as the chemistry: a cold can in hand fills the exact spot a beer used to. That's why drinks became the go-to for people cutting back on alcohol. Same porch, same toast, no hangover.</p>
+
+<h2>The dosing math</h2>
+<p>Most Minnesota drinks come in friendly sizes: <strong>2.5mg and 5mg cans</strong> are everywhere, with 10mg for the seasoned. That makes them one of the easiest products to dose, a 2.5mg seltzer is about as gentle as THC gets. The mistakes are the same as any edible: drinking a second can because the first "isn't working," or treating a 10mg can like a light beer. The <a href="/blog/edibles-dosing-guide-minnesota/">edibles dosing rules</a> apply, just in beverage form: sip, wait, then decide.</p>
+
+<h2>One honest warning</h2>
+<p>Drinks go down easy, that's their charm and their trap. A seltzer disappears in twenty minutes on a hot dock. Pace them the way you'd pace real drinks at minimum, and if you're new, make can two a plain sparkling water while you wait for can one to arrive.</p>
+
+<h2>Where to find them</h2>
+<p>Beverages are on the menu at nearly every dispensary, and prices swing more than you'd think for the same style of can. Our live <a href="/cheapest-beverage-minneapolis/">cheapest THC beverages</a> pages track them across the metro, and the <a href="/products/beverage/">beverage category</a> shows what's in stock right now.</p>
+`,
+    related: [
+      { href: '/cheapest-beverage-minneapolis/', label: 'Cheapest THC drinks' },
+      { href: '/blog/edibles-dosing-guide-minnesota/', label: 'Edibles dosing guide' },
+      { href: '/products/beverage/', label: 'Browse beverages' },
+    ],
+  },
+
+  {
+    slug: 'gifting-cannabis-minnesota',
+    title: 'Can you gift cannabis in Minnesota? The sharing rules, explained',
+    dek: 'Passing a joint, giving a friend a gummy, bringing an eighth to a party. What’s actually legal when cannabis changes hands without money.',
+    date: '2026-07-08',
+    updated: '2026-07-08',
+    category: 'Laws & basics',
+    read: 4,
+    body: `
+<p>Someone's birthday is coming up and you know exactly what they'd enjoy. Or a friend wants to try what you've been raving about. Can you just... give them cannabis? In Minnesota, mostly yes, and the rules are simpler than people fear. Here's the plain version.</p>
+
+<h2>Adults can share with adults</h2>
+<p>Minnesota law allows adults 21 and over to <strong>give cannabis to other adults 21 and over</strong>, within the same possession limits that apply to carrying it yourself, up to two ounces of flower or the equivalent. No money, no problem. Passing a joint at a backyard fire, gifting a nice eighth, splitting a pack of gummies with a friend, all fine between adults.</p>
+
+<h2>Where "gifting" goes wrong</h2>
+<ul>
+  <li><strong>Anything that smells like a sale.</strong> "Gifting" cannabis with a purchase, a $60 sticker that comes with a free eighth, is the oldest trick in the gray market and it is not legal. A gift attached to money changing hands is a sale without a license.</li>
+  <li><strong>Anyone under 21.</strong> Giving cannabis to a minor is a serious crime, full stop. Not your younger sibling, not your 19-year-old coworker.</li>
+  <li><strong>Gifting across state lines.</strong> Mailing an eighth to your friend in Wisconsin crosses into federal territory. Don't. Cannabis bought here stays here, the <a href="/minnesota-cannabis-laws/">state rules</a> end at the border.</li>
+</ul>
+
+<h2>Gift ideas that actually land</h2>
+<p>If you're gifting a newcomer, skip the strongest thing you love and pick something gentle: a low-dose <a href="/blog/thc-drinks-minnesota/">THC seltzer</a>, 2.5mg gummies, or a nice <a href="/blog/cannabis-topicals-minnesota/">topical balm</a> for the friend who'd rather not get high at all. Pair it with a one-line dosing tip, that's the difference between a great gift and a rough Tuesday for someone you like. And compare prices first on our <a href="/cheapest-cannabis-twin-cities/">price tracker</a>, because a thoughtful gift doesn't need to be an overpriced one.</p>
+`,
+    related: [
+      { href: '/minnesota-cannabis-laws/', label: 'Minnesota cannabis laws' },
+      { href: '/blog/thc-drinks-minnesota/', label: 'THC drinks' },
+      { href: '/blog/edibles-dosing-guide-minnesota/', label: 'Edibles dosing guide' },
+    ],
+  },
+
+  {
+    slug: 'traveling-with-cannabis-minnesota',
+    title: 'Traveling with cannabis: what Minnesotans need to know',
+    dek: 'It’s legal here. It’s not legal everywhere, and it’s never legal in the air. The rules for road trips, flights, and the cabin up north.',
+    date: '2026-08-10',
+    updated: '2026-08-10',
+    category: 'Laws & basics',
+    read: 5,
+    body: `
+<p>You bought it legally, so you can bring it along, right? Sometimes. The rules of traveling with cannabis have one core principle: <strong>legality stops at the border</strong>, and sometimes sooner. Here's what that means for the trips Minnesotans actually take.</p>
+
+<h2>Within Minnesota: yes, stored right</h2>
+<p>Adults can transport cannabis inside the state, up to the two-ounce public limit, as long as it's sealed and out of reach while driving, think trunk, not cupholder. The full car rules are in our <a href="/blog/cannabis-and-driving-minnesota/">driving guide</a>. The cabin up north? As long as it's in Minnesota and it's your property or your host is fine with it, you're good.</p>
+
+<h2>Crossing state lines: no</h2>
+<p>The moment your car crosses into Wisconsin, Iowa, or the Dakotas, your legal Minnesota cannabis becomes contraband. Wisconsin and the Dakotas have no recreational market, and even crossing into another legal state is technically federal interstate trafficking, unenforced against ordinary people, but the border states here are not legal, so this is not a technicality for us. If the trip leaves Minnesota, the cannabis stays home.</p>
+
+<h2>Flying: also no</h2>
+<p>Airports and airspace are federal, and cannabis is federally illegal, MSP included. TSA isn't hunting for your gummies, their job is security, but if they find cannabis they can involve local authorities, and flying it to another state is a federal offense regardless of where you land. The practical read: don't fly with it, buy legally at your destination if you can.</p>
+
+<h2>Canada and the border</h2>
+<p>Do not bring cannabis across the Canadian border in either direction, even though Canada is fully legal. Border crossings are federal checkpoints, and consequences can include being barred from entry. Boundary Waters trip through customs? Leave it at home.</p>
+
+<h2>The rule of thumb</h2>
+<p>Cannabis is a homebody. It's happy anywhere in Minnesota, sealed in your trunk, and it should never see an airport, a border, or another state's highway. Plan around that and every trip stays easy.</p>
+`,
+    related: [
+      { href: '/blog/cannabis-and-driving-minnesota/', label: 'Cannabis and driving' },
+      { href: '/blog/where-can-you-use-cannabis-minnesota/', label: 'Where you can use it' },
+      { href: '/minnesota-cannabis-laws/', label: 'Minnesota cannabis laws' },
+    ],
+  },
+
+  {
+    slug: 'microdosing-cannabis-minnesota',
+    title: 'Microdosing cannabis: the case for barely feeling it',
+    dek: 'The fastest-growing way to use cannabis is using almost none of it. What microdosing actually means, who it’s for, and how to do it right.',
+    date: '2026-08-17',
+    updated: '2026-08-17',
+    category: 'Wellness',
+    read: 5,
+    body: `
+<p>The most interesting trend in cannabis isn't a stronger product, it's people deliberately taking less. Microdosing, using an amount small enough that you barely feel it, has quietly become the default for a huge slice of the market, especially people who want the ease without the experience. Here's the honest guide.</p>
+
+<h2>What counts as a microdose</h2>
+<p>There's no official number, but in practice it means <strong>1 to 2.5mg of THC</strong>, sometimes up to 5mg for people with some tolerance. At that level most people report a subtle settling, a little less edge, a little more ease, without feeling high in any way they'd have to explain. Compare that to the 10mg gummy that's a full-on evening.</p>
+
+<h2>Why people do it</h2>
+<ul>
+  <li><strong>Function.</strong> A microdose doesn't argue with your to-do list. People use it the way others use a cup of chamomile: a nudge, not a night.</li>
+  <li><strong>Mood and anxiety.</strong> Low doses tend to be where THC's calming side lives, push higher and it can flip on you, as our <a href="/blog/cannabis-for-anxiety-minnesota/">anxiety guide</a> covers.</li>
+  <li><strong>Tolerance economics.</strong> Small doses keep your tolerance low, which keeps small doses working. It's the opposite of the <a href="/blog/tolerance-break-minnesota/">tolerance treadmill</a>, and it's dramatically cheaper.</li>
+</ul>
+
+<h2>How to actually do it</h2>
+<p>Precision matters at small numbers, so lean on products built for it: <strong>2.5mg gummies, 2.5mg <a href="/blog/thc-drinks-minnesota/">seltzers</a>, or a <a href="/blog/cannabis-tinctures-minnesota/">tincture</a></strong>, which is the microdoser's best friend since you can measure by the drop. Cutting a 10mg gummy into quarters works, roughly, but infused products aren't always evenly mixed, so purpose-made low-dose products beat kitchen surgery.</p>
+
+<h2>The honest caveat</h2>
+<p>Microdosing is subtle by design, which means the line between "it's working gently" and "it's doing nothing" can be fuzzy. Give a dose level a few sessions before judging it, keep notes if you're serious, and resist the urge to creep upward, the whole point lives at the bottom of the dose curve.</p>
+`,
+    related: [
+      { href: '/blog/edibles-dosing-guide-minnesota/', label: 'Edibles dosing guide' },
+      { href: '/blog/cannabis-for-anxiety-minnesota/', label: 'Cannabis for anxiety' },
+      { href: '/blog/cannabis-tinctures-minnesota/', label: 'Cannabis tinctures' },
+    ],
+  },
+
+  {
+    slug: 'cannabis-nausea-appetite-minnesota',
+    title: 'Cannabis for nausea and appetite: what the munchies are actually good for',
+    dek: 'The oldest medical use of cannabis is helping people eat. An honest look at THC for nausea, appetite loss, and getting through hard treatments.',
+    date: '2026-08-24',
+    updated: '2026-08-24',
+    category: 'Wellness',
+    read: 6,
+    body: `
+<p>Long before dispensaries and seltzers, the medical case for cannabis started here: helping people who couldn't eat, eat. Chemotherapy patients rediscovering food. People with chronic illness keeping weight on. The munchies, the most joked-about effect in cannabis, are also its most medically established one.</p>
+
+<h2>What the evidence actually supports</h2>
+<p>THC's anti-nausea and appetite-stimulating effects are among the best documented in cannabis medicine, this is the use case with real pharmaceutical history behind it, going back decades. For people dealing with treatment-related nausea, appetite loss from illness or medication, or conditions that make eating a chore, THC can genuinely change the day-to-day.</p>
+
+<h2>How people use it for this</h2>
+<ul>
+  <li><strong>Low doses, ahead of meals.</strong> You don't need to be high to get hungry. A small dose, 2.5 to 5mg, taken an hour before a meal is the common pattern. The <a href="/blog/microdosing-cannabis-minnesota/">microdosing playbook</a> applies directly.</li>
+  <li><strong>Faster formats for active nausea.</strong> Waiting two hours for an edible is rough when you're queasy, and keeping a gummy down can be its own challenge. That's where inhaled cannabis or an under-the-tongue <a href="/blog/cannabis-tinctures-minnesota/">tincture</a> earns its place: relief in minutes, not hours.</li>
+  <li><strong>THC over CBD for this one.</strong> Unlike anxiety or inflammation, appetite is squarely THC's department. CBD alone won't bring the munchies.</li>
+</ul>
+
+<h2>The serious-illness caveat, said plainly</h2>
+<p>If you're navigating chemo, a chronic condition, or unexplained weight loss, cannabis should be part of a conversation with your care team, not a secret side project. Most oncologists in 2026 have had this conversation a hundred times and won't blink. It matters because cannabis can interact with medications, and because unexplained appetite loss is a symptom that deserves a doctor's eyes first. Minnesota's medical program also exists for exactly these situations, see our <a href="/blog/medical-card-vs-recreational-minnesota/">medical card guide</a>.</p>
+
+<h2>And for the everyday version</h2>
+<p>No illness, just a picky appetite or food that's lost its spark? The same low-dose logic applies, and dinner genuinely does taste better. Use it as a seasoning, not a staple, and it stays useful.</p>
+`,
+    related: [
+      { href: '/blog/medical-card-vs-recreational-minnesota/', label: 'Medical card vs recreational' },
+      { href: '/blog/microdosing-cannabis-minnesota/', label: 'Microdosing cannabis' },
+      { href: '/blog/cannabis-tinctures-minnesota/', label: 'Cannabis tinctures' },
+    ],
+  },
+
+  {
+    slug: 'greening-out-minnesota',
+    title: 'Greening out: what to do when you (or a friend) took too much',
+    dek: 'Nobody has died from it, but plenty of people were sure they would. The calm, practical playbook for the too-high hour, and how to never need it.',
+    date: '2026-08-31',
+    updated: '2026-08-31',
+    category: 'Getting started',
+    read: 5,
+    body: `
+<p>It happens to almost everyone once: the edible finally arrives, all of it, and suddenly the evening is a lot. Racing heart, spinning thoughts, the deep certainty that something is wrong. This is greening out, and here is the single most important fact about it: <strong>cannabis has no lethal dose. You are not in danger. It will pass.</strong> Now here's the playbook.</p>
+
+<h2>The playbook</h2>
+<ul>
+  <li><strong>Change the channel.</strong> Move to a calm, familiar spot. Dim the lights. Put on something comfortable and boring. Your environment is a dial, turn it down.</li>
+  <li><strong>Water and something small to eat.</strong> Sip, don't chug. A little food can steady the ride.</li>
+  <li><strong>Breathe slower than feels natural.</strong> Long exhales tell your nervous system the emergency is fake. Four counts in, six counts out, repeat.</li>
+  <li><strong>Try black pepper.</strong> The folk remedy with a plausible mechanism: chew a peppercorn or two, or just sniff cracked pepper. Terpenes in pepper may take the edge off. Worst case, it's a weird minute that distracted you.</li>
+  <li><strong>Sleep is a full reset.</strong> If you can drift off, do. You'll wake up fine, maybe a little foggy, fully yourself.</li>
+</ul>
+
+<h2>If you're the sober friend</h2>
+<p>Your job is calm, not solutions. Speak slowly, agree that it's temporary, get them water, and don't feed the spiral by looking worried. "You took a little too much, it wears off, I'm right here" is the whole script. Do not let them drive, obviously, see <a href="/blog/cannabis-and-driving-minnesota/">why</a>.</p>
+
+<h2>When to actually get help</h2>
+<p>Cannabis alone doesn't require the ER, but mixed with alcohol or other substances, or if someone has a heart condition and feels genuinely unwell, trust your judgment and call. And if a child or pet got into edibles, that's an immediate call to poison control or the vet, no debate.</p>
+
+<h2>How to never need this page again</h2>
+<p>Every greenout traces back to the same two mistakes: too much, too fast, almost always an edible redosed too soon. The <a href="/blog/edibles-dosing-guide-minnesota/">two-hour rule</a> prevents nearly all of it, and <a href="/blog/microdosing-cannabis-minnesota/">starting smaller than you think</a> prevents the rest. The best night is the one where this guide stays bookmarked and unused.</p>
+`,
+    related: [
+      { href: '/blog/edibles-dosing-guide-minnesota/', label: 'Edibles dosing guide' },
+      { href: '/blog/microdosing-cannabis-minnesota/', label: 'Microdosing cannabis' },
+      { href: '/blog/cannabis-for-anxiety-minnesota/', label: 'Cannabis for anxiety' },
+    ],
+  },
 ];
