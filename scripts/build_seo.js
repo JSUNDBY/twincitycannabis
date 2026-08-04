@@ -1052,12 +1052,22 @@ const buildBrandsIndex = (brands) => {
 };
 
 // ---------- CITY PAGE ----------
+// Minneapolis + Saint Paul get the flagship treatment: these are the head-term
+// pages ("cannabis minneapolis" sits at position ~12 in GSC) and they need to
+// out-substance everything on page 1. Extra sections are computed from live
+// data so they stay fresh on every Pi rebuild.
+const FLAGSHIP_CITIES = new Set(['minneapolis', 'saint paul']);
+
 const buildCityPage = (cityName, slug) => {
   const dispensaries = TCC.dispensaries.filter(d =>
     (d.city || '').toLowerCase() === cityName.toLowerCase());
   if (dispensaries.length === 0) return null;
 
-  const title = `Cannabis Dispensaries in ${cityName}, MN — Menus, Prices & Reviews`;
+  const flagship = FLAGSHIP_CITIES.has(cityName.toLowerCase());
+
+  const title = flagship
+    ? `Cannabis in ${cityName}, MN — Every Dispensary, Live Prices & Deals`
+    : `Cannabis Dispensaries in ${cityName}, MN — Menus, Prices & Reviews`;
   const description = `Every recreational cannabis dispensary in ${cityName}, Minnesota. ${dispensaries.length} stores with real Google ratings, live menus, and side-by-side price comparison. Updated daily.`;
   const canonical = `${SITE}/${slug}/`;
 
@@ -1080,7 +1090,8 @@ const buildCityPage = (cityName, slug) => {
 </a>`;
   }).join('\n');
 
-  return headOpen({ title, description, canonical, schema }) + `
+  if (!flagship) {
+    return headOpen({ title, description, canonical, schema }) + `
 <div class="crumbs"><a href="/">Home</a> / <a href="/dispensaries/">Dispensaries</a> / ${esc(cityName)}</div>
 <h1>Cannabis Dispensaries in ${esc(cityName)}, Minnesota</h1>
 <p>${dispensaries.length} recreational cannabis ${dispensaries.length === 1 ? 'dispensary' : 'dispensaries'} in ${esc(cityName)}. We track every menu, every price, every Google review — updated daily — so you can compare before you drive.</p>
@@ -1090,6 +1101,116 @@ const buildCityPage = (cityName, slug) => {
 <h2>Compare prices across ${esc(cityName)} stores</h2>
 <p>Twin City Cannabis is the only place that shows real-time prices side-by-side across every recreational cannabis store in ${esc(cityName)} and the broader Minneapolis-Saint Paul metro. No affiliate links, no pay-to-play rankings.</p>
 <p><a class="cta" href="/#compare">Compare ${esc(cityName)} prices →</a></p>
+` + footer;
+  }
+
+  // ── Flagship extras, all computed from live data ──
+  const open = dispensaries.filter(isOperationalDispensary);
+  const cityIds = new Set(open.map(d => d.id));
+  const shopNameById = (id) => (TCC.dispensaries.find(d => d.id === id) || {}).name || id;
+  const cityLow = (p) => {
+    let lo = Infinity, id = null;
+    for (const [k, v] of Object.entries(p.prices || {})) {
+      if (v > 0 && cityIds.has(k) && v < lo) { lo = v; id = k; }
+    }
+    return id ? { lo, id } : null;
+  };
+  const inCity = TCC.products.filter(isRealCannabisProduct)
+    .map(p => ({ p, c: cityLow(p) })).filter(x => x.c);
+  const eighths = inCity.filter(x => x.p.category === 'flower' && x.p.weight === '1/8 oz')
+    .sort((a, b) => a.c.lo - b.c.lo);
+  const cheapEighth = eighths[0] || null;
+  const rated = open.filter(d => d.google && d.google.rating && (d.google.review_count || 0) >= 10);
+  const avgRating = rated.length ? (rated.reduce((s, d) => s + d.google.rating, 0) / rated.length).toFixed(1) : null;
+  const best = rated.slice().sort((a, b) =>
+    (b.google.rating - a.google.rating) || (b.google.review_count - a.google.review_count)).slice(0, 5);
+  const catTop = (cat, n) => inCity.filter(x => x.p.category === cat)
+    .sort((a, b) => a.c.lo - b.c.lo).slice(0, n);
+
+  const hoodMap = {};
+  open.forEach(d => {
+    const assigned = assignNeighborhood(d);
+    // "St. Paul" / "Saint Paul" style variants of the city name aren't real
+    // neighborhoods — fold them into the catch-all group.
+    const norm = (s) => String(s || '').toLowerCase().replace(/\bst\.?\b/, 'saint').replace(/[^a-z]/g, '');
+    const h = assigned ? assigned.name
+      : (d.neighborhood && norm(d.neighborhood) !== norm(d.city)) ? d.neighborhood
+      : `Around ${cityName}`;
+    const key = h + (assigned ? `|${assigned.slug}` : '|');
+    (hoodMap[key] = hoodMap[key] || []).push(d);
+  });
+  const hoods = Object.entries(hoodMap)
+    .map(([key, list]) => { const [name, hslug] = key.split('|'); return { name, hslug, list }; })
+    .sort((a, b) => b.list.length - a.list.length);
+
+  const cityKey = slugify(cityName);
+  const priceRows = (items) => items.map(({ p, c }) => `<tr>
+    <td>${esc(p.name)}<br><span style="font-size:.78rem;color:var(--text-muted,#8b909a)">${esc(p.brand || '')}${p.weight && p.weight !== 'each' ? ' · ' + esc(p.weight) : ''}</span></td>
+    <td class="n">$${c.lo.toFixed(2)}</td>
+    <td><a href="/dispensaries/${esc(c.id)}/">${esc(shopNameById(c.id))}</a></td>
+  </tr>`).join('\n');
+
+  const FAQ_CITY = [
+    { q: `How many dispensaries are in ${cityName}?`, a: `${open.length} recreational cannabis dispensaries are open in ${cityName} right now, out of ${dispensaries.length} licensed locations we track there. New shops keep opening — this page updates daily as menus come online.` },
+    { q: `What is the cheapest eighth in ${cityName} right now?`, a: cheapEighth ? `As of today, the cheapest eighth of flower in ${cityName} is $${cheapEighth.c.lo.toFixed(2)} (${cheapEighth.p.name} at ${shopNameById(cheapEighth.c.id)}). Prices move daily, so check the live comparison before you drive.` : `Prices move daily — check the live comparison on this page before you drive.` },
+    { q: `Is recreational cannabis legal in ${cityName}?`, a: `Yes. Minnesota legalized recreational cannabis for adults 21 and over on August 1, 2023, and licensed dispensaries operate across ${cityName}. Bring a government ID; most shops are cash-preferred.` },
+    { q: `Which ${cityName} dispensary is the best?`, a: best.length ? `By Google rating, the current leader is ${best[0].name} (${best[0].google.rating}★ across ${best[0].google.review_count} reviews). "Best" depends on what you want — the best price on your product often lives at a different shop, which is what this site is for.` : `It depends what you value — ratings, price, or selection. Compare all three here before you go.` },
+  ];
+  const { html: cityFaqHtml, schema: cityFaqSchema } = renderFAQ(FAQ_CITY);
+  schema.push(cityFaqSchema);
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/dispensaries/">Dispensaries</a> / ${esc(cityName)}</div>
+<h1>Cannabis in ${esc(cityName)}, Minnesota</h1>
+<p>Every recreational dispensary in ${esc(cityName)}, every menu, every price — tracked daily. ${open.length} shops are open right now${avgRating ? `, averaging ${avgRating}★ on Google` : ''}${cheapEighth ? `, and today's cheapest eighth in the city is $${cheapEighth.c.lo.toFixed(0)}` : ''}. Compare before you drive; the same product routinely costs 20% more a few blocks away.</p>
+
+<div class="seo-strip">
+  <div class="seo-strip-cell"><div class="seo-strip-value">${open.length}</div><div class="seo-strip-label">Open dispensaries</div><div class="seo-strip-sub">${dispensaries.length} licensed locations tracked</div></div>
+  <div class="seo-strip-cell"><div class="seo-strip-value">${inCity.length.toLocaleString('en-US')}</div><div class="seo-strip-label">Products on ${esc(cityName)} menus</div><div class="seo-strip-sub">live prices, refreshed daily</div></div>
+  <div class="seo-strip-cell"><div class="seo-strip-value">${cheapEighth ? '$' + cheapEighth.c.lo.toFixed(0) : '—'}</div><div class="seo-strip-label">Cheapest eighth today</div><div class="seo-strip-sub">${cheapEighth ? esc(shopNameById(cheapEighth.c.id)) : 'see live list'}</div></div>
+  <div class="seo-strip-cell"><div class="seo-strip-value">${avgRating || '—'}★</div><div class="seo-strip-label">Average Google rating</div><div class="seo-strip-sub">across rated ${esc(cityName)} shops</div></div>
+</div>
+
+<span class="seo-section-label">Cheapest in ${esc(cityName)} right now</span>
+<h2>Cheapest flower in ${esc(cityName)} today</h2>
+<table><thead><tr><th>Product</th><th class="n">Price</th><th>Where</th></tr></thead><tbody>
+${priceRows(catTop('flower', 5))}
+</tbody></table>
+<p><a href="/cheapest-flower-${cityKey}/">Full cheapest-flower list for ${esc(cityName)} →</a></p>
+
+<h2>Cheapest edibles in ${esc(cityName)} today</h2>
+<table><thead><tr><th>Product</th><th class="n">Price</th><th>Where</th></tr></thead><tbody>
+${priceRows(catTop('edible', 5))}
+</tbody></table>
+<p><a href="/cheapest-edible-${cityKey}/">Full cheapest-edibles list for ${esc(cityName)} →</a> · <a href="/cheapest-beverage-${cityKey}/">THC drinks</a> · <a href="/weed-deals-twin-cities/">today's price drops</a> · <a href="/price-spread-index/">the Price Spread Index</a></p>
+
+<h2>Highest-rated dispensaries in ${esc(cityName)}</h2>
+<div class="grid">
+${best.map(d => `<a class="card" href="/dispensaries/${esc(d.id)}/">
+  <p class="title">${esc(d.name)}</p>
+  <p class="sub"><span class="stars">★</span> ${d.google.rating} · ${d.google.review_count} Google reviews${d.neighborhood && d.neighborhood !== d.city ? ' · ' + esc(d.neighborhood) : ''}</p>
+</a>`).join('\n')}
+</div>
+
+<h2>${esc(cityName)} dispensaries by neighborhood</h2>
+${hoods.map(({ name: h, hslug, list }) => `<h3>${hslug ? `<a href="/neighborhoods/${esc(hslug)}/">${esc(h)}</a>` : esc(h)} (${list.length})</h3>
+<div class="grid">
+${list.map(d => {
+    const rating = d.google && d.google.rating;
+    const rc = (d.google && d.google.review_count) || 0;
+    return `<a class="card" href="/dispensaries/${esc(d.id)}/">
+  <p class="title">${esc(d.name)}</p>
+  <p class="sub">${esc(d.address || cityName)}${rating ? ` · <span class="stars">★</span> ${rating} (${rc})` : ''}</p>
+</a>`;
+  }).join('\n')}
+</div>`).join('\n')}
+
+<h2>New to buying cannabis in ${esc(cityName)}?</h2>
+<p>Start with our plain-English guides: <a href="/blog/first-time-dispensary-guide-minnesota/">your first dispensary visit</a>, <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a>, <a href="/blog/edibles-dosing-guide-minnesota/">edibles dosing</a>, and <a href="/minnesota-cannabis-laws/">what's legal in Minnesota</a>. The <a href="/tax-calculator/">tax calculator</a> shows your real out-the-door total.</p>
+
+${cityFaqHtml}
+
+<a class="cta" href="/#compare">Compare every ${esc(cityName)} price live →</a>
 ` + footer;
 };
 
