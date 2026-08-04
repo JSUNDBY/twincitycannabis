@@ -467,7 +467,7 @@ const footer = `</main>
 <footer>
   <p><strong class="footer-brand">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Twin Cities dispensary.</p>
   <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a></p>
-  <p><a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
+  <p><a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/price-spread-index/">Price Spread Index</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
   <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
 </footer>
@@ -3674,6 +3674,115 @@ ${answerPages.map(a => `<a class="card" href="/answers/${esc(a.slug)}/"><p class
 }
 console.log(`Wrote ${answerPages.length} answer pages + hub`);
 
+// ============================================================================
+// PRICE SPREAD INDEX — the money page competitors can't copy. Ranks products
+// carried at 3+ open shops by how much shopping around saves. Recomputed from
+// live prices on every build (the Pi runs this 5x/day), so it is permanently
+// fresh at zero cost. Same-product, same-listing comparisons only.
+// ============================================================================
+const buildSpreadIndexPage = () => {
+  const openShopIds = new Set(TCC.dispensaries.filter(isOperationalDispensary).map(d => d.id));
+  const shopName = (id) => (TCC.dispensaries.find(d => d.id === id) || {}).name || id;
+  const rows = TCC.products
+    .filter(isRealCannabisProduct)
+    .map(p => {
+      const entries = Object.entries(p.prices || {}).filter(([id, v]) => v > 0 && openShopIds.has(id));
+      if (entries.length < 3) return null;
+      entries.sort((a, b) => a[1] - b[1]);
+      const [loId, lo] = entries[0];
+      const hi = entries[entries.length - 1][1];
+      const save = Math.round((hi - lo) * 100) / 100;
+      if (save <= 0) return null;
+      const pct = Math.round((save / hi) * 100);
+      // Spreads this extreme almost always mean a mislabeled listing (bulk vs
+      // unit, wrong weight field), not a real deal. Credibility > drama.
+      if (pct >= 75) return null;
+      return { p, n: entries.length, lo, hi, loId, save, pct };
+    })
+    .filter(Boolean);
+
+  const gaps = rows.map(r => r.pct).sort((a, b) => a - b);
+  const medianGap = gaps.length ? gaps[Math.floor(gaps.length / 2)] : 0;
+  const top = rows.slice().sort((a, b) => b.save - a.save).slice(0, 20);
+  const biggestSave = top.length ? top[0].save : 0;
+
+  const title = 'Cannabis Price Spread Index — Where Shopping Around Saves the Most in Minnesota';
+  const description = `${rows.length} cannabis products are carried at 3+ Minnesota dispensaries right now, and the median gap between the cheapest and priciest shop is ${medianGap}%. These are the products where checking prices saves the most, updated daily.`;
+  const canonical = `${SITE}/price-spread-index/`;
+
+  const FAQ_SPREAD = [
+    { q: 'What is the Price Spread Index?', a: `A daily ranking of the cannabis products where prices differ most between Minnesota dispensaries. We track live menus at every shop we cover, find products carried at three or more open dispensaries, and rank them by the dollar gap between the cheapest and priciest shop.` },
+    { q: 'Why do prices for the same product vary so much?', a: `Minnesota's recreational market is young and fragmented. Shops set prices independently based on their supply deals, margins, and local competition — so the same jar can cost ${medianGap}% more a few miles away. That gap is the whole reason comparing pays off.` },
+    { q: 'How often is this updated?', a: 'The underlying menu prices refresh several times a day, and this page is rebuilt with them. What you see reflects current listed prices, though shops can change a price at any moment — confirm at the counter.' },
+  ];
+  const { html: faqHtml, schema: faqSchema } = renderFAQ(FAQ_SPREAD);
+
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'The Cannabis Price Spread Index',
+    description,
+    dateModified: today,
+    author: { '@type': 'Organization', name: 'Twin City Cannabis', url: SITE },
+    publisher: { '@type': 'Organization', name: 'Twin City Cannabis', logo: { '@type': 'ImageObject', url: `${SITE}/img/twin-city-cannabis-logo-512.png` } },
+    mainEntityOfPage: canonical,
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Products with the largest price spread across Minnesota dispensaries',
+    numberOfItems: top.length,
+    itemListElement: top.map((r, i) => ({ '@type': 'ListItem', position: i + 1, name: r.p.name })),
+  }, faqSchema];
+
+  const trs = top.map((r, i) => {
+    const p = r.p;
+    const prodHref = p._seoSlug ? `/products/${p.category}/${p._seoSlug}/` : `/products/${p.category}/`;
+    return `<tr>
+      <td class="n">${i + 1}</td>
+      <td><a href="${prodHref}">${esc(p.name)}</a><br><span style="font-size:.78rem;color:var(--text-muted,#8b909a)">${esc(p.brand || '')}${p.weight && p.weight !== 'each' ? ' · ' + esc(p.weight) : ''} · ${esc(p.category)}</span></td>
+      <td class="n">${r.n}</td>
+      <td class="n">$${r.lo.toFixed(2)}<br><a href="/dispensaries/${esc(r.loId)}/" style="font-size:.78rem">${esc(shopName(r.loId))}</a></td>
+      <td class="n">$${r.hi.toFixed(2)}</td>
+      <td class="n"><strong style="color:var(--green-text,#22c55e)">$${r.save.toFixed(2)}</strong><br><span style="font-size:.78rem;color:var(--text-muted,#8b909a)">${r.pct}% less</span></td>
+    </tr>`;
+  }).join('\n');
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / Price Spread Index</div>
+<h1>The Price Spread Index</h1>
+<p>The same cannabis product almost never costs the same at two Minnesota dispensaries. This page tracks every product carried at <strong>three or more open shops</strong> and ranks the ones where checking prices before you drive saves the most, computed from live menus and refreshed throughout the day.</p>
+
+<div class="seo-strip">
+  <div class="seo-strip-cell"><div class="seo-strip-value">${rows.length}</div><div class="seo-strip-label">Products at 3+ shops</div><div class="seo-strip-sub">same product, multiple menus</div></div>
+  <div class="seo-strip-cell"><div class="seo-strip-value">${medianGap}%</div><div class="seo-strip-label">Median price gap</div><div class="seo-strip-sub">cheapest vs priciest shop</div></div>
+  <div class="seo-strip-cell"><div class="seo-strip-value">$${biggestSave.toFixed(0)}</div><div class="seo-strip-label">Biggest save right now</div><div class="seo-strip-sub">on a single product</div></div>
+  <div class="seo-strip-cell"><div class="seo-strip-value">${openDispCount}</div><div class="seo-strip-label">Open dispensaries</div><div class="seo-strip-sub">menus tracked daily</div></div>
+</div>
+
+<span class="seo-section-label">Top ${top.length} by dollars saved</span>
+<table>
+<thead><tr><th class="n">#</th><th>Product</th><th class="n">Shops</th><th class="n">Cheapest</th><th class="n">Priciest</th><th class="n">You save</th></tr></thead>
+<tbody>
+${trs}
+</tbody>
+</table>
+
+<h2>How this is computed</h2>
+<p>We compare the listed price of the <em>exact same product</em> across every open dispensary carrying it, and only when at least three shops carry it. The "you save" figure is the gap between the cheapest and priciest listing. We exclude spreads so extreme they usually indicate a listing error rather than a real price, and we exclude accessories. Prices come straight from dispensary menus and refresh several times a day, so treat this as a live snapshot, not a guarantee — a shop can reprice at any moment.</p>
+
+<p>Want the full picture? Browse <a href="/cheapest-cannabis-twin-cities/">the cheapest products by category</a>, today's <a href="/weed-deals-twin-cities/">real price drops</a>, or <a href="/dispensaries/">every dispensary we track</a>. And the <a href="/tax-calculator/">tax calculator</a> shows what you'll actually pay out the door.</p>
+
+${faqHtml}
+
+<a class="cta" href="/#compare">Compare any product across every shop →</a>
+` + footer;
+};
+
+writePage('price-spread-index/index.html', buildSpreadIndexPage());
+extraSitemap.push({ loc: `${SITE}/price-spread-index/`, priority: '0.8', changefreq: 'daily' });
+count++;
+console.log('Wrote price-spread-index page');
+
 // llms.txt — the emerging convention answer engines check for a site map of
 // meaning. Regenerated every build so counts stay honest.
 fs.writeFileSync(path.join(ROOT, 'llms.txt'), `# Twin City Cannabis
@@ -3686,6 +3795,7 @@ ${answerPages.map(a => `- [${a.question}](${SITE}/answers/${a.slug}/)`).join('\n
 - [Every Minnesota dispensary with live menus](${SITE}/dispensaries/)
 - [Compare every product price](${SITE}/products/)
 - [Cheapest cannabis in the Twin Cities, by category](${SITE}/cheapest-cannabis-twin-cities/)
+- [Price Spread Index: the products where shopping around saves most](${SITE}/price-spread-index/)
 - [Real price drops happening now](${SITE}/weed-deals-twin-cities/)
 - [Best-rated dispensaries by real Google reviews](${SITE}/best-dispensaries-twin-cities/)
 - [Minnesota cannabis laws, plain-language](${SITE}/minnesota-cannabis-laws/)
