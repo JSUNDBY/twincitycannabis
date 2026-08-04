@@ -5534,3 +5534,108 @@
     });
 
 })();
+
+// ─── Ambient sparkle field — the site's quiet extra dimension ───────────────
+// A fixed canvas behind the page: tiny glinting particles (trichome dust) in
+// parallax depth layers. It evolves with purpose: scrolling feeds it energy
+// (drift quickens, glints fire, near layers shift more than far ones) and the
+// palette warms from green toward gold as you travel down the page. Subtle by
+// design — it lives in the negative space and never competes with content.
+// Skipped for reduced-motion users and Save-Data connections; free when the
+// tab is hidden (rAF pauses).
+(function () {
+    'use strict';
+    try {
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (navigator.connection && navigator.connection.saveData) return;
+    } catch (e) { /* non-fatal */ }
+
+    const canvas = document.createElement('canvas');
+    canvas.id = 'ambient-sparkle';
+    canvas.setAttribute('aria-hidden', 'true');
+    canvas.style.cssText = 'position:fixed;inset:0;z-index:-1;pointer-events:none;';
+    document.body.prepend(canvas);
+    const ctx = canvas.getContext('2d');
+    if (!ctx) { canvas.remove(); return; }
+
+    const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+    let W = 0, H = 0, parts = [];
+
+    function make(anywhere) {
+        const z = 0.25 + Math.random() * 0.75;      // depth: far … near
+        return {
+            x: Math.random() * W,
+            y: anywhere ? Math.random() * H : (Math.random() < 0.5 ? -8 : H + 8),
+            z: z,
+            r: 0.6 + z * 1.5,                        // near = bigger
+            a: 0.10 + z * 0.26,                      // near = brighter
+            tw: 0.5 + Math.random() * 2.2,           // twinkle rate
+            ph: Math.random() * Math.PI * 2,
+            vy: (0.04 + Math.random() * 0.1) * z,    // gentle rise
+            sway: 0.3 + Math.random() * 0.8,
+            glint: 0,
+        };
+    }
+
+    function size() {
+        W = window.innerWidth; H = window.innerHeight;
+        canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR);
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        const target = Math.min(85, Math.round((W * H) / 17000));
+        while (parts.length < target) parts.push(make(true));
+        parts.length = target;
+    }
+
+    let lastScroll = window.scrollY, energy = 0, t = 0;
+
+    function frame() {
+        t += 0.016;
+        const sy = window.scrollY;
+        const dv = sy - lastScroll;
+        lastScroll = sy;
+        energy = Math.min(1, energy * 0.94 + Math.abs(dv) * 0.004);
+
+        const doc = Math.max(1, document.documentElement.scrollHeight - H);
+        const depthT = Math.min(1, sy / doc);
+        const light = document.documentElement.getAttribute('data-theme') === 'light';
+        const hue = Math.round(145 + (46 - 145) * (depthT * 0.75)); // green → gold
+        const lum = light ? 34 : 62;
+        const aScale = light ? 0.55 : 1;
+
+        ctx.clearRect(0, 0, W, H);
+        for (let i = 0; i < parts.length; i++) {
+            const p = parts[i];
+            p.y -= p.vy * (1 + energy * 2.2);        // ambient rise, quickened by motion
+            p.y -= dv * 0.05 * p.z;                  // parallax: near layers ride the scroll
+            p.x += Math.sin(t * 0.4 + p.ph) * 0.08 * p.sway * (1 + energy);
+            if (p.y < -14) { p.y = H + 10; p.x = Math.random() * W; }
+            else if (p.y > H + 14) { p.y = -10; p.x = Math.random() * W; }
+
+            const twinkle = 0.55 + 0.45 * Math.sin(t * p.tw + p.ph);
+            const alpha = p.a * twinkle * aScale;
+
+            if (p.glint > 0) p.glint -= 0.03;
+            else if (Math.random() < 0.0004 + energy * 0.0035 * p.z) p.glint = 1;
+
+            ctx.beginPath();
+            ctx.fillStyle = 'hsla(' + hue + ',70%,' + lum + '%,' + alpha.toFixed(3) + ')';
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (p.glint > 0) {                        // 4-ray star flare
+                const g = p.glint, len = p.r * (4 + 8 * g);
+                ctx.strokeStyle = 'hsla(' + hue + ',85%,' + (lum + 12) + '%,' + (0.32 * g * aScale).toFixed(3) + ')';
+                ctx.lineWidth = 0.7;
+                ctx.beginPath();
+                ctx.moveTo(p.x - len, p.y); ctx.lineTo(p.x + len, p.y);
+                ctx.moveTo(p.x, p.y - len); ctx.lineTo(p.x, p.y + len);
+                ctx.stroke();
+            }
+        }
+        requestAnimationFrame(frame);
+    }
+
+    size();
+    window.addEventListener('resize', size);
+    requestAnimationFrame(frame);
+})();
