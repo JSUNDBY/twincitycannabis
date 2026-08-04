@@ -1048,4 +1048,46 @@ module.exports = [
       { href: '/blog/cannabis-for-anxiety-minnesota/', label: 'Cannabis for anxiety' },
     ],
   },
+
+  {
+    slug: 'minnesota-cannabis-numbers-august-2026',
+    title: 'Minnesota cannabis by the numbers: what our August data shows',
+    dek: 'We track 144 dispensaries and close to 2,800 products every day. Here is what that data actually says about the market right now, including where shoppers are leaving money on the counter.',
+    date: '2026-08-10',
+    updated: '2026-08-10',
+    category: 'Market watch',
+    read: 5,
+    body: `
+<p>We rebuild this site's price data several times a day, which means at any given moment we are sitting on a decent picture of what Minnesota's legal market actually looks like. Once a month we are going to stop and write down what the numbers say. No spin, no predictions, just what is on the shelves and what it costs.</p>
+<p>Everything below comes from our own tracking as of early August 2026. Where we could not verify a number, we left it out.</p>
+
+<h2>144 shops, and half of them are nowhere near Minneapolis</h2>
+<p>We currently track 144 licensed dispensaries across 84 Minnesota cities. Here is the split that surprised us: 70 are in the metro and 74 are in greater Minnesota. This is not a Twin Cities market with a few outstate stragglers attached. It went genuinely statewide, and it got there faster than most people expected.</p>
+<p>Minneapolis has the most shops of any single city at 18, with Saint Paul next. After that the list gets interesting. Albert Lea has six. Luverne has four. Duluth, Winona, and Alexandria have three apiece. If you live in a smaller Minnesota town and wrote this off as a metro thing, it is worth another look at the <a href="/dispensaries/">dispensary directory</a>. The map changed underneath us.</p>
+
+<h2>Edibles and seltzer are eating the shelf</h2>
+<p>Across the roughly 2,780 products we track, the shelf breaks down like this: edibles 1,033, flower 660, beverages 620, pre-rolls 273. Then a long drop to tinctures at 55, vape cartridges at 49, topicals at 47, and concentrates at 43.</p>
+<p>Two things stand out. Edibles outnumber flower by a wide margin, which is not how most legal markets start out. And THC beverages have very nearly caught flower, which is a Minnesota story specifically. We had legal hemp-derived THC drinks years before adult-use stores opened, so the seltzer habit was fully built by the time dispensaries showed up. More on that in <a href="/blog/thc-drinks-minnesota/">why Minnesota fell in love with the cannabis seltzer</a>.</p>
+<p>The other side of that coin: vapes and concentrates are thin. Forty-nine cartridges across the whole state is not much to choose from. If that is your category, expect to shop around and expect the <a href="/products/cartridge/">selection</a> to keep filling in over the next year.</p>
+
+<h2>An eighth runs about fifty dollars</h2>
+<p>Looking at every eighth of flower on our tracker, the median price lands right around $50. The low end of honest listings sits near $30. We are deliberately not quoting you a headline "cheapest eighth in Minnesota" number, because the very bottom and top of the range are cluttered with bulk deli listings and mislabeled weights that are not really eighths at all. The middle of the distribution is the trustworthy part.</p>
+<p>So keep $50 in your head. If you are paying meaningfully more than that and you are not buying something genuinely special, you are paying for the storefront and not the flower. Our <a href="/cheapest-flower-minneapolis/">cheapest flower in Minneapolis</a> page tracks the current bottom of the range.</p>
+
+<h2>The same jar, thirteen dollars apart</h2>
+<p>This is the number that matters most, and it is the one nobody else can show you.</p>
+<p>There are 103 products on our tracker carried at three or more different dispensaries, which means we can compare the identical item from the identical producer across shops. The median gap between the cheapest shop and the priciest shop on those items is 25 percent. Two thirds of them vary by more than 20 percent. Only about one in seven is priced within 10 percent across the board.</p>
+<p>Some real examples from this week. A Grasslandz Gelato 45 eighth is on the menu at eight dispensaries, ranging from $42 to $55. Purple Ice Water, also at eight shops, runs $42 to $58. A Grasslandz Glue 31 eighth swings from $35 to $55. Same product, same size, same week, and a $20 difference depending on which parking lot you pulled into.</p>
+<p>Nobody is doing anything wrong here. Shops set their own prices, rent is different in Edina than in Luverne, and margins are genuinely tight in a young market. But you do not have to be the person on the wrong end of it, and checking takes about twenty seconds. That is the whole reason the <a href="/cheapest-cannabis-twin-cities/">price tracker</a> exists.</p>
+
+<h2>What we would actually do with this</h2>
+<p>Three things. Look up the specific product you want before you drive, because a 25 percent spread is real money on anything resembling a regular habit. Do not use the THC percentage as your quality filter, for all the reasons in <a href="/blog/thc-percentage-myth-minnesota/">this piece</a>. And if you are outside the metro, check again, because there is a decent chance a shop opened closer to you than the last time you looked.</p>
+<p>We will run these numbers again next month and tell you what moved. If you want the shopping fundamentals in one place first, start with <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money at Minnesota dispensaries</a>, or see <a href="/blog/how-much-does-weed-cost-minnesota/">what weed actually costs here</a>.</p>
+`,
+    related: [
+      { href: '/cheapest-cannabis-twin-cities/', label: 'Price tracker' },
+      { href: '/dispensaries/', label: 'Dispensary directory' },
+      { href: '/blog/how-to-save-money-minnesota-dispensaries/', label: 'How to actually save money' },
+    ],
+  },
 ];
