@@ -1127,6 +1127,33 @@ const buildCityPage = (cityName, slug) => {
   const catTop = (cat, n) => inCity.filter(x => x.p.category === cat)
     .sort((a, b) => a.c.lo - b.c.lo).slice(0, n);
 
+  // City-level liftable price stats — same shape as /minnesota-cannabis-prices/
+  // (declarative medians + typical ranges answer engines can quote), filtered
+  // to this city's open shops. Targets "[city] cannabis prices" queries.
+  const cityPts = (f) => {
+    const out = [];
+    TCC.products.filter(isRealCannabisProduct).filter(f).forEach(p => {
+      for (const [id, v] of Object.entries(p.prices || {})) {
+        if (v > 0 && cityIds.has(id)) out.push(v);
+      }
+    });
+    return out.sort((a, b) => a - b);
+  };
+  const cityStat = (points) => {
+    if (points.length < 5) return null;
+    const q = (f) => points[Math.min(points.length - 1, Math.floor(points.length * f))];
+    return { n: points.length, med: Math.round(q(0.5)), lo: Math.round(q(0.1)), hi: Math.round(q(0.9)) };
+  };
+  const CITY_CATS = [
+    ['Flower — eighth (3.5g)', (p) => p.category === 'flower' && (p.weight === '1/8 oz' || p.weight === '3.5 g')],
+    ['Pre-rolls', (p) => p.category === 'pre-roll'],
+    ['Edibles (per package)', (p) => p.category === 'edible'],
+    ['THC beverages (per can)', (p) => p.category === 'beverage'],
+    ['Vape cartridges', (p) => p.category === 'cartridge'],
+  ].map(([label, f]) => ({ label, s: cityStat(cityPts(f)) })).filter(x => x.s);
+  const e8c = CITY_CATS.find(c => c.label.includes('eighth')) || null;
+  const cityToday = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
   const hoodMap = {};
   open.forEach(d => {
     const assigned = assignNeighborhood(d);
@@ -1171,6 +1198,13 @@ const buildCityPage = (cityName, slug) => {
   <div class="seo-strip-cell"><div class="seo-strip-value">${avgRating || '—'}★</div><div class="seo-strip-label">Average Google rating</div><div class="seo-strip-sub">across rated ${esc(cityName)} shops</div></div>
 </div>
 
+${CITY_CATS.length ? `<h2>Average cannabis prices in ${esc(cityName)} right now</h2>
+<p><strong>Updated ${cityToday}.</strong> Computed from live menus at ${open.length} open ${esc(cityName)} dispensaries.${e8c ? ` The median eighth of flower in ${esc(cityName)} costs <strong>$${e8c.s.med}</strong> today, with most eighths selling between $${e8c.s.lo} and $${e8c.s.hi}.` : ''} Minnesota adds a 10% cannabis gross receipts tax plus regular sales taxes at the register.</p>
+<ul>
+${CITY_CATS.map(c => `<li><strong>${esc(c.label)}:</strong> typically $${c.s.lo}–$${c.s.hi}, median $${c.s.med} <span style="color:var(--text-muted,#8b909a)">(${c.s.n.toLocaleString('en-US')} live price points)</span></li>`).join('\n')}
+</ul>
+<p>Statewide context on our <a href="/minnesota-cannabis-prices/">Minnesota cannabis prices page</a>, updated daily.</p>
+` : ''}
 <span class="seo-section-label">Cheapest in ${esc(cityName)} right now</span>
 <h2>Cheapest flower in ${esc(cityName)} today</h2>
 <table><thead><tr><th>Product</th><th class="n">Price</th><th>Where</th></tr></thead><tbody>
