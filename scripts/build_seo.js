@@ -467,7 +467,7 @@ const footer = `</main>
 <footer>
   <p><strong class="footer-brand">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Twin Cities dispensary.</p>
   <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a></p>
-  <p><a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/price-spread-index/">Price Spread Index</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
+  <p><a href="/minnesota-cannabis-prices/">MN Cannabis Prices</a> &middot; <a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/price-spread-index/">Price Spread Index</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
   <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
 </footer>
@@ -3974,6 +3974,122 @@ extraSitemap.push({ loc: `${SITE}/price-spread-index/`, priority: '0.8', changef
 count++;
 console.log('Wrote price-spread-index page');
 
+// ============================================================================
+// MINNESOTA CANNABIS PRICES — the AI-Overview page. Answer engines lift
+// declarative sentences with concrete numbers; this page states the live
+// market stats in exactly that shape (median + typical range per category,
+// datestamped, recomputed every Pi rebuild). Headset quotes national
+// estimates; we quote today's actual Minnesota menus.
+// ============================================================================
+const buildPricesPage = () => {
+  const openIds = new Set(TCC.dispensaries.filter(isOperationalDispensary).map(d => d.id));
+  const pts = (filter) => {
+    const out = [];
+    TCC.products.filter(isRealCannabisProduct).filter(filter).forEach(p => {
+      for (const [id, v] of Object.entries(p.prices || {})) {
+        if (v > 0 && openIds.has(id)) out.push({ v, id, p });
+      }
+    });
+    return out.sort((a, b) => a.v - b.v);
+  };
+  const stat = (points) => {
+    if (points.length < 5) return null;
+    const q = (f) => points[Math.min(points.length - 1, Math.floor(points.length * f))].v;
+    const cheap = points[0];
+    return { n: points.length, med: Math.round(q(0.5)), lo: Math.round(q(0.1)), hi: Math.round(q(0.9)), cheap };
+  };
+  const shopNm = (id) => (TCC.dispensaries.find(d => d.id === id) || {}).name || id;
+
+  const CATS = [
+    { key: 'eighth', label: 'Flower — eighth (3.5g)', f: (p) => p.category === 'flower' && (p.weight === '1/8 oz' || p.weight === '3.5 g') },
+    { key: 'quarter', label: 'Flower — quarter (7g)', f: (p) => p.category === 'flower' && (p.weight === '1/4 oz' || p.weight === '7 g') },
+    { key: 'half', label: 'Flower — half ounce (14g)', f: (p) => p.category === 'flower' && (p.weight === '1/2 oz' || p.weight === '14 g') },
+    { key: 'ounce', label: 'Flower — ounce (28g)', f: (p) => p.category === 'flower' && (p.weight === '1 oz' || p.weight === '28 g') },
+    { key: 'preroll', label: 'Pre-rolls', f: (p) => p.category === 'pre-roll' },
+    { key: 'edible', label: 'Edibles (per package)', f: (p) => p.category === 'edible' },
+    { key: 'beverage', label: 'THC beverages (per can/bottle)', f: (p) => p.category === 'beverage' },
+    { key: 'cartridge', label: 'Vape cartridges', f: (p) => p.category === 'cartridge' },
+    { key: 'concentrate', label: 'Concentrates', f: (p) => p.category === 'concentrate' },
+  ].map(c => ({ ...c, s: stat(pts(c.f)) })).filter(c => c.s);
+
+  const e8 = CATS.find(c => c.key === 'eighth');
+  const todayHumanFull = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const totalPts = CATS.reduce((s, c) => s + c.s.n, 0);
+
+  const title = 'Cannabis Prices in Minnesota — Live Averages, Updated Daily';
+  const description = `Real Minnesota cannabis prices from ${openDispCount} open dispensaries, updated daily. ${e8 ? `Median eighth: $${e8.s.med} (typical range $${e8.s.lo}–$${e8.s.hi}).` : ''} Flower, edibles, beverages, cartridges, and concentrates — computed from live menus, not estimates.`;
+  const canonical = `${SITE}/minnesota-cannabis-prices/`;
+
+  const FAQ_PRICES = [
+    { q: 'How much does an eighth cost in Minnesota?', a: e8 ? `As of ${todayHumanFull}, the median price of an eighth (3.5g) of flower across ${openDispCount} open Minnesota dispensaries is $${e8.s.med}, with most eighths selling between $${e8.s.lo} and $${e8.s.hi}. Prices refresh daily on this page.` : 'Check the live table on this page — it updates daily from real dispensary menus.' },
+    { q: 'What taxes are added to cannabis in Minnesota?', a: 'Minnesota adds a 10% cannabis gross receipts tax on top of regular state and local sales taxes, so expect roughly 17–19% total added at the register. Our tax calculator shows the exact out-the-door price.' },
+    { q: 'Why do Minnesota cannabis prices vary so much between dispensaries?', a: 'The market is young and shops price independently. The same product routinely costs 20% more at one shop than another a few miles away — our Price Spread Index tracks the products with the biggest gaps.' },
+    { q: 'Where does this price data come from?', a: `Live menus at every open licensed dispensary we track in Minnesota — ${totalPts.toLocaleString('en-US')} current price points across ${openDispCount} shops, recomputed several times a day. These are actual listed prices, not survey estimates.` },
+  ];
+  const { html: faqHtml, schema: faqSchema } = renderFAQ(FAQ_PRICES);
+
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Cannabis Prices in Minnesota, Updated Daily',
+    description,
+    dateModified: today,
+    author: { '@type': 'Organization', name: 'Twin City Cannabis', url: SITE },
+    publisher: { '@type': 'Organization', name: 'Twin City Cannabis', logo: { '@type': 'ImageObject', url: `${SITE}/img/twin-city-cannabis-logo-512.png` } },
+    mainEntityOfPage: canonical,
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'Minnesota cannabis retail prices (live)',
+    description: `Current listed prices for cannabis products across ${openDispCount} open Minnesota dispensaries, updated multiple times daily.`,
+    url: canonical,
+    creator: { '@type': 'Organization', name: 'Twin City Cannabis' },
+    temporalCoverage: today,
+  }, faqSchema];
+
+  const bullets = CATS.map(c =>
+    `<li><strong>${esc(c.label)}:</strong> typically $${c.s.lo}–$${c.s.hi}, median $${c.s.med} <span style="color:var(--text-muted,#8b909a)">(${c.s.n.toLocaleString('en-US')} live price points)</span></li>`).join('\n');
+
+  const rows = CATS.map(c => `<tr>
+    <td>${esc(c.label)}</td>
+    <td class="n">$${c.s.med}</td>
+    <td class="n">$${c.s.lo}–$${c.s.hi}</td>
+    <td class="n">$${c.s.cheap.v.toFixed(2)}<br><a href="/dispensaries/${esc(c.s.cheap.id)}/" style="font-size:.78rem">${esc(shopNm(c.s.cheap.id))}</a></td>
+  </tr>`).join('\n');
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / Minnesota cannabis prices</div>
+<h1>Cannabis Prices in Minnesota</h1>
+<p><strong>Updated ${todayHumanFull}.</strong> The numbers below are computed from ${totalPts.toLocaleString('en-US')} live price points on the menus of ${openDispCount} open licensed Minnesota dispensaries — actual listed prices, refreshed several times a day, not survey estimates. ${e8 ? `The median eighth of flower in Minnesota costs <strong>$${e8.s.med}</strong> today, and most eighths sell between $${e8.s.lo} and $${e8.s.hi}.` : ''} Minnesota adds a 10% cannabis gross receipts tax plus regular sales taxes, so expect roughly 17–19% on top at the register.</p>
+
+<h2>Average cannabis prices in Minnesota right now</h2>
+<ul>
+${bullets}
+</ul>
+
+<h2>Median, typical range, and today's cheapest</h2>
+<table>
+<thead><tr><th>Category</th><th class="n">Median</th><th class="n">Typical range</th><th class="n">Cheapest today</th></tr></thead>
+<tbody>
+${rows}
+</tbody>
+</table>
+<p style="font-size:.85rem;color:var(--text-muted,#8b909a)">Typical range = the middle 80% of live listed prices (extreme outliers and probable listing errors excluded). Prices move daily; this page recomputes with every menu refresh.</p>
+
+<h2>What actually drives the price you pay</h2>
+<p><strong>Taxes:</strong> Minnesota's 10% cannabis gross receipts tax stacks on state and local sales tax — the <a href="/tax-calculator/">tax calculator</a> shows your exact out-the-door total. <strong>The shop you pick:</strong> the same product routinely costs 20% more a few miles away; the <a href="/price-spread-index/">Price Spread Index</a> ranks the products where comparing saves the most. <strong>Size:</strong> quarters and ounces almost always beat eighths per gram. <strong>City:</strong> see live lists for <a href="/cheapest-flower-minneapolis/">Minneapolis</a>, <a href="/cheapest-flower-saint-paul/">Saint Paul</a>, and <a href="/cheapest-cannabis-twin-cities/">the whole metro by category</a>.</p>
+
+${faqHtml}
+
+<a class="cta" href="/#compare">Compare every price across every shop →</a>
+` + footer;
+};
+
+writePage('minnesota-cannabis-prices/index.html', buildPricesPage());
+extraSitemap.push({ loc: `${SITE}/minnesota-cannabis-prices/`, priority: '0.9', changefreq: 'daily' });
+count++;
+console.log('Wrote minnesota-cannabis-prices page');
+
 // llms.txt — the emerging convention answer engines check for a site map of
 // meaning. Regenerated every build so counts stay honest.
 fs.writeFileSync(path.join(ROOT, 'llms.txt'), `# Twin City Cannabis
@@ -3985,6 +4101,7 @@ ${answerPages.map(a => `- [${a.question}](${SITE}/answers/${a.slug}/)`).join('\n
 ## Key pages
 - [Every Minnesota dispensary with live menus](${SITE}/dispensaries/)
 - [Compare every product price](${SITE}/products/)
+- [Minnesota cannabis prices: live medians and ranges by category, updated daily](${SITE}/minnesota-cannabis-prices/)
 - [Cheapest cannabis in the Twin Cities, by category](${SITE}/cheapest-cannabis-twin-cities/)
 - [Price Spread Index: the products where shopping around saves most](${SITE}/price-spread-index/)
 - [Real price drops happening now](${SITE}/weed-deals-twin-cities/)

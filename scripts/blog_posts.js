@@ -444,7 +444,7 @@ module.exports = [
   <li><strong>Edibles:</strong> a pack of gummies is typically an affordable single purchase, priced by total milligrams.</li>
   <li><strong>Vape carts:</strong> priced by size and quality, usually a mid-range single-item buy.</li>
 </ul>
-<p>For the actual current numbers, do not trust a blog's ballpark, check the live board. Our <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a> and pages like <a href="/cheapest-flower-minneapolis/">cheapest flower in Minneapolis</a> show real prices updated daily.</p>
+<p>For the actual current numbers, do not trust a blog's ballpark, check the live board. Our <a href="/minnesota-cannabis-prices/">Minnesota cannabis prices page</a> computes the median and typical range for every category from live menus daily, and pages like <a href="/cheapest-flower-minneapolis/">cheapest flower in Minneapolis</a> show real prices updated daily.</p>
 
 <h2>Why the same product costs different amounts</h2>
 <p>Two shops can price the identical jar 20 to 40 percent apart. It comes down to their supplier deals, their margins, their location, and how aggressively they are competing. This is the single biggest reason to compare before you buy, and the reason this whole site exists.</p>
