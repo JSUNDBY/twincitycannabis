@@ -204,13 +204,78 @@ const isRealCannabisProduct = (p) => {
   return true;
 };
 
+// Honest sitemap lastmod: every page used to claim lastmod=today on every
+// build, which burns crawler trust (600 pages "changing" daily). We hash each
+// page's content (minus the always-changing announce strip) and only bump its
+// lastmod when the content actually changed. Manifest persists across builds.
+const LASTMOD_PATH = path.join(ROOT, 'scraper', 'data', 'page_lastmod.json');
+let PAGE_LASTMOD = {};
+try { PAGE_LASTMOD = JSON.parse(fs.readFileSync(LASTMOD_PATH, 'utf8')); } catch { PAGE_LASTMOD = {}; }
+const pageHashOf = (html) => require('crypto').createHash('sha256')
+  .update(String(html).replace(/<div class="seo-announce">[\s\S]*?<\/div>/, '')).digest('hex').slice(0, 16);
+
 const writePage = (relPath, html) => {
   const full = path.join(ROOT, relPath);
   fs.mkdirSync(path.dirname(full), { recursive: true });
   fs.writeFileSync(full, html);
+  const urlPath = '/' + relPath.replace(/index\.html$/, '');
+  const h = pageHashOf(html);
+  const prev = PAGE_LASTMOD[urlPath];
+  if (!prev || prev.hash !== h) PAGE_LASTMOD[urlPath] = { hash: h, lastmod: today };
+};
+const lastmodFor = (loc) => {
+  const urlPath = loc.replace(SITE, '') || '/';
+  return (PAGE_LASTMOD[urlPath] && PAGE_LASTMOD[urlPath].lastmod) || today;
 };
 
 const today = new Date().toISOString().slice(0, 10);
+
+// Parse "11:00am - 8:00pm" style strings into schema.org OpeningHoursSpecification.
+// Returns undefined when hours can't be parsed — never fabricate.
+const parseHoursRange = (s) => {
+  const m = String(s || '').match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)\s*[–-]+\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i);
+  if (!m) return null;
+  const to24 = (h, min, ap) => {
+    let hh = parseInt(h, 10) % 12;
+    if (/pm/i.test(ap)) hh += 12;
+    return `${String(hh).padStart(2, '0')}:${min || '00'}`;
+  };
+  return { opens: to24(m[1], m[2], m[3]), closes: to24(m[4], m[5], m[6]) };
+};
+const hoursSpec = (d) => {
+  if (!d.hours) return undefined;
+  const wk = parseHoursRange(d.hours.weekday);
+  const we = parseHoursRange(d.hours.weekend);
+  if (!wk && !we) return undefined;
+  const spec = [];
+  if (wk) spec.push({ '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: wk.opens, closes: wk.closes });
+  if (we) spec.push({ '@type': 'OpeningHoursSpecification', dayOfWeek: ['Saturday', 'Sunday'], opens: we.opens, closes: we.closes });
+  return spec;
+};
+
+// Grams per listing for honest per-gram comparison on "cheapest" pages.
+const gramsFromWeight = (w) => ({
+  '1 g': 1, '1g': 1, '2.5 g': 2.5, '3.5 g': 3.5, '1/8 oz': 3.5, '4 g': 4,
+  '7 g': 7, '1/4 oz': 7, '14 g': 14, '1/2 oz': 14, '28 g': 28, '1 oz': 28,
+}[w] || null);
+const perGram = (p) => {
+  const g = gramsFromWeight(p.weight);
+  const lo = (() => { const v = Object.values(p.prices || {}).filter(x => x > 0); return v.length ? Math.min(...v) : null; })();
+  return (g && lo) ? lo / g : null;
+};
+// Cheapest-page comparator: flower ranks by $/gram (an $18 one-gram must not
+// outrank a $9/g eighth), everything else by absolute lowest price.
+const cheapestCompare = (catId) => (a, b) => {
+  if (catId === 'flower') {
+    const pa = perGram(a), pb = perGram(b);
+    if (pa && pb && pa !== pb) return pa - pb;
+    if (pa && !pb) return -1;
+    if (!pa && pb) return 1;
+  }
+  const la = Object.values(a.prices || {}).filter(x => x > 0);
+  const lb = Object.values(b.prices || {}).filter(x => x > 0);
+  return (la.length ? Math.min(...la) : 9999) - (lb.length ? Math.min(...lb) : 9999);
+};
 
 // ---------- Shared chrome (nav/footer) ----------
 // "Open" vs "tracked" — mirrors isOperationalDispensary() in js/app.js; keep
@@ -268,6 +333,7 @@ const headOpen = ({ title, description, canonical, ogImage = '/og-image.png', sc
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${canonical}">
+<meta name="robots" content="max-image-preview:large">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:type" content="website">
@@ -547,10 +613,17 @@ const buildDispensaryPage = (d) => {
   const description = `${d.name}, ${d.city}, MN — ${descBits.join(' · ')}.`;
   const canonical = `${SITE}/dispensaries/${d.id}/`;
 
-  // Schema.org LocalBusiness — the big SEO unlock
+  // Schema.org LocalBusiness — the big SEO unlock.
+  // NOTE (2026-08 schema truth pass): type is ["Store","LocalBusiness"] because
+  // "CannabisStore" is not a schema.org type (invalid markup gets ignored).
+  // Google-sourced reviews/ratings are deliberately NOT marked up: Google's
+  // review-snippet policy forbids third-party/aggregated reviews on your own
+  // LocalBusiness ("self-serving reviews") — that markup is what triggered the
+  // GSC "Review snippets: 100% not eligible" flag. The reviews still render as
+  // visible content; they just carry no structured data.
   const schema = [{
     '@context': 'https://schema.org',
-    '@type': 'CannabisStore',
+    '@type': ['Store', 'LocalBusiness'],
     name: d.name,
     image: d.img || `${SITE}/img/twin-city-cannabis-logo-512.png`,
     url: canonical,
@@ -567,20 +640,7 @@ const buildDispensaryPage = (d) => {
       };
     })(),
     geo: (d.lat && d.lng) ? { '@type': 'GeoCoordinates', latitude: d.lat, longitude: d.lng } : undefined,
-    aggregateRating: rating ? {
-      '@type': 'AggregateRating',
-      ratingValue: rating,
-      reviewCount: reviewCount,
-      bestRating: 5,
-      worstRating: 1
-    } : undefined,
-    review: reviews.slice(0, 5).map(r => ({
-      '@type': 'Review',
-      author: { '@type': 'Person', name: r.author },
-      reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5 },
-      reviewBody: r.text,
-      datePublished: today
-    }))
+    openingHoursSpecification: hoursSpec(d),
   }, {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -646,7 +706,33 @@ ${d.google && d.google.maps_url ? `<p><a href="${esc(d.google.maps_url)}" rel="n
   </div>
 </div>
 
-<p>${esc(d.name)} is a cannabis dispensary in ${esc(d.city || 'the Twin Cities')}, Minnesota. ${products.length > 0 ? `Below is the current menu (${products.length} products), with each price compared against every other dispensary in the metro. Prices update daily.` : 'This listing is being indexed — full menu data is on its way.'}</p>
+<p>${esc(d.name)} is a ${products.length > 0 ? '' : 'licensed '}cannabis dispensary in ${esc(d.city || 'the Twin Cities')}, Minnesota. ${products.length > 0 ? `Below is the current menu (${products.length} products), with each price compared against every other dispensary in the metro. Prices update daily.` : `${d.name}'s online menu isn't published in a form we can track yet, so live prices aren't shown here — call ahead${d.phone ? ` at ${esc(d.phone)}` : ''} or check their website for today's selection. Everything else on this page is current: location, hours, and real Google reviews below.`}</p>
+
+${products.length === 0 ? (() => {
+  // No-menu pages still earn their place: real alternatives + city context
+  // instead of a "being indexed" stub (which Google reads as a soft 404).
+  const near = (d.lat && d.lng) ? TCC.dispensaries
+    .filter(o => o.id !== d.id && o.lat && o.lng && isOperationalDispensary(o) &&
+      TCC.products.some(p => p.prices && p.prices[o.id] > 0))
+    .map(o => {
+      const R = 3959, toRad = (x) => x * Math.PI / 180;
+      const dLat = toRad(o.lat - d.lat), dLng = toRad(o.lng - d.lng);
+      const h = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(d.lat)) * Math.cos(toRad(o.lat)) * Math.sin(dLng / 2) ** 2;
+      return { o, mi: Math.round(R * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h)) * 10) / 10 };
+    })
+    .sort((a, b) => a.mi - b.mi).slice(0, 3) : [];
+  const cityShops = TCC.dispensaries.filter(o => o.city === d.city && isOperationalDispensary(o)).length;
+  return `
+<h2>Nearby dispensaries with live menus</h2>
+<p>While ${esc(d.name)}'s menu comes online, these are the closest open shops we track full prices for:</p>
+<div class="grid">
+${near.map(({ o, mi }) => `<a class="card" href="/dispensaries/${esc(o.id)}/">
+  <p class="title">${esc(o.name)}</p>
+  <p class="sub">${mi} mi away · ${esc(o.city || '')}${o.google && o.google.rating ? ` · <span class="stars">★</span> ${o.google.rating}` : ''}</p>
+</a>`).join('\n')}
+</div>
+${d.city ? `<p>${cityShops > 1 ? `${esc(d.city)} has ${cityShops} open dispensaries — see <a href="/${slugify(d.city)}-cannabis-dispensaries/">every ${esc(d.city)} dispensary</a> with menus and prices.` : `See <a href="/dispensaries/">every open Minnesota dispensary</a> with live menus and prices.`}</p>` : ''}`;
+})() : ''}
 
 <a class="cta" href="/#dashboard/${esc(d.id)}">View interactive menu &amp; price compare →</a>
 ${d.website && !d.website.includes('weedmaps.com') ? `<a class="cta" href="${esc(d.website)}" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit ${esc(d.name)}'s website →</a>` : ''}
@@ -669,9 +755,56 @@ ${reviewsHtml}
 ` + footer;
 };
 
+// ---------- DISPENSARY NEAR ME ----------
+// "dispensary near me" shows 943 impressions in GSC with no dedicated landing
+// surface. This page answers the intent directly and funnels into the app's
+// one-tap proximity sort.
+const buildNearMePage = () => {
+  const title = 'Dispensary Near Me — Find Open Minnesota Dispensaries With Live Prices';
+  const canonical = `${SITE}/dispensary-near-me/`;
+  const description = `Find the closest open cannabis dispensary in Minnesota: ${openDispCount} open shops with live menus, real prices, and Google ratings. One tap sorts every dispensary by distance from you.`;
+  const rated = TCC.dispensaries.filter(d => isOperationalDispensary(d) && d.google && d.google.rating && (d.google.review_count || 0) >= 25)
+    .sort((a, b) => (b.google.rating - a.google.rating) || (b.google.review_count - a.google.review_count)).slice(0, 6);
+  const bigCities = ['Minneapolis', 'Saint Paul', 'Bloomington', 'Edina', 'Roseville', 'Brooklyn Park', 'Blaine', 'Woodbury', 'Hopkins', 'Burnsville'];
+  const FAQ_NEAR = [
+    { q: 'How do I find the closest dispensary to me?', a: `Tap "Dispensaries near me" on our dispensary map — your browser shares your location once and every open Minnesota shop sorts by distance, with mileage on each card. ${openDispCount} dispensaries are open statewide right now.` },
+    { q: 'Are dispensaries near me open right now?', a: 'Most Minnesota dispensaries run roughly 10am–9pm with shorter Sunday hours, and each listing here shows its hours. Our open-now page filters to shops open at this moment.' },
+    { q: 'Should I just go to the nearest dispensary?', a: 'Not always — the same product routinely costs 20% more at one shop than another a few miles apart. Check the price comparison before you drive; sometimes the second-closest shop saves you real money.' },
+  ];
+  const { html: faqHtml, schema: faqSchema } = renderFAQ(FAQ_NEAR);
+  const schema = [{
+    '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: canonical, description, dateModified: today,
+  }, faqSchema];
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / Dispensary near me</div>
+<h1>Find a Dispensary Near You</h1>
+<p>${openDispCount} recreational cannabis dispensaries are open across Minnesota right now. The fastest way to find the closest one: open the live map and tap <strong>"Dispensaries near me"</strong> — every shop sorts by distance from you, with mileage, hours, ratings, and live menu prices on each card.</p>
+<a class="cta" href="/#dispensaries">Find dispensaries near me →</a>
+<p style="margin-top:.75rem"><a href="/open-now/">Just show me what's open right now →</a></p>
+
+<h2>Highest-rated dispensaries in Minnesota</h2>
+<div class="grid">
+${rated.map(d => `<a class="card" href="/dispensaries/${esc(d.id)}/">
+  <p class="title">${esc(d.name)}</p>
+  <p class="sub"><span class="stars">★</span> ${d.google.rating} · ${d.google.review_count} reviews · ${esc(d.city || '')}</p>
+</a>`).join('\n')}
+</div>
+
+<h2>Browse by city</h2>
+<p>${bigCities.map(c => `<a href="/${slugify(c)}-cannabis-dispensaries/">${esc(c)}</a>`).join(' · ')} — or <a href="/dispensaries/">every Minnesota dispensary</a>.</p>
+
+<h2>Before you drive: check the price</h2>
+<p>Proximity is only half the answer. The same eighth or gummy pack routinely costs 20% more at one shop than another nearby — see <a href="/minnesota-cannabis-prices/">today's Minnesota price medians</a>, <a href="/cheapest-cannabis-twin-cities/">the cheapest products by category</a>, and <a href="/price-spread-index/">the products where comparing saves the most</a>.</p>
+
+${faqHtml}
+
+<a class="cta" href="/#dispensaries">Open the live dispensary map →</a>
+` + footer;
+};
+
 // ---------- DISPENSARIES INDEX ----------
 const buildDispensariesIndex = () => {
-  const title = 'All Twin Cities Cannabis Dispensaries — Menus, Prices & Reviews';
+  const title = `Minnesota Dispensaries Near Me — ${openDispCount} Open Shops, Menus & Prices`;
   const description = `Every licensed cannabis dispensary in Minnesota — Twin Cities metro and beyond. ${TCC.dispensaries.length} tracked, ${openDispCount} open now, with real Google ratings, live menus, and daily price comparisons.`;
   const canonical = `${SITE}/dispensaries/`;
 
@@ -723,7 +856,7 @@ const buildCategoryPage = (cat) => {
   const products = TCC.products.filter(p => p.category === cat.id && isRealCannabisProduct(p));
   const sorted = products
     .slice()
-    .sort((a, b) => (lowestPrice(a) || 9999) - (lowestPrice(b) || 9999));
+    .sort(cheapestCompare(cat.id));
 
   const title = `${cat.name} — Compare Prices Across Twin Cities Dispensaries`;
   const description = `${products.length} ${cat.name.toLowerCase()} products from Twin Cities dispensaries. Compare prices side-by-side, find the cheapest, see which dispensary has it. Updated daily.`;
@@ -1130,7 +1263,15 @@ const buildCityPage = (cityName, slug) => {
   const best = rated.slice().sort((a, b) =>
     (b.google.rating - a.google.rating) || (b.google.review_count - a.google.review_count)).slice(0, 5);
   const catTop = (cat, n) => inCity.filter(x => x.p.category === cat)
-    .sort((a, b) => a.c.lo - b.c.lo).slice(0, n);
+    .sort((a, b) => {
+      if (cat === 'flower') {
+        const ga = gramsFromWeight(a.p.weight), gb = gramsFromWeight(b.p.weight);
+        if (ga && gb) return (a.c.lo / ga) - (b.c.lo / gb);
+        if (ga && !gb) return -1;
+        if (!ga && gb) return 1;
+      }
+      return a.c.lo - b.c.lo;
+    }).slice(0, n);
 
   // City-level liftable price stats — same shape as /minnesota-cannabis-prices/
   // (declarative medians + typical ranges answer engines can quote), filtered
@@ -1415,7 +1556,7 @@ const buildCheapestPage = () => {
   const sections = TCC.categories.map(cat => {
     const top10 = TCC.products
       .filter(p => p.category === cat.id && isRealCannabisProduct(p))
-      .sort((a, b) => lowestPrice(a) - lowestPrice(b))
+      .sort(cheapestCompare(cat.id))
       .slice(0, 10);
     if (top10.length === 0) return '';
 
@@ -1487,7 +1628,7 @@ const buildProductPage = (p) => {
         '@type': 'Offer',
         price: o.price,
         priceCurrency: 'USD',
-        seller: { '@type': 'CannabisStore', name: o.d.name }
+        seller: { '@type': 'Store', name: o.d.name }
       }))
     }
   }, {
@@ -2821,7 +2962,7 @@ const buildSitemap = (extras = []) => {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url>
     <loc>${u.loc}</loc>
-    <lastmod>${today}</lastmod>
+    <lastmod>${lastmodFor(u.loc)}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
   </url>`).join('\n')}
@@ -3202,7 +3343,16 @@ const buildCheapestCategoryCity = (catId, catName, city) => {
       return { p, price: offers[0][1], dispensaryId: offers[0][0] };
     })
     .filter(Boolean)
-    .sort((a, b) => a.price - b.price)
+    .sort((a, b) => {
+      // Flower ranks by $/gram so a $18 one-gram never outranks a $9/g eighth.
+      if (catId === 'flower') {
+        const ga = gramsFromWeight(a.p.weight), gb = gramsFromWeight(b.p.weight);
+        if (ga && gb) return (a.price / ga) - (b.price / gb);
+        if (ga && !gb) return -1;
+        if (!ga && gb) return 1;
+      }
+      return a.price - b.price;
+    })
     .slice(0, 20);
 
   if (productsHere.length < 3) return null; // not enough data to make a page worth reading
@@ -3381,7 +3531,7 @@ const buildStrainCityPage = (strain, city) => {
           itemOffered: { '@type': 'Product', name: o.p.name },
           availability: 'https://schema.org/InStock',
           seller: store ? {
-            '@type': 'CannabisStore',
+            '@type': ['Store', 'LocalBusiness'],
             name: store.name,
             url: `${SITE}/dispensaries/${store.id}/`
           } : undefined
@@ -4216,6 +4366,11 @@ ${faqHtml}
 ` + footer;
 };
 
+writePage('dispensary-near-me/index.html', buildNearMePage());
+extraSitemap.push({ loc: `${SITE}/dispensary-near-me/`, priority: '0.8', changefreq: 'weekly' });
+count++;
+console.log('Wrote dispensary-near-me page');
+
 writePage('minnesota-cannabis/index.html', buildMinnesotaHub());
 extraSitemap.push({ loc: `${SITE}/minnesota-cannabis/`, priority: '0.9', changefreq: 'daily' });
 count++;
@@ -4231,6 +4386,7 @@ ${answerPages.map(a => `- [${a.question}](${SITE}/answers/${a.slug}/)`).join('\n
 
 ## Key pages
 - [Every Minnesota dispensary with live menus](${SITE}/dispensaries/)
+- [Find the closest open dispensary near you](${SITE}/dispensary-near-me/)
 - [Compare every product price](${SITE}/products/)
 - [Cannabis in Minnesota: the live statewide picture — dispensaries, prices, laws](${SITE}/minnesota-cannabis/)
 - [Minnesota cannabis prices: live medians and ranges by category, updated daily](${SITE}/minnesota-cannabis-prices/)
@@ -4365,6 +4521,7 @@ console.log(`Wrote ${blogSorted.length} blog posts + index`);
 
 // Sitemap
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), buildSitemap(extraSitemap));
+fs.writeFileSync(LASTMOD_PATH, JSON.stringify(Object.fromEntries(Object.entries(PAGE_LASTMOD).sort()), null, 0));
 
 // ---------- INJECT INTERNAL CRAWL FOOTER INTO index.html ----------
 // Replaces the marked block with up-to-date links to all generated pages so the

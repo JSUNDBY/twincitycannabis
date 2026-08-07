@@ -119,6 +119,7 @@ git add js/data.js index.html sitemap.xml \
     scraper/data/full_menu_products.json scraper/data/last_weedmaps_scrape.txt \
     scraper/data/dispensaries.json scraper/data/dispensaries_export.json \
     scraper/data/dispensary_shop_products.json scraper/data/meadow_products.json \
+    scraper/data/page_lastmod.json \
     llms.txt
 grep -o '<loc>https://twincitycannabis.com/[^<]*</loc>' sitemap.xml \
   | sed 's|<loc>https://twincitycannabis.com/||;s|</loc>||;s|/$||' \
@@ -131,6 +132,8 @@ else
     git commit -m "Auto-update: $(date +%Y-%m-%d\ %H:%M) - fresh prices"
     git push
     echo "Pushed fresh data"
+    # Tell Bing & friends immediately (IndexNow) — ChatGPT search leans on Bing.
+    bash scripts/indexnow_ping.sh || true
 fi
 
 # Heartbeat: ping the uptime monitor. set -e means we only reach here on a
