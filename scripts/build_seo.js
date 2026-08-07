@@ -467,7 +467,7 @@ const footer = `</main>
 <footer>
   <p><strong class="footer-brand">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Twin Cities dispensary.</p>
   <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a></p>
-  <p><a href="/minnesota-cannabis-prices/">MN Cannabis Prices</a> &middot; <a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/price-spread-index/">Price Spread Index</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
+  <p><a href="/minnesota-cannabis/">Cannabis in Minnesota</a> &middot; <a href="/minnesota-cannabis-prices/">MN Cannabis Prices</a> &middot; <a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/price-spread-index/">Price Spread Index</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
   <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
 </footer>
@@ -1064,9 +1064,14 @@ const buildCityPage = (cityName, slug) => {
   if (dispensaries.length === 0) return null;
 
   const flagship = FLAGSHIP_CITIES.has(cityName.toLowerCase());
+  // People type "St. Paul" far more than "Saint Paul" — make sure the page
+  // carries both forms for the head terms.
+  const stPaul = cityName.toLowerCase() === 'saint paul';
 
   const title = flagship
-    ? `Cannabis in ${cityName}, MN — Every Dispensary, Live Prices & Deals`
+    ? (stPaul
+      ? `Cannabis in Saint Paul, MN — St. Paul Dispensaries, Live Prices & Deals`
+      : `Cannabis in ${cityName}, MN — Every Dispensary, Live Prices & Deals`)
     : `Cannabis Dispensaries in ${cityName}, MN — Menus, Prices & Reviews`;
   const description = `Every recreational cannabis dispensary in ${cityName}, Minnesota. ${dispensaries.length} stores with real Google ratings, live menus, and side-by-side price comparison. Updated daily.`;
   const canonical = `${SITE}/${slug}/`;
@@ -1189,7 +1194,7 @@ const buildCityPage = (cityName, slug) => {
   return headOpen({ title, description, canonical, schema }) + `
 <div class="crumbs"><a href="/">Home</a> / <a href="/dispensaries/">Dispensaries</a> / ${esc(cityName)}</div>
 <h1>Cannabis in ${esc(cityName)}, Minnesota</h1>
-<p>Every recreational dispensary in ${esc(cityName)}, every menu, every price — tracked daily. ${open.length} shops are open right now${avgRating ? `, averaging ${avgRating}★ on Google` : ''}${cheapEighth ? `, and today's cheapest eighth in the city is $${cheapEighth.c.lo.toFixed(0)}` : ''}. Compare before you drive; the same product routinely costs 20% more a few blocks away.</p>
+<p>Every recreational dispensary in ${stPaul ? 'Saint Paul (St.&nbsp;Paul)' : esc(cityName)}, every menu, every price — tracked daily. ${open.length} shops are open right now${avgRating ? `, averaging ${avgRating}★ on Google` : ''}${cheapEighth ? `, and today's cheapest eighth in the city is $${cheapEighth.c.lo.toFixed(0)}` : ''}. Compare before you drive; the same product routinely costs 20% more a few blocks away.</p>
 
 <div class="seo-strip">
   <div class="seo-strip-cell"><div class="seo-strip-value">${open.length}</div><div class="seo-strip-label">Open dispensaries</div><div class="seo-strip-sub">${dispensaries.length} licensed locations tracked</div></div>
@@ -4124,6 +4129,98 @@ extraSitemap.push({ loc: `${SITE}/minnesota-cannabis-prices/`, priority: '0.9', 
 count++;
 console.log('Wrote minnesota-cannabis-prices page');
 
+// ============================================================================
+// MINNESOTA CANNABIS — the statewide head-term hub ("minnesota cannabis",
+// "cannabis in minnesota", "cannabis mn"). The homepage targets compare-price
+// queries; this page answers the broad state question with live numbers, the
+// legal snapshot, where to buy, prices, and events — all liftable prose.
+// ============================================================================
+const buildMinnesotaHub = () => {
+  const canonical = `${SITE}/minnesota-cannabis/`;
+  const open = TCC.dispensaries.filter(isOperationalDispensary);
+  const cityCount = new Set(open.map(d => (d.city || '').toLowerCase()).filter(Boolean)).size;
+  const openIds = new Set(open.map(d => d.id));
+  // Median eighth, statewide (same guard as the prices page)
+  const e8pts = [];
+  TCC.products.filter(isRealCannabisProduct)
+    .filter(p => p.category === 'flower' && (p.weight === '1/8 oz' || p.weight === '3.5 g'))
+    .forEach(p => { for (const [id, v] of Object.entries(p.prices || {})) if (v > 0 && openIds.has(id)) e8pts.push(v); });
+  e8pts.sort((a, b) => a - b);
+  const e8med = e8pts.length >= 5 ? Math.round(e8pts[Math.floor(e8pts.length / 2)]) : null;
+  const rated = open.filter(d => d.google && d.google.rating && (d.google.review_count || 0) >= 25);
+  const best = rated.sort((a, b) => (b.google.rating - a.google.rating) || (b.google.review_count - a.google.review_count)).slice(0, 6);
+  const hubToday = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const legacyCupLive = today <= '2026-09-26';
+
+  const title = 'Cannabis in Minnesota — Dispensaries, Prices, Laws & Events';
+  const description = `The live picture of Minnesota cannabis: ${open.length} open dispensaries across ${cityCount} cities, ${(TCC.products || []).length.toLocaleString('en-US')} products with real prices${e8med ? `, median eighth $${e8med}` : ''}, plus the laws in plain English and upcoming events. Updated daily.`;
+
+  const FAQ_HUB = [
+    { q: 'Is cannabis legal in Minnesota?', a: 'Yes. Minnesota legalized recreational cannabis for adults 21 and over on August 1, 2023. Adults can possess up to 2 ounces of flower in public and 2 pounds at home, and grow up to 8 plants (4 flowering) at home.' },
+    { q: 'How many dispensaries are open in Minnesota?', a: `${open.length} recreational dispensaries are open in Minnesota right now, across ${cityCount} cities, out of ${TCC.dispensaries.length} licensed locations we track. New shops open nearly every week — this page updates daily.` },
+    { q: 'How much does cannabis cost in Minnesota?', a: e8med ? `As of ${hubToday}, the median eighth of flower across open Minnesota dispensaries is $${e8med}. Our Minnesota cannabis prices page tracks live medians and ranges for every product category, updated daily.` : 'Our Minnesota cannabis prices page tracks live medians and ranges for every category, updated daily.' },
+    { q: 'Can visitors buy cannabis in Minnesota?', a: 'Yes — anyone 21 or older with a government ID can buy at licensed dispensaries, resident or not. You cannot legally take cannabis across state lines, including into Wisconsin, Iowa, or the Dakotas.' },
+  ];
+  const { html: faqHtml, schema: faqSchema } = renderFAQ(FAQ_HUB);
+
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Cannabis in Minnesota: the live statewide picture',
+    description,
+    dateModified: today,
+    author: { '@type': 'Organization', name: 'Twin City Cannabis', url: SITE },
+    publisher: { '@type': 'Organization', name: 'Twin City Cannabis', logo: { '@type': 'ImageObject', url: `${SITE}/img/twin-city-cannabis-logo-512.png` } },
+    mainEntityOfPage: canonical,
+  }, faqSchema];
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / Minnesota cannabis</div>
+<h1>Cannabis in Minnesota</h1>
+<p><strong>Updated ${hubToday}.</strong> Recreational cannabis has been legal in Minnesota for adults 21+ since August 1, 2023. Right now, <strong>${open.length} dispensaries are open across ${cityCount} Minnesota cities</strong>, selling ${(TCC.products || []).length.toLocaleString('en-US')} tracked products${e8med ? `, and the median eighth of flower statewide costs <strong>$${e8med}</strong>` : ''}. This page is the live statewide picture — recomputed from real menus several times a day.</p>
+
+<div class="seo-strip">
+  <div class="seo-strip-cell"><div class="seo-strip-value">${open.length}</div><div class="seo-strip-label">Open dispensaries</div><div class="seo-strip-sub">${TCC.dispensaries.length} licensed tracked</div></div>
+  <div class="seo-strip-cell"><div class="seo-strip-value">${cityCount}</div><div class="seo-strip-label">Cities with a shop</div><div class="seo-strip-sub">metro + greater Minnesota</div></div>
+  <div class="seo-strip-cell"><div class="seo-strip-value">${e8med ? '$' + e8med : '—'}</div><div class="seo-strip-label">Median eighth today</div><div class="seo-strip-sub"><a href="/minnesota-cannabis-prices/">full price data</a></div></div>
+  <div class="seo-strip-cell"><div class="seo-strip-value">${(TCC.products || []).length.toLocaleString('en-US')}</div><div class="seo-strip-label">Products tracked</div><div class="seo-strip-sub">live prices, daily</div></div>
+</div>
+
+<h2>What's legal, in one paragraph</h2>
+<p>Adults 21+ can buy at licensed dispensaries and possess up to <strong>2 ounces of flower in public</strong> (2 pounds at home), plus concentrates and edibles within state limits. You can grow <strong>8 plants at home</strong> (4 flowering) in an enclosed, locked space. You can't use in public, in a vehicle, or on federal land, and cannabis can't cross state lines. Full plain-English breakdown: <a href="/minnesota-cannabis-laws/">Minnesota cannabis laws</a>.</p>
+
+<h2>Where to buy</h2>
+<p>The metro leads — <a href="/minneapolis-cannabis-dispensaries/">Minneapolis</a> and <a href="/saint-paul-cannabis-dispensaries/">Saint Paul (St. Paul)</a> each have flagship guides with live city prices — and greater Minnesota is filling in fast, from Duluth to Rochester to Albert Lea. Browse <a href="/dispensaries/">every open dispensary</a>, see <a href="/best-dispensaries-twin-cities/">the best-rated by real Google reviews</a>, or find <a href="/open-now/">what's open right now</a>.</p>
+
+<h2>Highest-rated dispensaries in Minnesota</h2>
+<div class="grid">
+${best.map(d => `<a class="card" href="/dispensaries/${esc(d.id)}/">
+  <p class="title">${esc(d.name)}</p>
+  <p class="sub"><span class="stars">★</span> ${d.google.rating} · ${d.google.review_count} reviews · ${esc(d.city || '')}</p>
+</a>`).join('\n')}
+</div>
+
+<h2>What it costs</h2>
+<p>${e8med ? `The median eighth statewide is <strong>$${e8med}</strong> today, and the same product routinely costs 20% more at one shop than another.` : 'Prices vary widely between shops.'} See <a href="/minnesota-cannabis-prices/">live Minnesota price medians and ranges</a>, <a href="/cheapest-cannabis-twin-cities/">the cheapest products by category</a>, <a href="/weed-deals-twin-cities/">today's price drops</a>, and <a href="/price-spread-index/">the Price Spread Index</a> — the products where shopping around saves the most.</p>
+
+${legacyCupLive ? `<h2>Coming up in Minnesota cannabis</h2>
+<p><strong>Legacy Cup 2026</strong> — the Midwest's largest cannabis festival — lands at Surly Festival Field in Minneapolis on <strong>September 26</strong>, with Big Boi, Bone Thugs-N-Harmony, and The Cup Awards. See <a href="/events/">all Minnesota cannabis events</a>.</p>` : `<h2>Events</h2>
+<p>Festivals, showcases, and meetups across the state: <a href="/events/">the Minnesota cannabis events calendar</a>.</p>`}
+
+<h2>New to all this?</h2>
+<p>Start with our guides: <a href="/blog/first-time-dispensary-guide-minnesota/">your first dispensary visit</a>, <a href="/blog/edibles-dosing-guide-minnesota/">edibles dosing</a>, <a href="/blog/thc-drinks-minnesota/">Minnesota's THC seltzer culture</a>, and <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a> — or browse <a href="/blog/">all the guides</a>.</p>
+
+${faqHtml}
+
+<a class="cta" href="/#compare">Compare every Minnesota price live →</a>
+` + footer;
+};
+
+writePage('minnesota-cannabis/index.html', buildMinnesotaHub());
+extraSitemap.push({ loc: `${SITE}/minnesota-cannabis/`, priority: '0.9', changefreq: 'daily' });
+count++;
+console.log('Wrote minnesota-cannabis hub');
+
 // llms.txt — the emerging convention answer engines check for a site map of
 // meaning. Regenerated every build so counts stay honest.
 fs.writeFileSync(path.join(ROOT, 'llms.txt'), `# Twin City Cannabis
@@ -4135,6 +4232,7 @@ ${answerPages.map(a => `- [${a.question}](${SITE}/answers/${a.slug}/)`).join('\n
 ## Key pages
 - [Every Minnesota dispensary with live menus](${SITE}/dispensaries/)
 - [Compare every product price](${SITE}/products/)
+- [Cannabis in Minnesota: the live statewide picture — dispensaries, prices, laws](${SITE}/minnesota-cannabis/)
 - [Minnesota cannabis prices: live medians and ranges by category, updated daily](${SITE}/minnesota-cannabis-prices/)
 - [Cheapest cannabis in the Twin Cities, by category](${SITE}/cheapest-cannabis-twin-cities/)
 - [Price Spread Index: the products where shopping around saves most](${SITE}/price-spread-index/)
