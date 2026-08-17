@@ -1090,4 +1090,97 @@ module.exports = [
       { href: '/blog/how-to-save-money-minnesota-dispensaries/', label: 'How to actually save money' },
     ],
   },
+
+  {
+    slug: 'albert-lea-dispensaries-minnesota',
+    title: 'Albert Lea dispensaries: a real guide to all six shops',
+    dek: 'A town of 18,000 people somehow has six licensed cannabis shops. Here is who they are, why they clustered here, and what to know before you go.',
+    date: '2026-09-07',
+    updated: '2026-09-07',
+    category: 'Buying smart',
+    read: 7,
+    body: `
+<p>Albert Lea has six licensed cannabis dispensaries. For a town of about 18,000 people, that is a genuinely strange number, and it is one of the more interesting things happening in Minnesota cannabis right now. Minneapolis has 18 shops and more than twenty times the population. Something else is going on here, and it is worth understanding before you shop.</p>
+
+<h2>Why six shops landed in a town this size</h2>
+<p>Two reasons, and neither one is an accident. Albert Lea sits right where I-35 crosses I-90, so a lot of people pass through without planning to. More importantly, it is roughly twenty miles north of the Iowa line, and Iowa has not legalized adult-use cannabis. If you live in Mason City or Clear Lake, the nearest legal dispensary is in Minnesota, and Albert Lea is the first exit worth taking. Border towns get border business.</p>
+<p>The other half of the story is Minnesota's microbusiness license, written so that small local operators could grow and sell their own cannabis instead of the whole market going to a few large companies. Outstate Minnesota is where that idea actually worked. All six shops in Albert Lea are microbusinesses, and all six are newly licensed.</p>
+
+<h2>The six shops</h2>
+<ul>
+  <li><strong>Aficionados</strong>, 2006 E Main Street</li>
+  <li><strong>Big Dream Organics</strong>, 1039 S Broadway Avenue</li>
+  <li><strong>Black Husky LLC</strong>, 2706 Ekko Avenue</li>
+  <li><strong>The Matchbox Dispensary</strong>, 2316 Hendrickson Road</li>
+  <li><strong>Mountain Sight Vision LLC</strong>, 2400 Myers Road</li>
+  <li><strong>The Smoking Tree</strong>, 2718 Bridge Avenue</li>
+</ul>
+<p>They are spread across town rather than lined up on one strip, so which one is closest depends on where in Albert Lea you are starting. Maps and whatever menu data each shop has published sit on our <a href="/albert-lea-cannabis-dispensaries/">Albert Lea dispensary page</a>.</p>
+
+<h2>Shopping a microbusiness is different, in a good way</h2>
+<p>A microbusiness grows what it sells, usually in small batches, and that has real consequences at the counter. The selection is narrower than a big metro shop and it rotates, so the strain you loved last month may simply be gone. In exchange, the flower is often fresher than anything that traveled through a distributor, the person helping you may have grown it himself, and the price is frequently better because nobody in the middle took a cut.</p>
+<p>So change your question. Instead of asking for a brand you saw in Minneapolis, ask what they grew themselves and what just came out of cure. That is the good stuff, and it is the whole reason to shop a place like this instead of a chain.</p>
+
+<h2>Call before you drive</h2>
+<p>Here is the practical warning. Most of the Albert Lea shops have not published their hours anywhere we can find, which is normal for businesses this new. Do not assume anyone is open at nine on a Sunday night. Find a phone number and call, or check the shop's own site, before you drive across town or up from Iowa. Bring cash while you are at it, for the reasons in our <a href="/blog/first-time-dispensary-guide-minnesota/">first-visit guide</a>.</p>
+
+<h2>Ask one question at the counter</h2>
+<p>Minnesota has two kinds of THC on shelves: adult-use cannabis from a licensed dispensary, and hemp-derived THC, which has been legal here since 2022 and is sold in a lot of places. Both are legal. They are not the same thing, and the second one is usually milder while sometimes carrying the first one's price. If you want actual adult-use cannabis, ask plainly whether what you are holding is adult-use or hemp-derived. Nobody will be offended, and it is the easiest way to avoid going home with the wrong product. Our <a href="/blog/cbd-vs-thc-minnesota/">CBD and THC explainer</a> covers the difference properly.</p>
+
+<h2>What you should expect to pay</h2>
+<p>We do not have live daily price tracking for Albert Lea the way we do for the metro, because these shops publish less menu data. Use the statewide picture instead. The median eighth of flower in Minnesota runs right around $50, and honest listings bottom out near $30. Our <a href="/minnesota-cannabis-prices/">Minnesota price medians</a> page keeps that current. If a shop is well above $50 for an ordinary eighth, it is fair to ask what makes it worth the difference, and it is fair to walk.</p>
+<p>One local advantage worth using: with six shops in one small town, comparison shopping is a ten-minute errand instead of a highway trip. Almost nowhere else in Minnesota is that true, and it is the same trick that saves metro shoppers real money in <a href="/blog/how-to-save-money-minnesota-dispensaries/">our savings guide</a>.</p>
+
+<h2>Coming down from the metro</h2>
+<p>Honestly, no, do not drive ninety minutes to Albert Lea just to buy weed. The metro has far better price competition, and our <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a> will find you a better eighth closer to home. But if you are already heading down I-35, or you are visiting family, it is a genuinely good stop. Small-batch flower from the person who grew it is something the big shops cannot sell you.</p>
+`,
+    related: [
+      { href: '/albert-lea-cannabis-dispensaries/', label: 'Albert Lea dispensaries' },
+      { href: '/dispensaries/', label: 'Full dispensary directory' },
+      { href: '/blog/first-time-dispensary-guide-minnesota/', label: 'Your first dispensary visit' },
+    ],
+  },
+
+  {
+    slug: 'duluth-dispensaries-minnesota',
+    title: 'Duluth dispensaries: what to know before you shop up north',
+    dek: 'Three shops in town, two Native owned options twenty minutes out, and one question at the counter that keeps people from buying the wrong thing entirely.',
+    date: '2026-09-14',
+    updated: '2026-09-14',
+    category: 'Buying smart',
+    read: 7,
+    body: `
+<p>Duluth has three licensed dispensaries in town, two more Native owned shops about twenty minutes down the road, and one specific thing that goes wrong for shoppers here more than almost anywhere else in Minnesota. Whether you live up here or you are in town for a weekend on the shore, this is what actually matters.</p>
+
+<h2>The three shops in Duluth</h2>
+<p><strong>Legacy Cannabis Duluth</strong>, 1906 West Superior Street, (218) 720-0747, open roughly 10am to 9pm. The biggest reputation of the three, with close to 200 Google reviews and a 4.3 average at the time of writing. Large menu, online ordering, and reviewers keep singling out the budtenders for actually knowing cannabis instead of reading the label back to you.</p>
+<p><strong>North Shore Dispensary</strong>, 2033 W Superior St, (218) 481-7724, also about 10am to 9pm, a few blocks up the same street. Notable for one practical reason: it takes debit and credit cards, which is rare in this business and saves you the ATM fee. It carries the highest overall score of the three on our tracker, and it runs a loyalty program.</p>
+<p><strong>Lake Superior Dispensary</strong>, 1019 W Central Entrance, (218) 830-0505, open about 11am to 8pm, up by the mall rather than downtown. Curbside pickup and online ordering. Read the next section before you shop here or anywhere else in town.</p>
+<p>Hours move around, so check our <a href="/duluth-cannabis-dispensaries/">Duluth dispensary page</a> or the shop's own site before you head out.</p>
+
+<h2>The question that will save you sixty dollars</h2>
+<p>This is the real reason to read this page. Minnesota has two separate legal THC markets: adult-use cannabis sold by licensed dispensaries, and hemp-derived THC, legal here since 2022 and sold all over the state. Both are legal, both say THC on the label, and they are not the same product.</p>
+<p>In Duluth this trips people up constantly. Read the reviews for shops in this town and you will find person after person who came in asking for flower, walked out with a bag, and only worked out at home that they had bought hemp-derived CBD flower rather than adult-use cannabis. Several of them paid adult-use prices for it.</p>
+<p>The fix takes four seconds. Ask whether what you are holding is adult-use cannabis or hemp-derived, and ask before you pay rather than after. A licensed adult-use product has the state's testing and labeling behind it, and a budtender will answer that without hesitating. If the answer is vague, that is your answer. Our <a href="/blog/cbd-vs-thc-minnesota/">CBD versus THC guide</a> spells out the difference, and the <a href="/minnesota-cannabis-laws/">Minnesota cannabis laws</a> page covers what a licensed shop owes you.</p>
+
+<h2>Two Native owned shops worth the short drive</h2>
+<p>Twenty to twenty-five minutes southwest of downtown there are two more options, both Native owned. <strong>ANANG Native Cannabis Co.</strong> is at 1508 Big Lake Rd in <a href="/cloquet-cannabis-dispensaries/">Cloquet</a>, with a large menu, online ordering, and curbside. <strong>ANANG Tasting Lounge and Dispensary</strong> is at 1440 Black Bear Dr in <a href="/carlton-cannabis-dispensaries/">Carlton</a>, and that one is genuinely unusual. A tasting lounge is a place you can consume on site, which an ordinary Minnesota dispensary cannot offer you. Tribal operations run under their own sovereign regulations, which is why they reached the market early and why they can do things state-licensed shops cannot.</p>
+<p>If you are staying downtown without a car it is a cab ride. If you are driving I-35 anyway, it is barely a detour.</p>
+
+<h2>Expect to pay more than you would in the metro</h2>
+<p>Be ready for this one. Northern Minnesota prices run higher than Minneapolis and Saint Paul, and the reviews for every shop in town include somebody startled at the register. Three shops in a city this size means less price pressure than the metro's crowded market, and that is simply how it works up here for now.</p>
+<p>What you can do is know the number before you walk in. The median Minnesota eighth sits right around $50 on our <a href="/minnesota-cannabis-prices/">price medians</a> page. Above that, decide on purpose instead of by surprise. If you are heading down to the Cities anyway, check the <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a> first, because a 25 percent spread on the identical jar is normal down there. We ran the same exercise for the other end of the state in our <a href="/blog/albert-lea-dispensaries-minnesota/">Albert Lea guide</a>.</p>
+
+<h2>Do not take it across the bridge</h2>
+<p>Here is Duluth's specific legal trap. Superior, Wisconsin is a five-minute drive over the Blatnik or the Bong, and Wisconsin has no adult-use cannabis market. The moment you cross that water with legal Minnesota cannabis in the car you are committing a crime in Wisconsin, and having bought it legally an hour earlier does not help you. Same story heading north to Canada, where it is a federal crossing and cannabis being legal on both sides does not make it legal to carry across. Our piece on <a href="/blog/traveling-with-cannabis-minnesota/">traveling with cannabis in Minnesota</a> works through it. The short version is that it stays in Minnesota.</p>
+
+<h2>If you are heading up the shore</h2>
+<p><strong>Two Harbors Cannabis</strong> at 629 7th Ave is your last easy stop before the long quiet stretch of Highway 61, about half an hour up from Duluth. Worth knowing if your plans involve a cabin and you would rather not drive back into town. Details on the <a href="/two-harbors-cannabis-dispensaries/">Two Harbors page</a>.</p>
+`,
+    related: [
+      { href: '/duluth-cannabis-dispensaries/', label: 'Duluth dispensaries' },
+      { href: '/blog/cbd-vs-thc-minnesota/', label: 'CBD versus THC' },
+      { href: '/blog/traveling-with-cannabis-minnesota/', label: 'Traveling with cannabis' },
+    ],
+  },
 ];
