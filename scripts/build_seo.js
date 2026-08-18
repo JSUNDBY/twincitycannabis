@@ -230,6 +230,44 @@ const lastmodFor = (loc) => {
 
 const today = new Date().toISOString().slice(0, 10);
 
+// ---------------------------------------------------------------------------
+// Price-data freshness. `today` above is BUILD time, which is the honest stamp
+// for "when did this page change" but a lie for "how old are these prices".
+// Those diverge the moment the scraper stops shipping: between 2026-08-06 and
+// 2026-08-17 the site rebuilt happily and told every visitor prices were
+// updated daily while serving an 11-day-old feed. Freshness claims below are
+// sourced from the scrape marker instead, and downgrade themselves to a plain
+// "last updated {date}" once the feed is more than 48h behind.
+const SCRAPE_MARKER = path.join(ROOT, 'scraper/data/last_weedmaps_scrape.txt');
+const SCRAPED_AT = (() => {
+  try {
+    const t = new Date(fs.readFileSync(SCRAPE_MARKER, 'utf8').trim());
+    return isNaN(t.getTime()) ? null : t;
+  } catch { return null; }
+})();
+const SCRAPE_AGE_HOURS = SCRAPED_AT ? (Date.now() - SCRAPED_AT.getTime()) / 36e5 : Infinity;
+const DATA_STALE = !(SCRAPE_AGE_HOURS < 48);
+const dataDayHuman = (SCRAPED_AT || new Date()).toLocaleDateString('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Chicago',
+});
+const dataDay = (SCRAPED_AT || new Date()).toISOString().slice(0, 10);
+
+// Swap-in phrases. Fresh feed keeps the marketing claim; stale feed states the
+// date and stops promising a cadence the data isn't meeting.
+const FRESH = {
+  updatedDaily:   DATA_STALE ? `last updated ${dataDayHuman}`   : 'updated daily',
+  refreshedDaily: DATA_STALE ? `last refreshed ${dataDayHuman}` : 'refreshed daily',
+  pricesDaily:    DATA_STALE ? `Prices were last updated ${dataDayHuman}.` : 'Prices update daily.',
+  trackedDaily:   DATA_STALE ? `last updated ${dataDayHuman}`   : 'tracked daily',
+};
+
+if (DATA_STALE) {
+  const age = SCRAPED_AT ? `${Math.floor(SCRAPE_AGE_HOURS)}h old` : 'MISSING';
+  console.warn(`\n  !! STALE PRICE DATA (${age}) — last scrape ${SCRAPED_AT ? SCRAPED_AT.toISOString() : 'unknown'}`);
+  console.warn(`     Freshness claims downgraded to "last updated ${dataDayHuman}".`);
+  console.warn(`     Fix the scraper; the site is only as good as this marker.\n`);
+}
+
 // Parse "11:00am - 8:00pm" style strings into schema.org OpeningHoursSpecification.
 // Returns undefined when hours can't be parsed — never fabricate.
 const parseHoursRange = (s) => {
@@ -706,7 +744,7 @@ ${d.google && d.google.maps_url ? `<p><a href="${esc(d.google.maps_url)}" rel="n
   </div>
 </div>
 
-<p>${esc(d.name)} is a ${products.length > 0 ? '' : 'licensed '}cannabis dispensary in ${esc(d.city || 'the Twin Cities')}, Minnesota. ${products.length > 0 ? `Below is the current menu (${products.length} products), with each price compared against every other dispensary in the metro. Prices update daily.` : `${d.name}'s online menu isn't published in a form we can track yet, so live prices aren't shown here — call ahead${d.phone ? ` at ${esc(d.phone)}` : ''} or check their website for today's selection. Everything else on this page is current: location, hours, and real Google reviews below.`}</p>
+<p>${esc(d.name)} is a ${products.length > 0 ? '' : 'licensed '}cannabis dispensary in ${esc(d.city || 'the Twin Cities')}, Minnesota. ${products.length > 0 ? `Below is the current menu (${products.length} products), with each price compared against every other dispensary in the metro. ${FRESH.pricesDaily}` : `${d.name}'s online menu isn't published in a form we can track yet, so live prices aren't shown here — call ahead${d.phone ? ` at ${esc(d.phone)}` : ''} or check their website for today's selection. Everything else on this page is current: location, hours, and real Google reviews below.`}</p>
 
 ${products.length === 0 ? (() => {
   // No-menu pages still earn their place: real alternatives + city context
@@ -747,8 +785,8 @@ ${reviewsHtml}
 
 <h2>More ways to shop the Twin Cities</h2>
 <ul>
-  <li><a href="/cheapest-cannabis-twin-cities/">Cheapest cannabis in the Twin Cities</a> — lowest prices in every category, refreshed daily.</li>
-  <li><a href="/weed-deals-twin-cities/">Biggest weed price drops in the Twin Cities</a> — real products that just got cheaper, updated daily.</li>
+  <li><a href="/cheapest-cannabis-twin-cities/">Cheapest cannabis in the Twin Cities</a> — lowest prices in every category, ${FRESH.refreshedDaily}.</li>
+  <li><a href="/weed-deals-twin-cities/">Biggest weed price drops in the Twin Cities</a> — real products that just got cheaper, ${FRESH.updatedDaily}.</li>
   <li><a href="/best-dispensaries-twin-cities/">Best-rated dispensaries in the Twin Cities</a> — every metro shop ranked by real Google reviews.</li>
   <li><a href="/minnesota-cannabis-laws/">Minnesota cannabis laws</a> — possession limits, public-use rules, and travel restrictions.</li>
 </ul>
@@ -843,7 +881,7 @@ const buildDispensariesIndex = () => {
   return headOpen({ title, description, canonical, schema }) + `
 <div class="crumbs"><a href="/">Home</a> / Dispensaries</div>
 <h1>Every Twin Cities Cannabis Dispensary</h1>
-<p>Real menus, real Google reviews, real prices — every licensed recreational dispensary in Minnesota, Twin Cities metro and beyond, all in one place. ${TCC.dispensaries.length} tracked &middot; ${openDispCount} open now &middot; the rest licensed and opening soon. Prices updated daily.</p>
+<p>Real menus, real Google reviews, real prices — every licensed recreational dispensary in Minnesota, Twin Cities metro and beyond, all in one place. ${TCC.dispensaries.length} tracked &middot; ${openDispCount} open now &middot; the rest licensed and opening soon. ${FRESH.pricesDaily}</p>
 <a class="cta" href="/#dispensaries">Open interactive map &amp; filters →</a>
 <div class="grid">
 ${cards}
@@ -1232,7 +1270,7 @@ const buildCityPage = (cityName, slug) => {
     return headOpen({ title, description, canonical, schema }) + `
 <div class="crumbs"><a href="/">Home</a> / <a href="/dispensaries/">Dispensaries</a> / ${esc(cityName)}</div>
 <h1>Cannabis Dispensaries in ${esc(cityName)}, Minnesota</h1>
-<p>${dispensaries.length} recreational cannabis ${dispensaries.length === 1 ? 'dispensary' : 'dispensaries'} in ${esc(cityName)}. We track every menu, every price, every Google review — updated daily — so you can compare before you drive.</p>
+<p>${dispensaries.length} recreational cannabis ${dispensaries.length === 1 ? 'dispensary' : 'dispensaries'} in ${esc(cityName)}. We track every menu, every price, every Google review — ${FRESH.updatedDaily} — so you can compare before you drive.</p>
 <a class="cta" href="/#dispensaries">Open interactive map →</a>
 <h2>All ${esc(cityName)} dispensaries</h2>
 <div class="grid">${cards}</div>
@@ -1335,11 +1373,11 @@ const buildCityPage = (cityName, slug) => {
   return headOpen({ title, description, canonical, schema }) + `
 <div class="crumbs"><a href="/">Home</a> / <a href="/dispensaries/">Dispensaries</a> / ${esc(cityName)}</div>
 <h1>Cannabis in ${esc(cityName)}, Minnesota</h1>
-<p>Every recreational dispensary in ${stPaul ? 'Saint Paul (St.&nbsp;Paul)' : esc(cityName)}, every menu, every price — tracked daily. ${open.length} shops are open right now${avgRating ? `, averaging ${avgRating}★ on Google` : ''}${cheapEighth ? `, and today's cheapest eighth in the city is $${cheapEighth.c.lo.toFixed(0)}` : ''}. Compare before you drive; the same product routinely costs 20% more a few blocks away.</p>
+<p>Every recreational dispensary in ${stPaul ? 'Saint Paul (St.&nbsp;Paul)' : esc(cityName)}, every menu, every price — ${FRESH.trackedDaily}. ${open.length} shops are open right now${avgRating ? `, averaging ${avgRating}★ on Google` : ''}${cheapEighth ? `, and today's cheapest eighth in the city is $${cheapEighth.c.lo.toFixed(0)}` : ''}. Compare before you drive; the same product routinely costs 20% more a few blocks away.</p>
 
 <div class="seo-strip">
   <div class="seo-strip-cell"><div class="seo-strip-value">${open.length}</div><div class="seo-strip-label">Open dispensaries</div><div class="seo-strip-sub">${dispensaries.length} licensed locations tracked</div></div>
-  <div class="seo-strip-cell"><div class="seo-strip-value">${inCity.length.toLocaleString('en-US')}</div><div class="seo-strip-label">Products on ${esc(cityName)} menus</div><div class="seo-strip-sub">live prices, refreshed daily</div></div>
+  <div class="seo-strip-cell"><div class="seo-strip-value">${inCity.length.toLocaleString('en-US')}</div><div class="seo-strip-label">Products on ${esc(cityName)} menus</div><div class="seo-strip-sub">live prices, ${FRESH.refreshedDaily}</div></div>
   <div class="seo-strip-cell"><div class="seo-strip-value">${cheapEighth ? '$' + cheapEighth.c.lo.toFixed(0) : '—'}</div><div class="seo-strip-label">Cheapest eighth today</div><div class="seo-strip-sub">${cheapEighth ? esc(shopNameById(cheapEighth.c.id)) : 'see live list'}</div></div>
   <div class="seo-strip-cell"><div class="seo-strip-value">${avgRating || '—'}★</div><div class="seo-strip-label">Average Google rating</div><div class="seo-strip-sub">across rated ${esc(cityName)} shops</div></div>
 </div>
@@ -1349,7 +1387,7 @@ ${CITY_CATS.length ? `<h2>Average cannabis prices in ${esc(cityName)} right now<
 <ul>
 ${CITY_CATS.map(c => `<li><strong>${esc(c.label)}:</strong> typically $${c.s.lo}–$${c.s.hi}, median $${c.s.med} <span style="color:var(--text-muted,#8b909a)">(${c.s.n.toLocaleString('en-US')} live price points)</span></li>`).join('\n')}
 </ul>
-<p>Statewide context on our <a href="/minnesota-cannabis-prices/">Minnesota cannabis prices page</a>, updated daily.</p>
+<p>Statewide context on our <a href="/minnesota-cannabis-prices/">Minnesota cannabis prices page</a>, ${FRESH.updatedDaily}.</p>
 ` : ''}
 <span class="seo-section-label">Cheapest in ${esc(cityName)} right now</span>
 <h2>Cheapest flower in ${esc(cityName)} today</h2>
@@ -1418,7 +1456,7 @@ const FAQ_CHEAPEST = [
   { q: 'How much do cannabis prices vary between Twin Cities dispensaries?', a: 'For the same product, we routinely see spreads of $5 to $30 on flower, $5 to $15 on edibles, and $10 to $25 on cartridges. The biggest gaps are between metro dispensaries with competition and shops that have a near-monopoly in smaller towns.' },
   { q: 'Why are cannabis prices in Minnesota so different store to store?', a: 'Recreational sales are still new in Minnesota — legalized in August 2023 — so the supply chain is fragmented. Some shops focus on volume and undercut, others position around premium brands, atmosphere, or location. The market has not stabilized yet.' },
   { q: 'What is the cheapest cannabis flower in the Twin Cities right now?', a: 'It changes daily. Our cheapest-flower category page tracks the lowest-priced eighths (3.5g) and quarters (7g) across every licensed metro dispensary. Bulk deals on quarters and ounces often beat eighth pricing on a per-gram basis.' },
-  { q: 'Are there cannabis deals or coupons in Minneapolis?', a: 'Yes — many dispensaries run weekly specials, first-time-customer discounts, and brand promos. Our deals page aggregates current promotions across the metro and is refreshed daily.' },
+  { q: 'Are there cannabis deals or coupons in Minneapolis?', a: `Yes — many dispensaries run weekly specials, first-time-customer discounts, and brand promos. Our deals page aggregates current promotions across the metro and is ${FRESH.refreshedDaily}.` },
   { q: 'Is the Minnesota cannabis tax included in the listed price?', a: 'No. Prices on TCC and at most dispensaries are pre-tax. Expect roughly 17 to 18 percent added at checkout — that is the 10 percent state cannabis tax plus regular metro sales tax of 7 to 8 percent.' },
   { q: 'Do Minnesota dispensaries price-match competitors?', a: 'A few will informally match an identical product if you show them a competitor’s listing on your phone — call ahead and ask. There is no industry-wide policy yet.' },
   { q: 'What is the difference between price per gram and total price on flower?', a: 'Total price is what you pay; price per gram normalizes across sizes so you can compare an eighth ($30 / 3.5g = $8.57/g) to a quarter ($55 / 7g = $7.86/g). Price per gram is the honest way to compare bulk against single-eighth pricing.' },
@@ -1548,7 +1586,7 @@ ${faqHtml}
 // ---------- CHEAPEST PAGE ----------
 const buildCheapestPage = () => {
   const title = 'Cheapest Cannabis in the Twin Cities — Best Deals by Category';
-  const description = `The cheapest cannabis products at Minneapolis-Saint Paul dispensaries, by category. Real prices, updated daily. Save money before you shop.`;
+  const description = `The cheapest cannabis products at Minneapolis-Saint Paul dispensaries, by category. Real prices, ${FRESH.updatedDaily}. Save money before you shop.`;
   const canonical = `${SITE}/cheapest-cannabis-twin-cities/`;
 
   const { html: faqHtml, schema: faqSchema } = renderFAQ(FAQ_CHEAPEST);
@@ -1582,7 +1620,7 @@ const buildCheapestPage = () => {
   return headOpen({ title, description, canonical, schema: [faqSchema] }) + `
 <div class="crumbs"><a href="/">Home</a> / Cheapest cannabis</div>
 <h1>Cheapest Cannabis in the Twin Cities</h1>
-<p>The lowest-priced products in every category, pulled from live menus across 33 Minneapolis-Saint Paul dispensaries. Prices update daily. Last refreshed ${today}.</p>
+<p>The lowest-priced products in every category, pulled from live menus across 33 Minneapolis-Saint Paul dispensaries. ${FRESH.pricesDaily} Last refreshed ${dataDayHuman}.</p>
 ${sections}
 <h2>Why prices vary</h2>
 <p>Twin Cities cannabis is brand new — Minnesota only legalized recreational sales in August 2023. With dispensaries still ramping supply chains, the same product can cost $20 more at one store than another a few miles away. Twin City Cannabis is the only site that shows you the spread before you drive.</p>
@@ -1659,7 +1697,7 @@ const buildProductPage = (p) => {
   ${p.cbd ? `<span>CBD: ${esc(p.cbd)}</span>` : ''}
   ${p.weight ? `<span>Size: ${esc(p.weight)}</span>` : ''}
 </div>
-<p>${esc(p.name)} is currently sold at <strong>${offerCount} Twin Cities dispensaries</strong>. The cheapest store is selling it for <strong class="price">$${lo.toFixed(2)}</strong>, while the most expensive is at <strong>$${hi.toFixed(2)}</strong>. You can save up to <strong>$${savings}</strong> by checking the comparison below before you shop. Prices update daily.</p>
+<p>${esc(p.name)} is currently sold at <strong>${offerCount} Twin Cities dispensaries</strong>. The cheapest store is selling it for <strong class="price">$${lo.toFixed(2)}</strong>, while the most expensive is at <strong>$${hi.toFixed(2)}</strong>. You can save up to <strong>$${savings}</strong> by checking the comparison below before you shop. ${FRESH.pricesDaily}</p>
 
 <a class="cta" href="/#compare">Open interactive price tracker →</a>
 
@@ -1747,7 +1785,7 @@ const buildNeighborhoodPage = (n, dispensaries) => {
   return headOpen({ title, description, canonical, schema }) + `
 <div class="crumbs"><a href="/">Home</a> / <a href="/neighborhoods/">Neighborhoods</a> / ${esc(n.name)}</div>
 <h1>Cannabis Dispensaries in ${esc(n.name)}</h1>
-<p>${dispensaries.length} recreational cannabis ${dispensaries.length === 1 ? 'dispensary' : 'dispensaries'} in ${esc(n.name)}. All within roughly 1.5 miles of the neighborhood center — most are walkable or a quick bike ride. Real Google reviews, real prices, updated daily.</p>
+<p>${dispensaries.length} recreational cannabis ${dispensaries.length === 1 ? 'dispensary' : 'dispensaries'} in ${esc(n.name)}. All within roughly 1.5 miles of the neighborhood center — most are walkable or a quick bike ride. Real Google reviews, real prices, ${FRESH.updatedDaily}.</p>
 <a class="cta" href="/#dispensaries">Open the interactive map →</a>
 <h2>Stores in ${esc(n.name)}</h2>
 <div class="grid">${cards}</div>
@@ -3497,7 +3535,7 @@ const buildStrainCityPage = (strain, city) => {
   if (matches.length < 2) return null;
 
   const title = `${strain} in ${city} — Where to Buy & Real Prices | Twin City Cannabis`;
-  const description = `Find ${strain} at licensed ${city} cannabis dispensaries. Real prices, side-by-side, updated daily. ${matches.length} listings across ${dispensariesHere.length} shops.`;
+  const description = `Find ${strain} at licensed ${city} cannabis dispensaries. Real prices, side-by-side, ${FRESH.updatedDaily}. ${matches.length} listings across ${dispensariesHere.length} shops.`;
   const canonical = `${SITE}/${strainSlug}-${citySlug2}/`;
 
   const lowPrice = matches[0].price;
@@ -4206,7 +4244,7 @@ const buildPricesPage = () => {
   const totalPts = CATS.reduce((s, c) => s + c.s.n, 0);
 
   const title = 'Cannabis Prices in Minnesota — Live Averages, Updated Daily';
-  const description = `Real Minnesota cannabis prices from ${openDispCount} open dispensaries, updated daily. ${e8 ? `Median eighth: $${e8.s.med} (typical range $${e8.s.lo}–$${e8.s.hi}).` : ''} Flower, edibles, beverages, cartridges, and concentrates — computed from live menus, not estimates.`;
+  const description = `Real Minnesota cannabis prices from ${openDispCount} open dispensaries, ${FRESH.updatedDaily}. ${e8 ? `Median eighth: $${e8.s.med} (typical range $${e8.s.lo}–$${e8.s.hi}).` : ''} Flower, edibles, beverages, cartridges, and concentrates — computed from live menus, not estimates.`;
   const canonical = `${SITE}/minnesota-cannabis-prices/`;
 
   const FAQ_PRICES = [
@@ -4308,7 +4346,7 @@ const buildMinnesotaHub = () => {
   const FAQ_HUB = [
     { q: 'Is cannabis legal in Minnesota?', a: 'Yes. Minnesota legalized recreational cannabis for adults 21 and over on August 1, 2023. Adults can possess up to 2 ounces of flower in public and 2 pounds at home, and grow up to 8 plants (4 flowering) at home.' },
     { q: 'How many dispensaries are open in Minnesota?', a: `${open.length} recreational dispensaries are open in Minnesota right now, across ${cityCount} cities, out of ${TCC.dispensaries.length} licensed locations we track. New shops open nearly every week — this page updates daily.` },
-    { q: 'How much does cannabis cost in Minnesota?', a: e8med ? `As of ${hubToday}, the median eighth of flower across open Minnesota dispensaries is $${e8med}. Our Minnesota cannabis prices page tracks live medians and ranges for every product category, updated daily.` : 'Our Minnesota cannabis prices page tracks live medians and ranges for every category, updated daily.' },
+    { q: 'How much does cannabis cost in Minnesota?', a: e8med ? `As of ${hubToday}, the median eighth of flower across open Minnesota dispensaries is $${e8med}. Our Minnesota cannabis prices page tracks live medians and ranges for every product category, ${FRESH.updatedDaily}.` : `Our Minnesota cannabis prices page tracks live medians and ranges for every category, ${FRESH.updatedDaily}.` },
     { q: 'Can visitors buy cannabis in Minnesota?', a: 'Yes — anyone 21 or older with a government ID can buy at licensed dispensaries, resident or not. You cannot legally take cannabis across state lines, including into Wisconsin, Iowa, or the Dakotas.' },
   ];
   const { html: faqHtml, schema: faqSchema } = renderFAQ(FAQ_HUB);
@@ -4389,7 +4427,7 @@ ${answerPages.map(a => `- [${a.question}](${SITE}/answers/${a.slug}/)`).join('\n
 - [Find the closest open dispensary near you](${SITE}/dispensary-near-me/)
 - [Compare every product price](${SITE}/products/)
 - [Cannabis in Minnesota: the live statewide picture — dispensaries, prices, laws](${SITE}/minnesota-cannabis/)
-- [Minnesota cannabis prices: live medians and ranges by category, updated daily](${SITE}/minnesota-cannabis-prices/)
+- [Minnesota cannabis prices: live medians and ranges by category, ${FRESH.updatedDaily}](${SITE}/minnesota-cannabis-prices/)
 - [Cheapest cannabis in the Twin Cities, by category](${SITE}/cheapest-cannabis-twin-cities/)
 - [Price Spread Index: the products where shopping around saves most](${SITE}/price-spread-index/)
 - [Real price drops happening now](${SITE}/weed-deals-twin-cities/)

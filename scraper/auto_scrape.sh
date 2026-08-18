@@ -21,20 +21,49 @@ echo "=========================================="
 echo "TCC Auto Scrape: $(date)"
 echo "=========================================="
 
-# 0. Sync repo state. Without this, the Pi runs whatever local copy of
-#    auto_scrape.sh it last had — so newly-added platform scrapers
+# 0. Sync repo state to origin/main. Without this, the Pi runs whatever local
+#    copy of auto_scrape.sh it last had — so newly-added platform scrapers
 #    (e.g. dispensary.shop, Meadow) silently don't run, and the
-#    `direct_menu_scrape` step below wipes their products on every
-#    cycle. `git pull --rebase` keeps the Pi current with origin/main.
-git pull --rebase --quiet || echo "WARNING: git pull failed — running with local code"
+#    `direct_menu_scrape` step below wipes their products on every cycle.
+#
+#    This is a HARD SYNC, not a pull, and it is deliberate. Everything this
+#    machine commits is generated output that the run below recreates from
+#    scratch, so origin/main is always the truth and local commits are never
+#    worth preserving. Rebasing hundreds of generated files instead produces
+#    conflicts nobody is present to resolve.
+#
+#    History (2026-07-05 to 2026-08-17): a `git rebase -i` was abandoned here
+#    and left `.git/rebase-merge` behind. Every later `git pull --rebase` died
+#    instantly on "already a rebase-merge directory", and the old code swallowed
+#    that with `|| echo WARNING` and kept going. Scrapes ran, commits landed,
+#    pushes were rejected non-fast-forward, and the site served 11-day-old
+#    prices while claiming daily freshness. Clearing stale rebase state and
+#    resetting to origin makes that whole class of failure self-healing: a
+#    push rejected this cycle is absorbed at the top of the next one.
+# Hash this script before syncing: if the sync updates auto_scrape.sh itself,
+# bash may be mid-read of the old file, so re-exec once to run the new version
+# whole rather than a spliced half-old copy.
+_sha() { command -v sha256sum >/dev/null 2>&1 && sha256sum "$1" | cut -d" " -f1 || shasum -a 256 "$1" | cut -d" " -f1; }
+SELF="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
+SELF_HASH_BEFORE="$(_sha "$SELF")"
 
-# Guard: a prior hard-reset or checkout can strand the repo on a detached HEAD.
-# The scrape still runs and commits, but the final `git push` then fails with
-# "not currently on a branch" — so fresh data silently never ships and the site
-# goes stale. Force back onto main (synced to origin) before doing any work.
-if ! git symbolic-ref -q HEAD >/dev/null; then
-    echo "Detached HEAD detected — reattaching to main"
-    git fetch origin main --quiet && git checkout -B main origin/main
+echo "Syncing to origin/main..."
+rm -rf .git/rebase-merge .git/rebase-apply
+if ! git fetch origin main --quiet; then
+    echo "FATAL: git fetch failed — cannot verify repo state, refusing to run."
+    echo "       A scrape from unsynced code can wipe products and cannot push."
+    exit 1
+fi
+if ! git reset --hard origin/main --quiet; then
+    echo "FATAL: git reset to origin/main failed — refusing to run."
+    exit 1
+fi
+echo "Synced to $(git rev-parse --short HEAD) on $(git rev-parse --abbrev-ref HEAD)"
+
+if [ "$TCC_REEXEC" != "1" ] && [ "$(_sha "$SELF")" != "$SELF_HASH_BEFORE" ]; then
+    echo "auto_scrape.sh changed during sync — re-executing the updated version"
+    export TCC_REEXEC=1
+    exec bash "$SELF" "$@"
 fi
 
 # 1. Scrape dispensary listings
