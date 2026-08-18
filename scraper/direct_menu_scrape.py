@@ -28,6 +28,13 @@ try:
     from curl_cffi import requests as _cffi
 
     class _WMRequests:
+        # curl_cffi mirrors requests' exception hierarchy, so re-export it.
+        # Without this, `except requests.exceptions.HTTPError` below raises
+        # AttributeError while the clause is being EVALUATED, which means the
+        # broad `except Exception` after it never runs and one transient
+        # timeout kills the entire scrape. Cost us a run on 2026-08-17.
+        exceptions = _cffi.exceptions
+
         def get(self, *args, **kwargs):
             kwargs.setdefault("impersonate", "chrome")
             return _cffi.get(*args, **kwargs)
@@ -125,6 +132,7 @@ def scrape_menu(slug, name=""):
     """Scrape ALL menu items for a dispensary."""
     all_items = []
     page = 1
+    timeouts = {}
 
     while True:
         url = f"{WM_API}/{slug}/menu_items"
@@ -159,6 +167,19 @@ def scrape_menu(slug, name=""):
             page += 1
             time.sleep(0.5)  # polite
 
+        except requests.exceptions.Timeout as e:
+            # Weedmaps times out intermittently. Retry the page a couple of
+            # times before abandoning it, so one slow response doesn't
+            # silently truncate a dispensary's menu.
+            attempts = timeouts.get(page, 0) + 1
+            timeouts[page] = attempts
+            if attempts <= 2:
+                wait = 3 * attempts
+                print(f"  Timeout on page {page} (attempt {attempts}/3), retrying in {wait}s")
+                time.sleep(wait)
+                continue
+            print(f"  Timeout on page {page} after 3 attempts, giving up on this menu: {e}")
+            break
         except requests.exceptions.HTTPError as e:
             print(f"  Error on page {page}: {e}")
             break
