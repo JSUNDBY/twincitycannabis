@@ -52,8 +52,20 @@ def main():
         raw_cat = p.get("category", "flower")
         normalized_cat = categorize_by_name(name, brand, raw_cat)
         if normalized_cat == "EXCLUDE":
-            excluded_count += 1
-            continue
+            # Unlike dispensary.shop/Meadow, Carrot categories are the store's
+            # own taxonomy (accessory/merch categories are skipped at scrape
+            # time), so when name-based detection has no opinion, trust the
+            # store — but never resurrect an explicit accessory/junk match.
+            from normalize import _PATTERNS
+            probe = f"{name} {brand}"
+            junk = (_PATTERNS["EXCLUDE_NOT_PRODUCT"].search(probe)
+                    or _PATTERNS["ACCESSORIES_EARLY"].search(probe)
+                    or _PATTERNS["ACCESSORIES"].search(probe))
+            if junk or raw_cat not in ("flower", "pre-roll", "cartridge", "edible",
+                                       "beverage", "concentrate", "tincture", "topical"):
+                excluded_count += 1
+                continue
+            normalized_cat = raw_cat
 
         key = f"{name}|||{weight}|||{menu_type}"
 

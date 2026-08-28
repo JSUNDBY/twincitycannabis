@@ -31,7 +31,7 @@ _PATTERNS = {
         r'|volcano\s*dosing|dosing\s*capsule|boveda\s*pack|dab\s*rag|dab\s*straw'
         r'|rolling\s*paper|raw\s*cone|grinder|lighter|ashtray|rolling\s*tray'
         r'|stash\s*jar|smell\s*proof|dugout|one\s*hitter|chillum|pipe\s*screen'
-        r'|bong|rig\s*mat|torch|hemp\s*wick|filter\s*tip|joint\s*holder'
+        r'|bong|rig\s*mat|torch(?!\s*top)|hemp\s*wick|filter\s*tip|joint\s*holder'
         r'|doob\s*tube|clipper|blazy\s*susan|bic\s+lighter'
         r'|pulsar\s*scribe|tronian|battery\s*\d|button\s*battery'
         # Non-cannabis retail that platform scrapers dump into "flower":
@@ -139,7 +139,7 @@ _PATTERNS = {
         # Rolling supplies
         r'grinder|lighter|rolling\s*papers?|rolling\s*kit|rolling\s*kits|hemp\s*rolling\s*kit|hemp\s*wraps?|blunt\s*wraps?|leaf\s*cones?|filter\s*tips?|stash\s*jar|cone\s*pack|empty\s*cones?|tea\s*leaf\s*cones?|pre[\s\-]?roll\s*tubes?|joint\s*tubes?|kief\s*box|debowler|herb\s*grinder|grinder\s*kit|grinder\s*card|rolling\s*trays?|ash\s*trays?|ashtrays?|dab\s*mat'
         # Glassware / pipes / dab hardware
-        r'|pipe|bong|water\s*pipe|dab\s*rig|dab\s*nail|dab\s*tool|dab\s*tools?|dab\s*tray|dab\s*kit|dab\s*grab|nectar\s*collector|banger|torch|chillum|one[\s\-]?hitter|dugout|carb\s*cap|terp\s*pearl|silicone\s*container'
+        r'|pipe|bong|water\s*pipe|dab\s*rig|dab\s*nail|dab\s*tool|dab\s*tools?|dab\s*tray|dab\s*kit|dab\s*grab|nectar\s*collector|banger|torch(?!\s*top)|chillum|one[\s\-]?hitter|dugout|carb\s*cap|terp\s*pearl|silicone\s*container'
         # Cannabis-themed novelty / merch labels (shop-branded swag)
         r'|happy\s*kit|velcro\s*label|sticker\s*pack|patch\s*pack'
         # Vape hardware (devices, batteries, atomizers - NOT consumable vapes)

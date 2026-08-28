@@ -105,6 +105,13 @@ python3 scraper/merge_dispensary_shop_data.py
 python3 scraper/meadow_scrape.py
 python3 scraper/merge_meadow_data.py
 
+# 7.7. Pull menus from Carrot platform (Wildflower NE + North Loop, Verist
+#      Fields). These stores keep their Weedmaps listings stale or absent —
+#      Carrot is their real menu. Non-fatal: a Carrot outage must not kill
+#      the whole scrape, and merge skips cleanly on missing/empty output.
+python3 scraper/carrot_scrape.py || echo "Carrot scrape failed (non-fatal)"
+python3 scraper/merge_carrot_data.py
+
 
 # 7.9. Backfill strain type (indica/sativa/hybrid) onto any products the live
 #      scrape didn't tag, using the dispensaries' own labels. Never invents one.
@@ -148,6 +155,7 @@ git add js/data.js index.html sitemap.xml \
     scraper/data/full_menu_products.json scraper/data/last_weedmaps_scrape.txt \
     scraper/data/dispensaries.json scraper/data/dispensaries_export.json \
     scraper/data/dispensary_shop_products.json scraper/data/meadow_products.json \
+    scraper/data/carrot_products.json \
     scraper/data/page_lastmod.json \
     llms.txt
 grep -o '<loc>https://twincitycannabis.com/[^<]*</loc>' sitemap.xml \

@@ -2,11 +2,19 @@
 """
 Twin City Cannabis — Carrot (getcarrot.io) menu scraper
 
-Pulls product data from Carrot-powered dispensaries via their Typesense
-search API. Completely unauthenticated — just needs the Typesense API key,
-host, and space/location IDs (all embedded in the dispensary's public page).
+Pulls product data from Carrot-powered dispensaries via Carrot's own REST
+API (api.<region>.getcarrot.io). Completely unauthenticated — the only
+requirement is the store's numeric space id, sent as a `carrot-space-id`
+header. This replaced the original Typesense approach (2026-08-28): the
+Typesense keys rotted silently, and the REST API needs no key at all.
 
-Currently: Wildflower (Northeast + North Loop)
+To add a new Carrot-powered dispensary:
+  1. Visit their store page, open DevTools Network tab
+  2. Look for requests to api.<region>.getcarrot.io/api/v1/store/...
+  3. Copy the `carrot-space-id` request header value and the locId query
+     param into CARROT_STORES below.
+
+Currently: Wildflower (Northeast + North Loop), Verist Fields (50th & Bryant)
 
 Output: scraper/data/carrot_products.json
 """
@@ -22,26 +30,35 @@ DATA_DIR = Path(__file__).parent / "data"
 OUTPUT_FILE = DATA_DIR / "carrot_products.json"
 
 # ─── STORE CONFIG ─────────────────────────────────────────────────────────
-# Each entry: TCC dispensary slug -> Typesense config
-# To add a new Carrot-powered dispensary:
-#   1. Visit their store page, open DevTools Network tab
-#   2. Look for POST to *.typesense.net/multi_search
-#   3. Copy the x-typesense-api-key from the URL, host from the domain,
-#      and collection name from the POST body
+# Each entry: TCC dispensary slug -> Carrot REST config.
+#   space_id / loc_id: from the store page's network requests (see above).
+#   region: subdomain of api.<region>.getcarrot.io (both MN stores: nevada).
+#   default_brand: used when Carrot's brand field is empty. Verist's store
+#     sells only their own line, so everything rolls up to the brand page.
 CARROT_STORES = {
     "wildflower-5": {
         "name": "Wildflower NE",
-        "typesense_host": "ht8ucq7wreyb4z0dp.a1.typesense.net",
-        "typesense_key": "UqPQlDfOUeHdcCIXumrknslXGdPuG5Zy",
-        "collection": "carrot-nevada-prod-324-loc_1-products",
+        "region": "nevada",
+        "space_id": "324",
+        "loc_id": "1",
     },
     "wildflower-north-loop-1": {
         "name": "Wildflower North Loop",
-        "typesense_host": "ht8ucq7wreyb4z0dp.a1.typesense.net",
-        "typesense_key": "UqPQlDfOUeHdcCIXumrknslXGdPuG5Zy",
-        "collection": "carrot-nevada-prod-324-loc_2-products",
+        "region": "nevada",
+        "space_id": "324",
+        "loc_id": "2",
+    },
+    "verist-fields": {
+        "name": "Verist Fields (50th & Bryant)",
+        "region": "nevada",
+        "space_id": "354",
+        "loc_id": "1",
+        "default_brand": "Verist Fields",
     },
 }
+
+# Category slugs that are never cannabis products.
+SKIP_CATEGORY_SLUGS = {"accessory", "accessories", "merch", "apparel", "lifestyle"}
 
 HEADERS = {
     "Content-Type": "application/json",
@@ -82,41 +99,44 @@ def category_map(master, sub):
     return None  # skip unknown (lifestyle, accessories)
 
 
+def _api_get(config, path):
+    url = f"https://api.{config['region']}.getcarrot.io/api/v1{path}"
+    headers = dict(HEADERS)
+    headers["carrot-space-id"] = config["space_id"]
+    resp = requests.get(url, headers=headers, timeout=15)
+    resp.raise_for_status()
+    return resp.json()
+
+
 def scrape_store(slug, config):
-    """Fetch all products from a Carrot store via Typesense."""
-    url = f"https://{config['typesense_host']}/multi_search?x-typesense-api-key={config['typesense_key']}"
+    """Fetch all products from a Carrot store via its REST API."""
+    loc = config["loc_id"]
+    categories = _api_get(config, f"/store/category?locId={loc}&platform=web")
+    if isinstance(categories, dict):
+        categories = categories.get("categories", [])
 
     all_products = []
-    page = 1
-    per_page = 200
+    seen = 0
 
-    while True:
-        body = {
-            "searches": [{
-                "collection": config["collection"],
-                "q": "*",
-                "query_by": "name",
-                "per_page": per_page,
-                "page": page,
-            }]
-        }
+    for cat in categories:
+        cat_slug = (cat.get("slug") or "").strip()
+        if not cat_slug or cat_slug in SKIP_CATEGORY_SLUGS:
+            continue
 
-        resp = requests.post(url, json=body, headers=HEADERS, timeout=15)
-        resp.raise_for_status()
-        data = resp.json()
+        items = _api_get(config, f"/store/category/slug/{cat_slug}/product?locId={loc}&platform=web")
+        if not isinstance(items, list):
+            continue
+        seen += len(items)
 
-        results = data.get("results", [{}])[0]
-        hits = results.get("hits", [])
-        found = results.get("found", 0)
-
-        for h in hits:
-            doc = h.get("document", {})
-            name = doc.get("name", "").strip()
+        for doc in items:
+            name = (doc.get("name") or "").strip()
+            # Carrot prefixes some product-line tags like "-IX | " — noise.
+            name = re.sub(r'^-\w{1,4}\s*\|\s*', '', name)
             if not name or JUNK_RE.search(name):
                 continue
 
             master = doc.get("masterCategoryName", "")
-            sub = doc.get("categoryName", "")
+            sub = doc.get("subcategoryName", "") or doc.get("categoryName", "")
             category = category_map(master, sub)
             if not category:
                 continue  # skip accessories/lifestyle
@@ -125,10 +145,9 @@ def scrape_store(slug, config):
             if not price or float(price) <= 0:
                 continue
 
-            brand = doc.get("brand", "").strip() or "House"
+            brand = (doc.get("brand") or "").strip() or config.get("default_brand", "House")
             thc = ""
             cbd = ""
-            # Carrot stores THC/CBD in labResultNames or thcPercentage
             thc_pct = doc.get("thcPercentage") or doc.get("thc")
             cbd_pct = doc.get("cbdPercentage") or doc.get("cbd")
             if thc_pct:
@@ -136,15 +155,19 @@ def scrape_store(slug, config):
             if cbd_pct:
                 cbd = f"{cbd_pct}%"
 
-            # Weight from the name or weights field
+            # Weight: prefer the first cash option (qty + unit), then
+            # unitWeight, then the name.
             weight = ""
-            weights = doc.get("weights", [])
-            if weights:
-                weight = weights[0]
-            elif re.search(r'\d+g\b', name):
-                weight = re.search(r'(\d+g)\b', name).group(1)
-
-            image = doc.get("imageUrl", "") or ""
+            opts = doc.get("cashOptions") or []
+            if opts:
+                unit = (opts[0].get("optionUnit") or "").lower()
+                qty = opts[0].get("qty")
+                if qty and unit.startswith("gram"):
+                    weight = f"{qty:g}g"
+            if not weight and doc.get("unitWeight"):
+                weight = f"{doc['unitWeight']:g}g"
+            if not weight and re.search(r'([\d.]+)\s*g\b', name):
+                weight = re.search(r'([\d.]+)\s*g\b', name).group(1) + "g"
 
             all_products.append({
                 "dispensary_id": slug,
@@ -156,20 +179,16 @@ def scrape_store(slug, config):
                 "cbd": cbd,
                 "price": float(price),
                 "weight": weight,
-                "image": image,
+                "image": "",
                 "source": "carrot",
             })
 
-        if len(all_products) >= found or len(hits) < per_page:
-            break
-        page += 1
-
-    print(f"  {config['name']}: {found} total -> {len(all_products)} cannabis products")
+    print(f"  {config['name']}: {seen} listed -> {len(all_products)} cannabis products")
     return all_products
 
 
 def main():
-    print("Carrot scraper: Wildflower")
+    print("Carrot scraper: Wildflower + Verist Fields")
     all_products = []
 
     for slug, config in CARROT_STORES.items():

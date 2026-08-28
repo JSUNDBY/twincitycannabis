@@ -572,7 +572,7 @@ const footer = `</main>
   <p><strong class="footer-brand">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Twin Cities dispensary.</p>
   <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a></p>
   <p><a href="/minnesota-cannabis/">Cannabis in Minnesota</a> &middot; <a href="/minnesota-cannabis-prices/">MN Cannabis Prices</a> &middot; <a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/price-spread-index/">Price Spread Index</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
-  <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a></p>
+  <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a> &middot; <a href="/founding-partners/">Founding Partners</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
 </footer>
 <script>
@@ -2023,6 +2023,79 @@ const buildContactPage = () => {
 ` + footer;
 };
 
+// ---------- FOUNDING PARTNERS PAGE ----------
+// Dispensaries that verified early and partner with TCC directly. Free tier,
+// earned (not bought): owner verification + written menu authorization + a
+// link back. Perk = the badge and founding rates on paid placements, locked
+// for good. Mirror of FOUNDING_PARTNER_IDS in js/app.js — keep in sync.
+const FOUNDING_PARTNER_IDS = ['legit-cannabis'];
+
+const buildFoundingPartnersPage = () => {
+  const partners = FOUNDING_PARTNER_IDS
+    .map(id => TCC.dispensaries.find(d => d.id === id))
+    .filter(Boolean);
+
+  const title = 'Founding Partners — Twin City Cannabis';
+  const description = 'The Minnesota dispensaries that verified early and partner directly with Twin City Cannabis: owner-verified listings, authorized live menus, and founding rates locked for good.';
+  const canonical = `${SITE}/founding-partners/`;
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: title, url: canonical, description,
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: partners.map((d, i) => ({
+      '@type': 'ListItem', position: i + 1, name: d.name,
+      url: `${SITE}/dispensaries/${d.id}/`,
+    })),
+  }];
+
+  const goldStar = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.2 6.6 20.2l1.2-6.1L3.2 9.9l6.2-.7z"/></svg>';
+
+  const partnerCards = partners.map(d => {
+    const g = d.google || {};
+    const rating = g.rating ? `★ ${Number(g.rating).toFixed(1)} (${(g.review_count || 0).toLocaleString()} reviews)` : '';
+    const soon = (TCC.comingSoon || [])
+      .filter(c => (c.name || '').toLowerCase().startsWith(d.name.toLowerCase()))
+      .map(c => c.location).join(' · ');
+    return `<a class="card" href="/dispensaries/${esc(d.id)}/" style="display:block;border-color:rgba(234,179,8,0.45);padding:1.4rem">
+  <p class="title" style="margin-bottom:.2rem">${esc(d.name)} <span style="font-size:.68rem;font-weight:700;color:#eab308;letter-spacing:1px;white-space:nowrap">${goldStar} FOUNDING PARTNER</span></p>
+  <p class="sub" style="margin-bottom:.4rem">${esc(d.address || d.city || '')}${rating ? ' · ' + rating : ''}</p>
+  ${soon ? `<p class="sub" style="color:#eab308">Expanding: ${esc(soon)}</p>` : ''}
+</a>`;
+  }).join('\n');
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / Founding Partners</div>
+<h1>${goldStar} Founding Partners</h1>
+<p style="max-width:62ch">Founding Partners are the Minnesota dispensaries that verified their listing early and work with us directly. The badge is a trust marker, not an ad: it means the owner has confirmed their information, authorized us to display their live menu and prices, and has a direct line to get anything fixed fast. It is never sold.</p>
+
+<h2>Current founding partners</h2>
+${partnerCards || '<p>The first partners are being onboarded now.</p>'}
+
+<h2>What founding partners get</h2>
+<ul>
+  <li><strong>The Founding Partner badge</strong> on every one of their listings — a permanent marker that they were here early and stand behind their data.</li>
+  <li><strong>Founding rates, locked for good.</strong> Paid placements (Featured, Premium) are always clearly labeled and never touch our honest rankings. Founding partners get them at the founding rate whenever they want them, no matter what the price is by then.</li>
+  <li><strong>A direct line.</strong> Menu corrections, new locations, hours changes — handled same-day, owner to builder.</li>
+</ul>
+
+<h2>What it takes</h2>
+<p style="max-width:62ch">Nothing to buy. Three things to give:</p>
+<ol>
+  <li>Verify you own or manage the dispensary.</li>
+  <li>Authorize us in writing to display your live menu and pricing.</li>
+  <li>Link back to twincitycannabis.com from your site.</li>
+</ol>
+
+<h2>Why we do it this way</h2>
+<p style="max-width:62ch">This site exists because shoppers deserve real prices from every shop, updated daily, ranked honestly. Dispensaries that put their name behind their data early make that possible — the founding tier is how we say it mattered.</p>
+
+<p style="margin-top:2rem"><a class="cta" href="mailto:hello@twincitycannabis.com?subject=Founding%20Partner">Claim your listing → hello@twincitycannabis.com</a></p>
+` + footer;
+};
+
 // ---------- EVENTS PAGE ----------
 const buildEventsPage = () => {
   const title = 'Minnesota Cannabis Events 2026 — Twin City Cannabis';
@@ -3172,6 +3245,9 @@ writePage('brands/index.html', buildBrandsIndex(brands));
 count++;
 writePage('for-brands/index.html', buildForBrandsPage());
 extraSitemap.push({ loc: `${SITE}/for-brands/`, priority: '0.7', changefreq: 'weekly' });
+
+writePage('founding-partners/index.html', buildFoundingPartnersPage());
+extraSitemap.push({ loc: `${SITE}/founding-partners/`, priority: '0.6', changefreq: 'weekly' });
 count++;
 writePage('featured/index.html', buildFeaturedPage());
 extraSitemap.push({ loc: `${SITE}/featured/`, priority: '0.6', changefreq: 'weekly' });

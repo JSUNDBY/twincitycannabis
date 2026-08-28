@@ -244,6 +244,11 @@
     // Worker URL deployed from /cloudflare. Returns tier overrides as JSON.
     const TCC_WORKER_URL = 'https://dashboard.twincitycannabis.com';
 
+    // Founding Partners — dispensaries that verified early and partner with
+    // TCC directly (free, earned tier; see /founding-partners/). Mirror of
+    // FOUNDING_PARTNER_IDS in scripts/build_seo.js — keep in sync.
+    const FOUNDING_PARTNER_IDS = new Set(['legit-cannabis']);
+
     // Stripe Payment Link URLs. Replace these with the real URLs after creating
     // the products in Stripe (see /cloudflare/README.md step 3).
     // The Subscribe button appends ?client_reference_id=<dispensary_id> so the
@@ -340,6 +345,7 @@
         tag: svgIcon(14, '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>'),
         verified: '<svg width="14" height="14" viewBox="0 0 24 24" fill="var(--blue)" stroke="white" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>',
         ownerVerified: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>',
+        foundingStar: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.2 6.6 20.2l1.2-6.1L3.2 9.9l6.2-.7z"/></svg>',
 
         // ===== CATEGORY ICONS =====
         // Flat silhouettes, single color (currentColor), bold and obvious.
@@ -2043,6 +2049,10 @@
         // from the review-count "Verified" above; means the shop manages it.
         const ownerEl = document.getElementById('detail-owner-verified');
         if (ownerEl) ownerEl.style.display = d.claimed ? 'inline-flex' : 'none';
+
+        // Founding Partner — early verified shops (see /founding-partners/).
+        const fpEl = document.getElementById('detail-founding-partner');
+        if (fpEl) fpEl.style.display = FOUNDING_PARTNER_IDS.has(d.id) ? 'inline-flex' : 'none';
 
         // Features
         document.getElementById('detail-features').innerHTML = d.features.map(f =>
@@ -4028,6 +4038,7 @@
                         ${productCount > 0 ? `<span>${Icons.leaf} ${productCount} products</span>` : ''}
                         ${d.verified ? `<span>${Icons.verified} Confirmed</span>` : ''}
                         ${d.claimed ? `<span style="color:var(--green)">${Icons.ownerVerified} Verified Owner</span>` : ''}
+                        ${FOUNDING_PARTNER_IDS.has(d.id) ? `<span style="color:#eab308">${Icons.foundingStar} Founding Partner</span>` : ''}
                     </div>
                     ${dealHtml}
                     ${spotlightHtml}
