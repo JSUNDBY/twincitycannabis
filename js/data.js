@@ -14537,6 +14537,8 @@ TCC.mnBrands = [
 
 // ---- COMING SOON DISPENSARIES ----
 TCC.comingSoon = [
+    { name: 'Legit Cannabis — Minneapolis', location: '951 E Hennepin Ave, Minneapolis, MN', type: 'Retail', status: 'Coming soon', desc: 'Second location from the 5.0-rated Rosemount shop, opening in Northeast Minneapolis.', notable: 'Owner-verified on TCC' },
+    { name: 'Legit Cannabis — Duluth', location: '120 W Superior St, Duluth, MN', type: 'Retail', status: 'Coming soon', desc: 'Legit Cannabis expands to downtown Duluth on Superior Street.', notable: 'Owner-verified on TCC' },
     { name: 'Anoka Cannabis Company', location: 'Anoka, MN', type: 'Municipal', status: 'Opening 2026', desc: 'Minnesota\'s first government-run cannabis dispensary. City-owned and operated.', notable: 'First municipal dispensary in the US' },
     { name: 'Osseo Municipal Dispensary', location: 'Osseo, MN', type: 'Municipal', status: 'Mid-2026', desc: 'Osseo\'s publicly run dispensary, currently in renovation and licensing phase.', notable: 'City-operated' },
     { name: 'RISE Brooklyn Park', location: 'Brooklyn Park, MN', type: 'Retail', status: 'Expanding', desc: 'RISE dispensary expanding adult-use sales at their Brooklyn Park location.', notable: 'Part of Green Thumb Industries' },

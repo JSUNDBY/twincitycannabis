@@ -4,7 +4,11 @@
     {
       "name": "tcc-static",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8742"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8742"
+      ],
       "port": 8742
     }
   ]

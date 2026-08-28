@@ -5932,3 +5932,11 @@ html[data-theme="light"] .kit-form-wrapper .formkit-submit * {
 @media (prefers-reduced-motion: reduce) {
     ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
 }
+
+/* OSM tiles are light; give them the site's dark look in dark theme. */
+html:not([data-theme="light"]) .leaflet-tile-pane {
+    filter: invert(1) hue-rotate(180deg) brightness(0.7) contrast(1.05) saturate(0.35);
+}
+html:not([data-theme="light"]) .leaflet-control-attribution {
+    background: rgba(10, 14, 12, 0.7); color: #8b909a;
+}

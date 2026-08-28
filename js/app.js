@@ -1503,12 +1503,16 @@
 
         App.mapInstance = L.map('dispensary-map', {
             scrollWheelZoom: false,
-            attributionControl: false
+            attributionControl: true
         }).setView([44.9778, -93.2650], 10);
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        // OSM tiles (Carto basemaps now require an API key). Dark look comes
+        // from a CSS filter on the tile pane; OSM attribution is required.
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         }).addTo(App.mapInstance);
+        App.mapInstance.attributionControl && App.mapInstance.attributionControl.setPrefix('');
 
         const bounds = [];
         dispensaries.forEach(d => {
@@ -1695,9 +1699,9 @@
         }).setView([45.45, -94.0], 7);
         App.mapPageInstance = map;
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">Carto</a>',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         }).addTo(map);
 
         const tierColor = (tier) => ({
