@@ -1262,7 +1262,7 @@ TCC.dispensaries = [
         lng: -93.217068,
         phone: '(612) 315-5882',
         hours: { weekday: '10:00am - 10:00pm', weekend: '10:00am - 10:00pm', note: '10:00 AM – 10:00 PM' },
-        website: 'https://www.dinkydope.com/',
+        website: 'https://mnlegitcannabis.com/',
         tier: 'free',
         tcc_score: 95,
         scores: { pricing: 82, selection: 86, service: 91, lab_testing: 83 },
