@@ -17,7 +17,9 @@ Output: scraper/data/dispensary_shop_products.json
 
 import json
 import os
+import re
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -33,6 +35,14 @@ KNOWN_SHOPS = [
     ("fort-road-cannabis-llc", "fortroadcannabis.dispensary.shop"),
     ("twin-cities-cannabis-richfield", "twincitiescannabis.dispensary.shop"),
     ("aurora-cannabis-prior-lake", "priorlakedispo.dispensary.shop"),
+    # Discovered 2026-08-28 by probing menu-less shops' websites:
+    ("higher-place", "higherplace.dispensary.shop"),
+    ("twin-cities-high-llc", "twincitieshigh.dispensary.shop"),
+    ("flipside-dispensary-and-music", "flipsideflipside.dispensary.shop"),
+    ("green-leaf-depot", "greenleafdepot.dispensary.shop"),
+    ("green-apple-cannabis", "greenapplecannabis.dispensary.shop"),
+    ("black-bear-weed-dispensary-winona", "blackbear.dispensary.shop"),
+    ("coastless", "coastlesscannabis.dispensary.shop"),
 ]
 
 # dispensary.shop categories that are never cannabis products and should
@@ -191,33 +201,90 @@ def normalize_product(raw, dispensary_id):
 
 
 def scrape_shop(dispensary_id, hostname):
-    url = f"https://{hostname}/rec/menu"
-    print(f"[{dispensary_id}] fetching {url}")
+    # 2026-08-28 rewrite: the platform moved to streamed Remix routes — the
+    # /rec/menu page's initial context no longer holds products (they arrive
+    # in deferred carousel chunks, capped at ~12 each). The full catalog now
+    # lives on the paginated "all products" browse route, whose per-shop slug
+    # is linked from the menu page nav: /rec/all-products/nb/<slug>?page=N
+    # (20 products a page, `total` in the same loaderData group).
+    menu_url = f"https://{hostname}/rec/menu"
+    print(f"[{dispensary_id}] fetching {menu_url}")
     try:
-        r = requests.get(url, headers=HEADERS, proxies=PROXIES, timeout=30)
+        r = requests.get(menu_url, headers=HEADERS, proxies=PROXIES, timeout=30)
         r.raise_for_status()
     except Exception as e:
         print(f"  HTTP error: {e}")
         return []
 
-    ctx = extract_remix_context(r.text)
-    if not ctx:
-        print("  could not parse remix context")
+    m = re.search(r'href="(/rec/all-products/nb/[a-z0-9]+)"', r.text)
+    if m:
+        browse_path = m.group(1)
+    elif '/rec/search' in r.text:
+        # Some shops (twin-cities-high) have no all-products nav button;
+        # /rec/search with no query lists the full catalog, same loaderData.
+        browse_path = "/rec/search"
+    else:
+        print("  could not find all-products browse link on menu page")
         return []
 
     seen = set()
     products = []
-    for arr in find_product_arrays(ctx):
-        for p in arr:
-            pid = p.get("product_id")
-            if not pid or pid in seen:
-                continue
-            seen.add(pid)
-            normalized = normalize_product(p, dispensary_id)
-            if normalized:
-                products.append(normalized)
-    print(f"  parsed {len(products)} unique products")
+    page = 1
+    total = None
+    while True:
+        url = f"https://{hostname}{browse_path}?page={page}"
+        try:
+            r = requests.get(url, headers=HEADERS, proxies=PROXIES, timeout=30)
+            r.raise_for_status()
+        except Exception as e:
+            print(f"  HTTP error on page {page}: {e}")
+            break
+
+        ctx = extract_remix_context(r.text)
+        if not ctx:
+            print(f"  could not parse remix context on page {page}")
+            break
+
+        page_new = 0
+        for arr in find_product_arrays(ctx):
+            for p in arr:
+                pid = p.get("product_id")
+                if not pid or pid in seen:
+                    continue
+                seen.add(pid)
+                normalized = normalize_product(p, dispensary_id)
+                if normalized:
+                    products.append(normalized)
+                page_new += 1
+
+        # total comes from the browse group that carries the products list
+        if total is None:
+            total = _find_browse_total(ctx)
+
+        if page_new == 0 or (total and len(seen) >= total) or page >= 60:
+            break
+        page += 1
+        time.sleep(0.5)  # gentle pacing
+
+    print(f"  parsed {len(products)} unique products" + (f" of {total} listed" if total else ""))
     return products
+
+
+def _find_browse_total(node):
+    """Find the `total` on the browse group that holds the products array."""
+    if isinstance(node, dict):
+        if isinstance(node.get("products"), list) and isinstance(node.get("total"), int):
+            return node["total"]
+        for v in node.values():
+            t = _find_browse_total(v)
+            if t:
+                return t
+    elif isinstance(node, list):
+        for v in node:
+            t = _find_browse_total(v)
+            if t:
+                return t
+    return None
 
 
 def main():

@@ -123,6 +123,13 @@ python3 scraper/merge_jane_data.py
 python3 scraper/sweed_scrape.py || echo "Sweed scrape failed (non-fatal)"
 python3 scraper/merge_sweed_data.py
 
+# 7.95. Pull menus from Dutchie embedded menus (8 outstate/suburb shops:
+#       Rochester, Morton, Ramsey, La Crescent, Welch, White Bear Lake,
+#       Luverne, Monticello). curl_cffi passes Dutchie's Cloudflare; the
+#       scrape self-paces. Skips cleanly if curl_cffi is missing.
+python3 scraper/dutchie_scrape.py || echo "Dutchie scrape failed (non-fatal)"
+python3 scraper/merge_dutchie_data.py
+
 
 # 7.9. Backfill strain type (indica/sativa/hybrid) onto any products the live
 #      scrape didn't tag, using the dispensaries' own labels. Never invents one.
@@ -167,7 +174,7 @@ git add js/data.js index.html sitemap.xml \
     scraper/data/dispensaries.json scraper/data/dispensaries_export.json \
     scraper/data/dispensary_shop_products.json scraper/data/meadow_products.json \
     scraper/data/carrot_products.json scraper/data/jane_products.json \
-    scraper/data/sweed_products.json \
+    scraper/data/sweed_products.json scraper/data/dutchie_products.json \
     scraper/data/page_lastmod.json \
     llms.txt
 grep -o '<loc>https://twincitycannabis.com/[^<]*</loc>' sitemap.xml \
