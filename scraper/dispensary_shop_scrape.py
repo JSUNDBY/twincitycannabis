@@ -43,6 +43,8 @@ KNOWN_SHOPS = [
     ("green-apple-cannabis", "greenapplecannabis.dispensary.shop"),
     ("black-bear-weed-dispensary-winona", "blackbear.dispensary.shop"),
     ("coastless", "coastlesscannabis.dispensary.shop"),
+    # Just-opened Minneapolis shop (Hiawatha Ave), added 2026-08-28:
+    ("levitated-cannabis", "levitateddispensary.dispensary.shop"),
 ]
 
 # dispensary.shop categories that are never cannabis products and should
