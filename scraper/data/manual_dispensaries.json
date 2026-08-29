@@ -892,45 +892,6 @@
   "region": "metro"
  },
  {
-  "id": "rise",
-  "name": "Rise",
-  "tagline": "Licensed cannabis dispensary in St. Paul",
-  "address": "2239 Ford Parkway, Saint Paul, MN 55116",
-  "neighborhood": "St. Paul",
-  "city": "St. Paul",
-  "lat": 44.9179815,
-  "lng": -93.1946881,
-  "phone": "",
-  "hours": {
-   "weekday": "Check website",
-   "weekend": "Check website",
-   "note": "Hours not yet listed \u2014 check the shop's website or call"
-  },
-  "website": "",
-  "tier": "free",
-  "tcc_score": 75,
-  "scores": {
-   "pricing": 73,
-   "selection": 73,
-   "service": 75,
-   "lab_testing": 75
-  },
-  "review_count": 0,
-  "verified": true,
-  "features": [
-   "Medical-licensed",
-   "Newly licensed"
-  ],
-  "gradient": "linear-gradient(135deg, #7c2d12, #f59e0b)",
-  "initial": "RI",
-  "img": "",
-  "manually_added": true,
-  "ocm_imported": true,
-  "ocm_license": "MDCMB-L25-000001",
-  "ocm_license_type": "Medical combination",
-  "region": "metro"
- },
- {
   "id": "green-leaf-depot",
   "name": "Green Leaf Depot",
   "tagline": "Licensed cannabis dispensary in Savage",
@@ -2528,6 +2489,181 @@
   ],
   "gradient": "linear-gradient(135deg, #166534, #22c55e)",
   "initial": "LC",
+  "img": "",
+  "manually_added": true
+ },
+ {
+  "id": "rise-brooklyn-park",
+  "name": "RISE Dispensary Brooklyn Park",
+  "tagline": "RISE Dispensary (Green Thumb) medical + adult-use",
+  "address": "8061 Brooklyn Blvd, Brooklyn Park, MN 55445",
+  "neighborhood": "Brooklyn Park",
+  "city": "Brooklyn Park",
+  "lat": 45.0943842,
+  "lng": -93.3783515,
+  "phone": "(763) 317-6762",
+  "hours": {
+   "weekday": "Mon-Sat 9am-9pm \u00b7 Sun 10am-8pm",
+   "weekend": "Mon-Sat 9am-9pm \u00b7 Sun 10am-8pm",
+   "note": "Mon-Sat 9am-9pm \u00b7 Sun 10am-8pm"
+  },
+  "website": "https://risecannabis.com/dispensaries/minnesota/brooklyn-park/",
+  "tier": "free",
+  "tcc_score": 80,
+  "scores": {
+   "pricing": 76,
+   "selection": 82,
+   "service": 80,
+   "lab_testing": 85
+  },
+  "review_count": 0,
+  "verified": true,
+  "features": [
+   "Medical + adult-use",
+   "Statewide chain"
+  ],
+  "gradient": "linear-gradient(135deg, #166534, #22c55e)",
+  "initial": "RD",
+  "img": "",
+  "manually_added": true
+ },
+ {
+  "id": "rise-new-hope",
+  "name": "RISE Dispensary New Hope",
+  "tagline": "RISE Dispensary (Green Thumb) medical + adult-use",
+  "address": "7700 N 42nd Ave, New Hope, MN 55427",
+  "neighborhood": "New Hope",
+  "city": "New Hope",
+  "lat": 45.0332413,
+  "lng": -93.3783535,
+  "phone": "(763) 237-5107",
+  "hours": {
+   "weekday": "Mon-Sat 10am-9pm \u00b7 Sun 10am-8pm",
+   "weekend": "Mon-Sat 10am-9pm \u00b7 Sun 10am-8pm",
+   "note": "Mon-Sat 10am-9pm \u00b7 Sun 10am-8pm"
+  },
+  "website": "https://risecannabis.com/dispensaries/minnesota/new-hope/",
+  "tier": "free",
+  "tcc_score": 80,
+  "scores": {
+   "pricing": 76,
+   "selection": 82,
+   "service": 80,
+   "lab_testing": 85
+  },
+  "review_count": 0,
+  "verified": true,
+  "features": [
+   "Medical + adult-use",
+   "Statewide chain"
+  ],
+  "gradient": "linear-gradient(135deg, #166534, #22c55e)",
+  "initial": "RD",
+  "img": "",
+  "manually_added": true
+ },
+ {
+  "id": "rise-mankato",
+  "name": "RISE Dispensary Mankato",
+  "tagline": "RISE Dispensary (Green Thumb) medical + adult-use",
+  "address": "1 Sioux Rd Suite 100, Mankato, MN 56001",
+  "neighborhood": "Mankato",
+  "city": "Mankato",
+  "lat": 44.1661374,
+  "lng": -93.952031,
+  "phone": "(507) 405-0369",
+  "hours": {
+   "weekday": "Mon-Sat 9am-9pm \u00b7 Sun 10am-8pm",
+   "weekend": "Mon-Sat 9am-9pm \u00b7 Sun 10am-8pm",
+   "note": "Mon-Sat 9am-9pm \u00b7 Sun 10am-8pm"
+  },
+  "website": "https://risecannabis.com/dispensaries/minnesota/mankato/",
+  "tier": "free",
+  "tcc_score": 80,
+  "scores": {
+   "pricing": 76,
+   "selection": 82,
+   "service": 80,
+   "lab_testing": 85
+  },
+  "review_count": 0,
+  "verified": true,
+  "features": [
+   "Medical + adult-use",
+   "Statewide chain"
+  ],
+  "gradient": "linear-gradient(135deg, #166534, #22c55e)",
+  "initial": "RD",
+  "img": "",
+  "manually_added": true
+ },
+ {
+  "id": "rise-baxter",
+  "name": "RISE Dispensary Baxter",
+  "tagline": "RISE Dispensary (Green Thumb) medical + adult-use",
+  "address": "14091 Baxter Drive, Baxter, MN 56425",
+  "neighborhood": "Baxter",
+  "city": "Baxter",
+  "lat": 46.3563185,
+  "lng": -94.2258123,
+  "phone": "(218) 421-6350",
+  "hours": {
+   "weekday": "Daily 10am-8pm",
+   "weekend": "Daily 10am-8pm",
+   "note": "Daily 10am-8pm"
+  },
+  "website": "https://risecannabis.com/dispensaries/minnesota/baxter/",
+  "tier": "free",
+  "tcc_score": 80,
+  "scores": {
+   "pricing": 76,
+   "selection": 82,
+   "service": 80,
+   "lab_testing": 85
+  },
+  "review_count": 0,
+  "verified": true,
+  "features": [
+   "Medical + adult-use",
+   "Statewide chain"
+  ],
+  "gradient": "linear-gradient(135deg, #166534, #22c55e)",
+  "initial": "RD",
+  "img": "",
+  "manually_added": true
+ },
+ {
+  "id": "rise-willmar",
+  "name": "RISE Dispensary Willmar",
+  "tagline": "RISE Dispensary (Green Thumb) medical + adult-use",
+  "address": "1413 1st St S, Willmar, MN 56201",
+  "neighborhood": "Willmar",
+  "city": "Willmar",
+  "lat": 45.1080893,
+  "lng": -95.0422257,
+  "phone": "(320) 208-9081",
+  "hours": {
+   "weekday": "Mon-Sat 9am-9pm",
+   "weekend": "Mon-Sat 9am-9pm",
+   "note": "Mon-Sat 9am-9pm"
+  },
+  "website": "https://risecannabis.com/dispensaries/minnesota/willmar/",
+  "tier": "free",
+  "tcc_score": 80,
+  "scores": {
+   "pricing": 76,
+   "selection": 82,
+   "service": 80,
+   "lab_testing": 85
+  },
+  "review_count": 0,
+  "verified": true,
+  "features": [
+   "Medical + adult-use",
+   "Statewide chain"
+  ],
+  "gradient": "linear-gradient(135deg, #166534, #22c55e)",
+  "initial": "RD",
   "img": "",
   "manually_added": true
  }

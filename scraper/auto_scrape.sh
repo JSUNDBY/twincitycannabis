@@ -112,10 +112,11 @@ python3 scraper/merge_meadow_data.py
 python3 scraper/carrot_scrape.py || echo "Carrot scrape failed (non-fatal)"
 python3 scraper/merge_carrot_data.py
 
-# 7.8. Pull menus from Jane/iHeartJane (all 8 Green Goods locations, rec+med).
-#      Green Goods left Weedmaps entirely — the shops live in
-#      manual_dispensaries.json and Jane is their only menu source.
-"$NODE_BIN" scraper/jane_scrape.js || echo "Jane scrape failed (non-fatal)"
+# 7.8. Pull menus from Jane/iHeartJane — all 8 Green Goods + all 8 RISE
+#      locations, rec+med, via Jane's public Algolia search (no browser;
+#      jane_algolia_scrape.py replaced the headless-Chromium jane_scrape.js
+#      2026-08-28). Both chains left Weedmaps; Jane is their only source.
+python3 scraper/jane_algolia_scrape.py || echo "Jane scrape failed (non-fatal)"
 python3 scraper/merge_jane_data.py
 
 # 7.9. Pull menus from Sweed POS storefronts (Legit Cannabis). Legit left

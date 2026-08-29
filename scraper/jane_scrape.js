@@ -87,6 +87,40 @@ const JANE_STORES = {
       { url: "https://visitgreengoods.com/moorhead-mn-menu-med/", menu_type: "med" },
     ],
   },
+  // RISE (Green Thumb Industries) — their risecannabis.com menus are Jane-
+  // powered too, so the same dmerch interception works. Added 2026-08-28.
+  "leafline-labs-st-paul": {
+    name: "RISE - St. Paul",
+    menus: [{ url: "https://risecannabis.com/dispensaries/minnesota/st-paul/6456/recreational-menu/", menu_type: "rec" }],
+  },
+  "leafline-labs-st-cloud": {
+    name: "RISE - St. Cloud",
+    menus: [{ url: "https://risecannabis.com/dispensaries/minnesota/st-cloud/6458/recreational-menu/", menu_type: "rec" }],
+  },
+  "leafline-labs-eagan": {
+    name: "RISE - Eagan",
+    menus: [{ url: "https://risecannabis.com/dispensaries/minnesota/eagan/6455/recreational-menu/", menu_type: "rec" }],
+  },
+  "rise-brooklyn-park": {
+    name: "RISE - Brooklyn Park",
+    menus: [{ url: "https://risecannabis.com/dispensaries/minnesota/brooklyn-park/6459/recreational-menu/", menu_type: "rec" }],
+  },
+  "rise-new-hope": {
+    name: "RISE - New Hope",
+    menus: [{ url: "https://risecannabis.com/dispensaries/minnesota/new-hope/6460/recreational-menu/", menu_type: "rec" }],
+  },
+  "rise-mankato": {
+    name: "RISE - Mankato",
+    menus: [{ url: "https://risecannabis.com/dispensaries/minnesota/mankato/6454/recreational-menu/", menu_type: "rec" }],
+  },
+  "rise-baxter": {
+    name: "RISE - Baxter",
+    menus: [{ url: "https://risecannabis.com/dispensaries/minnesota/baxter/6466/recreational-menu/", menu_type: "rec" }],
+  },
+  "rise-willmar": {
+    name: "RISE - Willmar",
+    menus: [{ url: "https://risecannabis.com/dispensaries/minnesota/willmar/6457/recreational-menu/", menu_type: "rec" }],
+  },
 };
 
 // ─── BROWSER ─────────────────────────────────────────────────────────────────
