@@ -5940,3 +5940,57 @@ html:not([data-theme="light"]) .leaflet-tile-pane {
 html:not([data-theme="light"]) .leaflet-control-attribution {
     background: rgba(10, 14, 12, 0.7); color: #8b909a;
 }
+
+/* ============ MOTION LAYER (2026-08-28) ============
+   Hover lift + hero aurora (CSS) — FLIP reflow, count-ups, and sparkline
+   draw live in the motion layer at the end of js/app.js. Grid scroll-reveal
+   is the site's pre-existing .stagger system, untouched. */
+
+/* Card lift — extend the existing border/background hover with a gentle
+   rise and green glow. Transform+shadow only: no layout shift. */
+.card,
+.dispensary-card,
+.product-card {
+    transition: border-color .18s ease, background .18s ease,
+                transform .22s cubic-bezier(.2, .7, .2, 1), box-shadow .25s ease;
+}
+.card:hover,
+.dispensary-card:hover,
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px -14px rgba(34, 197, 94, 0.28);
+}
+
+/* NOTE: no whole-page entry animation on .page.active — a hidden/throttled
+   tab freezes CSS animation clocks at frame 0, which held the entire page
+   at opacity 0 (found in preview 2026-08-28). Scroll-reveal on cards gives
+   the entry motion instead, and IntersectionObserver recovers correctly
+   when a hidden tab becomes visible. */
+
+/* Hero aurora — slow smoky drift in green/gold behind the hero grid.
+   Organic, barely-there; sits under .hero-search .container (z-index 1). */
+.hero-search::before {
+    content: '';
+    position: absolute;
+    inset: -25%;
+    background:
+        radial-gradient(38% 30% at 28% 34%, rgba(34, 197, 94, 0.10), transparent 65%),
+        radial-gradient(30% 26% at 72% 58%, rgba(224, 163, 46, 0.055), transparent 62%),
+        radial-gradient(26% 32% at 50% 80%, rgba(34, 197, 94, 0.05), transparent 60%);
+    filter: blur(42px);
+    animation: tcc-aurora 44s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+}
+@keyframes tcc-aurora {
+    0%   { transform: translate3d(-3%, -2%, 0) scale(1) rotate(0deg); }
+    50%  { transform: translate3d(2%, 3%, 0) scale(1.07) rotate(1.2deg); }
+    100% { transform: translate3d(4%, -3%, 0) scale(1.02) rotate(-1deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-search::before { animation: none; }
+    .card:hover,
+    .dispensary-card:hover,
+    .product-card:hover { transform: none; box-shadow: none; }
+}

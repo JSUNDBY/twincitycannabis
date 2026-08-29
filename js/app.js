@@ -1493,7 +1493,10 @@
             }
             html += dispensaryCard(d);
         });
+        // FLIP: cards glide to their new spots on filter/sort changes
+        const _flipSnap = window.__tccFlip && window.__tccFlip.snap(container);
         container.innerHTML = html;
+        if (_flipSnap) window.__tccFlip.play(container, _flipSnap);
         renderMap(results);
     }
 
@@ -3169,6 +3172,8 @@
         // Render quick category pills (above grid)
         renderBrowsePills();
 
+        // FLIP: product cards glide when category/strain/sort filters change
+        const _flipSnap = window.__tccFlip && window.__tccFlip.snap(document.getElementById('browse-grid'));
         container.innerHTML = `
             ${modeHeader}
             <div class="browse-result-meta">
@@ -3194,6 +3199,7 @@
                 ` : ''}
             `}
         `;
+        if (_flipSnap) window.__tccFlip.play(document.getElementById('browse-grid'), _flipSnap);
 
         // Clear-filters chip: one tap back to the unfiltered browse, with the
         // hash, search input, and category select all reset in sync.
@@ -4015,7 +4021,7 @@
             ? `<div class="dispensary-card-quote">&ldquo;${esc(topReview.text.slice(0, 160))}${topReview.text.length > 160 ? '…' : ''}&rdquo; &mdash; ${esc(topReview.author)}</div>`
             : '';
 
-        return `<div class="card dispensary-card ${tierClass} ${variant === 'grid' ? 'dispensary-card-grid' : ''}" onclick="window.location.hash='dispensary/${d.id}'">
+        return `<div class="card dispensary-card ${tierClass} ${variant === 'grid' ? 'dispensary-card-grid' : ''}" data-fk="${d.id}" onclick="window.location.hash='dispensary/${d.id}'">
             <div class="card-body">
                 <div class="dispensary-card-avatar">
                     ${avatar}
@@ -4473,7 +4479,7 @@
             : `<div class="product-card-img"><div class="product-card-img-fallback">${catEmoji}</div></div>`;
 
         const watchedClass = Watchlist.has(p.id) ? ' is-watched' : '';
-        return `<div class="card product-card${watchedClass}" onclick="window.location.hash='compare/${p.id}'">
+        return `<div class="card product-card${watchedClass}" data-fk="${p.id}" onclick="window.location.hash='compare/${p.id}'">
             ${starButton(p.id)}
             <div class="card-body-sm" style="display:flex;gap:0.8rem;align-items:flex-start">
                 ${imgHtml}
@@ -5653,4 +5659,141 @@
     size();
     window.addEventListener('resize', size);
     requestAnimationFrame(frame);
+})();
+
+// ─── Motion layer (2026-08-28) ──────────────────────────────────────────────
+// Makes the data feel alive: scroll-reveal with stagger, count-up stats,
+// self-drawing sparklines, FLIP reflow on filter changes. All transform/
+// opacity only (no layout shift), all skipped under prefers-reduced-motion.
+(function () {
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // FLIP helper — exposed for the render functions. snap() before an
+    // innerHTML swap, play() after: surviving cards glide to their new
+    // positions, brand-new cards fade in.
+    window.__tccFlip = {
+        snap: function (container) {
+            if (reduced || !container) return null;
+            var map = {};
+            var els = container.querySelectorAll('[data-fk]');
+            if (!els.length) return null;
+            els.forEach(function (el) { map[el.getAttribute('data-fk')] = el.getBoundingClientRect(); });
+            return map;
+        },
+        play: function (container, before) {
+            if (reduced || !container || !before) return;
+            var els = container.querySelectorAll('[data-fk]');
+            var movers = [];
+            els.forEach(function (el) {
+                el.__motionSettled = true; // FLIP owns these; skip scroll-reveal
+                var prev = before[el.getAttribute('data-fk')];
+                if (!prev) {
+                    el.style.opacity = '0';
+                    movers.push({ el: el, enter: true });
+                    return;
+                }
+                var now = el.getBoundingClientRect();
+                var dx = prev.left - now.left;
+                var dy = prev.top - now.top;
+                if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+                el.style.transition = 'none';
+                el.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+                movers.push({ el: el });
+            });
+            if (!movers.length) return;
+            void container.offsetWidth; // commit start positions
+            requestAnimationFrame(function () {
+                movers.forEach(function (m) {
+                    m.el.style.transition = 'transform .38s cubic-bezier(.2,.7,.2,1), opacity .3s ease';
+                    m.el.style.transform = '';
+                    m.el.style.opacity = '';
+                });
+                setTimeout(function () {
+                    movers.forEach(function (m) { m.el.style.transition = ''; });
+                }, 450);
+            });
+        },
+    };
+
+    if (reduced) return; // everything below is pure decoration
+
+    // One observer for all reveal work.
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+            if (!en.isIntersecting) return;
+            var el = en.target;
+            io.unobserve(el);
+            if (el.__motionCountup) { countUp(el); return; }
+            if (el.__motionSpark) { drawSpark(el); return; }
+        });
+    }, { rootMargin: '0px 0px -6% 0px', threshold: 0.04 });
+
+    function countUp(el) {
+        var text = el.textContent.trim();
+        var m = text.match(/^([^0-9]*)([\d,]+(?:\.\d+)?)(.*)$/);
+        if (!m) return;
+        var target = parseFloat(m[2].replace(/,/g, ''));
+        if (!isFinite(target) || target <= 0) return;
+        var decimals = (m[2].split('.')[1] || '').length;
+        var start = null, dur = 850, done = false;
+        function fmt(v) {
+            var s = v.toFixed(decimals);
+            var parts = s.split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            return m[1] + parts.join('.') + m[3];
+        }
+        function tick(ts) {
+            if (done) return;
+            if (start === null) start = ts;
+            var t = Math.min(1, (ts - start) / dur);
+            var eased = 1 - Math.pow(1 - t, 3);
+            el.textContent = fmt(target * eased);
+            if (t < 1) requestAnimationFrame(tick);
+            else done = true;
+        }
+        requestAnimationFrame(tick);
+        // rAF pauses in hidden tabs — guarantee the final number lands.
+        setTimeout(function () { if (!done) { done = true; el.textContent = fmt(target); } }, dur + 400);
+    }
+
+    function drawSpark(el) {
+        var line = el.querySelector('polyline');
+        if (!line || !line.getTotalLength) return;
+        try {
+            var len = line.getTotalLength();
+            line.style.strokeDasharray = len;
+            line.style.strokeDashoffset = len;
+            void line.getBoundingClientRect();
+            line.style.transition = 'stroke-dashoffset .8s ease-out';
+            line.style.strokeDashoffset = '0';
+        } catch (e) { /* detached/hidden svg — leave static */ }
+    }
+
+    // NOTE: no per-card scroll-reveal here — the site already has one (the
+    // .stagger/.visible container system near the bottom of this file), and
+    // running two reveal systems on the same cards makes them fight.
+    var COUNT_SEL = '.live-metric-value, #proof-stat-products, #proof-stat-disps';
+
+    function prep(root) {
+        if (!root || root.nodeType !== 1 || !root.querySelectorAll) return;
+        root.querySelectorAll(COUNT_SEL).forEach(function (e) {
+            if (e.__motionPrepped) return;
+            e.__motionPrepped = true;
+            e.__motionCountup = true;
+            io.observe(e);
+        });
+        root.querySelectorAll('svg.product-sparkline').forEach(function (s) {
+            if (s.__motionPrepped) return;
+            s.__motionPrepped = true;
+            s.__motionSpark = true;
+            io.observe(s);
+        });
+    }
+
+    new MutationObserver(function (muts) {
+        muts.forEach(function (m) {
+            for (var i = 0; i < m.addedNodes.length; i++) prep(m.addedNodes[i]);
+        });
+    }).observe(document.body, { childList: true, subtree: true });
+    prep(document.body);
 })();
