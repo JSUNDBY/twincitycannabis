@@ -2028,7 +2028,7 @@ const buildContactPage = () => {
 // earned (not bought): owner verification + written menu authorization + a
 // link back. Perk = the badge and founding rates on paid placements, locked
 // for good. Mirror of FOUNDING_PARTNER_IDS in js/app.js — keep in sync.
-const FOUNDING_PARTNER_IDS = ['legit-cannabis'];
+const FOUNDING_PARTNER_IDS = ['legit-cannabis', 'verist-fields'];
 
 const buildFoundingPartnersPage = () => {
   const partners = FOUNDING_PARTNER_IDS

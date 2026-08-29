@@ -247,7 +247,7 @@
     // Founding Partners — dispensaries that verified early and partner with
     // TCC directly (free, earned tier; see /founding-partners/). Mirror of
     // FOUNDING_PARTNER_IDS in scripts/build_seo.js — keep in sync.
-    const FOUNDING_PARTNER_IDS = new Set(['legit-cannabis']);
+    const FOUNDING_PARTNER_IDS = new Set(['legit-cannabis', 'verist-fields']);
 
     // Stripe Payment Link URLs. Replace these with the real URLs after creating
     // the products in Stripe (see /cloudflare/README.md step 3).
