@@ -112,6 +112,17 @@ python3 scraper/merge_meadow_data.py
 python3 scraper/carrot_scrape.py || echo "Carrot scrape failed (non-fatal)"
 python3 scraper/merge_carrot_data.py
 
+# 7.8. Pull menus from Jane/iHeartJane (all 8 Green Goods locations, rec+med).
+#      Green Goods left Weedmaps entirely — the shops live in
+#      manual_dispensaries.json and Jane is their only menu source.
+"$NODE_BIN" scraper/jane_scrape.js || echo "Jane scrape failed (non-fatal)"
+python3 scraper/merge_jane_data.py
+
+# 7.9. Pull menus from Sweed POS storefronts (Legit Cannabis). Legit left
+#      Weedmaps ~2026-08-25; their own Sweed shop is the only menu source.
+python3 scraper/sweed_scrape.py || echo "Sweed scrape failed (non-fatal)"
+python3 scraper/merge_sweed_data.py
+
 
 # 7.9. Backfill strain type (indica/sativa/hybrid) onto any products the live
 #      scrape didn't tag, using the dispensaries' own labels. Never invents one.
@@ -155,7 +166,8 @@ git add js/data.js index.html sitemap.xml \
     scraper/data/full_menu_products.json scraper/data/last_weedmaps_scrape.txt \
     scraper/data/dispensaries.json scraper/data/dispensaries_export.json \
     scraper/data/dispensary_shop_products.json scraper/data/meadow_products.json \
-    scraper/data/carrot_products.json \
+    scraper/data/carrot_products.json scraper/data/jane_products.json \
+    scraper/data/sweed_products.json \
     scraper/data/page_lastmod.json \
     llms.txt
 grep -o '<loc>https://twincitycannabis.com/[^<]*</loc>' sitemap.xml \

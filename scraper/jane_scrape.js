@@ -66,6 +66,27 @@ const JANE_STORES = {
       { url: "https://visitgreengoods.com/burnsville-mn-menu-med/", menu_type: "med" },
     ],
   },
+  "minnesota-medical-solutions-rochester": {
+    name: "Green Goods - Rochester",
+    menus: [
+      { url: "https://visitgreengoods.com/rochester-mn-menu-rec/", menu_type: "rec" },
+      { url: "https://visitgreengoods.com/rochester-mn-menu-med/", menu_type: "med" },
+    ],
+  },
+  "green-goods-duluth": {
+    name: "Green Goods - Duluth/Hermantown",
+    menus: [
+      { url: "https://visitgreengoods.com/duluth-hermantown-mn-menu-rec/", menu_type: "rec" },
+      { url: "https://visitgreengoods.com/duluth-hermantown-mn-menu-med/", menu_type: "med" },
+    ],
+  },
+  "minnesota-medical-solutions-moorhead": {
+    name: "Green Goods - Moorhead",
+    menus: [
+      { url: "https://visitgreengoods.com/moorhead-mn-menu-rec/", menu_type: "rec" },
+      { url: "https://visitgreengoods.com/moorhead-mn-menu-med/", menu_type: "med" },
+    ],
+  },
 };
 
 // ─── BROWSER ─────────────────────────────────────────────────────────────────
