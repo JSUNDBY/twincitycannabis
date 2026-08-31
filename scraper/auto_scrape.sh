@@ -153,6 +153,11 @@ python3 scraper/recategorize_data_js.py
 # 7.95. Generate the real price-drop deals feed from priceHistory (no fakes).
 "$NODE_BIN" scraper/generate_deals.js
 
+# 7.96. Aggregate weekly price-trend medians from the history file for the
+#       /minnesota-price-trends/ page. Non-fatal; the build skips the page
+#       cleanly if the trends file is missing.
+python3 scripts/build_price_trends.py || echo "Price trends aggregation failed (non-fatal)"
+
 # 8. Rebuild static SEO pages (per-dispensary, per-category, sitemap.xml)
 #    These are crawler-facing pages with LocalBusiness/Product Schema.org markup
 #    so Google indexes every dispensary + category as its own URL.
@@ -176,7 +181,7 @@ git add js/data.js index.html sitemap.xml \
     scraper/data/dispensary_shop_products.json scraper/data/meadow_products.json \
     scraper/data/carrot_products.json scraper/data/jane_products.json \
     scraper/data/sweed_products.json scraper/data/dutchie_products.json \
-    scraper/data/page_lastmod.json \
+    scraper/data/page_lastmod.json scraper/data/price_trends.json \
     llms.txt
 grep -o '<loc>https://twincitycannabis.com/[^<]*</loc>' sitemap.xml \
   | sed 's|<loc>https://twincitycannabis.com/||;s|</loc>||;s|/$||' \

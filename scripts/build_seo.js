@@ -571,7 +571,7 @@ const footer = `</main>
 <footer>
   <p><strong class="footer-brand">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Minnesota dispensary.</p>
   <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a></p>
-  <p><a href="/minnesota-cannabis/">Cannabis in Minnesota</a> &middot; <a href="/minnesota-cannabis-prices/">MN Cannabis Prices</a> &middot; <a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/price-spread-index/">Price Spread Index</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
+  <p><a href="/minnesota-cannabis/">Cannabis in Minnesota</a> &middot; <a href="/minnesota-cannabis-prices/">MN Cannabis Prices</a> &middot; <a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/price-spread-index/">Price Spread Index</a> &middot; <a href="/minnesota-price-trends/">Price Trends</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
   <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a> &middot; <a href="/founding-partners/">Founding Partners</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
 </footer>
@@ -4653,6 +4653,109 @@ ${tribalShops.map(({ d, n }) => `<li><a href="/dispensaries/${esc(d.id)}/">${esc
 ` + footer;
 };
 
+// ---------- PRICE TRENDS PAGE (2026-08-30) ----------
+// Weekly category medians since March 2026, aggregated by
+// scripts/build_price_trends.py from the Pi's price-history records.
+// Charts are build-time inline SVG: crawler-visible, zero JS, themed via
+// currentColor + CSS variables.
+
+function trendChartSvg(points, { width = 720, height = 220, color = 'var(--green, #22c55e)' } = {}) {
+  const usable = points.filter(p => p.med != null);
+  if (usable.length < 2) return '';
+  const pad = { l: 44, r: 12, t: 12, b: 26 };
+  const vals = usable.map(p => p.med);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (hi - lo < 4) { const mid = (hi + lo) / 2; lo = mid - 2; hi = mid + 2; } // flat series still reads
+  const x = (i) => pad.l + (i / (points.length - 1)) * (width - pad.l - pad.r);
+  const y = (v) => pad.t + (1 - (v - lo) / (hi - lo)) * (height - pad.t - pad.b);
+  // polyline segments, breaking across missing weeks
+  const segs = [];
+  let cur = [];
+  points.forEach((p, i) => {
+    if (p.med == null) { if (cur.length > 1) segs.push(cur); cur = []; return; }
+    cur.push(`${x(i).toFixed(1)},${y(p.med).toFixed(1)}`);
+  });
+  if (cur.length > 1) segs.push(cur);
+  const gridVals = [lo, (lo + hi) / 2, hi];
+  const monthLabels = points.map((p, i) => ({ p, i }))
+    .filter(({ p }, idx, arr) => idx === 0 || p.week.slice(5, 7) !== arr[idx - 1].p.week.slice(5, 7))
+    .map(({ p, i }) => `<text x="${x(i).toFixed(0)}" y="${height - 8}" font-size="11" fill="var(--text-muted, #8b909a)">${new Date(p.week + 'T12:00:00').toLocaleDateString('en-US', { month: 'short' })}</text>`);
+  return `<svg viewBox="0 0 ${width} ${height}" role="img" style="width:100%;height:auto;max-width:${width}px">
+${gridVals.map(v => `<line x1="${pad.l}" x2="${width - pad.r}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="var(--border, #2a2f2c)" stroke-width="1"/><text x="4" y="${(y(v) + 4).toFixed(1)}" font-size="11" fill="var(--text-muted, #8b909a)">$${Math.round(v)}</text>`).join('\n')}
+${monthLabels.join('\n')}
+${segs.map(s => `<polyline fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${s.join(' ')}"/>`).join('\n')}
+${points.map((p, i) => p.med == null ? '' : `<circle cx="${x(i).toFixed(1)}" cy="${y(p.med).toFixed(1)}" r="2.5" fill="${color}"/>`).join('')}
+</svg>`;
+}
+
+const buildPriceTrendsPage = () => {
+  const trendsPath = path.join(ROOT, 'scraper/data/price_trends.json');
+  if (!fs.existsSync(trendsPath)) return null;
+  const T = JSON.parse(fs.readFileSync(trendsPath, 'utf8'));
+  const S = T.series;
+  const firstLast = (key) => {
+    const pts = S[key].points;
+    const f = pts.find(p => p.med != null), l = [...pts].reverse().find(p => p.med != null);
+    return { f, l };
+  };
+  const fmt = (v) => '$' + Number(v).toFixed(2).replace(/\.00$/, '');
+  const fe = firstLast('flower_eighth'), ca = firstLast('cartridge'),
+        ed = firstLast('edible'), pr = firstLast('pre-roll');
+  const monthsSpan = Math.round((new Date(T.last_week) - new Date(T.first_week)) / (30.44 * 864e5));
+
+  const title = 'Minnesota Cannabis Price Trends — Weekly Medians Since March 2026';
+  const description = `Are cannabis prices falling in Minnesota? ${monthsSpan} months of weekly recorded data: the median flower eighth has held near ${fmt(fe.l.med)}, edibles near ${fmt(ed.l.med)}, with charts by category. ${FRESH.updatedDaily}.`;
+  const canonical = `${SITE}/minnesota-price-trends/`;
+  const faq = [
+    ['Are cannabis prices falling in Minnesota?', `Mostly, no — they are strikingly stable. The median 3.5g flower eighth has held at ${fmt(fe.l.med)} since ${new Date(T.first_week + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}, and the median edible has stayed at ${fmt(ed.l.med)}, even as the number of tracked products grew several-fold. Vape cartridges are the exception, moving in a roughly $55–$70 band as new stores and brands enter the market.`],
+    ['What does an eighth of flower cost in Minnesota right now?', `The statewide median listed price is ${fmt(fe.l.med)} for a 3.5g eighth (week of ${fe.l.week}, ${fe.l.n} eighths tracked), before Minnesota's roughly 17–18% cannabis and sales taxes.`],
+    ['Where does this data come from?', `Twin City Cannabis has recorded every tracked product's listed price on every menu refresh since late March 2026 — ${T.products_used.toLocaleString()} products contribute to these weekly medians. Each product counts once per week regardless of how often it was observed, and accessory/non-cannabis listings are filtered out.`],
+  ];
+  const schema = [{
+    '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: canonical, description, dateModified: today,
+  }, {
+    '@context': 'https://schema.org', '@type': 'Dataset',
+    name: 'Minnesota cannabis weekly median prices',
+    description: `Weekly median listed prices for cannabis flower eighths, cartridges, edibles, and pre-rolls at Minnesota dispensaries, recorded since ${T.first_week}.`,
+    url: canonical, temporalCoverage: `${T.first_week}/${T.last_week}`,
+    creator: { '@type': 'Organization', name: 'Twin City Cannabis', url: SITE },
+  }, {
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+  }];
+
+  const chartBlock = (key, caption) => `
+<h2>${esc(S[key].label)}</h2>
+${trendChartSvg(S[key].points)}
+<p>${caption}</p>`;
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/minnesota-cannabis-prices/">Prices</a> / Trends</div>
+<h1>Minnesota cannabis price trends: ${monthsSpan} months of weekly data</h1>
+<p><strong>Updated ${today}.</strong> Twin City Cannabis has recorded listed prices on every menu refresh since <strong>${new Date(T.first_week + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong> — ${T.products_used.toLocaleString()} products feed these weekly medians. The headline: Minnesota cannabis prices are <strong>strikingly stable</strong>. The market's growth has shown up as more selection, not lower shelf prices.</p>
+
+${chartBlock('flower_eighth', `The median 3.5g eighth has held at <strong>${fmt(fe.l.med)}</strong> essentially every week since ${new Date(T.first_week + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} — from ${fe.f.n} eighths tracked then to ${fe.l.n} now. Competition so far has widened the range (the cheapest eighths sit well under $30) without moving the middle.`)}
+
+${chartBlock('cartridge', `Cartridges are the one category that moves: the weekly median has swung between <strong>$55 and $70</strong>, ending the latest week at ${fmt(ca.l.med)}. The swings track market composition — new stores and brands entering — more than repricing of existing products.`)}
+
+${chartBlock('edible', `The median edible has not moved from <strong>${fmt(ed.l.med)}</strong> in ${monthsSpan} months, across a ${Math.round(ed.l.n / ed.f.n)}x growth in tracked products (${ed.f.n} → ${ed.l.n}). The $20 gummy bag is Minnesota's most stable cannabis price point.`)}
+
+${chartBlock('pre-roll', `Pre-rolls drifted from about ${fmt(pr.f.med)} up to $18 through early summer and back to <strong>${fmt(pr.l.med)}</strong> — the only category to round-trip. Range: $16.24–$18.00.`)}
+
+<h2>How to read this honestly</h2>
+<p>These are <em>listed menu prices</em>, before Minnesota's roughly 17–18% cannabis and sales taxes. Coverage grew from Twin Cities metro shops in spring to <a href="/minnesota-cannabis/">statewide</a> (including <a href="/rise-vs-green-goods-minnesota/">RISE and Green Goods</a>) by late August, so later weeks rest on much larger samples; each product counts once per week no matter how often it was observed. Gaps in the lines are weeks with no recorded data. The underlying medians recompute as the tracker runs, ${FRESH.updatedDaily.toLowerCase()}.</p>
+<p style="margin-top:2rem"><a class="cta" href="/minnesota-cannabis-prices/">Today's live price medians →</a> &nbsp; <a class="cta" href="/price-spread-index/">Where shopping around saves most →</a></p>
+` + footer;
+};
+
+const _trendsHtml = buildPriceTrendsPage();
+if (_trendsHtml) {
+  writePage('minnesota-price-trends/index.html', _trendsHtml);
+  extraSitemap.push({ loc: `${SITE}/minnesota-price-trends/`, priority: '0.7', changefreq: 'weekly' });
+} else {
+  console.log('price_trends.json missing — skipped /minnesota-price-trends/');
+}
+
 writePage('rise-vs-green-goods-minnesota/index.html', buildChainComparePage());
 extraSitemap.push({ loc: `${SITE}/rise-vs-green-goods-minnesota/`, priority: '0.7', changefreq: 'daily' });
 writePage('tribal-vs-state-dispensaries-minnesota/index.html', buildTribalComparePage());
@@ -4674,6 +4777,7 @@ ${answerPages.map(a => `- [${a.question}](${SITE}/answers/${a.slug}/)`).join('\n
 - [Minnesota cannabis prices: live medians and ranges by category, ${FRESH.updatedDaily}](${SITE}/minnesota-cannabis-prices/)
 - [Cheapest cannabis in the Twin Cities, by category](${SITE}/cheapest-cannabis-twin-cities/)
 - [Price Spread Index: the products where shopping around saves most](${SITE}/price-spread-index/)
+- [Minnesota cannabis price trends: weekly medians recorded since March 2026](${SITE}/minnesota-price-trends/)
 - [RISE vs. Green Goods: Minnesota's two big chains compared with live prices](${SITE}/rise-vs-green-goods-minnesota/)
 - [Tribal vs. state-licensed dispensaries: what live price data shows](${SITE}/tribal-vs-state-dispensaries-minnesota/)
 - [Real price drops happening now](${SITE}/weed-deals-twin-cities/)
