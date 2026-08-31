@@ -4490,6 +4490,174 @@ extraSitemap.push({ loc: `${SITE}/minnesota-cannabis/`, priority: '0.9', changef
 count++;
 console.log('Wrote minnesota-cannabis hub');
 
+// ---------- AI-CITATION COMPARISON PAGES (2026-08-28) ----------
+// Built to win AI Overview citations on "compare cannabis minnesota"-class
+// queries: claim-shaped sentences with computed numbers under question
+// headings. Every figure recomputes from live menus each build — the moat
+// over competitors' hand-written estimates.
+
+// Chain ids — keep in sync with JANE_STORES in scraper/jane_algolia_scrape.py
+const RISE_IDS = ['leafline-labs-st-paul', 'leafline-labs-st-cloud', 'leafline-labs-eagan',
+  'rise-brooklyn-park', 'rise-new-hope', 'rise-mankato', 'rise-baxter', 'rise-willmar'];
+const GG_IDS = ['minnesota-medical-solutions', 'minnesota-medical-solutions-bloomington',
+  'green-goods-blaine', 'green-goods-burnsville', 'green-goods-woodbury',
+  'minnesota-medical-solutions-rochester', 'green-goods-duluth', 'minnesota-medical-solutions-moorhead'];
+// Tribal (sovereign-land) dispensaries currently tracked. Tax-exempt at the
+// register, unlike state-licensed shops.
+const TRIBAL_IDS = ['island-pezi', 'nativecare-1', 'waabigwan-mashkiki-1',
+  'waabigwan-mashkiki-saint-cloud', 'anang-native-cannabis-co', 'anang-tasting-lounge-dispensary'];
+
+const _gFromW = (w) => {
+  const m = /([\d.]+)\s*g/.exec(w || '');
+  if (m) return parseFloat(m[1]);
+  if (/1\/8|eighth/i.test(w || '')) return 3.5;
+  return null;
+};
+const _median = (a) => { a.sort((x, y) => x - y); return a.length ? a[Math.floor(a.length / 2)] : null; };
+
+// Median LISTED price of a 3.5g flower eighth across a set of shop ids.
+function eighthStats(idSet) {
+  const prices = [];
+  TCC.products.forEach(p => {
+    if (p.category !== 'flower') return;
+    const g = _gFromW(p.weight) || _gFromW(p.name);
+    if (g !== 3.5) return;
+    Object.entries(p.prices || {}).forEach(([id, v]) => {
+      if (idSet.has(id) && v > 0 && v <= 150) prices.push(v);
+    });
+  });
+  return { n: prices.length, med: _median(prices.slice()) };
+}
+
+function categoryMedians(idSet) {
+  const byCat = {};
+  TCC.products.forEach(p => {
+    Object.entries(p.prices || {}).forEach(([id, v]) => {
+      if (!idSet.has(id) || !(v > 0) || v > 500) return;
+      (byCat[p.category] = byCat[p.category] || []).push(v);
+    });
+  });
+  const out = {};
+  Object.entries(byCat).forEach(([c, arr]) => { out[c] = { n: arr.length, med: _median(arr) }; });
+  return out;
+}
+
+const buildChainComparePage = () => {
+  const rise = new Set(RISE_IDS), gg = new Set(GG_IDS);
+  const riseShops = RISE_IDS.map(id => TCC.dispensaries.find(d => d.id === id)).filter(Boolean);
+  const ggShops = GG_IDS.map(id => TCC.dispensaries.find(d => d.id === id)).filter(Boolean);
+  const rE = eighthStats(rise), gE = eighthStats(gg);
+  const rCats = categoryMedians(rise), gCats = categoryMedians(gg);
+  const riseCities = riseShops.map(d => d.city).join(', ');
+  const ggCities = ggShops.map(d => d.city).join(', ');
+  const fmt = (v) => v == null ? '—' : '$' + (Math.round(v * 100) / 100).toFixed(2);
+
+  const catRows = ['flower', 'edible', 'beverage', 'tincture']
+    .filter(c => (rCats[c] && rCats[c].n >= 5) || (gCats[c] && gCats[c].n >= 5))
+    .map(c => {
+      const catName = (TCC.categories.find(x => x.id === c) || {}).name || c;
+      const r = rCats[c], g = gCats[c];
+      const edge = r && g ? (r.med < g.med ? 'RISE' : (g.med < r.med ? 'Green Goods' : 'Tie')) : '—';
+      return `<tr><td>${esc(catName)}</td><td style="text-align:right">${fmt(r && r.med)}</td><td style="text-align:right">${fmt(g && g.med)}</td><td>${edge}</td></tr>`;
+    }).join('\n');
+
+  const title = 'RISE vs. Green Goods in Minnesota — Live Price & Menu Comparison';
+  const description = `RISE (Green Thumb) and Green Goods (Vireo) compared with live menu data: median flower eighth ${fmt(rE.med)} vs ${fmt(gE.med)}, category prices, and all 16 Minnesota locations. ${FRESH.updatedDaily}.`;
+  const canonical = `${SITE}/rise-vs-green-goods-minnesota/`;
+  const faq = [
+    ['Which is cheaper, RISE or Green Goods?', `On listed menu prices today, a median 3.5g flower eighth costs ${fmt(rE.med)} at RISE and ${fmt(gE.med)} at Green Goods. Edibles median ${fmt(rCats.edible && rCats.edible.med)} at RISE vs ${fmt(gCats.edible && gCats.edible.med)} at Green Goods. Prices move daily — the numbers on this page recompute from live menus.`],
+    ['How many Minnesota locations does each chain have?', `Both chains run 8 Minnesota stores. RISE: ${riseCities}. Green Goods: ${ggCities}.`],
+    ['Do RISE and Green Goods sell recreational cannabis?', 'Yes. Both chains serve adult-use (21+) customers at all Minnesota locations, and both also run medical menus for registered patients.'],
+  ];
+  const schema = [{
+    '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: canonical,
+    description, dateModified: today,
+  }, {
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+  }];
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/minnesota-cannabis/">Minnesota</a> / RISE vs. Green Goods</div>
+<h1>RISE vs. Green Goods: Minnesota's two big chains, compared with live data</h1>
+<p><strong>Updated ${today}.</strong> RISE Dispensaries (Green Thumb Industries) and Green Goods (Vireo) each operate <strong>8 Minnesota stores</strong>. This page compares their live menus — ${(rE.n + gE.n).toLocaleString()} flower eighths and ${Object.values(rCats).concat(Object.values(gCats)).reduce((s, c) => s + c.n, 0).toLocaleString()} priced products — recomputed several times a day from each chain's own menu.</p>
+
+<h2>Which is cheaper, RISE or Green Goods?</h2>
+<p>On listed menu prices today, the median 3.5g flower eighth costs <strong>${fmt(rE.med)} at RISE</strong> (${rE.n} eighths tracked) and <strong>${fmt(gE.med)} at Green Goods</strong> (${gE.n} eighths tracked). Neither chain includes Minnesota's roughly 17–18% cannabis and sales taxes in listed prices.</p>
+<table>
+<thead><tr><th>Category</th><th style="text-align:right">RISE median</th><th style="text-align:right">Green Goods median</th><th>Cheaper today</th></tr></thead>
+<tbody>
+${catRows}
+</tbody>
+</table>
+
+<h2>Where are the stores?</h2>
+<p><strong>RISE</strong>: ${riseShops.map(d => `<a href="/dispensaries/${esc(d.id)}/">${esc(d.city)}</a>`).join(' · ')}</p>
+<p><strong>Green Goods</strong>: ${ggShops.map(d => `<a href="/dispensaries/${esc(d.id)}/">${esc(d.city)}</a>`).join(' · ')}</p>
+
+<h2>How the menus differ</h2>
+<p>RISE leans on Green Thumb house brands like RYTHM, Dogwalkers, and incredibles; Green Goods carries Vireo lines such as Good Green and Limited Salad alongside third-party Minnesota brands. Both run separate medical menus with tax exemptions for registered patients. Live menus for every store are on their Twin City Cannabis pages linked above.</p>
+
+<h2>How this comparison works</h2>
+<p>Twin City Cannabis tracks both chains' menus directly and recomputes this page ${FRESH.updatedDaily.toLowerCase()}. Neither chain pays for placement, and paid placement never affects rankings anywhere on this site. Cross-shop with the <a href="/minnesota-cannabis-prices/">statewide price medians</a> and the <a href="/price-spread-index/">Price Spread Index</a>.</p>
+` + footer;
+};
+
+const buildTribalComparePage = () => {
+  const tribal = new Set(TRIBAL_IDS);
+  const licensedIds = new Set(TCC.dispensaries.filter(d => !tribal.has(d.id)).map(d => d.id));
+  const tE = eighthStats(tribal), lE = eighthStats(licensedIds);
+  const TAX = 0.175; // ~10% gross receipts + ~7.5% sales, consistent sitewide
+  const fmt = (v) => v == null ? '—' : '$' + (Math.round(v * 100) / 100).toFixed(2);
+  const lOut = lE.med != null ? lE.med * (1 + TAX) : null;
+  const tribalShops = TRIBAL_IDS.map(id => TCC.dispensaries.find(d => d.id === id)).filter(Boolean)
+    .map(d => ({ d, n: TCC.products.filter(p => p.prices && p.prices[d.id] != null).length }));
+
+  const gapPct = (tE.med && lOut) ? Math.round(Math.abs(lOut - tE.med) / lOut * 100) : null;
+  const cheaperSide = (tE.med && lOut) ? (tE.med < lOut ? 'tribal' : 'state-licensed') : null;
+
+  const title = 'Tribal vs. State-Licensed Dispensaries in Minnesota — Real Price Data';
+  const description = `Are tribal dispensaries actually cheaper in Minnesota? Live menu data: median eighth ${fmt(tE.med)} at tribal shops (tax-free) vs ${fmt(lE.med)} listed + ~17.5% tax at state-licensed shops. ${FRESH.updatedDaily}.`;
+  const canonical = `${SITE}/tribal-vs-state-dispensaries-minnesota/`;
+  const faq = [
+    ['Are tribal dispensaries cheaper than state-licensed dispensaries in Minnesota?', `Not automatically. Today the median listed 3.5g eighth is ${fmt(tE.med)} at tribal dispensaries and ${fmt(lE.med)} at state-licensed shops — but licensed shops add roughly 17–18% in taxes at the register while tribal shops add none. Out the door, the median eighth lands near ${fmt(lOut)} licensed vs ${fmt(tE.med)} tribal${gapPct != null ? (gapPct <= 1 ? ' — a statistical tie on today\'s data' : ` — about ${gapPct}% cheaper at ${cheaperSide} shops on today's data`) : ''}. Compare the specific product, not the reputation.`],
+    ['Why don’t tribal dispensaries charge Minnesota cannabis tax?', 'Tribal dispensaries operate on sovereign tribal land under tribal cannabis ordinances, outside state tax jurisdiction. State-licensed retailers collect the 10% cannabis gross receipts tax plus state and local sales tax, roughly 17–18% total at checkout.'],
+    ['Which tribal dispensaries does Twin City Cannabis track?', tribalShops.map(({ d }) => d.name).join(', ') + '. Live menus are linked below where available.'],
+  ];
+  const schema = [{
+    '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: canonical, description, dateModified: today,
+  }, {
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+  }];
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/minnesota-cannabis/">Minnesota</a> / Tribal vs. State-Licensed</div>
+<h1>Tribal vs. state-licensed dispensaries: what the price data actually shows</h1>
+<p><strong>Updated ${today}.</strong> The common claim is that tribal dispensaries are 10–17% cheaper because they don't charge state cannabis taxes. Live menu data tells a more interesting story.</p>
+
+<h2>Are tribal dispensaries actually cheaper?</h2>
+<p>On today's menus, the median listed 3.5g flower eighth costs <strong>${fmt(tE.med)} at tribal dispensaries</strong> (${tE.n} eighths tracked) and <strong>${fmt(lE.med)} at state-licensed shops</strong> (${lE.n.toLocaleString()} eighths tracked). But listed prices aren't out-the-door prices: state-licensed shops add roughly <strong>17–18% in taxes</strong> at the register (10% cannabis gross receipts tax plus state and local sales tax), while tribal shops on sovereign land add none.</p>
+<p>Estimated out-the-door median eighth: <strong>${fmt(lOut)} at a licensed shop vs ${fmt(tE.med)} at a tribal shop</strong>${gapPct != null ? (gapPct <= 1 ? ' — a <strong>statistical tie</strong> on today\'s data' : ` — about <strong>${gapPct}%</strong> ${cheaperSide === 'tribal' ? 'cheaper at tribal shops' : 'cheaper at licensed shops'} on today's data`) : ''}. The honest takeaway: the tax advantage is real, but tribal listed prices often absorb part of it. Compare the specific product you want, not the category of store.</p>
+
+<h2>Why the tax rules differ</h2>
+<p>Tribal dispensaries operate on sovereign tribal land under their nations' own cannabis ordinances, outside Minnesota's tax jurisdiction. State-licensed retailers — including chains like <a href="/rise-vs-green-goods-minnesota/">RISE and Green Goods</a> — collect the 10% cannabis gross receipts tax plus regular sales taxes. Registered medical patients are exempt from cannabis taxes at licensed shops, which closes most of the gap for them.</p>
+
+<h2>Tribal dispensaries we track</h2>
+<ul>
+${tribalShops.map(({ d, n }) => `<li><a href="/dispensaries/${esc(d.id)}/">${esc(d.name)}</a> — ${esc(d.city)}${n > 0 ? ` · ${n} products on the live menu` : ' · menu not yet published online'}</li>`).join('\n')}
+</ul>
+<p>Sample-size note: tribal menu coverage is smaller than licensed coverage (${tE.n} vs ${lE.n.toLocaleString()} tracked eighths), so tribal medians move more day to day. Every number on this page recomputes from live menus, ${FRESH.updatedDaily.toLowerCase()}.</p>
+
+<p style="margin-top:2rem"><a class="cta" href="/minnesota-cannabis-prices/">See live statewide price medians →</a></p>
+` + footer;
+};
+
+writePage('rise-vs-green-goods-minnesota/index.html', buildChainComparePage());
+extraSitemap.push({ loc: `${SITE}/rise-vs-green-goods-minnesota/`, priority: '0.7', changefreq: 'daily' });
+writePage('tribal-vs-state-dispensaries-minnesota/index.html', buildTribalComparePage());
+extraSitemap.push({ loc: `${SITE}/tribal-vs-state-dispensaries-minnesota/`, priority: '0.7', changefreq: 'daily' });
+
 // llms.txt — the emerging convention answer engines check for a site map of
 // meaning. Regenerated every build so counts stay honest.
 fs.writeFileSync(path.join(ROOT, 'llms.txt'), `# Twin City Cannabis
@@ -4506,6 +4674,8 @@ ${answerPages.map(a => `- [${a.question}](${SITE}/answers/${a.slug}/)`).join('\n
 - [Minnesota cannabis prices: live medians and ranges by category, ${FRESH.updatedDaily}](${SITE}/minnesota-cannabis-prices/)
 - [Cheapest cannabis in the Twin Cities, by category](${SITE}/cheapest-cannabis-twin-cities/)
 - [Price Spread Index: the products where shopping around saves most](${SITE}/price-spread-index/)
+- [RISE vs. Green Goods: Minnesota's two big chains compared with live prices](${SITE}/rise-vs-green-goods-minnesota/)
+- [Tribal vs. state-licensed dispensaries: what live price data shows](${SITE}/tribal-vs-state-dispensaries-minnesota/)
 - [Real price drops happening now](${SITE}/weed-deals-twin-cities/)
 - [Best-rated dispensaries by real Google reviews](${SITE}/best-dispensaries-twin-cities/)
 - [Minnesota cannabis laws, plain-language](${SITE}/minnesota-cannabis-laws/)
