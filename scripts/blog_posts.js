@@ -1183,4 +1183,96 @@ module.exports = [
       { href: '/blog/traveling-with-cannabis-minnesota/', label: 'Traveling with cannabis' },
     ],
   },
+
+  {
+    slug: 'richfield-edina-dispensaries-minnesota',
+    title: 'Richfield, Edina and south Minneapolis: the dispensary guide',
+    dek: 'Eleven shops inside a fifteen minute drive, and a twelve dollar gap on the exact same jar. Here is the whole corridor, and where the cheap flower actually is.',
+    date: '2026-09-21',
+    updated: '2026-09-21',
+    category: 'Buying smart',
+    read: 7,
+    body: `
+<p>The stretch of the metro running from 50th Street down through Richfield and west into Edina has more dispensaries packed into it than anywhere in Minnesota outside downtown Minneapolis. It also carries the widest price gap we track on identical products. Both of those are worth knowing before you pick a shop off a map app and drive there.</p>
+
+<h2>Forget the city lines</h2>
+<p>The borders here are close to meaningless for shopping. Richfield, Edina and the south edge of Minneapolis run together, and the shops sit on the seams. Holy Smokes Cannabis has a Minneapolis address and a 55423 zip code, which is Richfield. Pot Mama's is branded Edina and sits at 4528 France Avenue South, which is technically Minneapolis. If you have searched for one of these places by city and come up confused, that is why. Search by street, and treat the whole corridor as one shopping area, because that is what it is.</p>
+
+<h2>Richfield, Penn and Lyndale</h2>
+<p><strong>Twin Cities Cannabis</strong>, 6625 Penn Avenue South. A microbusiness with online ordering and pickup. It has not published hours anywhere we can find, which is normal for a shop this new, so check the site before you head over.</p>
+<p><strong>Holy Smokes Cannabis</strong>, 7424 Lyndale Avenue South, (612) 315-5595, open roughly 10am to 10pm. Large menu, and the longest hours in this part of the corridor.</p>
+<p><strong>Green Rose</strong>, 514 East 60th Street, (612) 315-5078, about 10am to 9pm. Takes debit cards, which saves you the ATM stop.</p>
+<p>Current menus for all three sit on our <a href="/richfield-cannabis-dispensaries/">Richfield</a> and <a href="/minneapolis-cannabis-dispensaries/">Minneapolis</a> pages.</p>
+
+<h2>The France Avenue run</h2>
+<p><strong>Edina Canna</strong>, 7145 France Avenue South, (612) 208-6509, about 10am to 8pm. Large menu and online ordering.</p>
+<p><strong>Pot Mama's</strong>, 4528 France Avenue South, (651) 661-6262, about 10am to 7pm. Closes earliest of anything in the corridor, so do not make it your after-work stop.</p>
+<p><strong>Minnesota Canna</strong>, 5125 Edina Industrial Boulevard, Suite 300, (952) 444-4420, about 10am to 8pm. It is in an industrial park rather than on the avenue, so navigate to the address and not the neighborhood. More on our <a href="/edina-cannabis-dispensaries/">Edina page</a>.</p>
+
+<h2>Fiftieth Street and the edges</h2>
+<p><strong>Verist Fields</strong>, 911 West 50th Street, (612) 452-2647, noon to 9pm. <strong>Da Spot Dispensary and Wellness</strong>, 2313 West 50th Street, is a newly licensed microbusiness with no hours posted yet.</p>
+<p>South of there, <strong>Green Goods Bloomington</strong> at 5232 West 84th Street, (952) 800-4404, runs 10am to 8pm Sunday through Wednesday and 9am to 9pm Thursday through Saturday. It is a statewide chain shop serving both medical and adult-use customers, which matters if you hold a medical card. West, in <a href="/hopkins-cannabis-dispensaries/">Hopkins</a>, <strong>Lake Daze</strong> at 502 Mainstreet, (952) 855-7603, and <strong>Hopkins Dispensary</strong> at 415 17th Avenue North, (952) 381-5812, close out the corridor.</p>
+
+<h2>Here is the part that will surprise you</h2>
+<p>Edina has the cheapest flower in the south metro. Not the small shops, not the microbusinesses. Edina.</p>
+<p>Across the eighths currently listed on our tracker, Edina Canna's median price is $42 and Minnesota Canna's is $42. The statewide median eighth in Minnesota right now sits at $50. Holy Smokes medians $50. Lake Daze in Hopkins medians $52.</p>
+<p>The clearest way to see it is one product. A 3.5g jar of Purple Ice Water is on the shelf at four shops in this corridor at the same time: $42 at Edina Canna, $42 at Minnesota Canna, $50 at Holy Smokes, $54 at Lake Daze. Same jar, same week, twelve dollars apart, eight miles apart. That is a 29 percent difference for driving a little further.</p>
+
+<h2>Why the same jar costs twelve dollars more three miles away</h2>
+<p>Nothing sinister is going on. Shops buy from the same distributors and then set their own margin, and margin is where rent, staffing, volume and how badly a shop wants your repeat business all show up. A store moving a lot of product can live on less per jar. A store that opened in the spring often cannot. None of that spread is quality, which is the part people get wrong. It is the same product from the same grower out of the same box.</p>
+<p>Which is the entire argument for checking before you drive instead of after. Our <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a> and <a href="/cheapest-flower-minneapolis/">cheapest flower in Minneapolis</a> pages move as prices move, and <a href="/minnesota-cannabis-prices/">Minnesota price medians</a> shows what normal looks like statewide so you can tell when a shelf price is out of line. The rest of the tactics live in our <a href="/blog/how-to-save-money-minnesota-dispensaries/">savings guide</a>.</p>
+
+<h2>Three things before you go</h2>
+<p>Bring cash. Only some of these shops take debit, and the card workarounds carry a fee every transaction.</p>
+<p>Check hours for real. Two shops in this corridor have not published any, and Pot Mama's closes at 7pm while Holy Smokes runs to 10pm. That is a wide spread to guess at on a Tuesday evening.</p>
+<p>Ask whether what you are holding is adult-use or hemp-derived. Minnesota has both on shelves legally, they are not the same product, and the second is sometimes sold at the first one's price. Four seconds at the counter saves you the disappointment at home. Our <a href="/blog/cbd-vs-thc-minnesota/">CBD versus THC explainer</a> has the full difference, and the <a href="/minnesota-cannabis-laws/">Minnesota cannabis laws</a> page covers what a licensed shop owes you.</p>
+`,
+    related: [
+      { href: '/richfield-cannabis-dispensaries/', label: 'Richfield dispensaries' },
+      { href: '/edina-cannabis-dispensaries/', label: 'Edina dispensaries' },
+      { href: '/cheapest-cannabis-twin-cities/', label: 'Cheapest cannabis, Twin Cities' },
+    ],
+  },
+
+  {
+    slug: 'brooklyn-park-dispensaries-minnesota',
+    title: 'Brooklyn Park and the northwest metro: where to actually shop',
+    dek: 'Seven shops, the latest hours in Minnesota, and one Golden Valley store quietly running forty dollar eighths. An honest look at the northwest side.',
+    date: '2026-09-28',
+    updated: '2026-09-28',
+    category: 'Buying smart',
+    read: 6,
+    body: `
+<p>The northwest metro is a thinner cannabis market than the south side, and shoppers here notice it. Brooklyn Park, New Hope, Golden Valley, Maple Grove and Champlin have seven licensed shops between them, against eleven crammed into the Richfield and Edina corridor. What the northwest has instead is the latest hours in the state and, if you know where to look, the cheapest eighths in the metro.</p>
+
+<h2>Brooklyn Park</h2>
+<p><strong>URBAN GREEN Dispensary</strong>, 9326 Zane Avenue North, (763) 762-8924. Open 9am to 11pm, seven days a week. That is a fourteen hour window every day, and nothing else on this side of town comes close. It takes debit cards, does online ordering and carries a large menu. If you have ever needed a dispensary at 10:15 on a Sunday night, this is the one.</p>
+<p><strong>RISE Dispensary Brooklyn Park</strong>, 8061 Brooklyn Boulevard, (763) 317-6762, 9am to 9pm Monday through Saturday and 10am to 8pm Sunday. RISE is one of the statewide chains and serves medical and adult-use customers both, so it is the practical choice if you hold a medical card. Both shops are on our <a href="/brooklyn-park-cannabis-dispensaries/">Brooklyn Park page</a>.</p>
+
+<h2>New Hope and Golden Valley</h2>
+<p><strong>RISE Dispensary New Hope</strong>, 7700 North 42nd Avenue, (763) 237-5107, 10am to 9pm most days and 10am to 8pm Sunday. Same chain, same medical and adult-use setup.</p>
+<p><strong>Twin Cities High</strong>, 7702 Olson Memorial Highway in <a href="/golden-valley-cannabis-dispensaries/">Golden Valley</a>, (612) 590-0563, takes debit and does curbside. This one earns a note for two reasons. It lists hours until 11:59pm, one of only two shops in the whole state open until midnight. And on price it is the quiet winner out here, which we will get to.</p>
+
+<h2>Maple Grove and Champlin, with a warning</h2>
+<p><strong>Fullmelt Factory</strong>, (612) 703-3265, and <strong>Splitrock Farms</strong>, (763) 260-1696, both list 13777 Grove Drive in <a href="/maple-grove-cannabis-dispensaries/">Maple Grove</a>. Two licenses at one address usually means a shared building or co-located operations, and it also means your map app will not tell you which door to use. Fullmelt runs about noon to 9pm. Splitrock's hours vary and have shown as closed. Call both before you drive.</p>
+<p><strong>Splitrock Farms Dispensary</strong> in <a href="/champlin-cannabis-dispensaries/">Champlin</a>, 11991 Business Park Boulevard, is newly licensed with no hours posted yet. Same advice.</p>
+<p>That is the honest state of the northwest side. Several of these are young microbusinesses still getting their basics online, which is exactly what we ran into writing up <a href="/blog/albert-lea-dispensaries-minnesota/">Albert Lea</a>. Newly licensed does not mean bad. It means call ahead.</p>
+
+<h2>The price story out here</h2>
+<p>Across the eighths currently listed on our tracker, Twin Cities High medians $40, with listings running $35 to $50. URBAN GREEN medians $49, running $47 to $52. The statewide median eighth in Minnesota sits right at $50.</p>
+<p>So Twin Cities High is about nine dollars under the state median and nine dollars under its nearest neighbor. From Brooklyn Park or New Hope that is a fifteen minute drive for real money, and it is the same arithmetic that makes <a href="/blog/richfield-edina-dispensaries-minnesota/">the south metro corridor</a> worth comparing shop to shop.</p>
+<p>One caveat, and it is a real one. The two RISE stores and the Maple Grove pair publish little or no menu data, so we cannot price them for you. That is not a knock on the shops. Chains and brand new microbusinesses both tend to keep menus inside their own systems. It does mean the picture out here is thinner than the metro core, and you should call or check their own sites rather than assume. Live numbers for what we can see are on the <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a> and <a href="/minnesota-cannabis-prices/">Minnesota price medians</a> pages.</p>
+
+<h2>Use the hours, they are your real advantage</h2>
+<p>Most of the metro closes between 8 and 9pm. Out here you have a shop open to 11pm and another to midnight. If your schedule is bad, or you work a shift that ends when everything else is shut, the northwest side is genuinely the best served corner of the Twin Cities. Small thing, turns out to matter a lot.</p>
+
+<h2>Before you go</h2>
+<p>Bring cash unless you are heading to URBAN GREEN or Twin Cities High, which take debit. Call the Maple Grove and Champlin shops first. And ask at the counter whether what you are buying is adult-use cannabis or hemp-derived THC, because Minnesota sells both legally and they are not the same thing. Our <a href="/blog/cbd-vs-thc-minnesota/">CBD versus THC guide</a> explains it, and if this is new to you the <a href="/blog/first-time-dispensary-guide-minnesota/">first visit guide</a> covers the rest.</p>
+`,
+    related: [
+      { href: '/brooklyn-park-cannabis-dispensaries/', label: 'Brooklyn Park dispensaries' },
+      { href: '/cheapest-cannabis-twin-cities/', label: 'Cheapest cannabis, Twin Cities' },
+      { href: '/blog/richfield-edina-dispensaries-minnesota/', label: 'The south metro corridor' },
+    ],
+  },
 ];
