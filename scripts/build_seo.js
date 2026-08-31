@@ -572,7 +572,7 @@ const footer = `</main>
   <p><strong class="footer-brand">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Minnesota dispensary.</p>
   <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a></p>
   <p><a href="/minnesota-cannabis/">Cannabis in Minnesota</a> &middot; <a href="/minnesota-cannabis-prices/">MN Cannabis Prices</a> &middot; <a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/price-spread-index/">Price Spread Index</a> &middot; <a href="/minnesota-price-trends/">Price Trends</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
-  <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a> &middot; <a href="/founding-partners/">Founding Partners</a></p>
+  <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a> &middot; <a href="/founding-partners/">Founding Partners</a> &middot; <a href="https://venmo.com/u/Josh-Sundby" rel="noopener">Support TCC</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
 </footer>
 <script>
@@ -2016,6 +2016,9 @@ const buildContactPage = () => {
 <p>Every Twin Cities dispensary is already listed for free. If you're a dispensary owner who wants to update info, see analytics, or upgrade to a paid tier with extra visibility, the dispensary signup form is the fastest path:</p>
 <a class="cta" href="/#for-dispensaries">For dispensaries →</a>
 
+<h2>Support the site</h2>
+<p style="max-width:62ch">Twin City Cannabis is free for shoppers and always will be. No account walls, no pay-to-rank, no selling your data — just every menu in Minnesota, tracked honestly. If the site has saved you money and you feel like buying me a coffee, my Venmo is <a href="https://venmo.com/u/Josh-Sundby" rel="noopener">@Josh-Sundby</a>. Never expected, always appreciated.</p>
+
 <h2>Mailing address</h2>
 <p>Twin City Cannabis<br>Minneapolis, Minnesota</p>
 
@@ -3126,6 +3129,7 @@ const buildBlogPost = (post, allPosts) => {
   ${post.body}
   ${related ? `<div class="post-related"><h3>Keep reading</h3><ul>${related}</ul></div>` : ''}
   <a class="cta" href="/dispensaries/" style="margin-top:2rem">Compare prices at every Twin Cities dispensary →</a>
+  <p style="margin-top:2.5rem;font-size:.85rem;color:var(--text-muted,#8b909a)">Twin City Cannabis is free and independent — one person tracking every menu in Minnesota. If a guide saved you money, you can <a href="https://venmo.com/u/Josh-Sundby" rel="noopener">tip the builder</a>.</p>
 </article>
 ` + footer;
 };
