@@ -6031,6 +6031,7 @@ html:not([data-theme="light"]) .leaflet-control-attribution {
 @media (max-width: 640px) { .tcc-board-row { font-size: .74rem; } }
 
 /* ============ SUGGESTION BOX ============ */
+.suggest-panel[hidden] { display: none !important; }
 .suggest-panel {
     position: fixed; inset: 0; z-index: 300;
     background: rgba(5, 9, 7, 0.6); backdrop-filter: blur(3px);
