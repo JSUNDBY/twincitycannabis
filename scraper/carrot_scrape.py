@@ -55,6 +55,15 @@ CARROT_STORES = {
         "loc_id": "1",
         "default_brand": "Verist Fields",
     },
+    # Newer Carrot stores authenticate with a space KEY (carrot-space-key)
+    # instead of a numeric id — capture it from the store page's fetch
+    # headers the same way.
+    "green-rose": {
+        "name": "Green Rose (Minneapolis)",
+        "region": "nevada",
+        "space_key": "sp_5EANTFpEXJ7vAqo170dr2z",
+        "loc_id": "1",
+    },
 }
 
 # Category slugs that are never cannabis products.
@@ -102,7 +111,10 @@ def category_map(master, sub):
 def _api_get(config, path):
     url = f"https://api.{config['region']}.getcarrot.io/api/v1{path}"
     headers = dict(HEADERS)
-    headers["carrot-space-id"] = config["space_id"]
+    if config.get("space_key"):
+        headers["carrot-space-key"] = config["space_key"]
+    else:
+        headers["carrot-space-id"] = config["space_id"]
     resp = requests.get(url, headers=headers, timeout=15)
     resp.raise_for_status()
     return resp.json()
@@ -188,7 +200,7 @@ def scrape_store(slug, config):
 
 
 def main():
-    print("Carrot scraper: Wildflower + Verist Fields")
+    print("Carrot scraper: Wildflower + Verist Fields + Green Rose")
     all_products = []
 
     for slug, config in CARROT_STORES.items():
