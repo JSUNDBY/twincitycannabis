@@ -742,8 +742,11 @@ ${items.map(p => {
   const here = p.prices[d.id];
   const lo = lowestPrice(p);
   const isBest = here === lo;
+  const thumb = p.image && p.image.length > 10
+    ? `<img src="${esc(p.image)}" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)">`
+    : '';
   return `<tr>
-    <td><a href="/products/${esc(p.category)}/">${esc(p.name)}</a>${strainTagHtml(p)}</td>
+    <td style="display:flex;align-items:center">${thumb}<a href="${productHref(p)}">${esc(p.name)}</a>${strainTagHtml(p)}</td>
     <td>${esc(p.brand || '—')}</td>
     <td style="text-align:right" class="price">$${here.toFixed(2)}${isBest ? ' ✓' : ''}</td>
     <td style="text-align:right">$${lo.toFixed(2)}</td>

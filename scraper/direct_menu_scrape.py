@@ -66,6 +66,11 @@ WM_API = "https://api-g.weedmaps.com/discovery/v1/listings/dispensaries"
 # Add new entries when a dispensary owner reaches out.
 MANUAL_INCLUDE_SLUGS = [
     "green-canopy-inc",          # Green Canopy Craft Dispensary, Lakeland Shores — owner requested 2026-04-10
+    # 2026-09-03 sweep: shops whose sites link active Weedmaps menus but sit
+    # outside the 50-listing Minneapolis radius fetch.
+    "anang-native-cannabis-co",  # Cloquet
+    "lake-superior-dispensary",  # Duluth
+    "green-box-cannabis",        # Lakeville
 ]
 
 

@@ -64,6 +64,16 @@ CARROT_STORES = {
         "space_key": "sp_5EANTFpEXJ7vAqo170dr2z",
         "loc_id": "1",
     },
+    # 2026-09-03 sweep: 10 more MN Carrot shops found by probing menu-less
+    # dispensaries' websites. Numeric ids from each shop page's config.
+    "lake-leaf-dispensary":    {"name": "Lake Leaf (Onamia)",   "region": "nevada", "space_id": "282", "loc_id": "1"},
+    "lake-leaf-cultivation-1": {"name": "Lake Leaf (Hinckley)", "region": "nevada", "space_id": "282", "loc_id": "2"},
+    "lake-leaf-dispensary-1":  {"name": "Lake Leaf (Isle)",     "region": "nevada", "space_id": "282", "loc_id": "3"},
+    "the-cannabis-co":         {"name": "The Cannabis Co (St. Michael)", "region": "nevada", "space_id": "351", "loc_id": "1"},
+    "northern-crown-cannabis": {"name": "Northern Crown (Isanti)", "region": "nevada", "space_id": "353", "loc_id": "1"},
+    "high-fidelity":           {"name": "High Fidelity (Luverne)", "region": "nevada", "space_id": "330", "loc_id": "1"},
+    "cannajoymn":              {"name": "CannaJoy (Minneapolis)", "region": "nevada", "space_id": "359", "loc_id": "1"},
+    "healing-harvest":         {"name": "Healing Harvest (St. Peter)", "region": "nevada", "space_key": "sp_1uYYKWb45De5tMplWTnhFR", "loc_id": "1"},
 }
 
 # Category slugs that are never cannabis products.
