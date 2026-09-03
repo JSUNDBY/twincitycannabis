@@ -4888,7 +4888,30 @@
                     applyDispFilters();
                     return;
                 }
-                const orig = label ? label.textContent : '';
+                // Friendly pre-prompt before the browser's stark permission
+                // dialog: first tap explains the deal, second tap proceeds.
+                // Remembered per-browser so regulars never see it again.
+                let geoOk = false;
+                try { geoOk = localStorage.getItem('tcc-geo-ok') === '1'; } catch (e) {}
+                if (!geoOk && _userLat == null) {
+                    if (!dispNearMe.dataset.armed) {
+                        dispNearMe.dataset.armed = '1';
+                        if (label) label.textContent = 'Yes, find my closest shops →';
+                        if (dispNearMsg) dispNearMsg.textContent = 'We peek at your location once to sort shops by distance — never stored, never shared, and your browser will ask first. 🌿';
+                        setTimeout(() => {
+                            if (dispNearMe.dataset.armed) {
+                                delete dispNearMe.dataset.armed;
+                                if (label) label.textContent = 'Dispensaries near me';
+                                if (dispNearMsg) dispNearMsg.textContent = '';
+                            }
+                        }, 9000);
+                        return;
+                    }
+                    delete dispNearMe.dataset.armed;
+                    try { localStorage.setItem('tcc-geo-ok', '1'); } catch (e) {}
+                }
+                const orig = 'Dispensaries near me';
+                if (label) label.textContent = orig;
                 if (label) label.textContent = 'Locating…';
                 dispNearMe.classList.add('loading');
                 const ok = await _requestLocation();
@@ -5796,4 +5819,101 @@
         });
     }).observe(document.body, { childList: true, subtree: true });
     prep(document.body);
+})();
+
+// ─── The Board + suggestion box (2026-09-03) ────────────────────────────────
+(function () {
+    // Suggestion box — footer link opens a small panel; POSTs to the worker.
+    var openBtn = document.getElementById('suggest-open');
+    var panel = document.getElementById('suggest-panel');
+    if (openBtn && panel) {
+        var close = function () { panel.hidden = true; };
+        openBtn.addEventListener('click', function (e) { e.preventDefault(); panel.hidden = false; });
+        document.getElementById('suggest-close').addEventListener('click', close);
+        panel.addEventListener('click', function (e) { if (e.target === panel) close(); });
+        document.getElementById('suggest-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            var text = document.getElementById('suggest-text').value.trim();
+            if (!text) return;
+            try {
+                await fetch('https://dashboard.twincitycannabis.com/suggest', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text: text,
+                        contact: document.getElementById('suggest-contact').value.trim(),
+                        page: location.pathname + location.hash,
+                    }),
+                });
+            } catch (err) { /* store-and-forward not worth the complexity */ }
+            document.getElementById('suggest-form').hidden = true;
+            document.getElementById('suggest-thanks').hidden = false;
+            setTimeout(close, 2600);
+        });
+    }
+
+    // The Board — Solari-inspired live strip. Rows come from build-injected
+    // JSON (new arrivals, strongest) plus client-side deals. A row swap
+    // "flaps": characters scramble briefly, then settle. Honors
+    // prefers-reduced-motion with plain swaps.
+    var host = document.getElementById('tcc-board');
+    var rowsEl = document.getElementById('tcc-board-rows');
+    if (!host || !rowsEl) return;
+    var data = {};
+    try { data = JSON.parse(document.getElementById('tcc-board-data').textContent) || {}; } catch (e) {}
+
+    var items = [];
+    (data.arrivals || []).forEach(function (a) {
+        items.push({ tag: 'new', cls: 'new', html: '<a href="/dispensaries/' + a.shop + '/">' + a.name + '</a> — <span class="price">$' + a.price + '</span> · ' + a.shopName });
+    });
+    (TCC.deals || []).filter(function (d) { return d.type === 'price-drop' && d.salePrice && d.originalPrice; })
+        .sort(function (a, b) { return (b.discount || 0) - (a.discount || 0); })
+        .slice(0, 5)
+        .forEach(function (d) {
+            var shop = TCC.dispensaries.find(function (x) { return x.id === d.dispensaryId; });
+            items.push({ tag: 'drop', cls: 'drop', html: '<a href="#deals">' + d.title + '</a> — <s>$' + d.originalPrice + '</s> <span class="price">$' + d.salePrice + '</span>' + (shop ? ' · ' + shop.name : '') });
+        });
+    if (data.strongest) {
+        items.push({ tag: 'record', cls: 'rec', html: '<a href="/strongest-cannabis-minnesota/">Strongest flower today: ' + data.strongest.thc + '% THC (' + data.strongest.brand + ')</a> — <span class="price">$' + data.strongest.price + '</span>' });
+    }
+    if (items.length < 3) return; // not enough signal — keep it hidden
+
+    var VISIBLE = Math.min(4, items.length);
+    var cursor = VISIBLE;
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789·—$%';
+
+    function rowHtml(item) {
+        return '<span class="tcc-board-tag ' + item.cls + '">' + item.tag.toUpperCase() + '</span><span class="flip-txt">' + item.html + '</span>';
+    }
+    for (var i = 0; i < VISIBLE; i++) {
+        var div = document.createElement('div');
+        div.className = 'tcc-board-row';
+        div.innerHTML = rowHtml(items[i]);
+        rowsEl.appendChild(div);
+    }
+    host.style.display = '';
+
+    if (items.length <= VISIBLE) return; // nothing to rotate through
+
+    var swapIdx = 0;
+    setInterval(function () {
+        var row = rowsEl.children[swapIdx % VISIBLE];
+        var next = items[cursor % items.length];
+        cursor++; swapIdx++;
+        if (reduced || document.hidden) { row.innerHTML = rowHtml(next); return; }
+        // flap: scramble the row's text a few frames, then settle.
+        var txtEl = row.querySelector('.flip-txt');
+        var finalHtml = rowHtml(next);
+        var plain = txtEl ? txtEl.textContent : '';
+        var frames = 0;
+        var scramble = setInterval(function () {
+            frames++;
+            if (!txtEl) { clearInterval(scramble); row.innerHTML = finalHtml; return; }
+            txtEl.textContent = plain.split('').map(function (ch) {
+                return ch === ' ' ? ' ' : (Math.random() < 0.5 ? CHARS[Math.floor(Math.random() * CHARS.length)] : ch);
+            }).join('');
+            if (frames >= 6) { clearInterval(scramble); row.innerHTML = finalHtml; }
+        }, 55);
+    }, 5200);
 })();

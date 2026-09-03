@@ -129,6 +129,14 @@ export default {
       return handlePublicStats(env, cors, statsMatch[1]);
     }
 
+    if (url.pathname === '/suggest' && request.method === 'POST') {
+      return handleSuggest(request, env, cors);
+    }
+
+    if (url.pathname === '/admin/suggestions' && request.method === 'GET') {
+      return handleSuggestionsRead(request, env, cors);
+    }
+
     if (url.pathname === '/contact' && request.method === 'POST') {
       return handleContact(request, env, cors);
     }
@@ -1288,6 +1296,38 @@ const TRACK_EVENTS = new Set(['view', 'outbound', 'search_hit', 'featured_view',
 
 // ─── /contact ────────────────────────────────────────────────────────────────
 // Receives claim/inquiry form submissions, stores in KV, shows on /admin.
+// ─── /suggest ────────────────────────────────────────────────────────────
+// Anonymous, frictionless suggestion box. Text only, optional contact.
+// Stored newest-first in KV 'index:suggestions', capped at 300.
+async function handleSuggest(request, env, cors) {
+  let body;
+  try { body = await request.json(); } catch {
+    return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const text = String(body.text || '').trim().slice(0, 1500);
+  if (text.length < 3) {
+    return new Response(JSON.stringify({ ok: false, error: 'empty' }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const entry = {
+    text,
+    contact: String(body.contact || '').slice(0, 200),
+    page: String(body.page || '').slice(0, 300),
+    submitted_at: new Date().toISOString(),
+  };
+  const list = (await env.TCC_OVERRIDES.get('index:suggestions', { type: 'json' })) || [];
+  list.unshift(entry);
+  await env.TCC_OVERRIDES.put('index:suggestions', JSON.stringify(list.slice(0, 300)));
+  return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+}
+
+async function handleSuggestionsRead(request, env, cors) {
+  if (!verifyAdminToken(request, env)) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const list = (await env.TCC_OVERRIDES.get('index:suggestions', { type: 'json' })) || [];
+  return new Response(JSON.stringify(list, null, 1), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+}
+
 async function handleContact(request, env, cors) {
   let body;
   try { body = await request.json(); } catch {

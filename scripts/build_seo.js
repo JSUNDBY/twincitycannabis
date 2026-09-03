@@ -5304,6 +5304,48 @@ indexHtml = indexHtml.replace(/(id="proof-stat-products">)[\d,]+\+(<\/)/g, `$1${
 
 console.log(`Injected live counts: ${liveDispCount} dispensaries, ${liveProdLabel} products (${liveProdRaw} actual)`);
 
+// ---------- BOARD DATA (homepage split-flap strip) ----------
+// Fresh arrivals + today's strongest, baked into the tcc-board-data script
+// tag; app.js renders and rotates them (deals join client-side).
+try {
+  const trendsPathB = path.join(ROOT, 'scraper/data/price_trends.json');
+  const firstSeenB = fs.existsSync(trendsPathB)
+    ? (JSON.parse(fs.readFileSync(trendsPathB, 'utf8')).first_seen || {}) : {};
+  const cutoffB = new Date(Date.now() - 14 * 864e5).toISOString().slice(0, 10);
+  const shopNameB = (id) => (TCC.dispensaries.find(x => x.id === id) || {}).name || id;
+  const arrivalsB = TCC.products
+    .filter(p => isRealCannabisProduct(p))
+    .map(p => {
+      const seen = firstSeenB[(p.name || '').trim().toLowerCase()];
+      if (!seen || seen < cutoffB) return null;
+      const shops = Object.entries(p.prices || {}).filter(([, v]) => v > 0);
+      if (!shops.length || shops.every(([id]) => RECENTLY_ONBOARDED.has(id))) return null;
+      shops.sort((a, b) => a[1] - b[1]);
+      return { name: esc(p.name.slice(0, 46)), price: shops[0][1].toFixed(0), shop: shops[0][0], shopName: esc(shopNameB(shops[0][0])), first: seen };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.first.localeCompare(a.first))
+    .slice(0, 6);
+  let strongestB = null;
+  TCC.products.forEach(p => {
+    if (p.category !== 'flower') return;
+    const m = /([\d.]+)\s*%/.exec(p.thc || '');
+    if (!m) return;
+    const thc = parseFloat(m[1]);
+    if (!(thc >= 15 && thc <= 40)) return;
+    const lows = Object.values(p.prices || {}).filter(v => v > 0);
+    if (!lows.length) return;
+    if (!strongestB || thc > strongestB.thc) {
+      strongestB = { thc, brand: esc((p.brand || 'House').replace(/[-\s]*[\d.]+\s*g\b/ig, '').trim()), price: Math.min(...lows).toFixed(0) };
+    }
+  });
+  const boardJson = JSON.stringify({ arrivals: arrivalsB, strongest: strongestB });
+  indexHtml = indexHtml.replace(/(<script id="tcc-board-data" type="application\/json">)[\s\S]*?(<\/script>)/, `$1${boardJson}$2`);
+  console.log(`Board data: ${arrivalsB.length} arrivals${strongestB ? `, strongest ${strongestB.thc}%` : ''}`);
+} catch (e) {
+  console.log('Board data injection skipped:', e.message);
+}
+
 // ---------- CACHE-BUST data.js + app.js ----------
 // Append ?v=<short content hash> to the script tags so any change to either
 // file invalidates browsers' caches automatically. Without this, returning

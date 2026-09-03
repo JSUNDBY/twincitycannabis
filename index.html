@@ -189,7 +189,7 @@
     <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""></noscript>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="css/styles.css?v=3651aa64">
+    <link rel="stylesheet" href="css/styles.css?v=4d14f0a8">
 
     <!-- Theme initialization — runs synchronously to prevent flash of wrong theme.
          Reads saved preference, falls back to system preference, defaults to dark. -->
@@ -393,6 +393,22 @@
     <!-- Watchlist drop banner (Phase 12) — only visible when saved items have moved -->
     <section class="watchlist-banner" id="watchlist-banner" style="display:none"></section>
 
+    <!-- The Board — split-flap-style live strip (new arrivals from build data,
+         price drops from TCC.deals). Rendered by renderBoard() in app.js;
+         hidden entirely when there's nothing to show. -->
+    <section class="tcc-board-section" id="tcc-board" style="display:none">
+        <div class="container">
+            <div class="tcc-board">
+                <div class="tcc-board-head">
+                    <span class="tcc-board-title">▪ LIVE BOARD · MINNESOTA CANNABIS</span>
+                    <span class="tcc-board-sub">arrivals · drops · records</span>
+                </div>
+                <div class="tcc-board-rows" id="tcc-board-rows" aria-live="off"></div>
+            </div>
+        </div>
+    </section>
+    <script id="tcc-board-data" type="application/json">{"arrivals":[{"name":"VF Vapes White Meridian Live Resin 1g","price":"85","shop":"highrx","shopName":"HighRx","first":"2026-09-03"},{"name":"TGM Double Sour Grape 3.5g","price":"42","shop":"edina-canna","shopName":"Edina Canna","first":"2026-09-02"},{"name":"TGM Swedish OG 3.5g","price":"42","shop":"edina-canna","shopName":"Edina Canna","first":"2026-09-02"},{"name":"Campfire Cannabis Cap Junky Flower 7g","price":"90","shop":"dinky-dope-dispensary","shopName":"Dinky Dope Dispensary","first":"2026-09-02"},{"name":"Cap Junky 3.5g","price":"55","shop":"highrx","shopName":"HighRx","first":"2026-09-02"},{"name":"Flor - Mendo Breath - 7g Packaged Buds","price":"90","shop":"litt-dispensaries-llc","shopName":"Litt Dispensaries LLC","first":"2026-09-02"}],"strongest":{"thc":30.5,"brand":"Off The Path","price":"52"}}</script>
+
     <!-- Live market metrics (Phase 7c) — civic numerics strip below the hero -->
     <section class="live-metrics-section" id="live-metrics"></section>
 
@@ -560,7 +576,7 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
-            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T05:30:24.697Z">Live data · last refresh Sep 3, 12:30 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
+            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T07:45:04.728Z">Live data · last refresh Sep 3, 2:45 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
             <div class="footer-links">
                 <a href="/tax-calculator/">Tax Calc</a>
                 <a href="/events/">Events</a>
@@ -568,6 +584,7 @@
                 <a href="#for-dispensaries">For Dispensaries</a>
                 <a href="#for-cultivators">For Brands</a>
                 <a href="#watchlist">Sign in</a>
+                <a href="#" id="suggest-open">💡 Suggest something</a>
                 <a href="https://venmo.com/u/Josh-Sundby" rel="noopener">Support TCC</a>
                 <a href="/privacy/">Privacy</a>
                 <a href="/terms/">Terms</a>
@@ -667,7 +684,7 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
-            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T05:30:24.697Z">Live data · last refresh Sep 3, 12:30 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
+            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T07:45:04.728Z">Live data · last refresh Sep 3, 2:45 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
             <div class="footer-links">
                 <a href="/privacy/">Privacy</a>
                 <a href="/terms/">Terms</a>
@@ -775,7 +792,7 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
-            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T05:30:24.697Z">Live data · last refresh Sep 3, 12:30 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
+            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T07:45:04.728Z">Live data · last refresh Sep 3, 2:45 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
             <div class="footer-links">
                 <a href="/privacy/">Privacy</a>
                 <a href="/terms/">Terms</a>
@@ -814,7 +831,7 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
-            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T05:30:24.697Z">Live data · last refresh Sep 3, 12:30 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
+            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T07:45:04.728Z">Live data · last refresh Sep 3, 2:45 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
             <div class="footer-links">
                 <a href="/privacy/">Privacy</a>
                 <a href="/terms/">Terms</a>
@@ -857,7 +874,7 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
-            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T05:30:24.697Z">Live data · last refresh Sep 3, 12:30 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
+            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T07:45:04.728Z">Live data · last refresh Sep 3, 2:45 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
             <div class="footer-links">
                 <a href="/privacy/">Privacy</a>
                 <a href="/terms/">Terms</a>
@@ -927,7 +944,7 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
-            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T05:30:24.697Z">Live data · last refresh Sep 3, 12:30 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
+            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T07:45:04.728Z">Live data · last refresh Sep 3, 2:45 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
             <div class="footer-links">
                 <a href="/privacy/">Privacy</a>
                 <a href="/terms/">Terms</a>
@@ -1042,7 +1059,7 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
-            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T05:30:24.697Z">Live data · last refresh Sep 3, 12:30 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
+            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T07:45:04.728Z">Live data · last refresh Sep 3, 2:45 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
             <div class="footer-links">
                 <a href="/privacy/">Privacy</a>
                 <a href="/terms/">Terms</a>
@@ -1421,7 +1438,7 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
-            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T05:30:24.697Z">Live data · last refresh Sep 3, 12:30 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
+            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T07:45:04.728Z">Live data · last refresh Sep 3, 2:45 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
             <div class="footer-links">
                 <a href="/privacy/">Privacy</a>
                 <a href="/terms/">Terms</a>
@@ -1490,7 +1507,7 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
-            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T05:30:24.697Z">Live data · last refresh Sep 3, 12:30 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
+            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T07:45:04.728Z">Live data · last refresh Sep 3, 2:45 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
             <div class="footer-links">
                 <a href="/privacy/">Privacy</a>
                 <a href="/terms/">Terms</a>
@@ -1913,7 +1930,7 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
-            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T05:30:24.697Z">Live data · last refresh Sep 3, 12:30 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
+            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T07:45:04.728Z">Live data · last refresh Sep 3, 2:45 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
             <div class="footer-links">
                 <a href="/privacy/">Privacy</a>
                 <a href="/terms/">Terms</a>
@@ -2375,7 +2392,7 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <span class="footer-copy">&copy; 2026 Twin City Cannabis. Minneapolis-St. Paul, MN.</span>
-            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T05:30:24.697Z">Live data · last refresh Sep 3, 12:30 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
+            <span class="footer-fresh"><span class="fresh-dot"></span><!-- LAST_UPDATED_FOOTER --><span class="fresh-ts" data-fresh-ts="2026-09-03T07:45:04.728Z">Live data · last refresh Sep 3, 2:45 AM CDT</span><!-- /LAST_UPDATED_FOOTER --></span>
             <div class="footer-links">
                 <a href="/privacy/">Privacy</a>
                 <a href="/terms/">Terms</a>
@@ -2419,7 +2436,7 @@
 </script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script defer src="js/data.js?v=5895aea5"></script>
-<script defer src="js/app.js?v=e872691a"></script>
+<script defer src="js/app.js?v=459f735d"></script>
 
 
 <script>/* fresh-ts client */
@@ -2443,5 +2460,22 @@
   setInterval(tick, 60000);
 })();
 </script>
+<!-- Suggestion box — frictionless, anonymous-friendly -->
+<div class="suggest-panel" id="suggest-panel" hidden>
+    <div class="suggest-card">
+        <button type="button" class="suggest-close" id="suggest-close" aria-label="Close">×</button>
+        <div class="font-display font-bold" style="font-size:1.05rem;margin-bottom:.3rem">Make the site better</div>
+        <p class="text-sm text-secondary" style="margin-bottom:.8rem">A missing shop, a broken thing, a feature you wish existed — one person reads every one of these (hi, it's Josh).</p>
+        <form id="suggest-form">
+            <textarea id="suggest-text" rows="4" maxlength="1500" required placeholder="What should we add, fix, or track?"></textarea>
+            <input id="suggest-contact" type="text" maxlength="200" placeholder="Email or @handle (optional — only if you want a reply)">
+            <button type="submit" class="btn btn-primary" style="width:100%">Send it</button>
+        </form>
+        <div id="suggest-thanks" hidden style="text-align:center;padding:1rem 0">
+            <div style="font-size:1.6rem">🙏</div>
+            <p class="text-sm text-secondary" style="margin:0">Got it — thank you. Ideas like yours built half this site.</p>
+        </div>
+    </div>
+</div>
 </body>
 </html>

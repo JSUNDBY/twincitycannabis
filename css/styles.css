@@ -5994,3 +5994,66 @@ html:not([data-theme="light"]) .leaflet-control-attribution {
     .dispensary-card:hover,
     .product-card:hover { transform: none; box-shadow: none; }
 }
+
+/* ============ LIVE BOARD (split-flap strip, 2026-09-03) ============ */
+.tcc-board-section { padding: 0 0 1rem; }
+.tcc-board {
+    background: linear-gradient(180deg, rgba(8, 12, 10, 0.96), rgba(12, 18, 14, 0.92));
+    border: 1px solid rgba(63, 220, 139, 0.18);
+    border-radius: 14px;
+    padding: .9rem 1.2rem 1rem;
+    font-family: 'SF Mono', 'Cascadia Mono', 'Consolas', monospace;
+    overflow: hidden;
+}
+.tcc-board-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: .68rem; letter-spacing: 2px;
+    color: #e0a32e; margin-bottom: .55rem;
+}
+.tcc-board-sub { color: var(--text-muted, #8b909a); letter-spacing: 1.5px; }
+.tcc-board-rows { display: flex; flex-direction: column; gap: .35rem; }
+.tcc-board-row {
+    display: flex; gap: .8rem; align-items: baseline;
+    font-size: .82rem; line-height: 1.5;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tcc-board-tag {
+    flex-shrink: 0; font-size: .62rem; font-weight: 700; letter-spacing: 1.5px;
+    padding: .1rem .5rem; border-radius: 3px;
+}
+.tcc-board-tag.new  { color: #4ade80; background: rgba(74, 222, 128, 0.12); }
+.tcc-board-tag.drop { color: #e0a32e; background: rgba(224, 163, 46, 0.12); }
+.tcc-board-tag.rec  { color: #c4b5fd; background: rgba(196, 181, 253, 0.12); }
+.tcc-board-row a { color: var(--text-primary, #f5f6f8); text-decoration: none; }
+.tcc-board-row a:hover { color: #4ade80; }
+.tcc-board-row .flip-txt { overflow: hidden; text-overflow: ellipsis; }
+.tcc-board-row .price { color: #4ade80; font-weight: 700; }
+@media (max-width: 640px) { .tcc-board-row { font-size: .74rem; } }
+
+/* ============ SUGGESTION BOX ============ */
+.suggest-panel {
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(5, 9, 7, 0.6); backdrop-filter: blur(3px);
+    display: flex; align-items: flex-end; justify-content: flex-end;
+    padding: 1.2rem;
+}
+.suggest-card {
+    position: relative;
+    width: min(380px, 94vw);
+    background: var(--bg-card, #101a14);
+    border: 1px solid rgba(63, 220, 139, 0.25);
+    border-radius: 16px;
+    padding: 1.3rem;
+    box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+}
+.suggest-card textarea, .suggest-card input {
+    width: 100%; margin-bottom: .6rem; padding: .6rem .75rem;
+    background: var(--bg-secondary, #0b120e); color: var(--text-primary, #f5f6f8);
+    border: 1px solid var(--border, #22302a); border-radius: 10px;
+    font: inherit; font-size: .9rem; resize: vertical;
+}
+.suggest-close {
+    position: absolute; top: .6rem; right: .8rem;
+    background: none; border: none; color: var(--text-muted, #8b909a);
+    font-size: 1.4rem; cursor: pointer; line-height: 1;
+}
