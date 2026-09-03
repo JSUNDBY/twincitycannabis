@@ -1672,7 +1672,7 @@ const buildCheapestPage = () => {
       const cheapestStoreId = Object.entries(p.prices).sort((a, b) => a[1] - b[1])[0][0];
       const store = TCC.dispensaries.find(d => d.id === cheapestStoreId);
       return `<tr>
-  <td>${esc(p.name)}</td>
+  <td><a href="${productHref(p)}">${esc(p.name)}</a></td>
   <td class="price">$${lo.toFixed(2)}</td>
   <td>${store ? `<a href="/dispensaries/${esc(store.id)}/">${esc(store.name)}</a>` : '—'}</td>
 </tr>`;
@@ -3245,6 +3245,26 @@ ${cards}
 let count = 0;
 const extraSitemap = [];
 
+// Pre-assign per-product page slugs (pages themselves are written later) so
+// every table on the site can link product names. Products without a page
+// fall back to the app's compare view — nothing is ever a dead cell.
+const _topProductsPre = TCC.products
+  .filter(p => Object.keys(p.prices || {}).length >= 3 && isRealCannabisProduct(p))
+  .sort((a, b) => Object.keys(b.prices).length - Object.keys(a.prices).length)
+  .slice(0, 100);
+{
+  const seen = new Set();
+  _topProductsPre.forEach(p => {
+    let slug = productSlug(p);
+    if (!slug) return;
+    let final = slug, n = 2;
+    while (seen.has(`${p.category}/${final}`)) { final = `${slug}-${n++}`; }
+    seen.add(`${p.category}/${final}`);
+    p._seoSlug = final;
+  });
+}
+const productHref = (p) => p._seoSlug ? `/products/${p.category}/${p._seoSlug}/` : `/#compare/${p.id}`;
+
 // Dispensaries
 TCC.dispensaries.forEach(d => {
   writePage(`dispensaries/${d.id}/index.html`, buildDispensaryPage(d));
@@ -3362,21 +3382,11 @@ count++;
 
 // Per-product pages — top by offer count, min 3 stores carrying. Highest-value
 // long-tail SEO surfaces ("Vireo Blue Dream cartridge minneapolis price").
-const topProducts = TCC.products
-  .filter(p => Object.keys(p.prices || {}).length >= 3 && isRealCannabisProduct(p))
-  .sort((a, b) => Object.keys(b.prices).length - Object.keys(a.prices).length)
-  .slice(0, 100);
-const seenProductSlugs = new Set();
-topProducts.forEach(p => {
-  let slug = productSlug(p);
-  if (!slug) return;
-  let final = slug, n = 2;
-  while (seenProductSlugs.has(`${p.category}/${final}`)) { final = `${slug}-${n++}`; }
-  seenProductSlugs.add(`${p.category}/${final}`);
-  // store final slug for sitemap
-  p._seoSlug = final;
-  writePage(`products/${p.category}/${final}/index.html`, buildProductPage(p));
-  extraSitemap.push({ loc: `${SITE}/products/${p.category}/${final}/`, priority: '0.6', changefreq: 'daily' });
+// Slugs were pre-assigned at the top of the build (see productHref).
+_topProductsPre.forEach(p => {
+  if (!p._seoSlug) return;
+  writePage(`products/${p.category}/${p._seoSlug}/index.html`, buildProductPage(p));
+  extraSitemap.push({ loc: `${SITE}/products/${p.category}/${p._seoSlug}/`, priority: '0.6', changefreq: 'daily' });
   count++;
 });
 
@@ -3552,7 +3562,7 @@ const buildCheapestCategoryCity = (catId, catName, city) => {
     const store = TCC.dispensaries.find(d => d.id === o.dispensaryId);
     return `<tr>
   <td>${i + 1}</td>
-  <td>${esc(o.p.name)}</td>
+  <td><a href="${productHref(o.p)}">${esc(o.p.name)}</a></td>
   <td class="price">$${o.price.toFixed(2)}</td>
   <td>${store ? `<a href="/dispensaries/${esc(store.id)}/">${esc(store.name)}</a>` : '—'}</td>
 </tr>`;
@@ -4876,7 +4886,7 @@ const buildStrongestFlowerPage = () => {
 <table>
 <thead><tr><th>#</th><th>Product</th><th>Brand</th><th style="text-align:right">THC</th><th style="text-align:right">Best price</th><th>Where</th></tr></thead>
 <tbody>
-${top.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.p.name.slice(0, 60))}</td><td>${esc(cleanBrand(r.p.brand))}</td><td style="text-align:right"><strong>${r.thc}%</strong></td><td style="text-align:right" class="price">$${r.lo.toFixed(2)}</td><td><a href="/dispensaries/${esc(r.loId)}/">${esc(shopName(r.loId))}</a></td></tr>`).join('\n')}
+${top.map((r, i) => `<tr><td>${i + 1}</td><td><a href="${productHref(r.p)}">${esc(r.p.name.slice(0, 60))}</a></td><td>${esc(cleanBrand(r.p.brand))}</td><td style="text-align:right"><strong>${r.thc}%</strong></td><td style="text-align:right" class="price">$${r.lo.toFixed(2)}</td><td><a href="/dispensaries/${esc(r.loId)}/">${esc(shopName(r.loId))}</a></td></tr>`).join('\n')}
 </tbody>
 </table>
 <h2>A number to enjoy, not to worship</h2>
@@ -4937,7 +4947,7 @@ const buildNewArrivalsPage = () => {
 <table>
 <thead><tr><th>First seen</th><th>Product</th><th>Brand</th><th>Category</th><th style="text-align:right">Price</th><th>Where</th></tr></thead>
 <tbody>
-${arrivals.map(r => `<tr><td>${r.first.slice(5)}</td><td>${esc(r.p.name.slice(0, 55))}</td><td>${esc(r.p.brand || '')}</td><td>${esc(catName(r.p.category))}</td><td style="text-align:right" class="price">$${r.lo.toFixed(2)}</td><td><a href="/dispensaries/${esc(r.loId)}/">${esc(shopName(r.loId))}</a></td></tr>`).join('\n')}
+${arrivals.map(r => `<tr><td>${r.first.slice(5)}</td><td><a href="${productHref(r.p)}">${esc(r.p.name.slice(0, 55))}</a></td><td>${esc(r.p.brand || '')}</td><td>${esc(catName(r.p.category))}</td><td style="text-align:right" class="price">$${r.lo.toFixed(2)}</td><td><a href="/dispensaries/${esc(r.loId)}/">${esc(shopName(r.loId))}</a></td></tr>`).join('\n')}
 </tbody>
 </table>
 <p style="max-width:62ch;margin-top:1.5rem">Menus from shops we started tracking recently are excluded until their baseline settles, so this list reflects genuinely new products — not new coverage. Recomputed ${FRESH.updatedDaily.toLowerCase()}.</p>

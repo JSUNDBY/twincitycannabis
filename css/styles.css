@@ -6058,3 +6058,11 @@ html:not([data-theme="light"]) .leaflet-control-attribution {
     background: none; border: none; color: var(--text-muted, #8b909a);
     font-size: 1.4rem; cursor: pointer; line-height: 1;
 }
+
+/* Table links must LOOK clickable — plain white text hid the fact that
+   dispensary and product cells navigate (Josh, 2026-09-03). */
+table td a {
+    color: var(--green-text, #4ade80);
+    text-decoration: none;
+}
+table td a:hover { text-decoration: underline; }
