@@ -141,14 +141,21 @@ python3 scraper/backfill_strain_type.py
 #       result fails to parse, revert to the pre-step copy (keeps fresh prices,
 #       never deploys a broken data file).
 cp js/data.js /tmp/tcc_data_prebrand.js
+PRODUCTS_BEFORE=$("$NODE_BIN" -e 'global.window={};require("./js/data.js");console.log(window.TCC.products.length)' 2>/dev/null || echo 0)
 python3 scraper/consolidate_brands.py --apply
 python3 scraper/backfill_images.py
 # Re-categorize by name + weight and drop non-cannabis. Fixes platform
 # scrapers (dispensary.shop / Meadow) that dump every product into "flower"
 # (flavor-named gummies, beverages, even toothpaste/pipes leaked in).
 python3 scraper/recategorize_data_js.py
-"$NODE_BIN" -e 'global.window={};require("./js/data.js")' 2>/dev/null \
-  || { echo "data.js failed to parse after data-quality steps — reverting"; cp /tmp/tcc_data_prebrand.js js/data.js; }
+PRODUCTS_AFTER=$("$NODE_BIN" -e 'global.window={};require("./js/data.js");console.log(window.TCC.products.length)' 2>/dev/null || echo 0)
+if [ "$PRODUCTS_AFTER" -lt 1 ] 2>/dev/null; then
+    echo "data.js failed to parse after data-quality steps — reverting"
+    cp /tmp/tcc_data_prebrand.js js/data.js
+elif [ "$PRODUCTS_BEFORE" -gt 0 ] && [ "$PRODUCTS_AFTER" -lt $((PRODUCTS_BEFORE * 8 / 10)) ]; then
+    echo "data.js shrank $PRODUCTS_BEFORE -> $PRODUCTS_AFTER after data-quality steps — reverting"
+    cp /tmp/tcc_data_prebrand.js js/data.js
+fi
 
 # 7.95. Generate the real price-drop deals feed from priceHistory (no fakes).
 "$NODE_BIN" scraper/generate_deals.js

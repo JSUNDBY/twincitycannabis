@@ -34,8 +34,13 @@ def main():
 
     products_block = products_match.group(2)
 
-    # Split product entries on the boundary `{ id: 'pNNNN'`
-    product_lines = re.split(r"(?=\{\s*id:\s*'p\d+)", products_block)
+    # Split product entries on the boundary `{ id: '<prefix>NNNN'` — ANY
+    # id prefix (p=weedmaps, ds=dispensary.shop, m=meadow, c=carrot, j=jane,
+    # sw=sweed, du=dutchie). The old p-only split glued every platform entry
+    # onto the final p-chunk; when that one p-product was excluded as junk,
+    # the whole platform tail (~2,500 products) silently went with it —
+    # that's what wiped the live site's platform menus on 2026-09-02.
+    product_lines = re.split(r"(?=\{\s*id:\s*'[a-z]{1,2}\d+)", products_block)
     product_lines = [p.strip() for p in product_lines if p.strip()]
     print(f"Parsed {len(product_lines)} product entries")
 
@@ -45,6 +50,12 @@ def main():
     cat_changes = 0
 
     for entry in product_lines:
+        # Platform entries (non-'p' prefixes) were already junk-filtered by
+        # their own merge scripts, which trust each store's real taxonomy —
+        # re-excluding them here second-guesses that and gutted RISE/Legit
+        # menus (2026-09-02). Recategorize may still fix their category, but
+        # never drops them.
+        is_weedmaps = re.match(r"\{\s*id:\s*'p\d+", entry) is not None
         # Extract name, brand, category
         name_m = re.search(r"name:\s*'((?:[^'\\]|\\.)*)'", entry)
         brand_m = re.search(r"brand:\s*'((?:[^'\\]|\\.)*)'", entry)
@@ -61,7 +72,10 @@ def main():
 
         new_cat = categorize_by_name(name, brand, old_cat, weight)
         if new_cat == 'EXCLUDE':
-            excluded_count += 1
+            if is_weedmaps:
+                excluded_count += 1
+                continue
+            kept.append(entry)  # platform entry: keep, trust its merge filter
             continue
 
         if new_cat != old_cat:
@@ -73,6 +87,13 @@ def main():
     print(f"Kept: {len(kept)}")
     print(f"Excluded: {excluded_count}")
     print(f"Category changes: {cat_changes}")
+
+    # Shrink guard: a categorizer pass should trim junk, not amputate the
+    # catalog. If we'd drop more than 30% of entries, something upstream is
+    # mis-parsed — refuse to write and leave data.js untouched.
+    if product_lines and len(kept) < 0.7 * len(product_lines):
+        print(f"ABORT: would keep only {len(kept)}/{len(product_lines)} entries — refusing to write")
+        sys.exit(1)
 
     # Reassemble
     new_block = ",\n".join(kept) if kept else ""

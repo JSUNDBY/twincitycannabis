@@ -571,7 +571,7 @@ const footer = `</main>
 <footer>
   <p><strong class="footer-brand">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Minnesota dispensary.</p>
   <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a></p>
-  <p><a href="/minnesota-cannabis/">Cannabis in Minnesota</a> &middot; <a href="/minnesota-cannabis-prices/">MN Cannabis Prices</a> &middot; <a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/price-spread-index/">Price Spread Index</a> &middot; <a href="/minnesota-price-trends/">Price Trends</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
+  <p><a href="/minnesota-cannabis/">Cannabis in Minnesota</a> &middot; <a href="/minnesota-cannabis-prices/">MN Cannabis Prices</a> &middot; <a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/price-spread-index/">Price Spread Index</a> &middot; <a href="/minnesota-price-trends/">Price Trends</a> &middot; <a href="/strongest-cannabis-minnesota/">Strongest Flower</a> &middot; <a href="/new-cannabis-minnesota/">New Arrivals</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
   <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a> &middot; <a href="/founding-partners/">Founding Partners</a> &middot; <a href="https://venmo.com/u/Josh-Sundby" rel="noopener">Support TCC</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
 </footer>
@@ -614,6 +614,44 @@ const strainTagHtml = (p) => {
   return STRAIN_HEX[st]
     ? ` <span style="font-size:0.72em;font-weight:700;color:${STRAIN_HEX[st]};text-transform:capitalize">${st}</span>`
     : '';
+};
+
+// ─── Shop-page hook helpers (2026-09-02) ────────────────────────────────
+// GA showed search visitors land on dispensary pages, grab one fact in
+// ~19s, and leave. These give the first screen a reason for a second tap.
+
+// Median listed price of a 3.5g flower eighth at one shop (null if <3).
+// Local weight parse: platform weights arrive as '3.5g' (no space), which
+// the shared gramsFromWeight lookup table doesn't know.
+const eighthGrams = (p) => {
+  const src = `${p.weight || ''} ${p.name || ''}`;
+  const m = /([\d.]+)\s*g\b/.exec(src);
+  if (m) return parseFloat(m[1]);
+  if (/1\/8|eighth/i.test(src)) return 3.5;
+  return null;
+};
+const shopEighthMedian = (shopId) => {
+  const prices = [];
+  TCC.products.forEach(p => {
+    if (p.category !== 'flower') return;
+    if (eighthGrams(p) !== 3.5) return;
+    const v = (p.prices || {})[shopId];
+    if (v > 0 && v <= 150) prices.push(v);
+  });
+  if (prices.length < 3) return null;
+  prices.sort((a, b) => a - b);
+  return { med: prices[Math.floor(prices.length / 2)], n: prices.length };
+};
+
+// Nearest open shops with menus + their eighth medians.
+const nearbyWithEighths = (d, maxMiles = 40, count = 3) => {
+  if (!d.lat || !d.lng) return [];
+  return TCC.dispensaries
+    .filter(n => n.id !== d.id && n.lat && n.lng)
+    .map(n => ({ n, miles: haversineMiles(d.lat, d.lng, n.lat, n.lng), e: shopEighthMedian(n.id) }))
+    .filter(x => x.miles <= maxMiles && x.e)
+    .sort((a, b) => a.miles - b.miles)
+    .slice(0, count);
 };
 
 const buildDispensaryPage = (d) => {
@@ -745,6 +783,37 @@ ${d.google && d.google.maps_url ? `<p><a href="${esc(d.google.maps_url)}" rel="n
 </div>
 
 <p>${esc(d.name)} is a ${products.length > 0 ? '' : 'licensed '}cannabis dispensary in ${esc(d.city || 'the Twin Cities')}, Minnesota. ${products.length > 0 ? `Below is the current menu (${products.length} products), with each price compared against every other dispensary in the metro. ${FRESH.pricesDaily}` : `${d.name}'s online menu isn't published in a form we can track yet, so live prices aren't shown here — call ahead${d.phone ? ` at ${esc(d.phone)}` : ''} or check their website for today's selection. Everything else on this page is current: location, hours, and real Google reviews below.`}</p>
+
+${(() => {
+  // ── Hook 1: savings teaser / cheapest badge ──
+  if (products.length === 0) return '';
+  const mine = shopEighthMedian(d.id);
+  const near = nearbyWithEighths(d);
+  let teaser = '';
+  if (mine && near.length) {
+    const cheaper = near.filter(x => x.e.med < mine.med).sort((a, b) => a.e.med - b.e.med)[0];
+    if (cheaper) {
+      teaser = `<div class="card" style="padding:.9rem 1.2rem;margin:1rem 0;border-color:rgba(34,197,94,0.3)">
+  <strong>Median eighth here: $${mine.med.toFixed(0)}</strong> · $${cheaper.e.med.toFixed(0)} at <a href="/dispensaries/${esc(cheaper.n.id)}/">${esc(cheaper.n.name)}</a> (${cheaper.miles.toFixed(0)} mi) — <a href="/cheapest-cannabis-twin-cities/">compare across every shop →</a>
+</div>`;
+    } else {
+      teaser = `<div class="card" style="padding:.9rem 1.2rem;margin:1rem 0;border-color:rgba(234,179,8,0.4)">
+  <strong style="color:#eab308">Cheapest median eighth in this area</strong> — $${mine.med.toFixed(0)} at ${esc(d.name)}, lowest of the ${near.length + 1} nearest tracked menus. <a href="/cheapest-cannabis-twin-cities/">See the statewide cheapest →</a>
+</div>`;
+    }
+  }
+  // ── Hook 2: live price drops at this shop, pulled to the top ──
+  const drops = (TCC.deals || []).filter(x => x.dispensaryId === d.id && x.type === 'price-drop' && x.salePrice && x.originalPrice).slice(0, 3);
+  const dropsHtml = drops.length ? `<div class="card" style="padding:.9rem 1.2rem;margin:1rem 0">
+  <strong class="text-green">Price drops at ${esc(d.name)} right now:</strong>
+  <ul style="margin:.4rem 0 0;padding-left:1.2rem">
+    ${drops.map(x => `<li>${esc(x.title)} — <s>$${x.originalPrice}</s> <strong>$${x.salePrice}</strong> (${x.discount}% off)</li>`).join('\n    ')}
+  </ul>
+</div>` : '';
+  // ── Hook 3: nearby shops row ──
+  const nearbyHtml = near.length ? `<p style="font-size:.92rem;color:var(--text-muted,#8b909a);margin:.6rem 0 1.2rem">Also nearby: ${near.map(x => `<a href="/dispensaries/${esc(x.n.id)}/">${esc(x.n.name)}</a> (${x.miles.toFixed(0)} mi · eighths ~$${x.e.med.toFixed(0)})`).join(' · ')}</p>` : '';
+  return teaser + dropsHtml + nearbyHtml;
+})()}
 
 ${products.length === 0 ? (() => {
   // No-menu pages still earn their place: real alternatives + city context
@@ -4752,6 +4821,141 @@ ${chartBlock('pre-roll', `Pre-rolls drifted from about ${fmt(pr.f.med)} up to $1
 ` + footer;
 };
 
+// ---------- STRONGEST FLOWER PAGE (2026-09-02) ----------
+const buildStrongestFlowerPage = () => {
+  const rows = TCC.products
+    .filter(p => p.category === 'flower' && isRealCannabisProduct(p))
+    .map(p => {
+      const m = /([\d.]+)\s*%/.exec(p.thc || '');
+      if (!m) return null;
+      const thc = parseFloat(m[1]);
+      if (!(thc >= 15 && thc <= 40)) return null; // sanity: flower tops out mid-30s
+      const entries = Object.entries(p.prices || {}).filter(([, v]) => v > 0);
+      if (!entries.length) return null;
+      entries.sort((a, b) => a[1] - b[1]);
+      return { p, thc, loId: entries[0][0], lo: entries[0][1] };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.thc - a.thc);
+
+  // Collapse the same product listed under different names at different
+  // shops: one row per (brand, THC to 1 decimal), keeping the cheapest.
+  const seen = new Map();
+  rows.forEach(r => {
+    const key = `${(r.p.brand || '').toLowerCase()}|${r.thc.toFixed(1)}`;
+    if (!seen.has(key) || r.lo < seen.get(key).lo) seen.set(key, r);
+  });
+  const top = [...seen.values()].sort((a, b) => b.thc - a.thc).slice(0, 20);
+  if (top.length < 5) return null;
+  const shopName = (id) => (TCC.dispensaries.find(x => x.id === id) || {}).name || id;
+  // Scraped brand fields sometimes carry weight suffixes ("CAMPFIRE-14G") —
+  // strip them for display only (dedupe still uses the raw value).
+  const cleanBrand = (b) => (b || '').replace(/[-\s]*[\d.]+\s*g\b/ig, '').trim() || 'House';
+  const champ = top[0];
+
+  const title = 'Strongest Cannabis Flower in Minnesota — Highest THC%, Tracked Live';
+  const description = `The highest-THC flower on Minnesota dispensary menus right now, from lab-tested listings: today's strongest is ${champ.thc}% THC (${cleanBrand(champ.p.brand)}) from $${champ.lo.toFixed(0)}. ${FRESH.updatedDaily}.`;
+  const canonical = `${SITE}/strongest-cannabis-minnesota/`;
+  const schema = [{
+    '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: canonical, description, dateModified: today,
+  }, {
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: [{
+      '@type': 'Question', name: 'What is the strongest cannabis flower in Minnesota right now?',
+      acceptedAnswer: { '@type': 'Answer', text: `On today's tracked menus, the highest lab-tested flower is ${champ.thc}% THC — ${cleanBrand(champ.p.brand)}'s ${champ.p.name.replace(/\|.*/, '').trim()}, from $${champ.lo.toFixed(0)} at ${shopName(champ.loId)}. This page recomputes from live menus as dispensaries restock.` },
+    }, {
+      '@type': 'Question', name: 'Does higher THC mean stronger effects?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Not reliably. THC percentage is one input among many — terpenes, your tolerance, and consumption method matter as much or more. A 22% flower with a rich terpene profile can feel stronger than a 30% one. Treat this list as a data curiosity, not a quality ranking.' },
+    }],
+  }];
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/products/">Products</a> / Strongest Flower</div>
+<h1>The strongest flower on Minnesota menus right now</h1>
+<p><strong>Updated ${today}.</strong> Ranked by lab-tested THC percentage as listed on live dispensary menus — ${rows.length.toLocaleString()} flower listings carry a THC number today. Today's top: <strong>${champ.thc}% THC</strong> from ${esc(cleanBrand(champ.p.brand))}, starting at $${champ.lo.toFixed(0)}.</p>
+<table>
+<thead><tr><th>#</th><th>Product</th><th>Brand</th><th style="text-align:right">THC</th><th style="text-align:right">Best price</th><th>Where</th></tr></thead>
+<tbody>
+${top.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.p.name.slice(0, 60))}</td><td>${esc(cleanBrand(r.p.brand))}</td><td style="text-align:right"><strong>${r.thc}%</strong></td><td style="text-align:right" class="price">$${r.lo.toFixed(2)}</td><td><a href="/dispensaries/${esc(r.loId)}/">${esc(shopName(r.loId))}</a></td></tr>`).join('\n')}
+</tbody>
+</table>
+<h2>A number to enjoy, not to worship</h2>
+<p style="max-width:62ch">THC% is the most over-weighted number in cannabis. Terpenes, freshness, and your own tolerance shape the experience at least as much — a mid-20s flower with loud terpenes routinely outperforms a 30% one. We wrote up the evidence: <a href="/blog/thc-percentage-myth-minnesota/">the THC percentage myth</a>. Rankings recompute ${FRESH.updatedDaily.toLowerCase()} as menus change.</p>
+<p style="margin-top:2rem"><a class="cta" href="/products/flower/">Compare all flower prices →</a></p>
+` + footer;
+};
+
+// ---------- NEW ARRIVALS PAGE (2026-09-02) ----------
+// Shops onboarded in the late-Aug platform expansion — their entire menus
+// read as "new" in the history, so they're excluded from arrival detection.
+const RECENTLY_ONBOARDED = new Set([
+  ...RISE_IDS, ...GG_IDS, 'legit-cannabis', 'levitated-cannabis',
+  'hempire-llc', 'off-the-path-cannabis-dispensary', 'high-10-dispensary', 'la-canna',
+  'island-pezi', 'the-lakes-dispensary', 'the-flower-shop-mn-llc', 'altitude-dispensary',
+  'higher-place', 'twin-cities-high-llc', 'flipside-dispensary-and-music', 'green-leaf-depot',
+  'green-apple-cannabis', 'black-bear-weed-dispensary-winona', 'coastless',
+]);
+
+const buildNewArrivalsPage = () => {
+  const trendsPath = path.join(ROOT, 'scraper/data/price_trends.json');
+  if (!fs.existsSync(trendsPath)) return null;
+  const firstSeen = (JSON.parse(fs.readFileSync(trendsPath, 'utf8')).first_seen) || {};
+  const cutoff = new Date(Date.now() - 14 * 864e5).toISOString().slice(0, 10);
+
+  const arrivals = TCC.products
+    .filter(p => isRealCannabisProduct(p))
+    .map(p => {
+      const fs2 = firstSeen[(p.name || '').trim().toLowerCase()];
+      if (!fs2 || fs2 < cutoff) return null;
+      const shops = Object.entries(p.prices || {}).filter(([, v]) => v > 0);
+      if (!shops.length) return null;
+      // Products only sold at recently-onboarded shops aren't market-new —
+      // we just started seeing that shop's whole menu.
+      if (shops.every(([id]) => RECENTLY_ONBOARDED.has(id))) return null;
+      shops.sort((a, b) => a[1] - b[1]);
+      return { p, first: fs2, loId: shops[0][0], lo: shops[0][1] };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.first.localeCompare(a.first))
+    .slice(0, 40);
+
+  if (arrivals.length < 5) return null;
+  const shopName = (id) => (TCC.dispensaries.find(x => x.id === id) || {}).name || id;
+  const catName = (id) => (TCC.categories.find(c => c.id === id) || {}).name || id;
+
+  const title = 'New Cannabis Products in Minnesota — Fresh Menu Arrivals, Tracked Daily';
+  const description = `${arrivals.length} products that just hit Minnesota dispensary menus in the last two weeks — new strains, edibles, and vapes with prices, spotted automatically by our daily menu tracker.`;
+  const canonical = `${SITE}/new-cannabis-minnesota/`;
+  const schema = [{
+    '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, url: canonical, description, dateModified: today,
+  }];
+
+  return headOpen({ title, description, canonical, schema }) + `
+<div class="crumbs"><a href="/">Home</a> / <a href="/products/">Products</a> / New Arrivals</div>
+<h1>New on Minnesota menus</h1>
+<p><strong>Updated ${today}.</strong> Our tracker records every product on every menu it watches, several times a day — so when something appears that has never been seen before, it lands here. These ${arrivals.length} products hit shelves within the last two weeks.</p>
+<table>
+<thead><tr><th>First seen</th><th>Product</th><th>Brand</th><th>Category</th><th style="text-align:right">Price</th><th>Where</th></tr></thead>
+<tbody>
+${arrivals.map(r => `<tr><td>${r.first.slice(5)}</td><td>${esc(r.p.name.slice(0, 55))}</td><td>${esc(r.p.brand || '')}</td><td>${esc(catName(r.p.category))}</td><td style="text-align:right" class="price">$${r.lo.toFixed(2)}</td><td><a href="/dispensaries/${esc(r.loId)}/">${esc(shopName(r.loId))}</a></td></tr>`).join('\n')}
+</tbody>
+</table>
+<p style="max-width:62ch;margin-top:1.5rem">Menus from shops we started tracking recently are excluded until their baseline settles, so this list reflects genuinely new products — not new coverage. Recomputed ${FRESH.updatedDaily.toLowerCase()}.</p>
+<p style="margin-top:2rem"><a class="cta" href="/weed-deals-twin-cities/">Live price drops →</a> &nbsp; <a class="cta" href="/strongest-cannabis-minnesota/">Strongest flower right now →</a></p>
+` + footer;
+};
+
+const _strongestHtml = buildStrongestFlowerPage();
+if (_strongestHtml) {
+  writePage('strongest-cannabis-minnesota/index.html', _strongestHtml);
+  extraSitemap.push({ loc: `${SITE}/strongest-cannabis-minnesota/`, priority: '0.7', changefreq: 'daily' });
+}
+const _arrivalsHtml = buildNewArrivalsPage();
+if (_arrivalsHtml) {
+  writePage('new-cannabis-minnesota/index.html', _arrivalsHtml);
+  extraSitemap.push({ loc: `${SITE}/new-cannabis-minnesota/`, priority: '0.7', changefreq: 'daily' });
+}
+
 const _trendsHtml = buildPriceTrendsPage();
 if (_trendsHtml) {
   writePage('minnesota-price-trends/index.html', _trendsHtml);
@@ -4782,6 +4986,8 @@ ${answerPages.map(a => `- [${a.question}](${SITE}/answers/${a.slug}/)`).join('\n
 - [Cheapest cannabis in the Twin Cities, by category](${SITE}/cheapest-cannabis-twin-cities/)
 - [Price Spread Index: the products where shopping around saves most](${SITE}/price-spread-index/)
 - [Minnesota cannabis price trends: weekly medians recorded since March 2026](${SITE}/minnesota-price-trends/)
+- [Strongest flower on Minnesota menus right now, by lab-tested THC%](${SITE}/strongest-cannabis-minnesota/)
+- [New products that just hit Minnesota dispensary menus](${SITE}/new-cannabis-minnesota/)
 - [RISE vs. Green Goods: Minnesota's two big chains compared with live prices](${SITE}/rise-vs-green-goods-minnesota/)
 - [Tribal vs. state-licensed dispensaries: what live price data shows](${SITE}/tribal-vs-state-dispensaries-minnesota/)
 - [Real price drops happening now](${SITE}/weed-deals-twin-cities/)

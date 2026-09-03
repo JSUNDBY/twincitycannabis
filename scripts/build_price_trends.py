@@ -96,6 +96,22 @@ def main():
         for wk, prices in weeks.items():
             weekly[wk][series].append(median(prices))
 
+    # First-seen dates for the /new-cannabis-minnesota/ page: any product key
+    # whose earliest observation is within the last 60 days (small output).
+    cutoff = date.today() - timedelta(days=60)
+    first_seen = {}
+    for key, rec in history.items():
+        dates = []
+        for e in rec.get("entries") or []:
+            try:
+                dates.append(date.fromisoformat(e["date"]))
+            except (KeyError, ValueError, TypeError):
+                continue
+        if dates:
+            first = min(dates)
+            if first >= cutoff:
+                first_seen[key] = first.isoformat()
+
     all_weeks = sorted(weekly.keys())
     if not all_weeks:
         print("No usable history — not writing trends file")
@@ -119,6 +135,7 @@ def main():
         "last_week": all_weeks[-1].isoformat(),
         "products_used": kept,
         "products_skipped": skipped,
+        "first_seen": first_seen,
         "series": out_series,
     }, indent=1))
     print(f"Wrote {OUT.name}: {len(all_weeks)} weeks, {kept} products used, {skipped} skipped")
