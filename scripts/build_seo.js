@@ -5385,5 +5385,5 @@ console.log(`  Categories:      ${TCC.categories.length}`);
 console.log(`  Brands:          ${brands.length}`);
 console.log(`  Cities:          ${cities.length}`);
 console.log(`  Neighborhoods:   ${neighborhoodGroups.length}`);
-console.log(`  Top products:    ${topProducts.length}`);
+console.log(`  Top products:    ${_topProductsPre.length}`);
 console.log(`  Total products:  ${TCC.products.length}`);
