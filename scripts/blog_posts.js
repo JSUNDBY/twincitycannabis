@@ -1275,4 +1275,101 @@ module.exports = [
       { href: '/blog/richfield-edina-dispensaries-minnesota/', label: 'The south metro corridor' },
     ],
   },
+
+  {
+    slug: 'minnesota-cannabis-numbers-september-2026',
+    title: 'Minnesota cannabis by the numbers: what our September data shows',
+    dek: 'An eighth still costs fifty dollars. But the market quietly split into two pricing worlds this month, and vape carts finally showed up. Here is what a month of tracking says.',
+    date: '2026-09-14',
+    updated: '2026-09-14',
+    category: 'Market watch',
+    read: 5,
+    body: `
+<p>Once a month we stop and write down what our own data says about Minnesota's legal market. No spin, no predictions, just what is on the shelves and what it costs. Everything below is from our tracking as of mid September 2026. Where we could not verify a number we left it out, and where a number moved for a boring reason we say so instead of dressing it up.</p>
+
+<h2>The product count doubled, mostly not for the reason you would guess</h2>
+<p>In August we tracked about 2,780 products. Today it is 5,702. That is not the market doubling in five weeks. Most of it is us. We spent the month getting menus flowing from shops we already had listed but could not read, and the dispensary count only went from 144 to 156 in the same stretch.</p>
+<p>So treat that jump as better eyesight, not a boom. The useful part is that the picture is far less patchy now, especially outside the metro.</p>
+
+<h2>138 shops we can confirm are actually open</h2>
+<p>We hold 156 dispensary records across 88 Minnesota cities. Of those, 138 clear our bar for confirmed operating, which is the number the site shows you. The metro and greater Minnesota split almost evenly at 76 and 80, and that split has held all year. It still surprises people who assume this is a Twin Cities market with a few outstate stragglers attached.</p>
+<p>If you have not looked lately, the <a href="/dispensaries/">directory</a> is worth another pass, and <a href="/open-now/">open now</a> will tell you who is taking customers this minute.</p>
+
+<h2>An eighth still costs fifty dollars</h2>
+<p>Across every eighth of flower on the tracker the median is $49.97. In August it was right around $50. Five weeks and several hundred new listings later, the middle of the market has not moved a dollar.</p>
+<p>The tenth percentile sits at $40 and the ninetieth at $60. So the honest range for a normal eighth is forty to sixty, and fifty is the number to carry in your head. If you are paying well past sixty you are either buying something genuinely special or you are paying for the storefront. The <a href="/cheapest-flower-minneapolis/">cheapest flower pages</a> track the bottom of that range, and <a href="/minnesota-cannabis-prices/">the price medians page</a> has the rest.</p>
+
+<h2>The market split into two pricing worlds</h2>
+<p>This is the most interesting thing in the September data, and it would be easy to misread.</p>
+<p>Of the 300 products carried at three or more shops, 201 are priced identically at every shop that stocks them. In August almost nothing was. That looks like prices converging across Minnesota. It is not. It is chains arriving.</p>
+<p>Green Goods now has eight Minnesota locations, and 91 of the 102 products it carries at three or more of its own stores are the same price at all of them. Same jar, same price in Minneapolis, Rochester, Moorhead and Duluth. That is one price list run statewide.</p>
+<p>Take the chains back out and the independents look exactly like they always have. Purple Ice Water sits on eleven menus from $42 to $58. A Brownie Scout half gram is on thirteen and runs $30 to $65.</p>
+<p>So the shopping rule now depends on which kind of shop you are standing in. At a chain, comparing locations is a waste of your time, because the price is the price. At independents, comparing is worth more than it has ever been. That is what the <a href="/price-spread-index/">price spread index</a> is for.</p>
+
+<h2>Vape carts finally showed up</h2>
+<p>In August we counted 49 cartridges statewide and said the category should fill in over the next year. It took five weeks. There are 242 now, and it is the fastest growing shelf on the site.</p>
+<p>One warning before you go shopping on it. Half gram and full gram carts sit side by side on menus, often with the size buried or missing entirely. The median half gram is $58.25. The median full gram is $64.00. That is $5.75 more for twice the oil, which makes the half gram close to double the price per gram. And 41 cartridge listings on our tracker show no size at all.</p>
+<p>Do the per gram math every single time. You can <a href="/products/cartridge/">browse cartridges here</a> or start with <a href="/cheapest-cartridge-minneapolis/">the cheapest cartridges in Minneapolis</a>.</p>
+
+<h2>What we would actually do with this</h2>
+<p>Keep fifty dollars in your head for an eighth. Check the size on a cart before you look at the price. If you shop a chain, stop comparing its locations, and if you shop independents, compare every time, because a twenty dollar swing on the same jar is still sitting right there. And if you live outside the metro, look again, because what we can see out there got a lot better this month.</p>
+<p>The fundamentals are in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money at Minnesota dispensaries</a> and <a href="/blog/thc-percentage-myth-minnesota/">why the THC number is a bad filter</a>. We will run these again next month and tell you what moved.</p>
+`,
+    related: [
+      { href: '/price-spread-index/', label: 'Price spread index' },
+      { href: '/dispensaries/', label: 'Dispensary directory' },
+      { href: '/blog/how-to-save-money-minnesota-dispensaries/', label: 'How to actually save money' },
+    ],
+  },
+
+  {
+    slug: 'vape-cartridges-minnesota',
+    title: 'Buying a vape cartridge in Minnesota without overpaying',
+    dek: 'The median half gram cart costs $58.25. The median full gram costs $64.00. That six dollar gap is the most expensive thing on a Minnesota dispensary menu, and almost nobody catches it.',
+    date: '2026-10-05',
+    updated: '2026-10-05',
+    category: 'Buying smart',
+    read: 7,
+    body: `
+<p>Cartridges were an afterthought in Minnesota until about a month ago. In August we could find 49 of them in the entire state. There are 242 now. The shelf filled in fast, which is good news, and it also means a lot of people are about to buy their first cart from a menu that is genuinely confusing on purpose.</p>
+<p>Here is what our price tracking says about how to do it without getting worked.</p>
+
+<h2>The size is the whole game</h2>
+<p>Start here, because nothing else on this page will save you as much money.</p>
+<p>Across every cartridge listing we track, the median half gram costs $58.25 and the median full gram costs $64.00. Read that twice. You pay $5.75 more and you get twice the oil. Per gram, the half gram works out to about $116 and the full gram to about $64. The small one is nearly double the price of the big one for the same thing.</p>
+<p>The two gram carts that have started appearing are cheaper still, around $60 a gram. So the size ladder runs exactly the way it does with flower: the bigger you buy, the less each gram costs, and the gap here is much wider than most people assume.</p>
+<p>This is the same arithmetic that makes a quarter cheaper than two eighths, which we walked through in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a>. It just bites harder on carts.</p>
+
+<h2>Forty one listings do not tell you the size at all</h2>
+<p>Now the annoying part. Of the cartridge listings on our tracker, 41 show no weight whatsoever. They are listed as "each" and nothing more. Plenty of others use four different spellings of the same size, so you will see 1g, 1 g, 1 Grams and 1 Milliliters on menus in the same city.</p>
+<p>That is not shops being sneaky, it is mostly menu software and rushed data entry. But the effect on you is the same. A $45 cart is a bargain at a gram and a bad deal at a half gram, and the menu will happily not tell you which one it is.</p>
+<p>So ask. "Is this a half or a full gram" is a completely normal question and the budtender will answer it in two seconds. Ask it before you ask anything about strain or flavor.</p>
+
+<h2>What a cart should cost</h2>
+<p>The median cartridge in Minnesota is $60. A quarter of them are under $48.55 and a quarter are over $70.11. The cheap tail reaches down around $26 and the top ten percent start at $84.</p>
+<p>If you are being quoted much past $70 for a single gram, you are in the top quarter of the market and you should have a reason for being there, like a live resin or rosin cart rather than a standard distillate. Under about $30 a gram, look closely at what it actually is before you assume you found a deal.</p>
+<p>Live prices are on the <a href="/products/cartridge/">cartridge page</a>, and the city pages like <a href="/cheapest-cartridge-minneapolis/">cheapest cartridges in Minneapolis</a> and <a href="/cheapest-cartridge-saint-paul/">Saint Paul</a> track the current bottom.</p>
+
+<h2>Only about a third of shops carry them</h2>
+<p>This one catches people out. Of the dispensaries we track, 54 currently have cartridges on the menu. That is roughly one in three. Flower and edibles are everywhere in Minnesota. Carts are not, yet.</p>
+<p>So do not drive somewhere assuming. Check the shop's menu first, or use the <a href="/dispensaries/">directory</a> and <a href="/open-now/">open now</a> to find one that actually stocks the category before you get in the car. Outside the metro this matters even more, and it is the same coverage gap we found writing up <a href="/blog/duluth-dispensaries-minnesota/">Duluth</a>.</p>
+
+<h2>Who is actually making them</h2>
+<p>The cart shelf here is homegrown so far. Off The Path has the most listings at 57, then Grasslandz at 37, then a spread of house brands and smaller producers like Nebula, CCCo and Lakeside Canna. You are not going to find the national brands you may know from Colorado or Michigan, because Minnesota's supply chain is still almost entirely in state.</p>
+<p>That is worth knowing for expectation setting. Selection is thinner than a mature market, prices are a bit higher, and the same few producers show up on most menus. It also means a cart at $70 here is not automatically premium, it may just be the only one the shop could get.</p>
+
+<h2>Battery, hardware and the honest caveats</h2>
+<p>Most Minnesota carts are standard 510 thread, so a cheap battery from any shop will run them. Disposables cost more per gram than a cart plus a reusable battery, so if you vape regularly, buying the battery once is the cheaper path.</p>
+<p>Two honest notes. Cartridge potency numbers are high by nature and mean even less than they do on flower, for the reasons in <a href="/blog/thc-percentage-myth-minnesota/">the THC percentage piece</a>. And vaping hits faster and harder than most first timers expect, closer to smoking than to an edible, so the advice in our <a href="/blog/flower-vapes-edibles-minnesota/">flower versus vapes versus edibles guide</a> applies. One small pull, wait a few minutes, decide from there.</p>
+
+<h2>The short version</h2>
+<p>Ask the size before you ask anything else. Buy the full gram, because the half gram is close to double per gram. Expect to pay around $60. Call ahead, because two thirds of Minnesota shops do not carry carts at all. And check the price at more than one independent shop, since the spread on identical products is still wide, as our <a href="/blog/minnesota-cannabis-numbers-september-2026/">September numbers</a> showed.</p>
+<p>Current deals across the metro are on the <a href="/weed-deals-twin-cities/">Twin Cities deals page</a>.</p>
+`,
+    related: [
+      { href: '/products/cartridge/', label: 'Browse cartridges' },
+      { href: '/cheapest-cartridge-minneapolis/', label: 'Cheapest cartridges, Minneapolis' },
+      { href: '/blog/flower-vapes-edibles-minnesota/', label: 'Flower vs vapes vs edibles' },
+    ],
+  },
 ];
