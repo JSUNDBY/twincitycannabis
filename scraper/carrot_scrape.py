@@ -118,6 +118,24 @@ def category_map(master, sub):
     return None  # skip unknown (lifestyle, accessories)
 
 
+# region -> media CDN root (e.g. https://carrot-nevada-media.sfo2.cdn.
+# digitaloceanspaces.com/). Lives in /store/settings under the literal key
+# "system:media_bucket_root"; product image = {root}products/webp/{imageHash}-500.webp
+# (the -500 suffix is the thumbnail size the web store itself uses).
+_MEDIA_ROOTS = {}
+
+
+def _media_root(config):
+    region = config["region"]
+    if region not in _MEDIA_ROOTS:
+        try:
+            settings = _api_get(config, f"/store/settings?locId={config['loc_id']}&platform=web")
+            _MEDIA_ROOTS[region] = settings.get("system:media_bucket_root") or ""
+        except Exception:
+            _MEDIA_ROOTS[region] = ""
+    return _MEDIA_ROOTS[region]
+
+
 def _api_get(config, path):
     url = f"https://api.{config['region']}.getcarrot.io/api/v1{path}"
     headers = dict(HEADERS)
@@ -133,6 +151,7 @@ def _api_get(config, path):
 def scrape_store(slug, config):
     """Fetch all products from a Carrot store via its REST API."""
     loc = config["loc_id"]
+    media_root = _media_root(config)
     categories = _api_get(config, f"/store/category?locId={loc}&platform=web")
     if isinstance(categories, dict):
         categories = categories.get("categories", [])
@@ -191,6 +210,12 @@ def scrape_store(slug, config):
             if not weight and re.search(r'([\d.]+)\s*g\b', name):
                 weight = re.search(r'([\d.]+)\s*g\b', name).group(1) + "g"
 
+            # Real product photo when the store uploaded one (placeholder
+            # hashes live in a separate field, so imageHash is trustworthy).
+            image = ""
+            if media_root and doc.get("imageHash"):
+                image = f"{media_root}products/webp/{doc['imageHash']}-500.webp"
+
             all_products.append({
                 "dispensary_id": slug,
                 "name": name,
@@ -201,7 +226,7 @@ def scrape_store(slug, config):
                 "cbd": cbd,
                 "price": float(price),
                 "weight": weight,
-                "image": "",
+                "image": image,
                 "source": "carrot",
             })
 

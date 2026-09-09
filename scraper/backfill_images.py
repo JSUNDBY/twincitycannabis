@@ -41,7 +41,11 @@ def norm_key(name):
 def main():
     content = DATA.read_text()
     block = re.search(r"TCC\.products = \[(.*?)\n\];", content, re.DOTALL).group(1)
-    entries = re.split(r"(?=\{ id: 'p\d)", block)
+    # Split on ANY product-id prefix (p=weedmaps, ds/m/c/j/sw/du=platform
+    # scrapers). Splitting only on 'p' glued every platform entry to the
+    # preceding weedmaps chunk, so Carrot/Jane/Sweed/Dutchie products never
+    # gave or received a backfilled image.
+    entries = re.split(r"(?=\{ id: '[a-z]{1,2}\d)", block)
 
     def field(e, k):
         m = re.search(k + r":\s*('(?:\\.|[^'])*'|\"[^\"]*\"|null|'')", e)
@@ -56,7 +60,7 @@ def main():
     img_by = {}
     parsed = []
     for e in entries:
-        if "id: 'p" not in e:
+        if not re.match(r"\{ id: '[a-z]{1,2}\d", e):
             parsed.append((e, None, None, None))
             continue
         name = field(e, "name")
