@@ -6059,6 +6059,20 @@ html:not([data-theme="light"]) .leaflet-control-attribution {
     font-size: 1.4rem; cursor: pointer; line-height: 1;
 }
 
+/* Homepage claim form (#for-dispensaries-claim). Native form on the worker
+   /contact path — see index.html for why the Kit embed had to go. */
+.claim-form input, .claim-form textarea {
+    width: 100%; margin-bottom: .7rem; padding: .7rem .85rem;
+    background: var(--bg-secondary, #0b120e); color: var(--text-primary, #f5f6f8);
+    border: 1px solid var(--border, #22302a); border-radius: 10px;
+    font: inherit; font-size: .95rem; resize: vertical;
+}
+.claim-form input:focus, .claim-form textarea:focus {
+    outline: none; border-color: var(--green-dim, #16a34a);
+}
+.claim-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
+@media (max-width: 560px) { .claim-form-row { grid-template-columns: 1fr; } }
+
 /* Table links must LOOK clickable — plain white text hid the fact that
    dispensary and product cells navigate (Josh, 2026-09-03). */
 table td a {

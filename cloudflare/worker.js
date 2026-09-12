@@ -1365,8 +1365,34 @@ async function handleContact(request, env, cors) {
   // Fire email notification — non-blocking, don't fail the form if email fails
   try { await sendLeadNotification(lead, env); } catch (e) { console.error('email send failed:', e); }
 
+  // Mirror the lead into Kit (TCC Dispensary Inquiries, form 9295019) so the
+  // email list keeps growing exactly as it did when the homepage claim form
+  // was a Kit embed. The embed was replaced 2026-09 because Kit swallowed
+  // claim submissions silently for months (Levitated's owner tried repeatedly
+  // and nobody saw it). Non-blocking.
+  try { await mirrorLeadToKit(lead, env); } catch (e) { console.error('kit mirror failed:', e); }
+
   return new Response(JSON.stringify({ ok: true }), {
     status: 200, headers: { 'Content-Type': 'application/json', ...cors },
+  });
+}
+
+async function mirrorLeadToKit(lead, env) {
+  if (!env.KIT_API_KEY) return;
+  const headers = { 'X-Kit-Api-Key': env.KIT_API_KEY, 'Content-Type': 'application/json' };
+  // Create-or-update carries the custom fields; the form call links them to
+  // the TCC Dispensary Inquiries list.
+  await fetch('https://api.kit.com/v4/subscribers', {
+    method: 'POST', headers,
+    body: JSON.stringify({
+      email_address: lead.email,
+      first_name: lead.name,
+      fields: { dispensary: lead.dispensary || lead.brand || '', phone: lead.phone || '', message: lead.message || '' },
+    }),
+  });
+  await fetch('https://api.kit.com/v4/forms/9295019/subscribers', {
+    method: 'POST', headers,
+    body: JSON.stringify({ email_address: lead.email }),
   });
 }
 

@@ -5821,6 +5821,54 @@
     prep(document.body);
 })();
 
+// ─── Homepage claim form (2026-09-12) ───────────────────────────────────────
+// Native form on the /contact worker path (emails hello@, feeds the Leads
+// dashboard, mirrors into Kit). Replaced the silent Kit embed.
+(function () {
+    var form = document.getElementById('claim-form');
+    if (!form) return;
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var errEl = document.getElementById('claim-error');
+        errEl.hidden = true;
+        var name = document.getElementById('claim-name').value.trim();
+        var email = document.getElementById('claim-email').value.trim();
+        if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+            errEl.textContent = 'Name and a real email are all we need.';
+            errEl.hidden = false;
+            return;
+        }
+        var btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true; btn.textContent = 'Sending…';
+        var ok = false;
+        try {
+            var res = await fetch('https://dashboard.twincitycannabis.com/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    dispensary: document.getElementById('claim-dispensary').value.trim(),
+                    phone: document.getElementById('claim-phone').value.trim(),
+                    message: document.getElementById('claim-message').value.trim(),
+                    kind: 'dispensary',
+                }),
+            });
+            ok = res.ok;
+        } catch (err) { ok = false; }
+        if (ok) {
+            if (typeof trackEvent === 'function') trackEvent('generate_lead', { event_category: 'dispensary', event_label: 'homepage_claim_form' });
+            form.hidden = true;
+            document.getElementById('claim-thanks').hidden = false;
+        } else {
+            // Never eat a lead silently again — fall back to email.
+            btn.disabled = false; btn.textContent = 'Send it';
+            errEl.innerHTML = 'That didn’t go through — email us directly at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+            errEl.hidden = false;
+        }
+    });
+})();
+
 // ─── The Board + suggestion box (2026-09-03) ────────────────────────────────
 (function () {
     // Suggestion box — footer link opens a small panel; POSTs to the worker.

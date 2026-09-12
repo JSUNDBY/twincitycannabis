@@ -125,13 +125,26 @@ def fetch_page(dispensary_id, page, per_page=100):
     url = (GRAPHQL + "?operationName=FilteredProducts"
            + "&variables=" + urllib.parse.quote(json.dumps(variables))
            + "&extensions=" + urllib.parse.quote(json.dumps(ext)))
-    r = creq.get(url, impersonate="chrome", timeout=30,
-                 headers={"content-type": "application/json"})
-    r.raise_for_status()
-    data = r.json()
-    if "errors" in data and not data.get("data"):
-        raise RuntimeError(json.dumps(data["errors"])[:200])
-    return data["data"]["filteredProducts"]
+    # Since ~2026-09-11 Cloudflare challenges a random fraction of these
+    # calls ("Just a moment..." 403) — the same request retried a few
+    # seconds later usually passes. One unretried 403 used to kill the
+    # whole store, and three cycles of that wiped all 8 menus.
+    last_err = None
+    for attempt in range(5):
+        if attempt:
+            time.sleep(4 * attempt)
+        try:
+            r = creq.get(url, impersonate=("chrome", "safari", "chrome")[attempt % 3],
+                         timeout=30, headers={"content-type": "application/json"})
+            r.raise_for_status()
+        except Exception as e:
+            last_err = e
+            continue
+        data = r.json()
+        if "errors" in data and not data.get("data"):
+            raise RuntimeError(json.dumps(data["errors"])[:200])
+        return data["data"]["filteredProducts"]
+    raise last_err
 
 
 def scrape_store(slug, config):
@@ -202,12 +215,24 @@ def main():
         print("curl_cffi not installed — skipping Dutchie scrape")
         return
     print(f"Dutchie scraper: {len(DUTCHIE_STORES)} stores")
+    # Last-good carry-over: a store that errors this cycle keeps its
+    # products from the previous run instead of vanishing from the site.
+    previous = {}
+    try:
+        for p in json.loads(OUTPUT_FILE.read_text()):
+            previous.setdefault(p["dispensary_id"], []).append(p)
+    except Exception:
+        pass
+
     all_products = []
     for slug, config in DUTCHIE_STORES.items():
         try:
             all_products.extend(scrape_store(slug, config))
         except Exception as e:
-            print(f"  ERROR scraping {config['name']}: {e}")
+            carried = previous.get(slug, [])
+            print(f"  ERROR scraping {config['name']}: {e}"
+                  + (f" — carrying over {len(carried)} products from last good run" if carried else ""))
+            all_products.extend(carried)
         time.sleep(2)
 
     print(f"\nTotal Dutchie products: {len(all_products)}")
