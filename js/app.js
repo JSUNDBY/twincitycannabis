@@ -2806,7 +2806,7 @@
                     </div>
                     <div style="text-align:center;margin-top:1rem">
                         <p class="text-sm text-secondary">See full competitor breakdown: product-by-product pricing, market position, and weekly trends.</p>
-                        <a href="#for-dispensaries-claim" class="btn btn-sm btn-primary" style="margin-top:0.5rem">Unlock with Premium ($99/mo founding)</a>
+                        <a href="#for-dispensaries-claim" class="btn btn-sm btn-primary" style="margin-top:0.5rem">Unlock with Market Intel ($125/mo founding)</a>
                     </div>
                 `;
             } else {

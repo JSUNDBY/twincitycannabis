@@ -2067,7 +2067,7 @@ const buildTermsPage = () => {
 <p>To the maximum extent allowed by law, Twin City Cannabis is not liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the Site, including but not limited to lost profits, lost data, or any cannabis purchase decision made based on Site information.</p>
 
 <h2>10. Dispensary listings &amp; paid tiers</h2>
-<p>Every licensed Twin Cities dispensary is listed for free. Featured (from $49/month) and Premium (from $99/month) tiers add extra visibility in clearly-labeled sections of the Site. Paid tiers do not influence organic search rankings, the TCC Score, or review display.</p>
+<p>Every licensed Twin Cities dispensary is listed for free. Featured (from $49/month) and Market Intel (from $125/month) tiers add extra visibility in clearly-labeled sections of the Site. Paid tiers do not influence organic search rankings, the TCC Score, or review display.</p>
 
 <h2>11. Changes to these terms</h2>
 <p>We may update these terms from time to time. The "Last updated" date at the top will reflect the most recent revision. Continued use of the Site after changes means you accept the updated terms.</p>
@@ -2266,7 +2266,7 @@ ${partnerCards || '<p>The first partners are being onboarded now.</p>'}
 <h2>What founding partners get</h2>
 <ul>
   <li><strong>The Founding Partner badge</strong> on every one of their listings — a permanent marker that they were here early and stand behind their data.</li>
-  <li><strong>Founding rates, locked for good.</strong> Paid placements (Featured, Premium) are always clearly labeled and never touch our honest rankings. Founding partners get them at the founding rate whenever they want them, no matter what the price is by then.</li>
+  <li><strong>Half price, for good.</strong> Paid placements (Featured, Market Intel) are always clearly labeled and never touch our honest rankings. Founding partners pay half the standard rate whenever they want them &mdash; and as our traffic grows and standard rates rise, founders keep paying half. You always hold the best rate on the platform.</li>
   <li><strong>A direct line.</strong> Menu corrections, new locations, hours changes — handled same-day, owner to builder.</li>
 </ul>
 

@@ -166,7 +166,7 @@
           "name": "How can my dispensary get listed on Twin City Cannabis?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "All Twin Cities dispensaries are listed automatically for free. Dispensary owners can claim their profile to update information, respond to reviews, and access analytics. Premium tiers with priority placement start at $49/month."
+            "text": "All Twin Cities dispensaries are listed automatically for free. Dispensary owners can claim their profile to update information, respond to reviews, and access analytics. Paid tiers start at $49/month for Featured placement; Market Intel, our daily competitor price reporting, starts at $125/month."
           }
         }
       ]
@@ -1537,7 +1537,7 @@
                 <a href="#for-dispensaries-claim" class="btn btn-primary btn-lg" style="font-size:1rem;padding:0.9rem 2rem">Claim Your Free Listing</a>
                 <a href="#for-dispensaries" class="btn btn-secondary btn-lg" style="font-size:1rem;padding:0.9rem 2rem" onclick="event.preventDefault();window.location.hash='for-dispensaries';setTimeout(function(){document.getElementById('for-dispensaries-tiers').scrollIntoView({behavior:'smooth',block:'start'})},150)">See Upgrade Options</a>
             </div>
-            <p style="color:var(--green);font-weight:600;font-size:0.95rem">Claiming is always free. Founding Featured is $49/mo, locked for life for the first 10 shops.</p>
+            <p style="color:var(--green);font-weight:600;font-size:0.95rem">Claiming is always free. The first 10 shops pay half price forever &mdash; today that's $49/mo Featured, $125/mo Market Intel.</p>
         </div>
     </section>
 
@@ -1718,8 +1718,8 @@
                 <div style="flex-shrink:0;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#eab308,#ca8a04);display:flex;align-items:center;justify-content:center;font-size:1.4rem"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.2 6.6 20.2l1.2-6.1L3.2 9.9l6.2-.7z"/></svg></div>
                 <div style="flex:1;min-width:200px">
                     <div style="font-size:0.7rem;font-weight:700;color:#eab308;letter-spacing:1.5px;margin-bottom:0.2rem">FOUNDING MEMBER PRICING &middot; LIMITED</div>
-                    <div class="font-display font-bold" style="font-size:1.05rem;margin-bottom:0.2rem">First 10 dispensaries keep these prices <em>as long as they subscribe</em>.</div>
-                    <div class="text-sm text-secondary">After all 10 slots fill, Featured goes to <strong>$99/mo</strong> and Premium to <strong>$199/mo</strong>. Subscribers at founding rates stay at those rates forever.</div>
+                    <div class="font-display font-bold" style="font-size:1.05rem;margin-bottom:0.2rem">First 10 dispensaries pay <em>half price, for as long as they subscribe</em>.</div>
+                    <div class="text-sm text-secondary">Standard rates rise as our traffic grows. Founding members always pay half of whatever the current rate is &mdash; today that's <strong>$125</strong> Market Intel and <strong>$49</strong> Featured.</div>
                 </div>
                 <div style="flex-shrink:0;text-align:center;padding:0.4rem 1rem;background:rgba(234,179,8,0.15);border-radius:var(--radius-md);min-width:120px">
                     <div class="font-display font-bold text-2xl founding-slots" style="color:#eab308;line-height:1" id="founding-slots-remaining">10</div>
@@ -1729,15 +1729,51 @@
 
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
 
+                <!-- Market Intel (flagship — value comes from our data, not our traffic) -->
+                <div class="card" style="border-color:var(--purple);padding:2rem;position:relative;overflow:visible">
+                    <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--purple);color:#fff;font-size:0.7rem;font-weight:700;padding:0.2rem 1rem;border-radius:var(--radius-full);letter-spacing:1px">MOST POPULAR</div>
+                    <div class="font-display font-bold text-purple" style="font-size:1.2rem;margin-bottom:0.2rem">Market Intel</div>
+                    <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.3rem">
+                        <div class="font-display font-bold" style="font-size:2.5rem">$125<span class="text-sm text-muted font-medium">/mo</span></div>
+                        <div class="text-sm text-muted" style="text-decoration:line-through">$249/mo</div>
+                    </div>
+                    <div style="display:inline-block;font-size:0.65rem;font-weight:700;color:#eab308;background:rgba(234,179,8,0.12);padding:0.15rem 0.6rem;border-radius:var(--radius-full);letter-spacing:1.2px;margin-bottom:0.8rem"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.2 6.6 20.2l1.2-6.1L3.2 9.9l6.2-.7z"/></svg> FOUNDING MEMBER &middot; ALWAYS HALF PRICE</div>
+                    <p class="text-sm text-secondary" style="margin-bottom:1.2rem">Know what every competitor charges, every day.</p>
+                    <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.85rem;margin-bottom:1.5rem">
+                        <div><span class="text-purple">&#10003;</span> <strong>Daily competitor price report</strong> on every product you share with a nearby shop</div>
+                        <div><span class="text-purple">&#10003;</span> <strong>Weekly market intel email:</strong> price trends, new products in your area, where you sit above or below market</div>
+                        <div><span class="text-purple">&#10003;</span> <strong>Price-drop alerts</strong> when a nearby shop undercuts you on a product you both carry</div>
+                        <div><span class="text-purple">&#10003;</span> <strong>Shopper behavior data:</strong> how many shoppers compared each of your products, and how often they chose you</div>
+                        <div><span class="text-purple">&#10003;</span> <strong>Sponsored product cards</strong> in Compare results (clearly labeled)</div>
+                        <div><span class="text-purple">&#10003;</span> Everything in Featured</div>
+                    </div>
+                    <div class="card" style="padding:1rem;background:var(--bg-secondary);border-color:rgba(168,85,247,0.2);margin-bottom:1.5rem">
+                        <div class="text-xs text-purple font-semibold" style="margin-bottom:0.5rem">WHAT YOU GET, EVERY MORNING</div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;padding:0.25rem 0;border-bottom:1px solid var(--border)">
+                            <span>Blue Dream 3.5g <span style="color:var(--text-muted)">&middot; you</span></span>
+                            <span style="font-weight:700;color:var(--green)">$38</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;padding:0.25rem 0;border-bottom:1px solid var(--border)">
+                            <span>Blue Dream 3.5g <span style="color:var(--text-muted)">&middot; 1.2 mi away</span></span>
+                            <span style="font-weight:700">$44</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;padding:0.25rem 0">
+                            <span>Blue Dream 3.5g <span style="color:var(--text-muted)">&middot; 2.8 mi away</span></span>
+                            <span style="font-weight:700;color:#f87171">$35 &darr;</span>
+                        </div>
+                    </div>
+                    <a href="#for-dispensaries-claim" class="btn btn-secondary" style="width:100%;font-size:1rem;padding:0.8rem;border-color:var(--purple);color:var(--purple)">Claim &amp; talk to us</a>
+                    <p class="text-xs text-muted" style="text-align:center;margin-top:0.5rem">Billing set up on a short call. Invoiced monthly, cancel anytime.</p>
+                </div>
+
                 <!-- Featured -->
-                <div class="card" style="border-color:var(--green);padding:2rem;position:relative;overflow:visible">
-                    <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:var(--bg-primary);font-size:0.7rem;font-weight:700;padding:0.2rem 1rem;border-radius:var(--radius-full);letter-spacing:1px">MOST POPULAR</div>
+                <div class="card" style="border-color:var(--green);padding:2rem">
                     <div class="font-display font-bold text-green" style="font-size:1.2rem;margin-bottom:0.2rem">Featured</div>
                     <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.3rem">
                         <div class="font-display font-bold" style="font-size:2.5rem">$49<span class="text-sm text-muted font-medium">/mo</span></div>
                         <div class="text-sm text-muted" style="text-decoration:line-through">$99/mo</div>
                     </div>
-                    <div style="display:inline-block;font-size:0.65rem;font-weight:700;color:#eab308;background:rgba(234,179,8,0.12);padding:0.15rem 0.6rem;border-radius:var(--radius-full);letter-spacing:1.2px;margin-bottom:0.8rem"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.2 6.6 20.2l1.2-6.1L3.2 9.9l6.2-.7z"/></svg> FOUNDING MEMBER &middot; RATE GUARANTEED</div>
+                    <div style="display:inline-block;font-size:0.65rem;font-weight:700;color:#eab308;background:rgba(234,179,8,0.12);padding:0.15rem 0.6rem;border-radius:var(--radius-full);letter-spacing:1.2px;margin-bottom:0.8rem"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.2 6.6 20.2l1.2-6.1L3.2 9.9l6.2-.7z"/></svg> FOUNDING MEMBER &middot; ALWAYS HALF PRICE</div>
                     <p class="text-sm text-secondary" style="margin-bottom:1.2rem">Be the dispensary shoppers see first.</p>
                     <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.85rem;margin-bottom:1.5rem">
                         <div><span class="text-green">&#10003;</span> <strong>"Featured" badge</strong> on your profile and cards</div>
@@ -1760,36 +1796,19 @@
                     <a href="#for-dispensaries-claim" class="btn btn-primary" style="width:100%;font-size:1rem;padding:0.8rem">Claim &amp; talk to us</a>
                     <p class="text-xs text-muted" style="text-align:center;margin-top:0.5rem">Billing set up on a short call. Invoiced monthly, cancel anytime.</p>
                 </div>
+            </div>
 
-                <!-- Premium -->
-                <div class="card" style="border-color:var(--purple);padding:2rem">
-                    <div class="font-display font-bold text-purple" style="font-size:1.2rem;margin-bottom:0.2rem">Premium</div>
-                    <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.3rem">
-                        <div class="font-display font-bold" style="font-size:2.5rem">$99<span class="text-sm text-muted font-medium">/mo</span></div>
-                        <div class="text-sm text-muted" style="text-decoration:line-through">$199/mo</div>
-                    </div>
-                    <div style="display:inline-block;font-size:0.65rem;font-weight:700;color:#eab308;background:rgba(234,179,8,0.12);padding:0.15rem 0.6rem;border-radius:var(--radius-full);letter-spacing:1.2px;margin-bottom:0.8rem"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.2 6.6 20.2l1.2-6.1L3.2 9.9l6.2-.7z"/></svg> FOUNDING MEMBER &middot; RATE GUARANTEED</div>
-                    <p class="text-sm text-secondary" style="margin-bottom:1.2rem">Turn comparison shoppers into your customers.</p>
-                    <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.85rem;margin-bottom:1.5rem">
-                        <div><span class="text-purple">&#10003;</span> Everything in Featured</div>
-                        <div><span class="text-purple">&#10003;</span> <strong>Shopper behavior data:</strong> how many shoppers compared each of your products, and how often they chose you over a nearby shop</div>
-                        <div><span class="text-purple">&#10003;</span> <strong>Sponsored product cards</strong> in Compare results (clearly labeled)</div>
-                        <div><span class="text-purple">&#10003;</span> <strong>Deal push notifications</strong> to shoppers near you who have opted in</div>
-                        <div><span class="text-purple">&#10003;</span> <strong>Weekly market intel email:</strong> price trends, new products in your area, shopper demand shifts</div>
-                    </div>
-                    <div class="card" style="padding:1rem;background:var(--bg-secondary);border-color:rgba(168,85,247,0.2);margin-bottom:1.5rem">
-                        <div class="text-xs text-purple font-semibold" style="margin-bottom:0.4rem">WHAT SHOPPERS SEE IN COMPARE</div>
-                        <div style="display:flex;justify-content:space-between;align-items:center">
-                            <div>
-                                <div style="font-size:0.85rem;font-weight:600">Your Best Product</div>
-                                <div style="font-size:0.7rem;color:var(--text-muted)">Your Brand &#8226; <span style="color:var(--purple);font-size:0.6rem">Sponsored</span></div>
-                            </div>
-                            <div style="font-weight:700;color:var(--green);font-size:1.1rem">$45</div>
-                        </div>
-                    </div>
-                    <a href="#for-dispensaries-claim" class="btn btn-secondary" style="width:100%;font-size:1rem;padding:0.8rem;border-color:var(--purple);color:var(--purple)">Claim &amp; talk to us</a>
-                    <p class="text-xs text-muted" style="text-align:center;margin-top:0.5rem">Billing set up on a short call. Invoiced monthly, cancel anytime.</p>
+            <!-- The ladder: Featured pricing is tied to measured delivery, not to what we
+                 feel like charging. Published so an owner can check our math. -->
+            <div class="card" style="padding:1.4rem;margin-top:2rem;background:var(--bg-secondary)">
+                <div class="font-display font-bold" style="font-size:1rem;margin-bottom:0.4rem">How Featured pricing rises</div>
+                <p class="text-sm text-secondary" style="margin-bottom:1rem">We price advertising on what we actually deliver. Your dashboard counts every visit to your listing and every click through to your own site &mdash; those numbers set the rate, and you can see them any time.</p>
+                <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.85rem">
+                    <div style="display:flex;justify-content:space-between;gap:1rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border)"><span>Under 40 clicks/month to your site</span><strong>$99/mo</strong></div>
+                    <div style="display:flex;justify-content:space-between;gap:1rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border)"><span>40&ndash;120 clicks/month</span><strong>$149/mo</strong></div>
+                    <div style="display:flex;justify-content:space-between;gap:1rem"><span>120+ clicks/month</span><strong>$249/mo</strong></div>
                 </div>
+                <p class="text-xs text-muted" style="margin-top:0.9rem;margin-bottom:0">Founding members always pay half of whatever the current rate is.</p>
             </div>
         </div>
     </section>
@@ -1825,7 +1844,7 @@
             <div style="display:flex;flex-direction:column;gap:1rem">
                 <div class="card" style="border-color:rgba(234,179,8,0.35)"><div class="card-body">
                     <div class="font-display font-semibold" style="margin-bottom:0.3rem"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.2 6.6 20.2l1.2-6.1L3.2 9.9l6.2-.7z"/></svg> What's the Founding Member deal?</div>
-                    <div class="text-sm text-secondary">The first 10 dispensaries to subscribe keep <strong>$49/mo Featured</strong> or <strong>$99/mo Premium</strong> as long as their subscription is active. When we raise prices to $99 and $199, your rate stays the same. No contracts, cancel anytime. This is a one-time offer for early supporters who help us prove the model.</div>
+                    <div class="text-sm text-secondary">The first 10 dispensaries to subscribe pay <strong>half the standard rate, for as long as their subscription stays active</strong>. Today that's $49/mo Featured or $125/mo Market Intel. Standard rates rise as our traffic grows &mdash; when they do, founding members still pay half, so you always have the best rate on the platform. No contracts, cancel anytime.</div>
                 </div></div>
                 <div class="card"><div class="card-body">
                     <div class="font-display font-semibold" style="margin-bottom:0.3rem">Can you just buy a higher ranking?</div>
@@ -1837,7 +1856,7 @@
                 </div></div>
                 <div class="card"><div class="card-body">
                     <div class="font-display font-semibold" style="margin-bottom:0.3rem">What does Featured cost?</div>
-                    <div class="text-sm text-secondary">Claiming your listing is always free. Founding rate is $49/mo for Featured and $99/mo for Premium, locked for life for the first 10 dispensaries. After the 10 founding slots fill, Featured is $99/mo and Premium $199/mo &mdash; founders keep their rate as long as they subscribe.</div>
+                    <div class="text-sm text-secondary">Claiming your listing is always free. Standard rates are $99/mo Featured and $249/mo Market Intel. The first 10 dispensaries pay half of those &mdash; $49 and $125 today &mdash; and keep the half-price rate for as long as they subscribe, even after standard rates rise.</div>
                 </div></div>
                 <div class="card"><div class="card-body">
                     <div class="font-display font-semibold" style="margin-bottom:0.3rem">How does billing work?</div>
@@ -1848,7 +1867,7 @@
                     <div class="text-sm text-secondary">National directories cast a wide, generic net. TCC is a local price comparison tool built specifically for the Twin Cities. We help shoppers find the best price across YOUR local competitors, and we send that traffic directly to you. Featured starts at $49/mo founding ($99 after) vs the $300-1,500/mo a Weedmaps listing runs.</div>
                 </div></div>
                 <div class="card"><div class="card-body">
-                    <div class="font-display font-semibold" style="margin-bottom:0.3rem">What behavioral data do I get with Premium?</div>
+                    <div class="font-display font-semibold" style="margin-bottom:0.3rem">What behavioral data do I get with Market Intel?</div>
                     <div class="text-sm text-secondary">You'll see exactly how shoppers interact with your products vs competitors: how many people viewed your product, how many compared prices, what percentage chose you, and which products are driving the most traffic. This is data you can't get anywhere else.</div>
                 </div></div>
             </div>
@@ -2043,7 +2062,7 @@
         <div class="container" style="max-width:1100px">
             <div class="section-label" style="text-align:center">Pricing</div>
             <h2 class="font-display font-bold text-2xl tracking-tight" style="margin-bottom:0.5rem;text-align:center">Pick the tier that fits</h2>
-            <p class="text-secondary text-sm" style="text-align:center;margin-bottom:2rem">Founder pricing locked in for life on the first 5 brands. Strike-throughs show what subsequent customers will pay.</p>
+            <p class="text-secondary text-sm" style="text-align:center;margin-bottom:2rem">The first 5 brands pay half price for as long as they subscribe. Strike-throughs show the standard rate &mdash; as it rises, founders keep paying half.</p>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem">
 
                 <!-- Featured Brand -->
@@ -2053,7 +2072,7 @@
                         <span style="color:var(--green)">$75</span>
                         <span class="text-sm text-muted" style="font-weight:500">/mo</span>
                     </div>
-                    <div class="text-xs text-muted" style="margin-bottom:1rem"><span style="text-decoration:line-through">$149/mo</span> — founder price, locked in</div>
+                    <div class="text-xs text-muted" style="margin-bottom:1rem"><span style="text-decoration:line-through">$149/mo</span> — standard rate. Founders always pay half.</div>
                     <ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;line-height:1.7;color:var(--text-secondary)">
                         <li>✓ Featured badge on your brand page</li>
                         <li>✓ Priority placement on strain×city pages where your products match</li>
@@ -2070,7 +2089,7 @@
                         <span style="color:#c084fc">$175</span>
                         <span class="text-sm text-muted" style="font-weight:500">/mo</span>
                     </div>
-                    <div class="text-xs text-muted" style="margin-bottom:1rem"><span style="text-decoration:line-through">$349/mo</span> — founder price, locked in</div>
+                    <div class="text-xs text-muted" style="margin-bottom:1rem"><span style="text-decoration:line-through">$349/mo</span> — standard rate. Founders always pay half.</div>
                     <ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;line-height:1.7;color:var(--text-secondary)">
                         <li>✓ Everything in Featured</li>
                         <li>✓ Rotating callout on the home page</li>
@@ -2086,7 +2105,7 @@
                         <span style="color:var(--amber)">$349</span>
                         <span class="text-sm text-muted" style="font-weight:500">/mo</span>
                     </div>
-                    <div class="text-xs text-muted" style="margin-bottom:1rem"><span style="text-decoration:line-through">$699/mo</span> — founder price, locked in</div>
+                    <div class="text-xs text-muted" style="margin-bottom:1rem"><span style="text-decoration:line-through">$699/mo</span> — standard rate. Founders always pay half.</div>
                     <ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;line-height:1.7;color:var(--text-secondary)">
                         <li>✓ Everything in Spotlight</li>
                         <li>✓ Private market-intel dashboard (peer pricing, share of shelf, weekly trends)</li>
@@ -2252,7 +2271,7 @@
                     <div class="card-body">
                         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
                             <div class="font-display font-semibold">Competitor Price Report</div>
-                            <span class="tag tag-sm tag-purple">Premium</span>
+                            <span class="tag tag-sm tag-purple">Market Intel</span>
                         </div>
                         <p class="text-xs text-muted" style="margin-bottom:0.8rem">How your prices compare to nearby dispensaries on shared products</p>
                         <div id="dash-competitors"></div>
@@ -2294,7 +2313,7 @@
                     <div style="flex:1;min-width:200px">
                         <div style="font-size:0.7rem;font-weight:700;color:#eab308;letter-spacing:1.5px;margin-bottom:0.2rem">FOUNDING MEMBER PRICING &middot; LIMITED</div>
                         <div class="font-display font-bold" style="font-size:1.05rem;margin-bottom:0.2rem">First 10 dispensaries lock these prices <em>for as long as they subscribe</em>.</div>
-                        <div class="text-sm text-secondary">After all 10 slots fill, Featured goes to <strong>$99/mo</strong> and Premium to <strong>$199/mo</strong>. Founding rates stay locked forever.</div>
+                        <div class="text-sm text-secondary">Standard rates rise as our traffic grows. Founding members always pay half of whatever the current rate is.</div>
                     </div>
                     <div style="flex-shrink:0;text-align:center;padding:0.4rem 1rem;background:rgba(234,179,8,0.15);border-radius:var(--radius-md);min-width:120px">
                         <div class="font-display font-bold text-2xl founding-slots" style="color:#eab308;line-height:1">10</div>
@@ -2351,8 +2370,8 @@
 
                     <!-- Premium Tier -->
                     <div class="card" style="padding:1.5rem;border-color:var(--purple)">
-                        <div class="font-display font-bold text-purple" style="margin-bottom:0.3rem">Premium</div>
-                        <div class="font-display font-bold text-2xl" style="margin-bottom:0.8rem">$99<span class="text-sm text-muted">/mo founding</span></div>
+                        <div class="font-display font-bold text-purple" style="margin-bottom:0.3rem">Market Intel</div>
+                        <div class="font-display font-bold text-2xl" style="margin-bottom:0.8rem">$125<span class="text-sm text-muted">/mo founding</span></div>
                         <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:0.8rem;color:var(--text-secondary)">
                             <div style="color:var(--purple)">&#10003; Everything in Featured</div>
                             <div>&#10003; <strong>Competitor price report</strong>: see exactly what nearby dispensaries charge for the same products</div>
