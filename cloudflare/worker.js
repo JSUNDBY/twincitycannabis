@@ -141,6 +141,18 @@ export default {
       return handleAlert(request, env, cors);
     }
 
+    if (url.pathname === '/checkin' && request.method === 'POST') {
+      return handleCheckin(request, env, cors);
+    }
+
+    if (url.pathname === '/checkins/public' && request.method === 'GET') {
+      return handleCheckinsPublic(request, env, cors);
+    }
+
+    if (url.pathname === '/admin/checkins/update' && request.method === 'POST') {
+      return handleCheckinUpdate(request, env, cors);
+    }
+
     if (url.pathname === '/contact' && request.method === 'POST') {
       return handleContact(request, env, cors);
     }
@@ -589,11 +601,12 @@ async function handleAdminData(request, env, cors) {
     });
   }
 
-  const [subscribers, overrides, site, leads] = await Promise.all([
+  const [subscribers, overrides, site, leads, checkins] = await Promise.all([
     fetchSubscribers(env),
     fetchOverrides(env),
     fetchSiteHealth(),
     fetchLeads(env),
+    env.TCC_OVERRIDES.get('index:checkins', { type: 'json' }).then((v) => v || []),
   ]);
 
   return new Response(JSON.stringify({
@@ -601,6 +614,7 @@ async function handleAdminData(request, env, cors) {
     overrides,
     site,
     leads,
+    checkins,
     generated_at: new Date().toISOString(),
   }), {
     status: 200,
@@ -1054,6 +1068,26 @@ function render(d) {
     </section>
 
     <section>
+      <h2>Price check-ins <span style="font-size:.75rem;color:var(--accent);float:right">\${(d.checkins || []).filter(c => c.status === 'pending').length} pending</span></h2>
+      \${(d.checkins || []).length ? '<table><thead><tr><th>When</th><th>Shop</th><th>Product</th><th>Paid</th><th>Note</th><th>From</th><th>Status</th><th></th></tr></thead><tbody>' +
+        (d.checkins || []).slice(0, 40).map(c => '<tr id="ck-' + esc(c.id) + '">' +
+          '<td><code class="mono">' + esc(c.submitted_at ? c.submitted_at.slice(0,10) : '—') + '</code></td>' +
+          '<td><strong>' + esc(c.shop) + '</strong></td>' +
+          '<td>' + esc(c.product) + '</td>' +
+          '<td><strong>$' + esc(String(c.price)) + '</strong></td>' +
+          '<td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(c.note || '—') + '</td>' +
+          '<td>' + esc(c.name || '—') + '</td>' +
+          '<td><span class="pill ' + (c.status === 'approved' ? 'active' : '') + '">' + esc(c.status) + '</span></td>' +
+          '<td>' + (c.status === 'pending'
+            ? '<button class="btn" style="padding:.2rem .6rem;font-size:.75rem" onclick="ckAct(\\'' + esc(c.id) + '\\',\\'approve\\')">Approve</button> ' +
+              '<button class="btn ghost" style="padding:.2rem .6rem;font-size:.75rem" onclick="ckAct(\\'' + esc(c.id) + '\\',\\'reject\\')">Reject</button>'
+            : '<button class="btn ghost" style="padding:.2rem .6rem;font-size:.75rem" onclick="ckAct(\\'' + esc(c.id) + '\\',\\'reject\\')">Remove</button>') + '</td>' +
+        '</tr>').join('') +
+        '</tbody></table>'
+        : '<div class="empty">No shopper price reports yet. They arrive from the "What did you pay?" form on dispensary pages.</div>'}
+    </section>
+
+    <section>
       <h2>Quick links</h2>
       <div class="links">
         <a class="btn" href="https://dashboard.stripe.com/subscriptions" target="_blank">Stripe subscriptions</a>
@@ -1260,6 +1294,25 @@ function renderPipeline() {
   });
 }
 
+async function ckAct(id, action) {
+  const key = new URLSearchParams(location.search).get('key');
+  if (!key) return;
+  try {
+    const r = await fetch('/admin/checkins/update?key=' + encodeURIComponent(key), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, action }),
+    });
+    if (r.ok) {
+      const row = document.getElementById('ck-' + id);
+      if (row) {
+        if (action === 'reject') row.remove();
+        else row.querySelector('.pill').textContent = 'approved';
+      }
+    }
+  } catch (e) { console.error('checkin update failed', e); }
+}
+
 async function saveCrm(id, patch) {
   const key = new URLSearchParams(location.search).get('key');
   if (!key) return;
@@ -1335,6 +1388,81 @@ async function handleSuggest(request, env, cors) {
       `New suggestion from the site\n\n${text}\n\nContact: ${entry.contact || '(none left)'}\nPage: ${entry.page || '-'}\nAll suggestions: https://dashboard.twincitycannabis.com/admin/suggestions (admin token required)`);
   } catch (e) { console.error('suggestion email failed:', e); }
 
+  return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+}
+
+// ─── Price check-ins ──────────────────────────────────────────────────────
+// Shoppers report what they actually paid at the register ("$45 for the
+// Grasslandz eighth at X"). This is the site's crowdsourced layer: register
+// prices vs menu prices is data no competitor has, and a price + product
+// name is about the safest UGC there is. Submissions land pending; Josh
+// approves in the admin dashboard; shop pages show approved reports.
+async function handleCheckin(request, env, cors) {
+  let body;
+  try { body = await request.json(); } catch {
+    return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const shop = String(body.shop || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 80);
+  const product = String(body.product || '').trim().slice(0, 120);
+  const note = String(body.note || '').trim().slice(0, 200);
+  const name = String(body.name || '').trim().slice(0, 40);
+  const price = Number(body.price);
+  if (!shop || product.length < 2 || !Number.isFinite(price) || price < 0.5 || price > 500) {
+    return new Response(JSON.stringify({ ok: false, error: 'shop, product, and a real price are required' }), {
+      status: 400, headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+  const entry = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+    shop, product, price: Math.round(price * 100) / 100, note, name,
+    submitted_at: new Date().toISOString(),
+    status: 'pending',
+  };
+  const list = (await env.TCC_OVERRIDES.get('index:checkins', { type: 'json' })) || [];
+  list.unshift(entry);
+  await env.TCC_OVERRIDES.put('index:checkins', JSON.stringify(list.slice(0, 500)));
+  // Intake rule: no silent stores.
+  try {
+    await sendOpsEmail(env, `💵 Price check-in: $${entry.price} — ${product.slice(0, 50)} @ ${shop}`,
+      `New shopper price report (pending your approval)\n\nShop: ${shop}\nProduct: ${product}\nPaid: $${entry.price}\n${note ? 'Note: ' + note + '\n' : ''}${name ? 'From: ' + name + '\n' : ''}\nApprove or reject in the dashboard:\nhttps://dashboard.twincitycannabis.com/admin (Price check-ins section)`);
+  } catch (e) { console.error('checkin email failed:', e); }
+  return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+}
+
+// Public, edge-cached: approved reports for one shop, newest first.
+async function handleCheckinsPublic(request, env, cors) {
+  const url = new URL(request.url);
+  const shop = String(url.searchParams.get('shop') || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
+  const list = (await env.TCC_OVERRIDES.get('index:checkins', { type: 'json' })) || [];
+  const out = list
+    .filter((c) => c.status === 'approved' && (!shop || c.shop === shop))
+    .slice(0, 8)
+    .map((c) => ({ product: c.product, price: c.price, note: c.note, name: c.name, submitted_at: c.submitted_at }));
+  return new Response(JSON.stringify(out), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300', ...cors },
+  });
+}
+
+async function handleCheckinUpdate(request, env, cors) {
+  if (!verifyAdminToken(request, env)) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  let body;
+  try { body = await request.json(); } catch {
+    return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const list = (await env.TCC_OVERRIDES.get('index:checkins', { type: 'json' })) || [];
+  const idx = list.findIndex((c) => c.id === body.id);
+  if (idx === -1) {
+    return new Response(JSON.stringify({ ok: false, error: 'not found' }), { status: 404, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  if (body.action === 'approve') list[idx].status = 'approved';
+  else if (body.action === 'reject') list.splice(idx, 1);
+  else {
+    return new Response(JSON.stringify({ ok: false, error: 'action must be approve|reject' }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  await env.TCC_OVERRIDES.put('index:checkins', JSON.stringify(list));
   return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
 }
 
