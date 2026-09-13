@@ -124,6 +124,12 @@ python3 scraper/merge_jane_data.py
 python3 scraper/sweed_scrape.py || echo "Sweed scrape failed (non-fatal)"
 python3 scraper/merge_sweed_data.py
 
+# 7.91. Pull menus from Blaze/Tymber storefronts (MN THC Co Dundas +
+#       Lakeville, The Winona Dispensary — all three sat menu-less for
+#       months; MN THC's owner asked to be added in April). Non-fatal.
+python3 scraper/blaze_scrape.py || echo "Blaze scrape failed (non-fatal)"
+python3 scraper/merge_blaze_data.py
+
 # 7.93. Pull menus from Treez/GapCommerce headless storefronts (Flame &
 #       Flora, the Shakopee Mdewakanton Sioux Community dispensary in
 #       Prior Lake — the owner asked to be added 2026-06, found in the
@@ -211,7 +217,7 @@ git add js/data.js index.html sitemap.xml \
     scraper/data/dispensary_shop_products.json scraper/data/meadow_products.json \
     scraper/data/carrot_products.json scraper/data/jane_products.json \
     scraper/data/sweed_products.json scraper/data/dutchie_products.json \
-    scraper/data/treez_products.json \
+    scraper/data/treez_products.json scraper/data/blaze_products.json \
     scraper/data/shop_counts.json scraper/data/menu_alerts.json \
     scraper/data/page_lastmod.json scraper/data/price_trends.json \
     llms.txt
