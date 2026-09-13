@@ -699,7 +699,12 @@ const checkinBlock = (d, products) => {
   }).catch(function () {});
   var open = document.getElementById('checkin-open');
   var form = document.getElementById('checkin-form');
+  function openForm() { form.hidden = false; document.getElementById('checkin-product').focus(); }
   open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  // The link under the menu scrolls up here — open the form on arrival so
+  // the reader doesn't have to hunt for a second click.
+  var jump = document.getElementById('checkin-jump');
+  if (jump) jump.addEventListener('click', function () { setTimeout(openForm, 300); });
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var err = document.getElementById('checkin-err');
@@ -928,9 +933,10 @@ ${d.city ? `<p>${cityShops > 1 ? `${esc(d.city)} has ${cityShops} open dispensar
 <a class="cta" href="/#dashboard/${esc(d.id)}">View interactive menu &amp; price compare →</a>
 ${d.website && !d.website.includes('weedmaps.com') ? `<a class="cta" href="${esc(d.website)}" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit ${esc(d.name)}'s website →</a>` : ''}
 
-${products.length > 0 ? `<h2>Full menu &amp; live prices</h2>${menuHtml}` : ''}
-
 ${checkinBlock(d, products)}
+
+${products.length > 0 ? `<h2>Full menu &amp; live prices</h2>${menuHtml}
+<p style="font-size:.9rem;margin:.8rem 0 0"><a href="#checkins-section" id="checkin-jump">Shopped here? Tell other people what you actually paid →</a></p>` : ''}
 
 ${reviewsHtml}
 
