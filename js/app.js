@@ -2806,7 +2806,7 @@
                     </div>
                     <div style="text-align:center;margin-top:1rem">
                         <p class="text-sm text-secondary">See full competitor breakdown: product-by-product pricing, market position, and weekly trends.</p>
-                        <a href="#for-dispensaries-claim" class="btn btn-sm btn-primary" style="margin-top:0.5rem">Unlock with Premium ($599/mo)</a>
+                        <a href="#for-dispensaries-claim" class="btn btn-sm btn-primary" style="margin-top:0.5rem">Unlock with Premium ($99/mo founding)</a>
                     </div>
                 `;
             } else {
@@ -5821,46 +5821,51 @@
     prep(document.body);
 })();
 
-// ─── Claim/inquiry forms (2026-09-12) ───────────────────────────────────────
-// Native forms on the /contact worker path (emails hello@, feeds the Leads
-// dashboard, mirrors into Kit). Replaced the Kit embeds on the dispensary
-// AND cultivator sections, which stored submissions silently.
+// ─── Homepage claim form (2026-09-12) ───────────────────────────────────────
+// Native form on the /contact worker path (emails hello@, feeds the Leads
+// dashboard, mirrors into Kit). Replaced the silent Kit embed.
 (function () {
-    document.querySelectorAll('form.claim-form').forEach(function (form) {
-        form.addEventListener('submit', async function (e) {
-            e.preventDefault();
-            var errEl = form.querySelector('.claim-error');
-            errEl.hidden = true;
-            var data = Object.fromEntries(new FormData(form));
-            data.kind = form.dataset.kind || 'dispensary';
-            if (!data.name || !data.name.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email || '')) {
-                errEl.textContent = 'Name and a real email are all we need.';
-                errEl.hidden = false;
-                return;
-            }
-            var btn = form.querySelector('button[type="submit"]');
-            btn.disabled = true; btn.textContent = 'Sending…';
-            var ok = false;
-            try {
-                var res = await fetch('https://dashboard.twincitycannabis.com/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
-                });
-                ok = res.ok;
-            } catch (err) { ok = false; }
-            if (ok) {
-                if (typeof trackEvent === 'function') trackEvent('generate_lead', { event_category: data.kind, event_label: 'claim_form' });
-                form.hidden = true;
-                var thanks = form.parentElement.querySelector('.claim-thanks');
-                if (thanks) thanks.hidden = false;
-            } else {
-                // Never eat a lead silently again — fall back to email.
-                btn.disabled = false; btn.textContent = 'Send it';
-                errEl.innerHTML = 'That didn’t go through — email us directly at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
-                errEl.hidden = false;
-            }
-        });
+    var form = document.getElementById('claim-form');
+    if (!form) return;
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var errEl = document.getElementById('claim-error');
+        errEl.hidden = true;
+        var name = document.getElementById('claim-name').value.trim();
+        var email = document.getElementById('claim-email').value.trim();
+        if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+            errEl.textContent = 'Name and a real email are all we need.';
+            errEl.hidden = false;
+            return;
+        }
+        var btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true; btn.textContent = 'Sending…';
+        var ok = false;
+        try {
+            var res = await fetch('https://dashboard.twincitycannabis.com/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    dispensary: document.getElementById('claim-dispensary').value.trim(),
+                    phone: document.getElementById('claim-phone').value.trim(),
+                    message: document.getElementById('claim-message').value.trim(),
+                    kind: 'dispensary',
+                }),
+            });
+            ok = res.ok;
+        } catch (err) { ok = false; }
+        if (ok) {
+            if (typeof trackEvent === 'function') trackEvent('generate_lead', { event_category: 'dispensary', event_label: 'homepage_claim_form' });
+            form.hidden = true;
+            document.getElementById('claim-thanks').hidden = false;
+        } else {
+            // Never eat a lead silently again — fall back to email.
+            btn.disabled = false; btn.textContent = 'Send it';
+            errEl.innerHTML = 'That didn’t go through — email us directly at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+            errEl.hidden = false;
+        }
     });
 })();
 

@@ -25,8 +25,8 @@
  */
 
 const PRICE_TO_TIER = {
-  'price_1TMgZrIdXtVMG9WO5Fgmuy55': 'featured',  // $299/mo
-  'price_1TMgipIdXtVMG9WOFRFtFA39': 'premium',   // $599/mo
+  'price_1TMgZrIdXtVMG9WO5Fgmuy55': 'featured',  // Stripe price object predates the 2026-09 repricing (Featured now $49 founding / $99)
+  'price_1TMgipIdXtVMG9WOFRFtFA39': 'premium',   // Stripe price object predates the 2026-09 repricing (Premium now $99 founding / $199)
 };
 
 const ALLOWED_ORIGIN = 'https://twincitycannabis.com';
