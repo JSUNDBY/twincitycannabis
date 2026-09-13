@@ -240,6 +240,23 @@ def main():
         if added:
             print(f"Merged {added} manually-added dispensaries from manual_dispensaries.json")
 
+    # Duplicate Weedmaps listings for the same physical shop (same street
+    # address, verified 2026-09-12). Drop the id with no/thin menu; the kept
+    # id is the one the platform scrapers feed. Owners notice these — Fort
+    # Road's owner wrote in about being "on here twice."
+    DUPLICATE_OF = {
+        "fort-road-cannabis": "fort-road-cannabis-llc",
+        "litt-dispensaries-llc-l-l-c": "litt-dispensaries-llc",
+        "farmer-s-cannabis-co": "farmer-s-cannabis-company",
+        "the-cannabis-co-4": "the-cannabis-co",
+        "feelin-mn-llc": "feelin-mn",
+        "black-bear-dispensary": "black-bear-weed-dispensary-winona",
+    }
+    before = len(all_dispensaries)
+    all_dispensaries = [d for d in all_dispensaries if d.get("id") not in DUPLICATE_OF]
+    if before != len(all_dispensaries):
+        print(f"Dropped {before - len(all_dispensaries)} duplicate listings (DUPLICATE_OF)")
+
     # Filter to metro area + manual includes
     metro = [d for d in all_dispensaries if is_included(d)]
     print(f"Filtered to {len(metro)} dispensaries (metro + manual includes)")

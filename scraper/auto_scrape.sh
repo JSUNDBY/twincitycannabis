@@ -149,12 +149,24 @@ python3 scraper/backfill_images.py
 # (flavor-named gummies, beverages, even toothpaste/pipes leaked in).
 python3 scraper/recategorize_data_js.py
 PRODUCTS_AFTER=$("$NODE_BIN" -e 'global.window={};require("./js/data.js");console.log(window.TCC.products.length)' 2>/dev/null || echo 0)
+# Alert helper: pushes a message to hello@ via the worker /alert endpoint
+# (env from /etc/tcc-scrape.env). Non-fatal, no-op when env is missing.
+_tcc_alert() {
+    [ -n "$TCC_ALERT_URL" ] && [ -n "$TCC_ALERT_TOKEN" ] || return 0
+    curl -fsS --max-time 15 -X POST "$TCC_ALERT_URL" \
+        -H "Content-Type: application/json" -H "x-alert-token: $TCC_ALERT_TOKEN" \
+        -d "{\"source\":\"auto_scrape\",\"text\":$(printf '%s' "$1" | python3 -c 'import json,sys;print(json.dumps(sys.stdin.read()))')}" \
+        >/dev/null 2>&1 || echo "Alert POST failed (non-fatal)"
+}
+
 if [ "$PRODUCTS_AFTER" -lt 1 ] 2>/dev/null; then
     echo "data.js failed to parse after data-quality steps — reverting"
     cp /tmp/tcc_data_prebrand.js js/data.js
+    _tcc_alert "data.js failed to parse after data-quality steps and was reverted to the pre-step copy. The site keeps serving the previous data; investigate the data-quality trio."
 elif [ "$PRODUCTS_BEFORE" -gt 0 ] && [ "$PRODUCTS_AFTER" -lt $((PRODUCTS_BEFORE * 8 / 10)) ]; then
     echo "data.js shrank $PRODUCTS_BEFORE -> $PRODUCTS_AFTER after data-quality steps — reverting"
     cp /tmp/tcc_data_prebrand.js js/data.js
+    _tcc_alert "data.js shrank $PRODUCTS_BEFORE -> $PRODUCTS_AFTER products after the data-quality steps and was reverted. A scraper or filter is misbehaving; investigate before the next cycle compounds it."
 fi
 
 # 7.95. Generate the real price-drop deals feed from priceHistory (no fakes).

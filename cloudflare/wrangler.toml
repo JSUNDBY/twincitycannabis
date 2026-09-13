@@ -31,3 +31,8 @@ id = "71b77df77ea74522ab66c82e20cc9339"
 # Observability — keeps the last 7 days of logs accessible via `wrangler tail`
 [observability]
 enabled = true
+
+# Weekly intake digest — Mondays 14:00 UTC (9am Central). The safety net:
+# even if a per-event notification breaks, silence lasts at most a week.
+[triggers]
+crons = ["0 14 * * 1"]

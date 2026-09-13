@@ -137,6 +137,10 @@ export default {
       return handleSuggestionsRead(request, env, cors);
     }
 
+    if (url.pathname === '/alert' && request.method === 'POST') {
+      return handleAlert(request, env, cors);
+    }
+
     if (url.pathname === '/contact' && request.method === 'POST') {
       return handleContact(request, env, cors);
     }
@@ -180,6 +184,11 @@ export default {
     }
 
     return new Response('Not found', { status: 404 });
+  },
+
+  // Monday-morning intake digest — see sendWeeklyDigest.
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(sendWeeklyDigest(env));
   },
 };
 
@@ -1317,7 +1326,90 @@ async function handleSuggest(request, env, cors) {
   const list = (await env.TCC_OVERRIDES.get('index:suggestions', { type: 'json' })) || [];
   list.unshift(entry);
   await env.TCC_OVERRIDES.put('index:suggestions', JSON.stringify(list.slice(0, 300)));
+
+  // Intake rule (2026-09-12, learned from the Kit-embed incident): nothing a
+  // visitor sends may end in a silent store. Every suggestion also emails
+  // hello@. Non-blocking.
+  try {
+    await sendOpsEmail(env, `💡 Suggestion: ${text.slice(0, 60)}`,
+      `New suggestion from the site\n\n${text}\n\nContact: ${entry.contact || '(none left)'}\nPage: ${entry.page || '-'}\nAll suggestions: https://dashboard.twincitycannabis.com/admin/suggestions (admin token required)`);
+  } catch (e) { console.error('suggestion email failed:', e); }
+
   return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+}
+
+// Generic ops notification to hello@ — the one pipe every signal ends in.
+async function sendOpsEmail(env, subject, text) {
+  if (!env.RESEND_API_KEY) return;
+  const r = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: 'TCC Ops <notifications@send.twincitycannabis.com>',
+      to: ['hello@twincitycannabis.com'],
+      subject,
+      text,
+    }),
+  });
+  if (!r.ok) throw new Error(`Resend API ${r.status}: ${await r.text()}`);
+}
+
+// ─── /alert ───────────────────────────────────────────────────────────────
+// Machine-to-inbox bridge for the Pi scraper: the menu watchdog and the
+// data-quality count guard POST here so a dying menu or a reverted build
+// reaches hello@ within the cycle instead of rotting in a cron log
+// (the Dutchie wipe of 2026-09-11 sat unseen for three cycles).
+// Auth: x-alert-token header must match the ALERT_TOKEN secret.
+async function handleAlert(request, env, cors) {
+  if (!env.ALERT_TOKEN || request.headers.get('x-alert-token') !== env.ALERT_TOKEN) {
+    return new Response(JSON.stringify({ ok: false }), { status: 401, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  let body;
+  try { body = await request.json(); } catch {
+    return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const source = String(body.source || 'scraper').slice(0, 60);
+  const text = String(body.text || '').slice(0, 5000);
+  if (!text) {
+    return new Response(JSON.stringify({ ok: false, error: 'text required' }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  try { await sendOpsEmail(env, `🚨 TCC alert [${source}]`, text); }
+  catch (e) {
+    console.error('alert email failed:', e);
+    return new Response(JSON.stringify({ ok: false, error: 'email failed' }), { status: 502, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+}
+
+// ─── Weekly digest (cron) ─────────────────────────────────────────────────
+// Safety net under the per-event notifications: every Monday morning a
+// summary of everything the KV stores collected lands at hello@, so even a
+// broken notification path can stay silent for at most a week.
+async function sendWeeklyDigest(env) {
+  const since = new Date(Date.now() - 7 * 86400 * 1000).toISOString();
+  const leads = (await env.TCC_OVERRIDES.get('index:leads', { type: 'json' })) || [];
+  const suggestions = (await env.TCC_OVERRIDES.get('index:suggestions', { type: 'json' })) || [];
+  const uploads = (await env.TCC_OVERRIDES.get('index:menu-uploads', { type: 'json' })) || [];
+  const newLeads = leads.filter((l) => (l.submitted_at || '') >= since);
+  const newSugg = suggestions.filter((s) => (s.submitted_at || '') >= since);
+  const pendingUploads = uploads.filter((u) => !u.processed);
+  let alerts = [];
+  try {
+    const r = await fetch('https://twincitycannabis.com/scraper/data/menu_alerts.json', { cf: { cacheTtl: 0 } });
+    if (r.ok) alerts = (await r.json()).filter((a) => (a.date || '') >= since.slice(0, 10));
+  } catch (_) {}
+
+  const lines = [
+    `TCC weekly intake digest (${new Date().toISOString().slice(0, 10)})`,
+    '',
+    `Leads this week: ${newLeads.length}` + (newLeads.length ? '\n' + newLeads.map((l) => `  - ${l.submitted_at.slice(0, 10)} ${l.name} <${l.email}> ${l.dispensary || l.brand || ''}`).join('\n') : ''),
+    `Suggestions this week: ${newSugg.length}` + (newSugg.length ? '\n' + newSugg.map((s) => `  - ${(s.submitted_at || '').slice(0, 10)} ${s.text.slice(0, 90)}`).join('\n') : ''),
+    `Menu uploads pending import: ${pendingUploads.length}` + (pendingUploads.length ? '\n' + pendingUploads.map((u) => `  - ${u.slug} (${u.submitted_at.slice(0, 10)})`).join('\n') : ''),
+    `Menu watchdog alerts this week: ${alerts.length}` + (alerts.length ? '\n' + alerts.map((a) => `  - ${a.date} ${a.kind}: ${a.shop} ${a.before}->${a.after}`).join('\n') : ''),
+    '',
+    'Dashboard: https://dashboard.twincitycannabis.com/admin',
+  ];
+  await sendOpsEmail(env, `📬 TCC weekly digest: ${newLeads.length} leads, ${newSugg.length} suggestions, ${alerts.length} alerts`, lines.join('\n'));
 }
 
 async function handleSuggestionsRead(request, env, cors) {

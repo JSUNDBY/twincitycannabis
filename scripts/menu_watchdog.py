@@ -36,6 +36,33 @@ console.log(JSON.stringify(c));
     return json.loads(out.stdout.strip())
 
 
+def _post_alert(alerts):
+    """Push alerts to hello@ via the worker /alert endpoint. A cron log
+    nobody reads is a silent store — the 2026-09-11 Dutchie wipe sat
+    unseen for three cycles. Non-fatal: env vars come from
+    /etc/tcc-scrape.env on the Pi; missing means log-only."""
+    import os
+    import urllib.request
+    url = os.environ.get("TCC_ALERT_URL")
+    token = os.environ.get("TCC_ALERT_TOKEN")
+    if not url or not token:
+        return
+    text = "\n".join(
+        f"{a['kind']}: {a['shop']} ({a['before']} -> {a['after']} products)"
+        for a in alerts
+    ) + "\n\nLikely left its menu platform; probe the shop's website for a new menu system."
+    try:
+        req = urllib.request.Request(
+            url,
+            data=json.dumps({"source": "menu-watchdog", "text": text}).encode(),
+            headers={"Content-Type": "application/json", "x-alert-token": token},
+        )
+        urllib.request.urlopen(req, timeout=15)
+        print("Watchdog alert emailed via worker /alert")
+    except Exception as e:  # never kill the scrape over a notification
+        print(f"Watchdog alert POST failed (non-fatal): {e}")
+
+
 def main():
     counts = current_counts()
     prev = json.loads(SNAPSHOT.read_text()) if SNAPSHOT.exists() else {}
@@ -64,6 +91,7 @@ def main():
                   f"({a['before']} -> {a['after']} products). "
                   f"Likely left its menu platform; probe their website.")
         ALERTS.write_text(json.dumps((alerts + existing)[:50], indent=1))
+        _post_alert(alerts)
     else:
         print(f"Menu watchdog: {sum(1 for v in counts.values() if v > 0)} shops "
               f"with menus, no deaths.")
