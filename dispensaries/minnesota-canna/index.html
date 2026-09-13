@@ -240,6 +240,82 @@
 <a class="cta" href="/#dashboard/minnesota-canna">View interactive menu &amp; price compare →</a>
 <a class="cta" href="https://minnesotacanna.com/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit Minnesota Canna's website →</a>
 
+
+<div id="checkins-section" data-slug="minnesota-canna">
+  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
+  <div id="checkins-list"></div>
+  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
+  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
+  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
+    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <datalist id="checkin-products"><option value="GRD Half and Half Lemonade Shot 10mg THC"><option value="Lemonade"><option value="BSD Blueberry Lemonade Cooler 10mg THC"><option value="HOH Lemonade Tea 10mg THC"><option value="Fill-a Blunts Ceramic Tip"><option value="KBC Grape Ape Soda 10mg THC"><option value="KBC Lemon Haze Soda 10mg THC"><option value="KBC Orange Turbo Soda 10mg THC"><option value="KBC Root Beer Soda 10mg THC"><option value="NBH Black Cherry Seltzer 10mg THC"><option value="NBH Fruit Punch Seltzer 10mg THC"><option value="MLC Wild Cherry Moonshot Drink 10mg THC + 10mg CBD"><option value="UBC Frosted Runtz Pre-Roll 0.5g"><option value="UBC Vanilla Berries Pre-Roll 0.5g"><option value="UBC Wilfunk Pre-Roll 0.5g"><option value="HLH Blue Raspberry Gummies 2pk 50mg THC"><option value="GRD Groovy Pebbles Gummies 50mg THC"><option value="GRD Lemon Cherry Gelato Gummies 50mg THC"><option value="GRD Lemon Headz Gummies 50mg THC"><option value="HLH Pineapple Mango Gummies 2pk 50mg THC"><option value="HLH Citrus Crush Gummies 2pk 50mg THC + 20mg CBC"><option value="NCW Blue Raspberry Gummies 50mg THC"><option value="NCW Cherry Limeade Gummies 50mg THC"><option value="NCW Cotton Candy Gummies 50mg THC"><option value="NCW Grape Gummies 50mg THC"><option value="NCW Green Apple Gummies 50mg THC"><option value="NCW Juicy Peach Gummies 50mg THC"><option value="NCW Mango Gummies 50mg THC"><option value="NCW Orange Soda Gummies 50mg THC"><option value="NCW Rainbow Rush Gummies 50mg THC"><option value="MNG Berry Bliss Gummy Bar 50mg THC"><option value="MNG BlueBeary Gummy Bar 50mg THC"><option value="Peach Gummy Bar"><option value="Highbernate 2.0 Yummy Gummy Bar"><option value="STL Fog Dog Pre-Roll 0.35g"><option value="Tropical Sunrise Gummy Bar"><option value="BSD Blue Raspberry Indica Gummy 50mg THC"><option value="BSD Peach Mango Indica Gummy 50mg THC"><option value="BSD Strawberry Sativa Gummy 50mg THC"><option value="NCW Cookies and Cream CBG 40mg THC"><option value="NCW Dark Chocolate CBN 40mg THC"><option value="Highbernate 2.0 Gummy Bar"><option value="MNG Caramel Apple Gummy Bar 50mg THC"><option value="BSD Watermelon Sativa Gummy 50mg THC"><option value="KBC Blueberry Lavender Gummies 50mg"><option value="KBC Raspberry Lemonade Gummies 50mg"><option value="GGL Elderberry Sleep Gummies 50mg THC GGL5"><option value="GGL Peach Gummies 50mg THC GGL4"><option value="GGL Sativa Gummies 50mg THC GGL3"><option value="GGL Watermelon Gummies 50mg THC GGL2"><option value="KBC Mixed Fruit Gummies 50mg"><option value="Raspberry Sativa Enhanced Delta-9 Gummies"><option value="NBH Blackberry Relax Gummies 50mg THC"><option value="NBH Raspberry Focus Gummies 50mg THC"><option value="Sour Cherry Indica Enhanced Delta-9 Gummies"><option value="GTI Jack&#39;s Delight Pre-Roll 0.75g"><option value="Huckleberry Hybrid Enhanced Delta-9 Gummies"><option value="Marionberry Indica Enhanced Delta-9 Gummies"><option value="WLD Sour Apple Sativa Gummy 50mg THC"><option value="GTI OMG Pre-Roll 0.75g"><option value="KBC Kiwi Gummies 50mg"><option value="KBC Lemon Gummies 50mg"><option value="NBH Blueberry Uplift Gummies 50mg THC"><option value="WLD Sour Tangerine Hybrid Gummy 50mg THC"><option value="So Superior Clementine Gummies"><option value="Highbernate Moon Melon Gummies"><option value="Minny Grown Gummies - Highbernate Original"><option value="Kabetogama Kiwi Watermelon"><option value="MNG BlueBeary Gummies 50mg THC"><option value="Midwest Sunset Mango"><option value="Minny Apple Gummies"><option value="BFS Grape Indica Gummies 50mg THC"><option value="Minny Grown"><option value="BFS Mango Sativa Gummies 50mg THC"><option value="Beary Bliss Gummies"><option value="Fresh Cut Watermelon Gummies"><option value="Peach Gummies"><option value="RBR Cookies and Cream Chocolate Bar 10pk 50mg THC"><option value="RBR Creamy White Chocolate Bar 10pk 50mg THC"><option value="RBR Dark Chocolate Espresso Bar 10pk 50mg THC"></datalist>
+    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
+    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
+  </form>
+  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
+    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var slug = "minnesota-canna";
+  var W = 'https://dashboard.twincitycannabis.com';
+  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('checkins-title').hidden = false;
+    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
+      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
+      var prod = String(c.product).replace(/[<>&"]/g, '');
+      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
+      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
+    }).join('');
+  }).catch(function () {});
+  var open = document.getElementById('checkin-open');
+  var form = document.getElementById('checkin-form');
+  function openForm() { form.hidden = false; document.getElementById('checkin-product').focus(); }
+  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  // The link under the menu scrolls up here — open the form on arrival so
+  // the reader doesn't have to hunt for a second click.
+  var jump = document.getElementById('checkin-jump');
+  if (jump) jump.addEventListener('click', function () { setTimeout(openForm, 300); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('checkin-err');
+    err.hidden = true;
+    var product = document.getElementById('checkin-product').value.trim();
+    var price = parseFloat(document.getElementById('checkin-price').value);
+    if (product.length < 2 || !(price > 0.5 && price < 500)) {
+      err.textContent = 'A product and a real price are all we need.';
+      err.hidden = false;
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(W + '/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop: slug, product: product, price: price,
+        note: document.getElementById('checkin-note').value.trim(),
+        name: document.getElementById('checkin-name').value.trim(),
+      }),
+    }).then(function (r) {
+      if (!r.ok) throw new Error('bad');
+      form.hidden = true;
+      document.getElementById('checkin-thanks').hidden = false;
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = 'Send it';
+      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+      err.hidden = false;
+    });
+  });
+})();
+</script>
+
 <h2>Full menu &amp; live prices</h2>
 <h3>Beverages (13)</h3>
 <table>
@@ -252,7 +328,7 @@
     <td style="text-align:right">$4.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/529/029/avatar/1781594155-441758878_9c120319-754d-45a9-af74-596cd8511dc2.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1853">Lemonade | 10mg | 2fl oz</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/529/029/avatar/1781594155-441758878_9c120319-754d-45a9-af74-596cd8511dc2.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1852">Lemonade | 10mg | 2fl oz</a></td>
     <td>Lemonade</td>
     <td style="text-align:right" class="price">$4.00 ✓</td>
     <td style="text-align:right">$4.00</td>
@@ -282,13 +358,13 @@
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/100/006/694/9/443434113_c80009a9-a65a-4276-b27f-51cfe4775b78.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1721">KBC Orange Turbo Soda 10mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/100/006/694/9/443434113_c80009a9-a65a-4276-b27f-51cfe4775b78.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1720">KBC Orange Turbo Soda 10mg THC</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/100/006/694/9/443434118_648d3046-b683-4c6e-8d39-a9b90065bdad.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1722">KBC Root Beer Soda 10mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/100/006/694/9/443434118_648d3046-b683-4c6e-8d39-a9b90065bdad.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1721">KBC Root Beer Soda 10mg THC</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
@@ -428,7 +504,7 @@
     <td style="text-align:right">$10.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/971/941/822/443860969_29b9908a-d1b3-4861-8200-2778ff15159e.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1595">HLH Citrus Crush Gummies 2pk 50mg THC + 20mg CBC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/971/941/822/443860969_29b9908a-d1b3-4861-8200-2778ff15159e.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1594">HLH Citrus Crush Gummies 2pk 50mg THC + 20mg CBC</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$10.00 ✓</td>
     <td style="text-align:right">$10.00</td>
@@ -743,77 +819,7 @@
   </tr>
 </tbody>
 </table>
-
-
-<div id="checkins-section" data-slug="minnesota-canna">
-  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
-  <div id="checkins-list"></div>
-  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
-  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
-  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
-    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <datalist id="checkin-products"><option value="GRD Half and Half Lemonade Shot 10mg THC"><option value="Lemonade"><option value="BSD Blueberry Lemonade Cooler 10mg THC"><option value="HOH Lemonade Tea 10mg THC"><option value="Fill-a Blunts Ceramic Tip"><option value="KBC Grape Ape Soda 10mg THC"><option value="KBC Lemon Haze Soda 10mg THC"><option value="KBC Orange Turbo Soda 10mg THC"><option value="KBC Root Beer Soda 10mg THC"><option value="NBH Black Cherry Seltzer 10mg THC"><option value="NBH Fruit Punch Seltzer 10mg THC"><option value="MLC Wild Cherry Moonshot Drink 10mg THC + 10mg CBD"><option value="UBC Frosted Runtz Pre-Roll 0.5g"><option value="UBC Vanilla Berries Pre-Roll 0.5g"><option value="UBC Wilfunk Pre-Roll 0.5g"><option value="HLH Blue Raspberry Gummies 2pk 50mg THC"><option value="GRD Groovy Pebbles Gummies 50mg THC"><option value="GRD Lemon Cherry Gelato Gummies 50mg THC"><option value="GRD Lemon Headz Gummies 50mg THC"><option value="HLH Pineapple Mango Gummies 2pk 50mg THC"><option value="HLH Citrus Crush Gummies 2pk 50mg THC + 20mg CBC"><option value="NCW Blue Raspberry Gummies 50mg THC"><option value="NCW Cherry Limeade Gummies 50mg THC"><option value="NCW Cotton Candy Gummies 50mg THC"><option value="NCW Grape Gummies 50mg THC"><option value="NCW Green Apple Gummies 50mg THC"><option value="NCW Juicy Peach Gummies 50mg THC"><option value="NCW Mango Gummies 50mg THC"><option value="NCW Orange Soda Gummies 50mg THC"><option value="NCW Rainbow Rush Gummies 50mg THC"><option value="MNG Berry Bliss Gummy Bar 50mg THC"><option value="MNG BlueBeary Gummy Bar 50mg THC"><option value="Peach Gummy Bar"><option value="Highbernate 2.0 Yummy Gummy Bar"><option value="STL Fog Dog Pre-Roll 0.35g"><option value="Tropical Sunrise Gummy Bar"><option value="BSD Blue Raspberry Indica Gummy 50mg THC"><option value="BSD Peach Mango Indica Gummy 50mg THC"><option value="BSD Strawberry Sativa Gummy 50mg THC"><option value="NCW Cookies and Cream CBG 40mg THC"><option value="NCW Dark Chocolate CBN 40mg THC"><option value="Highbernate 2.0 Gummy Bar"><option value="MNG Caramel Apple Gummy Bar 50mg THC"><option value="BSD Watermelon Sativa Gummy 50mg THC"><option value="KBC Blueberry Lavender Gummies 50mg"><option value="KBC Raspberry Lemonade Gummies 50mg"><option value="GGL Elderberry Sleep Gummies 50mg THC GGL5"><option value="GGL Peach Gummies 50mg THC GGL4"><option value="GGL Sativa Gummies 50mg THC GGL3"><option value="GGL Watermelon Gummies 50mg THC GGL2"><option value="KBC Mixed Fruit Gummies 50mg"><option value="Raspberry Sativa Enhanced Delta-9 Gummies"><option value="NBH Blackberry Relax Gummies 50mg THC"><option value="NBH Raspberry Focus Gummies 50mg THC"><option value="Sour Cherry Indica Enhanced Delta-9 Gummies"><option value="GTI Jack&#39;s Delight Pre-Roll 0.75g"><option value="Huckleberry Hybrid Enhanced Delta-9 Gummies"><option value="Marionberry Indica Enhanced Delta-9 Gummies"><option value="WLD Sour Apple Sativa Gummy 50mg THC"><option value="GTI OMG Pre-Roll 0.75g"><option value="KBC Kiwi Gummies 50mg"><option value="KBC Lemon Gummies 50mg"><option value="NBH Blueberry Uplift Gummies 50mg THC"><option value="WLD Sour Tangerine Hybrid Gummy 50mg THC"><option value="So Superior Clementine Gummies"><option value="Highbernate Moon Melon Gummies"><option value="Minny Grown Gummies - Highbernate Original"><option value="Kabetogama Kiwi Watermelon"><option value="MNG BlueBeary Gummies 50mg THC"><option value="Midwest Sunset Mango"><option value="Minny Apple Gummies"><option value="BFS Grape Indica Gummies 50mg THC"><option value="Minny Grown"><option value="BFS Mango Sativa Gummies 50mg THC"><option value="Beary Bliss Gummies"><option value="Fresh Cut Watermelon Gummies"><option value="Peach Gummies"><option value="RBR Cookies and Cream Chocolate Bar 10pk 50mg THC"><option value="RBR Creamy White Chocolate Bar 10pk 50mg THC"><option value="RBR Dark Chocolate Espresso Bar 10pk 50mg THC"></datalist>
-    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
-    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
-  </form>
-  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
-    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
-  </div>
-</div>
-<script>
-(function () {
-  var slug = "minnesota-canna";
-  var W = 'https://dashboard.twincitycannabis.com';
-  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
-    if (!rows || !rows.length) return;
-    document.getElementById('checkins-title').hidden = false;
-    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
-      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
-      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
-      var prod = String(c.product).replace(/[<>&"]/g, '');
-      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
-      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
-    }).join('');
-  }).catch(function () {});
-  var open = document.getElementById('checkin-open');
-  var form = document.getElementById('checkin-form');
-  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var err = document.getElementById('checkin-err');
-    err.hidden = true;
-    var product = document.getElementById('checkin-product').value.trim();
-    var price = parseFloat(document.getElementById('checkin-price').value);
-    if (product.length < 2 || !(price > 0.5 && price < 500)) {
-      err.textContent = 'A product and a real price are all we need.';
-      err.hidden = false;
-      return;
-    }
-    var btn = form.querySelector('button[type="submit"]');
-    btn.disabled = true; btn.textContent = 'Sending…';
-    fetch(W + '/checkin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        shop: slug, product: product, price: price,
-        note: document.getElementById('checkin-note').value.trim(),
-        name: document.getElementById('checkin-name').value.trim(),
-      }),
-    }).then(function (r) {
-      if (!r.ok) throw new Error('bad');
-      form.hidden = true;
-      document.getElementById('checkin-thanks').hidden = false;
-    }).catch(function () {
-      btn.disabled = false; btn.textContent = 'Send it';
-      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
-      err.hidden = false;
-    });
-  });
-})();
-</script>
+<p style="font-size:.9rem;margin:.8rem 0 0"><a href="#checkins-section" id="checkin-jump">Shopped here? Tell other people what you actually paid →</a></p>
 
 
 <h2>What customers say on Google</h2>

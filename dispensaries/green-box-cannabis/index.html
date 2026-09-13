@@ -235,32 +235,6 @@
 <a class="cta" href="/#dashboard/green-box-cannabis">View interactive menu &amp; price compare →</a>
 <a class="cta" href="http://greenboxcannabis.wm.store/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit Green Box Cannabis's website →</a>
 
-<h2>Full menu &amp; live prices</h2>
-<h3>Flower (3)</h3>
-<table>
-<thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Green Box Cannabis</th><th style="text-align:right">Lowest in metro</th></tr></thead>
-<tbody>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/554/478/397/442962121_defaultImg.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0941">Cannexa-Blizzard 3.5g</a></td>
-    <td>House</td>
-    <td style="text-align:right" class="price">$50.00 ✓</td>
-    <td style="text-align:right">$50.00</td>
-  </tr>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/554/478/397/442962125_Sex_Panther.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0942">Cannexa-Sex Panther 3.5 g</a></td>
-    <td>House</td>
-    <td style="text-align:right" class="price">$50.00 ✓</td>
-    <td style="text-align:right">$50.00</td>
-  </tr>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/554/478/397/442962126_Space_Queen.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0943">Cannexa-Space Queen 3.5 g</a></td>
-    <td>House</td>
-    <td style="text-align:right" class="price">$50.00 ✓</td>
-    <td style="text-align:right">$50.00</td>
-  </tr>
-</tbody>
-</table>
-
 
 <div id="checkins-section" data-slug="green-box-cannabis">
   <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
@@ -297,7 +271,12 @@
   }).catch(function () {});
   var open = document.getElementById('checkin-open');
   var form = document.getElementById('checkin-form');
+  function openForm() { form.hidden = false; document.getElementById('checkin-product').focus(); }
   open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  // The link under the menu scrolls up here — open the form on arrival so
+  // the reader doesn't have to hunt for a second click.
+  var jump = document.getElementById('checkin-jump');
+  if (jump) jump.addEventListener('click', function () { setTimeout(openForm, 300); });
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var err = document.getElementById('checkin-err');
@@ -331,6 +310,33 @@
   });
 })();
 </script>
+
+<h2>Full menu &amp; live prices</h2>
+<h3>Flower (3)</h3>
+<table>
+<thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Green Box Cannabis</th><th style="text-align:right">Lowest in metro</th></tr></thead>
+<tbody>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/554/478/397/442962121_defaultImg.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0940">Cannexa-Blizzard 3.5g</a></td>
+    <td>House</td>
+    <td style="text-align:right" class="price">$50.00 ✓</td>
+    <td style="text-align:right">$50.00</td>
+  </tr>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/554/478/397/442962125_Sex_Panther.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0941">Cannexa-Sex Panther 3.5 g</a></td>
+    <td>House</td>
+    <td style="text-align:right" class="price">$50.00 ✓</td>
+    <td style="text-align:right">$50.00</td>
+  </tr>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/554/478/397/442962126_Space_Queen.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0942">Cannexa-Space Queen 3.5 g</a></td>
+    <td>House</td>
+    <td style="text-align:right" class="price">$50.00 ✓</td>
+    <td style="text-align:right">$50.00</td>
+  </tr>
+</tbody>
+</table>
+<p style="font-size:.9rem;margin:.8rem 0 0"><a href="#checkins-section" id="checkin-jump">Shopped here? Tell other people what you actually paid →</a></p>
 
 
 <h2>What customers say on Google</h2>

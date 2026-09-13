@@ -235,6 +235,82 @@
 <a class="cta" href="/#dashboard/pot-mama-s-edina">View interactive menu &amp; price compare →</a>
 <a class="cta" href="https://www.pot-mamas.com/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit Pot Mama&#39;s - Edina's website →</a>
 
+
+<div id="checkins-section" data-slug="pot-mama-s-edina">
+  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
+  <div id="checkins-list"></div>
+  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
+  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
+  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
+    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <datalist id="checkin-products"><option value="Mini Soda"><option value="THC Infusions"><option value="BLNCD"><option value="Mango Tango"><option value="Blueberry Pom 5:1 CBD:CBN Sparkling Water"><option value="Bootlegger"><option value="Caviar"><option value="Clementine 10:1 CBD:THC D-9 Sparkling Water"><option value="Hop The Wave"><option value="Looner"><option value="Crested River"><option value="Natreum"><option value="Sour Tangerine Hybrid Enhanced Delta-9 Gummies"><option value="Drops"><option value="Elderberry 2:1 THC:CBN Indica Enhanced Gummies"><option value="Blood Orange 1:1 THC:CBC Sativa Delta-9 Gummies"><option value="Pomegranate 1:1 THC:CBD Hybrid Delta-9 Gummies"><option value="Dizgo"><option value="Retro Bakery"><option value="Wyld"><option value="THC Gummies"><option value="Avio Supply"><option value="Mini Mints"><option value="VetCBD"><option value="Elderberry 5:1 CBD:CBN Gummies"><option value="MLLW"><option value="Peach 2:1 CBD:CBC Gummies"><option value="Pear 2:1 CBD:CBG Gummies"><option value="Foundry"><option value="THC Mocktail"><option value="Unbound"><option value="Mischief"><option value="CBD Salve"><option value="Illemonati"><option value="Papaya Fuel"><option value="Gruntz"><option value="Watermelon Pound Cake"><option value="Jungle Wifi"><option value="Native Care"><option value="Tasty Gems"><option value="Medusa"></datalist>
+    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
+    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
+  </form>
+  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
+    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var slug = "pot-mama-s-edina";
+  var W = 'https://dashboard.twincitycannabis.com';
+  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('checkins-title').hidden = false;
+    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
+      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
+      var prod = String(c.product).replace(/[<>&"]/g, '');
+      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
+      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
+    }).join('');
+  }).catch(function () {});
+  var open = document.getElementById('checkin-open');
+  var form = document.getElementById('checkin-form');
+  function openForm() { form.hidden = false; document.getElementById('checkin-product').focus(); }
+  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  // The link under the menu scrolls up here — open the form on arrival so
+  // the reader doesn't have to hunt for a second click.
+  var jump = document.getElementById('checkin-jump');
+  if (jump) jump.addEventListener('click', function () { setTimeout(openForm, 300); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('checkin-err');
+    err.hidden = true;
+    var product = document.getElementById('checkin-product').value.trim();
+    var price = parseFloat(document.getElementById('checkin-price').value);
+    if (product.length < 2 || !(price > 0.5 && price < 500)) {
+      err.textContent = 'A product and a real price are all we need.';
+      err.hidden = false;
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(W + '/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop: slug, product: product, price: price,
+        note: document.getElementById('checkin-note').value.trim(),
+        name: document.getElementById('checkin-name').value.trim(),
+      }),
+    }).then(function (r) {
+      if (!r.ok) throw new Error('bad');
+      form.hidden = true;
+      document.getElementById('checkin-thanks').hidden = false;
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = 'Send it';
+      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+      err.hidden = false;
+    });
+  });
+})();
+</script>
+
 <h2>Full menu &amp; live prices</h2>
 <h3>Beverages (32)</h3>
 <table>
@@ -259,19 +335,19 @@
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443332756_Screenshot-2026-04-26-164837-efaeb370-038c-41e7-b46a-e85bc460b3b1.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0685">BLNCD | Fuse Levitate 10mg THC:CBG Infusion</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443332756_Screenshot-2026-04-26-164837-efaeb370-038c-41e7-b46a-e85bc460b3b1.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0684">BLNCD | Fuse Levitate 10mg THC:CBG Infusion</a></td>
     <td>BLNCD</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444012206_mini-soda-lime-a858f6ec-e980-4b38-b750-e41e2b6843cf.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2064">Mini Soda | Lime Soda | 5mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444012206_mini-soda-lime-a858f6ec-e980-4b38-b750-e41e2b6843cf.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2063">Mini Soda | Lime Soda | 5mg THC</a></td>
     <td>Mini Soda</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444012204_mini-soda-mandarin-6e4e3371-6afb-4691-b649-6c0415ee10f2.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2065">Mini Soda | Mandarin Soda | 5mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444012204_mini-soda-mandarin-6e4e3371-6afb-4691-b649-6c0415ee10f2.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2064">Mini Soda | Mandarin Soda | 5mg THC</a></td>
     <td>Mini Soda</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
@@ -289,55 +365,55 @@
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443727055_BLNCD_THC_Infusions_Levitate_20mg-800x801-fc8cbf2b-6d30-46f7-ae0f-678b6d07229e.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0686">BLNCD | Fuse Levitate 20mg THC:CBG Infusion</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443727055_BLNCD_THC_Infusions_Levitate_20mg-800x801-fc8cbf2b-6d30-46f7-ae0f-678b6d07229e.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0685">BLNCD | Fuse Levitate 20mg THC:CBG Infusion</a></td>
     <td>BLNCD</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444012528_bootlegger-mai-tai-d7b2fc8a-9de8-432a-8746-f252faf1b688.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0819">Bootlegger | Mai Tai Mocktail | 10mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444012528_bootlegger-mai-tai-d7b2fc8a-9de8-432a-8746-f252faf1b688.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0818">Bootlegger | Mai Tai Mocktail | 10mg THC</a></td>
     <td>Bootlegger</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444469945_caviar-fruit-punch-0b7aa2f5-21f6-4d02-b38e-3f2524730cf8.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0985">Caviar | Fruit Sucker Punch | 10mg THC:5mg CBG</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444469945_caviar-fruit-punch-0b7aa2f5-21f6-4d02-b38e-3f2524730cf8.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0984">Caviar | Fruit Sucker Punch | 10mg THC:5mg CBG</a></td>
     <td>Caviar</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444469943_caviar-strawberry-lemonade-9bba0b18-9c64-4db1-87b0-b46b8ad2721c.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0986">Caviar | Lifted Strawberry Lemonade | 10mg THC:5mg CBG</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444469943_caviar-strawberry-lemonade-9bba0b18-9c64-4db1-87b0-b46b8ad2721c.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0985">Caviar | Lifted Strawberry Lemonade | 10mg THC:5mg CBG</a></td>
     <td>Caviar</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/493/713/avatar/1788195371-thc_clementine_sparkling_water_product.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1034">Clementine 10:1 CBD:THC D-9 Sparkling Water | Carbonated | 20mg | 12 fl oz</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/493/713/avatar/1788195371-thc_clementine_sparkling_water_product.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1033">Clementine 10:1 CBD:THC D-9 Sparkling Water | Carbonated | 20mg | 12 fl oz</a></td>
     <td>WYLD</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444000862_hop-the-wave-iced-tea-7ee8e522-4506-455a-ae82-14e202375a22.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1672">Hop The Wave | Iced Tea | 10mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444000862_hop-the-wave-iced-tea-7ee8e522-4506-455a-ae82-14e202375a22.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1671">Hop The Wave | Iced Tea | 10mg THC</a></td>
     <td>Hop The Wave</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444457607_looner-cola-60e117ad-6ec6-4ce7-893d-6f8df7da9e1f.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1916">Looner | Cola Soda | 10mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444457607_looner-cola-60e117ad-6ec6-4ce7-893d-6f8df7da9e1f.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1915">Looner | Cola Soda | 10mg THC</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444457608_looner-dew-9c7116cb-6281-4b40-9430-ce90dc32ef1d.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1918">Looner | Dew Soda | 10mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444457608_looner-dew-9c7116cb-6281-4b40-9430-ce90dc32ef1d.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1917">Looner | Dew Soda | 10mg THC</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444457606_looner-lemon-lime-ed52890f-e764-41bf-b30d-f786b3c86aeb.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1919">Looner | Lemon Lime Soda | 10mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444457606_looner-lemon-lime-ed52890f-e764-41bf-b30d-f786b3c86aeb.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1918">Looner | Lemon Lime Soda | 10mg THC</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
@@ -361,31 +437,31 @@
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443809406_CR-forbidden-fruit-dcf22318-cd2b-43af-936c-73d43fe586a8.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1073">Crested River | Forbidden Fruit Soda | 10mg THC:CBD</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443809406_CR-forbidden-fruit-dcf22318-cd2b-43af-936c-73d43fe586a8.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1072">Crested River | Forbidden Fruit Soda | 10mg THC:CBD</a></td>
     <td>Crested River</td>
     <td style="text-align:right" class="price">$7.00 ✓</td>
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444012208_crested-river-grape-ape-4c219556-400e-421f-8555-a5016535270f.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1074">Crested River | Grape Ape Soda | 10mg THC:CBD</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444012208_crested-river-grape-ape-4c219556-400e-421f-8555-a5016535270f.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1073">Crested River | Grape Ape Soda | 10mg THC:CBD</a></td>
     <td>Crested River</td>
     <td style="text-align:right" class="price">$7.00 ✓</td>
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444138945_cr-hotb-01be98fb-1fc1-418f-990c-cfa8959a83d7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1076">Crested River | Hex On The Beach Soda | 10mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444138945_cr-hotb-01be98fb-1fc1-418f-990c-cfa8959a83d7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1075">Crested River | Hex On The Beach Soda | 10mg THC</a></td>
     <td>Crested River</td>
     <td style="text-align:right" class="price">$7.00 ✓</td>
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1077">Crested River | Lemonade | 10mg THC:CBG</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1076">Crested River | Lemonade | 10mg THC:CBG</a></td>
     <td>Crested River</td>
     <td style="text-align:right" class="price">$7.00 ✓</td>
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1974">MLLW | Fruit Punch Moon Rocks | 48mg THC</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1973">MLLW | Fruit Punch Moon Rocks | 48mg THC</a></td>
     <td>MLLW</td>
     <td style="text-align:right" class="price">$25.00 ✓</td>
     <td style="text-align:right">$25.00</td>
@@ -398,31 +474,31 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Pot Mama&#39;s - Edina</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444084033_Screenshot-2026-04-26-162107-bb366d90-9348-4acc-b0e8-bba7ae6a21b9.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0678">BLNCD | Dream State Gummies (3ct) | 5mg THC:10mg CBD:CBN</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444084033_Screenshot-2026-04-26-162107-bb366d90-9348-4acc-b0e8-bba7ae6a21b9.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0677">BLNCD | Dream State Gummies (3ct) | 5mg THC:10mg CBD:CBN</a></td>
     <td>BLNCD</td>
     <td style="text-align:right" class="price">$7.50 ✓</td>
     <td style="text-align:right">$7.50</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818029_natreum-blue-raz-f16f0cdf-d0fa-4f43-88fc-9e6a9e4ba6f3.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2183">Natreum | Blue Razz Fast Acting Gummies (10ct) | 5mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818029_natreum-blue-raz-f16f0cdf-d0fa-4f43-88fc-9e6a9e4ba6f3.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2182">Natreum | Blue Razz Fast Acting Gummies (10ct) | 5mg THC</a></td>
     <td>Natreum</td>
     <td style="text-align:right" class="price">$10.00 ✓</td>
     <td style="text-align:right">$10.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818021_natreum-mango-8b488393-d815-4993-b048-c38ca2d622ab.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2184">Natreum | Fast Acting 5mg THC Gummies | Mango</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818021_natreum-mango-8b488393-d815-4993-b048-c38ca2d622ab.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2183">Natreum | Fast Acting 5mg THC Gummies | Mango</a></td>
     <td>Natreum</td>
     <td style="text-align:right" class="price">$10.00 ✓</td>
     <td style="text-align:right">$10.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818023_natreum-paw-paw-5b20a7bb-918c-45f3-909e-6cb98b14e7ac.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2190">Natreum | Paw Paw Fast Acting Gummies (10ct) | 5mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818023_natreum-paw-paw-5b20a7bb-918c-45f3-909e-6cb98b14e7ac.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2189">Natreum | Paw Paw Fast Acting Gummies (10ct) | 5mg THC</a></td>
     <td>Natreum</td>
     <td style="text-align:right" class="price">$10.00 ✓</td>
     <td style="text-align:right">$10.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818025_natreum-surprise-gummimes-802de1cb-1cad-4967-8f66-d0e3b960d4df.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2191">Natreum | Surprise Fast Acting Gummies (10ct) | 5mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818025_natreum-surprise-gummimes-802de1cb-1cad-4967-8f66-d0e3b960d4df.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2190">Natreum | Surprise Fast Acting Gummies (10ct) | 5mg THC</a></td>
     <td>Natreum</td>
     <td style="text-align:right" class="price">$10.00 ✓</td>
     <td style="text-align:right">$10.00</td>
@@ -434,49 +510,49 @@
     <td style="text-align:right">$14.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443595356_IMG_1103-59d1991e-88e9-4d8c-9a71-a212af035d5d.PNG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1190">Drops | Black Currant Indica Gummies (10ct) | 5mg THC:CBN:CBD</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443595356_IMG_1103-59d1991e-88e9-4d8c-9a71-a212af035d5d.PNG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1189">Drops | Black Currant Indica Gummies (10ct) | 5mg THC:CBN:CBD</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Drops</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443595218_IMG_1104-55222071-99c3-455a-919d-64d2b6e8ca48.PNG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1192">Drops | Blackberry Indica Gummies (10ct) | 5mg THC:10mg CBD</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443595218_IMG_1104-55222071-99c3-455a-919d-64d2b6e8ca48.PNG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1191">Drops | Blackberry Indica Gummies (10ct) | 5mg THC:10mg CBD</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Drops</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444521465_IMG_1102-a37f0007-4a2a-4547-93a3-90595016bd0e.PNG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1194">Drops | Blueberry Indica Gummies (20ct) | 1mg THC:2.5mg CBN:10mg CBD</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444521465_IMG_1102-a37f0007-4a2a-4547-93a3-90595016bd0e.PNG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1193">Drops | Blueberry Indica Gummies (20ct) | 1mg THC:2.5mg CBN:10mg CBD</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Drops</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443745559_lemon-drops-0e77f1e0-ec2e-4d8e-b04a-15a3a031f501.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1199">Drops | Lemon Sativa Gummies (10ct) | 5mg THC</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443745559_lemon-drops-0e77f1e0-ec2e-4d8e-b04a-15a3a031f501.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1198">Drops | Lemon Sativa Gummies (10ct) | 5mg THC</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>Drops</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443745558_lime-drops-79c67efb-b476-4446-b39f-ed5a6d7bf602.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1200">Drops | Lime Hybrid Gummies (10ct) | 5mg THC</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443745558_lime-drops-79c67efb-b476-4446-b39f-ed5a6d7bf602.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1199">Drops | Lime Hybrid Gummies (10ct) | 5mg THC</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Drops</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443595073_IMG_1097-0dd50e24-b832-4872-8acb-473aeb29a384.PNG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1203">Drops | Orange Sativa Gummies (10ct) | 5mg THC</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443595073_IMG_1097-0dd50e24-b832-4872-8acb-473aeb29a384.PNG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1202">Drops | Orange Sativa Gummies (10ct) | 5mg THC</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>Drops</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443595074_IMG_1101-74c5ca90-08f0-4d76-9110-5c8d98707bee.PNG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1204">Drops | Raspberry Hybrid Gummies (10ct) | 5mg THC:2.5mg CBD</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443595074_IMG_1101-74c5ca90-08f0-4d76-9110-5c8d98707bee.PNG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1203">Drops | Raspberry Hybrid Gummies (10ct) | 5mg THC:2.5mg CBD</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Drops</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/226/599/avatar/1781629618-1779382487-1748901280-watermelon_20.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1207">Drops | Watermelon Gummies | 100mg | 20ct | 5mg/ea</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/226/599/avatar/1781629618-1779382487-1748901280-watermelon_20.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1206">Drops | Watermelon Gummies | 100mg | 20ct | 5mg/ea</a></td>
     <td>Drops</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
@@ -500,31 +576,31 @@
     <td style="text-align:right">$16.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818024_natreum-good-nite-gummies-45c2412b-5a9a-45c4-ac42-7ec83640d20f.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2182">Natreum | Blue Raspberry Good Nite+ Gummies (10ct) | 5mg THC:CBN:25mg CBD</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818024_natreum-good-nite-gummies-45c2412b-5a9a-45c4-ac42-7ec83640d20f.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2181">Natreum | Blue Raspberry Good Nite+ Gummies (10ct) | 5mg THC:CBN:25mg CBD</a></td>
     <td>Natreum</td>
     <td style="text-align:right" class="price">$16.00 ✓</td>
     <td style="text-align:right">$16.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818030_natreum-good-day-gummies-6c003ca6-3ecd-41fd-9e68-68d73e3c997e.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2185">Natreum | Golden Pear Good Day+ Gummies (10ct) | 5mg THC:25mg CBG:10mg CBD:5mg CBC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818030_natreum-good-day-gummies-6c003ca6-3ecd-41fd-9e68-68d73e3c997e.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2184">Natreum | Golden Pear Good Day+ Gummies (10ct) | 5mg THC:25mg CBG:10mg CBD:5mg CBC</a></td>
     <td>Natreum</td>
     <td style="text-align:right" class="price">$16.00 ✓</td>
     <td style="text-align:right">$16.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818031_natreum-happy-guts-gummies-61c6b752-ae8f-473f-9f09-bd94a71e9f13.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2189">Natreum | Honey, Ginger, Turmeric Happy Guts+ Gummies (10ct) | 5mg THC:CBG:CBD:CBC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818031_natreum-happy-guts-gummies-61c6b752-ae8f-473f-9f09-bd94a71e9f13.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2188">Natreum | Honey, Ginger, Turmeric Happy Guts+ Gummies (10ct) | 5mg THC:CBG:CBD:CBC</a></td>
     <td>Natreum</td>
     <td style="text-align:right" class="price">$16.00 ✓</td>
     <td style="text-align:right">$16.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443330856_espresso-91f1f999-703c-454e-b1e6-5a6b8ab04216.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2526">Retro Bakery | Dark Chocolate Espresso Bar | 50mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443330856_espresso-91f1f999-703c-454e-b1e6-5a6b8ab04216.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2525">Retro Bakery | Dark Chocolate Espresso Bar | 50mg THC</a></td>
     <td>Retro Bakery</td>
     <td style="text-align:right" class="price">$16.00 ✓</td>
     <td style="text-align:right">$16.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443330855_puppy-chow-8a058362-00b2-4857-9ae6-a1fc51ca1bcd.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2533">Retro Bakery | Puppy Chow Chocolate Bar | 50mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443330855_puppy-chow-8a058362-00b2-4857-9ae6-a1fc51ca1bcd.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2532">Retro Bakery | Puppy Chow Chocolate Bar | 50mg THC</a></td>
     <td>Retro Bakery</td>
     <td style="text-align:right" class="price">$16.00 ✓</td>
     <td style="text-align:right">$16.00</td>
@@ -542,7 +618,7 @@
     <td style="text-align:right">$17.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443595464_blncd-citrus-10ct-336b0dd4-67b2-477b-87eb-09e7f9e845a0.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0675">BLNCD | Citrus Gummies (10ct) | 5mg THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443595464_blncd-citrus-10ct-336b0dd4-67b2-477b-87eb-09e7f9e845a0.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0674">BLNCD | Citrus Gummies (10ct) | 5mg THC</a></td>
     <td>BLNCD</td>
     <td style="text-align:right" class="price">$17.00 ✓</td>
     <td style="text-align:right">$17.00</td>
@@ -555,7 +631,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Pot Mama&#39;s - Edina</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443332757_BLNCD30mlFaceMist-66e0a267-cb3c-4eec-b13b-2c34394e9b39.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0670">BLNCD | 10mg CBD:CBG Vital Face Mist</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443332757_BLNCD30mlFaceMist-66e0a267-cb3c-4eec-b13b-2c34394e9b39.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0669">BLNCD | 10mg CBD:CBG Vital Face Mist</a></td>
     <td>BLNCD</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
@@ -573,7 +649,7 @@
     <td style="text-align:right">$35.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443332762_BLNCD_Vital_Face_Oil_Thumbnail-238bd0a0-7218-4eba-87f1-a8d5c2d03e93.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0671">BLNCD | 250mg CBD Face Oil</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443332762_BLNCD_Vital_Face_Oil_Thumbnail-238bd0a0-7218-4eba-87f1-a8d5c2d03e93.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0670">BLNCD | 250mg CBD Face Oil</a></td>
     <td>BLNCD</td>
     <td style="text-align:right" class="price">$42.50 ✓</td>
     <td style="text-align:right">$42.50</td>
@@ -586,13 +662,13 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Pot Mama&#39;s - Edina</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1140">Dizgo | 3 Pack Pre-roll (.33g Each) | Purple Lemonade</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1139">Dizgo | 3 Pack Pre-roll (.33g Each) | Purple Lemonade</a></td>
     <td>Dizgo</td>
     <td style="text-align:right" class="price">$16.00 ✓</td>
     <td style="text-align:right">$16.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444343330_pre-roll-556b2588-ea4f-4a30-8e60-8f4857048db6.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0638">Avio Supply | 1g Pre-Roll | Mendo Breath</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444343330_pre-roll-556b2588-ea4f-4a30-8e60-8f4857048db6.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0637">Avio Supply | 1g Pre-Roll | Mendo Breath</a></td>
     <td>Avio Supply</td>
     <td style="text-align:right" class="price">$18.00 ✓</td>
     <td style="text-align:right">$18.00</td>
@@ -617,13 +693,13 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Pot Mama&#39;s - Edina</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818515_vet-cbd-xtra-strength-98b382a2-a54a-4d2c-89d4-dbef2d59474e.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0480">VetCBD | 250mg Pet Tincture | 10:1 CBD:THC (Extra Strength)</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818515_vet-cbd-xtra-strength-98b382a2-a54a-4d2c-89d4-dbef2d59474e.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0479">VetCBD | 250mg Pet Tincture | 10:1 CBD:THC (Extra Strength)</a></td>
     <td>VetCBD</td>
     <td style="text-align:right" class="price">$25.00 ✓</td>
     <td style="text-align:right">$25.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818380_vet-cbd-regular-strength-77b5bd11-f385-4c2f-b23c-76435569ec2a.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0481">VetCBD | 250mg Pet Tincture | 20:1CBD:THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/443818380_vet-cbd-regular-strength-77b5bd11-f385-4c2f-b23c-76435569ec2a.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0480">VetCBD | 250mg Pet Tincture | 20:1CBD:THC</a></td>
     <td>VetCBD</td>
     <td style="text-align:right" class="price">$25.00 ✓</td>
     <td style="text-align:right">$25.00</td>
@@ -642,7 +718,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Pot Mama&#39;s - Edina</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444250435_turtle-taffy-a41e6f91-c992-49f1-b019-3d9586b33080.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2123">Mischief | 3.5g Pre-Packaged Small Buds | Turtle Taffy</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/429/872/005/444250435_turtle-taffy-a41e6f91-c992-49f1-b019-3d9586b33080.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2122">Mischief | 3.5g Pre-Packaged Small Buds | Turtle Taffy</a></td>
     <td>Mischief</td>
     <td style="text-align:right" class="price">$42.00 ✓</td>
     <td style="text-align:right">$42.00</td>
@@ -746,77 +822,7 @@
   </tr>
 </tbody>
 </table>
-
-
-<div id="checkins-section" data-slug="pot-mama-s-edina">
-  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
-  <div id="checkins-list"></div>
-  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
-  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
-  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
-    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <datalist id="checkin-products"><option value="Mini Soda"><option value="THC Infusions"><option value="BLNCD"><option value="Mango Tango"><option value="Blueberry Pom 5:1 CBD:CBN Sparkling Water"><option value="Bootlegger"><option value="Caviar"><option value="Clementine 10:1 CBD:THC D-9 Sparkling Water"><option value="Hop The Wave"><option value="Looner"><option value="Crested River"><option value="Natreum"><option value="Sour Tangerine Hybrid Enhanced Delta-9 Gummies"><option value="Drops"><option value="Elderberry 2:1 THC:CBN Indica Enhanced Gummies"><option value="Blood Orange 1:1 THC:CBC Sativa Delta-9 Gummies"><option value="Pomegranate 1:1 THC:CBD Hybrid Delta-9 Gummies"><option value="Dizgo"><option value="Retro Bakery"><option value="Wyld"><option value="THC Gummies"><option value="Avio Supply"><option value="Mini Mints"><option value="VetCBD"><option value="Elderberry 5:1 CBD:CBN Gummies"><option value="MLLW"><option value="Peach 2:1 CBD:CBC Gummies"><option value="Pear 2:1 CBD:CBG Gummies"><option value="Foundry"><option value="THC Mocktail"><option value="Unbound"><option value="Mischief"><option value="CBD Salve"><option value="Illemonati"><option value="Papaya Fuel"><option value="Gruntz"><option value="Watermelon Pound Cake"><option value="Jungle Wifi"><option value="Native Care"><option value="Tasty Gems"><option value="Medusa"></datalist>
-    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
-    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
-  </form>
-  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
-    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
-  </div>
-</div>
-<script>
-(function () {
-  var slug = "pot-mama-s-edina";
-  var W = 'https://dashboard.twincitycannabis.com';
-  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
-    if (!rows || !rows.length) return;
-    document.getElementById('checkins-title').hidden = false;
-    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
-      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
-      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
-      var prod = String(c.product).replace(/[<>&"]/g, '');
-      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
-      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
-    }).join('');
-  }).catch(function () {});
-  var open = document.getElementById('checkin-open');
-  var form = document.getElementById('checkin-form');
-  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var err = document.getElementById('checkin-err');
-    err.hidden = true;
-    var product = document.getElementById('checkin-product').value.trim();
-    var price = parseFloat(document.getElementById('checkin-price').value);
-    if (product.length < 2 || !(price > 0.5 && price < 500)) {
-      err.textContent = 'A product and a real price are all we need.';
-      err.hidden = false;
-      return;
-    }
-    var btn = form.querySelector('button[type="submit"]');
-    btn.disabled = true; btn.textContent = 'Sending…';
-    fetch(W + '/checkin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        shop: slug, product: product, price: price,
-        note: document.getElementById('checkin-note').value.trim(),
-        name: document.getElementById('checkin-name').value.trim(),
-      }),
-    }).then(function (r) {
-      if (!r.ok) throw new Error('bad');
-      form.hidden = true;
-      document.getElementById('checkin-thanks').hidden = false;
-    }).catch(function () {
-      btn.disabled = false; btn.textContent = 'Send it';
-      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
-      err.hidden = false;
-    });
-  });
-})();
-</script>
+<p style="font-size:.9rem;margin:.8rem 0 0"><a href="#checkins-section" id="checkin-jump">Shopped here? Tell other people what you actually paid →</a></p>
 
 
 <h2>What customers say on Google</h2>

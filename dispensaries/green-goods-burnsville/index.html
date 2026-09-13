@@ -235,6 +235,82 @@
 <a class="cta" href="/#dashboard/green-goods-burnsville">View interactive menu &amp; price compare →</a>
 <a class="cta" href="https://visitgreengoods.com/locations/burnsville-mn/?utm_source=google-gmb&amp;utm_medium=organic&amp;utm_campaign=burnsville/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit Green Goods Burnsville's website →</a>
 
+
+<div id="checkins-section" data-slug="green-goods-burnsville">
+  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
+  <div id="checkins-list"></div>
+  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
+  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
+  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
+    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <datalist id="checkin-products"><option value="50mg Blackberry CBD Gummies"><option value="50mg Lemon CBD Gummies"><option value="40mg Peach CBD:CBC Gummies"><option value="40mg Pear CBD:CBG Gummies"><option value="50mg Elderberry CBD:CBN Gummies"><option value="Fruit Punch [10pk] (100mg)"><option value="Sour Strawberry Lemonade [10pk]"><option value="200mg Pear CBD:CBG Gummies"><option value="Honey Apple Nano [10pk]"><option value="Fantasy Melonz"><option value="Cherry Paloma"><option value="Flap Jacks"><option value="Rain Drops"><option value="Znow Flakes"><option value="Garlic Budder"><option value="Hellcat #15"><option value="Ice Cream Cake"><option value="Jack&#39;s Delight"><option value="Jet Fuel OG"><option value="GMO Pie"><option value="GMO Punch"><option value="PAVE"><option value="Blue Runtz"><option value="Chile Azul"><option value="Crunch Berriez"><option value="Frozen Bag"><option value="Grape Mochi"><option value="Petrol Station"><option value="Garlic Death"><option value="Chem n&#39; Cookies"><option value="Indigo Oral Solution [25ml]"><option value="Indigo Tincture [25ml]"><option value="Bananaconda"><option value="Black Maple"><option value="Pink Passion Fruit"><option value="Sour Jack"><option value="1000mg Raspberry CBD Gummies"><option value="Kabuki Sour"><option value="1000mg Blackberry CBD Gummies"><option value="Super Boof"><option value="Violet Tincture [25ml]"><option value="1000mg Elderberry CBD:CBN Gummies"><option value="800mg Pear CBD:CBG Gummies"><option value="800mg Peach CBD:CBC Gummies"><option value="Green Tincture [25ml]"><option value="Blue Dream"><option value="Durban Z"><option value="Afternoon Delight"><option value="Yellow Tincture [25ml]"><option value="Açai Sherbert"><option value="Green Oral Solution [25ml]"></datalist>
+    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
+    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
+  </form>
+  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
+    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var slug = "green-goods-burnsville";
+  var W = 'https://dashboard.twincitycannabis.com';
+  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('checkins-title').hidden = false;
+    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
+      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
+      var prod = String(c.product).replace(/[<>&"]/g, '');
+      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
+      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
+    }).join('');
+  }).catch(function () {});
+  var open = document.getElementById('checkin-open');
+  var form = document.getElementById('checkin-form');
+  function openForm() { form.hidden = false; document.getElementById('checkin-product').focus(); }
+  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  // The link under the menu scrolls up here — open the form on arrival so
+  // the reader doesn't have to hunt for a second click.
+  var jump = document.getElementById('checkin-jump');
+  if (jump) jump.addEventListener('click', function () { setTimeout(openForm, 300); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('checkin-err');
+    err.hidden = true;
+    var product = document.getElementById('checkin-product').value.trim();
+    var price = parseFloat(document.getElementById('checkin-price').value);
+    if (product.length < 2 || !(price > 0.5 && price < 500)) {
+      err.textContent = 'A product and a real price are all we need.';
+      err.hidden = false;
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(W + '/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop: slug, product: product, price: price,
+        note: document.getElementById('checkin-note').value.trim(),
+        name: document.getElementById('checkin-name').value.trim(),
+      }),
+    }).then(function (r) {
+      if (!r.ok) throw new Error('bad');
+      form.hidden = true;
+      document.getElementById('checkin-thanks').hidden = false;
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = 'Send it';
+      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+      err.hidden = false;
+    });
+  });
+})();
+</script>
+
 <h2>Full menu &amp; live prices</h2>
 <h3>Edibles (12)</h3>
 <table>
@@ -533,77 +609,7 @@
   </tr>
 </tbody>
 </table>
-
-
-<div id="checkins-section" data-slug="green-goods-burnsville">
-  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
-  <div id="checkins-list"></div>
-  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
-  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
-  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
-    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <datalist id="checkin-products"><option value="50mg Blackberry CBD Gummies"><option value="50mg Lemon CBD Gummies"><option value="40mg Peach CBD:CBC Gummies"><option value="40mg Pear CBD:CBG Gummies"><option value="50mg Elderberry CBD:CBN Gummies"><option value="Fruit Punch [10pk] (100mg)"><option value="Sour Strawberry Lemonade [10pk]"><option value="200mg Pear CBD:CBG Gummies"><option value="Honey Apple Nano [10pk]"><option value="Fantasy Melonz"><option value="Cherry Paloma"><option value="Flap Jacks"><option value="Rain Drops"><option value="Znow Flakes"><option value="Garlic Budder"><option value="Hellcat #15"><option value="Ice Cream Cake"><option value="Jack&#39;s Delight"><option value="Jet Fuel OG"><option value="GMO Pie"><option value="GMO Punch"><option value="PAVE"><option value="Blue Runtz"><option value="Chile Azul"><option value="Crunch Berriez"><option value="Frozen Bag"><option value="Grape Mochi"><option value="Petrol Station"><option value="Garlic Death"><option value="Chem n&#39; Cookies"><option value="Indigo Oral Solution [25ml]"><option value="Indigo Tincture [25ml]"><option value="Bananaconda"><option value="Black Maple"><option value="Pink Passion Fruit"><option value="Sour Jack"><option value="1000mg Raspberry CBD Gummies"><option value="Kabuki Sour"><option value="1000mg Blackberry CBD Gummies"><option value="Super Boof"><option value="Violet Tincture [25ml]"><option value="1000mg Elderberry CBD:CBN Gummies"><option value="800mg Pear CBD:CBG Gummies"><option value="800mg Peach CBD:CBC Gummies"><option value="Green Tincture [25ml]"><option value="Blue Dream"><option value="Durban Z"><option value="Afternoon Delight"><option value="Yellow Tincture [25ml]"><option value="Açai Sherbert"><option value="Green Oral Solution [25ml]"></datalist>
-    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
-    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
-  </form>
-  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
-    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
-  </div>
-</div>
-<script>
-(function () {
-  var slug = "green-goods-burnsville";
-  var W = 'https://dashboard.twincitycannabis.com';
-  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
-    if (!rows || !rows.length) return;
-    document.getElementById('checkins-title').hidden = false;
-    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
-      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
-      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
-      var prod = String(c.product).replace(/[<>&"]/g, '');
-      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
-      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
-    }).join('');
-  }).catch(function () {});
-  var open = document.getElementById('checkin-open');
-  var form = document.getElementById('checkin-form');
-  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var err = document.getElementById('checkin-err');
-    err.hidden = true;
-    var product = document.getElementById('checkin-product').value.trim();
-    var price = parseFloat(document.getElementById('checkin-price').value);
-    if (product.length < 2 || !(price > 0.5 && price < 500)) {
-      err.textContent = 'A product and a real price are all we need.';
-      err.hidden = false;
-      return;
-    }
-    var btn = form.querySelector('button[type="submit"]');
-    btn.disabled = true; btn.textContent = 'Sending…';
-    fetch(W + '/checkin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        shop: slug, product: product, price: price,
-        note: document.getElementById('checkin-note').value.trim(),
-        name: document.getElementById('checkin-name').value.trim(),
-      }),
-    }).then(function (r) {
-      if (!r.ok) throw new Error('bad');
-      form.hidden = true;
-      document.getElementById('checkin-thanks').hidden = false;
-    }).catch(function () {
-      btn.disabled = false; btn.textContent = 'Send it';
-      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
-      err.hidden = false;
-    });
-  });
-})();
-</script>
+<p style="font-size:.9rem;margin:.8rem 0 0"><a href="#checkins-section" id="checkin-jump">Shopped here? Tell other people what you actually paid →</a></p>
 
 
 <h2>What customers say on Google</h2>

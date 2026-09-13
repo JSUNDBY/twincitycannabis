@@ -235,6 +235,82 @@
 <a class="cta" href="/#dashboard/hopkis-dispensary">View interactive menu &amp; price compare →</a>
 <a class="cta" href="https://hopkinsdispensary.com/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit Hopkins Dispensary's website →</a>
 
+
+<div id="checkins-section" data-slug="hopkis-dispensary">
+  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
+  <div id="checkins-list"></div>
+  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
+  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
+  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
+    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <datalist id="checkin-products"><option value="Freedom Soda Lemonade"><option value="Freedom Soda Orange"><option value="Freedom Soda Pink Lemonade"><option value="You Betcha! Hibiscus Mint (Blue)"><option value="X2 Lemonade (Hybrid)"><option value="X2 Lemonade (Indica)"><option value="X2 Lemonade (Sativa)"><option value="Freedom Flower"><option value="LL Bubble Bath"><option value="LL Donny Burger"><option value="LL MAC Stomper"><option value="You Betcha! Gummies (Green)"><option value="You Betcha! Gummies (Pink)"><option value="You Betcha! Gummies (Red)"><option value="You Betcha! Gummies (Yellow)"><option value="Raspberry Lemonade (Indica)"><option value="Relief Lotion"><option value="CBD Pet Tincture (Peanut Butter)"><option value="Cherry Lime Gummy Bar"><option value="Infused Kief Coated Pre-Roll-IX"><option value="Gummies 4.5g"><option value="Grasslandz"><option value="LL LIT OG"><option value="Grapes N Cream"><option value="LL Grape Canyon Zkittles"><option value="Permanent Marker"><option value="LL Guava"><option value="LL Pine Soul"><option value="GG4"><option value="EFF"><option value="TH Octane Mintz"><option value="Cookies G-Pen"><option value="14g Gorilla Glue4 4"></datalist>
+    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
+    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
+  </form>
+  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
+    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var slug = "hopkis-dispensary";
+  var W = 'https://dashboard.twincitycannabis.com';
+  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('checkins-title').hidden = false;
+    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
+      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
+      var prod = String(c.product).replace(/[<>&"]/g, '');
+      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
+      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
+    }).join('');
+  }).catch(function () {});
+  var open = document.getElementById('checkin-open');
+  var form = document.getElementById('checkin-form');
+  function openForm() { form.hidden = false; document.getElementById('checkin-product').focus(); }
+  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  // The link under the menu scrolls up here — open the form on arrival so
+  // the reader doesn't have to hunt for a second click.
+  var jump = document.getElementById('checkin-jump');
+  if (jump) jump.addEventListener('click', function () { setTimeout(openForm, 300); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('checkin-err');
+    err.hidden = true;
+    var product = document.getElementById('checkin-product').value.trim();
+    var price = parseFloat(document.getElementById('checkin-price').value);
+    if (product.length < 2 || !(price > 0.5 && price < 500)) {
+      err.textContent = 'A product and a real price are all we need.';
+      err.hidden = false;
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(W + '/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop: slug, product: product, price: price,
+        note: document.getElementById('checkin-note').value.trim(),
+        name: document.getElementById('checkin-name').value.trim(),
+      }),
+    }).then(function (r) {
+      if (!r.ok) throw new Error('bad');
+      form.hidden = true;
+      document.getElementById('checkin-thanks').hidden = false;
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = 'Send it';
+      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+      err.hidden = false;
+    });
+  });
+})();
+</script>
+
 <h2>Full menu &amp; live prices</h2>
 <h3>Beverages (7)</h3>
 <table>
@@ -247,13 +323,13 @@
     <td style="text-align:right">$4.94</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1402">Freedom Soda Orange</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1401">Freedom Soda Orange</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$4.94 ✓</td>
     <td style="text-align:right">$4.94</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1403">Freedom Soda Pink Lemonade</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1402">Freedom Soda Pink Lemonade</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$4.94 ✓</td>
     <td style="text-align:right">$4.94</td>
@@ -277,7 +353,7 @@
     <td style="text-align:right">$13.50</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p2462">Raspberry Lemonade (Indica)</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p2461">Raspberry Lemonade (Indica)</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>House</td>
     <td style="text-align:right" class="price">$24.99 ✓</td>
     <td style="text-align:right">$24.99</td>
@@ -326,13 +402,13 @@
     <td style="text-align:right">$24.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1569">Gummies 4.5g | Grasslandz | Sour Blueberry</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1568">Gummies 4.5g | Grasslandz | Sour Blueberry</a></td>
     <td>Gummies 4.5g</td>
     <td style="text-align:right" class="price">$37.06 ✓</td>
     <td style="text-align:right">$37.06</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1058">Cookies G-Pen</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1057">Cookies G-Pen</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$150.00 ✓</td>
     <td style="text-align:right">$150.00</td>
@@ -345,31 +421,31 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Hopkins Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1401">Freedom Flower | Good Witch | Pre-Roll</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1400">Freedom Flower | Good Witch | Pre-Roll</a></td>
     <td>Freedom Flower</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1781">LL Bubble Bath | Pre-Roll</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1780">LL Bubble Bath | Pre-Roll</a></td>
     <td>LL Bubble Bath</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1784">LL Donny Burger | Pre-Roll</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1783">LL Donny Burger | Pre-Roll</a></td>
     <td>LL Donny Burger</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1790">LL MAC Stomper | Pre-Roll</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1789">LL MAC Stomper | Pre-Roll</a></td>
     <td>LL MAC Stomper</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1692">Infused Kief Coated Pre-Roll-IX | Lakeside Canna | Jacked Up Boof | 1g | 1 ct (Infused Pre-Rolls)</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1691">Infused Kief Coated Pre-Roll-IX | Lakeside Canna | Jacked Up Boof | 1g | 1 ct (Infused Pre-Rolls)</a></td>
     <td>Infused Kief Coated Pre-Roll-IX</td>
     <td style="text-align:right" class="price">$32.99 ✓</td>
     <td style="text-align:right">$32.99</td>
@@ -382,7 +458,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Hopkins Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p2476">Relief Lotion</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p2475">Relief Lotion</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$25.00 ✓</td>
     <td style="text-align:right">$25.00</td>
@@ -395,7 +471,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Hopkins Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p0873">CBD Pet Tincture (Peanut Butter)</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p0872">CBD Pet Tincture (Peanut Butter)</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$28.33 ✓</td>
     <td style="text-align:right">$28.33</td>
@@ -420,25 +496,25 @@
     <td style="text-align:right">$54.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/405/870/avatar/1778619695-1774324886-441830274_41b91dfa-06c2-4691-9d87-f974af61734f.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1513">Grapes N Cream | Big Buds | 3.5g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/405/870/avatar/1778619695-1774324886-441830274_41b91dfa-06c2-4691-9d87-f974af61734f.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1512">Grapes N Cream | Big Buds | 3.5g</a></td>
     <td>Grapes N Cream</td>
     <td style="text-align:right" class="price">$54.99 ✓</td>
     <td style="text-align:right">$54.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/686/880/350/441832363_032A0014.jpg?txt64=UHJvZHVjdCBleGFtcGxl&amp;txt-fit=max&amp;txt-color=666&amp;txt-lead=0&amp;txt-size=24&amp;txt-font=Avenir+Next+Medium&amp;txt-align=center,bottom" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1780">LL Bubble Bath | Flower | Pre-Packed</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/686/880/350/441832363_032A0014.jpg?txt64=UHJvZHVjdCBleGFtcGxl&amp;txt-fit=max&amp;txt-color=666&amp;txt-lead=0&amp;txt-size=24&amp;txt-font=Avenir+Next+Medium&amp;txt-align=center,bottom" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1779">LL Bubble Bath | Flower | Pre-Packed</a></td>
     <td>LL Bubble Bath</td>
     <td style="text-align:right" class="price">$54.99 ✓</td>
     <td style="text-align:right">$54.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/686/880/350/441042167_180730_StrainReview_EnjoyableXJ13_04.jpg?txt64=UHJvZHVjdCBleGFtcGxl&amp;txt-fit=max&amp;txt-color=666&amp;txt-lead=0&amp;txt-size=24&amp;txt-font=Avenir+Next+Medium&amp;txt-align=center,bottom" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1783">LL Donny Burger | Flower | Pre-Packed</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/686/880/350/441042167_180730_StrainReview_EnjoyableXJ13_04.jpg?txt64=UHJvZHVjdCBleGFtcGxl&amp;txt-fit=max&amp;txt-color=666&amp;txt-lead=0&amp;txt-size=24&amp;txt-font=Avenir+Next+Medium&amp;txt-align=center,bottom" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1782">LL Donny Burger | Flower | Pre-Packed</a></td>
     <td>LL Donny Burger</td>
     <td style="text-align:right" class="price">$54.99 ✓</td>
     <td style="text-align:right">$54.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/686/880/350/441398589_nug0454.jpg?txt64=UHJvZHVjdCBleGFtcGxl&amp;txt-fit=max&amp;txt-color=666&amp;txt-lead=0&amp;txt-size=24&amp;txt-font=Avenir+Next+Medium&amp;txt-align=center,bottom" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1787">LL Grape Canyon Zkittles | Flower | Pre-Packed</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/686/880/350/441398589_nug0454.jpg?txt64=UHJvZHVjdCBleGFtcGxl&amp;txt-fit=max&amp;txt-color=666&amp;txt-lead=0&amp;txt-size=24&amp;txt-font=Avenir+Next+Medium&amp;txt-align=center,bottom" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1786">LL Grape Canyon Zkittles | Flower | Pre-Packed</a></td>
     <td>LL Grape Canyon Zkittles</td>
     <td style="text-align:right" class="price">$54.99 ✓</td>
     <td style="text-align:right">$54.99</td>
@@ -450,13 +526,13 @@
     <td style="text-align:right">$46.75</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/686/880/350/441674439_032A0012.jpg?txt64=UHJvZHVjdCBleGFtcGxl&amp;txt-fit=max&amp;txt-color=666&amp;txt-lead=0&amp;txt-size=24&amp;txt-font=Avenir+Next+Medium&amp;txt-align=center,bottom" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1788">LL Guava | Flower | Pre-Packed</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/686/880/350/441674439_032A0012.jpg?txt64=UHJvZHVjdCBleGFtcGxl&amp;txt-fit=max&amp;txt-color=666&amp;txt-lead=0&amp;txt-size=24&amp;txt-font=Avenir+Next+Medium&amp;txt-align=center,bottom" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1787">LL Guava | Flower | Pre-Packed</a></td>
     <td>LL Guava</td>
     <td style="text-align:right" class="price">$61.75 ✓</td>
     <td style="text-align:right">$61.75</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/686/880/350/441042166_032A0023.jpg?txt64=UHJvZHVjdCBleGFtcGxl&amp;txt-fit=max&amp;txt-color=666&amp;txt-lead=0&amp;txt-size=24&amp;txt-font=Avenir+Next+Medium&amp;txt-align=center,bottom" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1792">LL Pine Soul | Flower | Pre-Package</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/686/880/350/441042166_032A0023.jpg?txt64=UHJvZHVjdCBleGFtcGxl&amp;txt-fit=max&amp;txt-color=666&amp;txt-lead=0&amp;txt-size=24&amp;txt-font=Avenir+Next+Medium&amp;txt-align=center,bottom" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1791">LL Pine Soul | Flower | Pre-Package</a></td>
     <td>LL Pine Soul</td>
     <td style="text-align:right" class="price">$61.75 ✓</td>
     <td style="text-align:right">$61.75</td>
@@ -468,102 +544,32 @@
     <td style="text-align:right">$61.76</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1217">EFF | Mochi Melon | bulk deli | flower/buds</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1216">EFF | Mochi Melon | bulk deli | flower/buds</a></td>
     <td>EFF</td>
     <td style="text-align:right" class="price">$70.00 ✓</td>
     <td style="text-align:right">$70.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1218">EFF | White Inferno | bulk deli | flower/buds</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1217">EFF | White Inferno | bulk deli | flower/buds</a></td>
     <td>EFF</td>
     <td style="text-align:right" class="price">$70.00 ✓</td>
     <td style="text-align:right">$70.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/686/880/350/441042166_032A0023.jpg?txt64=UHJvZHVjdCBleGFtcGxl&amp;txt-fit=max&amp;txt-color=666&amp;txt-lead=0&amp;txt-size=24&amp;txt-font=Avenir+Next+Medium&amp;txt-align=center,bottom" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2761">TH Octane Mintz | Bulk Deli | Flower (Flowers/Buds)</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/686/880/350/441042166_032A0023.jpg?txt64=UHJvZHVjdCBleGFtcGxl&amp;txt-fit=max&amp;txt-color=666&amp;txt-lead=0&amp;txt-size=24&amp;txt-font=Avenir+Next+Medium&amp;txt-align=center,bottom" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2760">TH Octane Mintz | Bulk Deli | Flower (Flowers/Buds)</a></td>
     <td>TH Octane Mintz</td>
     <td style="text-align:right" class="price">$70.00 ✓</td>
     <td style="text-align:right">$70.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/686/880/350/441832363_032A0014.jpg?txt64=UHJvZHVjdCBleGFtcGxl&amp;txt-fit=max&amp;txt-color=666&amp;txt-lead=0&amp;txt-size=24&amp;txt-font=Avenir+Next+Medium&amp;txt-align=center,bottom" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0528">14g Gorilla Glue4 4 | BaseCamp | Trailhead</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/686/880/350/441832363_032A0014.jpg?txt64=UHJvZHVjdCBleGFtcGxl&amp;txt-fit=max&amp;txt-color=666&amp;txt-lead=0&amp;txt-size=24&amp;txt-font=Avenir+Next+Medium&amp;txt-align=center,bottom" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0527">14g Gorilla Glue4 4 | BaseCamp | Trailhead</a></td>
     <td>14g Gorilla Glue4 4</td>
     <td style="text-align:right" class="price">$173.00 ✓</td>
     <td style="text-align:right">$173.00</td>
   </tr>
 </tbody>
 </table>
-
-
-<div id="checkins-section" data-slug="hopkis-dispensary">
-  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
-  <div id="checkins-list"></div>
-  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
-  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
-  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
-    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <datalist id="checkin-products"><option value="Freedom Soda Lemonade"><option value="Freedom Soda Orange"><option value="Freedom Soda Pink Lemonade"><option value="You Betcha! Hibiscus Mint (Blue)"><option value="X2 Lemonade (Hybrid)"><option value="X2 Lemonade (Indica)"><option value="X2 Lemonade (Sativa)"><option value="Freedom Flower"><option value="LL Bubble Bath"><option value="LL Donny Burger"><option value="LL MAC Stomper"><option value="You Betcha! Gummies (Green)"><option value="You Betcha! Gummies (Pink)"><option value="You Betcha! Gummies (Red)"><option value="You Betcha! Gummies (Yellow)"><option value="Raspberry Lemonade (Indica)"><option value="Relief Lotion"><option value="CBD Pet Tincture (Peanut Butter)"><option value="Cherry Lime Gummy Bar"><option value="Infused Kief Coated Pre-Roll-IX"><option value="Gummies 4.5g"><option value="Grasslandz"><option value="LL LIT OG"><option value="Grapes N Cream"><option value="LL Grape Canyon Zkittles"><option value="Permanent Marker"><option value="LL Guava"><option value="LL Pine Soul"><option value="GG4"><option value="EFF"><option value="TH Octane Mintz"><option value="Cookies G-Pen"><option value="14g Gorilla Glue4 4"></datalist>
-    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
-    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
-  </form>
-  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
-    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
-  </div>
-</div>
-<script>
-(function () {
-  var slug = "hopkis-dispensary";
-  var W = 'https://dashboard.twincitycannabis.com';
-  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
-    if (!rows || !rows.length) return;
-    document.getElementById('checkins-title').hidden = false;
-    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
-      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
-      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
-      var prod = String(c.product).replace(/[<>&"]/g, '');
-      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
-      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
-    }).join('');
-  }).catch(function () {});
-  var open = document.getElementById('checkin-open');
-  var form = document.getElementById('checkin-form');
-  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var err = document.getElementById('checkin-err');
-    err.hidden = true;
-    var product = document.getElementById('checkin-product').value.trim();
-    var price = parseFloat(document.getElementById('checkin-price').value);
-    if (product.length < 2 || !(price > 0.5 && price < 500)) {
-      err.textContent = 'A product and a real price are all we need.';
-      err.hidden = false;
-      return;
-    }
-    var btn = form.querySelector('button[type="submit"]');
-    btn.disabled = true; btn.textContent = 'Sending…';
-    fetch(W + '/checkin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        shop: slug, product: product, price: price,
-        note: document.getElementById('checkin-note').value.trim(),
-        name: document.getElementById('checkin-name').value.trim(),
-      }),
-    }).then(function (r) {
-      if (!r.ok) throw new Error('bad');
-      form.hidden = true;
-      document.getElementById('checkin-thanks').hidden = false;
-    }).catch(function () {
-      btn.disabled = false; btn.textContent = 'Send it';
-      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
-      err.hidden = false;
-    });
-  });
-})();
-</script>
+<p style="font-size:.9rem;margin:.8rem 0 0"><a href="#checkins-section" id="checkin-jump">Shopped here? Tell other people what you actually paid →</a></p>
 
 
 <h2>What customers say on Google</h2>

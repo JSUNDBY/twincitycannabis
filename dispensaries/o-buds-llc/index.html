@@ -251,8 +251,6 @@
 
 
 
-
-
 <div id="checkins-section" data-slug="o-buds-llc">
   <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
   <div id="checkins-list"></div>
@@ -288,7 +286,12 @@
   }).catch(function () {});
   var open = document.getElementById('checkin-open');
   var form = document.getElementById('checkin-form');
+  function openForm() { form.hidden = false; document.getElementById('checkin-product').focus(); }
   open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  // The link under the menu scrolls up here — open the form on arrival so
+  // the reader doesn't have to hunt for a second click.
+  var jump = document.getElementById('checkin-jump');
+  if (jump) jump.addEventListener('click', function () { setTimeout(openForm, 300); });
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var err = document.getElementById('checkin-err');
@@ -322,6 +325,8 @@
   });
 })();
 </script>
+
+
 
 
 <h2>What customers say on Google</h2>

@@ -240,6 +240,82 @@
 <a class="cta" href="/#dashboard/sweet-leaves">View interactive menu &amp; price compare →</a>
 <a class="cta" href="https://sweetleavesnorthloop.com/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit Sweetleaves's website →</a>
 
+
+<div id="checkins-section" data-slug="sweet-leaves">
+  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
+  <div id="checkins-list"></div>
+  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
+  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
+  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
+    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <datalist id="checkin-products"><option value="Animal Scout Big Dog"><option value="Sweet Leaves"><option value="Dogwalkers .75g Big Dog Pre Rolls"><option value="Dogwalkers .75g Big Dog Sunset Sherbet"><option value="St. Croix Tropical Sunrise Gummies"><option value="Raspberry Sativa Enhanced Delta-9 Gummies"><option value="Elderberry 2:1 THC:CBN Indica Enhanced Gummies"><option value="Sour Cherry Indica Enhanced Delta-9 Gummies"><option value="Huckleberry Hybrid Enhanced Delta-9 Gummies"><option value="Marionberry Indica Enhanced Delta-9 Gummies"><option value="Pomegranate 1:1 THC:CBD Hybrid Delta-9 Gummies"><option value="Sour Apple Sativa Enhanced Delta-9 Gummies"><option value="Sour Tangerine Hybrid Enhanced Delta-9 Gummies"><option value="Blood Orange 1:1 THC:CBC Sativa Delta-9 Gummies"><option value="Pear 1:1 THC:CBG Hybrid Enhanced Delta-9 Gummies"><option value="Sour Cherry Lemonade"><option value="&amp;Shine"><option value="Cherry Lime Gummy Bar"><option value="Dogwalkers Sit Mini Pre Rolls (5pk)"><option value="Dogwalkers 1.75g Mini Dog Pre-rolls"><option value="Green Apple Gummy Bar"><option value="Cotton Candy Gummy Bar"><option value="Jacked Up Boof"><option value="Chill"><option value="Excite"><option value="Anytime Gummies"><option value="Jack&#39;s Delight"><option value="OMG"><option value="Grape Canyon Zkittlez"><option value="Fight Club"><option value="Cap Junky"><option value="Mac Stomper"><option value="Purple Octane"><option value="RYTHM Premium Flower Bananaconda 3.5g"><option value="Black Haze"><option value="Grape Aliens"><option value="Super Silver Haze"><option value="Grasslandz"><option value="Blue Berry Blast Off"><option value="Strawberry Jelly"><option value="Sour Pebbles"></datalist>
+    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
+    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
+  </form>
+  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
+    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var slug = "sweet-leaves";
+  var W = 'https://dashboard.twincitycannabis.com';
+  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('checkins-title').hidden = false;
+    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
+      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
+      var prod = String(c.product).replace(/[<>&"]/g, '');
+      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
+      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
+    }).join('');
+  }).catch(function () {});
+  var open = document.getElementById('checkin-open');
+  var form = document.getElementById('checkin-form');
+  function openForm() { form.hidden = false; document.getElementById('checkin-product').focus(); }
+  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  // The link under the menu scrolls up here — open the form on arrival so
+  // the reader doesn't have to hunt for a second click.
+  var jump = document.getElementById('checkin-jump');
+  if (jump) jump.addEventListener('click', function () { setTimeout(openForm, 300); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('checkin-err');
+    err.hidden = true;
+    var product = document.getElementById('checkin-product').value.trim();
+    var price = parseFloat(document.getElementById('checkin-price').value);
+    if (product.length < 2 || !(price > 0.5 && price < 500)) {
+      err.textContent = 'A product and a real price are all we need.';
+      err.hidden = false;
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(W + '/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop: slug, product: product, price: price,
+        note: document.getElementById('checkin-note').value.trim(),
+        name: document.getElementById('checkin-name').value.trim(),
+      }),
+    }).then(function (r) {
+      if (!r.ok) throw new Error('bad');
+      form.hidden = true;
+      document.getElementById('checkin-thanks').hidden = false;
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = 'Send it';
+      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+      err.hidden = false;
+    });
+  });
+})();
+</script>
+
 <h2>Full menu &amp; live prices</h2>
 <h3>Flower (14)</h3>
 <table>
@@ -252,19 +328,19 @@
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/674/828/avatar/1737639445-image.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1153">Dogwalkers .75g Big Dog Sunset Sherbet</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/674/828/avatar/1737639445-image.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1152">Dogwalkers .75g Big Dog Sunset Sherbet</a></td>
     <td>Dogwalkers</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1698">Jack&#39;s Delight</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1697">Jack&#39;s Delight</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>House</td>
     <td style="text-align:right" class="price">$40.00 ✓</td>
     <td style="text-align:right">$40.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444435348_fc4611e3-1e59-40a7-bfa9-6ad3b913d826.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2222">OMG</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444435348_fc4611e3-1e59-40a7-bfa9-6ad3b913d826.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2221">OMG</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$40.00 ✓</td>
     <td style="text-align:right">$40.00</td>
@@ -282,19 +358,19 @@
     <td style="text-align:right">$42.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444627800_c0e279c5-75e3-4137-8abb-7c68e9d30f9e.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0946">Cap Junky</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444627800_c0e279c5-75e3-4137-8abb-7c68e9d30f9e.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0945">Cap Junky</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>House</td>
     <td style="text-align:right" class="price">$48.00 ✓</td>
     <td style="text-align:right">$48.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444642701_fa113de8-d8a1-43cf-906d-278297156034.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2014">Mac Stomper</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444642701_fa113de8-d8a1-43cf-906d-278297156034.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2013">Mac Stomper</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>House</td>
     <td style="text-align:right" class="price">$48.00 ✓</td>
     <td style="text-align:right">$48.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444398892_0528cf54-a868-4a6b-b1b9-a1eeb139eefd.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2413">Purple Octane</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444398892_0528cf54-a868-4a6b-b1b9-a1eeb139eefd.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2412">Purple Octane</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>House</td>
     <td style="text-align:right" class="price">$48.00 ✓</td>
     <td style="text-align:right">$48.00</td>
@@ -312,19 +388,19 @@
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444372996_110bcd11-6073-4fd8-8740-ddf4473b6a38.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1502">Grape Aliens</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444372996_110bcd11-6073-4fd8-8740-ddf4473b6a38.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1501">Grape Aliens</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444607943_76df7ea5-29b1-427d-bf91-546a83b5613a.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2742">Super Silver Haze</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444607943_76df7ea5-29b1-427d-bf91-546a83b5613a.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2741">Super Silver Haze</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444505988_3b2dff2b-a52a-4528-9343-449ce474ef4b.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2682">Sour Pebbles</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444505988_3b2dff2b-a52a-4528-9343-449ce474ef4b.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2681">Sour Pebbles</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$90.00 ✓</td>
     <td style="text-align:right">$90.00</td>
@@ -445,7 +521,7 @@
     <td style="text-align:right">$25.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/699/202/avatar/1740696193-4098571_screenshot_2025-02-27_at_5-11-09_pm.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0508">&amp;Shine | 10pk Gummies | Tropical - 100mg</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/699/202/avatar/1740696193-4098571_screenshot_2025-02-27_at_5-11-09_pm.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0507">&amp;Shine | 10pk Gummies | Tropical - 100mg</a></td>
     <td>&amp;SHINE</td>
     <td style="text-align:right" class="price">$25.00 ✓</td>
     <td style="text-align:right">$25.00</td>
@@ -494,7 +570,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Sweetleaves</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/552/695/avatar/1701466657-dogwalkers-big-dog-preroll-570x380.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1151">Dogwalkers .75g Big Dog Pre Rolls | Brownie Scout</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/552/695/avatar/1701466657-dogwalkers-big-dog-preroll-570x380.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1150">Dogwalkers .75g Big Dog Pre Rolls | Brownie Scout</a></td>
     <td>Dogwalkers</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
@@ -524,7 +600,7 @@
     <td style="text-align:right">$30.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/567/958/avatar/1785944422-lsc_flower_1_g_pre-roll_sizesm.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1701">Jacked Up Boof | Infused | 1 G Pre-roll</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/567/958/avatar/1785944422-lsc_flower_1_g_pre-roll_sizesm.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1700">Jacked Up Boof | Infused | 1 G Pre-roll</a></td>
     <td>Lakeside Cannabis Co</td>
     <td style="text-align:right" class="price">$30.00 ✓</td>
     <td style="text-align:right">$30.00</td>
@@ -537,7 +613,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Sweetleaves</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444441508_df04fa00-12b4-487e-bbf4-0f6b1d9d63c7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2681">Sour Cherry Lemonade | 10mg | 15mg CBD | 10mg CBG | 4pk</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444441508_df04fa00-12b4-487e-bbf4-0f6b1d9d63c7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2680">Sour Cherry Lemonade | 10mg | 15mg CBD | 10mg CBG | 4pk</a></td>
     <td>Sour Cherry Lemonade</td>
     <td style="text-align:right" class="price">$24.99 ✓</td>
     <td style="text-align:right">$24.99</td>
@@ -556,13 +632,13 @@
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/568/013/avatar/1785947412-nebula_1g_cart_1.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0785">Blue Berry Blast Off | Cartridge | 1g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/568/013/avatar/1785947412-nebula_1g_cart_1.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0784">Blue Berry Blast Off | Cartridge | 1g</a></td>
     <td>Nebula</td>
     <td style="text-align:right" class="price">$70.00 ✓</td>
     <td style="text-align:right">$70.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/568/008/avatar/1785947192-nebula_1g_cart_1.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2723">Strawberry Jelly | Cartridge | 1g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/568/008/avatar/1785947192-nebula_1g_cart_1.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2722">Strawberry Jelly | Cartridge | 1g</a></td>
     <td>Nebula</td>
     <td style="text-align:right" class="price">$70.00 ✓</td>
     <td style="text-align:right">$70.00</td>
@@ -575,77 +651,7 @@
   </tr>
 </tbody>
 </table>
-
-
-<div id="checkins-section" data-slug="sweet-leaves">
-  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
-  <div id="checkins-list"></div>
-  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
-  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
-  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
-    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <datalist id="checkin-products"><option value="Animal Scout Big Dog"><option value="Sweet Leaves"><option value="Dogwalkers .75g Big Dog Pre Rolls"><option value="Dogwalkers .75g Big Dog Sunset Sherbet"><option value="St. Croix Tropical Sunrise Gummies"><option value="Raspberry Sativa Enhanced Delta-9 Gummies"><option value="Elderberry 2:1 THC:CBN Indica Enhanced Gummies"><option value="Sour Cherry Indica Enhanced Delta-9 Gummies"><option value="Huckleberry Hybrid Enhanced Delta-9 Gummies"><option value="Marionberry Indica Enhanced Delta-9 Gummies"><option value="Pomegranate 1:1 THC:CBD Hybrid Delta-9 Gummies"><option value="Sour Apple Sativa Enhanced Delta-9 Gummies"><option value="Sour Tangerine Hybrid Enhanced Delta-9 Gummies"><option value="Blood Orange 1:1 THC:CBC Sativa Delta-9 Gummies"><option value="Pear 1:1 THC:CBG Hybrid Enhanced Delta-9 Gummies"><option value="Sour Cherry Lemonade"><option value="&amp;Shine"><option value="Cherry Lime Gummy Bar"><option value="Dogwalkers Sit Mini Pre Rolls (5pk)"><option value="Dogwalkers 1.75g Mini Dog Pre-rolls"><option value="Green Apple Gummy Bar"><option value="Cotton Candy Gummy Bar"><option value="Jacked Up Boof"><option value="Chill"><option value="Excite"><option value="Anytime Gummies"><option value="Jack&#39;s Delight"><option value="OMG"><option value="Grape Canyon Zkittlez"><option value="Fight Club"><option value="Cap Junky"><option value="Mac Stomper"><option value="Purple Octane"><option value="RYTHM Premium Flower Bananaconda 3.5g"><option value="Black Haze"><option value="Grape Aliens"><option value="Super Silver Haze"><option value="Grasslandz"><option value="Blue Berry Blast Off"><option value="Strawberry Jelly"><option value="Sour Pebbles"></datalist>
-    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
-    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
-  </form>
-  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
-    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
-  </div>
-</div>
-<script>
-(function () {
-  var slug = "sweet-leaves";
-  var W = 'https://dashboard.twincitycannabis.com';
-  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
-    if (!rows || !rows.length) return;
-    document.getElementById('checkins-title').hidden = false;
-    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
-      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
-      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
-      var prod = String(c.product).replace(/[<>&"]/g, '');
-      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
-      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
-    }).join('');
-  }).catch(function () {});
-  var open = document.getElementById('checkin-open');
-  var form = document.getElementById('checkin-form');
-  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var err = document.getElementById('checkin-err');
-    err.hidden = true;
-    var product = document.getElementById('checkin-product').value.trim();
-    var price = parseFloat(document.getElementById('checkin-price').value);
-    if (product.length < 2 || !(price > 0.5 && price < 500)) {
-      err.textContent = 'A product and a real price are all we need.';
-      err.hidden = false;
-      return;
-    }
-    var btn = form.querySelector('button[type="submit"]');
-    btn.disabled = true; btn.textContent = 'Sending…';
-    fetch(W + '/checkin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        shop: slug, product: product, price: price,
-        note: document.getElementById('checkin-note').value.trim(),
-        name: document.getElementById('checkin-name').value.trim(),
-      }),
-    }).then(function (r) {
-      if (!r.ok) throw new Error('bad');
-      form.hidden = true;
-      document.getElementById('checkin-thanks').hidden = false;
-    }).catch(function () {
-      btn.disabled = false; btn.textContent = 'Send it';
-      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
-      err.hidden = false;
-    });
-  });
-})();
-</script>
+<p style="font-size:.9rem;margin:.8rem 0 0"><a href="#checkins-section" id="checkin-jump">Shopped here? Tell other people what you actually paid →</a></p>
 
 
 <h2>What customers say on Google</h2>

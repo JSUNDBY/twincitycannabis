@@ -235,6 +235,82 @@
 <a class="cta" href="/#dashboard/mnloon">View interactive menu &amp; price compare →</a>
 <a class="cta" href="http://themnloon.com/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit MnLooN - Minneapolis's website →</a>
 
+
+<div id="checkins-section" data-slug="mnloon">
+  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
+  <div id="checkins-list"></div>
+  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
+  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
+  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
+    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <datalist id="checkin-products"><option value="Iced Tea Lemonade"><option value="Peach Lemonade"><option value="Raspberry Lemonade"><option value="THC Mocktail"><option value="THC Sparkling Water"><option value="Collective Project"><option value="Foundry"><option value="Kite Soda"><option value="Orange Soda"><option value="THC + Adaptogen Elixir"><option value="CBD Sparkling Water"><option value="Lagom"><option value="Looner"><option value="Uncle Arnie&#39;s"><option value="Pre-Roll"><option value="Jelly"><option value="Erba"><option value="Minny Grown"><option value="Raiden Labs"><option value="Smiile"><option value="Zenith Mango"><option value="Twilight Strawberry"><option value="Looner Gummies - Twilight Blackberry - 50MG THC 250MG CBN"><option value="Zenith Blackberry"><option value="Zenith Strawberry"><option value="Purple Ice Water"><option value="Wright Way Farms"><option value="FLÖR"><option value="Hooch"><option value="Flower Bag"><option value="Live Rosin"></datalist>
+    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
+    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
+  </form>
+  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
+    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var slug = "mnloon";
+  var W = 'https://dashboard.twincitycannabis.com';
+  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('checkins-title').hidden = false;
+    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
+      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
+      var prod = String(c.product).replace(/[<>&"]/g, '');
+      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
+      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
+    }).join('');
+  }).catch(function () {});
+  var open = document.getElementById('checkin-open');
+  var form = document.getElementById('checkin-form');
+  function openForm() { form.hidden = false; document.getElementById('checkin-product').focus(); }
+  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  // The link under the menu scrolls up here — open the form on arrival so
+  // the reader doesn't have to hunt for a second click.
+  var jump = document.getElementById('checkin-jump');
+  if (jump) jump.addEventListener('click', function () { setTimeout(openForm, 300); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('checkin-err');
+    err.hidden = true;
+    var product = document.getElementById('checkin-product').value.trim();
+    var price = parseFloat(document.getElementById('checkin-price').value);
+    if (product.length < 2 || !(price > 0.5 && price < 500)) {
+      err.textContent = 'A product and a real price are all we need.';
+      err.hidden = false;
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(W + '/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop: slug, product: product, price: price,
+        note: document.getElementById('checkin-note').value.trim(),
+        name: document.getElementById('checkin-name').value.trim(),
+      }),
+    }).then(function (r) {
+      if (!r.ok) throw new Error('bad');
+      form.hidden = true;
+      document.getElementById('checkin-thanks').hidden = false;
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = 'Send it';
+      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+      err.hidden = false;
+    });
+  });
+})();
+</script>
+
 <h2>Full menu &amp; live prices</h2>
 <h3>Beverages (23)</h3>
 <table>
@@ -319,55 +395,55 @@
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/568/473/avatar/1786035602-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0877">CBD Sparkling Water | Balance | Carbonated | 12fl oz/ea</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/568/473/avatar/1786035602-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0876">CBD Sparkling Water | Balance | Carbonated | 12fl oz/ea</a></td>
     <td>CBD Sparkling Water</td>
     <td style="text-align:right" class="price">$7.00 ✓</td>
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/568/479/avatar/1786035603-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0878">CBD Sparkling Water | Chill | Carbonated | 12fl oz/ea</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/568/479/avatar/1786035603-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0877">CBD Sparkling Water | Chill | Carbonated | 12fl oz/ea</a></td>
     <td>CBD Sparkling Water</td>
     <td style="text-align:right" class="price">$7.00 ✓</td>
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/358/248/605/443237691_d115693b-d73e-479e-a690-58a4adc4aa97.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1741">Kite Soda | Grape Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/358/248/605/443237691_d115693b-d73e-479e-a690-58a4adc4aa97.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1740">Kite Soda | Grape Single Can</a></td>
     <td>Kite Soda</td>
     <td style="text-align:right" class="price">$7.00 ✓</td>
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/358/248/605/443237451_2fe9b09c-9117-4ab0-8adc-95c3d6ed5151.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1742">Kite Soda | Orange Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/358/248/605/443237451_2fe9b09c-9117-4ab0-8adc-95c3d6ed5151.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1741">Kite Soda | Orange Single Can</a></td>
     <td>Kite Soda</td>
     <td style="text-align:right" class="price">$7.00 ✓</td>
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/358/248/605/443237450_27047b02-69e0-466e-8d6f-76175f6154ae.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1743">Kite Soda | Root Beer Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/358/248/605/443237450_27047b02-69e0-466e-8d6f-76175f6154ae.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1742">Kite Soda | Root Beer Single Can</a></td>
     <td>Kite Soda</td>
     <td style="text-align:right" class="price">$7.00 ✓</td>
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1801">Lagom | 24K Lemonade Single Can</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1800">Lagom | 24K Lemonade Single Can</a></td>
     <td>Lagom</td>
     <td style="text-align:right" class="price">$7.00 ✓</td>
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1915">Looner | Classic Lemonade Single Shot</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1914">Looner | Classic Lemonade Single Shot</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$7.00 ✓</td>
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1921">Looner | Peach Lemonade Single Shot</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1920">Looner | Peach Lemonade Single Shot</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$7.00 ✓</td>
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1922">Looner | Pink Lemonade Single Shot</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1921">Looner | Pink Lemonade Single Shot</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$7.00 ✓</td>
     <td style="text-align:right">$7.00</td>
@@ -434,7 +510,7 @@
     <td style="text-align:right">$45.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443717422_babc2bb3-dc4e-4752-89d7-10b29012a97d.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2390">Pre-Roll | Lifted North | Blueberry Muffin | 0.5g | 5 ct Indica Dominant</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443717422_babc2bb3-dc4e-4752-89d7-10b29012a97d.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2389">Pre-Roll | Lifted North | Blueberry Muffin | 0.5g | 5 ct Indica Dominant</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Pre-Roll</td>
     <td style="text-align:right" class="price">$45.00 ✓</td>
     <td style="text-align:right">$45.00</td>
@@ -483,7 +559,7 @@
     <td style="text-align:right">$13.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444446186_63d723b5-7524-4e60-98ec-117e3f978f9f.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1228">Erba | Turtle Taffy | Flower 1G</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444446186_63d723b5-7524-4e60-98ec-117e3f978f9f.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1227">Erba | Turtle Taffy | Flower 1G</a></td>
     <td>ERBA</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
@@ -495,97 +571,97 @@
     <td style="text-align:right">$16.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443142302_650666a9-3e5e-43d7-b3de-af3c274800a3.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1802">Lagom | Berry Melon Bliss Gummies</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443142302_650666a9-3e5e-43d7-b3de-af3c274800a3.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1801">Lagom | Berry Melon Bliss Gummies</a></td>
     <td>Lagom</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444684774_01b4eae4-b8e1-455c-91f2-48a8ca1e6de6.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1803">Lagom | MDC Blueberry Yum Yum Gummies</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444684774_01b4eae4-b8e1-455c-91f2-48a8ca1e6de6.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1802">Lagom | MDC Blueberry Yum Yum Gummies</a></td>
     <td>Lagom</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1804">Lagom | MDC Peach Gummies</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1803">Lagom | MDC Peach Gummies</a></td>
     <td>Lagom</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444684773_8c4c6f44-7503-4838-aa57-8dfb2431cec0.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1805">Lagom | MDC Pink Lemonade Gummies</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444684773_8c4c6f44-7503-4838-aa57-8dfb2431cec0.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1804">Lagom | MDC Pink Lemonade Gummies</a></td>
     <td>Lagom</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444684775_9661935b-66db-44a4-9459-8a9daff4f045.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1806">Lagom | MDC Strawberry Gummies</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444684775_9661935b-66db-44a4-9459-8a9daff4f045.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1805">Lagom | MDC Strawberry Gummies</a></td>
     <td>Lagom</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443141815_4d5ed63d-956e-47c8-ac43-fe3434fc867c.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1807">Lagom | Organic Blue Razz Gummies</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443141815_4d5ed63d-956e-47c8-ac43-fe3434fc867c.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1806">Lagom | Organic Blue Razz Gummies</a></td>
     <td>Lagom</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443141813_9b4dc7cd-b874-4501-aeb9-4897af63c663.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1808">Lagom | Organic Cherry Bliss Gummies</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443141813_9b4dc7cd-b874-4501-aeb9-4897af63c663.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1807">Lagom | Organic Cherry Bliss Gummies</a></td>
     <td>Lagom</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443141814_207dcda1-4e05-4dc7-bbc4-a5097b111d40.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1809">Lagom | Organic Push Pop Gummies</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443141814_207dcda1-4e05-4dc7-bbc4-a5097b111d40.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1808">Lagom | Organic Push Pop Gummies</a></td>
     <td>Lagom</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p2118">Minny Grown | Peach Gummies</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p2117">Minny Grown | Peach Gummies</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Minny Grown</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p2119">Minny Grown | St. Croix Tropical Gummies</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p2118">Minny Grown | St. Croix Tropical Gummies</a></td>
     <td>Minny Grown</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p2458">Raiden Labs | Focus Cherry | Gummies | 50 mg THC + 250 mg CBG</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p2457">Raiden Labs | Focus Cherry | Gummies | 50 mg THC + 250 mg CBG</a></td>
     <td>Raiden Labs</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444685416_cc8c2a99-ef66-4bac-85fc-9dfb27f02ce6.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2650">Smiile | Coconut Cream Sativa Gummies</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444685416_cc8c2a99-ef66-4bac-85fc-9dfb27f02ce6.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2649">Smiile | Coconut Cream Sativa Gummies</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>Smiile</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444685211_a23e327a-7b6a-4c64-8519-a9d6ab2d768b.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2651">Smiile | Dripping Peach Sativa Gummies</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444685211_a23e327a-7b6a-4c64-8519-a9d6ab2d768b.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2650">Smiile | Dripping Peach Sativa Gummies</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>Smiile</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444685213_ecb0192b-9acf-4e68-9c87-8884bb428209.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2652">Smiile | Midnight Grape Indica Gummies</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444685213_ecb0192b-9acf-4e68-9c87-8884bb428209.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2651">Smiile | Midnight Grape Indica Gummies</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Smiile</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444685209_e26ec846-c1ce-46c1-b6d6-57af6e438f48.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2653">Smiile | Strawberry Burst Hybrid Gummies</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444685209_e26ec846-c1ce-46c1-b6d6-57af6e438f48.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2652">Smiile | Strawberry Burst Hybrid Gummies</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Smiile</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444685340_10ad2b34-3299-4c8b-a927-23d903c772c0.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2654">Smiile | Wet Watermelon Indica Gummies</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444685340_10ad2b34-3299-4c8b-a927-23d903c772c0.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2653">Smiile | Wet Watermelon Indica Gummies</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Smiile</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
@@ -610,49 +686,49 @@
     <td style="text-align:right">$35.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444159706_f3a63f8c-c45e-41bb-8ffa-2110993fc53c.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0492">Wright Way Farms | Face Fat | 3.5g | Indica Dominant Flower</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444159706_f3a63f8c-c45e-41bb-8ffa-2110993fc53c.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0491">Wright Way Farms | Face Fat | 3.5g | Indica Dominant Flower</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Wright Way Farms</td>
     <td style="text-align:right" class="price">$49.00 ✓</td>
     <td style="text-align:right">$49.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444159573_22c14278-aad5-4df2-9f72-896270cd3cc4.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0493">Wright Way Farms | Garlic Jam | 3.5g | Indica Dominant Flower</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444159573_22c14278-aad5-4df2-9f72-896270cd3cc4.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0492">Wright Way Farms | Garlic Jam | 3.5g | Indica Dominant Flower</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Wright Way Farms</td>
     <td style="text-align:right" class="price">$49.00 ✓</td>
     <td style="text-align:right">$49.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444159707_2e215d71-4f85-471f-a7a6-c373e7f56972.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0494">Wright Way Farms | TriCross | 3.5g | Indica Dominant Flower</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444159707_2e215d71-4f85-471f-a7a6-c373e7f56972.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0493">Wright Way Farms | TriCross | 3.5g | Indica Dominant Flower</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Wright Way Farms</td>
     <td style="text-align:right" class="price">$49.00 ✓</td>
     <td style="text-align:right">$49.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443504384_fb9981d3-8430-4056-a0f4-f7086188bd3c.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1257">FLÖR | Fog Dog | 3.5g | Indica Dominant Flower</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443504384_fb9981d3-8430-4056-a0f4-f7086188bd3c.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1256">FLÖR | Fog Dog | 3.5g | Indica Dominant Flower</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>FLÖR</td>
     <td style="text-align:right" class="price">$49.00 ✓</td>
     <td style="text-align:right">$49.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/574/022/avatar/1787256767-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1669">Hooch | Big Buds | 3.5g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/574/022/avatar/1787256767-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1668">Hooch | Big Buds | 3.5g</a></td>
     <td>Purple Prince</td>
     <td style="text-align:right" class="price">$49.00 ✓</td>
     <td style="text-align:right">$49.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443884016_662e6f71-0b0a-4d64-9d68-0afe536d92cc.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1321">Flower Bag | Valhalla | Apricot Ice Cream | 3.5g | Indica Dominant</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443884016_662e6f71-0b0a-4d64-9d68-0afe536d92cc.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1320">Flower Bag | Valhalla | Apricot Ice Cream | 3.5g | Indica Dominant</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Flower Bag</td>
     <td style="text-align:right" class="price">$55.00 ✓</td>
     <td style="text-align:right">$55.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443884016_662e6f71-0b0a-4d64-9d68-0afe536d92cc.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1323">Flower Bag | Valhalla | Cherry Garcia | 3.5g | Hybrid</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443884016_662e6f71-0b0a-4d64-9d68-0afe536d92cc.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1322">Flower Bag | Valhalla | Cherry Garcia | 3.5g | Hybrid</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Flower Bag</td>
     <td style="text-align:right" class="price">$55.00 ✓</td>
     <td style="text-align:right">$55.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443884016_662e6f71-0b0a-4d64-9d68-0afe536d92cc.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1324">Flower Bag | Valhalla | Primal Punch | 3.5g | Hybrid</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/443884016_662e6f71-0b0a-4d64-9d68-0afe536d92cc.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1323">Flower Bag | Valhalla | Primal Punch | 3.5g | Hybrid</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Flower Bag</td>
     <td style="text-align:right" class="price">$55.00 ✓</td>
     <td style="text-align:right">$55.00</td>
@@ -684,77 +760,7 @@
   </tr>
 </tbody>
 </table>
-
-
-<div id="checkins-section" data-slug="mnloon">
-  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
-  <div id="checkins-list"></div>
-  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
-  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
-  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
-    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <datalist id="checkin-products"><option value="Iced Tea Lemonade"><option value="Peach Lemonade"><option value="Raspberry Lemonade"><option value="THC Mocktail"><option value="THC Sparkling Water"><option value="Collective Project"><option value="Foundry"><option value="Kite Soda"><option value="Orange Soda"><option value="THC + Adaptogen Elixir"><option value="CBD Sparkling Water"><option value="Lagom"><option value="Looner"><option value="Uncle Arnie&#39;s"><option value="Pre-Roll"><option value="Jelly"><option value="Erba"><option value="Minny Grown"><option value="Raiden Labs"><option value="Smiile"><option value="Zenith Mango"><option value="Twilight Strawberry"><option value="Looner Gummies - Twilight Blackberry - 50MG THC 250MG CBN"><option value="Zenith Blackberry"><option value="Zenith Strawberry"><option value="Purple Ice Water"><option value="Wright Way Farms"><option value="FLÖR"><option value="Hooch"><option value="Flower Bag"><option value="Live Rosin"></datalist>
-    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
-    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
-  </form>
-  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
-    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
-  </div>
-</div>
-<script>
-(function () {
-  var slug = "mnloon";
-  var W = 'https://dashboard.twincitycannabis.com';
-  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
-    if (!rows || !rows.length) return;
-    document.getElementById('checkins-title').hidden = false;
-    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
-      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
-      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
-      var prod = String(c.product).replace(/[<>&"]/g, '');
-      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
-      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
-    }).join('');
-  }).catch(function () {});
-  var open = document.getElementById('checkin-open');
-  var form = document.getElementById('checkin-form');
-  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var err = document.getElementById('checkin-err');
-    err.hidden = true;
-    var product = document.getElementById('checkin-product').value.trim();
-    var price = parseFloat(document.getElementById('checkin-price').value);
-    if (product.length < 2 || !(price > 0.5 && price < 500)) {
-      err.textContent = 'A product and a real price are all we need.';
-      err.hidden = false;
-      return;
-    }
-    var btn = form.querySelector('button[type="submit"]');
-    btn.disabled = true; btn.textContent = 'Sending…';
-    fetch(W + '/checkin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        shop: slug, product: product, price: price,
-        note: document.getElementById('checkin-note').value.trim(),
-        name: document.getElementById('checkin-name').value.trim(),
-      }),
-    }).then(function (r) {
-      if (!r.ok) throw new Error('bad');
-      form.hidden = true;
-      document.getElementById('checkin-thanks').hidden = false;
-    }).catch(function () {
-      btn.disabled = false; btn.textContent = 'Send it';
-      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
-      err.hidden = false;
-    });
-  });
-})();
-</script>
+<p style="font-size:.9rem;margin:.8rem 0 0"><a href="#checkins-section" id="checkin-jump">Shopped here? Tell other people what you actually paid →</a></p>
 
 
 <h2>What customers say on Google</h2>

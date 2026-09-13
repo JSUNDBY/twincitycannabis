@@ -235,6 +235,82 @@
 <a class="cta" href="/#dashboard/rise-new-hope">View interactive menu &amp; price compare →</a>
 <a class="cta" href="https://risecannabis.com/dispensaries/minnesota/new-hope/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit RISE Dispensary New Hope's website →</a>
 
+
+<div id="checkins-section" data-slug="rise-new-hope">
+  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
+  <div id="checkins-list"></div>
+  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
+  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
+  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
+    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <datalist id="checkin-products"><option value="Kush Mango Pineapple [12oz] (10mg THC/10mg CBD)"><option value="Sativa Mandarin Orange Beverage- THC [12oz] (10mg THC)"><option value="Grapefruit Paloma [12oz] (10mg)"><option value="Lime Jalapeno Margarita [12oz] (10mg)"><option value="Mango Margarita [12oz] (10mg)"><option value="Ranch Water [12oz] (10mg)"><option value="Chem &#39;N Cookies [.75g]"><option value="2:1 Chill Pink Lemonade [10pk] (100mg CBD/50mg THC)"><option value="Brownie Scout [.75g]"><option value="Caramel Apple Alien Abduction - 1:1:1 [10pk] (50mg THC/50mg CBD/50mg CBN)"><option value="Pink Lemonade [10pk] (250mg CBG)"><option value="Cranberry Apple Rosin Gummies [10pk] (50mg)"><option value="Tropical Gummies [10pk] (50mg)"><option value="Fruit Punch [10pk] (100mg)"><option value="Brain Boost THC + Adaptogen Gummies  [10pk] (50mg CBD/50mg THC)"><option value="Zen Blend THC + Adaptogen Gummies[10pk] (50mg CBD/50mg THC)"><option value="Granny Candy [.35g]"><option value="Pink Tourmaline Lemonade [10pk] (100mg)"><option value="OMG"><option value="Fantasy Melonz"><option value="Jet Fuel OG"><option value="Chem n&#39; Cookies"><option value="Evercrisp"><option value="Jack&#39;s Delight"><option value="Kong"><option value="L&#39;Orange"><option value="Signature Cultivar-IX"><option value="Medusa"><option value="Orion"><option value="Angel Cake"><option value="Blueberry Muffin"><option value="Wilfunk"><option value="Bananaconda"><option value="Amanda"><option value="Animal Face"><option value="Animal Scout"><option value="Durban Z"><option value="Giggle Gas"><option value="Gogurtz"><option value="Velcroz"><option value="Chem &#39;n Cookies [.5g]"><option value="Brownie Scout"><option value="Brownie Scout [.35g]"></datalist>
+    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
+    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
+  </form>
+  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
+    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var slug = "rise-new-hope";
+  var W = 'https://dashboard.twincitycannabis.com';
+  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('checkins-title').hidden = false;
+    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
+      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
+      var prod = String(c.product).replace(/[<>&"]/g, '');
+      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
+      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
+    }).join('');
+  }).catch(function () {});
+  var open = document.getElementById('checkin-open');
+  var form = document.getElementById('checkin-form');
+  function openForm() { form.hidden = false; document.getElementById('checkin-product').focus(); }
+  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  // The link under the menu scrolls up here — open the form on arrival so
+  // the reader doesn't have to hunt for a second click.
+  var jump = document.getElementById('checkin-jump');
+  if (jump) jump.addEventListener('click', function () { setTimeout(openForm, 300); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('checkin-err');
+    err.hidden = true;
+    var product = document.getElementById('checkin-product').value.trim();
+    var price = parseFloat(document.getElementById('checkin-price').value);
+    if (product.length < 2 || !(price > 0.5 && price < 500)) {
+      err.textContent = 'A product and a real price are all we need.';
+      err.hidden = false;
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(W + '/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop: slug, product: product, price: price,
+        note: document.getElementById('checkin-note').value.trim(),
+        name: document.getElementById('checkin-name').value.trim(),
+      }),
+    }).then(function (r) {
+      if (!r.ok) throw new Error('bad');
+      form.hidden = true;
+      document.getElementById('checkin-thanks').hidden = false;
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = 'Send it';
+      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+      err.hidden = false;
+    });
+  });
+})();
+</script>
+
 <h2>Full menu &amp; live prices</h2>
 <h3>Beverages (11)</h3>
 <table>
@@ -332,7 +408,7 @@
     <td style="text-align:right">$18.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/j0276">Cranberry Apple Rosin Gummies [10pk] (50mg)</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/j0275">Cranberry Apple Rosin Gummies [10pk] (50mg)</a></td>
     <td>Granny&#39;s</td>
     <td style="text-align:right" class="price">$18.00 ✓</td>
     <td style="text-align:right">$18.00</td>
@@ -368,7 +444,7 @@
     <td style="text-align:right">$55.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/j0244">Chem &#39;n Cookies [.5g]</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/j0243">Chem &#39;n Cookies [.5g]</a></td>
     <td>&amp;Shine</td>
     <td style="text-align:right" class="price">$55.00 ✓</td>
     <td style="text-align:right">$55.00</td>
@@ -501,7 +577,7 @@
     <td style="text-align:right">$40.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/j0257">L&#39;Orange</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/j0256">L&#39;Orange</a></td>
     <td>Good Green</td>
     <td style="text-align:right" class="price">$40.00 ✓</td>
     <td style="text-align:right">$40.00</td>
@@ -525,13 +601,13 @@
     <td style="text-align:right">$45.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444482186_f5c24064-ccc7-465c-a5a6-8d9abeaa5e04.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/j0278">Angel Cake</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/544/551/584/444482186_f5c24064-ccc7-465c-a5a6-8d9abeaa5e04.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/j0277">Angel Cake</a></td>
     <td>Lifted North</td>
     <td style="text-align:right" class="price">$45.00 ✓</td>
     <td style="text-align:right">$45.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/444346438_908fe21f-7b22-4904-8918-6acf9f354970.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/j0279">Blueberry Muffin</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/444346438_908fe21f-7b22-4904-8918-6acf9f354970.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/j0278">Blueberry Muffin</a></td>
     <td>Lifted North</td>
     <td style="text-align:right" class="price">$45.00 ✓</td>
     <td style="text-align:right">$45.00</td>
@@ -556,77 +632,7 @@
   </tr>
 </tbody>
 </table>
-
-
-<div id="checkins-section" data-slug="rise-new-hope">
-  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
-  <div id="checkins-list"></div>
-  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
-  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
-  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
-    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <datalist id="checkin-products"><option value="Kush Mango Pineapple [12oz] (10mg THC/10mg CBD)"><option value="Sativa Mandarin Orange Beverage- THC [12oz] (10mg THC)"><option value="Grapefruit Paloma [12oz] (10mg)"><option value="Lime Jalapeno Margarita [12oz] (10mg)"><option value="Mango Margarita [12oz] (10mg)"><option value="Ranch Water [12oz] (10mg)"><option value="Chem &#39;N Cookies [.75g]"><option value="2:1 Chill Pink Lemonade [10pk] (100mg CBD/50mg THC)"><option value="Brownie Scout [.75g]"><option value="Caramel Apple Alien Abduction - 1:1:1 [10pk] (50mg THC/50mg CBD/50mg CBN)"><option value="Pink Lemonade [10pk] (250mg CBG)"><option value="Cranberry Apple Rosin Gummies [10pk] (50mg)"><option value="Tropical Gummies [10pk] (50mg)"><option value="Fruit Punch [10pk] (100mg)"><option value="Brain Boost THC + Adaptogen Gummies  [10pk] (50mg CBD/50mg THC)"><option value="Zen Blend THC + Adaptogen Gummies[10pk] (50mg CBD/50mg THC)"><option value="Granny Candy [.35g]"><option value="Pink Tourmaline Lemonade [10pk] (100mg)"><option value="OMG"><option value="Fantasy Melonz"><option value="Jet Fuel OG"><option value="Chem n&#39; Cookies"><option value="Evercrisp"><option value="Jack&#39;s Delight"><option value="Kong"><option value="L&#39;Orange"><option value="Signature Cultivar-IX"><option value="Medusa"><option value="Orion"><option value="Angel Cake"><option value="Blueberry Muffin"><option value="Wilfunk"><option value="Bananaconda"><option value="Amanda"><option value="Animal Face"><option value="Animal Scout"><option value="Durban Z"><option value="Giggle Gas"><option value="Gogurtz"><option value="Velcroz"><option value="Chem &#39;n Cookies [.5g]"><option value="Brownie Scout"><option value="Brownie Scout [.35g]"></datalist>
-    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
-    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
-  </form>
-  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
-    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
-  </div>
-</div>
-<script>
-(function () {
-  var slug = "rise-new-hope";
-  var W = 'https://dashboard.twincitycannabis.com';
-  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
-    if (!rows || !rows.length) return;
-    document.getElementById('checkins-title').hidden = false;
-    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
-      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
-      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
-      var prod = String(c.product).replace(/[<>&"]/g, '');
-      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
-      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
-    }).join('');
-  }).catch(function () {});
-  var open = document.getElementById('checkin-open');
-  var form = document.getElementById('checkin-form');
-  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var err = document.getElementById('checkin-err');
-    err.hidden = true;
-    var product = document.getElementById('checkin-product').value.trim();
-    var price = parseFloat(document.getElementById('checkin-price').value);
-    if (product.length < 2 || !(price > 0.5 && price < 500)) {
-      err.textContent = 'A product and a real price are all we need.';
-      err.hidden = false;
-      return;
-    }
-    var btn = form.querySelector('button[type="submit"]');
-    btn.disabled = true; btn.textContent = 'Sending…';
-    fetch(W + '/checkin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        shop: slug, product: product, price: price,
-        note: document.getElementById('checkin-note').value.trim(),
-        name: document.getElementById('checkin-name').value.trim(),
-      }),
-    }).then(function (r) {
-      if (!r.ok) throw new Error('bad');
-      form.hidden = true;
-      document.getElementById('checkin-thanks').hidden = false;
-    }).catch(function () {
-      btn.disabled = false; btn.textContent = 'Send it';
-      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
-      err.hidden = false;
-    });
-  });
-})();
-</script>
+<p style="font-size:.9rem;margin:.8rem 0 0"><a href="#checkins-section" id="checkin-jump">Shopped here? Tell other people what you actually paid →</a></p>
 
 
 
