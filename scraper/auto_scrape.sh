@@ -124,6 +124,13 @@ python3 scraper/merge_jane_data.py
 python3 scraper/sweed_scrape.py || echo "Sweed scrape failed (non-fatal)"
 python3 scraper/merge_sweed_data.py
 
+# 7.93. Pull menus from Treez/GapCommerce headless storefronts (Flame &
+#       Flora, the Shakopee Mdewakanton Sioux Community dispensary in
+#       Prior Lake — the owner asked to be added 2026-06, found in the
+#       Kit-form backlog). Non-fatal, merge skips cleanly when empty.
+python3 scraper/treez_scrape.py || echo "Treez scrape failed (non-fatal)"
+python3 scraper/merge_treez_data.py
+
 # 7.95. Pull menus from Dutchie embedded menus (8 outstate/suburb shops:
 #       Rochester, Morton, Ramsey, La Crescent, Welch, White Bear Lake,
 #       Luverne, Monticello). curl_cffi passes Dutchie's Cloudflare; the
@@ -204,6 +211,7 @@ git add js/data.js index.html sitemap.xml \
     scraper/data/dispensary_shop_products.json scraper/data/meadow_products.json \
     scraper/data/carrot_products.json scraper/data/jane_products.json \
     scraper/data/sweed_products.json scraper/data/dutchie_products.json \
+    scraper/data/treez_products.json \
     scraper/data/shop_counts.json scraper/data/menu_alerts.json \
     scraper/data/page_lastmod.json scraper/data/price_trends.json \
     llms.txt

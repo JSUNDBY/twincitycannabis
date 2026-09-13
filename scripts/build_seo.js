@@ -4591,7 +4591,8 @@ const GG_IDS = ['minnesota-medical-solutions', 'minnesota-medical-solutions-bloo
 // Tribal (sovereign-land) dispensaries currently tracked. Tax-exempt at the
 // register, unlike state-licensed shops.
 const TRIBAL_IDS = ['island-pezi', 'nativecare-1', 'waabigwan-mashkiki-1',
-  'waabigwan-mashkiki-saint-cloud', 'anang-native-cannabis-co', 'anang-tasting-lounge-dispensary'];
+  'waabigwan-mashkiki-saint-cloud', 'anang-native-cannabis-co', 'anang-tasting-lounge-dispensary',
+  'flame-flora'];
 
 const _gFromW = (w) => {
   const m = /([\d.]+)\s*g/.exec(w || '');
