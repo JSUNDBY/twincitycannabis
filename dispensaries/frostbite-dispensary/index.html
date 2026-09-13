@@ -735,6 +735,77 @@
 </table>
 
 
+<div id="checkins-section" data-slug="frostbite-dispensary">
+  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
+  <div id="checkins-list"></div>
+  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
+  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
+  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
+    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <datalist id="checkin-products"><option value="Blue Dream"><option value="Iced Tea Lemonade"><option value="THC Mocktail"><option value="Fruit Punch"><option value="High Voltage Lemonade 10mg THC 10mg CBG"><option value="Homegrown Soda"><option value="Layer Cake Lemonade 10mg THC"><option value="Pineapple Kush Tonic"><option value="Seltzer"><option value="Soda"><option value="Chillberry CBD Wellness Gummies"><option value="Minny Grown 250mg CBN Gummies"><option value="Pink Lemonade Wellness Gummies"><option value="Watermelon Kiwi Wellness Gummies"><option value="Black Currant Rosin Gummies"><option value="Cotton Candy Cubes"><option value="Lemon Rosin Gummies"><option value="Lime Rosin Gummies"><option value="Raspberry Rosin Gummies"><option value="Watermelon Rosin Gummies"><option value="RW Jelly Breath"><option value="So Superior Clementine Gummies"><option value="Highbernate Moon Melon Gummies"><option value="Kabetogama Kiwi Watermelon"><option value="MNG BlueBeary Gummies 50mg THC"><option value="Midwest Sunset Mango"><option value="Peach Gummies"><option value="st. croix"><option value="OG Highbernate"><option value="Zenith Mango"><option value="Twilight Strawberry"><option value="Looner Gummies - Twilight Blackberry - 50MG THC 250MG CBN"><option value="Twilight Mango"><option value="Zenith Blackberry"><option value="Zenith Strawberry"><option value="Citrus Gummies"><option value="Tropical Gummies"><option value="Brain Boost Gummies"><option value="Dream State Gummies"><option value="LC Infused Kief Coated"><option value="ZEN Blend Gummies"><option value="Grasslandz"><option value="&amp;Shine"><option value="Dogwalkers 1.75g Mini Dog Pre-rolls"><option value="Dogwalkers Sit Mini Pre Rolls (5pk)"><option value="Watermelon Gummies"><option value="Blue Raspberry Gummies"><option value="Cinnamon Roll White Chocolate Bar"><option value="Fast Acting Gummies"><option value="Gummies"><option value="Pomegranate Gummies"><option value="Orange-sicle White"><option value="Banana Bread Chocolate Bar"><option value="Blueberry Cheesecake Chocolate"><option value="DC Celestial Brownie Chocolate Bar"><option value="DC Dark Chocolate Caramel Latte"><option value="DC Mint Chocolate Chip"><option value="Illemonati"><option value="Biscotti- 3.5g"><option value="Glitter Bomb- 3.5g"><option value="Jet Fuel Gelato- 3.5g"><option value="BD Amanda"><option value="BD Frozen Diamonds"><option value="BD Grape Aliens"><option value="BD The Chosen One"><option value="Chem Kesey - 3.5 G"><option value="GP Sour Pebbles"><option value="Gary Payton- 3.5 G"><option value="UB Orangade"><option value="Jungle Wifi"><option value="Papaya Fuel"><option value="Gruntz"><option value="Hawaiian Fanta"><option value="Super Silver Haze"><option value="Topanga Canyon"><option value="Wilfunk"><option value="CC Cap Junky"><option value="CC Guava"><option value="CC Orange Runtz"><option value="Donny Burger"></datalist>
+    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
+    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
+  </form>
+  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
+    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var slug = "frostbite-dispensary";
+  var W = 'https://dashboard.twincitycannabis.com';
+  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('checkins-title').hidden = false;
+    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
+      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
+      var prod = String(c.product).replace(/[<>&"]/g, '');
+      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
+      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
+    }).join('');
+  }).catch(function () {});
+  var open = document.getElementById('checkin-open');
+  var form = document.getElementById('checkin-form');
+  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('checkin-err');
+    err.hidden = true;
+    var product = document.getElementById('checkin-product').value.trim();
+    var price = parseFloat(document.getElementById('checkin-price').value);
+    if (product.length < 2 || !(price > 0.5 && price < 500)) {
+      err.textContent = 'A product and a real price are all we need.';
+      err.hidden = false;
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(W + '/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop: slug, product: product, price: price,
+        note: document.getElementById('checkin-note').value.trim(),
+        name: document.getElementById('checkin-name').value.trim(),
+      }),
+    }).then(function (r) {
+      if (!r.ok) throw new Error('bad');
+      form.hidden = true;
+      document.getElementById('checkin-thanks').hidden = false;
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = 'Send it';
+      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+      err.hidden = false;
+    });
+  });
+})();
+</script>
+
+
 <h2>What customers say on Google</h2>
 
 <div class="review">

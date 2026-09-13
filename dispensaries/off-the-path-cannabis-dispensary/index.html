@@ -1136,6 +1136,77 @@
 </table>
 
 
+<div id="checkins-section" data-slug="off-the-path-cannabis-dispensary">
+  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
+  <div id="checkins-list"></div>
+  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
+  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
+  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
+    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <datalist id="checkin-products"><option value="BLNCD - FUSE - 5mg THC Infusion - 1ct"><option value="BLNCD - 5mg THC Sparkling Water - Yuzu Ginger"><option value="BLNCD - 5mg THC Sparkling Water - Strawberry Basil"><option value="BLNCD - 5mg THC Sparkling Water - Blood Orange Cardamom"><option value="CCCo - Hawaiian Haze CBD Preroll - 1g"><option value="CCCo - Watermelon Skittles CBD Preroll - 1g"><option value="CCCo - Strawberry Shortcake CBD Preroll - 1g"><option value="CCCo - Sour Space Candy CBD Preroll - 1g"><option value="CCCo - Sour Diesel CBD Preroll - 1g"><option value="CCCo - Pineapple Express CBD Preroll - 1g"><option value="CCCo - Maui Wowie CBD Preroll - 1g"><option value="CCCo - Kush Cake CBD Preroll - 1g"><option value="CCCo - Cherry Wine Kush CBD Preroll - 1g"><option value="CCCo - Blue Orchid OG CBD Preroll - 1g"><option value="CCCo - Blue Dream CBD Preroll - 1g"><option value="BLNCD - Cannabis + Adaptogen - 5mg THC Elixir - ZEN BLEND"><option value="BLNCD - Cannabis + Adaptogen - 5mg THC Elixir - BRAIN BOOST"><option value="BLNCD - Sparkling Water CHILL - 20mg CBD - 12oz"><option value="BLNCD - Sparkling Water BALANCE - 20mg CBD - 12oz"><option value="Looner - Sweet Orange - 10mg THC - 12oz"><option value="BLNCD - FUSE10 - 10mg THC Infusion - 1ct"><option value="Looner - Professor Pepper - 10mg THC - 12oz"><option value="Looner - Classic Root Beer - 10mg THC - 12oz"><option value="Looner - Sparkling Classic Lemonade - 10mg THC - 12oz"><option value="Looner - Lemon Lime - 10mg THC - 12oz"><option value="Looner - Sparkling Pink Lemonade - 10mg THC - 12oz"><option value="BLNCD - 10mg THC Mocktail - PRICKLY PEAR BEE&#39;S KNEES"><option value="Retro - Pink Lemonade - 10mg THC - 12oz"><option value="Retro - OG Lemonade - 10mg THC - 12oz"><option value="Retro - Blue Raspberry Lemonade - 10mg THC - 12oz"><option value="Looner - Wild Grape - 10mg THC - 12oz"><option value="Looner - Sparkling Peach Lemonade - 10mg THC - 12oz"><option value="Looner - Sparkling Half&amp;Half Tea + Lemonade - 10mg THC - 12oz"><option value="Looner - Diet Root Beer - 10mg THC - 12oz"><option value="Looner - Diet Professor Pepper - 10mg THC - 12oz"><option value="Looner - Dew - 10mg THC - 12oz"><option value="Looner - Creme - 10mg THC - 12oz"><option value="Looner - Cola - 10mg THC - 12oz"><option value="Freedom Soda - Pink Lemonade - 10mg THC - 12oz"><option value="Freedom Soda - Orange Soda - 10mg THC - 12oz"><option value="Freedom Soda - Lemonade - 10mg THC - 12oz"><option value="Freedom Soda - Grape Soda - 10mg THC - 12oz"><option value="Freedom Soda - Cream Soda - 10mg THC - 12oz"><option value="Bleezy - Northern Lights Soda - 10mg - 16oz"><option value="BLNCD - 10mg THC Mocktail - WATERMELON MARGARITA"><option value="BLNCD - 10mg THC Mocktail - CUCUMBER MOJITO"><option value="Oliphant Brewing - Super Kushy - 10mg THC + 5mg CBD 12oz"><option value="Oliphant Brewing - Ruin - 10mg THC + 5mg CBD 12oz"><option value="Oliphant Brewing - Rainbow Kushy - 10mg THC + 5mg CBD 12oz"><option value="Oliphant Brewing - Blueberry Lemonade Ruin - 10mg THC + 5mg CBD 12oz"><option value="Oliphant Brewing - Blueberry Cheesecake Disaster - 10mg THC + 5mg CBD 12oz"><option value="BLNCD - Levitate - 10mg THC 10mg CBG Infusion - 1ct"><option value="Ganja Skoden - Sparkling Lime Margarita - 10mg THC - 12oz"><option value="Stiiizy - Watermelon Wave Seltzer - 20mg THC - 12oz"><option value="Stiiizy - Strawberry Kiwi Seltzer - 20mg THC - 12oz"><option value="Stiiizy - Pineapple Soda - 20mg THC - 12oz"><option value="Stiiizy - Orange Soda - 20mg THC - 12oz"><option value="Stiiizy - Mango Tango Seltzer - 20mg THC - 12oz"><option value="Stiiizy - Grape Soda - 20mg THC - 12oz"><option value="Stiiizy - Cream Soda - 20mg THC - 12oz"><option value="Stiiizy - Carribean Breeze Seltzer - 20mg THC - 12oz"><option value="Looner - Wild Grape - 20mg THC - 12oz"><option value="Looner - Sweet Orange - 20mg THC - 12oz"><option value="Looner - Professer Pepper - 20mg THC - 12oz"><option value="Looner - Classic Root Beer - 20mg THC - 12oz"><option value="Off The Path - 50mg Shooter - Tropical Lemonade"><option value="Off The Path - 50mg Shooter - Strawberry Lemonade"><option value="Off The Path - 50mg Shooter - Cherry Limeade"><option value="Off The Path - 50mg Shooter - Blueberry Lemonade"><option value="Foundry Nation - 20mg THC Soda - Orange Tangie - 12oz"><option value="Foundry Nation - 20mg THC Soda - Granddaddy Purple - 12oz"><option value="Foundry Nation - 20mg THC Soda - Blue Dream - 12oz"><option value="BLNCD - Levitate - 20mg THC 20mg CBG Infusion - 1ct"><option value="BLNCD - FUSE20 - 20mg THC Infusion - 1ct"><option value="BLNCD - CBD+CBN SLEEP Gummies - Assorted 3ct"><option value="BLNCD - Cannabis + Adaptogen - 20mg THC Elixir - ZEN BLEND"><option value="Black Cherry Kush - 1g Preroll - Indica - Flower"><option value="Amaretto Mintz - 1g Preroll - Hybrid - Flower"><option value="Blueberry Cheesecake - 1g Preroll - Indica - Flower"><option value="Pineapple Express - 1g Preroll - Sativa - Flower"></datalist>
+    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
+    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
+  </form>
+  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
+    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var slug = "off-the-path-cannabis-dispensary";
+  var W = 'https://dashboard.twincitycannabis.com';
+  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('checkins-title').hidden = false;
+    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
+      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
+      var prod = String(c.product).replace(/[<>&"]/g, '');
+      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
+      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
+    }).join('');
+  }).catch(function () {});
+  var open = document.getElementById('checkin-open');
+  var form = document.getElementById('checkin-form');
+  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('checkin-err');
+    err.hidden = true;
+    var product = document.getElementById('checkin-product').value.trim();
+    var price = parseFloat(document.getElementById('checkin-price').value);
+    if (product.length < 2 || !(price > 0.5 && price < 500)) {
+      err.textContent = 'A product and a real price are all we need.';
+      err.hidden = false;
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(W + '/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop: slug, product: product, price: price,
+        note: document.getElementById('checkin-note').value.trim(),
+        name: document.getElementById('checkin-name').value.trim(),
+      }),
+    }).then(function (r) {
+      if (!r.ok) throw new Error('bad');
+      form.hidden = true;
+      document.getElementById('checkin-thanks').hidden = false;
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = 'Send it';
+      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+      err.hidden = false;
+    });
+  });
+})();
+</script>
+
+
 <h2>What customers say on Google</h2>
 
 <div class="review">

@@ -651,6 +651,77 @@
 </table>
 
 
+<div id="checkins-section" data-slug="lucid-leaf-2">
+  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
+  <div id="checkins-list"></div>
+  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
+  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
+  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
+    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <datalist id="checkin-products"><option value="Single 5mg Beezwax Gummy"><option value="Looner - Peach Lemonade"><option value="Boom Boom - Mint"><option value="Boom Boom - Winter Mint"><option value="Happy Duck 10MG THC Seltzer - Bomba Juice"><option value="Happy Duck 10MG THC Seltzer - Tangerine"><option value="Looner - Classic Lemonade"><option value="Looner - Creme 10MG THC Soda"><option value="Looner - Dew 10MG THC Soda"><option value="Looner - Lemon Lime 10MG THC Soda"><option value="Looner - Pink Lemonade 10MG THC Soda"><option value="Looner - Professor Pepper 10MG THC Soda"><option value="Looner - Wild Grape 10MG THC Soda"><option value="MLLW Iced Tea Lemonade Half &amp; Half"><option value="Freedom Soda Lemonade"><option value="Beezwax X2 Berrylicious THC Gummies – Sativa (50mg)"><option value="Beezwax X2 Blue Raz THC Gummies – Indica (50mg)"><option value="Berrylicious X2"><option value="Diamond Dust Pre-Roll-IX"><option value="Fish Fry Infused Pre-Roll-IX"><option value="Gummibears Pre-Roll-IX"><option value="Happy Duck 10MG THC Shot - Tangerine"><option value="Pilot Light 2.0 Pre-Rolls-IX"><option value="Preroll-IX"><option value="Government Oranges Alpha Pre-Roll-IX"><option value="Highbernate Moon Melon Gummies"><option value="Baja Nano Hydro"><option value="Beezwax Nano Hydro Fast-Acting Gummies Berry Blast - Hybrid (50MG)"><option value="Beezwax Nano Hydro Fast-Acting Gummies – Baja"><option value="Beezwax Nano Hydro Fast-Acting Gummies – Berry Blast"><option value="Beezwax Nano Hydro Fast-Acting Gummies – Fairy Dust"><option value="Beezwax Nano Hydro Fast-Acting Gummies – STW Kiwi"><option value="MN First Babe THC Gummies – Hybrid (50mg)"><option value="MN First Babe THC Gummies – Indica (50mg)"><option value="MN First Babe THC Gummies – Sativa (50mg)"><option value="MN First Dove THC Gummies – Indica (50mg)"><option value="MN First Dove THC Gummies – Sativa (50mg)"><option value="MN First Slapshot THC Gummies – Hybrid (50mg)"><option value="MN First Slapshot THC Gummies – Indica (50mg)"><option value="MN First Slapshot THC Gummies – Sativa (50mg)"><option value="MN First – Superior Gummies (Hybrid"><option value="MN First – Superior Gummies (Indica"><option value="Minny Grown Berry Bliss Gummies"><option value="Minny Grown Bluebeary Gummies"><option value="Minny Grown Caramel Apple Alien Gummies"><option value="Minny Grown Clementine Gummies"><option value="Minny Grown Kabetogama Kiwi Watermelon Gummies"><option value="Minny Grown Mango Gummies"><option value="Minny Grown Minny Apple Gummies"><option value="Minny Grown Peach Gummies"><option value="Minny Grown St. Croix Sunrise Gummies"><option value="Minny Grown Watermelon Gummies"><option value="Happy Duck 5MG THC Gummies 10 Pck - Bomba"><option value="Raspberry Lemonade"><option value="Beezwax Chocolate Bar Cookies n&#39; Creme"><option value="Beezwax Chocolate Bar Milk Chocolate"><option value="Beezwax Chocolate Bar Peanut Butter"><option value="MLLW Chocolate Mousse Cheesecake Chocolate Bar"><option value="MLLW Chocolate-Covered Strawberry Chocolate Bar"><option value="MLLW Cookie &amp; Cream Chocolate Bar"><option value="MLLW Fruit Punch Moon Rocks"><option value="MLLW Key Lime Pie Chocolate Bar"><option value="CBD Relief Roll-On Lotion"><option value="3 Pack Pre Roll-IX"><option value="Standard Pre Roll-IX"><option value="Size Pre-Rolls-IX"><option value="Grasslandz"><option value="Bubble Bath"><option value="LL Fight Club"><option value="Permanent Markers"><option value="LL LIT OG"><option value="LL MAC Stomper"><option value="LL Purple Octane"><option value="LL Runtz"><option value="Cap Junky"><option value="PS1 Double Concentrate and Cartridge Bubbler"><option value="Face Fat Resin Cartridge-IX"><option value="Turtle Taffy Smalls-IX"></datalist>
+    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
+    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
+  </form>
+  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
+    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var slug = "lucid-leaf-2";
+  var W = 'https://dashboard.twincitycannabis.com';
+  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('checkins-title').hidden = false;
+    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
+      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
+      var prod = String(c.product).replace(/[<>&"]/g, '');
+      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
+      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
+    }).join('');
+  }).catch(function () {});
+  var open = document.getElementById('checkin-open');
+  var form = document.getElementById('checkin-form');
+  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('checkin-err');
+    err.hidden = true;
+    var product = document.getElementById('checkin-product').value.trim();
+    var price = parseFloat(document.getElementById('checkin-price').value);
+    if (product.length < 2 || !(price > 0.5 && price < 500)) {
+      err.textContent = 'A product and a real price are all we need.';
+      err.hidden = false;
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(W + '/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop: slug, product: product, price: price,
+        note: document.getElementById('checkin-note').value.trim(),
+        name: document.getElementById('checkin-name').value.trim(),
+      }),
+    }).then(function (r) {
+      if (!r.ok) throw new Error('bad');
+      form.hidden = true;
+      document.getElementById('checkin-thanks').hidden = false;
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = 'Send it';
+      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+      err.hidden = false;
+    });
+  });
+})();
+</script>
+
+
 <h2>What customers say on Google</h2>
 
 <div class="review">

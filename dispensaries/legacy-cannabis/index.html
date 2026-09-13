@@ -971,6 +971,77 @@
 </table>
 
 
+<div id="checkins-section" data-slug="legacy-cannabis">
+  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
+  <div id="checkins-list"></div>
+  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
+  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
+  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
+    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <datalist id="checkin-products"><option value="MLLW - Sparkling Beverage - 10mg THC - Strawberry Limeade"><option value="Beboe - 5mg Gummies - 4 ct - Blood Orange"><option value="Beboe - 5mg Gummies - 4 ct - Huckleberry"><option value="Munchies de Mayo Gummies - 10mg x 2 Count - Mango Fuego"><option value="Native Care - Chocolate Bar - 20mg"><option value="Nebula Gummy Bar - 20mg - Cotton Candy"><option value="Souree Edibles - Legacy Cup 2pack Gummies - Blue Raspberry"><option value="Souree Edibles - Legacy Cup 2pack Gummies - Fruit Punch"><option value="Voyageur Gummies - 10mg Gummy 2pack (20mg) - Blueberry"><option value="Voyageur Gummies - 10mg Gummy 2pack (20mg) - Mango"><option value="Voyageur Gummies - 10mg Gummy 2pack (20mg) - Strawberry"><option value="You Betcha! Gummies 10mg [2 Count] - Sour Pink Lemonade"><option value="Granddaddy Purple"><option value="Jixxie - THC Seltzer-10mg THC + 5mg CBG - Peach Rhubarb"><option value="Jixxie - THC Seltzer-10mg THC + 5mg CBG - Plum Cardamom"><option value="Strawberry Diesel"><option value="Caviar - 10mg THC 5mg CBG - Fruit Punch"><option value="Caviar - 10mg THC 5mg CBG - Strawberry Lemonade"><option value="Lupulin Brewing - SMAZEY Seltzer - 10mg THC - Mango Pineapple"><option value="Lupulin Brewing - SMAZEY Seltzer - 10mg THC - Triple Berry"><option value="THC Mocktail"><option value="Two Scoops"><option value="Blue Dream"><option value="Kite Soda - 10mg THC - Cherry Cola"><option value="Kite Soda - 10mg THC - Grape"><option value="Kite Soda - 10mg THC - Root Beer"><option value="Lemon Haze"><option value="Lemonade"><option value="Looner - Infused Soda - 10mg THC - Diet Root Beer"><option value="On Point - Soda - 10mg THC - Lemon Lime"><option value="On Point - Soda - 10mg THC - Root Beer"><option value="Ol Skool Edibles - 20mg Hard Candy - Passion Fruit"><option value="Dogwalkers .75g Big Dog Pre Rolls"><option value="Freedom Flower - 1g Pre-Roll - The Good Witch"><option value="Native Care - .5g Pre-Roll 2 Pack (1g total) - Cap Junky"><option value="Native Care - .5g Pre-Roll 2 Pack (1g total) - Kosher Kush"><option value="Waabigwan Mashkiki - 1g Prerolls - White Truffle"><option value="Good Green - 0.5g Preroll 2 Pack - Indica Blend"><option value="Good Green - 0.5g Preroll 2 Pack - Sativa Blend"><option value="Campfire Cannabis - 1g Flower - Cap Junky"><option value="Grasslandz - 1g Flower - Glue 31"><option value="Grasslandz - 1g Flower - Zandia"><option value="Grasslandz - 1g Flower - Zoap"><option value="Native Care - 1g Flower - Lemon Cherry Gelato"><option value="Native Care - 1g Flower - Lit OG"><option value="Native Care - 1g Flower - Super Silver Haze"><option value="Rythm - 1g Flower - Animal Face"><option value="Rythm - 1g Flower - Giggle Gas"><option value="Rythm - 1g Flower - Gogurtz"><option value="Unbound - 1g Pre-Roll - Orangeade (S/H)"><option value="Waabigwan Mashkiki - 1g Flower - Lemon OG Haze"><option value="Waabigwan Mashkiki - 1g Flower - White Truffle"><option value="Waabigwan Mashkiki - 1g Flower - Wiishkobi Mashkiki"><option value="Campfire Cannabis - 1g Pre-Roll - Mac Stomper (H)"><option value="Grasslandz - .35g Preroll 3 pack - Zoap"><option value="Matchbox Farms - 1g Flower - Dulce De Uva"><option value="Trailhead Cannabis Co - 1g Flower - Cherry Lady Slipper (H)"><option value="Trailhead Cannabis Co - 1g Flower - Killer Cupcake (H)"><option value="Trailhead Cannabis Co - 1g Flower - Trailside Sunset (H)"><option value="Trailhead Cannabis Co - 1g Pre-roll - Trailside Sunset"><option value="Valhalla Cannabis Co - 1g Flower - Granola Funk"><option value="Good Night Grape Rosin-Infused"><option value="Morning Mango"><option value="Party Pear"><option value="Pomegranate Peak"><option value="Lifted North - .5g Pre-Roll 2 Pack - Blueberry Octane"><option value="On Point - Gummies - 50mg THC + 250mg CBD - Fruit Punch"><option value="Raiden Labs - Gummies - Charged Cherry- 50mg THC 250mg CBG"><option value="Raiden Labs - Gummies - Powered Passion Orange- 50mg THC 250mg CBG"><option value="Raiden Labs - Gummies - Static Strawberry- 50mg THC 250mg CBG"><option value="Avio Supply Co. - 1g Pre-Roll - Mendo Breath (I/H)"><option value="Campfire Cannabis - 1g Pre-Roll - Runtz (H)"><option value="Rainbow Sherbet Live Resin Gummies"><option value="Cranberry Apple Live Rosin Gummies"><option value="Pear Ginger Gummies"><option value="Orange Creamsicle Live Resin Gummies"><option value="SKAL - Hemp Gummy - Cubes - Crunch Berries"><option value="SKAL - Hemp Gummy - Strawberry Shortcake"><option value="Cherry Lime Gummy Bar"><option value="Cotton Candy Gummy Bar"></datalist>
+    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
+    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
+  </form>
+  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
+    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var slug = "legacy-cannabis";
+  var W = 'https://dashboard.twincitycannabis.com';
+  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('checkins-title').hidden = false;
+    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
+      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
+      var prod = String(c.product).replace(/[<>&"]/g, '');
+      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
+      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
+    }).join('');
+  }).catch(function () {});
+  var open = document.getElementById('checkin-open');
+  var form = document.getElementById('checkin-form');
+  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('checkin-err');
+    err.hidden = true;
+    var product = document.getElementById('checkin-product').value.trim();
+    var price = parseFloat(document.getElementById('checkin-price').value);
+    if (product.length < 2 || !(price > 0.5 && price < 500)) {
+      err.textContent = 'A product and a real price are all we need.';
+      err.hidden = false;
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(W + '/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop: slug, product: product, price: price,
+        note: document.getElementById('checkin-note').value.trim(),
+        name: document.getElementById('checkin-name').value.trim(),
+      }),
+    }).then(function (r) {
+      if (!r.ok) throw new Error('bad');
+      form.hidden = true;
+      document.getElementById('checkin-thanks').hidden = false;
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = 'Send it';
+      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+      err.hidden = false;
+    });
+  });
+})();
+</script>
+
+
 <h2>What customers say on Google</h2>
 
 <div class="review">

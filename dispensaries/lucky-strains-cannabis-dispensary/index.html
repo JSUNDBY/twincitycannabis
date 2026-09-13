@@ -535,6 +535,77 @@
 </table>
 
 
+<div id="checkins-section" data-slug="lucky-strains-cannabis-dispensary">
+  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
+  <div id="checkins-list"></div>
+  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
+  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
+  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
+    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <datalist id="checkin-products"><option value="Grape Soda"><option value="Lemonade"><option value="Drink 10mg THC Per Can"><option value="Half and Half Tea &amp; Lemonade"><option value="Iced Tea Lemonade"><option value="Lift Bridge Fruit Cup Sparkling Beverage 10mg THC"><option value="Lift Bridge Limelon Sparkling Beverage 10mg THC"><option value="Oliphant Ruin Lemonade 10mg THC and 5mg CBD"><option value="Pappy&#39;s Blackcherry Lemonade 10mg THC"><option value="Pappy&#39;s Strawberry Lemonade 10mg THC"><option value="Uncle Arnie&#39;s Strawberry Lemonade 10mg THC, Sugar Free"><option value="Zen Magic Tea"><option value="Gummies Monthly Special!"><option value="Natreum Fast Acting Gummies Mango 50 MG THC Per Bag"><option value="On Point Midwest Tropics Gummies 50mg THC, 100mg CBC, 100mg CBGa"><option value="On Point Strawberry Lemonade Balanced Any Time Vibes 50mg THC, 100mg CBC, 750mg of Lions Mane, C..."><option value="Bootlegger Mocktails Coconut Rum 50mg THC, 20mg CBG, 100mg CBD Per Pack Live Rosin"><option value="Bootlegger Mocktails Mojito 50mg THC, 20mg CBC, 100mg CBG Per Pack Live Rosin"><option value="Drops Blackberry Currant Gummies 50mg CBN, 50mg CBD and 50mg THC Per Pack"><option value="Drops Cranberry Gummies 50mg THC, 50mg CBD, 50mg CBC and CBG 50mg CBG Per Pack"><option value="Green Elevator Lemon Cake Sativa Gummies 50mg THC Per Pack"><option value="Green Elevator Mini Donuts Gummies Hybrid 50mg THC Per Pack"><option value="Hiza Kyte - Grape Escape Gummies Infused 50mg THC Per Pack"><option value="Pappy&#39;s Black Cherry Lemonade 50mg THC, 250 CBD Per Pack"><option value="Retro Bakery Chocolate Cookies 50mg Per Bar"><option value="Retro Bakery Chocolate Crispy Rice Treats 40mg THC"><option value="Retro Bakery Dark Chocolate Espresso 50mg Per Bar"><option value="Retro Bakery Milk Chocolate 50mg Per Bar"><option value="Retro Bakery Sea Salt Dark Chocolate 50mg THC Per Bar"><option value="Retro Bakery Simply Crafted Peanut Butter Cookies 50mg THC Per Bag"><option value="Retro Bakery x On Point Cookies &amp; Cream 50mg THC Per Bar"><option value="Standard Pre Roll-IX"><option value="Cherry Purgatory"><option value="CBD Gummies"><option value="Angel cake 8th (CANNABIS FLOWER (PACKAGED))"><option value="Purple Ice Water"><option value="Illemonati"><option value="Blizzard 3.5g (CANNABIS FLOWER (PACKAGED))"><option value="Flower Bag-IX"><option value="Mischief"><option value="Pre-Packaged-IX"><option value="Gruntz"></datalist>
+    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
+    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
+  </form>
+  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
+    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var slug = "lucky-strains-cannabis-dispensary";
+  var W = 'https://dashboard.twincitycannabis.com';
+  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('checkins-title').hidden = false;
+    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
+      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
+      var prod = String(c.product).replace(/[<>&"]/g, '');
+      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
+      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
+    }).join('');
+  }).catch(function () {});
+  var open = document.getElementById('checkin-open');
+  var form = document.getElementById('checkin-form');
+  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('checkin-err');
+    err.hidden = true;
+    var product = document.getElementById('checkin-product').value.trim();
+    var price = parseFloat(document.getElementById('checkin-price').value);
+    if (product.length < 2 || !(price > 0.5 && price < 500)) {
+      err.textContent = 'A product and a real price are all we need.';
+      err.hidden = false;
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(W + '/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop: slug, product: product, price: price,
+        note: document.getElementById('checkin-note').value.trim(),
+        name: document.getElementById('checkin-name').value.trim(),
+      }),
+    }).then(function (r) {
+      if (!r.ok) throw new Error('bad');
+      form.hidden = true;
+      document.getElementById('checkin-thanks').hidden = false;
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = 'Send it';
+      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+      err.hidden = false;
+    });
+  });
+})();
+</script>
+
+
 <h2>What customers say on Google</h2>
 
 <div class="review">

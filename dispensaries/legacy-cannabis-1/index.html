@@ -947,6 +947,77 @@
 </table>
 
 
+<div id="checkins-section" data-slug="legacy-cannabis-1">
+  <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
+  <div id="checkins-list"></div>
+  <p style="margin:1rem 0 .4rem"><button type="button" class="cta" id="checkin-open" style="border:none;cursor:pointer;font:inherit">💵 What did you pay? Help other shoppers</button></p>
+  <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
+  <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
+    <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <datalist id="checkin-products"><option value="THC Infusions"><option value="Botany Farms - Nano THC Shot - 10mg THC - Ginger"><option value="Botany Farms - Nano THC Shot - 10mg THC - Orange Delight"><option value="Botany Farms - Nano THC Shot - 10mg THC - Passion Fruit"><option value="Botany Farms - Nano THC Shot - 10mg THC - Pineapple Raspberry"><option value="Botany Farms - Nano THC Shot - 10mg THC - Strawberry Splash"><option value="BLNCD Sparkling Water - 5mg THC - Strawberry Basil"><option value="BLNCD Sparkling Water - 5mg THC - Yuzu Ginger"><option value="Granddaddy Purple"><option value="Jixxie - THC Seltzer-10mg THC + 5mg CBG - Peach Rhubarb"><option value="Jixxie - THC Seltzer-10mg THC + 5mg CBG - Plum Cardamom"><option value="Jixxie - THC Seltzer - 10mg THC + 5mg CBG - Grapefruit Rosemary"><option value="Jixxie - THC Seltzer-10mg THC + 5mg CBG - Huckleberry Sour"><option value="Jixxie - THC Seltzer-10mg THC + 5mg CBG - Strawberry Limon"><option value="BLNCD - Sparkling Water + Adaptogens 5mg THC + 5mg CBD - Brain Boost"><option value="BLNCD - Sparkling Water 5mg THC + 5mg CBD + Adaptogens - Zen Blend"><option value="BLNCD - THC Mocktail - 10mg - Cucumber Mojito"><option value="BLNCD - THC Mocktail - 10mg THC - Prickly Pear Bee&#39;s Knees"><option value="On Point - Soda - 10mg THC - Orange Sunrise"><option value="Fruit Punch"><option value="Pink Lemonade"><option value="Kite Soda - 10mg THC - Cherry Cola"><option value="Kite Soda - 10mg THC - Grape"><option value="Kite Soda - 10mg THC - Root Beer"><option value="Earl Giles Distillery - THC Beverage - 5mg Chronic Tonic"><option value="Foundry Nation - THC Soda - 10mg THC - Granddaddy Purple"><option value="Foundry Nation - THC Soda - 10mg THC - Lemon Haze"><option value="Foundry Nation - THC Soda - 10mg THC - Mango Tango"><option value="Kite Soda - 10mg THC - Orange"><option value="Looner - Infused Soda - 10mg THC - Ginger Beer"><option value="Looner - Infused Soda - 10mg THC - Wild Grape"><option value="Minny Grown - Cocktails - 10mg THC 20mg CBN - Highbernate Tonic"><option value="Stigma THC Beverage - Club Soda - 10mg THC - 16oz"><option value="Stigma THC Beverage - Lime Seltzer Water - 10mg THC - 16oz"><option value="Stigma THC Beverage - Sleep Tonic - 10mg THC + 5mg CBN - 12oz"><option value="You Betcha - Any Time Sparkling Water - 10mg THC + 10mg CBG - Kiwi Strawberry"><option value="You Betcha - Day Time Sparkling Water - 5mg THC + 5mg CBG - Blood Orange Lime"><option value="You Betcha - Night Time Herbal Tea - 5mg THC + 10mg CBD + 5mg CBN - Hibiscus Mint"><option value="You Betcha - Night Time Sparkling Water - 5mg THC + 5mg CBD + 1mg CBN - Blackberry Lemon"><option value="On Point - Soda - 10mg THC - Lemon Lime"><option value="On Point - Soda - 10mg THC - Root Beer"><option value="Full Spectrum CBD Gummies"><option value="Good Green - 0.5g Preroll 2 Pack - Indica Blend"><option value="Good Green - 0.5g Preroll 2 Pack - Sativa Blend"><option value="Taro THC Gummies - 5mg THC - Nano THC Blue Raspberry + Lemonade Mix"><option value="Highbernate 2.0 Gummies"><option value="Party Pear"><option value="Legacy Cannabis - Rosin Infused Gummies - 50mg THC - Campin&#39; Kiwi"><option value="Minny Grown - 5mg THC + 10mg CBD + 20mg CBN Gummies - Highbernate Moon Melon"><option value="Pomegranate Peak"><option value="Dogwalkers - Big Dog - .75g Pre-Roll - Animal Face (I/H)"><option value="Chillberry CBD Wellness Gummies"><option value="Dizgo - 0.5g Pre-Roll 2 Pack (1g Total) - Hyperion (H)"><option value="On Point - Gummies - 50mg THC + 250mg CBD - Fruit Punch"><option value="Campfire Cannabis - 1g Pre-Roll - Bubble Bath (I/H)"><option value="Raiden Labs - Gummies - Charged Cherry- 50mg THC 250mg CBG"><option value="Raiden Labs - Gummies - Powered Passion Orange- 50mg THC 250mg CBG"><option value="Raiden Labs - Gummies - Static Strawberry- 50mg THC 250mg CBG"><option value="Avio Supply Co. - 1g Pre-Roll - Mendo Breath (I/H)"><option value="Campfire Cannabis - 1g Pre-Roll - Runtz (H)"><option value="Avio Supply Co. - 1g Pre-Roll - Alien Lights (H)"><option value="Campfire Cannabis - 1g Pre-Roll - Private Party (H)"><option value="Botany Farms - Nano THC Gummies - Passionfruit Orange Guava"><option value="Botany Farms - Nano THC Gummies - Watermelon"><option value="On Point - Gummies - 50mg THC + 100mg CBD + 100mg CBN - Calm - Mixed Berry"><option value="On Point - Gummies - 50mg THC + 100mg CBG - Energize - Tangerine Sunrise"><option value="Granny Smith Live Resin Gummies"><option value="Orange Creamsicle Gummies"><option value="Rainbow Sherbet Live Resin Gummies"><option value="Cranberry Apple Live Rosin Gummies"><option value="Pear Ginger Gummies"><option value="BLNCD - Gummies + Adaptogens - 50mg THC - Brain Boost"><option value="BLNCD - Gummies + Adaptogens - 50mg THC - Zen Blend"><option value="Granny&#39;s - Live Resin Gummies - 50mg THC - Flavor Pack"><option value="SKAL - Hemp Gummy - Cubes - Crunch Berries"><option value="SKAL - Hemp Gummy - Strawberry Shortcake"><option value="SKAL - Hemp Gummy - Blue Razz"><option value="Cherry Lime Gummy Bar"><option value="BLNCD - THC + CBD + CBN Gummies - Dream State"><option value="Elevate"></datalist>
+    <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+    <button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit;width:100%">Send it</button>
+    <p id="checkin-err" hidden style="color:#f87171;font-size:.8rem;margin:.5rem 0 0;text-align:center"></p>
+  </form>
+  <div id="checkin-thanks" hidden style="max-width:440px;text-align:center;padding:.8rem;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;margin-bottom:1.2rem">
+    <p style="margin:0;font-size:.9rem">🙏 Got it — it'll appear here once a human checks it. You just made the price map better.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var slug = "legacy-cannabis-1";
+  var W = 'https://dashboard.twincitycannabis.com';
+  fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('checkins-title').hidden = false;
+    document.getElementById('checkins-list').innerHTML = rows.map(function (c) {
+      var when = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      var who = c.name ? String(c.name).replace(/[<>&"]/g, '') : 'A shopper';
+      var prod = String(c.product).replace(/[<>&"]/g, '');
+      var note = c.note ? ' — “' + String(c.note).replace(/[<>&"]/g, '') + '”' : '';
+      return '<div style="padding:.55rem 0;border-bottom:1px solid var(--border,#22302a);font-size:.9rem"><strong style="color:var(--green-text,#4ade80)">$' + Number(c.price).toFixed(2) + '</strong> — ' + prod + note + ' <span style="color:var(--text-muted,#8b909a);font-size:.78rem">· ' + who + ', ' + when + '</span></div>';
+    }).join('');
+  }).catch(function () {});
+  var open = document.getElementById('checkin-open');
+  var form = document.getElementById('checkin-form');
+  open.addEventListener('click', function () { form.hidden = !form.hidden; if (!form.hidden) document.getElementById('checkin-product').focus(); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('checkin-err');
+    err.hidden = true;
+    var product = document.getElementById('checkin-product').value.trim();
+    var price = parseFloat(document.getElementById('checkin-price').value);
+    if (product.length < 2 || !(price > 0.5 && price < 500)) {
+      err.textContent = 'A product and a real price are all we need.';
+      err.hidden = false;
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(W + '/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop: slug, product: product, price: price,
+        note: document.getElementById('checkin-note').value.trim(),
+        name: document.getElementById('checkin-name').value.trim(),
+      }),
+    }).then(function (r) {
+      if (!r.ok) throw new Error('bad');
+      form.hidden = true;
+      document.getElementById('checkin-thanks').hidden = false;
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = 'Send it';
+      err.innerHTML = 'That didn\u2019t go through — email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+      err.hidden = false;
+    });
+  });
+})();
+</script>
+
+
 <h2>What customers say on Google</h2>
 
 <div class="review">
