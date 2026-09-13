@@ -258,6 +258,31 @@
 (function () {
   var slug = "fullmelt-factory";
   var W = 'https://dashboard.twincitycannabis.com';
+  // Count this page view for the owner's dashboard. These static pages are
+  // where search traffic actually lands, and until 2026-09-13 they fired no
+  // tracker at all — so owners saw "5 profile views" while Google sent
+  // readers here all day. Fire-and-forget; never blocks rendering.
+  try {
+    fetch(W + '/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: slug, event: 'view' }),
+      keepalive: true,
+    }).catch(function () {});
+  } catch (e) {}
+  // Outbound clicks to the shop's own site are the conversion that matters.
+  document.querySelectorAll('a[rel~="nofollow"][target="_blank"]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      try {
+        fetch(W + '/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: slug, event: 'outbound' }),
+          keepalive: true,
+        }).catch(function () {});
+      } catch (e) {}
+    });
+  });
   fetch(W + '/checkins/public?shop=' + slug).then(function (r) { return r.json(); }).then(function (rows) {
     if (!rows || !rows.length) return;
     document.getElementById('checkins-title').hidden = false;
