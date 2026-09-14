@@ -19,6 +19,48 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from normalize import categorize_by_name
+
+# dispensary.shop shelf name -> TCC category, used only when name detection
+# returns EXCLUDE and no accessory/junk pattern fired.
+SHELF_CATEGORY = {
+    "vapes": "cartridge", "vape": "cartridge", "cartridges": "cartridge",
+    "flower": "flower",
+    "preroll": "pre-roll", "prerolls": "pre-roll", "pre-rolls": "pre-roll", "pre-roll": "pre-roll",
+    "concentrates": "concentrate", "concentrate": "concentrate",
+    "edibles": "edible", "hemp - edibles": "edible",
+    "beverages": "beverage", "hemp - beverages": "beverage", "drinks": "beverage",
+    "tinctures": "tincture", "topicals": "topical",
+}
+
+
+def shelf_category(raw_cat):
+    """TCC category for a dispensary.shop shelf name, or None. Exact names
+    first, then the words shops actually use ("Edibles - D9 THC/CBD",
+    "THC Drinks", "Low-Potency Edibles"). Hardware shelves never map."""
+    k = (raw_cat or "").strip().lower()
+    if not k:
+        return None
+    if k in SHELF_CATEGORY:
+        return SHELF_CATEGORY[k]
+    if any(w in k for w in ("electronic", "accessor", "bong", "pipe", "kit", "part", "gardening", "pet")):
+        return None
+    if "edible" in k:
+        return "edible"
+    if "drink" in k or "beverage" in k:
+        return "beverage"
+    if "preroll" in k or "pre-roll" in k:
+        return "pre-roll"
+    if "vape" in k or "cartridge" in k:
+        return "cartridge"
+    if "flower" in k:
+        return "flower"
+    if "concentrate" in k:
+        return "concentrate"
+    if "tincture" in k:
+        return "tincture"
+    if "topical" in k:
+        return "topical"
+    return None
 from merge_jane_data import _strip_entries_with_id_prefix
 
 DATA_DIR = Path(__file__).parent / "data"
@@ -61,8 +103,20 @@ def main():
         valid = ("flower", "pre-roll", "cartridge", "edible", "concentrate",
                  "topical", "tincture", "beverage")
         if normalized == "EXCLUDE" or normalized not in valid:
-            excluded += 1
-            continue
+            # Name detection has no opinion. dispensary.shop's shelf names are
+            # the store's own taxonomy ("Vapes", "Preroll", "Hemp - Edibles"),
+            # so trust a recognized shelf — but never resurrect an explicit
+            # accessory/junk match (batteries, sleeves, merch).
+            from normalize import _PATTERNS
+            probe = f"{name} {brand}"
+            junk = (_PATTERNS["EXCLUDE_NOT_PRODUCT"].search(probe)
+                    or _PATTERNS["ACCESSORIES_EARLY"].search(probe)
+                    or _PATTERNS["ACCESSORIES"].search(probe))
+            shelf = shelf_category(raw_cat)
+            if junk or not shelf:
+                excluded += 1
+                continue
+            normalized = shelf
         cat = normalized
 
         key = f"{name}|||{brand}|||{weight}|||{menu_type}"

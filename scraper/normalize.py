@@ -53,7 +53,7 @@ _PATTERNS = {
     # hardware devices (Volcano, Puffco, etc.). Those are caught by ACCESSORIES_EARLY.
     # We rely on accessories check running first to filter out hardware.
     'CARTRIDGE': re.compile(
-        r'\b(cartridge|cartridges|disposable|disposables|vape\s*cartridge|aio\s*vape|all[\s\-]?in[\s\-]?one\s*vape|all[\s\-]?in[\s\-]?one\s*disposable|live\s*resin\s*cart|live\s*resin\s*vape|live\s*rosin\s*vape|live\s*resin\s*disposable|live\s*rosin\s*disposable|distillate\s*cart|distillate\s*vape|distillate\s*pen|prefilled.*vaporizer|prefilled.*cartridge|prefilled\s*pen|\d+\s*pack\s*pods?|cart\s*pack|wax\s*pen|dab\s*pen|vape[\s\-]?ix|hash\s*vape|stargaze\s*vape|stiiizy\s*pod|ccell\s*cart|vape\s*pen|vape\s*disposable)\b',
+        r'\b(cartridge|cartridges|disposable|disposables|vape\s*cartridge|aio\s*vape|all[\s\-]?in[\s\-]?one\s*vape|all[\s\-]?in[\s\-]?one\s*disposable|live\s*resin\s*cart|live\s*resin\s*vape|live\s*rosin\s*vape|live\s*resin\s*disposable|live\s*rosin\s*disposable|distillate\s*cart|distillate\s*vape|distillate\s*pen|prefilled.*vaporizer|prefilled.*cartridge|prefilled\s*pen|\d+\s*pack\s*pods?|cart\s*pack|wax\s*pen|dab\s*pen|vape[\s\-]?ix|hash\s*vape|stargaze\s*vape|stiiizy\s*pod|distillate\s*pods?|resin\s*pods?|rosin\s*pods?|vape\s*pods?|thc\s*pods?|ccell\s*cart|vape\s*pen|vape\s*disposable)\b',
         re.IGNORECASE
     ),
 
