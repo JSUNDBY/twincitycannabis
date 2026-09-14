@@ -28348,7 +28348,7 @@ TCC.searchDispensaries = (query) => {
     );
 };
 
-TCC.formatPrice = (price) => `$${price}`;
+TCC.formatPrice = (price) => { const n = Math.round(Number(price) * 100) / 100; return Number.isFinite(n) ? '$' + (Number.isInteger(n) ? n : n.toFixed(2)) : `$${price}`; }; // cents, never float noise
 TCC.getTierLabel = (tier) => ({ free: '', featured: 'Featured', premium: 'Featured', platinum: 'Platinum Partner' }[tier] || ''); // shoppers see the placement (Featured); the tier name lives on the owner dashboard
 TCC.getTierColor = (tier) => ({ free: '', featured: '#22c55e', premium: '#a855f7', platinum: '#f59e0b' }[tier] || '');
 TCC.getScoreColor = (score) => score >= 90 ? '#22c55e' : score >= 80 ? '#f59e0b' : score >= 70 ? '#f97316' : '#ef4444';

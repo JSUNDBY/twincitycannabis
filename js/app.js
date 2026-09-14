@@ -2377,7 +2377,10 @@
         };
         const catLabel = { flower: 'Flower', 'pre-roll': 'Pre-rolls', cartridge: 'Carts', concentrate: 'Concentrates', edible: 'Edibles', beverage: 'Drinks', tincture: 'Tinctures', topical: 'Topicals' };
         const median = (a) => { if (!a.length) return null; const s = [...a].sort((x, y) => x - y); return s[Math.floor(s.length / 2)]; };
-        const money = (v) => TCC.formatPrice(v);
+        const money = (v) => TCC.formatPrice(Math.round(v * 100) / 100);
+        // Brand families: "Dizgo" and "Dizgo Collective" are the same shelf.
+        const bkey = (s) => norm(s).replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+        const sameBrand = (a, b) => a === b || a.startsWith(b + ' ') || b.startsWith(a + ' ');
         const menuOf = (id) => TCC.products.filter(p => p.prices && p.prices[id] != null);
 
         const mine = menuOf(d.id);
@@ -2410,9 +2413,9 @@
         // 2. Same brand, same size
         const brandRows = {};
         mine.forEach(p => {
-            const b = norm(p.brand); const s = sizeOf(p);
+            const b = bkey(p.brand); const s = sizeOf(p);
             if (!b || b === 'house' || !s) return;
-            const matches = offers.filter(o => norm(o.p.brand) === b && o.p.category === p.category && o.size === s);
+            const matches = offers.filter(o => sameBrand(bkey(o.p.brand), b) && o.p.category === p.category && o.size === s);
             if (!matches.length) return;
             const low = matches.reduce((a, o) => o.price < a.price ? o : a);
             const k = b + '|' + p.category + '|' + s;
@@ -2426,6 +2429,30 @@
             .map(p => { const shops = nearIds.filter(id => p.prices[id] != null); const lowId = shops.reduce((a, id) => p.prices[id] < p.prices[a] ? id : a); return { name: p.name, mine: p.prices[d.id], low: p.prices[lowId], shop: nameOf[lowId], diff: p.prices[lowId] - p.prices[d.id] }; })
             .sort((a, b) => a.diff - b.diff);
 
+        // 4. Brands two or more nearby shops carry that you don't (the shelf shoppers expect)
+        const myBrandKeys = [...new Set(mine.map(p => bkey(p.brand)).filter(b => b && b !== 'house'))];
+        const carryBrand = (b) => myBrandKeys.some(k => sameBrand(k, b));
+        const gapMap = {};
+        nearby.forEach(o => o.menu.forEach(p => {
+            const b = bkey(p.brand); if (!b || b === 'house' || carryBrand(b)) return;
+            const g = (gapMap[b] = gapMap[b] || { name: p.brand, shops: new Set(), n: 0, cats: new Set() });
+            g.shops.add(o.x.id); g.n++; g.cats.add(p.category);
+        }));
+        const gapRows = Object.values(gapMap).filter(g => g.shops.size >= 2).sort((a, b) => b.shops.size - a.shops.size || b.n - a.n).slice(0, 12);
+        // 5. Brands only you carry within range (nobody competes on these)
+        const nearKeys = [...new Set([].concat(...nearby.map(o => o.menu.map(p => bkey(p.brand)))).filter(b => b && b !== 'house'))];
+        const exclMap = {};
+        mine.forEach(p => { const b = bkey(p.brand); if (!b || b === 'house' || nearKeys.some(k => sameBrand(k, b))) return; (exclMap[b] = exclMap[b] || { name: p.brand, n: 0 }).n++; });
+        const exclRows = Object.values(exclMap).sort((a, b) => b.n - a.n);
+        // 6. Menu depth by category vs the nearby median
+        const depthRows = ['flower', 'pre-roll', 'cartridge', 'concentrate', 'edible', 'beverage', 'tincture', 'topical'].map(c => {
+            const my = mine.filter(p => p.category === c).length;
+            const th = nearby.map(o => o.menu.filter(p => p.category === c).length).sort((a, b) => a - b);
+            return { cat: c, my, med: th[Math.floor(th.length / 2)], lo: th[0], hi: th[th.length - 1] };
+        }).filter(r => r.my || r.hi);
+        const lowestOn = brandList.filter(r => r.diff > 0).length;
+        const undercutOn = brandList.filter(r => r.diff < 0).length;
+
         const gap = (diff) => diff < 0 ? 'var(--red)' : diff > 0 ? 'var(--green)' : 'var(--text-secondary)';
         const th = (t, r) => `<th style="text-align:${r ? 'right' : 'left'};font-size:.72rem;color:var(--text-muted);font-weight:600;padding:.3rem 0">${t}</th>`;
         const tbl = (head, rows) => `<div style="overflow-x:auto"><table style="width:100%;font-size:.85rem;border-collapse:collapse">${head}<tbody>${rows}</tbody></table></div>`;
@@ -2433,6 +2460,9 @@
         const undercut = standRows.filter(r => r.pct > 0).length;
 
         let html = `<div class="text-xs text-muted" style="margin-bottom:.4rem">Compared against ${nearby.length} shops within ${nearby[nearby.length - 1].dist.toFixed(1)} miles: ${nearby.map(o => esc(o.x.name)).join(', ')} &middot; refreshed with every menu pull</div>`;
+
+        const tile = (n, label) => `<div style="flex:1;min-width:130px;padding:.6rem .8rem;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-secondary)"><div class="font-display font-bold text-xl">${n}</div><div class="text-xs text-muted">${label}</div></div>`;
+        html += `<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin:.6rem 0 .2rem">${tile(`${lowestOn} of ${brandList.length}`, 'brand-and-size matches where you are the lowest price nearby')}${tile(undercutOn, 'brand-and-size matches where a nearby shop undercuts you')}${tile(gapRows.length, 'brands two or more nearby shops carry that you don\'t')}${tile(exclRows.length, 'brands only you carry within 12 miles')}</div>`;
 
         html += h3('Where you stand', 'Your median price vs the nearby median, by category and size. Red means the neighborhood is cheaper than you.');
         html += standRows.length ? tbl(`<thead><tr>${th('Category')}${th('You', 1)}${th('Nearby median', 1)}${th('Gap', 1)}${th('Cheapest nearby', 1)}</tr></thead>`,
@@ -2461,6 +2491,27 @@
                 <td style="text-align:right;white-space:nowrap">${money(r.low)}<div class="text-xs text-muted">${esc(r.shop)}</div></td>
                 <td style="text-align:right;white-space:nowrap;font-weight:600;color:${gap(r.diff)}">${r.diff < 0 ? '−' : r.diff > 0 ? '+' : ''}${money(Math.abs(r.diff))}</td>
             </tr>`).join('')) : '<p class="text-sm text-muted">No exact name matches with nearby shops.</p>';
+
+        html += h3('Brands nearby shops carry that you don\'t', 'Stocked by two or more shops within 12 miles. Shoppers looking for these leave your menu empty-handed.');
+        html += gapRows.length ? tbl(`<thead><tr>${th('Brand')}${th('Shops carrying it', 1)}${th('Products', 1)}${th('Categories', 1)}</tr></thead>`,
+            gapRows.map(g => `<tr>
+                <td style="padding:.35rem 0">${esc(g.name)}</td>
+                <td style="text-align:right">${g.shops.size}</td>
+                <td style="text-align:right">${g.n}</td>
+                <td style="text-align:right;white-space:nowrap" class="text-xs text-muted">${[...g.cats].map(c => catLabel[c] || esc(c)).join(', ')}</td>
+            </tr>`).join('')) : '<p class="text-sm text-muted">None. You carry every brand that two or more nearby shops stock.</p>';
+
+        html += h3('Only you carry', 'No shop within 12 miles lists these brands. Nobody competes with you on them, so they are the ones to put in front of shoppers.');
+        html += exclRows.length ? `<div class="text-sm" style="line-height:1.9">${exclRows.map(e => `${esc(e.name)} <span class="text-xs text-muted">(${e.n})</span>`).join(' &middot; ')}</div>` : '<p class="text-sm text-muted">Every brand you carry is also on a nearby menu.</p>';
+
+        html += h3('Menu depth', 'Products you list per category vs the nearby median. Amber means you are thinner than the shops around you.');
+        html += tbl(`<thead><tr>${th('Category')}${th('You', 1)}${th('Nearby median', 1)}${th('Nearby range', 1)}</tr></thead>`,
+            depthRows.map(r => `<tr>
+                <td style="padding:.35rem 0">${catLabel[r.cat] || esc(r.cat)}</td>
+                <td style="text-align:right;font-weight:600;color:${r.my < r.med ? 'var(--amber, #eab308)' : r.my > r.med ? 'var(--green)' : 'var(--text-secondary)'}">${r.my}</td>
+                <td style="text-align:right">${r.med}</td>
+                <td style="text-align:right" class="text-xs text-muted">${r.lo}&ndash;${r.hi}</td>
+            </tr>`).join(''));
 
         html += `<div class="text-xs text-muted" style="margin-top:.8rem">${undercut} of ${standRows.length} categories where the neighborhood is cheaper than you &middot; ${brandList.length} brand-level matches &middot; ${exact.length} exact matches</div>`;
         return html;
