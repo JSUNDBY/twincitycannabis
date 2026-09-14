@@ -2293,6 +2293,51 @@
     }
 
     // ---- RENDER: DEALS ----
+    // Product-level competitor report for Market Intel subscribers. One row per
+    // shared product: your price vs the lowest price among nearby shops that
+    // carry it, most-undercut first. Pure: takes the dashboard's nearby set.
+    function buildCompetitorReport(d, nearby, compRows) {
+        const byProduct = {};
+        nearby.forEach(({ nd, shared }) => {
+            shared.forEach(p => {
+                const r = { product: p.name, mine: p.prices[d.id], theirs: p.prices[nd.id], comp: nd.name };
+                const cur = byProduct[r.product];
+                if (!cur || r.theirs < cur.theirs) byProduct[r.product] = r;
+            });
+        });
+        const list = Object.values(byProduct)
+            .map(r => ({ ...r, diff: r.theirs - r.mine }))
+            .sort((a, b) => a.diff - b.diff);
+        const undercut = list.filter(r => r.diff < 0).length;
+        const gapColor = (diff) => diff < 0 ? 'var(--red)' : diff > 0 ? 'var(--green)' : 'var(--text-secondary)';
+        const summary = compRows.map(c => `
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:0.45rem 0;border-bottom:1px solid var(--border)">
+                <div>
+                    <div class="text-sm font-semibold">${esc(c.name)}</div>
+                    <div class="text-xs text-muted">${c.shared} shared products</div>
+                </div>
+                <div class="text-sm" style="text-align:right;color:${gapColor(-c.diff)}">
+                    ${c.diff > 0 ? 'You\'re $' + c.diff.toFixed(2) + ' cheaper on average' : c.diff < 0 ? 'They\'re $' + Math.abs(c.diff).toFixed(2) + ' cheaper on average' : 'Same on average'}
+                </div>
+            </div>`).join('');
+        const rows = list.slice(0, 40).map(r => `
+            <tr>
+                <td>${esc(r.product)}</td>
+                <td style="text-align:right;white-space:nowrap">${TCC.formatPrice(r.mine)}</td>
+                <td style="text-align:right;white-space:nowrap">${TCC.formatPrice(r.theirs)}<div class="text-xs text-muted">${esc(r.comp)}</div></td>
+                <td style="text-align:right;white-space:nowrap;font-weight:600;color:${gapColor(r.diff)}">${r.diff < 0 ? '−' : r.diff > 0 ? '+' : ''}${TCC.formatPrice(Math.abs(r.diff))}</td>
+            </tr>`).join('');
+        return `
+            <div class="text-xs text-muted" style="margin-bottom:0.6rem">${list.length} products you share with nearby shops &middot; ${undercut} where a neighbor is cheaper right now &middot; refreshed with every menu pull</div>
+            ${summary}
+            <div style="overflow-x:auto;margin-top:1rem">
+                <table style="width:100%;font-size:0.85rem;border-collapse:collapse">
+                    <thead><tr><th style="text-align:left">Product</th><th style="text-align:right">You</th><th style="text-align:right">Lowest nearby</th><th style="text-align:right">Gap</th></tr></thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            </div>`;
+    }
+
     function renderDeals(filter = 'all') {
         const container = document.getElementById('deals-list');
         const todayStr = new Date().toISOString().slice(0, 10);
@@ -2803,7 +2848,12 @@
                     return { name: nd.name, shared: shared.length, theirAvg, diff: theirAvg - myAvg };
                 });
 
-                compContainer.innerHTML = `
+                if (d.tier === 'premium') {
+                    // Market Intel is the paid deliverable: the unblurred,
+                    // product-level report. Before 2026-09-14 this block was
+                    // blurred for everyone, paid tier included.
+                    compContainer.innerHTML = buildCompetitorReport(d, nearby, compRows);
+                } else compContainer.innerHTML = `
                     <div style="filter:blur(4px);pointer-events:none;user-select:none">
                         ${compRows.map(c => `
                             <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--border)">
