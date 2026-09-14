@@ -2549,6 +2549,7 @@
                 <span class="tag" id="brand-verified-tag" style="display:none;color:var(--green);border-color:var(--green)">✓ Verified Brand</span>
                 <span class="tag brand-featured-tag" id="brand-featured-tag" style="display:none">★ Featured Partner</span>
             </div>
+            <p class="tcc-ad-warning tcc-ad-warning--unit" id="brand-featured-warning" style="display:none">Paid placement. Warning: Cannabis products are not for use by anyone under the age of 21. Cannabis use may cause drowsiness, affect focus, reaction time, and decision-making.</p>
             ${buySection}
             <p class="text-secondary" id="brand-claim-status" style="max-width:62ch;margin:1.75rem 0 1.5rem">This page is live and working. If ${esc(brandName)} is yours, claim it below — it's free, and it puts you in control of what shoppers see.</p>
 
@@ -2646,6 +2647,8 @@
                 if (rec.tier === 'featured') {
                     const ft = document.getElementById('brand-featured-tag');
                     if (ft) ft.style.display = '';
+                    const fw = document.getElementById('brand-featured-warning');
+                    if (fw) fw.style.display = '';
                     const theme = FEATURED_THEMES[slug];
                     if (theme) {
                         const hero = document.getElementById('brand-hero');
@@ -3111,7 +3114,7 @@
                                style="padding:.6rem .8rem;border:1px solid var(--border);border-radius:.4rem;background:var(--bg-input);color:var(--text-primary);font-size:.95rem">
                         <label style="display:flex;gap:.5rem;align-items:flex-start;font-size:.85rem;color:var(--text-muted);cursor:pointer;line-height:1.4">
                             <input type="checkbox" name="newsletter" style="margin-top:.18rem;flex-shrink:0">
-                            <span>Email me when new dispensaries open or notable drops hit the metro. Unsubscribe any time.</span>
+                            <span>I'm 21 or older. Email me when new dispensaries open or notable drops hit the metro. Unsubscribe any time.</span>
                         </label>
                         <button type="submit" class="btn btn-primary text-sm" style="align-self:flex-start">Send magic link</button>
                         <div id="auth-signin-status" style="font-size:.85rem;color:var(--text-muted);min-height:1.2em"></div>

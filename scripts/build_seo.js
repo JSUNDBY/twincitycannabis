@@ -31,6 +31,8 @@ const ICONS = {
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/>',
   globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.4 2.4 3.8 5.6 3.8 9s-1.4 6.6-3.8 9c-2.4-2.4-3.8-5.6-3.8-9S9.6 5.4 12 3z"/>',
 };
+// MN Stat. 342.64 subd. 1(7) + OCM GM-2025-07: required warning on cannabis advertising.
+const AD_WARNING = "Warning: Cannabis products are not for use by anyone under the age of 21. Cannabis use may cause drowsiness, affect focus, reaction time, and decision-making.";
 const icon = (name) => `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ''}</svg>`;
 const WORKER = 'https://dashboard.twincitycannabis.com';
 
@@ -574,6 +576,7 @@ const footer = `</main>
   <p><a href="/minnesota-cannabis/">Cannabis in Minnesota</a> &middot; <a href="/minnesota-cannabis-prices/">MN Cannabis Prices</a> &middot; <a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/price-spread-index/">Price Spread Index</a> &middot; <a href="/minnesota-price-trends/">Price Trends</a> &middot; <a href="/strongest-cannabis-minnesota/">Strongest Flower</a> &middot; <a href="/new-cannabis-minnesota/">New Arrivals</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
   <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a> &middot; <a href="/founding-partners/">Founding Partners</a> &middot; <a href="https://venmo.com/u/Josh-Sundby" rel="noopener">Support TCC</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
+  <p class="tcc-ad-warning">Listings marked Featured or Sponsored are paid placements. ${AD_WARNING}</p>
 </footer>
 <script>
 (function () {
@@ -1380,6 +1383,7 @@ const buildBrandsIndex = (brands) => {
     <span style="flex:1;min-width:0"><span class="fb-name" style="display:block;font-weight:700;font-size:1.25rem;color:var(--text-primary,#f5f6f8)"></span><span class="fb-meta" style="display:block;font-size:.9rem;color:var(--text-secondary,#b8bcc4);margin-top:.15rem"></span></span>
     <span id="fb-cta" style="color:var(--green-text,#22c55e);font-weight:600;font-size:.92rem;white-space:nowrap">View brand →</span>
   </a>
+  <p class="tcc-ad-warning tcc-ad-warning--unit">Paid placement. ${AD_WARNING}</p>
 </div>
 <script>(function(){
   var THEMES = ${FEATURED_THEMES_JSON};
@@ -3281,6 +3285,9 @@ const imgVer = (slug) => {
   return '?v=' + crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex').slice(0, 8);
 };
 
+// Health note on guides that touch conditions or effects (MN Stat. 342.64 subd. 1: no unverified health or therapeutic claims).
+const HEALTH_NOTE_SLUGS = new Set(['cbd-vs-thc-minnesota', 'cannabis-tinctures-minnesota', 'cannabis-topicals-minnesota', 'edibles-dosing-guide-minnesota', 'thc-drinks-minnesota']);
+const healthNote = `<aside class="post-health-note"><strong>Health note.</strong> This guide shares general information and what people commonly report. It is not medical advice, and nothing here is a verified health or therapeutic claim. Cannabis affects everyone differently and can interact with medications. Talk to a doctor before using cannabis for a health condition.</aside>`;
 const buildBlogPost = (post, allPosts) => {
   const canonical = `${SITE}/blog/${post.slug}/`;
   const title = `${post.title} | Twin City Cannabis`;
@@ -3313,6 +3320,7 @@ const buildBlogPost = (post, allPosts) => {
   <p class="post-dek">${esc(post.dek)}</p>
   ${hasImg ? `<img class="post-hero" src="${imgPath}${imgVer(post.slug)}" alt="${esc(post.title)}" width="1200" height="820" loading="eager">` : ''}
   ${post.body}
+  ${(post.category === 'Wellness' || HEALTH_NOTE_SLUGS.has(post.slug)) ? healthNote : ''}
   ${related ? `<div class="post-related"><h3>Keep reading</h3><ul>${related}</ul></div>` : ''}
   <a class="cta" href="/dispensaries/" style="margin-top:2rem">Compare prices at every Twin Cities dispensary →</a>
   <p style="margin-top:2.5rem;font-size:.85rem;color:var(--text-muted,#8b909a)">Twin City Cannabis is free and independent — one person tracking every menu in Minnesota. If a guide saved you money, you can <a href="https://venmo.com/u/Josh-Sundby" rel="noopener">tip the builder</a>.</p>
@@ -3416,6 +3424,7 @@ const buildFeaturedPage = () => {
 <div id="fp-list" style="margin:1.5rem 0 2rem;display:flex;flex-direction:column;gap:1.25rem">
   <p class="text-muted" id="fp-empty" style="font-size:.92rem">No featured partner right now.</p>
 </div>
+<p class="tcc-ad-warning tcc-ad-warning--unit">Featured Partner placements are paid advertising. ${AD_WARNING}</p>
 <div style="border:1px solid rgba(34,197,94,0.25);border-radius:14px;padding:1.5rem 1.6rem;background:rgba(34,197,94,0.04);margin-top:2rem">
   <div style="font-family:var(--font-display,sans-serif);font-weight:700;font-size:1.15rem;margin-bottom:.4rem">Want your brand featured?</div>
   <p class="text-secondary" style="font-size:.95rem;margin:0 0 1rem;max-width:60ch">Featured placement puts your brand in front of every shopper comparing prices in Minnesota: the homepage spotlight, the brands directory, and your own branded page. A limited number of slots.</p>

@@ -134,14 +134,14 @@ module.exports = [
 
   {
     slug: 'cannabis-for-sleep-minnesota',
-    title: 'Cannabis for sleep in Minnesota: what actually helps',
+    title: 'Cannabis for sleep in Minnesota: an honest guide',
     dek: 'People do not want to be high, they want to fall asleep. Here is an honest look at what tends to work, what to buy, and where to find it for less.',
     date: '2026-06-07',
     updated: '2026-06-07',
     category: 'Wellness',
     read: 7,
     body: `
-<p>A huge number of people trying cannabis right now are not chasing a party. They are lying awake at 2am and they want out. Cannabis is not a miracle and it is not for everyone, but for a lot of Minnesotans it genuinely helps with sleep. Here is the honest version, without the wellness fluff.</p>
+<p>A huge number of people trying cannabis right now are not chasing a party. They are lying awake at 2am and they want out. Cannabis is not a miracle and it is not for everyone, but a lot of Minnesotans say it helps them get to sleep. Here is the honest version, without the wellness fluff.</p>
 
 <h2>What tends to help sleep</h2>
 <p>The pieces that come up again and again for sleep:</p>
@@ -390,13 +390,13 @@ module.exports = [
   {
     slug: 'cannabis-for-anxiety-minnesota',
     title: 'Cannabis for anxiety in Minnesota: what helps and what backfires',
-    dek: 'Cannabis can calm anxiety or cause it, and the difference is mostly dose and chemistry. An honest guide to staying on the calm side.',
+    dek: 'Cannabis can feel calming or make anxiety worse, and the difference is mostly dose and chemistry. An honest guide to staying on the calm side.',
     date: '2026-06-14',
     updated: '2026-06-14',
     category: 'Wellness',
     read: 7,
     body: `
-<p>A lot of people try cannabis hoping it will quiet their anxiety, and for many it does. But cannabis is genuinely two-faced here: the same plant that relaxes one person at one dose can spike another person into a racing-heart spiral. The good news is the difference is mostly predictable. Here is how to land on the calm side.</p>
+<p>A lot of people try cannabis hoping it will quiet their anxiety, and many say it does. But cannabis is genuinely two-faced here: the same plant that relaxes one person at one dose can spike another person into a racing-heart spiral. The good news is the difference is mostly predictable. Here is how to land on the calm side.</p>
 
 <h2>The core rule: low and slow</h2>
 <p>Most cannabis-induced anxiety comes from too much THC, too fast. High doses can flip relaxation into paranoia and a pounding heart. If anxiety is your concern, start with the lowest reasonable dose and give it time. With edibles that means 2.5mg and the <a href="/blog/edibles-dosing-guide-minnesota/">two-hour wait</a>. With flower or a vape, one small amount and pause.</p>
@@ -684,23 +684,23 @@ module.exports = [
     category: 'Wellness',
     read: 7,
     body: `
-<p>Pain is one of the biggest reasons people walk into a dispensary now, especially folks who'd rather not lean on prescription painkillers. Cannabis genuinely helps a lot of them. It's also oversold, so here's the honest, non-hype version.</p>
+<p>Pain is one of the biggest reasons people walk into a dispensary now, especially folks who'd rather not lean on prescription painkillers. A lot of them say it helps. It's also oversold, so here's the honest, non-hype version.</p>
 
 <h2>What it tends to help with</h2>
 <p>Cannabis has the most real-world traction with <strong>chronic pain</strong>: the ongoing kind from arthritis, old injuries, nerve pain, tight muscles, and inflammation. It's less of a fit for sharp, acute pain, a broken bone is not a job for a gummy. But for the dull, all-day ache that wears you down, a lot of people find it takes the edge off and, maybe just as important, makes the pain easier to live with.</p>
 
 <h2>What to reach for</h2>
 <ul>
-  <li><strong>A balanced THC-to-CBD product.</strong> CBD is the piece most tied to the anti-inflammatory, body-calming side, and it softens THC's head change. Many people managing pain prefer a 1:1 over high-THC anything. See our <a href="/blog/cbd-vs-thc-minnesota/">CBD vs THC guide</a>.</li>
+  <li><strong>A balanced THC-to-CBD product.</strong> CBD is the piece people most often associate with the body-calming side, and it tends to soften THC's head change. Many people managing pain prefer a 1:1 over high-THC anything. See our <a href="/blog/cbd-vs-thc-minnesota/">CBD vs THC guide</a>.</li>
   <li><strong>Edibles or tinctures for all-day coverage.</strong> They last for hours, which suits pain that doesn't clock out. Read the <a href="/blog/edibles-dosing-guide-minnesota/">dosing guide</a> first.</li>
   <li><strong>Topicals for one spot.</strong> A cannabis balm rubbed on a sore knee or shoulder works locally and won't get you high at all. Underrated for joint and muscle pain.</li>
 </ul>
 
 <h2>Start low, and be patient</h2>
-<p>Managing pain is a dialing-in process, not a one-shot. Start with a low dose, give it real time, and notice what actually changes. Chasing a high is not the goal here, steady low-level relief is, and that usually comes from modest doses used consistently rather than big ones.</p>
+<p>Managing pain is a dialing-in process, not a one-shot. Start with a low dose, give it real time, and notice what actually changes. Chasing a high is not the goal here, a steady low-level effect is, and that usually comes from modest doses used consistently rather than big ones.</p>
 
 <h2>The honest part</h2>
-<p>Cannabis is a tool for living with pain, not a cure for what's causing it. For some people it's a real alternative to heavier medication. For others it's one piece alongside physical therapy, movement, and a doctor's guidance. If your pain is serious or new, that's a conversation for a doctor, not just a budtender. Used realistically, though, plenty of Minnesotans have found it genuinely changes their day. Compare products and prices on our <a href="/products/">product pages</a> before you settle on one.</p>
+<p>Cannabis is a tool for living with pain, not a cure for what's causing it. Some people use it alongside physical therapy, movement, and a doctor's guidance. Whether it belongs anywhere near your other medication is a question for that doctor, not for us. If your pain is serious or new, that's a conversation for a doctor, not just a budtender. Used realistically, though, plenty of Minnesotans have found it genuinely changes their day. Compare products and prices on our <a href="/products/">product pages</a> before you settle on one.</p>
 `,
     related: [
       { href: '/blog/cbd-vs-thc-minnesota/', label: 'CBD vs THC' },
@@ -783,7 +783,7 @@ module.exports = [
 
   {
     slug: 'cannabis-topicals-minnesota',
-    title: 'Cannabis topicals: relief for the body without the high',
+    title: 'Cannabis topicals: for the body, not the head',
     dek: 'Balms, lotions, and patches you rub on instead of ingest. The most underrated shelf in the dispensary, especially if you don’t want to feel high at all.',
     date: '2026-04-22',
     updated: '2026-04-22',
@@ -793,11 +793,11 @@ module.exports = [
 <p>There's a whole shelf at the dispensary for people who don't want to get high. That sounds like a joke, but topicals, the balms, lotions, and patches you apply to your skin, are exactly that: cannabis for your body with your head left completely out of it.</p>
 
 <h2>How they work</h2>
-<p>Rub a cannabis balm into a sore shoulder and the cannabinoids work locally, right where you put them, interacting with receptors in the skin and tissue. They don't reach your bloodstream in any meaningful way, which means <strong>no high, no impairment, nothing to schedule your day around</strong>. It's the reason topicals are the one product category people share with their skeptical parents.</p>
+<p>Rub a cannabis balm into a sore shoulder and the cannabinoids work locally, right where you put them, interacting with receptors in the skin and tissue. Standard topicals generally aren't absorbed into the bloodstream in any meaningful way, which means <strong>no high, no impairment, nothing to schedule your day around</strong>. It's the reason topicals are the one product category people share with their skeptical parents.</p>
 
-<h2>What they're good for</h2>
+<h2>What people use them for</h2>
 <ul>
-  <li><strong>Sore muscles and joints.</strong> The classic use: knees, shoulders, lower backs, hands. Massage it in, relief settles in over half an hour or so.</li>
+  <li><strong>Sore muscles and joints.</strong> The classic use: knees, shoulders, lower backs, hands. Massage it in and give it half an hour or so before you judge it.</li>
   <li><strong>Localized aches</strong> from workouts, yard work, or just being a person over forty.</li>
   <li><strong>Skin comfort.</strong> Many are built like quality lotions with cannabinoids added, and some people use them for general skin irritation.</li>
 </ul>
@@ -807,7 +807,7 @@ module.exports = [
 <p>You'll see THC topicals, CBD topicals, and blends, plus warming or cooling versions with menthol or arnica along for the ride. The honest truth: for a rub-on product, the THC-vs-CBD question matters less than it does for anything you ingest, since neither is getting to your head. Pick by feel, scent, and price. And prices vary plenty, so check the <a href="/products/topical/">topicals shelf</a> across shops before you buy.</p>
 
 <h2>Who should start here</h2>
-<p>If you're cannabis-curious but wary, a topical is the softest possible entry: zero high, zero dosing anxiety, just a balm that may genuinely help your sore spots. Worst case, you own a nice lotion. Best case, it becomes the thing you reach for before bed instead of another pill.</p>
+<p>If you're cannabis-curious but wary, a topical is the softest possible entry: zero high, zero dosing anxiety, just a balm people reach for on sore spots. Worst case, you own a nice lotion. Best case, it becomes the thing you reach for before bed instead of another pill.</p>
 `,
     related: [
       { href: '/blog/cannabis-for-pain-minnesota/', label: 'Cannabis for pain' },
@@ -988,15 +988,15 @@ module.exports = [
     category: 'Wellness',
     read: 6,
     body: `
-<p>Long before dispensaries and seltzers, the medical case for cannabis started here: helping people who couldn't eat, eat. Chemotherapy patients rediscovering food. People with chronic illness keeping weight on. The munchies, the most joked-about effect in cannabis, are also its most medically established one.</p>
+<p>Long before dispensaries and seltzers, the medical case for cannabis started here: helping people who couldn't eat, eat. Chemotherapy patients rediscovering food. People with chronic illness keeping weight on. The munchies, the most joked-about effect in cannabis, are also the effect with the longest medical paper trail.</p>
 
 <h2>What the evidence actually supports</h2>
-<p>THC's anti-nausea and appetite-stimulating effects are among the best documented in cannabis medicine, this is the use case with real pharmaceutical history behind it, going back decades. For people dealing with treatment-related nausea, appetite loss from illness or medication, or conditions that make eating a chore, THC can genuinely change the day-to-day.</p>
+<p>This is the one use with a real paper trail. The FDA approved dronabinol, a synthetic THC capsule, for chemotherapy nausea in 1985 and for appetite loss in AIDS patients in 1992, and Minnesota's medical cannabis program lists cancer and terminal illness with nausea or wasting among its qualifying conditions. None of that is a claim about your situation. It means people dealing with treatment-related nausea or appetite loss have a real conversation to have with their care team, and many of them say it changes the day-to-day.</p>
 
 <h2>How people use it for this</h2>
 <ul>
   <li><strong>Low doses, ahead of meals.</strong> You don't need to be high to get hungry. A small dose, 2.5 to 5mg, taken an hour before a meal is the common pattern. The <a href="/blog/microdosing-cannabis-minnesota/">microdosing playbook</a> applies directly.</li>
-  <li><strong>Faster formats for active nausea.</strong> Waiting two hours for an edible is rough when you're queasy, and keeping a gummy down can be its own challenge. That's where inhaled cannabis or an under-the-tongue <a href="/blog/cannabis-tinctures-minnesota/">tincture</a> earns its place: relief in minutes, not hours.</li>
+  <li><strong>Faster formats for active nausea.</strong> Waiting two hours for an edible is rough when you're queasy, and keeping a gummy down can be its own challenge. That's where inhaled cannabis or an under-the-tongue <a href="/blog/cannabis-tinctures-minnesota/">tincture</a> earns its place: effects in minutes, not hours.</li>
   <li><strong>THC over CBD for this one.</strong> Unlike anxiety or inflammation, appetite is squarely THC's department. CBD alone won't bring the munchies.</li>
 </ul>
 
