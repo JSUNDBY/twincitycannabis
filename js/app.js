@@ -2325,49 +2325,135 @@
     }
 
     // ---- RENDER: DEALS ----
-    // Product-level competitor report for Market Intel subscribers. One row per
-    // shared product: your price vs the lowest price among nearby shops that
-    // carry it, most-undercut first. Pure: takes the dashboard's nearby set.
-    function buildCompetitorReport(d, nearby, compRows) {
-        const byProduct = {};
-        nearby.forEach(({ nd, shared }) => {
-            shared.forEach(p => {
-                const r = { product: p.name, mine: p.prices[d.id], theirs: p.prices[nd.id], comp: nd.name };
-                const cur = byProduct[r.product];
-                if (!cur || r.theirs < cur.theirs) byProduct[r.product] = r;
-            });
+    // Market Intel report for a premium (owner-verified) dashboard. Three
+    // lenses, because exact product names almost never match across POS
+    // platforms (Levitated shared 0 of 89 items by name with 8 shops within
+    // 3 miles): (1) where you stand by category + size, (2) same brand +
+    // same size, (3) exact same product. Sizes are parsed from the weight
+    // field or the name; edibles/drinks compare by total mg.
+    function buildCompetitorReport(d) {
+        const norm = (s) => String(s || '').toLowerCase().trim();
+        const gramsOf = (p) => {
+            const w = norm(p.weight);
+            let m = w.match(/^(\d+(?:\.\d+)?)\s*g$/);
+            if (m) return parseFloat(m[1]);
+            m = norm(p.name).match(/(?:^|[\s|(])(\d+(?:\.\d+)?)\s*g(?![a-z])/);
+            if (m) return parseFloat(m[1]);
+            if (/\b(1\/8|eighth)\b/.test(norm(p.name))) return 3.5;
+            if (/\b(1\/4|quarter)\b/.test(norm(p.name))) return 7;
+            return null;
+        };
+        // Total THC mg per package. "10mg THC 4 Can" -> 40; "Gummy (5mg THC /
+        // 10mg CBN) 10 pack" -> 50; "50mg (5mg/Gummy)" -> 50; "12 x 10mg" -> 120.
+        const mgOf = (p) => {
+            const n = norm(p.name);
+            let m = n.match(/(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)\s*mg/) || n.match(/(\d+(?:\.\d+)?)\s*mg\s*[x×]\s*(\d+)\b/);
+            if (m) return Math.round(parseFloat(m[1]) * parseFloat(m[2]));
+            const thc = n.match(/(\d+(?:\.\d+)?)\s*mg\s*(?:of\s*)?thc/);
+            const all = [...n.matchAll(/(\d+(?:\.\d+)?)\s*mg/g)].map(x => parseFloat(x[1]));
+            if (!all.length) return null;
+            const unit = thc ? parseFloat(thc[1]) : all[0];
+            const cnt = n.match(/\b(\d{1,3})\s*(?:pk|pack|ct|count|cans?|pcs?|pieces?)\b/);
+            // MN caps a serving at 10mg, so a per-unit dose is small; a bigger
+            // stated number next to a count ("100mg 20pc") is already the total.
+            const packed = cnt && parseInt(cnt[1], 10) >= 2 && unit <= 25 ? unit * parseInt(cnt[1], 10) : 0;
+            return Math.round(Math.max(packed, Math.max(...all)));
+        };
+        const sizeOf = (p) => {
+            if (p.category === 'edible' || p.category === 'beverage' || p.category === 'tincture') {
+                const mg = mgOf(p); return mg ? `${mg}mg` : '';
+            }
+            const g = gramsOf(p); return g ? `${g}g` : '';
+        };
+        const catLabel = { flower: 'Flower', 'pre-roll': 'Pre-rolls', cartridge: 'Carts', concentrate: 'Concentrates', edible: 'Edibles', beverage: 'Drinks', tincture: 'Tinctures', topical: 'Topicals' };
+        const median = (a) => { if (!a.length) return null; const s = [...a].sort((x, y) => x - y); return s[Math.floor(s.length / 2)]; };
+        const money = (v) => TCC.formatPrice(v);
+        const menuOf = (id) => TCC.products.filter(p => p.prices && p.prices[id] != null);
+
+        const mine = menuOf(d.id);
+        const nearby = TCC.dispensaries
+            .filter(x => x.id !== d.id && x.lat != null && d.lat != null)
+            .map(x => ({ x, dist: _haversine(d.lat, d.lng, x.lat, x.lng) }))
+            .filter(o => o.dist <= 12)
+            .sort((a, b) => a.dist - b.dist)
+            .map(o => ({ ...o, menu: menuOf(o.x.id) }))
+            .filter(o => o.menu.length > 0)
+            .slice(0, 8);
+        if (!mine.length || !nearby.length) {
+            return '<p class="text-sm text-muted">Not enough nearby menus to compare yet. This fills in as shops within 12 miles publish menus.</p>';
+        }
+        const nearIds = nearby.map(o => o.x.id);
+        const nameOf = {}; nearby.forEach(o => { nameOf[o.x.id] = o.x.name; });
+        // (id, price, shop) offers from nearby shops, tagged with size
+        const offers = [];
+        nearby.forEach(o => o.menu.forEach(p => offers.push({ p, shop: o.x.id, price: p.prices[o.x.id], size: sizeOf(p) })));
+
+        // 1. Where you stand — (category, size) buckets
+        const buckets = {};
+        mine.forEach(p => { const s = sizeOf(p); if (!s) return; const k = p.category + '|' + s; (buckets[k] = buckets[k] || { cat: p.category, size: s, mine: [], theirs: [] }).mine.push(p.prices[d.id]); });
+        offers.forEach(o => { if (!o.size) return; const k = o.p.category + '|' + o.size; if (buckets[k]) buckets[k].theirs.push(o); });
+        const standRows = Object.values(buckets)
+            .filter(b => b.theirs.length >= 3)
+            .map(b => { const my = median(b.mine); const th = median(b.theirs.map(o => o.price)); const low = b.theirs.reduce((a, o) => o.price < a.price ? o : a); return { ...b, my, th, low, pct: (my - th) / th * 100 }; })
+            .sort((a, b) => b.pct - a.pct);
+
+        // 2. Same brand, same size
+        const brandRows = {};
+        mine.forEach(p => {
+            const b = norm(p.brand); const s = sizeOf(p);
+            if (!b || b === 'house' || !s) return;
+            const matches = offers.filter(o => norm(o.p.brand) === b && o.p.category === p.category && o.size === s);
+            if (!matches.length) return;
+            const low = matches.reduce((a, o) => o.price < a.price ? o : a);
+            const k = b + '|' + p.category + '|' + s;
+            const row = { brand: p.brand, cat: p.category, size: s, product: p.name, mine: p.prices[d.id], low, diff: low.price - p.prices[d.id] };
+            if (!brandRows[k] || row.diff < brandRows[k].diff) brandRows[k] = row;
         });
-        const list = Object.values(byProduct)
-            .map(r => ({ ...r, diff: r.theirs - r.mine }))
+        const brandList = Object.values(brandRows).sort((a, b) => a.diff - b.diff);
+
+        // 3. Exact same product
+        const exact = mine.filter(p => nearIds.some(id => p.prices[id] != null))
+            .map(p => { const shops = nearIds.filter(id => p.prices[id] != null); const lowId = shops.reduce((a, id) => p.prices[id] < p.prices[a] ? id : a); return { name: p.name, mine: p.prices[d.id], low: p.prices[lowId], shop: nameOf[lowId], diff: p.prices[lowId] - p.prices[d.id] }; })
             .sort((a, b) => a.diff - b.diff);
-        const undercut = list.filter(r => r.diff < 0).length;
-        const gapColor = (diff) => diff < 0 ? 'var(--red)' : diff > 0 ? 'var(--green)' : 'var(--text-secondary)';
-        const summary = compRows.map(c => `
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:0.45rem 0;border-bottom:1px solid var(--border)">
-                <div>
-                    <div class="text-sm font-semibold">${esc(c.name)}</div>
-                    <div class="text-xs text-muted">${c.shared} shared products</div>
-                </div>
-                <div class="text-sm" style="text-align:right;color:${gapColor(-c.diff)}">
-                    ${c.diff > 0 ? 'You\'re $' + c.diff.toFixed(2) + ' cheaper on average' : c.diff < 0 ? 'They\'re $' + Math.abs(c.diff).toFixed(2) + ' cheaper on average' : 'Same on average'}
-                </div>
-            </div>`).join('');
-        const rows = list.slice(0, 40).map(r => `
-            <tr>
-                <td>${esc(r.product)}</td>
-                <td style="text-align:right;white-space:nowrap">${TCC.formatPrice(r.mine)}</td>
-                <td style="text-align:right;white-space:nowrap">${TCC.formatPrice(r.theirs)}<div class="text-xs text-muted">${esc(r.comp)}</div></td>
-                <td style="text-align:right;white-space:nowrap;font-weight:600;color:${gapColor(r.diff)}">${r.diff < 0 ? '−' : r.diff > 0 ? '+' : ''}${TCC.formatPrice(Math.abs(r.diff))}</td>
-            </tr>`).join('');
-        return `
-            <div class="text-xs text-muted" style="margin-bottom:0.6rem">${list.length} products you share with nearby shops &middot; ${undercut} where a neighbor is cheaper right now &middot; refreshed with every menu pull</div>
-            ${summary}
-            <div style="overflow-x:auto;margin-top:1rem">
-                <table style="width:100%;font-size:0.85rem;border-collapse:collapse">
-                    <thead><tr><th style="text-align:left">Product</th><th style="text-align:right">You</th><th style="text-align:right">Lowest nearby</th><th style="text-align:right">Gap</th></tr></thead>
-                    <tbody>${rows}</tbody>
-                </table>
-            </div>`;
+
+        const gap = (diff) => diff < 0 ? 'var(--red)' : diff > 0 ? 'var(--green)' : 'var(--text-secondary)';
+        const th = (t, r) => `<th style="text-align:${r ? 'right' : 'left'};font-size:.72rem;color:var(--text-muted);font-weight:600;padding:.3rem 0">${t}</th>`;
+        const tbl = (head, rows) => `<div style="overflow-x:auto"><table style="width:100%;font-size:.85rem;border-collapse:collapse">${head}<tbody>${rows}</tbody></table></div>`;
+        const h3 = (t, sub) => `<div class="font-display font-semibold" style="margin:1.1rem 0 .15rem">${t}</div>${sub ? `<div class="text-xs text-muted" style="margin-bottom:.4rem">${sub}</div>` : ''}`;
+        const undercut = standRows.filter(r => r.pct > 0).length;
+
+        let html = `<div class="text-xs text-muted" style="margin-bottom:.4rem">Compared against ${nearby.length} shops within ${nearby[nearby.length - 1].dist.toFixed(1)} miles: ${nearby.map(o => esc(o.x.name)).join(', ')} &middot; refreshed with every menu pull</div>`;
+
+        html += h3('Where you stand', 'Your median price vs the nearby median, by category and size. Red means the neighborhood is cheaper than you.');
+        html += standRows.length ? tbl(`<thead><tr>${th('Category')}${th('You', 1)}${th('Nearby median', 1)}${th('Gap', 1)}${th('Cheapest nearby', 1)}</tr></thead>`,
+            standRows.map(r => `<tr>
+                <td style="padding:.35rem 0">${catLabel[r.cat] || esc(r.cat)} ${esc(r.size)} <span class="text-xs text-muted">(${r.mine.length} of yours)</span></td>
+                <td style="text-align:right;white-space:nowrap">${money(r.my)}</td>
+                <td style="text-align:right;white-space:nowrap">${money(r.th)}</td>
+                <td style="text-align:right;white-space:nowrap;font-weight:600;color:${gap(-r.pct)}">${r.pct > 0 ? '+' : ''}${r.pct.toFixed(0)}%</td>
+                <td style="text-align:right;white-space:nowrap">${money(r.low.price)}<div class="text-xs text-muted">${esc(nameOf[r.low.shop])}</div></td>
+            </tr>`).join('')) : '<p class="text-sm text-muted">No category has three or more comparable nearby listings yet.</p>';
+
+        html += h3('Same brand, same size', 'Products where a nearby shop carries the same brand in the same size.');
+        html += brandList.length ? tbl(`<thead><tr>${th('Yours')}${th('You', 1)}${th('Lowest nearby', 1)}${th('Gap', 1)}</tr></thead>`,
+            brandList.slice(0, 30).map(r => `<tr>
+                <td style="padding:.35rem 0">${esc(r.product)}</td>
+                <td style="text-align:right;white-space:nowrap">${money(r.mine)}</td>
+                <td style="text-align:right;white-space:nowrap">${money(r.low.price)}<div class="text-xs text-muted">${esc(nameOf[r.low.shop])} &middot; ${esc(r.low.p.name.slice(0, 40))}</div></td>
+                <td style="text-align:right;white-space:nowrap;font-weight:600;color:${gap(r.diff)}">${r.diff < 0 ? '−' : r.diff > 0 ? '+' : ''}${money(Math.abs(r.diff))}</td>
+            </tr>`).join('')) : '<p class="text-sm text-muted">No nearby shop carries your brands in matching sizes right now.</p>';
+
+        html += h3('Same product', 'Exact matches by name. Rare across different menu systems; the two sections above are the useful ones.');
+        html += exact.length ? tbl(`<thead><tr>${th('Product')}${th('You', 1)}${th('Lowest nearby', 1)}${th('Gap', 1)}</tr></thead>`,
+            exact.slice(0, 40).map(r => `<tr>
+                <td style="padding:.35rem 0">${esc(r.name)}</td>
+                <td style="text-align:right;white-space:nowrap">${money(r.mine)}</td>
+                <td style="text-align:right;white-space:nowrap">${money(r.low)}<div class="text-xs text-muted">${esc(r.shop)}</div></td>
+                <td style="text-align:right;white-space:nowrap;font-weight:600;color:${gap(r.diff)}">${r.diff < 0 ? '−' : r.diff > 0 ? '+' : ''}${money(Math.abs(r.diff))}</td>
+            </tr>`).join('')) : '<p class="text-sm text-muted">No exact name matches with nearby shops.</p>';
+
+        html += `<div class="text-xs text-muted" style="margin-top:.8rem">${undercut} of ${standRows.length} categories where the neighborhood is cheaper than you &middot; ${brandList.length} brand-level matches &middot; ${exact.length} exact matches</div>`;
+        return html;
     }
 
     function renderDeals(filter = 'all') {
@@ -2888,7 +2974,7 @@
                     compContainer.innerHTML = '<p class="text-sm text-muted">Checking access…</p>';
                     verifyOwner(d.id).then(v => {
                         if (v && v.ok && v.tier === 'premium') {
-                            compContainer.innerHTML = buildCompetitorReport(d, nearby, compRows);
+                            compContainer.innerHTML = buildCompetitorReport(d);
                             return;
                         }
                         compContainer.innerHTML = `
