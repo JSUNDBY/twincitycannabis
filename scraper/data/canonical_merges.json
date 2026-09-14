@@ -1,6 +1,6 @@
 {
- "merged_groups": 258,
- "absorbed": 362,
+ "merged_groups": 260,
+ "absorbed": 364,
  "groups": [
   {
    "key": "soap|flower|3.5g|big",
@@ -2869,6 +2869,22 @@
    "shops_after": 2
   },
   {
+   "key": "carpe diem|tincture|1000mg|gel muscle on relief",
+   "kept": {
+    "name": "Relief Muscle & Joint CBD Gel Roll-On 1000 mg",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Relief Muscle & Joint CBD Gel Roll-On 1000mg - Carpe Diem",
+     "shops": [
+      "flame-flora"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "carpe diem|tincture|1500mg|cream full relax spectrum",
    "kept": {
     "name": "Relax CBD Cream 1500 mg Full-Spectrum",
@@ -3276,6 +3292,22 @@
      "name": "Mendo Breath (Bulk) | 7g",
      "shops": [
       "the-flower-shop-mn-llc"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "camino|edible|50mg|bliss lemonade watermelon",
+   "kept": {
+    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
+     "shops": [
+      "island-pezi"
      ]
     }
    ],
@@ -4032,14 +4064,13 @@
    "key": "vireo|flower|7g|death garlic",
    "kept": {
     "name": "Garlic Death",
-    "shops_before": 4
+    "shops_before": 5
    },
    "absorbed": [
     {
      "name": "Garlic Death | 7g",
      "shops": [
       "green-goods-blaine",
-      "green-goods-burnsville",
       "green-goods-duluth",
       "minnesota-medical-solutions-bloomington"
      ]
@@ -4307,7 +4338,6 @@
      "name": "Garlic Death | 3.5g",
      "shops": [
       "green-goods-blaine",
-      "green-goods-burnsville",
       "green-goods-duluth",
       "minnesota-medical-solutions-bloomington"
      ]
@@ -4320,7 +4350,7 @@
      ]
     }
    ],
-   "shops_after": 8
+   "shops_after": 7
   },
   {
    "key": "vireo|flower|7g|gmo pie",
