@@ -2296,7 +2296,19 @@
     function renderDeals(filter = 'all') {
         const container = document.getElementById('deals-list');
         const todayStr = new Date().toISOString().slice(0, 10);
-        let deals = TCC.deals.filter(d => !d.expires || d.expires >= todayStr);
+        // Owner-posted specials (BOGO, happy hour...) live in the worker, not
+        // in data.js — fetch once, then re-render with them merged in.
+        if (window.__ownerDeals === undefined) {
+            window.__ownerDeals = [];
+            fetch(`${TCC_WORKER_URL}/deals/owner`).then(r => r.json()).then(rows => {
+                window.__ownerDeals = (rows || []).map(x => ({
+                    id: 'od-' + x.id, dispensaryId: x.shop, type: x.type,
+                    title: x.title, details: x.details, expires: x.ends, ownerPosted: true,
+                }));
+                if (window.__ownerDeals.length) renderDeals(filter);
+            }).catch(() => {});
+        }
+        let deals = TCC.deals.concat(window.__ownerDeals || []).filter(d => !d.expires || d.expires >= todayStr);
 
         if (filter !== 'all') {
             deals = deals.filter(d => d.type === filter);
@@ -2815,6 +2827,34 @@
             } else {
                 compContainer.innerHTML = '<p class="text-sm text-muted">Your competitor pricing will appear here once your menu is live and shoppers can compare it against nearby shops.</p>';
             }
+        }
+
+        // Post-a-special form -> worker /deal (pending until approved)
+        const specialForm = document.getElementById('dash-special-form');
+        if (specialForm) {
+            specialForm.onsubmit = async (e) => {
+                e.preventDefault();
+                const data = Object.fromEntries(new FormData(specialForm));
+                data.shop = d.id;
+                const btn = specialForm.querySelector('button[type="submit"]');
+                btn.disabled = true; btn.textContent = 'Posting…';
+                let ok = false;
+                try {
+                    const res = await fetch(`${TCC_WORKER_URL}/deal`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data),
+                    });
+                    ok = res.ok;
+                } catch (_) { ok = false; }
+                if (ok) {
+                    specialForm.style.display = 'none';
+                    document.getElementById('dash-special-success').style.display = 'block';
+                } else {
+                    btn.disabled = false; btn.textContent = 'Post special';
+                    alert('That didn\u2019t go through. Email it to hello@twincitycannabis.com and we\u2019ll post it for you.');
+                }
+            };
         }
 
         // Contact form handler
@@ -4529,6 +4569,7 @@
                 <span class="deal-card-badge deal-type-${d.type}">${typeLabels[d.type] || d.type}</span>
                 ${d.featured ? '<span class="tag tag-sm tag-amber" style="margin-left:0.3rem">Featured</span>' : ''}
                 <div class="deal-card-title">${esc(d.title)}</div>
+                ${d.details ? `<div class="text-sm text-secondary" style="margin:.2rem 0 .3rem">${esc(d.details)}</div>` : ''}
                 <div class="deal-card-dispensary">${disp ? esc(disp.name) + ' &bull; ' + esc(disp.neighborhood) : ''}</div>
                 ${d.salePrice ? `<div class="deal-card-pricing">
                     <span class="deal-card-sale">${TCC.formatPrice(d.salePrice)}</span>

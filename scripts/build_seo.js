@@ -662,6 +662,36 @@ const nearbyWithEighths = (d, maxMiles = 40, count = 3) => {
 // a fresh approval shows without waiting for the next static build. The form
 // posts to /checkin -> pending -> hello@ email -> Josh approves in the
 // dashboard. Register-vs-menu prices are data nobody else has.
+// Owner-posted specials (BOGO, happy hour, percent-off days) — the things the
+// automatic price-drop feed can't see. Rendered client-side from the worker so
+// an approval shows within minutes; expires on the owner's end date. This is
+// advertising under MN Stat. 342.64, so the block carries the warning.
+const specialsBlock = (d) => `
+<div id="specials-section" data-slug="${esc(d.id)}" hidden>
+  <h2>Current specials at ${esc(d.name)}</h2>
+  <div id="specials-list"></div>
+  <p class="tcc-ad-warning tcc-ad-warning--unit">Specials are posted by the dispensary. ${AD_WARNING}</p>
+</div>
+<script>
+(function () {
+  var labels = { 'bogo': 'BOGO', 'percent-off': 'Percent off', 'dollar-off': 'Dollars off', 'flash': 'Flash sale', 'happy-hour': 'Happy hour', 'loyalty': 'Loyalty', 'veteran': 'Veterans', 'new-customer': 'New customer' };
+  var clean = function (s) { return String(s || '').replace(/[<>&"]/g, ''); };
+  fetch('https://dashboard.twincitycannabis.com/deals/owner?shop=' + ${JSON.stringify(d.id)}).then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('specials-list').innerHTML = rows.map(function (x) {
+      var through = x.ends ? new Date(x.ends + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      return '<div style="padding:.6rem 0;border-bottom:1px solid var(--border,#22302a)">' +
+        '<span style="display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green-text,#4ade80);border:1px solid var(--green-dim,#16a34a);border-radius:999px;padding:.1rem .5rem;margin-right:.5rem">' + (labels[x.type] || clean(x.type)) + '</span>' +
+        '<strong>' + clean(x.title) + '</strong>' +
+        (x.details ? '<div style="font-size:.88rem;color:var(--text-secondary,#cdd2d8);margin-top:.2rem">' + clean(x.details) + '</div>' : '') +
+        (through ? '<div style="font-size:.78rem;color:var(--text-muted,#8b909a);margin-top:.15rem">Through ' + through + '</div>' : '') +
+        '</div>';
+    }).join('');
+    document.getElementById('specials-section').hidden = false;
+  }).catch(function () {});
+})();
+</script>`;
+
 const checkinBlock = (d, products) => {
   const datalist = [...new Set(products.slice(0, 120).map(p => p.name.split('|')[0].trim()))]
     .slice(0, 80)
@@ -960,6 +990,8 @@ ${d.city ? `<p>${cityShops > 1 ? `${esc(d.city)} has ${cityShops} open dispensar
 
 <a class="cta" href="/#dashboard/${esc(d.id)}">View interactive menu &amp; price compare →</a>
 ${d.website && !d.website.includes('weedmaps.com') ? `<a class="cta" href="${esc(d.website)}" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit ${esc(d.name)}'s website →</a>` : ''}
+
+${specialsBlock(d)}
 
 ${checkinBlock(d, products)}
 

@@ -141,6 +141,18 @@ export default {
       return handleAlert(request, env, cors);
     }
 
+    if (url.pathname === '/deal' && request.method === 'POST') {
+      return handleDealSubmit(request, env, cors);
+    }
+
+    if (url.pathname === '/deals/owner' && request.method === 'GET') {
+      return handleOwnerDealsPublic(request, env, cors);
+    }
+
+    if (url.pathname === '/admin/deals/update' && request.method === 'POST') {
+      return handleDealUpdate(request, env, cors);
+    }
+
     if (url.pathname === '/checkin' && request.method === 'POST') {
       return handleCheckin(request, env, cors);
     }
@@ -601,12 +613,13 @@ async function handleAdminData(request, env, cors) {
     });
   }
 
-  const [subscribers, overrides, site, leads, checkins] = await Promise.all([
+  const [subscribers, overrides, site, leads, checkins, ownerDeals] = await Promise.all([
     fetchSubscribers(env),
     fetchOverrides(env),
     fetchSiteHealth(),
     fetchLeads(env),
     env.TCC_OVERRIDES.get('index:checkins', { type: 'json' }).then((v) => v || []),
+    env.TCC_OVERRIDES.get('index:owner-deals', { type: 'json' }).then((v) => v || []),
   ]);
 
   return new Response(JSON.stringify({
@@ -615,6 +628,7 @@ async function handleAdminData(request, env, cors) {
     site,
     leads,
     checkins,
+    ownerDeals,
     generated_at: new Date().toISOString(),
   }), {
     status: 200,
@@ -1088,6 +1102,26 @@ function render(d) {
     </section>
 
     <section>
+      <h2>Shop specials <span style="font-size:.75rem;color:var(--accent);float:right">\${(d.ownerDeals || []).filter(x => x.status === 'pending').length} pending</span></h2>
+      \${(d.ownerDeals || []).length ? '<table><thead><tr><th>When</th><th>Shop</th><th>Type</th><th>Special</th><th>Through</th><th>Contact</th><th>Status</th><th></th></tr></thead><tbody>' +
+        (d.ownerDeals || []).slice(0, 40).map(x => '<tr id="od-' + esc(x.id) + '">' +
+          '<td><code class="mono">' + esc(x.submitted_at ? x.submitted_at.slice(0,10) : '—') + '</code></td>' +
+          '<td><strong>' + esc(x.shop) + '</strong></td>' +
+          '<td>' + esc(x.type) + '</td>' +
+          '<td>' + esc(x.title) + (x.details ? '<br><span style="color:var(--dim);font-size:.8rem">' + esc(x.details) + '</span>' : '') + '</td>' +
+          '<td><code class="mono">' + esc(x.ends) + '</code></td>' +
+          '<td>' + esc(x.contact || '—') + '</td>' +
+          '<td><span class="pill ' + (x.status === 'approved' ? 'active' : '') + '">' + esc(x.status) + '</span></td>' +
+          '<td>' + (x.status === 'pending'
+            ? '<button class="btn" style="padding:.2rem .6rem;font-size:.75rem" onclick="odAct(\\'' + esc(x.id) + '\\',\\'approve\\')">Approve</button> ' +
+              '<button class="btn ghost" style="padding:.2rem .6rem;font-size:.75rem" onclick="odAct(\\'' + esc(x.id) + '\\',\\'reject\\')">Reject</button>'
+            : '<button class="btn ghost" style="padding:.2rem .6rem;font-size:.75rem" onclick="odAct(\\'' + esc(x.id) + '\\',\\'reject\\')">Remove</button>') + '</td>' +
+        '</tr>').join('') +
+        '</tbody></table>'
+        : '<div class="empty">No shop specials yet. Claimed owners post BOGOs, happy hours, and percent-off days from their dashboard.</div>'}
+    </section>
+
+    <section>
       <h2>Quick links</h2>
       <div class="links">
         <a class="btn" href="https://dashboard.stripe.com/subscriptions" target="_blank">Stripe subscriptions</a>
@@ -1294,6 +1328,25 @@ function renderPipeline() {
   });
 }
 
+async function odAct(id, action) {
+  const key = new URLSearchParams(location.search).get('key');
+  if (!key) return;
+  try {
+    const r = await fetch('/admin/deals/update?key=' + encodeURIComponent(key), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, action }),
+    });
+    if (r.ok) {
+      const row = document.getElementById('od-' + id);
+      if (row) {
+        if (action === 'reject') row.remove();
+        else row.querySelector('.pill').textContent = 'approved';
+      }
+    }
+  } catch (e) { console.error('deal update failed', e); }
+}
+
 async function ckAct(id, action) {
   const key = new URLSearchParams(location.search).get('key');
   if (!key) return;
@@ -1466,6 +1519,93 @@ async function handleCheckinUpdate(request, env, cors) {
   return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
 }
 
+// ─── Owner specials ───────────────────────────────────────────────────────
+// The automatic deals feed only sees menu price drops. A BOGO, a happy hour,
+// or "20% off flower Fridays" never touches a menu price, so claimed owners
+// post those here. Pending -> hello@ email -> Josh approves in the dashboard
+// -> shows on the shop page and the app's Deals page until it expires.
+// These are advertising under MN Stat. 342.64: the approval step is the
+// editorial gate, and every surface that renders them carries the warning.
+const DEAL_TYPES = new Set(['bogo', 'percent-off', 'dollar-off', 'flash', 'happy-hour', 'loyalty', 'veteran', 'new-customer']);
+
+function _isoDate(s) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(String(s || '')) ? String(s) : '';
+}
+
+async function handleDealSubmit(request, env, cors) {
+  let body;
+  try { body = await request.json(); } catch {
+    return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const shop = String(body.shop || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 80);
+  const type = String(body.type || '').toLowerCase();
+  const title = String(body.title || '').trim().slice(0, 100);
+  const details = String(body.details || '').trim().slice(0, 300);
+  const contact = String(body.contact || '').trim().slice(0, 200);
+  const today = new Date().toISOString().slice(0, 10);
+  const maxEnd = new Date(Date.now() + 60 * 86400 * 1000).toISOString().slice(0, 10);
+  const defEnd = new Date(Date.now() + 14 * 86400 * 1000).toISOString().slice(0, 10);
+  let ends = _isoDate(body.ends) || defEnd;
+  if (ends > maxEnd) ends = maxEnd;
+  if (!shop || !DEAL_TYPES.has(type) || title.length < 3 || !contact.includes('@') || ends < today) {
+    return new Response(JSON.stringify({ ok: false, error: 'shop, deal type, title, contact email, and a future end date are required' }), {
+      status: 400, headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+  const entry = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+    shop, type, title, details, contact, ends,
+    submitted_at: new Date().toISOString(),
+    status: 'pending',
+  };
+  const list = (await env.TCC_OVERRIDES.get('index:owner-deals', { type: 'json' })) || [];
+  list.unshift(entry);
+  await env.TCC_OVERRIDES.put('index:owner-deals', JSON.stringify(list.slice(0, 300)));
+  try {
+    await sendOpsEmail(env, `🏷️ Special submitted: ${title.slice(0, 50)} @ ${shop}`,
+      `A dispensary posted a special (pending your approval)\n\nShop: ${shop}\nType: ${type}\nTitle: ${title}\n${details ? 'Details: ' + details + '\n' : ''}Runs through: ${ends}\nContact: ${contact}\n\nApprove or reject in the dashboard (Shop specials section):\nhttps://dashboard.twincitycannabis.com/admin`);
+  } catch (e) { console.error('deal email failed:', e); }
+  return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+}
+
+// Public, edge-cached: approved, unexpired specials (optionally for one shop).
+async function handleOwnerDealsPublic(request, env, cors) {
+  const url = new URL(request.url);
+  const shop = String(url.searchParams.get('shop') || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
+  const today = new Date().toISOString().slice(0, 10);
+  const list = (await env.TCC_OVERRIDES.get('index:owner-deals', { type: 'json' })) || [];
+  const out = list
+    .filter((d) => d.status === 'approved' && d.ends >= today && (!shop || d.shop === shop))
+    .slice(0, 60)
+    .map((d) => ({ id: d.id, shop: d.shop, type: d.type, title: d.title, details: d.details, ends: d.ends }));
+  return new Response(JSON.stringify(out), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300', ...cors },
+  });
+}
+
+async function handleDealUpdate(request, env, cors) {
+  if (!verifyAdminToken(request, env)) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  let body;
+  try { body = await request.json(); } catch {
+    return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const list = (await env.TCC_OVERRIDES.get('index:owner-deals', { type: 'json' })) || [];
+  const idx = list.findIndex((d) => d.id === body.id);
+  if (idx === -1) {
+    return new Response(JSON.stringify({ ok: false, error: 'not found' }), { status: 404, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  if (body.action === 'approve') list[idx].status = 'approved';
+  else if (body.action === 'reject') list.splice(idx, 1);
+  else {
+    return new Response(JSON.stringify({ ok: false, error: 'action must be approve|reject' }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  await env.TCC_OVERRIDES.put('index:owner-deals', JSON.stringify(list));
+  return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+}
+
 // Generic ops notification to hello@ — the one pipe every signal ends in.
 async function sendOpsEmail(env, subject, text) {
   if (!env.RESEND_API_KEY) return;
@@ -1521,6 +1661,8 @@ async function sendWeeklyDigest(env) {
   const newLeads = leads.filter((l) => (l.submitted_at || '') >= since);
   const newSugg = suggestions.filter((s) => (s.submitted_at || '') >= since);
   const pendingUploads = uploads.filter((u) => !u.processed);
+  const ownerDeals = (await env.TCC_OVERRIDES.get('index:owner-deals', { type: 'json' })) || [];
+  const pendingDeals = ownerDeals.filter((x) => x.status === 'pending');
   let alerts = [];
   try {
     const r = await fetch('https://twincitycannabis.com/scraper/data/menu_alerts.json', { cf: { cacheTtl: 0 } });
@@ -1533,6 +1675,7 @@ async function sendWeeklyDigest(env) {
     `Leads this week: ${newLeads.length}` + (newLeads.length ? '\n' + newLeads.map((l) => `  - ${l.submitted_at.slice(0, 10)} ${l.name} <${l.email}> ${l.dispensary || l.brand || ''}`).join('\n') : ''),
     `Suggestions this week: ${newSugg.length}` + (newSugg.length ? '\n' + newSugg.map((s) => `  - ${(s.submitted_at || '').slice(0, 10)} ${s.text.slice(0, 90)}`).join('\n') : ''),
     `Menu uploads pending import: ${pendingUploads.length}` + (pendingUploads.length ? '\n' + pendingUploads.map((u) => `  - ${u.slug} (${u.submitted_at.slice(0, 10)})`).join('\n') : ''),
+    `Shop specials pending approval: ${pendingDeals.length}` + (pendingDeals.length ? '\n' + pendingDeals.map((x) => `  - ${x.shop}: ${x.title} (through ${x.ends})`).join('\n') : ''),
     `Menu watchdog alerts this week: ${alerts.length}` + (alerts.length ? '\n' + alerts.map((a) => `  - ${a.date} ${a.kind}: ${a.shop} ${a.before}->${a.after}`).join('\n') : ''),
     '',
     'Dashboard: https://dashboard.twincitycannabis.com/admin',
