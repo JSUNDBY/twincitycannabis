@@ -2052,6 +2052,10 @@
         // from the review-count "Verified" above; means the shop manages it.
         const ownerEl = document.getElementById('detail-owner-verified');
         if (ownerEl) ownerEl.style.display = d.claimed ? 'inline-flex' : 'none';
+        // Specials are owner-only: the card exists only on claimed listings
+        // (and the worker enforces it again server-side).
+        const specialSection = document.getElementById('dash-special-section');
+        if (specialSection) specialSection.style.display = d.claimed ? '' : 'none';
 
         // Founding Partner — early verified shops (see /founding-partners/).
         const fpEl = document.getElementById('detail-founding-partner');
@@ -2888,7 +2892,7 @@
                 data.shop = d.id;
                 const btn = specialForm.querySelector('button[type="submit"]');
                 btn.disabled = true; btn.textContent = 'Posting…';
-                let ok = false;
+                let ok = false, payload = {};
                 try {
                     const res = await fetch(`${TCC_WORKER_URL}/deal`, {
                         method: 'POST',
@@ -2896,13 +2900,16 @@
                         body: JSON.stringify(data),
                     });
                     ok = res.ok;
+                    try { payload = await res.json(); } catch (_) {}
                 } catch (_) { ok = false; }
                 if (ok) {
                     specialForm.style.display = 'none';
+                    const msg = document.getElementById('dash-special-success-msg');
+                    if (msg && payload.confirm_sent_to) msg.textContent = `We sent a confirmation link to ${payload.confirm_sent_to}. Click it and we'll review the special and put it on your page.`;
                     document.getElementById('dash-special-success').style.display = 'block';
                 } else {
                     btn.disabled = false; btn.textContent = 'Post special';
-                    alert('That didn\u2019t go through. Email it to hello@twincitycannabis.com and we\u2019ll post it for you.');
+                    alert(payload.message || 'That didn\u2019t go through. Email it to hello@twincitycannabis.com and we\u2019ll post it for you.');
                 }
             };
         }

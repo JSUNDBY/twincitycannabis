@@ -145,6 +145,10 @@ export default {
       return handleDealSubmit(request, env, cors);
     }
 
+    if (url.pathname === '/deal/confirm' && request.method === 'GET') {
+      return handleDealConfirm(request, env);
+    }
+
     if (url.pathname === '/deals/owner' && request.method === 'GET') {
       return handleOwnerDealsPublic(request, env, cors);
     }
@@ -810,6 +814,10 @@ async function handleCrmUpdate(request, env, cors) {
   if (body.notes !== undefined) cur.notes = String(body.notes).slice(0, 2000);
   if (body.last_contacted !== undefined) cur.last_contacted = String(body.last_contacted).slice(0, 20);
   if (body.next_followup !== undefined) cur.next_followup = String(body.next_followup).slice(0, 20);
+  if (body.owner_email !== undefined) {
+    const em = String(body.owner_email).trim().toLowerCase().slice(0, 200);
+    cur.owner_email = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em) ? em : '';
+  }
   if (body.claimed !== undefined) {
     if (body.claimed && !CLAIM_OK_STATUS.has(cur.status)) {
       return new Response(JSON.stringify({
@@ -1278,6 +1286,7 @@ function renderPipeline() {
       '</select></td>' +
       '<td><input type="date" class="pipe-date" data-field="last_contacted" value="' + esc(crm.last_contacted || '') + '"></td>' +
       '<td><input type="date" class="pipe-date" data-field="next_followup" value="' + esc(crm.next_followup || '') + '"></td>' +
+      '<td><input type="email" class="pipe-date" style="width:170px" data-field="owner_email" placeholder="owner email" value="' + esc(crm.owner_email || '') + '"></td>' +
       '<td><textarea class="pipe-notes" rows="1" placeholder="Notes…">' + esc(crm.notes || '') + '</textarea></td>' +
       '</tr>';
   }).join('');
@@ -1285,7 +1294,7 @@ function renderPipeline() {
   document.getElementById('pipe-table-wrap').innerHTML =
     '<div style="overflow-x:auto"><table class="pipe-table">' +
     '<colgroup><col style="width:25%"><col style="width:6%"><col style="width:6%"><col style="width:12%"><col style="width:12%"><col style="width:12%"><col style="width:27%"></colgroup>' +
-    '<thead><tr><th>Dispensary · contact</th><th>TCC</th><th>Owner</th><th>Status</th><th>Last Contact</th><th>Next Followup</th><th>Notes</th></tr></thead>' +
+    '<thead><tr><th>Dispensary · contact</th><th>TCC</th><th>Owner</th><th>Status</th><th>Last Contact</th><th>Next Followup</th><th>Owner email</th><th>Notes</th></tr></thead>' +
     '<tbody>' + rows + '</tbody></table></div>';
 
   // Wire inline edits
@@ -1541,31 +1550,74 @@ async function handleDealSubmit(request, env, cors) {
   const type = String(body.type || '').toLowerCase();
   const title = String(body.title || '').trim().slice(0, 100);
   const details = String(body.details || '').trim().slice(0, 300);
-  const contact = String(body.contact || '').trim().slice(0, 200);
   const today = new Date().toISOString().slice(0, 10);
   const maxEnd = new Date(Date.now() + 60 * 86400 * 1000).toISOString().slice(0, 10);
   const defEnd = new Date(Date.now() + 14 * 86400 * 1000).toISOString().slice(0, 10);
   let ends = _isoDate(body.ends) || defEnd;
   if (ends > maxEnd) ends = maxEnd;
-  if (!shop || !DEAL_TYPES.has(type) || title.length < 3 || !contact.includes('@') || ends < today) {
-    return new Response(JSON.stringify({ ok: false, error: 'shop, deal type, title, contact email, and a future end date are required' }), {
+  if (!shop || !DEAL_TYPES.has(type) || title.length < 3 || ends < today) {
+    return new Response(JSON.stringify({ ok: false, error: 'shop, deal type, title, and a future end date are required' }), {
       status: 400, headers: { 'Content-Type': 'application/json', ...cors },
     });
   }
+  // Owner gate: only a claimed listing with an owner email on file can post,
+  // and nothing reaches Josh until that inbox clicks the confirmation link.
+  // No accounts, no passwords — control of the owner's email IS the login.
+  const crm = (await env.TCC_OVERRIDES.get('index:crm', { type: 'json' })) || {};
+  const rec = crm[shop] || {};
+  if (!rec.claimed || !rec.owner_email) {
+    return new Response(JSON.stringify({ ok: false, error: 'not_claimed',
+      message: 'Specials can only be posted by the claimed owner of a listing. Claim your listing first (it is free), or email hello@twincitycannabis.com.' }), {
+      status: 403, headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+  const list = (await env.TCC_OVERRIDES.get('index:owner-deals', { type: 'json' })) || [];
+  // One unconfirmed special per shop per hour, so a stranger hammering the
+  // form cannot flood the owner's inbox with confirmation links.
+  const hourAgo = Date.now() - 3600 * 1000;
+  if (list.some((d) => d.shop === shop && d.status === 'unconfirmed' && Date.parse(d.submitted_at) > hourAgo)) {
+    return new Response(JSON.stringify({ ok: true, throttled: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
   const entry = {
     id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
-    shop, type, title, details, contact, ends,
+    token: crypto.randomUUID().replace(/-/g, '') + Math.random().toString(36).slice(2, 10),
+    shop, type, title, details, contact: rec.owner_email, ends,
     submitted_at: new Date().toISOString(),
-    status: 'pending',
+    status: 'unconfirmed',
   };
-  const list = (await env.TCC_OVERRIDES.get('index:owner-deals', { type: 'json' })) || [];
   list.unshift(entry);
   await env.TCC_OVERRIDES.put('index:owner-deals', JSON.stringify(list.slice(0, 300)));
+  const link = 'https://dashboard.twincitycannabis.com/deal/confirm?t=' + entry.token;
   try {
-    await sendOpsEmail(env, `🏷️ Special submitted: ${title.slice(0, 50)} @ ${shop}`,
-      `A dispensary posted a special (pending your approval)\n\nShop: ${shop}\nType: ${type}\nTitle: ${title}\n${details ? 'Details: ' + details + '\n' : ''}Runs through: ${ends}\nContact: ${contact}\n\nApprove or reject here (Shop specials section):\n${adminUrl(env)}`);
-  } catch (e) { console.error('deal email failed:', e); }
-  return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+    await sendMail(env, rec.owner_email, `Confirm your special: ${title.slice(0, 50)}`,
+      `Someone posted a special for your listing on Twin City Cannabis:\n\n${type.toUpperCase()}: ${title}\n${details ? details + '\n' : ''}Runs through ${ends}\n\nIf that was you, confirm it here and we'll review and publish it:\n${link}\n\nIf it wasn't you, ignore this email and nothing will be posted.\n\nTwin City Cannabis\nhello@twincitycannabis.com`);
+  } catch (e) { console.error('owner confirm email failed:', e); }
+  return new Response(JSON.stringify({ ok: true, confirm_sent_to: rec.owner_email.replace(/^(.).*(@.*)$/, '$1***$2') }), {
+    status: 200, headers: { 'Content-Type': 'application/json', ...cors },
+  });
+}
+
+// Owner clicked the confirmation link: the special becomes pending and Josh
+// gets the review email. Plain HTML response — it opens in the owner's browser.
+async function handleDealConfirm(request, env) {
+  const url = new URL(request.url);
+  const token = String(url.searchParams.get('t') || '').replace(/[^a-z0-9]/gi, '').slice(0, 80);
+  const page = (title, body) => new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#0a1410;color:#e8e9eb;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0"><div style="max-width:460px;padding:2rem;text-align:center"><div style="color:#22c55e;font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:.6rem">Twin City Cannabis</div><h1 style="font-size:1.3rem;margin:0 0 .6rem">${title}</h1><p style="color:#b8bcc4;margin:0">${body}</p></div></body>`, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+  if (!token) return page('That link is missing its code', 'Open the link from your confirmation email again.');
+  const list = (await env.TCC_OVERRIDES.get('index:owner-deals', { type: 'json' })) || [];
+  const idx = list.findIndex((d) => d.token === token);
+  if (idx === -1) return page('That link has expired', 'Post the special again from your dashboard and confirm the new email.');
+  if (list[idx].status === 'unconfirmed') {
+    list[idx].status = 'pending';
+    list[idx].confirmed_at = new Date().toISOString();
+    await env.TCC_OVERRIDES.put('index:owner-deals', JSON.stringify(list));
+    const d = list[idx];
+    try {
+      await sendOpsEmail(env, `🏷️ Special confirmed by owner: ${d.title.slice(0, 50)} @ ${d.shop}`,
+        `Owner-confirmed special (pending your approval)\n\nShop: ${d.shop}\nType: ${d.type}\nTitle: ${d.title}\n${d.details ? 'Details: ' + d.details + '\n' : ''}Runs through: ${d.ends}\nConfirmed from: ${d.contact}\n\nApprove or reject here (Shop specials section):\n${adminUrl(env)}`);
+    } catch (e) { console.error('deal ops email failed:', e); }
+  }
+  return page('Confirmed', 'Thanks. We review every special before it goes live, usually the same day. It will show on your page and in Deals until your end date.');
 }
 
 // Public, edge-cached: approved, unexpired specials (optionally for one shop).
@@ -1611,6 +1663,21 @@ async function handleDealUpdate(request, env, cors) {
 // bare /admin link just lands on "unauthorized" (Josh hit exactly that
 // 2026-09-14 from a check-in email).
 const adminUrl = (env) => 'https://dashboard.twincitycannabis.com/admin?key=' + encodeURIComponent(env.ADMIN_TOKEN || '');
+
+// Transactional mail to any address (owner confirmations). Same Resend
+// sender as ops mail; hello@ is the reply-to so replies reach Josh.
+async function sendMail(env, to, subject, text) {
+  if (!env.RESEND_API_KEY) return;
+  const r = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: 'Twin City Cannabis <notifications@send.twincitycannabis.com>',
+      to: [to], reply_to: 'hello@twincitycannabis.com', subject, text,
+    }),
+  });
+  if (!r.ok) throw new Error(`Resend API ${r.status}: ${await r.text()}`);
+}
 
 // Generic ops notification to hello@ — the one pipe every signal ends in.
 async function sendOpsEmail(env, subject, text) {

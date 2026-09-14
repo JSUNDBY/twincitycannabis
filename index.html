@@ -2419,7 +2419,7 @@
             <div class="card" id="dash-special-section" style="margin-bottom:2rem">
                 <div class="card-body" style="padding:2rem">
                     <div class="font-display font-bold text-xl" style="margin-bottom:0.5rem">Post a special</div>
-                    <p class="text-secondary text-sm" style="margin-bottom:1.5rem">Running a BOGO, a happy hour, or a percent-off day that isn't a menu price change? Post it here. We review it, then it shows on your page and in Deals until the end date. Free.</p>
+                    <p class="text-secondary text-sm" style="margin-bottom:1.5rem">Running a BOGO, a happy hour, or a percent-off day that isn't a menu price change? Post it here. A confirmation link goes to the owner email we have on file for this shop; once you confirm, we review it and it shows on your page and in Deals until the end date. Free.</p>
                     <form id="dash-special-form" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
                         <div>
                             <label class="text-xs text-muted" style="display:block;margin-bottom:0.3rem">Type</label>
@@ -2447,16 +2447,12 @@
                             <input class="input" type="text" name="details" maxlength="300" placeholder="Fridays only, in-store, while supplies last">
                         </div>
                         <div style="grid-column:1/-1">
-                            <label class="text-xs text-muted" style="display:block;margin-bottom:0.3rem">Your email *</label>
-                            <input class="input" type="email" name="contact" placeholder="you@yourshop.com" required>
-                        </div>
-                        <div style="grid-column:1/-1">
                             <button type="submit" class="btn btn-primary" style="width:100%">Post special</button>
                         </div>
                     </form>
                     <div id="dash-special-success" style="display:none;text-align:center;padding:1.5rem 0">
                         <div style="font-size:1.6rem">🏷️</div>
-                        <p class="text-sm text-secondary" style="margin:.4rem 0 0">Got it. We'll review it and it'll be on your page shortly.</p>
+                        <p class="text-sm text-secondary" style="margin:.4rem 0 0" id="dash-special-success-msg">Check your email. Click the confirmation link and we'll review it and put it on your page.</p>
                     </div>
                 </div>
             </div>
