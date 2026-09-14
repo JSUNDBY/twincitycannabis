@@ -29805,7 +29805,7 @@ TCC.searchDispensaries = (query) => {
 };
 
 TCC.formatPrice = (price) => `$${price}`;
-TCC.getTierLabel = (tier) => ({ free: '', featured: 'Featured', premium: 'Premium', platinum: 'Platinum Partner' }[tier] || '');
+TCC.getTierLabel = (tier) => ({ free: '', featured: 'Featured', premium: 'Featured', platinum: 'Platinum Partner' }[tier] || ''); // shoppers see the placement (Featured); the tier name lives on the owner dashboard
 TCC.getTierColor = (tier) => ({ free: '', featured: '#22c55e', premium: '#a855f7', platinum: '#f59e0b' }[tier] || '');
 TCC.getScoreColor = (score) => score >= 90 ? '#22c55e' : score >= 80 ? '#f59e0b' : score >= 70 ? '#f97316' : '#ef4444';
 TCC.getScoreLabel = (score) => score >= 90 ? 'Excellent' : score >= 80 ? 'Great' : score >= 70 ? 'Good' : 'Fair';

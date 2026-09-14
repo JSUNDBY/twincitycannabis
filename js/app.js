@@ -2014,7 +2014,7 @@
         if (d.tier === 'premium' || d.tier === 'featured') {
             const tag = document.createElement('span');
             tag.className = 'detail-banner-tier-tag';
-            tag.textContent = d.tier === 'premium' ? 'Market Intel · Paid' : 'Featured · Paid';
+            tag.textContent = 'Featured · Paid'; // public disclosure names the placement, not the owner's tier
             bannerEl.appendChild(tag);
         }
         const initialEl = document.getElementById('detail-banner-initial');
@@ -2894,7 +2894,7 @@
         // Tier badge
         const tierBadge = document.getElementById('dash-tier-badge');
         if (d.tier !== 'free') {
-            tierBadge.textContent = TCC.getTierLabel(d.tier);
+            tierBadge.textContent = d.tier === 'premium' ? 'Market Intel' : TCC.getTierLabel(d.tier); // owner-facing: the tier they bought
             tierBadge.style.background = TCC.getTierColor(d.tier);
             tierBadge.style.color = d.tier === 'platinum' ? '#0a0a0a' : '#fff';
             tierBadge.style.borderColor = TCC.getTierColor(d.tier);
