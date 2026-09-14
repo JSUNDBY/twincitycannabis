@@ -815,7 +815,7 @@ const buildDispensaryPage = (d) => {
     '@context': 'https://schema.org',
     '@type': ['Store', 'LocalBusiness'],
     name: d.name,
-    image: d.img || `${SITE}/img/twin-city-cannabis-logo-512.png`,
+    image: d.img ? (d.img.startsWith('http') ? d.img : `${SITE}${d.img}`) : `${SITE}/img/twin-city-cannabis-logo-512.png`,
     url: canonical,
     telephone: d.phone || undefined,
     address: (() => {
