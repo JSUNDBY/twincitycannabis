@@ -1,6 +1,6 @@
 {
- "merged_groups": 260,
- "absorbed": 363,
+ "merged_groups": 258,
+ "absorbed": 362,
  "groups": [
   {
    "key": "soap|flower|3.5g|big",
@@ -68,12 +68,11 @@
     {
      "name": "Jungle Wifi | Big Buds | 3.5g",
      "shops": [
-      "bloomn",
-      "nativecare-1"
+      "bloomn"
      ]
     }
    ],
-   "shops_after": 7
+   "shops_after": 6
   },
   {
    "key": "dizgo collective|flower|3.5g|big orion",
@@ -729,7 +728,7 @@
    "key": "good green|flower|3.5g|chem cookies n",
    "kept": {
     "name": "Chem n' Cookies | 3.5g",
-    "shops_before": 7
+    "shops_before": 6
    },
    "absorbed": [
     {
@@ -760,7 +759,7 @@
      ]
     }
    ],
-   "shops_after": 13
+   "shops_after": 12
   },
   {
    "key": "good green|flower|3.5g|evercrisp",
@@ -1492,9 +1491,15 @@
      "shops": [
       "green-rose"
      ]
+    },
+    {
+     "name": "Cranberry Pomegranate Mule Mocktail 10mg \u2013 BLNCD",
+     "shops": [
+      "flame-flora"
+     ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "blncd|beverage|10mg|margarita mocktail watermelon",
@@ -3305,22 +3310,6 @@
    "shops_after": 10
   },
   {
-   "key": "camino|edible|50mg|bliss lemonade watermelon",
-   "kept": {
-    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "unbound|flower|3.5g|2 mac v",
    "kept": {
     "name": "Mac V2",
@@ -4128,22 +4117,6 @@
    "shops_after": 7
   },
   {
-   "key": "vireo|flower|3.5g|petrol station",
-   "kept": {
-    "name": "Petrol Station",
-    "shops_before": 3
-   },
-   "absorbed": [
-    {
-     "name": "Petrol Station",
-     "shops": [
-      "green-goods-duluth"
-     ]
-    }
-   ],
-   "shops_after": 4
-  },
-  {
    "key": "&shine|beverage|100mg|fruit punch",
    "kept": {
     "name": "Fruit Punch [10pk] (100mg)",
@@ -4605,9 +4578,16 @@
    "key": "good green|flower|7g|chem cookies n",
    "kept": {
     "name": "Chem n' Cookies | 7g",
-    "shops_before": 7
+    "shops_before": 6
    },
    "absorbed": [
+    {
+     "name": "Chem n' Cookies",
+     "shops": [
+      "leafline-labs-st-paul",
+      "rise-brooklyn-park"
+     ]
+    },
     {
      "name": "Chem n' Cookies",
      "shops": [
@@ -4623,12 +4603,6 @@
       "rise-mankato",
       "rise-new-hope",
       "rise-willmar"
-     ]
-    },
-    {
-     "name": "Chem n' Cookies",
-     "shops": [
-      "rise-brooklyn-park"
      ]
     }
    ],
@@ -4831,22 +4805,6 @@
    "shops_after": 2
   },
   {
-   "key": "grasslandz|edible|100mg|pineapple sour",
-   "kept": {
-    "name": "Sour Pineapple Gummies 100mg - Grasslandz",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Grasslandz Sour Pineapple Gummies - 100mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "retro bakery|beverage|10mg|lemonade pink",
    "kept": {
     "name": "Pink Lemonade 10mg - Retro Bakery",
@@ -4873,6 +4831,22 @@
      "name": "Nebula Cotton Candy Gummy Bar - 100mg | .1g",
      "shops": [
       "high-10-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "grasslandz|edible|100mg|pineapple sour",
+   "kept": {
+    "name": "Sour Pineapple Gummies 100mg - Grasslandz",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Grasslandz Sour Pineapple Gummies - 100mg THC",
+     "shops": [
+      "island-pezi"
      ]
     }
    ],
