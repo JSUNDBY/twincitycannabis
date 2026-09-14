@@ -1269,6 +1269,16 @@
             // Live deal promoted in the banner (the Premium-tier perk).
             deal: '25% off all White Meridian, Sour Luxxe & Platinum Jesus · in-store thru 8/4',
         },
+        'levitated-cannabis': {
+            name: 'Levitated Dispensaries',
+            // Owner-supplied wordmark with the green plate removed: white mark +
+            // text sit on the banner's own tint, so nothing crops or double-boxes.
+            logo: 'assets/brands/levitated-wordmark-knockout.svg',
+            accent: '#559563', accent2: '#8fcb9a', warm: 'rgba(85,149,99,0.14)',
+            cta: 'See the menu',
+            reach: 'Adult-use dispensary · 4145 Hiawatha Ave, Minneapolis',
+            link: '#dispensary/levitated-cannabis',
+        },
     };
     // Render ALL active featured partners as stacked slim banners — featured =
     // always visible, not rotated. Each carries its own brand takeover theme.
