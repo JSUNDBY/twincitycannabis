@@ -1,6 +1,6 @@
 {
- "merged_groups": 260,
- "absorbed": 363,
+ "merged_groups": 258,
+ "absorbed": 361,
  "groups": [
   {
    "key": "soap|flower|3.5g|big",
@@ -1166,22 +1166,6 @@
    "shops_after": 3
   },
   {
-   "key": "nebula|cartridge|1g|jelly strawberry",
-   "kept": {
-    "name": "Strawberry Jelly | Cartridge | 1g",
-    "shops_before": 2
-   },
-   "absorbed": [
-    {
-     "name": "Strawberry Jelly | Cartridge | 1g",
-     "shops": [
-      "sweet-leaves"
-     ]
-    }
-   ],
-   "shops_after": 3
-  },
-  {
    "key": "trailhead|flower|3.5g|cherry lady slipper",
    "kept": {
     "name": "Trailhead - 3.5g Flower - Cherry Lady Slipper (H)",
@@ -1491,15 +1475,9 @@
      "shops": [
       "green-rose"
      ]
-    },
-    {
-     "name": "Cranberry Pomegranate Mule Mocktail 10mg \u2013 BLNCD",
-     "shops": [
-      "flame-flora"
-     ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
   },
   {
    "key": "blncd|beverage|10mg|margarita mocktail watermelon",
@@ -2513,6 +2491,22 @@
    "shops_after": 2
   },
   {
+   "key": "nebula|cartridge|1g|jelly strawberry",
+   "kept": {
+    "name": "Strawberry Jelly | Cartridge | 1g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Strawberry Jelly | Cartridge | 1g",
+     "shops": [
+      "legacy-cannabis-1"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "unbound|flower|3.5g|goat golden",
    "kept": {
     "name": "Golden Goat",
@@ -2630,13 +2624,19 @@
    },
    "absorbed": [
     {
+     "name": "Mimosa Ice | 3.5G",
+     "shops": [
+      "aurora-cannabis-prior-lake"
+     ]
+    },
+    {
      "name": "Verist Fields | Mimosa Ice | 3.5g",
      "shops": [
       "verist-fields"
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "wyld|edible|50mg|1 5 blood cbc ct orange",
@@ -2857,22 +2857,6 @@
      "name": "Fog Dog | 1g Pre-Roll",
      "shops": [
       "lake-daze"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "carpe diem|tincture|1000mg|gel muscle on relief",
-   "kept": {
-    "name": "Relief Muscle & Joint CBD Gel Roll-On 1000 mg",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Relief Muscle & Joint CBD Gel Roll-On 1000mg - Carpe Diem",
-     "shops": [
-      "flame-flora"
      ]
     }
    ],
@@ -3276,22 +3260,6 @@
    "shops_after": 2
   },
   {
-   "key": "camino|edible|50mg|bliss lemonade watermelon",
-   "kept": {
-    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "granny's|edible|50mg|dill pickle pretzels",
    "kept": {
     "name": "Granny's Pretzels - Dill Pickle [50pk] (50mg)",
@@ -3318,6 +3286,22 @@
     }
    ],
    "shops_after": 10
+  },
+  {
+   "key": "camino|edible|50mg|bliss lemonade watermelon",
+   "kept": {
+    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "unbound|flower|3.5g|2 mac v",
@@ -4463,26 +4447,10 @@
    "shops_after": 3
   },
   {
-   "key": "simple|flower|14g|ai sherbert",
-   "kept": {
-    "name": "A\u00e7ai Sherbert | 14g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "A\u00e7ai Sherbert",
-     "shops": [
-      "green-goods-burnsville"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "simple|flower|28g|death garlic",
    "kept": {
     "name": "Garlic Death",
-    "shops_before": 1
+    "shops_before": 2
    },
    "absorbed": [
     {
@@ -4492,7 +4460,7 @@
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "vireo|flower|3.5g|pave",
@@ -4553,6 +4521,7 @@
     {
      "name": "Animal Face | 7g",
      "shops": [
+      "leafline-labs-eagan",
       "leafline-labs-st-cloud"
      ]
     }
@@ -4569,7 +4538,6 @@
     {
      "name": "Animal Face",
      "shops": [
-      "leafline-labs-eagan",
       "leafline-labs-st-paul",
       "rise-baxter",
       "rise-mankato",
@@ -4580,6 +4548,7 @@
     {
      "name": "Animal Face | 14g",
      "shops": [
+      "leafline-labs-eagan",
       "leafline-labs-st-cloud",
       "rise-mankato",
       "rise-willmar"
