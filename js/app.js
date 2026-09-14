@@ -244,6 +244,30 @@
     // Worker URL deployed from /cloudflare. Returns tier overrides as JSON.
     const TCC_WORKER_URL = 'https://dashboard.twincitycannabis.com';
 
+    // Owner access link: ?owner=<token> (from the emailed link) becomes a
+    // 30-day session for this browser. Stripped from the URL immediately so
+    // it never lands in a shared link or a screenshot.
+    try {
+        const qp = new URLSearchParams(location.search);
+        const ot = qp.get('owner');
+        if (ot && /^[a-z0-9]{20,80}$/i.test(ot)) {
+            localStorage.setItem('tcc-owner-token', ot);
+            history.replaceState(null, '', location.pathname + location.hash);
+        }
+    } catch (_) {}
+    const ownerToken = () => { try { return localStorage.getItem('tcc-owner-token') || ''; } catch (_) { return ''; } };
+    async function verifyOwner(shopId) {
+        const tok = ownerToken();
+        if (!tok) return null;
+        try {
+            const r = await fetch(`${TCC_WORKER_URL}/owner/verify?shop=${encodeURIComponent(shopId)}`, {
+                headers: { Authorization: 'Bearer ' + tok }, cache: 'no-store',
+            });
+            if (!r.ok) return null;
+            return await r.json();
+        } catch (_) { return null; }
+    }
+
     // Founding Partners — dispensaries that verified early and partner with
     // TCC directly (free, earned tier; see /founding-partners/). Mirror of
     // FOUNDING_PARTNER_IDS in scripts/build_seo.js — keep in sync.
@@ -2853,10 +2877,39 @@
                 });
 
                 if (d.tier === 'premium') {
-                    // Market Intel is the paid deliverable: the unblurred,
-                    // product-level report. Before 2026-09-14 this block was
-                    // blurred for everyone, paid tier included.
-                    compContainer.innerHTML = buildCompetitorReport(d, nearby, compRows);
+                    // Market Intel is the paid deliverable — and #dashboard/<shop>
+                    // is a public URL. The unblurred report renders only for a
+                    // verified owner session (emailed access link); everyone
+                    // else gets the teaser plus a way for the owner to get in.
+                    compContainer.innerHTML = '<p class="text-sm text-muted">Checking access…</p>';
+                    verifyOwner(d.id).then(v => {
+                        if (v && v.ok && v.tier === 'premium') {
+                            compContainer.innerHTML = buildCompetitorReport(d, nearby, compRows);
+                            return;
+                        }
+                        compContainer.innerHTML = `
+                            <div style="filter:blur(4px);pointer-events:none;user-select:none">
+                                ${compRows.map(c => `<div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border)"><div class="text-sm font-semibold">${esc(c.name)}</div><div class="text-sm">${c.shared} shared products</div></div>`).join('')}
+                            </div>
+                            <div style="text-align:center;margin-top:1rem">
+                                <p class="text-sm text-secondary">This shop's Market Intel is private to its owner.</p>
+                                <button type="button" class="btn btn-sm btn-secondary" id="dash-owner-link-btn" style="margin-top:0.5rem">Owner? Email me my access link</button>
+                                <p class="text-xs text-muted" id="dash-owner-link-msg" style="margin-top:0.5rem"></p>
+                            </div>`;
+                        const btn = document.getElementById('dash-owner-link-btn');
+                        if (btn) btn.onclick = async () => {
+                            btn.disabled = true; btn.textContent = 'Sending…';
+                            let j = {};
+                            try {
+                                const r = await fetch(`${TCC_WORKER_URL}/owner/link`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ shop: d.id }) });
+                                j = await r.json();
+                            } catch (_) {}
+                            const msg = document.getElementById('dash-owner-link-msg');
+                            if (j.ok && j.sent_to) { btn.style.display = 'none'; msg.textContent = `Sent to ${j.sent_to}. Open the link in this browser and the report unlocks.`; }
+                            else if (j.throttled) { btn.style.display = 'none'; msg.textContent = 'A link was sent in the last few minutes. Check the owner inbox.'; }
+                            else { btn.disabled = false; btn.textContent = 'Owner? Email me my access link'; msg.textContent = j.message || 'That did not go through. Email hello@twincitycannabis.com.'; }
+                        };
+                    });
                 } else compContainer.innerHTML = `
                     <div style="filter:blur(4px);pointer-events:none;user-select:none">
                         ${compRows.map(c => `

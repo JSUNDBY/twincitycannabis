@@ -37,7 +37,7 @@ function getCorsHeaders(request) {
   return {
     'Access-Control-Allow-Origin': allowed ? origin : ALLOWED_ORIGIN,
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Max-Age': '86400',
   };
 }
@@ -139,6 +139,18 @@ export default {
 
     if (url.pathname === '/alert' && request.method === 'POST') {
       return handleAlert(request, env, cors);
+    }
+
+    if (url.pathname === '/owner/link' && request.method === 'POST') {
+      return handleOwnerLink(request, env, cors, false);
+    }
+
+    if (url.pathname === '/owner/verify' && request.method === 'GET') {
+      return handleOwnerVerify(request, env, cors);
+    }
+
+    if (url.pathname === '/admin/owner-link' && request.method === 'POST') {
+      return handleOwnerLink(request, env, cors, true);
     }
 
     if (url.pathname === '/deal' && request.method === 'POST') {
@@ -1286,7 +1298,7 @@ function renderPipeline() {
       '</select></td>' +
       '<td><input type="date" class="pipe-date" data-field="last_contacted" value="' + esc(crm.last_contacted || '') + '"></td>' +
       '<td><input type="date" class="pipe-date" data-field="next_followup" value="' + esc(crm.next_followup || '') + '"></td>' +
-      '<td><input type="email" class="pipe-date" style="width:170px" data-field="owner_email" placeholder="owner email" value="' + esc(crm.owner_email || '') + '"></td>' +
+      '<td><input type="email" class="pipe-date" style="width:170px" data-field="owner_email" placeholder="owner email" value="' + esc(crm.owner_email || '') + '"> <button class="btn ghost" style="padding:.15rem .5rem;font-size:.7rem" title="Mint a 30-day owner access link for this shop (no email sent)" onclick="ownerLink(\\'' + esc(d.id) + '\\')">link</button></td>' +
       '<td><textarea class="pipe-notes" rows="1" placeholder="Notes…">' + esc(crm.notes || '') + '</textarea></td>' +
       '</tr>';
   }).join('');
@@ -1335,6 +1347,19 @@ function renderPipeline() {
       navigator.clipboard.writeText(msg).then(() => { const o = webBtn.textContent; webBtn.textContent = 'Copied ✓'; setTimeout(() => { webBtn.textContent = o; }, 1500); });
     });
   });
+}
+
+async function ownerLink(shop) {
+  const key = new URLSearchParams(location.search).get('key');
+  if (!key) return;
+  try {
+    const r = await fetch('/admin/owner-link?key=' + encodeURIComponent(key), {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ shop }),
+    });
+    const j = await r.json();
+    if (j.link) window.prompt('Owner access link for ' + shop + ' (30 days). Copy it:', j.link);
+    else alert(j.message || 'Could not mint a link.');
+  } catch (e) { alert('Could not mint a link.'); }
 }
 
 async function odAct(id, action) {
@@ -1526,6 +1551,77 @@ async function handleCheckinUpdate(request, env, cors) {
   }
   await env.TCC_OVERRIDES.put('index:checkins', JSON.stringify(list));
   return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+}
+
+// ─── Owner access (no accounts) ───────────────────────────────────────────
+// Market Intel is a paid deliverable, but #dashboard/<shop> is a public URL.
+// So the unblurred report is gated on an owner session: a tokenized link is
+// mailed to the owner email on file; opening it stores the token in that
+// browser, and the dashboard asks /owner/verify before rendering the report.
+// Josh can mint a link for any shop from the admin (no email) to preview or
+// to hand an owner personally. Sessions live 30 days in KV and expire alone.
+const OWNER_SESSION_TTL = 30 * 86400;
+
+async function _mintOwnerSession(env, shop) {
+  const token = crypto.randomUUID().replace(/-/g, '') + Math.random().toString(36).slice(2, 10);
+  await env.TCC_OVERRIDES.put(`owner-session:${token}`,
+    JSON.stringify({ shop, created: new Date().toISOString() }),
+    { expirationTtl: OWNER_SESSION_TTL });
+  return `https://twincitycannabis.com/?owner=${token}#dashboard/${shop}`;
+}
+
+async function handleOwnerLink(request, env, cors, isAdmin) {
+  if (isAdmin && !verifyAdminToken(request, env)) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  let body;
+  try { body = await request.json(); } catch {
+    return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const shop = String(body.shop || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 80);
+  const crm = (await env.TCC_OVERRIDES.get('index:crm', { type: 'json' })) || {};
+  const rec = crm[shop] || {};
+  if (!shop || (!isAdmin && (!rec.claimed || !rec.owner_email))) {
+    return new Response(JSON.stringify({ ok: false, error: 'not_claimed',
+      message: 'Access links go to the claimed owner of a listing. Claim your listing first (it is free), or email hello@twincitycannabis.com.' }), {
+      status: 403, headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+  if (isAdmin) {
+    const link = await _mintOwnerSession(env, shop);
+    return new Response(JSON.stringify({ ok: true, link }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  // One link per shop per 10 minutes — nobody can spam an owner's inbox.
+  const throttleKey = `owner-link-throttle:${shop}`;
+  if (await env.TCC_OVERRIDES.get(throttleKey)) {
+    return new Response(JSON.stringify({ ok: true, throttled: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  await env.TCC_OVERRIDES.put(throttleKey, '1', { expirationTtl: 600 });
+  const link = await _mintOwnerSession(env, shop);
+  try {
+    await sendMail(env, rec.owner_email, 'Your owner access link for Twin City Cannabis',
+      `Here is your private access link for your listing on Twin City Cannabis:\n\n${link}\n\nOpen it in the browser you use for the shop. It unlocks your Market Intel dashboard on this device for 30 days. Keep it to yourself — anyone with the link can see your report.\n\nIf you didn't request this, ignore this email.\n\nTwin City Cannabis\nhello@twincitycannabis.com`);
+  } catch (e) { console.error('owner link email failed:', e); }
+  return new Response(JSON.stringify({ ok: true, sent_to: rec.owner_email.replace(/^(.).*(@.*)$/, '$1***$2') }), {
+    status: 200, headers: { 'Content-Type': 'application/json', ...cors },
+  });
+}
+
+async function handleOwnerVerify(request, env, cors) {
+  const url = new URL(request.url);
+  const shop = String(url.searchParams.get('shop') || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
+  const auth = request.headers.get('Authorization') || '';
+  const token = String(auth.startsWith('Bearer ') ? auth.slice(7) : (url.searchParams.get('k') || '')).replace(/[^a-z0-9]/gi, '').slice(0, 80);
+  const deny = () => new Response(JSON.stringify({ ok: false }), { status: 401, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...cors } });
+  if (!shop || !token) return deny();
+  const sess = await env.TCC_OVERRIDES.get(`owner-session:${token}`, { type: 'json' });
+  if (!sess || sess.shop !== shop) return deny();
+  const tiers = await getTierIndex(env);
+  const tv = tiers[shop] || {};
+  const tier = tv.tier && !(tv.valid_until && Date.parse(tv.valid_until) < Date.now()) ? tv.tier : 'free';
+  return new Response(JSON.stringify({ ok: true, shop, tier }), {
+    status: 200, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...cors },
+  });
 }
 
 // ─── Owner specials ───────────────────────────────────────────────────────
