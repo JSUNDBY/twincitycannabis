@@ -1567,7 +1567,9 @@ async function _mintOwnerSession(env, shop) {
   await env.TCC_OVERRIDES.put(`owner-session:${token}`,
     JSON.stringify({ shop, created: new Date().toISOString() }),
     { expirationTtl: OWNER_SESSION_TTL });
-  return `https://twincitycannabis.com/?owner=${token}#dashboard/${shop}`;
+  // Token in the hash path, not a query param: "?owner=3d..." is quoted-
+  // printable bait ("=3d" is the encoding of "=" itself). No "=" anywhere.
+  return `https://twincitycannabis.com/#dashboard/${shop}/owner/${token}`;
 }
 
 async function handleOwnerLink(request, env, cors, isAdmin) {

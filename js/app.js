@@ -248,11 +248,15 @@
     // 30-day session for this browser. Stripped from the URL immediately so
     // it never lands in a shared link or a screenshot.
     try {
+        // Preferred form: #dashboard/<shop>/owner/<token> (no "=" for mail
+        // clients to mangle). Legacy ?owner=<token> still accepted.
+        const hm = location.hash.match(/^#dashboard\/([a-z0-9-]+)\/owner\/([a-z0-9]{20,80})$/i);
         const qp = new URLSearchParams(location.search);
-        const ot = qp.get('owner');
+        const ot = (hm && hm[2]) || qp.get('owner');
         if (ot && /^[a-z0-9]{20,80}$/i.test(ot)) {
             localStorage.setItem('tcc-owner-token', ot);
-            history.replaceState(null, '', location.pathname + location.hash);
+            const cleanHash = hm ? `#dashboard/${hm[1]}` : location.hash;
+            history.replaceState(null, '', location.pathname + cleanHash);
         }
     } catch (_) {}
     const ownerToken = () => { try { return localStorage.getItem('tcc-owner-token') || ''; } catch (_) { return ''; } };
