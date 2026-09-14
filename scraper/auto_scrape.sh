@@ -161,6 +161,10 @@ python3 scraper/backfill_images.py
 # scrapers (dispensary.shop / Meadow) that dump every product into "flower"
 # (flavor-named gummies, beverages, even toothpaste/pipes leaked in).
 python3 scraper/recategorize_data_js.py
+# Canonicalize the same product across menu platforms (brand + size +
+# normalized name, exact match only) so two shops' listings become one
+# product with two prices. Self-aborts if it would absorb >15% of entries.
+python3 scripts/canonicalize_products.py || echo "Canonicalize failed (non-fatal)"
 PRODUCTS_AFTER=$("$NODE_BIN" -e 'global.window={};require("./js/data.js");console.log(window.TCC.products.length)' 2>/dev/null || echo 0)
 # Alert helper: pushes a message to hello@ via the worker /alert endpoint
 # (env from /etc/tcc-scrape.env). Non-fatal, no-op when env is missing.
@@ -218,6 +222,7 @@ git add js/data.js index.html sitemap.xml \
     scraper/data/carrot_products.json scraper/data/jane_products.json \
     scraper/data/sweed_products.json scraper/data/dutchie_products.json \
     scraper/data/treez_products.json scraper/data/blaze_products.json \
+    scraper/data/canonical_merges.json \
     scraper/data/shop_counts.json scraper/data/menu_alerts.json \
     scraper/data/page_lastmod.json scraper/data/price_trends.json \
     llms.txt
