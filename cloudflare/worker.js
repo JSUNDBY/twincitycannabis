@@ -145,7 +145,7 @@ export default {
       return handleDealSubmit(request, env, cors);
     }
 
-    if (url.pathname === '/deal/confirm' && request.method === 'GET') {
+    if ((url.pathname === '/deal/confirm' || url.pathname.startsWith('/deal/confirm/')) && request.method === 'GET') {
       return handleDealConfirm(request, env);
     }
 
@@ -1587,7 +1587,7 @@ async function handleDealSubmit(request, env, cors) {
   };
   list.unshift(entry);
   await env.TCC_OVERRIDES.put('index:owner-deals', JSON.stringify(list.slice(0, 300)));
-  const link = 'https://dashboard.twincitycannabis.com/deal/confirm?t=' + entry.token;
+  const link = 'https://dashboard.twincitycannabis.com/deal/confirm/' + entry.token;
   try {
     await sendMail(env, rec.owner_email, `Confirm your special: ${title.slice(0, 50)}`,
       `Someone posted a special for your listing on Twin City Cannabis:\n\n${type.toUpperCase()}: ${title}\n${details ? details + '\n' : ''}Runs through ${ends}\n\nIf that was you, confirm it here and we'll review and publish it:\n${link}\n\nIf it wasn't you, ignore this email and nothing will be posted.\n\nTwin City Cannabis\nhello@twincitycannabis.com`);
@@ -1601,7 +1601,10 @@ async function handleDealSubmit(request, env, cors) {
 // gets the review email. Plain HTML response — it opens in the owner's browser.
 async function handleDealConfirm(request, env) {
   const url = new URL(request.url);
-  const token = String(url.searchParams.get('t') || '').replace(/[^a-z0-9]/gi, '').slice(0, 80);
+  // Token rides in the PATH: a "?t=6e..." link is quoted-printable bait —
+  // "=6e" decodes as a byte in some mail clients and the link dies.
+  const fromPath = url.pathname.startsWith('/deal/confirm/') ? url.pathname.slice('/deal/confirm/'.length) : '';
+  const token = String(fromPath || url.searchParams.get('t') || '').replace(/[^a-z0-9]/gi, '').slice(0, 80);
   const page = (title, body) => new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#0a1410;color:#e8e9eb;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0"><div style="max-width:460px;padding:2rem;text-align:center"><div style="color:#22c55e;font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:.6rem">Twin City Cannabis</div><h1 style="font-size:1.3rem;margin:0 0 .6rem">${title}</h1><p style="color:#b8bcc4;margin:0">${body}</p></div></body>`, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
   if (!token) return page('That link is missing its code', 'Open the link from your confirmation email again.');
   const list = (await env.TCC_OVERRIDES.get('index:owner-deals', { type: 'json' })) || [];
@@ -1674,6 +1677,10 @@ async function sendMail(env, to, subject, text) {
     body: JSON.stringify({
       from: 'Twin City Cannabis <notifications@send.twincitycannabis.com>',
       to: [to], reply_to: 'hello@twincitycannabis.com', subject, text,
+      html: '<pre style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif;white-space:pre-wrap;font-size:15px;line-height:1.5">'
+        + text.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))
+              .replace(/(https:\/\/\S+)/g, '<a href="$1" style="color:#22c55e">$1</a>')
+        + '</pre>',
     }),
   });
   if (!r.ok) throw new Error(`Resend API ${r.status}: ${await r.text()}`);
