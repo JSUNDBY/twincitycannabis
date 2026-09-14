@@ -4242,8 +4242,11 @@
                                 if (displayName.length > 42) displayName = displayName.slice(0, 40) + '…';
                                 if (!displayName) displayName = p.name;
                                 const catIcon = Icons[ ({flower:'leaf','pre-roll':'joint',cartridge:'cart',edible:'cookie',concentrate:'diamond',topical:'drop',tincture:'bottle',beverage:'beverage'})[p.category] || 'leaf' ] || '';
+                                // Show the actual product photo (every spotlight pick has one —
+                                // that's the selection rule). Icon stays as the onerror fallback.
+                                const thumb = `<img src="${esc(p.image)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block" onerror="this.parentNode.innerHTML=this.parentNode.dataset.icon">`;
                                 return `<div class="spotlight-item">
-                                    <div class="spotlight-item-cat">${catIcon}</div>
+                                    <div class="spotlight-item-cat" data-icon="${esc(catIcon)}" style="overflow:hidden;padding:0">${thumb}</div>
                                     <div class="spotlight-item-info">
                                         <div class="spotlight-item-name">${esc(displayName)}</div>
                                         <div class="spotlight-item-price">${price ? '$' + price.toFixed(2) : ''}</div>
