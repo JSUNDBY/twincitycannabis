@@ -3059,7 +3059,19 @@
                     specialForm.style.display = 'none';
                     const msg = document.getElementById('dash-special-success-msg');
                     if (msg && payload.confirm_sent_to) msg.textContent = `We sent a confirmation link to ${payload.confirm_sent_to}. Click it and we'll review the special and put it on your page.`;
-                    document.getElementById('dash-special-success').style.display = 'block';
+                    const success = document.getElementById('dash-special-success');
+                    success.style.display = 'block';
+                    const another = document.getElementById('dash-special-another');
+                    if (another) another.onclick = () => {
+                        // Keep type + end date (owners usually post a batch of the
+                        // same shape); clear the text so nothing gets double-posted.
+                        specialForm.querySelector('[name="title"]').value = '';
+                        specialForm.querySelector('[name="details"]').value = '';
+                        btn.disabled = false; btn.textContent = 'Post special';
+                        success.style.display = 'none';
+                        specialForm.style.display = '';
+                        specialForm.querySelector('[name="title"]').focus();
+                    };
                 } else {
                     btn.disabled = false; btn.textContent = 'Post special';
                     alert(payload.message || 'That didn\u2019t go through. Email it to hello@twincitycannabis.com and we\u2019ll post it for you.');

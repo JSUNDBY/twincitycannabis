@@ -1670,11 +1670,17 @@ async function handleDealSubmit(request, env, cors) {
     });
   }
   const list = (await env.TCC_OVERRIDES.get('index:owner-deals', { type: 'json' })) || [];
-  // One unconfirmed special per shop per hour, so a stranger hammering the
-  // form cannot flood the owner's inbox with confirmation links.
+  // Owners post several specials in one sitting (each gets its own
+  // confirmation link), so allow a burst — but cap unconfirmed posts per
+  // shop per hour so a stranger can't flood the owner's inbox. Say so
+  // honestly instead of pretending it worked.
   const hourAgo = Date.now() - 3600 * 1000;
-  if (list.some((d) => d.shop === shop && d.status === 'unconfirmed' && Date.parse(d.submitted_at) > hourAgo)) {
-    return new Response(JSON.stringify({ ok: true, throttled: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+  const pendingBurst = list.filter((d) => d.shop === shop && d.status === 'unconfirmed' && Date.parse(d.submitted_at) > hourAgo).length;
+  if (pendingBurst >= 6) {
+    return new Response(JSON.stringify({ ok: false, error: 'throttled',
+      message: 'That is six unconfirmed specials in the last hour. Confirm the ones already in your inbox, then post more.' }), {
+      status: 429, headers: { 'Content-Type': 'application/json', ...cors },
+    });
   }
   const entry = {
     id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
