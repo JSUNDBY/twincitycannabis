@@ -1438,7 +1438,7 @@ async function handleSuggest(request, env, cors) {
   // hello@. Non-blocking.
   try {
     await sendOpsEmail(env, `💡 Suggestion: ${text.slice(0, 60)}`,
-      `New suggestion from the site\n\n${text}\n\nContact: ${entry.contact || '(none left)'}\nPage: ${entry.page || '-'}\nAll suggestions: https://dashboard.twincitycannabis.com/admin/suggestions (admin token required)`);
+      `New suggestion from the site\n\n${text}\n\nContact: ${entry.contact || '(none left)'}\nPage: ${entry.page || '-'}\nDashboard: ${adminUrl(env)}`);
   } catch (e) { console.error('suggestion email failed:', e); }
 
   return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
@@ -1477,7 +1477,7 @@ async function handleCheckin(request, env, cors) {
   // Intake rule: no silent stores.
   try {
     await sendOpsEmail(env, `💵 Price check-in: $${entry.price} — ${product.slice(0, 50)} @ ${shop}`,
-      `New shopper price report (pending your approval)\n\nShop: ${shop}\nProduct: ${product}\nPaid: $${entry.price}\n${note ? 'Note: ' + note + '\n' : ''}${name ? 'From: ' + name + '\n' : ''}\nApprove or reject in the dashboard:\nhttps://dashboard.twincitycannabis.com/admin (Price check-ins section)`);
+      `New shopper price report (pending your approval)\n\nShop: ${shop}\nProduct: ${product}\nPaid: $${entry.price}\n${note ? 'Note: ' + note + '\n' : ''}${name ? 'From: ' + name + '\n' : ''}\nApprove or reject here (Price check-ins section):\n${adminUrl(env)}`);
   } catch (e) { console.error('checkin email failed:', e); }
   return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
 }
@@ -1563,7 +1563,7 @@ async function handleDealSubmit(request, env, cors) {
   await env.TCC_OVERRIDES.put('index:owner-deals', JSON.stringify(list.slice(0, 300)));
   try {
     await sendOpsEmail(env, `🏷️ Special submitted: ${title.slice(0, 50)} @ ${shop}`,
-      `A dispensary posted a special (pending your approval)\n\nShop: ${shop}\nType: ${type}\nTitle: ${title}\n${details ? 'Details: ' + details + '\n' : ''}Runs through: ${ends}\nContact: ${contact}\n\nApprove or reject in the dashboard (Shop specials section):\nhttps://dashboard.twincitycannabis.com/admin`);
+      `A dispensary posted a special (pending your approval)\n\nShop: ${shop}\nType: ${type}\nTitle: ${title}\n${details ? 'Details: ' + details + '\n' : ''}Runs through: ${ends}\nContact: ${contact}\n\nApprove or reject here (Shop specials section):\n${adminUrl(env)}`);
   } catch (e) { console.error('deal email failed:', e); }
   return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
 }
@@ -1605,6 +1605,12 @@ async function handleDealUpdate(request, env, cors) {
   await env.TCC_OVERRIDES.put('index:owner-deals', JSON.stringify(list));
   return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
 }
+
+// Admin dashboard link WITH the access key. These emails go only to hello@,
+// and the lead-notification email has always embedded the key this way — a
+// bare /admin link just lands on "unauthorized" (Josh hit exactly that
+// 2026-09-14 from a check-in email).
+const adminUrl = (env) => 'https://dashboard.twincitycannabis.com/admin?key=' + encodeURIComponent(env.ADMIN_TOKEN || '');
 
 // Generic ops notification to hello@ — the one pipe every signal ends in.
 async function sendOpsEmail(env, subject, text) {
@@ -1678,7 +1684,7 @@ async function sendWeeklyDigest(env) {
     `Shop specials pending approval: ${pendingDeals.length}` + (pendingDeals.length ? '\n' + pendingDeals.map((x) => `  - ${x.shop}: ${x.title} (through ${x.ends})`).join('\n') : ''),
     `Menu watchdog alerts this week: ${alerts.length}` + (alerts.length ? '\n' + alerts.map((a) => `  - ${a.date} ${a.kind}: ${a.shop} ${a.before}->${a.after}`).join('\n') : ''),
     '',
-    'Dashboard: https://dashboard.twincitycannabis.com/admin',
+    'Dashboard: ' + adminUrl(env),
   ];
   await sendOpsEmail(env, `📬 TCC weekly digest: ${newLeads.length} leads, ${newSugg.length} suggestions, ${alerts.length} alerts`, lines.join('\n'));
 }
