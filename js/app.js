@@ -1986,7 +1986,7 @@
         if (d.tier === 'premium' || d.tier === 'featured') {
             const tag = document.createElement('span');
             tag.className = 'detail-banner-tier-tag';
-            tag.textContent = d.tier === 'premium' ? 'Premium · Paid' : 'Featured · Paid';
+            tag.textContent = d.tier === 'premium' ? 'Market Intel · Paid' : 'Featured · Paid';
             bannerEl.appendChild(tag);
         }
         const initialEl = document.getElementById('detail-banner-initial');
