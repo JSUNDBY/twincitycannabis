@@ -1,6 +1,6 @@
 {
- "merged_groups": 260,
- "absorbed": 363,
+ "merged_groups": 259,
+ "absorbed": 361,
  "groups": [
   {
    "key": "soap|flower|3.5g|big",
@@ -1941,8 +1941,8 @@
   {
    "key": "good green|flower|3.5g|omg",
    "kept": {
-    "name": "OMG",
-    "shops_before": 9
+    "name": "OMG | 3.5g",
+    "shops_before": 8
    },
    "absorbed": [
     {
@@ -1952,14 +1952,14 @@
      ]
     },
     {
-     "name": "OMG | 3.5g",
+     "name": "OMG",
      "shops": [
-      "leafline-labs-eagan",
+      "green-goods-duluth",
+      "green-goods-woodbury",
+      "leafline-labs-st-cloud",
       "leafline-labs-st-paul",
-      "minnesota-medical-solutions",
-      "rise-baxter",
-      "rise-brooklyn-park",
-      "rise-mankato",
+      "minnesota-medical-solutions-bloomington",
+      "minnesota-medical-solutions-rochester",
       "rise-new-hope",
       "rise-willmar"
      ]
@@ -3139,17 +3139,17 @@
    "key": "verist fields|concentrate|1g|berry cured dream ix pappy resin sappy",
    "kept": {
     "name": "Cured Resin-IX | Sappy Pappy by Verist Fields | Dream Berry | 1g",
-    "shops_before": 1
+    "shops_before": 2
    },
    "absorbed": [
     {
      "name": "Cured Resin-IX | Sappy Pappy by Verist Fields | Dream Berry | 1g",
      "shops": [
-      "verist-fields"
+      "coastless"
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "flor|flower|3.5g|dog fog",
@@ -3384,44 +3384,6 @@
     }
    ],
    "shops_after": 8
-  },
-  {
-   "key": "flor|flower|3.5g|breath mendo",
-   "kept": {
-    "name": "Flor Mendo Breath 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Mendo Breath (Bulk) | 3.5g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "granny's|edible|50mg|original pretzels",
-   "kept": {
-    "name": "Granny's THC Pretzels Original 50mg (1mg/Pretzel)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Original Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
-     "name": "Granny's Original Pretzels - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 3
   },
   {
    "key": "campfire cannabis|flower|3.5g|canyon grape zkittlez",
@@ -4788,6 +4750,22 @@
    "absorbed": [
     {
      "name": "Grasslandz Sour Blueberry Gummies - 100mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "granny's|edible|50mg|original pretzels",
+   "kept": {
+    "name": "Original Pretzels 50mg - Granny's",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Granny's Original Pretzels - 50mg THC",
      "shops": [
       "island-pezi"
      ]
