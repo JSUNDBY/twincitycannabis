@@ -502,6 +502,49 @@
         </div>
     </section>
 
+    <!-- This Week on TCC — weekly editorial strip -->
+    <section class="section section-dark">
+        <div class="container">
+            <style>
+.tw-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:2rem}
+.tw-card{background:var(--bg-card);border-radius:12px;padding:1.5rem;display:flex;flex-direction:column;gap:.5rem}
+.tw-kicker{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;font-weight:600;color:var(--green)}
+.tw-title{font-size:1.05rem;font-weight:700;color:var(--text-primary);margin:0;line-height:1.3}
+.tw-body{font-size:.9rem;color:var(--text-secondary);line-height:1.6;margin:0;flex:1}
+.tw-link{font-size:.85rem;color:var(--green);font-weight:600;text-decoration:none;margin-top:.5rem}
+.tw-link:hover{text-decoration:underline}
+.tw-updated{font-size:.78rem;color:var(--text-muted);margin-top:1.5rem;text-align:right}
+            </style>
+            <div class="section-label fade-in">This Week on TCC</div>
+            <h2 class="section-title fade-in">What&rsquo;s worth knowing this week.</h2>
+            <div class="tw-strip stagger">
+
+                <article class="tw-card">
+                    <span class="tw-kicker">Brand Watch</span>
+                    <h3 class="tw-title">A name that earns it: You Betcha is now on TCC.</h3>
+                    <p class="tw-body">The brand with Minnesota&rsquo;s most straightforward name has landed on Twin City Cannabis. You Betcha carries 11 products across a handful of metro shops &mdash; flower, pre-rolls, and more. Compare prices and find it near you.</p>
+                    <a class="tw-link" href="/brands/you-betcha/">Browse You Betcha &rarr;</a>
+                </article>
+
+                <article class="tw-card">
+                    <span class="tw-kicker">What&rsquo;s New</span>
+                    <h3 class="tw-title">Large-format THC beverages hit Minnesota shelves.</h3>
+                    <p class="tw-body">Starting August&nbsp;1, Minnesota retailers can sell big-format THC drinks &mdash; think proper tallboys and larger seltzers alongside the minis you&rsquo;ve seen. Same per-serving limits, just more in one can. See what&rsquo;s in stock near you.</p>
+                    <a class="tw-link" href="/products/beverage/">Shop THC beverages &rarr;</a>
+                </article>
+
+                <article class="tw-card">
+                    <span class="tw-kicker">One Year In</span>
+                    <h3 class="tw-title">Minnesota&rsquo;s adult-use market turns one. Here&rsquo;s how to shop it.</h3>
+                    <p class="tw-body">State-licensed adult-use retail launched September 2025. Today there are more than 150 licensed shops across Minnesota &mdash; Minneapolis, St.&nbsp;Paul, Duluth, Rochester, and small-town stops in between. Compare prices across all of them, free.</p>
+                    <a class="tw-link" href="#compare">Compare dispensaries &rarr;</a>
+                </article>
+
+            </div>
+            <p class="tw-updated">Updated September 14, 2026</p>
+        </div>
+    </section>
+
     <!-- Featured Dispensaries — only renders when one or more shops have a paid tier.
          The "be the first" pitch fallback was removed in Phase 2: empty space beats
          a fake placeholder. /for-dispensaries handles the sales pitch. -->
