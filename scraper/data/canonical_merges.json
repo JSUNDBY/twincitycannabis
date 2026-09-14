@@ -1,6 +1,6 @@
 {
- "merged_groups": 260,
- "absorbed": 364,
+ "merged_groups": 256,
+ "absorbed": 360,
  "groups": [
   {
    "key": "soap|flower|3.5g|big",
@@ -287,8 +287,9 @@
     {
      "name": "Bubble Bath | Big Buds | 3.5g",
      "shops": [
-      "anoka-cannabis-company",
-      "legacy-cannabis-1"
+      "edina-canna",
+      "jens-consulting-llc-dba-fridley-dispensary",
+      "minnesota-canna"
      ]
     },
     {
@@ -298,7 +299,7 @@
      ]
     }
    ],
-   "shops_after": 6
+   "shops_after": 7
   },
   {
    "key": "dogwalkers|pre-roll|1.75g|bananaconda dog mini",
@@ -1182,6 +1183,22 @@
    "shops_after": 3
   },
   {
+   "key": "nebula|cartridge|1g|jelly strawberry",
+   "kept": {
+    "name": "Strawberry Jelly | Cartridge | 1g",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "Strawberry Jelly | Cartridge | 1g",
+     "shops": [
+      "sweet-leaves"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
    "key": "trailhead|flower|3.5g|cherry lady slipper",
    "kept": {
     "name": "Trailhead - 3.5g Flower - Cherry Lady Slipper (H)",
@@ -1572,22 +1589,6 @@
      "name": "BLNCD - 5mg THC Sparkling Water - Yuzu Ginger | 0.005g",
      "shops": [
       "off-the-path-cannabis-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "nebula|cartridge|1g|berry blast blue off",
-   "kept": {
-    "name": "Blue Berry Blast Off | Cartridge | 1g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Blue Berry Blast Off | Cartridge | 1g",
-     "shops": [
-      "legacy-cannabis"
      ]
     }
    ],
@@ -2497,22 +2498,6 @@
    "shops_after": 2
   },
   {
-   "key": "nebula|cartridge|1g|jelly strawberry",
-   "kept": {
-    "name": "Strawberry Jelly | Cartridge | 1g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Strawberry Jelly | Cartridge | 1g",
-     "shops": [
-      "legacy-cannabis-1"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "unbound|flower|3.5g|goat golden",
    "kept": {
     "name": "Golden Goat",
@@ -2869,38 +2854,6 @@
    "shops_after": 2
   },
   {
-   "key": "carpe diem|tincture|1000mg|gel muscle on relief",
-   "kept": {
-    "name": "Relief Muscle & Joint CBD Gel Roll-On 1000 mg",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Relief Muscle & Joint CBD Gel Roll-On 1000mg - Carpe Diem",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "carpe diem|tincture|1500mg|cream full relax spectrum",
-   "kept": {
-    "name": "Relax CBD Cream 1500 mg Full-Spectrum",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Carpe Diem CBD Cream - 1500mg CBD - Full Spectrum - RELAX",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "dizgo|flower|3.5g|orion",
    "kept": {
     "name": "Orion",
@@ -3234,22 +3187,6 @@
    "shops_after": 2
   },
   {
-   "key": "dizgo collective|flower|3.5g|medusa",
-   "kept": {
-    "name": "Dizgo Medusa 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "MEDUSA DIZGO | 3.5g",
-     "shops": [
-      "altitude-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "unbound|flower|3.5g|wilfunk",
    "kept": {
     "name": "Wilfunk",
@@ -3298,22 +3235,6 @@
    "shops_after": 2
   },
   {
-   "key": "camino|edible|50mg|bliss lemonade watermelon",
-   "kept": {
-    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "granny's|edible|50mg|dill pickle pretzels",
    "kept": {
     "name": "Granny's Pretzels - Dill Pickle [50pk] (50mg)",
@@ -3340,6 +3261,22 @@
     }
    ],
    "shops_after": 10
+  },
+  {
+   "key": "camino|edible|50mg|bliss lemonade watermelon",
+   "kept": {
+    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "unbound|flower|3.5g|2 mac v",
