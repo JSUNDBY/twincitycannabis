@@ -1,6 +1,6 @@
 {
- "merged_groups": 258,
- "absorbed": 361,
+ "merged_groups": 260,
+ "absorbed": 363,
  "groups": [
   {
    "key": "soap|flower|3.5g|big",
@@ -597,6 +597,22 @@
    "shops_after": 3
   },
   {
+   "key": "campfire cannabis|flower|7g|bath bubble",
+   "kept": {
+    "name": "Campfire Cannabis - 7g Flower -Bubble Bath (I/H)",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "Bubble Bath | 7g",
+     "shops": [
+      "legit-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
    "key": "crested river|beverage|10mg|cbg orange soda turbo",
    "kept": {
     "name": "Crested River | Orange Turbo Soda | 10mg THC:CBG",
@@ -1022,6 +1038,7 @@
     {
      "name": "Durban Z",
      "shops": [
+      "leafline-labs-eagan",
       "leafline-labs-st-cloud",
       "leafline-labs-st-paul",
       "rise-baxter",
@@ -1783,22 +1800,6 @@
    "shops_after": 2
   },
   {
-   "key": "campfire cannabis|flower|7g|bath bubble",
-   "kept": {
-    "name": "Campfire Cannabis - 7g Flower -Bubble Bath (I/H)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Bubble Bath | 7g",
-     "shops": [
-      "legit-cannabis"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "cap junky|flower|3.5g|grade",
    "kept": {
     "name": "Cap Junky | 3.5g Case | Grade A Flower | Pre packed (Flowers/Buds - Packaged)",
@@ -1919,8 +1920,8 @@
   {
    "key": "good green|flower|3.5g|omg",
    "kept": {
-    "name": "OMG | 3.5g",
-    "shops_before": 8
+    "name": "OMG",
+    "shops_before": 9
    },
    "absorbed": [
     {
@@ -1930,14 +1931,14 @@
      ]
     },
     {
-     "name": "OMG",
+     "name": "OMG | 3.5g",
      "shops": [
-      "green-goods-duluth",
-      "green-goods-woodbury",
-      "leafline-labs-st-cloud",
+      "leafline-labs-eagan",
       "leafline-labs-st-paul",
-      "minnesota-medical-solutions-bloomington",
-      "minnesota-medical-solutions-rochester",
+      "minnesota-medical-solutions",
+      "rise-baxter",
+      "rise-brooklyn-park",
+      "rise-mankato",
       "rise-new-hope",
       "rise-willmar"
      ]
@@ -2857,6 +2858,22 @@
      "name": "Fog Dog | 1g Pre-Roll",
      "shops": [
       "lake-daze"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "carpe diem|tincture|1500mg|cream full relax spectrum",
+   "kept": {
+    "name": "Relax CBD Cream 1500 mg Full-Spectrum",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Carpe Diem CBD Cream - 1500mg CBD - Full Spectrum - RELAX",
+     "shops": [
+      "island-pezi"
      ]
     }
    ],
@@ -4538,6 +4555,7 @@
     {
      "name": "Animal Face",
      "shops": [
+      "leafline-labs-eagan",
       "leafline-labs-st-paul",
       "rise-baxter",
       "rise-mankato",
@@ -4650,6 +4668,22 @@
     }
    ],
    "shops_after": 8
+  },
+  {
+   "key": "&shine|flower|7g|gogurtz",
+   "kept": {
+    "name": "Gogurtz | 7g",
+    "shops_before": 3
+   },
+   "absorbed": [
+    {
+     "name": "Gogurtz",
+     "shops": [
+      "leafline-labs-eagan"
+     ]
+    }
+   ],
+   "shops_after": 4
   },
   {
    "key": "rythm|flower|28g|animal face",
