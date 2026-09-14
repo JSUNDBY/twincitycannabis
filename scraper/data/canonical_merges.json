@@ -1,6 +1,6 @@
 {
- "merged_groups": 256,
- "absorbed": 360,
+ "merged_groups": 260,
+ "absorbed": 361,
  "groups": [
   {
    "key": "soap|flower|3.5g|big",
@@ -2433,15 +2433,9 @@
      "shops": [
       "green-rose"
      ]
-    },
-    {
-     "name": "Retro Bakery- Espresso Dark Chocolate Bar (sativa) 50mg THC",
-     "shops": [
-      "winona-dispensary"
-     ]
     }
    ],
-   "shops_after": 4
+   "shops_after": 3
   },
   {
    "key": "retro bakery|edible|50mg|chocolate dark mores",
@@ -2455,15 +2449,9 @@
      "shops": [
       "pot-mama-s-edina"
      ]
-    },
-    {
-     "name": "Retro Bakery- Dark Chocolate S'mores (50mg)",
-     "shops": [
-      "winona-dispensary"
-     ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
   },
   {
    "key": "retro|edible|50mg|bar chocolate milk",
@@ -2854,6 +2842,54 @@
    "shops_after": 2
   },
   {
+   "key": "carpe diem|tincture|1000mg|gel muscle on relief",
+   "kept": {
+    "name": "Relief Muscle & Joint CBD Gel Roll-On 1000 mg",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Relief Muscle & Joint CBD Gel Roll-On 1000mg - Carpe Diem",
+     "shops": [
+      "flame-flora"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "carpe diem|tincture|1500mg|cream full relax spectrum",
+   "kept": {
+    "name": "Relax CBD Cream 1500 mg Full-Spectrum",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Carpe Diem CBD Cream - 1500mg CBD - Full Spectrum - RELAX",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "northpark|cartridge|1g|41 gelato",
+   "kept": {
+    "name": "Gelato 41 1g Cart",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Gelato #41 1g Cart",
+     "shops": [
+      "voyager-cannabis-co"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "dizgo|flower|3.5g|orion",
    "kept": {
     "name": "Orion",
@@ -2942,22 +2978,6 @@
      "name": "Purple Ice Water Preroll 1g",
      "shops": [
       "twin-cities-cannabis-richfield"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "mllw|edible|48mg|bar chocolate covered strawberry",
-   "kept": {
-    "name": "MLLW Chocolate Covered Strawberry 48 MG Bar",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "MLLW- Chocolate Covered Strawberry Bar (48mg)",
-     "shops": [
-      "winona-dispensary"
      ]
     }
    ],
@@ -3111,6 +3131,22 @@
    "shops_after": 3
   },
   {
+   "key": "verist fields|pre-roll|1g|1 big birch ct ix mr stick tart uptown",
+   "kept": {
+    "name": "Big Stick-IX | Mr. Birch | Uptown Tart | 1 g | 1 ct",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Big Stick-IX | Mr. Birch | Uptown Tart | 1 g | 1 ct",
+     "shops": [
+      "verist-fields"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "flor|flower|3.5g|dog fog",
    "kept": {
     "name": "Flor Fog Dog 3.5g",
@@ -3181,6 +3217,22 @@
      "name": "Camino EXCITE Wild Cherry Gummies - 50mg THC",
      "shops": [
       "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "dizgo collective|flower|3.5g|medusa",
+   "kept": {
+    "name": "Dizgo Medusa 3.5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "MEDUSA DIZGO | 3.5g",
+     "shops": [
+      "altitude-dispensary"
      ]
     }
    ],
@@ -3317,22 +3369,6 @@
    "shops_after": 6
   },
   {
-   "key": "flor|flower|3.5g|breath mendo",
-   "kept": {
-    "name": "Flor Mendo Breath 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Mendo Breath (Bulk) | 3.5g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "granny's|edible|50mg|cheddar pretzels",
    "kept": {
     "name": "Granny's Pretzels - Cheddar [50pk] (50mg)",
@@ -3359,6 +3395,22 @@
     }
    ],
    "shops_after": 8
+  },
+  {
+   "key": "flor|flower|3.5g|breath mendo",
+   "kept": {
+    "name": "Flor Mendo Breath 3.5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Mendo Breath (Bulk) | 3.5g",
+     "shops": [
+      "the-flower-shop-mn-llc"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "granny's|edible|50mg|original pretzels",
@@ -3890,19 +3942,13 @@
    },
    "absorbed": [
     {
-     "name": "Retro Bakery- Sour Apple Wheels (50mg)",
-     "shops": [
-      "winona-dispensary"
-     ]
-    },
-    {
      "name": "Sour Apple Wheels Gummies 50mg - Retro Bakery",
      "shops": [
       "flame-flora"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
   },
   {
    "key": "retro bakery|edible|50mg|berry grape very wheels",
