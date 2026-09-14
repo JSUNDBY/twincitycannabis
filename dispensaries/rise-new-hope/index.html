@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RISE Dispensary New Hope — Today&#39;s Menu &amp; Prices | New Hope, MN</title>
-<meta name="description" content="RISE Dispensary New Hope, New Hope, MN — 89 products on today&#39;s menu from $7 · every price compared with every MN dispensary, updated twice daily.">
+<meta name="description" content="RISE Dispensary New Hope, New Hope, MN — 88 products on today&#39;s menu from $7 · every price compared with every MN dispensary, updated twice daily.">
 <link rel="canonical" href="https://twincitycannabis.com/dispensaries/rise-new-hope/">
 <meta name="robots" content="max-image-preview:large">
 <meta property="og:title" content="RISE Dispensary New Hope — Today&#39;s Menu &amp; Prices | New Hope, MN">
-<meta property="og:description" content="RISE Dispensary New Hope, New Hope, MN — 89 products on today&#39;s menu from $7 · every price compared with every MN dispensary, updated twice daily.">
+<meta property="og:description" content="RISE Dispensary New Hope, New Hope, MN — 88 products on today&#39;s menu from $7 · every price compared with every MN dispensary, updated twice daily.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://twincitycannabis.com/dispensaries/rise-new-hope/">
 <meta property="og:image" content="https://twincitycannabis.com/og-image.png">
 <meta property="og:site_name" content="Twin City Cannabis">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="RISE Dispensary New Hope — Today&#39;s Menu &amp; Prices | New Hope, MN">
-<meta name="twitter:description" content="RISE Dispensary New Hope, New Hope, MN — 89 products on today&#39;s menu from $7 · every price compared with every MN dispensary, updated twice daily.">
+<meta name="twitter:description" content="RISE Dispensary New Hope, New Hope, MN — 88 products on today&#39;s menu from $7 · every price compared with every MN dispensary, updated twice daily.">
 <meta name="twitter:image" content="https://twincitycannabis.com/og-image.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/img/twin-city-cannabis-logo-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/img/twin-city-cannabis-logo-192.png">
@@ -224,7 +224,7 @@
   </div>
 </div>
 
-<p>RISE Dispensary New Hope is a cannabis dispensary in New Hope, Minnesota. Below is the current menu (89 products), with each price compared against every other dispensary in the metro. Prices update daily.</p>
+<p>RISE Dispensary New Hope is a cannabis dispensary in New Hope, Minnesota. Below is the current menu (88 products), with each price compared against every other dispensary in the metro. Prices update daily.</p>
 
 <div class="card" style="padding:.9rem 1.2rem;margin:1rem 0;border-color:rgba(234,179,8,0.4)">
   <strong style="color:#eab308">Cheapest median eighth in this area</strong> — $45 at RISE Dispensary New Hope, lowest of the 4 nearest tracked menus. <a href="/cheapest-cannabis-twin-cities/">See the statewide cheapest →</a>
@@ -234,6 +234,32 @@
 
 <a class="cta" href="/#dashboard/rise-new-hope">View interactive menu &amp; price compare →</a>
 <a class="cta" href="https://risecannabis.com/dispensaries/minnesota/new-hope/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit RISE Dispensary New Hope's website →</a>
+
+
+<div id="specials-section" data-slug="rise-new-hope" hidden>
+  <h2>Current specials at RISE Dispensary New Hope</h2>
+  <div id="specials-list"></div>
+  <p class="tcc-ad-warning tcc-ad-warning--unit">Specials are posted by the dispensary. Warning: Cannabis products are not for use by anyone under the age of 21. Cannabis use may cause drowsiness, affect focus, reaction time, and decision-making.</p>
+</div>
+<script>
+(function () {
+  var labels = { 'bogo': 'BOGO', 'percent-off': 'Percent off', 'dollar-off': 'Dollars off', 'flash': 'Flash sale', 'happy-hour': 'Happy hour', 'loyalty': 'Loyalty', 'veteran': 'Veterans', 'new-customer': 'New customer' };
+  var clean = function (s) { return String(s || '').replace(/[<>&"]/g, ''); };
+  fetch('https://dashboard.twincitycannabis.com/deals/owner?shop=' + "rise-new-hope").then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('specials-list').innerHTML = rows.map(function (x) {
+      var through = x.ends ? new Date(x.ends + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      return '<div style="padding:.6rem 0;border-bottom:1px solid var(--border,#22302a)">' +
+        '<span style="display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green-text,#4ade80);border:1px solid var(--green-dim,#16a34a);border-radius:999px;padding:.1rem .5rem;margin-right:.5rem">' + (labels[x.type] || clean(x.type)) + '</span>' +
+        '<strong>' + clean(x.title) + '</strong>' +
+        (x.details ? '<div style="font-size:.88rem;color:var(--text-secondary,#cdd2d8);margin-top:.2rem">' + clean(x.details) + '</div>' : '') +
+        (through ? '<div style="font-size:.78rem;color:var(--text-muted,#8b909a);margin-top:.15rem">Through ' + through + '</div>' : '') +
+        '</div>';
+    }).join('');
+    document.getElementById('specials-section').hidden = false;
+  }).catch(function () {});
+})();
+</script>
 
 
 <div id="checkins-section" data-slug="rise-new-hope">
@@ -439,7 +465,7 @@
     <td style="text-align:right">$18.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/j0188">Tropical Gummies [10pk] (50mg)</a></td>
+    <td style="display:flex;align-items:center"><a href="/products/edible/tropical-gummies-10pk-50mg/">Tropical Gummies [10pk] (50mg)</a></td>
     <td>BLNCD</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
@@ -501,7 +527,7 @@
 </tbody>
 </table>
 
-<h3>Flower (64)</h3>
+<h3>Flower (63)</h3>
 <table>
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at RISE Dispensary New Hope</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
@@ -536,7 +562,7 @@
     <td style="text-align:right">$40.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/654/714/103/440492230_3acc005a-3be2-44ad-afde-40c6c39b4842.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/products/flower/evercrisp/">Evercrisp</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/654/714/103/440492230_3acc005a-3be2-44ad-afde-40c6c39b4842.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/products/flower/evercrisp-2/">Evercrisp</a></td>
     <td>Good Green</td>
     <td style="text-align:right" class="price">$40.00 ✓</td>
     <td style="text-align:right">$40.00</td>
@@ -584,7 +610,7 @@
     <td style="text-align:right">$40.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/654/714/103/440492230_3acc005a-3be2-44ad-afde-40c6c39b4842.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/products/flower/evercrisp-2/">Evercrisp</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/654/714/103/440492230_3acc005a-3be2-44ad-afde-40c6c39b4842.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/products/flower/evercrisp/">Evercrisp</a></td>
     <td>Good Green</td>
     <td style="text-align:right" class="price">$40.00 ✓</td>
     <td style="text-align:right">$40.00</td>

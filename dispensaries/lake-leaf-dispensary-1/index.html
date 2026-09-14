@@ -227,13 +227,39 @@
 <p>Lake Leaf Dispensary is a cannabis dispensary in Isle, Minnesota. Below is the current menu (23 products), with each price compared against every other dispensary in the metro. Prices update daily.</p>
 
 <div class="card" style="padding:.9rem 1.2rem;margin:1rem 0;border-color:rgba(34,197,94,0.3)">
-  <strong>Median eighth here: $55</strong> · $45 at <a href="/dispensaries/rise-baxter/">RISE Dispensary Baxter</a> (40 mi) — <a href="/cheapest-cannabis-twin-cities/">compare across every shop →</a>
-</div><p style="font-size:.92rem;color:var(--text-muted,#8b909a);margin:.6rem 0 1.2rem">Also nearby: <a href="/dispensaries/lake-leaf-dispensary/">Lake Leaf Dispensary</a> (15 mi · eighths ~$48) · <a href="/dispensaries/lake-leaf-cultivation-1/">Lake Leaf Dispensary</a> (26 mi · eighths ~$48) · <a href="/dispensaries/rise-baxter/">RISE Dispensary Baxter</a> (40 mi · eighths ~$45)</p>
+  <strong>Median eighth here: $55</strong> · $48 at <a href="/dispensaries/lake-leaf-dispensary/">Lake Leaf Dispensary</a> (15 mi) — <a href="/cheapest-cannabis-twin-cities/">compare across every shop →</a>
+</div><p style="font-size:.92rem;color:var(--text-muted,#8b909a);margin:.6rem 0 1.2rem">Also nearby: <a href="/dispensaries/lake-leaf-dispensary/">Lake Leaf Dispensary</a> (15 mi · eighths ~$48) · <a href="/dispensaries/lake-leaf-cultivation-1/">Lake Leaf Dispensary</a> (26 mi · eighths ~$48) · <a href="/dispensaries/rise-baxter/">RISE Dispensary Baxter</a> (40 mi · eighths ~$50)</p>
 
 
 
 <a class="cta" href="/#dashboard/lake-leaf-dispensary-1">View interactive menu &amp; price compare →</a>
 <a class="cta" href="https://lakeleafretail.com/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit Lake Leaf Dispensary's website →</a>
+
+
+<div id="specials-section" data-slug="lake-leaf-dispensary-1" hidden>
+  <h2>Current specials at Lake Leaf Dispensary</h2>
+  <div id="specials-list"></div>
+  <p class="tcc-ad-warning tcc-ad-warning--unit">Specials are posted by the dispensary. Warning: Cannabis products are not for use by anyone under the age of 21. Cannabis use may cause drowsiness, affect focus, reaction time, and decision-making.</p>
+</div>
+<script>
+(function () {
+  var labels = { 'bogo': 'BOGO', 'percent-off': 'Percent off', 'dollar-off': 'Dollars off', 'flash': 'Flash sale', 'happy-hour': 'Happy hour', 'loyalty': 'Loyalty', 'veteran': 'Veterans', 'new-customer': 'New customer' };
+  var clean = function (s) { return String(s || '').replace(/[<>&"]/g, ''); };
+  fetch('https://dashboard.twincitycannabis.com/deals/owner?shop=' + "lake-leaf-dispensary-1").then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('specials-list').innerHTML = rows.map(function (x) {
+      var through = x.ends ? new Date(x.ends + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      return '<div style="padding:.6rem 0;border-bottom:1px solid var(--border,#22302a)">' +
+        '<span style="display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green-text,#4ade80);border:1px solid var(--green-dim,#16a34a);border-radius:999px;padding:.1rem .5rem;margin-right:.5rem">' + (labels[x.type] || clean(x.type)) + '</span>' +
+        '<strong>' + clean(x.title) + '</strong>' +
+        (x.details ? '<div style="font-size:.88rem;color:var(--text-secondary,#cdd2d8);margin-top:.2rem">' + clean(x.details) + '</div>' : '') +
+        (through ? '<div style="font-size:.78rem;color:var(--text-muted,#8b909a);margin-top:.15rem">Through ' + through + '</div>' : '') +
+        '</div>';
+    }).join('');
+    document.getElementById('specials-section').hidden = false;
+  }).catch(function () {});
+})();
+</script>
 
 
 <div id="checkins-section" data-slug="lake-leaf-dispensary-1">

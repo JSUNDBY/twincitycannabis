@@ -236,6 +236,32 @@
 <a class="cta" href="https://visitgreengoods.com/locations/blaine-mn/?utm_source=google-gmb&amp;utm_medium=organic&amp;utm_campaign=blaine" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit Green Goods Blaine's website →</a>
 
 
+<div id="specials-section" data-slug="green-goods-blaine" hidden>
+  <h2>Current specials at Green Goods Blaine</h2>
+  <div id="specials-list"></div>
+  <p class="tcc-ad-warning tcc-ad-warning--unit">Specials are posted by the dispensary. Warning: Cannabis products are not for use by anyone under the age of 21. Cannabis use may cause drowsiness, affect focus, reaction time, and decision-making.</p>
+</div>
+<script>
+(function () {
+  var labels = { 'bogo': 'BOGO', 'percent-off': 'Percent off', 'dollar-off': 'Dollars off', 'flash': 'Flash sale', 'happy-hour': 'Happy hour', 'loyalty': 'Loyalty', 'veteran': 'Veterans', 'new-customer': 'New customer' };
+  var clean = function (s) { return String(s || '').replace(/[<>&"]/g, ''); };
+  fetch('https://dashboard.twincitycannabis.com/deals/owner?shop=' + "green-goods-blaine").then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('specials-list').innerHTML = rows.map(function (x) {
+      var through = x.ends ? new Date(x.ends + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      return '<div style="padding:.6rem 0;border-bottom:1px solid var(--border,#22302a)">' +
+        '<span style="display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green-text,#4ade80);border:1px solid var(--green-dim,#16a34a);border-radius:999px;padding:.1rem .5rem;margin-right:.5rem">' + (labels[x.type] || clean(x.type)) + '</span>' +
+        '<strong>' + clean(x.title) + '</strong>' +
+        (x.details ? '<div style="font-size:.88rem;color:var(--text-secondary,#cdd2d8);margin-top:.2rem">' + clean(x.details) + '</div>' : '') +
+        (through ? '<div style="font-size:.78rem;color:var(--text-muted,#8b909a);margin-top:.15rem">Through ' + through + '</div>' : '') +
+        '</div>';
+    }).join('');
+    document.getElementById('specials-section').hidden = false;
+  }).catch(function () {});
+})();
+</script>
+
+
 <div id="checkins-section" data-slug="green-goods-blaine">
   <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
   <div id="checkins-list"></div>
@@ -243,7 +269,7 @@
   <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
   <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
     <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <datalist id="checkin-products"><option value="250mg Blackberry CBD Gummies"><option value="250mg Raspberry CBD Gummies"><option value="Sour Strawberry Lemonade [10pk]"><option value="200mg Peach CBD:CBC Gummies"><option value="200mg Pear CBD:CBG Gummies"><option value="250mg Elderberry CBD:CBN Gummies"><option value="Fruit Punch [10pk] (100mg)"><option value="Crunch Berriez"><option value="Indigo Oral Solution [25ml]"><option value="Fantasy Melonz"><option value="1000mg Raspberry CBD Gummies"><option value="Garlic Budder"><option value="Hellcat #15"><option value="Jack&#39;s Delight"><option value="Jet Fuel OG"><option value="Glitter Bomb"><option value="1000mg Blackberry CBD Gummies"><option value="1000mg Lemon CBD Gummies"><option value="Duct Tape"><option value="PAVE"><option value="Chile Azul"><option value="Frozen Bag"><option value="Blueberry Sugar"><option value="Grape Mochi"><option value="Rain Drops"><option value="Super Boof"><option value="OMG"><option value="Violet Oral Solution [25ml]"><option value="Violet Tincture [25ml]"><option value="Yellow Oral Solution [25ml]"><option value="1000mg Elderberry CBD:CBN Gummies"><option value="800mg Pear CBD:CBG Gummies"><option value="800mg Peach CBD:CBC Gummies"><option value="Bananaconda"><option value="Black Maple"><option value="Durban Dream"><option value="Flap Jacks"><option value="Garlic Death"><option value="Ice Cream Cake"><option value="Blue Dream"><option value="Cherry Paloma"><option value="Fried Ice Cream"><option value="GMO Punch"><option value="Yellow Tincture [25ml]"><option value="Afternoon Delight"><option value="Animal Scout"><option value="MAC1"><option value="Green Oral Solution [25ml]"></datalist>
+    <datalist id="checkin-products"><option value="250mg Blackberry CBD Gummies"><option value="250mg Raspberry CBD Gummies"><option value="Sour Strawberry Lemonade [10pk]"><option value="200mg Peach CBD:CBC Gummies"><option value="200mg Pear CBD:CBG Gummies"><option value="250mg Elderberry CBD:CBN Gummies"><option value="Fruit Punch [10pk] (100mg)"><option value="Crunch Berriez"><option value="Indigo Oral Solution [25ml]"><option value="Fantasy Melonz"><option value="1000mg Raspberry CBD Gummies"><option value="Garlic Budder"><option value="Hellcat #15"><option value="Jack&#39;s Delight"><option value="Jet Fuel OG"><option value="1000mg Blackberry CBD Gummies"><option value="1000mg Lemon CBD Gummies"><option value="Duct Tape"><option value="PAVE"><option value="Chile Azul"><option value="Frozen Bag"><option value="Blueberry Sugar"><option value="Grape Mochi"><option value="Rain Drops"><option value="Super Boof"><option value="OMG"><option value="Garlic Death"><option value="Violet Oral Solution [25ml]"><option value="Violet Tincture [25ml]"><option value="Yellow Oral Solution [25ml]"><option value="1000mg Elderberry CBD:CBN Gummies"><option value="800mg Pear CBD:CBG Gummies"><option value="800mg Peach CBD:CBC Gummies"><option value="Bananaconda"><option value="Black Maple"><option value="Durban Dream"><option value="Flap Jacks"><option value="Ice Cream Cake"><option value="Blue Dream"><option value="Cherry Paloma"><option value="Fried Ice Cream"><option value="GMO Punch"><option value="Yellow Tincture [25ml]"><option value="Afternoon Delight"><option value="Animal Scout"><option value="MAC1"><option value="Green Oral Solution [25ml]"></datalist>
     <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
     <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
     <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
@@ -470,12 +496,6 @@
     <td style="text-align:right">$40.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://uploads.iheartjane.com/cdn-cgi/image/width=174,fit=scale-down,format=auto,metadata=none/uploads/1551cdfa-45c9-4813-9b48-22cc3f5a4320.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/j0128">Glitter Bomb</a></td>
-    <td>Vireo</td>
-    <td style="text-align:right" class="price">$40.00 ✓</td>
-    <td style="text-align:right">$40.00</td>
-  </tr>
-<tr>
     <td style="display:flex;align-items:center"><img src="https://uploads.iheartjane.com/cdn-cgi/image/width=174,fit=scale-down,format=auto,metadata=none/uploads/33e56a5f-82b6-4f0c-a299-75e2c57a8007.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/j0149">Duct Tape</a></td>
     <td>Vireo</td>
     <td style="text-align:right" class="price">$40.00 ✓</td>
@@ -528,6 +548,12 @@
     <td>Good Green</td>
     <td style="text-align:right" class="price">$41.89</td>
     <td style="text-align:right">$40.00</td>
+  </tr>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://uploads.iheartjane.com/cdn-cgi/image/width=174,fit=scale-down,format=auto,metadata=none/uploads/56c6c956-fade-44f7-9620-b2bd5bed7b9b.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/j0115">Garlic Death | 3.5g</a></td>
+    <td>Vireo</td>
+    <td style="text-align:right" class="price">$41.89 ✓</td>
+    <td style="text-align:right">$41.89</td>
   </tr>
 <tr>
     <td style="display:flex;align-items:center"><img src="https://uploads.iheartjane.com/cdn-cgi/image/width=174,fit=scale-down,format=auto,metadata=none/uploads/f09c3b6a-6f52-4e67-b30b-bb640a393825.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/products/flower/bananaconda/">Bananaconda</a></td>

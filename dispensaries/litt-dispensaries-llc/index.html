@@ -236,6 +236,32 @@
 <a class="cta" href="http://www.littdispensaries.com/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit Litt Dispensaries LLC's website →</a>
 
 
+<div id="specials-section" data-slug="litt-dispensaries-llc" hidden>
+  <h2>Current specials at Litt Dispensaries LLC</h2>
+  <div id="specials-list"></div>
+  <p class="tcc-ad-warning tcc-ad-warning--unit">Specials are posted by the dispensary. Warning: Cannabis products are not for use by anyone under the age of 21. Cannabis use may cause drowsiness, affect focus, reaction time, and decision-making.</p>
+</div>
+<script>
+(function () {
+  var labels = { 'bogo': 'BOGO', 'percent-off': 'Percent off', 'dollar-off': 'Dollars off', 'flash': 'Flash sale', 'happy-hour': 'Happy hour', 'loyalty': 'Loyalty', 'veteran': 'Veterans', 'new-customer': 'New customer' };
+  var clean = function (s) { return String(s || '').replace(/[<>&"]/g, ''); };
+  fetch('https://dashboard.twincitycannabis.com/deals/owner?shop=' + "litt-dispensaries-llc").then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('specials-list').innerHTML = rows.map(function (x) {
+      var through = x.ends ? new Date(x.ends + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      return '<div style="padding:.6rem 0;border-bottom:1px solid var(--border,#22302a)">' +
+        '<span style="display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green-text,#4ade80);border:1px solid var(--green-dim,#16a34a);border-radius:999px;padding:.1rem .5rem;margin-right:.5rem">' + (labels[x.type] || clean(x.type)) + '</span>' +
+        '<strong>' + clean(x.title) + '</strong>' +
+        (x.details ? '<div style="font-size:.88rem;color:var(--text-secondary,#cdd2d8);margin-top:.2rem">' + clean(x.details) + '</div>' : '') +
+        (through ? '<div style="font-size:.78rem;color:var(--text-muted,#8b909a);margin-top:.15rem">Through ' + through + '</div>' : '') +
+        '</div>';
+    }).join('');
+    document.getElementById('specials-section').hidden = false;
+  }).catch(function () {});
+})();
+</script>
+
+
 <div id="checkins-section" data-slug="litt-dispensaries-llc">
   <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
   <div id="checkins-list"></div>
@@ -342,91 +368,91 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Litt Dispensaries LLC</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1332">Flor - Diamond Dust - Single 0.35g Preroll</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1330">Flor - Diamond Dust - Single 0.35g Preroll</a></td>
     <td>Flor</td>
     <td style="text-align:right" class="price">$10.00 ✓</td>
     <td style="text-align:right">$10.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/443486878_420default-Preroll.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1337">Flor - Fog Dog - Single 0.35g Preroll</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/443486878_420default-Preroll.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1335">Flor - Fog Dog - Single 0.35g Preroll</a></td>
     <td>Flor</td>
     <td style="text-align:right" class="price">$10.00 ✓</td>
     <td style="text-align:right">$10.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1344">Flor - Turtle Taffy - Single 0.35g Preroll</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1342">Flor - Turtle Taffy - Single 0.35g Preroll</a></td>
     <td>Flor</td>
     <td style="text-align:right" class="price">$10.00 ✓</td>
     <td style="text-align:right">$10.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1333">Flor - Fish Fry - Infused Single 0.35g Preroll</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1331">Flor - Fish Fry - Infused Single 0.35g Preroll</a></td>
     <td>Flor</td>
     <td style="text-align:right" class="price">$12.00 ✓</td>
     <td style="text-align:right">$12.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/100/007/289/4/444241510_dizgo-medusa-4f2c7028-23f7-4dff-9f5d-bdf150ae498c.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1154">Dizgo - Hyperion Preroll (2) 0.5g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/100/007/289/4/444241510_dizgo-medusa-4f2c7028-23f7-4dff-9f5d-bdf150ae498c.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1153">Dizgo - Hyperion Preroll (2) 0.5g</a></td>
     <td>Dizgo</td>
     <td style="text-align:right" class="price">$14.00 ✓</td>
     <td style="text-align:right">$14.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444646744_download-845337aa-2aaa-4bbb-a511-ac0ff857f83d.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1155">Dizgo - Hyperion Preroll (3) 0.33g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444646744_download-845337aa-2aaa-4bbb-a511-ac0ff857f83d.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1154">Dizgo - Hyperion Preroll (3) 0.33g</a></td>
     <td>Dizgo</td>
     <td style="text-align:right" class="price">$16.00 ✓</td>
     <td style="text-align:right">$16.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444646745_download-78760efe-cfff-40c0-affb-fa54b552c3ad.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1156">Dizgo - Purple Lemonade Preroll (3) 0.33g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444646745_download-78760efe-cfff-40c0-affb-fa54b552c3ad.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1155">Dizgo - Purple Lemonade Preroll (3) 0.33g</a></td>
     <td>Dizgo</td>
     <td style="text-align:right" class="price">$16.00 ✓</td>
     <td style="text-align:right">$16.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/438/020/443507461_avion_prerolls.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0692">Avion - 1g Preroll - Alien Lights</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/438/020/443507461_avion_prerolls.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0691">Avion - 1g Preroll - Alien Lights</a></td>
     <td>Avion</td>
     <td style="text-align:right" class="price">$18.00 ✓</td>
     <td style="text-align:right">$18.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/438/020/443507461_avion_prerolls.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0693">Avion - 1g Preroll - Mendo Breath</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/438/020/443507461_avion_prerolls.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0692">Avion - 1g Preroll - Mendo Breath</a></td>
     <td>Avion</td>
     <td style="text-align:right" class="price">$18.00 ✓</td>
     <td style="text-align:right">$18.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/443486878_420default-Preroll.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1334">Flor - Fog Dog - (2) 0.35g Prerolls</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/443486878_420default-Preroll.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1332">Flor - Fog Dog - (2) 0.35g Prerolls</a></td>
     <td>Flor</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/443486878_420default-Preroll.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1335">Flor - Fog Dog - 1g Preroll</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/443486878_420default-Preroll.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1333">Flor - Fog Dog - 1g Preroll</a></td>
     <td>Flor</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1338">Flor - Garlic Jam - 1g Preroll</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1336">Flor - Garlic Jam - 1g Preroll</a></td>
     <td>Flor</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1341">Flor - Pilot Light - (2) 0.35g Prerolls</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1339">Flor - Pilot Light - (2) 0.35g Prerolls</a></td>
     <td>Flor</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1342">Flor - Pilot Light - 1g Preroll</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1340">Flor - Pilot Light - 1g Preroll</a></td>
     <td>Flor</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444619098_download-202077a1-f3e0-453e-a6f0-363ead82b6d2.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1906">Looner - Mendo Breath - 1g Preroll</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444619098_download-202077a1-f3e0-453e-a6f0-363ead82b6d2.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1905">Looner - Mendo Breath - 1g Preroll</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
@@ -463,7 +489,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Litt Dispensaries LLC</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/500/064/avatar/1786632393-sour_cherry_50mg.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2670">Sour Cherry Indica Enhanced Delta-9 Gummies | 25mg | 5ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/500/064/avatar/1786632393-sour_cherry_50mg.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2669">Sour Cherry Indica Enhanced Delta-9 Gummies | 25mg | 5ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>WYLD</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
@@ -517,25 +543,25 @@
     <td style="text-align:right">$17.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/443487400_ol-skool-7f394012-cc53-4cc3-bfb0-1e8d5a5c0ed7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2242">Ol&#39; Skool Edibles - Blue Raspberry Jolly Drops 5mg</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/443487400_ol-skool-7f394012-cc53-4cc3-bfb0-1e8d5a5c0ed7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2241">Ol&#39; Skool Edibles - Blue Raspberry Jolly Drops 5mg</a></td>
     <td>Ol&#39; Skool</td>
     <td style="text-align:right" class="price">$30.00 ✓</td>
     <td style="text-align:right">$30.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/443487399_ol-skool-cce908a9-365a-4d15-bf38-5cf9df84ed35.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2244">Ol&#39; Skool Edibles - Passion Fruit Jolly Drops 5mg</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/443487399_ol-skool-cce908a9-365a-4d15-bf38-5cf9df84ed35.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2243">Ol&#39; Skool Edibles - Passion Fruit Jolly Drops 5mg</a></td>
     <td>Ol&#39; Skool</td>
     <td style="text-align:right" class="price">$30.00 ✓</td>
     <td style="text-align:right">$30.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/443487400_ol-skool-7f394012-cc53-4cc3-bfb0-1e8d5a5c0ed7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2246">Ol&#39; Skool Edibles - Peach Jolly Drops 5mg</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/443487400_ol-skool-7f394012-cc53-4cc3-bfb0-1e8d5a5c0ed7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2245">Ol&#39; Skool Edibles - Peach Jolly Drops 5mg</a></td>
     <td>Ol&#39; Skool</td>
     <td style="text-align:right" class="price">$30.00 ✓</td>
     <td style="text-align:right">$30.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/443487400_ol-skool-7f394012-cc53-4cc3-bfb0-1e8d5a5c0ed7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2248">Ol&#39; Skool Edibles - Pineapple Jolly Drops 5mg</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/443487400_ol-skool-7f394012-cc53-4cc3-bfb0-1e8d5a5c0ed7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2247">Ol&#39; Skool Edibles - Pineapple Jolly Drops 5mg</a></td>
     <td>Ol&#39; Skool</td>
     <td style="text-align:right" class="price">$30.00 ✓</td>
     <td style="text-align:right">$30.00</td>
@@ -548,19 +574,19 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Litt Dispensaries LLC</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444619767_download-21bae3e6-7615-4101-84a9-ba986725241e.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1336">Flor - Fog Dog - 3.5g Packaged Buds</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444619767_download-21bae3e6-7615-4101-84a9-ba986725241e.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1334">Flor - Fog Dog - 3.5g Packaged Buds</a></td>
     <td>Flor</td>
     <td style="text-align:right" class="price">$49.00 ✓</td>
     <td style="text-align:right">$49.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444619768_download-7e5601b9-2d80-49b5-a120-6c216f44176c.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1339">Flor - Mendo Breath - 3.5g Packaged Buds</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444619768_download-7e5601b9-2d80-49b5-a120-6c216f44176c.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1337">Flor - Mendo Breath - 3.5g Packaged Buds</a></td>
     <td>Flor</td>
     <td style="text-align:right" class="price">$49.00 ✓</td>
     <td style="text-align:right">$49.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/528/667/avatar/1781593960-443251235_screenshot-2026-05-13-111703-53ea550e-ea59-481f-aa88-e1ad514eba24.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0303">Gucci Fruit | 3.5g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/528/667/avatar/1781593960-443251235_screenshot-2026-05-13-111703-53ea550e-ea59-481f-aa88-e1ad514eba24.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0302">Gucci Fruit | 3.5g</a></td>
     <td>Gucci Fruit</td>
     <td style="text-align:right" class="price">$52.00</td>
     <td style="text-align:right">$49.00</td>
@@ -590,25 +616,25 @@
     <td style="text-align:right">$53.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444646633_download-0232da5a-88f0-4330-bad0-76ea9da3ca7d.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2133">Mischief - Froot by the Foot - 3.5g Packaged Buds</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444646633_download-0232da5a-88f0-4330-bad0-76ea9da3ca7d.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2132">Mischief - Froot by the Foot - 3.5g Packaged Buds</a></td>
     <td>Mischief</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444619834_download-e4767b91-4c36-455d-a038-fbf2c941f5c9.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2209">Northpark - Fog Dog - 3.5g Packaged Buds</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444619834_download-e4767b91-4c36-455d-a038-fbf2c941f5c9.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2208">Northpark - Fog Dog - 3.5g Packaged Buds</a></td>
     <td>Northpark</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444619731_download-a37cdf2b-f9ef-465f-974e-b9a67fa6c2fd.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1075">Classified Crops - Sigma 7 - 3.5g Packaged Buds</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444619731_download-a37cdf2b-f9ef-465f-974e-b9a67fa6c2fd.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1074">Classified Crops - Sigma 7 - 3.5g Packaged Buds</a></td>
     <td>Classified Crops</td>
     <td style="text-align:right" class="price">$62.00 ✓</td>
     <td style="text-align:right">$62.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444619769_download-77b8a10a-912a-4b7b-881d-d434508ad441.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1340">Flor - Mendo Breath - 7g Packaged Buds</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444619769_download-77b8a10a-912a-4b7b-881d-d434508ad441.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1338">Flor - Mendo Breath - 7g Packaged Buds</a></td>
     <td>Flor</td>
     <td style="text-align:right" class="price">$90.00 ✓</td>
     <td style="text-align:right">$90.00</td>
@@ -621,7 +647,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Litt Dispensaries LLC</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444619642_Oma-All-In-One-9f7ee090-965e-40d7-b284-f22878504a91-72c02e85-32d9-4b35-8fe7-34415d6f734b.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2261">Oma - Jack Herer - 1g Disposable</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/230/869/131/444619642_Oma-All-In-One-9f7ee090-965e-40d7-b284-f22878504a91-72c02e85-32d9-4b35-8fe7-34415d6f734b.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2260">Oma - Jack Herer - 1g Disposable</a></td>
     <td>Oma</td>
     <td style="text-align:right" class="price">$84.00 ✓</td>
     <td style="text-align:right">$84.00</td>
@@ -633,7 +659,7 @@
     <td style="text-align:right">$107.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1343">Flor - Potluck Resin - 1g Cartridge</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1341">Flor - Potluck Resin - 1g Cartridge</a></td>
     <td>Flor</td>
     <td style="text-align:right" class="price">$120.00 ✓</td>
     <td style="text-align:right">$120.00</td>

@@ -236,6 +236,32 @@
 
 
 
+<div id="specials-section" data-slug="watchtower-dispensary" hidden>
+  <h2>Current specials at Watchtower Dispensary</h2>
+  <div id="specials-list"></div>
+  <p class="tcc-ad-warning tcc-ad-warning--unit">Specials are posted by the dispensary. Warning: Cannabis products are not for use by anyone under the age of 21. Cannabis use may cause drowsiness, affect focus, reaction time, and decision-making.</p>
+</div>
+<script>
+(function () {
+  var labels = { 'bogo': 'BOGO', 'percent-off': 'Percent off', 'dollar-off': 'Dollars off', 'flash': 'Flash sale', 'happy-hour': 'Happy hour', 'loyalty': 'Loyalty', 'veteran': 'Veterans', 'new-customer': 'New customer' };
+  var clean = function (s) { return String(s || '').replace(/[<>&"]/g, ''); };
+  fetch('https://dashboard.twincitycannabis.com/deals/owner?shop=' + "watchtower-dispensary").then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('specials-list').innerHTML = rows.map(function (x) {
+      var through = x.ends ? new Date(x.ends + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      return '<div style="padding:.6rem 0;border-bottom:1px solid var(--border,#22302a)">' +
+        '<span style="display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green-text,#4ade80);border:1px solid var(--green-dim,#16a34a);border-radius:999px;padding:.1rem .5rem;margin-right:.5rem">' + (labels[x.type] || clean(x.type)) + '</span>' +
+        '<strong>' + clean(x.title) + '</strong>' +
+        (x.details ? '<div style="font-size:.88rem;color:var(--text-secondary,#cdd2d8);margin-top:.2rem">' + clean(x.details) + '</div>' : '') +
+        (through ? '<div style="font-size:.78rem;color:var(--text-muted,#8b909a);margin-top:.15rem">Through ' + through + '</div>' : '') +
+        '</div>';
+    }).join('');
+    document.getElementById('specials-section').hidden = false;
+  }).catch(function () {});
+})();
+</script>
+
+
 <div id="checkins-section" data-slug="watchtower-dispensary">
   <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
   <div id="checkins-list"></div>
@@ -342,13 +368,13 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Watchtower Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444678140_Diamond_Dust_.35g_Pre_Roll.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1146">Diamon Dust Pre-Roll | FLÖR | 0.35 g | 1 ct</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444678140_Diamond_Dust_.35g_Pre_Roll.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1145">Diamon Dust Pre-Roll | FLÖR | 0.35 g | 1 ct</a></td>
     <td>Diamon Dust Pre-Roll</td>
     <td style="text-align:right" class="price">$8.06 ✓</td>
     <td style="text-align:right">$8.06</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444679624_Government_Oranges_Alpha_1g_Pre_Roll.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1514">Government Oranges Alpha Pre-Roll | FLÖR | 1g | 1 ct</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444679624_Government_Oranges_Alpha_1g_Pre_Roll.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1512">Government Oranges Alpha Pre-Roll | FLÖR | 1g | 1 ct</a></td>
     <td>Government Oranges Alpha Pre-Roll</td>
     <td style="text-align:right" class="price">$12.09 ✓</td>
     <td style="text-align:right">$12.09</td>
@@ -361,7 +387,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Watchtower Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444620543_Grease_Gun_3.5g.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1580">Grease Gun | Wright Way Farms | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444620543_Grease_Gun_3.5g.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1578">Grease Gun | Wright Way Farms | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Grease Gun</td>
     <td style="text-align:right" class="price">$44.35 ✓</td>
     <td style="text-align:right">$44.35</td>
@@ -373,25 +399,25 @@
     <td style="text-align:right">$44.35</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444155726_Face_Fat_3.5g.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1307">Face Fat | Wright Way Farms | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444155726_Face_Fat_3.5g.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1305">Face Fat | Wright Way Farms | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Face Fat</td>
     <td style="text-align:right" class="price">$48.38 ✓</td>
     <td style="text-align:right">$48.38</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444156048_Garlic_Jam_3.5g.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1490">Garlic Jam | Wright Way Farms | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444156048_Garlic_Jam_3.5g.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1488">Garlic Jam | Wright Way Farms | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Garlic Jam</td>
     <td style="text-align:right" class="price">$48.38 ✓</td>
     <td style="text-align:right">$48.38</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444435355_Mendo_Breath_3.5g.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2055">Mendo Breath | FLÖR | 3.5g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444435355_Mendo_Breath_3.5g.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2054">Mendo Breath | FLÖR | 3.5g</a></td>
     <td>Mendo Breath</td>
     <td style="text-align:right" class="price">$48.38 ✓</td>
     <td style="text-align:right">$48.38</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444155939_Froot_by_the_Foot_7g.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1449">Froot by the Foot | Wright Way Farms | 7g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444155939_Froot_by_the_Foot_7g.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1447">Froot by the Foot | Wright Way Farms | 7g</a></td>
     <td>Froot by the Foot</td>
     <td style="text-align:right" class="price">$80.63 ✓</td>
     <td style="text-align:right">$80.63</td>
@@ -404,19 +430,19 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Watchtower Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444620588_Hotdish_Resin_Cart.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1698">Hotdish Resin Cartridge | FLÖR | 1g | 1ct</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444620588_Hotdish_Resin_Cart.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1696">Hotdish Resin Cartridge | FLÖR | 1g | 1ct</a></td>
     <td>Hotdish Resin Cartridge</td>
     <td style="text-align:right" class="price">$76.60 ✓</td>
     <td style="text-align:right">$76.60</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444620635_Potluck_Resin_Cart.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2376">Potluck Resin Cartridge | FLÖR | 1g | 1ct</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444620635_Potluck_Resin_Cart.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2375">Potluck Resin Cartridge | FLÖR | 1g | 1ct</a></td>
     <td>Potluck Resin Cartridge</td>
     <td style="text-align:right" class="price">$76.60 ✓</td>
     <td style="text-align:right">$76.60</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444678436_Face_Fat_Resin_Cartridge.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1305">Face Fat Resin Cartridge | FLÖR | 1g | 1 ct</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/739/567/444678436_Face_Fat_Resin_Cartridge.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1303">Face Fat Resin Cartridge | FLÖR | 1g | 1 ct</a></td>
     <td>Face Fat Resin Cartridge</td>
     <td style="text-align:right" class="price">$80.63 ✓</td>
     <td style="text-align:right">$80.63</td>

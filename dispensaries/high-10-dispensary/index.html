@@ -236,6 +236,32 @@
 <a class="cta" href="https://ramseydispensary.com/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit High 10 Dispensary's website →</a>
 
 
+<div id="specials-section" data-slug="high-10-dispensary" hidden>
+  <h2>Current specials at High 10 Dispensary</h2>
+  <div id="specials-list"></div>
+  <p class="tcc-ad-warning tcc-ad-warning--unit">Specials are posted by the dispensary. Warning: Cannabis products are not for use by anyone under the age of 21. Cannabis use may cause drowsiness, affect focus, reaction time, and decision-making.</p>
+</div>
+<script>
+(function () {
+  var labels = { 'bogo': 'BOGO', 'percent-off': 'Percent off', 'dollar-off': 'Dollars off', 'flash': 'Flash sale', 'happy-hour': 'Happy hour', 'loyalty': 'Loyalty', 'veteran': 'Veterans', 'new-customer': 'New customer' };
+  var clean = function (s) { return String(s || '').replace(/[<>&"]/g, ''); };
+  fetch('https://dashboard.twincitycannabis.com/deals/owner?shop=' + "high-10-dispensary").then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('specials-list').innerHTML = rows.map(function (x) {
+      var through = x.ends ? new Date(x.ends + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      return '<div style="padding:.6rem 0;border-bottom:1px solid var(--border,#22302a)">' +
+        '<span style="display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green-text,#4ade80);border:1px solid var(--green-dim,#16a34a);border-radius:999px;padding:.1rem .5rem;margin-right:.5rem">' + (labels[x.type] || clean(x.type)) + '</span>' +
+        '<strong>' + clean(x.title) + '</strong>' +
+        (x.details ? '<div style="font-size:.88rem;color:var(--text-secondary,#cdd2d8);margin-top:.2rem">' + clean(x.details) + '</div>' : '') +
+        (through ? '<div style="font-size:.78rem;color:var(--text-muted,#8b909a);margin-top:.15rem">Through ' + through + '</div>' : '') +
+        '</div>';
+    }).join('');
+    document.getElementById('specials-section').hidden = false;
+  }).catch(function () {});
+})();
+</script>
+
+
 <div id="checkins-section" data-slug="high-10-dispensary">
   <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
   <div id="checkins-list"></div>
@@ -342,97 +368,97 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at High 10 Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/a065af99be99c15eed8475bcb1193cf2" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0399">Looner | Beverage | The Dew | 10mg | Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/a065af99be99c15eed8475bcb1193cf2" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0400">Looner | Beverage | The Dew | 10mg | Single Can</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/bfb2d0d823328412ec0ac4d0a28d950b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0409">Looner | Beverage | Wild Grape | 10mg | Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/bfb2d0d823328412ec0ac4d0a28d950b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0410">Looner | Beverage | Wild Grape | 10mg | Single Can</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/09544b50a8e73059199896c90923fd15" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0410">Looner | Beverage | Sweet Orange | 10mg | Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/09544b50a8e73059199896c90923fd15" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0411">Looner | Beverage | Sweet Orange | 10mg | Single Can</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/a934f747bf12398141e7eafce22dc47d" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0411">Looner | Beverage | Professor Pepper | 10mg | Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/a934f747bf12398141e7eafce22dc47d" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0412">Looner | Beverage | Professor Pepper | 10mg | Single Can</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/b43d43ea394222d5a971c9529e696817" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0412">Looner | Beverage | Pink Lemonade | 10mg | Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/b43d43ea394222d5a971c9529e696817" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0413">Looner | Beverage | Pink Lemonade | 10mg | Single Can</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/cc8c3a73573b7d1f7ba1daceee2d86af" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0413">Looner | Beverage | Diet Root Beer | 10mg | Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/cc8c3a73573b7d1f7ba1daceee2d86af" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0414">Looner | Beverage | Diet Root Beer | 10mg | Single Can</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/4adaf45dd9da5431c024e82cb0fb3762" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0414">Looner | Beverage | Diet Professor Pepper | 10mg | Single Can (Copy)</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/4adaf45dd9da5431c024e82cb0fb3762" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0415">Looner | Beverage | Diet Professor Pepper | 10mg | Single Can (Copy)</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/a3415cd1f7d35e47062b81b0de0a8e90" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0415">Looner | Beverage | Diet Cola | 10mg | Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/a3415cd1f7d35e47062b81b0de0a8e90" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0416">Looner | Beverage | Diet Cola | 10mg | Single Can</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/216a5d6c0d613e045f265b4a2a4b623a" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0416">Looner | Beverage | Cola | 10mg | Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/216a5d6c0d613e045f265b4a2a4b623a" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0417">Looner | Beverage | Cola | 10mg | Single Can</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/aa2566c4d8760d459fe125be6ee0eb32" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0417">Looner | Beverage | Classic Lemonade | 10mg | Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/aa2566c4d8760d459fe125be6ee0eb32" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0418">Looner | Beverage | Classic Lemonade | 10mg | Single Can</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/29a0207c599406cb3f6ea9bd46e2c12a" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0418">Keef | Beverage | Mr. Puffer | 10mg | Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/29a0207c599406cb3f6ea9bd46e2c12a" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0419">Keef | Beverage | Mr. Puffer | 10mg | Single Can</a></td>
     <td>Keef</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/fb2e4d0a6b40d46e39ae64ed1ad0e302" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0419">Keef | Beverage | Cream Soda | 10mg | Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/fb2e4d0a6b40d46e39ae64ed1ad0e302" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0420">Keef | Beverage | Cream Soda | 10mg | Single Can</a></td>
     <td>Keef</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/8ffa25ef0731deb4847b1020d90fcae5" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0425">Beverage | Hop The Wave | Raspberry Iced Tea | 10mg | Single</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/8ffa25ef0731deb4847b1020d90fcae5" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0426">Beverage | Hop The Wave | Raspberry Iced Tea | 10mg | Single</a></td>
     <td>Hop The Wave</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0426">Beezwax | 2X | Lemonade | Sativa | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0427">Beezwax | 2X | Lemonade | Sativa | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>Beezwax</td>
     <td style="text-align:right" class="price">$15.99 ✓</td>
     <td style="text-align:right">$15.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0427">Beezwax | 2X | Lemonade | Indica | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0428">Beezwax | 2X | Lemonade | Indica | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Beezwax</td>
     <td style="text-align:right" class="price">$15.99 ✓</td>
     <td style="text-align:right">$15.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0428">Beezwax | 2X | Lemonade | Hybrid | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0429">Beezwax | 2X | Lemonade | Hybrid | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Beezwax</td>
     <td style="text-align:right" class="price">$15.99 ✓</td>
     <td style="text-align:right">$15.99</td>
@@ -445,109 +471,109 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at High 10 Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/Edibles.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0423">Earl Giles | Ecto Chiller | 10mg | Single Can</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/Edibles.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0424">Earl Giles | Ecto Chiller | 10mg | Single Can</a></td>
     <td>Earl Giles</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/9b8ce6f093701f62ec3d5d27c8bf1a3b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0424">Country Cannabis Caramels - 5mg | 5pk</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/9b8ce6f093701f62ec3d5d27c8bf1a3b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0425">Country Cannabis Caramels - 5mg | 5pk</a></td>
     <td>Country Cannabis</td>
     <td style="text-align:right" class="price">$10.00 ✓</td>
     <td style="text-align:right">$10.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7e9f1dd67bf544d01d4fddf4d0013435" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0435">Beezwax Peanut Butter Chocolate Bar - 50MG THC | 0.05g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7e9f1dd67bf544d01d4fddf4d0013435" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0436">Beezwax Peanut Butter Chocolate Bar - 50MG THC | 0.05g</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$12.18 ✓</td>
     <td style="text-align:right">$12.18</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7e9f1dd67bf544d01d4fddf4d0013435" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0436">Beezwax Milk Chocolate Bar - 50MG THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7e9f1dd67bf544d01d4fddf4d0013435" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0437">Beezwax Milk Chocolate Bar - 50MG THC</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$12.18 ✓</td>
     <td style="text-align:right">$12.18</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7e9f1dd67bf544d01d4fddf4d0013435" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0437">Beezwax Kookies N&#39; Kream Chocolate Bar - 50MG THC</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7e9f1dd67bf544d01d4fddf4d0013435" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0438">Beezwax Kookies N&#39; Kream Chocolate Bar - 50MG THC</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$12.18 ✓</td>
     <td style="text-align:right">$12.18</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0429">Beezwax | 2X | Blue Raz | Sativa | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0430">Beezwax | 2X | Blue Raz | Sativa | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>Beezwax</td>
     <td style="text-align:right" class="price">$15.99 ✓</td>
     <td style="text-align:right">$15.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0430">Beezwax | 2X | Blue Raz | Indica | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0431">Beezwax | 2X | Blue Raz | Indica | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Beezwax</td>
     <td style="text-align:right" class="price">$15.99 ✓</td>
     <td style="text-align:right">$15.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0431">Beezwax | 2X | Blue Raz | Hybrid | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0432">Beezwax | 2X | Blue Raz | Hybrid | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Beezwax</td>
     <td style="text-align:right" class="price">$15.99 ✓</td>
     <td style="text-align:right">$15.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0432">Beezwax | 2X | Berrylicious | Sativa | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0433">Beezwax | 2X | Berrylicious | Sativa | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>Beezwax</td>
     <td style="text-align:right" class="price">$15.99 ✓</td>
     <td style="text-align:right">$15.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0433">Beezwax | 2X | Berrylicious | Indica | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0434">Beezwax | 2X | Berrylicious | Indica | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Beezwax</td>
     <td style="text-align:right" class="price">$15.99 ✓</td>
     <td style="text-align:right">$15.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0434">Beezwax | 2X | Berrylicious | Hybrid | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7da68dff3c8bae846d136053dd2c0278" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0435">Beezwax | 2X | Berrylicious | Hybrid | 25mg | 2pc</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Beezwax</td>
     <td style="text-align:right" class="price">$15.99 ✓</td>
     <td style="text-align:right">$15.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/ad2ae945489d28e4b5863f23bff9532b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0439">Beezwax - Cherry Blast Hydro zzz&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/ad2ae945489d28e4b5863f23bff9532b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0440">Beezwax - Cherry Blast Hydro zzz&#39;s</a></td>
     <td>Beezwax</td>
     <td style="text-align:right" class="price">$15.99 ✓</td>
     <td style="text-align:right">$15.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/5f10eba5b104d180c6570d8475175c39" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0440">Beezwax - Blue Raspberry Hydro zzz&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/5f10eba5b104d180c6570d8475175c39" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0441">Beezwax - Blue Raspberry Hydro zzz&#39;s</a></td>
     <td>Beezwax</td>
     <td style="text-align:right" class="price">$15.99 ✓</td>
     <td style="text-align:right">$15.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/4c1b54941e2b159499ef172d05e87fd8" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0405">Minny Grown Rainbow Sherbert - CBN Gummies</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/4c1b54941e2b159499ef172d05e87fd8" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0406">Minny Grown Rainbow Sherbert - CBN Gummies</a></td>
     <td>Minny Grown</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/6c234776eb708724eceede0ebebbdc01" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0406">Minny Grown Original Highbernate - 5mg THC | 10pk</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/6c234776eb708724eceede0ebebbdc01" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0407">Minny Grown Original Highbernate - 5mg THC | 10pk</a></td>
     <td>Minny Grown</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/a7a087ffc4055727cefd70ad64801302" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0407">Minny Grown Moon Melon Gummies - 5mg THC | 10pk</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/a7a087ffc4055727cefd70ad64801302" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0408">Minny Grown Moon Melon Gummies - 5mg THC | 10pk</a></td>
     <td>Minny Grown</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/fcfd3c6a1f9c268db310ecc7da2ca226" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0396">Nebula Cotton Candy Gummy Bar - 100mg | .1g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/fcfd3c6a1f9c268db310ecc7da2ca226" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0397">Nebula Cotton Candy Gummy Bar - 100mg | .1g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Nebula</td>
     <td style="text-align:right" class="price">$24.00 ✓</td>
     <td style="text-align:right">$24.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/09400a65289709359633d695d45c3b0e" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0397">Nebula Green Apple Gummy Bar - 100mg | .1g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/09400a65289709359633d695d45c3b0e" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0398">Nebula Green Apple Gummy Bar - 100mg | .1g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Nebula</td>
     <td style="text-align:right" class="price">$24.00 ✓</td>
     <td style="text-align:right">$24.00</td>
@@ -560,37 +586,37 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at High 10 Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/610ea6fa9e75f9f6f86d90c9780a1212" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0386">Mac Stomper - Hybrid | Pre Roll | 21.6% THC | 1g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/610ea6fa9e75f9f6f86d90c9780a1212" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0387">Mac Stomper - Hybrid | Pre Roll | 21.6% THC | 1g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Lake Leaf</td>
     <td style="text-align:right" class="price">$16.24 ✓</td>
     <td style="text-align:right">$16.24</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/675fd7e6f272046072e0af4e32cbf3d7" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0388">Fog Dog - Indica Pre Roll | 18.5% THC | 1g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/675fd7e6f272046072e0af4e32cbf3d7" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0389">Fog Dog - Indica Pre Roll | 18.5% THC | 1g</a></td>
     <td>Freedom</td>
     <td style="text-align:right" class="price">$16.24 ✓</td>
     <td style="text-align:right">$16.24</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/610ea6fa9e75f9f6f86d90c9780a1212" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0398">Runtz - Hybrid Pre Roll | 17.3% THC | 1g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/610ea6fa9e75f9f6f86d90c9780a1212" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0399">Runtz - Hybrid Pre Roll | 17.3% THC | 1g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Grow Co</td>
     <td style="text-align:right" class="price">$16.24 ✓</td>
     <td style="text-align:right">$16.24</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7463c4849ba8918e9ca4aa1af6529ad5" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0400">Wilfunk - Hybrid Pre Roll | 11.7% THC | 1g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7463c4849ba8918e9ca4aa1af6529ad5" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0401">Wilfunk - Hybrid Pre Roll | 11.7% THC | 1g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Unbound</td>
     <td style="text-align:right" class="price">$16.24 ✓</td>
     <td style="text-align:right">$16.24</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/610ea6fa9e75f9f6f86d90c9780a1212" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0403">Permanent Marker - Indica | Pre Roll | 18% THC | 1g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/610ea6fa9e75f9f6f86d90c9780a1212" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0404">Permanent Marker - Indica | Pre Roll | 18% THC | 1g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Grow Co</td>
     <td style="text-align:right" class="price">$16.24 ✓</td>
     <td style="text-align:right">$16.24</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/96da1c7e1c635929e370a0c782443c69" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0422">Garlic Jam - Indica Pre Roll | 18.39% THC | 1g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/96da1c7e1c635929e370a0c782443c69" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0423">Garlic Jam - Indica Pre Roll | 18.39% THC | 1g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Flor</td>
     <td style="text-align:right" class="price">$16.24 ✓</td>
     <td style="text-align:right">$16.24</td>
@@ -603,7 +629,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at High 10 Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/39bc173f804ba48811820dc3f470f746" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0438">Beezwax - Relief Roll-On | 2000mg | 2g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/39bc173f804ba48811820dc3f470f746" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0439">Beezwax - Relief Roll-On | 2000mg | 2g</a></td>
     <td>Beezwax</td>
     <td style="text-align:right" class="price">$39.99 ✓</td>
     <td style="text-align:right">$39.99</td>
@@ -616,97 +642,97 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at High 10 Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/26569b1f19cef0911abd26cc2ff6fd7f" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0408">Mendo Breath - Indica/Hybrid Flower | 17.4% THC | 3.5g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/26569b1f19cef0911abd26cc2ff6fd7f" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0409">Mendo Breath - Indica/Hybrid Flower | 17.4% THC | 3.5g</a></td>
     <td>Freedom</td>
     <td style="text-align:right" class="price">$40.00 ✓</td>
     <td style="text-align:right">$40.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/c0dcc184a3c58081ceb7bd4fb5e50419" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0390">Gelato #45 - Indica-Hybrid Flower | 17.99% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/c0dcc184a3c58081ceb7bd4fb5e50419" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0391">Gelato #45 - Indica-Hybrid Flower | 17.99% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Grasslandz</td>
     <td style="text-align:right" class="price">$45.00 ✓</td>
     <td style="text-align:right">$45.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/d4d0235f65a9e6beb7bbbd9770c017e5" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0389">Mac Stomper – Hybrid Flower | 20.3% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/d4d0235f65a9e6beb7bbbd9770c017e5" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0390">Mac Stomper – Hybrid Flower | 20.3% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Lake Leaf</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/c881f2af4dc09d62f88009a5e2fab14d" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0394">Pine Soul - Indica Flower | 15.1% THC | 4g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/c881f2af4dc09d62f88009a5e2fab14d" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0395">Pine Soul - Indica Flower | 15.1% THC | 4g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Lake Leaf</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/9f15c0f89bccc14bf1102c7dc9d733bb" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0402">Purple Ice Water - Hybrid Flower | 13% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/9f15c0f89bccc14bf1102c7dc9d733bb" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0403">Purple Ice Water - Hybrid Flower | 13% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Unbound</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/16caded89bf7d5c5652c1431b6775213" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0404">Orangade - Indica Flower | 18% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/16caded89bf7d5c5652c1431b6775213" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0405">Orangade - Indica Flower | 18% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Unbound</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/80054d2f96bdf1c746b556a826965e26" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0420">Grape Canyon Zkittles – Indica Flower | 19.1% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/80054d2f96bdf1c746b556a826965e26" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0421">Grape Canyon Zkittles – Indica Flower | 19.1% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Lake Leaf</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/341aaa283327b4429375b7d1eadb6286" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0421">Golden Goat - Hybrid Flower | 17.3% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/341aaa283327b4429375b7d1eadb6286" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0422">Golden Goat - Hybrid Flower | 17.3% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Unbound</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/a02cc09b7fbeda47d905d7a585467b12" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0383">Fight Club – Sativa Flower | 25.2% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/a02cc09b7fbeda47d905d7a585467b12" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0384">Fight Club – Sativa Flower | 25.2% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>Lake Leaf</td>
     <td style="text-align:right" class="price">$53.00 ✓</td>
     <td style="text-align:right">$53.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/660303231491002a5d69b2a2bed3c317" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0385">Lit OG – Indica Flower | 27.4% THC | 3.5g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/660303231491002a5d69b2a2bed3c317" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0386">Lit OG – Indica Flower | 27.4% THC | 3.5g</a></td>
     <td>Lake Leaf</td>
     <td style="text-align:right" class="price">$53.00 ✓</td>
     <td style="text-align:right">$53.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/3eb654cd738b2a0eae14183de911e527" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0387">Grape Cream Cake – Indica Flower | 23.2% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/3eb654cd738b2a0eae14183de911e527" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0388">Grape Cream Cake – Indica Flower | 23.2% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Lake Leaf</td>
     <td style="text-align:right" class="price">$53.00 ✓</td>
     <td style="text-align:right">$53.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/8b935086b2acb4cbc90435d317ee1f6e" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0391">Purple Octane – Indica Flower | 23.2% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/8b935086b2acb4cbc90435d317ee1f6e" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0392">Purple Octane – Indica Flower | 23.2% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Lake Leaf</td>
     <td style="text-align:right" class="price">$53.00 ✓</td>
     <td style="text-align:right">$53.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/490d8209c51c14ab565834b8aa238e0d" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0392">Permanent Marker – Indica Flower | 22.9% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/490d8209c51c14ab565834b8aa238e0d" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0393">Permanent Marker – Indica Flower | 22.9% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Lake Leaf</td>
     <td style="text-align:right" class="price">$53.00 ✓</td>
     <td style="text-align:right">$53.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/8cb7e70b7113b3e39d145ea13f6d4af4" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0395">Donny Burger – Indica Flower | 23.2% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/8cb7e70b7113b3e39d145ea13f6d4af4" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0396">Donny Burger – Indica Flower | 23.2% THC | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Lake Leaf</td>
     <td style="text-align:right" class="price">$53.00 ✓</td>
     <td style="text-align:right">$53.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/a02cc09b7fbeda47d905d7a585467b12" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0384">Fight Club – Sativa Flower | 25.2% THC | 7g</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/a02cc09b7fbeda47d905d7a585467b12" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0385">Fight Club – Sativa Flower | 25.2% THC | 7g</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>Lake Leaf</td>
     <td style="text-align:right" class="price">$101.52 ✓</td>
     <td style="text-align:right">$101.52</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/490d8209c51c14ab565834b8aa238e0d" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0393">Permanent Marker – Indica Flower | 22.9% THC | 7g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/490d8209c51c14ab565834b8aa238e0d" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0394">Permanent Marker – Indica Flower | 22.9% THC | 7g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Lake Leaf</td>
     <td style="text-align:right" class="price">$101.52 ✓</td>
     <td style="text-align:right">$101.52</td>
@@ -719,7 +745,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at High 10 Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7a586532df28f6f6d60d40c7fe0adc59" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0382">Jack Herer - Sativa/Hybrid Disposable Vape | 67.2% THC | 1g</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><img src="https://s3-us-west-2.amazonaws.com/dutchie-images/7a586532df28f6f6d60d40c7fe0adc59" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/du0383">Jack Herer - Sativa/Hybrid Disposable Vape | 67.2% THC | 1g</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>Oma</td>
     <td style="text-align:right" class="price">$64.97 ✓</td>
     <td style="text-align:right">$64.97</td>

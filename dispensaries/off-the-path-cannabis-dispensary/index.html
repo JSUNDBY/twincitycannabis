@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Off The Path Cannabis Dispensary — Today&#39;s Menu &amp; Prices | Morton, MN</title>
-<meta name="description" content="Off The Path Cannabis Dispensary, Morton, MN — 292 products on today&#39;s menu from $5 · 4.6★ (68 Google reviews) · every price compared with every MN dispensary, updated twice daily.">
+<meta name="description" content="Off The Path Cannabis Dispensary, Morton, MN — 293 products on today&#39;s menu from $5 · 4.6★ (68 Google reviews) · every price compared with every MN dispensary, updated twice daily.">
 <link rel="canonical" href="https://twincitycannabis.com/dispensaries/off-the-path-cannabis-dispensary/">
 <meta name="robots" content="max-image-preview:large">
 <meta property="og:title" content="Off The Path Cannabis Dispensary — Today&#39;s Menu &amp; Prices | Morton, MN">
-<meta property="og:description" content="Off The Path Cannabis Dispensary, Morton, MN — 292 products on today&#39;s menu from $5 · 4.6★ (68 Google reviews) · every price compared with every MN dispensary, updated twice daily.">
+<meta property="og:description" content="Off The Path Cannabis Dispensary, Morton, MN — 293 products on today&#39;s menu from $5 · 4.6★ (68 Google reviews) · every price compared with every MN dispensary, updated twice daily.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://twincitycannabis.com/dispensaries/off-the-path-cannabis-dispensary/">
 <meta property="og:image" content="https://twincitycannabis.com/og-image.png">
 <meta property="og:site_name" content="Twin City Cannabis">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Off The Path Cannabis Dispensary — Today&#39;s Menu &amp; Prices | Morton, MN">
-<meta name="twitter:description" content="Off The Path Cannabis Dispensary, Morton, MN — 292 products on today&#39;s menu from $5 · 4.6★ (68 Google reviews) · every price compared with every MN dispensary, updated twice daily.">
+<meta name="twitter:description" content="Off The Path Cannabis Dispensary, Morton, MN — 293 products on today&#39;s menu from $5 · 4.6★ (68 Google reviews) · every price compared with every MN dispensary, updated twice daily.">
 <meta name="twitter:image" content="https://twincitycannabis.com/og-image.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/img/twin-city-cannabis-logo-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/img/twin-city-cannabis-logo-192.png">
@@ -224,7 +224,7 @@
   </div>
 </div>
 
-<p>Off The Path Cannabis Dispensary is a cannabis dispensary in Morton, Minnesota. Below is the current menu (292 products), with each price compared against every other dispensary in the metro. Prices update daily.</p>
+<p>Off The Path Cannabis Dispensary is a cannabis dispensary in Morton, Minnesota. Below is the current menu (293 products), with each price compared against every other dispensary in the metro. Prices update daily.</p>
 
 
 
@@ -232,6 +232,32 @@
 
 <a class="cta" href="/#dashboard/off-the-path-cannabis-dispensary">View interactive menu &amp; price compare →</a>
 <a class="cta" href="https://offthepathcannabis.com/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit Off The Path Cannabis Dispensary's website →</a>
+
+
+<div id="specials-section" data-slug="off-the-path-cannabis-dispensary" hidden>
+  <h2>Current specials at Off The Path Cannabis Dispensary</h2>
+  <div id="specials-list"></div>
+  <p class="tcc-ad-warning tcc-ad-warning--unit">Specials are posted by the dispensary. Warning: Cannabis products are not for use by anyone under the age of 21. Cannabis use may cause drowsiness, affect focus, reaction time, and decision-making.</p>
+</div>
+<script>
+(function () {
+  var labels = { 'bogo': 'BOGO', 'percent-off': 'Percent off', 'dollar-off': 'Dollars off', 'flash': 'Flash sale', 'happy-hour': 'Happy hour', 'loyalty': 'Loyalty', 'veteran': 'Veterans', 'new-customer': 'New customer' };
+  var clean = function (s) { return String(s || '').replace(/[<>&"]/g, ''); };
+  fetch('https://dashboard.twincitycannabis.com/deals/owner?shop=' + "off-the-path-cannabis-dispensary").then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('specials-list').innerHTML = rows.map(function (x) {
+      var through = x.ends ? new Date(x.ends + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      return '<div style="padding:.6rem 0;border-bottom:1px solid var(--border,#22302a)">' +
+        '<span style="display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green-text,#4ade80);border:1px solid var(--green-dim,#16a34a);border-radius:999px;padding:.1rem .5rem;margin-right:.5rem">' + (labels[x.type] || clean(x.type)) + '</span>' +
+        '<strong>' + clean(x.title) + '</strong>' +
+        (x.details ? '<div style="font-size:.88rem;color:var(--text-secondary,#cdd2d8);margin-top:.2rem">' + clean(x.details) + '</div>' : '') +
+        (through ? '<div style="font-size:.78rem;color:var(--text-muted,#8b909a);margin-top:.15rem">Through ' + through + '</div>' : '') +
+        '</div>';
+    }).join('');
+    document.getElementById('specials-section').hidden = false;
+  }).catch(function () {});
+})();
+</script>
 
 
 <div id="checkins-section" data-slug="off-the-path-cannabis-dispensary">
@@ -492,7 +518,7 @@
 </tbody>
 </table>
 
-<h3>Pre-Rolls (47)</h3>
+<h3>Pre-Rolls (48)</h3>
 <table>
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Off The Path Cannabis Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>

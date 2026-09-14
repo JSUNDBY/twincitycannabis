@@ -236,6 +236,32 @@
 <a class="cta" href="https://sweetleavesnorthloop.com/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit Sweetleaves's website →</a>
 
 
+<div id="specials-section" data-slug="sweet-leaves" hidden>
+  <h2>Current specials at Sweetleaves</h2>
+  <div id="specials-list"></div>
+  <p class="tcc-ad-warning tcc-ad-warning--unit">Specials are posted by the dispensary. Warning: Cannabis products are not for use by anyone under the age of 21. Cannabis use may cause drowsiness, affect focus, reaction time, and decision-making.</p>
+</div>
+<script>
+(function () {
+  var labels = { 'bogo': 'BOGO', 'percent-off': 'Percent off', 'dollar-off': 'Dollars off', 'flash': 'Flash sale', 'happy-hour': 'Happy hour', 'loyalty': 'Loyalty', 'veteran': 'Veterans', 'new-customer': 'New customer' };
+  var clean = function (s) { return String(s || '').replace(/[<>&"]/g, ''); };
+  fetch('https://dashboard.twincitycannabis.com/deals/owner?shop=' + "sweet-leaves").then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('specials-list').innerHTML = rows.map(function (x) {
+      var through = x.ends ? new Date(x.ends + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      return '<div style="padding:.6rem 0;border-bottom:1px solid var(--border,#22302a)">' +
+        '<span style="display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green-text,#4ade80);border:1px solid var(--green-dim,#16a34a);border-radius:999px;padding:.1rem .5rem;margin-right:.5rem">' + (labels[x.type] || clean(x.type)) + '</span>' +
+        '<strong>' + clean(x.title) + '</strong>' +
+        (x.details ? '<div style="font-size:.88rem;color:var(--text-secondary,#cdd2d8);margin-top:.2rem">' + clean(x.details) + '</div>' : '') +
+        (through ? '<div style="font-size:.78rem;color:var(--text-muted,#8b909a);margin-top:.15rem">Through ' + through + '</div>' : '') +
+        '</div>';
+    }).join('');
+    document.getElementById('specials-section').hidden = false;
+  }).catch(function () {});
+})();
+</script>
+
+
 <div id="checkins-section" data-slug="sweet-leaves">
   <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
   <div id="checkins-list"></div>
@@ -342,25 +368,25 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Sweetleaves</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/530/104/avatar/1781627218-1774305844-442403564_23db5f5a-17fe-4cb5-ac53-85f8ff7376a9.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0097">Animal Scout Big Dog | Joints | 0.75g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/530/104/avatar/1781627218-1774305844-442403564_23db5f5a-17fe-4cb5-ac53-85f8ff7376a9.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0096">Animal Scout Big Dog | Joints | 0.75g</a></td>
     <td>Dogwalkers</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/674/828/avatar/1737639445-image.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1194">Dogwalkers .75g Big Dog Sunset Sherbet</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/674/828/avatar/1737639445-image.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1193">Dogwalkers .75g Big Dog Sunset Sherbet</a></td>
     <td>Dogwalkers</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1722">Jack&#39;s Delight</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1720">Jack&#39;s Delight</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>House</td>
     <td style="text-align:right" class="price">$40.00 ✓</td>
     <td style="text-align:right">$40.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444435348_fc4611e3-1e59-40a7-bfa9-6ad3b913d826.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2223">OMG</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444435348_fc4611e3-1e59-40a7-bfa9-6ad3b913d826.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2222">OMG</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$40.00 ✓</td>
     <td style="text-align:right">$40.00</td>
@@ -378,49 +404,49 @@
     <td style="text-align:right">$42.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444627800_c0e279c5-75e3-4137-8abb-7c68e9d30f9e.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0988">Cap Junky</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444627800_c0e279c5-75e3-4137-8abb-7c68e9d30f9e.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0987">Cap Junky</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>House</td>
     <td style="text-align:right" class="price">$48.00 ✓</td>
     <td style="text-align:right">$48.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444642701_fa113de8-d8a1-43cf-906d-278297156034.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2028">Mac Stomper</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444642701_fa113de8-d8a1-43cf-906d-278297156034.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2027">Mac Stomper</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>House</td>
     <td style="text-align:right" class="price">$48.00 ✓</td>
     <td style="text-align:right">$48.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444398892_0528cf54-a868-4a6b-b1b9-a1eeb139eefd.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2411">Purple Octane</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444398892_0528cf54-a868-4a6b-b1b9-a1eeb139eefd.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2410">Purple Octane</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>House</td>
     <td style="text-align:right" class="price">$48.00 ✓</td>
     <td style="text-align:right">$48.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444436086_bca79835-d1d8-4530-bf27-3f7d2b566100.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0080">RYTHM Premium Flower Bananaconda 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444436086_bca79835-d1d8-4530-bf27-3f7d2b566100.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0079">RYTHM Premium Flower Bananaconda 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>RYTHM</td>
     <td style="text-align:right" class="price">$50.00</td>
     <td style="text-align:right">$42.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/514/843/avatar/1781037815-440060302_69a6288c-0337-4b1f-8a44-04358272eed8.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0210">Black Haze | Big Buds | 3.5g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/514/843/avatar/1781037815-440060302_69a6288c-0337-4b1f-8a44-04358272eed8.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0209">Black Haze | Big Buds | 3.5g</a></td>
     <td>NativeCare Brand</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444372996_110bcd11-6073-4fd8-8740-ddf4473b6a38.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1541">Grape Aliens</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444372996_110bcd11-6073-4fd8-8740-ddf4473b6a38.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1539">Grape Aliens</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444607943_76df7ea5-29b1-427d-bf91-546a83b5613a.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2732">Super Silver Haze</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444607943_76df7ea5-29b1-427d-bf91-546a83b5613a.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2731">Super Silver Haze</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444505988_3b2dff2b-a52a-4528-9343-449ce474ef4b.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2673">Sour Pebbles</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444505988_3b2dff2b-a52a-4528-9343-449ce474ef4b.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2672">Sour Pebbles</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$90.00 ✓</td>
     <td style="text-align:right">$90.00</td>
@@ -433,37 +459,37 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Sweetleaves</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/952/583/avatar/1765234809-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0169">Sweet Leaves | Sleep | Gummies | 10pk</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/952/583/avatar/1765234809-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0168">Sweet Leaves | Sleep | Gummies | 10pk</a></td>
     <td>Sweet Leaves</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/952/588/avatar/1765234812-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0482">Sweet Leaves | Passionfruit | Gummies | 10pk</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/952/588/avatar/1765234812-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0481">Sweet Leaves | Passionfruit | Gummies | 10pk</a></td>
     <td>Sweet Leaves</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/952/582/avatar/1765234808-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0483">Sweet Leaves | Peach | Gummies | 10pk</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/952/582/avatar/1765234808-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0482">Sweet Leaves | Peach | Gummies | 10pk</a></td>
     <td>Sweet Leaves</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/952/586/avatar/1765234810-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0484">Sweet Leaves | Pineapple | Gummies | 10pk</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/952/586/avatar/1765234810-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0483">Sweet Leaves | Pineapple | Gummies | 10pk</a></td>
     <td>Sweet Leaves</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/952/587/avatar/1765234812-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0485">Sweet Leaves | Pink lemonade | Gummies | 10pk</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/952/587/avatar/1765234812-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0484">Sweet Leaves | Pink lemonade | Gummies | 10pk</a></td>
     <td>Sweet Leaves</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/952/584/avatar/1765234809-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0486">Sweet Leaves | Tropical | Gummies | 10pk</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/952/584/avatar/1765234809-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0485">Sweet Leaves | Tropical | Gummies | 10pk</a></td>
     <td>Sweet Leaves</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
@@ -487,7 +513,7 @@
     <td style="text-align:right">$16.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/494/552/avatar/1779560598-1774319894-440385328_a007de84-0688-4db7-8210-19a72a6b0db7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0083">Sour Cherry Indica Enhanced Delta-9 Gummies | 50mg | 10ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/494/552/avatar/1779560598-1774319894-440385328_a007de84-0688-4db7-8210-19a72a6b0db7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0082">Sour Cherry Indica Enhanced Delta-9 Gummies | 50mg | 10ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>WYLD</td>
     <td style="text-align:right" class="price">$19.99</td>
     <td style="text-align:right">$15.00</td>
@@ -499,49 +525,49 @@
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/495/907/avatar/1786632229-marionberry_50mg.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0138">Marionberry Indica Enhanced Delta-9 Gummies | 25mg | 5ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/495/907/avatar/1786632229-marionberry_50mg.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0137">Marionberry Indica Enhanced Delta-9 Gummies | 25mg | 5ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>WYLD</td>
     <td style="text-align:right" class="price">$19.99</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/498/560/avatar/1779915128-1774308612-440385276_027ef056-b1f4-4a20-8d58-70a4bed5fa32.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0159">Pomegranate 1:1 THC:CBD Hybrid Delta-9 Gummies | 50mg | 10ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/498/560/avatar/1779915128-1774308612-440385276_027ef056-b1f4-4a20-8d58-70a4bed5fa32.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0158">Pomegranate 1:1 THC:CBD Hybrid Delta-9 Gummies | 50mg | 10ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>WYLD</td>
     <td style="text-align:right" class="price">$19.99</td>
     <td style="text-align:right">$16.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/500/731/avatar/1780005416-1774322278-440385309_0ecae97d-84b3-4905-8da9-300ab042623e.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0165">Sour Apple Sativa Enhanced Delta-9 Gummies | 50mg | 10ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/500/731/avatar/1780005416-1774322278-440385309_0ecae97d-84b3-4905-8da9-300ab042623e.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0164">Sour Apple Sativa Enhanced Delta-9 Gummies | 50mg | 10ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>WYLD</td>
     <td style="text-align:right" class="price">$19.99</td>
     <td style="text-align:right">$16.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/496/057/avatar/1779825096-1774309468-440385324_6e538675-a7a8-40db-bacf-479687d80f56.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0166">Sour Tangerine Hybrid Enhanced Delta-9 Gummies | 50mg | 10ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/496/057/avatar/1779825096-1774309468-440385324_6e538675-a7a8-40db-bacf-479687d80f56.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0165">Sour Tangerine Hybrid Enhanced Delta-9 Gummies | 50mg | 10ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>WYLD</td>
     <td style="text-align:right" class="price">$19.99</td>
     <td style="text-align:right">$14.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/494/532/avatar/1779557845-1774322282-440385308_c4e90c1e-155c-48bf-9d1f-0e169445da6b.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0212">Blood Orange 1:1 THC:CBC Sativa Delta-9 Gummies | 50mg | 10ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/494/532/avatar/1779557845-1774322282-440385308_c4e90c1e-155c-48bf-9d1f-0e169445da6b.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0211">Blood Orange 1:1 THC:CBC Sativa Delta-9 Gummies | 50mg | 10ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>WYLD</td>
     <td style="text-align:right" class="price">$19.99 ✓</td>
     <td style="text-align:right">$19.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/505/799/avatar/1786632329-pear_11_thccbg_50mg.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0428">Pear 1:1 THC:CBG Hybrid Enhanced Delta-9 Gummies | 25mg | 5ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/505/799/avatar/1786632329-pear_11_thccbg_50mg.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0427">Pear 1:1 THC:CBG Hybrid Enhanced Delta-9 Gummies | 25mg | 5ct | 5mg/ea</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>WYLD</td>
     <td style="text-align:right" class="price">$19.99</td>
     <td style="text-align:right">$17.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/699/206/avatar/1740696192-4098575_screenshot_2025-02-27_at_5-09-40_pm.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0096">&amp;Shine | 10pk Gummies | Fruit Punch - 100mg</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/699/206/avatar/1740696192-4098575_screenshot_2025-02-27_at_5-09-40_pm.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0095">&amp;Shine | 10pk Gummies | Fruit Punch - 100mg</a> <span style="font-size:0.72em;font-weight:700;color:#f59e0b;text-transform:capitalize">sativa</span></td>
     <td>&amp;SHINE</td>
     <td style="text-align:right" class="price">$25.00 ✓</td>
     <td style="text-align:right">$25.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/699/202/avatar/1740696193-4098571_screenshot_2025-02-27_at_5-11-09_pm.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0561">&amp;Shine | 10pk Gummies | Tropical - 100mg</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/699/202/avatar/1740696193-4098571_screenshot_2025-02-27_at_5-11-09_pm.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0560">&amp;Shine | 10pk Gummies | Tropical - 100mg</a></td>
     <td>&amp;SHINE</td>
     <td style="text-align:right" class="price">$25.00 ✓</td>
     <td style="text-align:right">$25.00</td>
@@ -559,7 +585,7 @@
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/001/010/575/avatar/1780675087-1774634381-nebula_gummy_bar_cotton_candy_bar.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0238">Cotton Candy Gummy Bar | 100mg | 10ct | 10mg/ea</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/001/010/575/avatar/1780675087-1774634381-nebula_gummy_bar_cotton_candy_bar.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0237">Cotton Candy Gummy Bar | 100mg | 10ct | 10mg/ea</a></td>
     <td>Nebula</td>
     <td style="text-align:right" class="price">$30.00</td>
     <td style="text-align:right">$24.00</td>
@@ -577,7 +603,7 @@
     <td style="text-align:right">$22.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/646/024/avatar/1730231921-anytime-1-2048x2048.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0098">Anytime Gummies</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/646/024/avatar/1730231921-anytime-1-2048x2048.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0097">Anytime Gummies</a></td>
     <td>Beboe</td>
     <td style="text-align:right" class="price">$35.00 ✓</td>
     <td style="text-align:right">$35.00</td>
@@ -590,7 +616,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Sweetleaves</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/552/695/avatar/1701466657-dogwalkers-big-dog-preroll-570x380.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1193">Dogwalkers .75g Big Dog Pre Rolls | Brownie Scout</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/552/695/avatar/1701466657-dogwalkers-big-dog-preroll-570x380.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1192">Dogwalkers .75g Big Dog Pre Rolls | Brownie Scout</a></td>
     <td>Dogwalkers</td>
     <td style="text-align:right" class="price">$15.00 ✓</td>
     <td style="text-align:right">$15.00</td>
@@ -602,25 +628,25 @@
     <td style="text-align:right">$30.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/674/873/avatar/1737641566-5pk_sativ_a.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0110">Dogwalkers 1.75g Mini Dog Pre-rolls | Durban Z</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/674/873/avatar/1737641566-5pk_sativ_a.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0109">Dogwalkers 1.75g Mini Dog Pre-rolls | Durban Z</a></td>
     <td>Dogwalkers</td>
     <td style="text-align:right" class="price">$30.00 ✓</td>
     <td style="text-align:right">$30.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/674/785/avatar/1737639267-image.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0253">Dogwalkers 1.75g Mini Dog Pre-rolls | Animal Face</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/674/785/avatar/1737639267-image.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0252">Dogwalkers 1.75g Mini Dog Pre-rolls | Animal Face</a></td>
     <td>Dogwalkers</td>
     <td style="text-align:right" class="price">$30.00 ✓</td>
     <td style="text-align:right">$30.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/674/929/avatar/1737639838-image.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0254">Dogwalkers 1.75g Mini Dog Pre-rolls | Bananaconda</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/674/929/avatar/1737639838-image.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0253">Dogwalkers 1.75g Mini Dog Pre-rolls | Bananaconda</a></td>
     <td>Dogwalkers</td>
     <td style="text-align:right" class="price">$30.00 ✓</td>
     <td style="text-align:right">$30.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/567/958/avatar/1785944422-lsc_flower_1_g_pre-roll_sizesm.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1725">Jacked Up Boof | Infused | 1 G Pre-roll</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/567/958/avatar/1785944422-lsc_flower_1_g_pre-roll_sizesm.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1723">Jacked Up Boof | Infused | 1 G Pre-roll</a></td>
     <td>Lakeside Cannabis Co</td>
     <td style="text-align:right" class="price">$30.00 ✓</td>
     <td style="text-align:right">$30.00</td>
@@ -633,7 +659,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Sweetleaves</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444441508_df04fa00-12b4-487e-bbf4-0f6b1d9d63c7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2672">Sour Cherry Lemonade | 10mg | 15mg CBD | 10mg CBG | 4pk</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/211/852/483/444441508_df04fa00-12b4-487e-bbf4-0f6b1d9d63c7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2671">Sour Cherry Lemonade | 10mg | 15mg CBD | 10mg CBG | 4pk</a></td>
     <td>Sour Cherry Lemonade</td>
     <td style="text-align:right" class="price">$24.99 ✓</td>
     <td style="text-align:right">$24.99</td>
@@ -652,19 +678,19 @@
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/568/013/avatar/1785947412-nebula_1g_cart_1.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0833">Blue Berry Blast Off | Cartridge | 1g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/568/013/avatar/1785947412-nebula_1g_cart_1.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0832">Blue Berry Blast Off | Cartridge | 1g</a></td>
     <td>Nebula</td>
     <td style="text-align:right" class="price">$70.00 ✓</td>
     <td style="text-align:right">$70.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/568/008/avatar/1785947192-nebula_1g_cart_1.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2713">Strawberry Jelly | Cartridge | 1g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/568/008/avatar/1785947192-nebula_1g_cart_1.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2712">Strawberry Jelly | Cartridge | 1g</a></td>
     <td>Nebula</td>
     <td style="text-align:right" class="price">$70.00 ✓</td>
     <td style="text-align:right">$70.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/001/010/550/avatar/1780440219-1773690950-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0039">Grasslandz | Blue Dream | Disposable | 1g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/001/010/550/avatar/1780440219-1773690950-download.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0038">Grasslandz | Blue Dream | Disposable | 1g</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>Grasslandz</td>
     <td style="text-align:right" class="price">$78.00</td>
     <td style="text-align:right">$60.00</td>

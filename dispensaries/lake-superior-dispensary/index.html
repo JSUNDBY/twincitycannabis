@@ -234,6 +234,32 @@
 <a class="cta" href="https://www.lakesuperiordispensary.org/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit Lake Superior Dispensary's website →</a>
 
 
+<div id="specials-section" data-slug="lake-superior-dispensary" hidden>
+  <h2>Current specials at Lake Superior Dispensary</h2>
+  <div id="specials-list"></div>
+  <p class="tcc-ad-warning tcc-ad-warning--unit">Specials are posted by the dispensary. Warning: Cannabis products are not for use by anyone under the age of 21. Cannabis use may cause drowsiness, affect focus, reaction time, and decision-making.</p>
+</div>
+<script>
+(function () {
+  var labels = { 'bogo': 'BOGO', 'percent-off': 'Percent off', 'dollar-off': 'Dollars off', 'flash': 'Flash sale', 'happy-hour': 'Happy hour', 'loyalty': 'Loyalty', 'veteran': 'Veterans', 'new-customer': 'New customer' };
+  var clean = function (s) { return String(s || '').replace(/[<>&"]/g, ''); };
+  fetch('https://dashboard.twincitycannabis.com/deals/owner?shop=' + "lake-superior-dispensary").then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('specials-list').innerHTML = rows.map(function (x) {
+      var through = x.ends ? new Date(x.ends + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      return '<div style="padding:.6rem 0;border-bottom:1px solid var(--border,#22302a)">' +
+        '<span style="display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green-text,#4ade80);border:1px solid var(--green-dim,#16a34a);border-radius:999px;padding:.1rem .5rem;margin-right:.5rem">' + (labels[x.type] || clean(x.type)) + '</span>' +
+        '<strong>' + clean(x.title) + '</strong>' +
+        (x.details ? '<div style="font-size:.88rem;color:var(--text-secondary,#cdd2d8);margin-top:.2rem">' + clean(x.details) + '</div>' : '') +
+        (through ? '<div style="font-size:.78rem;color:var(--text-muted,#8b909a);margin-top:.15rem">Through ' + through + '</div>' : '') +
+        '</div>';
+    }).join('');
+    document.getElementById('specials-section').hidden = false;
+  }).catch(function () {});
+})();
+</script>
+
+
 <div id="checkins-section" data-slug="lake-superior-dispensary">
   <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
   <div id="checkins-list"></div>
@@ -340,13 +366,13 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Lake Superior Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1534">Granny&#39;s Soda</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1532">Granny&#39;s Soda</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$4.00 ✓</td>
     <td style="text-align:right">$4.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p2721">Stōkt Seltzer (cranberry lime)</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p2720">Stōkt Seltzer (cranberry lime)</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$4.00 ✓</td>
     <td style="text-align:right">$4.00</td>
@@ -358,7 +384,7 @@
     <td style="text-align:right">$4.50</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/342/847/avatar/1782400159-12oz10mgraspberrylemonadeimage1.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0161">Raspberry Lemonade | Non-Carbonated | 10mg/ea | 12oz</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/342/847/avatar/1782400159-12oz10mgraspberrylemonadeimage1.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0160">Raspberry Lemonade | Non-Carbonated | 10mg/ea | 12oz</a></td>
     <td>Uncle Arnies</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
@@ -370,55 +396,55 @@
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443981564_05ef73b9-2316-4473-a2ef-daf052a7239a.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0810">Birdie THC Shot- Pineapple Mango</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443981564_05ef73b9-2316-4473-a2ef-daf052a7239a.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0809">Birdie THC Shot- Pineapple Mango</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$5.50 ✓</td>
     <td style="text-align:right">$5.50</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443912242_cae62d60-25ba-4ffc-a262-0946998e0cdd.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0802">Bent Paddle Puff Soda Dragon Fruit &amp; Cloudberry</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443912242_cae62d60-25ba-4ffc-a262-0946998e0cdd.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0801">Bent Paddle Puff Soda Dragon Fruit &amp; Cloudberry</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$5.99 ✓</td>
     <td style="text-align:right">$5.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443912243_f7acf655-7289-4c2f-8e31-43a88cf1288d.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0803">Bent Paddle Puff Soda Prickly Pear Lemonade</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443912243_f7acf655-7289-4c2f-8e31-43a88cf1288d.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0802">Bent Paddle Puff Soda Prickly Pear Lemonade</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$5.99 ✓</td>
     <td style="text-align:right">$5.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340501_cdcdea9a-93d8-4284-a4bc-ca4db0e40bb7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1017">Castle Danger SODA - Key Lime</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340501_cdcdea9a-93d8-4284-a4bc-ca4db0e40bb7.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1016">Castle Danger SODA - Key Lime</a></td>
     <td>Castle Danger SODA</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443599306_bc9a2a33-2566-426d-891b-d0464eb39620.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1018">Castle Danger SODA - Strawberry Rhubarb</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443599306_bc9a2a33-2566-426d-891b-d0464eb39620.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1017">Castle Danger SODA - Strawberry Rhubarb</a></td>
     <td>Castle Danger SODA</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340508_740dab2e-0ecc-4c58-8d7f-e3f824141301.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1923">Looner Soda - Creme</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340508_740dab2e-0ecc-4c58-8d7f-e3f824141301.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1922">Looner Soda - Creme</a></td>
     <td>Looner</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443901897_f83a0549-51df-4283-bb60-7a9ee1cbbdaf.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1924">Looner Soda Diet Root Beer</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443901897_f83a0549-51df-4283-bb60-7a9ee1cbbdaf.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1923">Looner Soda Diet Root Beer</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$6.00 ✓</td>
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p2296">Ozium (8 Oz.)</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p2295">Ozium (8 Oz.)</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$9.00 ✓</td>
     <td style="text-align:right">$9.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443998016_5454da56-25fb-4db1-8ae3-69f9e84ba074.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2741">Sweet Leaves (Pink Lemonade)</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443998016_5454da56-25fb-4db1-8ae3-69f9e84ba074.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2740">Sweet Leaves (Pink Lemonade)</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$12.99 ✓</td>
     <td style="text-align:right">$12.99</td>
@@ -443,37 +469,37 @@
     <td style="text-align:right">$6.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1704">Hypno Toad - Royal Jelly</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1702">Hypno Toad - Royal Jelly</a></td>
     <td>Hypno Toad</td>
     <td style="text-align:right" class="price">$7.00 ✓</td>
     <td style="text-align:right">$7.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443341712_34072296-32d0-47dc-8f48-ae2fdfd50055.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1125">Cycling Frog Gummies Huckleberry</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443341712_34072296-32d0-47dc-8f48-ae2fdfd50055.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1124">Cycling Frog Gummies Huckleberry</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$9.99 ✓</td>
     <td style="text-align:right">$9.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/444000184_d7fd8e2e-22e1-4a1e-a6dc-7f0beeb3658a.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1126">Cycling Frog Gummies Mango Pineapple</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/444000184_d7fd8e2e-22e1-4a1e-a6dc-7f0beeb3658a.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1125">Cycling Frog Gummies Mango Pineapple</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$9.99 ✓</td>
     <td style="text-align:right">$9.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1331">Float Gummies</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1329">Float Gummies</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$12.00 ✓</td>
     <td style="text-align:right">$12.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340506_0c5d8bed-792b-415e-be8b-8488da53e97e.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1019">Castle Danger Strawberry Rhubarb gummies</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340506_0c5d8bed-792b-415e-be8b-8488da53e97e.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1018">Castle Danger Strawberry Rhubarb gummies</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$18.99 ✓</td>
     <td style="text-align:right">$18.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340611_982b3a27-239f-4d76-b35a-159ff9183ccd.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1020">Castle Danger key Lime gummies</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340611_982b3a27-239f-4d76-b35a-159ff9183ccd.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1019">Castle Danger key Lime gummies</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$18.99 ✓</td>
     <td style="text-align:right">$18.99</td>
@@ -485,31 +511,31 @@
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/528/930/avatar/1781594151-441758815_bf7be69f-a63c-429d-bbfa-f114cc4ccabc.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0175">Twilight Blackberry Chamomile | Gummies | 10pk | 5mg/ea</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/528/930/avatar/1781594151-441758815_bf7be69f-a63c-429d-bbfa-f114cc4ccabc.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0174">Twilight Blackberry Chamomile | Gummies | 10pk | 5mg/ea</a></td>
     <td>Twilight Blackberry Chamomile</td>
     <td style="text-align:right" class="price">$19.00</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443907034_979d0724-85c0-4421-b2a4-8a933cf76149.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1927">Looner THC Gummies Strawberry Twilight</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443907034_979d0724-85c0-4421-b2a4-8a933cf76149.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1926">Looner THC Gummies Strawberry Twilight</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443911992_c39a5fd7-1b8f-411f-a615-812bbf18cf15.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2489">Retro Bakery Chocolate Bar- Cookies &amp; Cream</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443911992_c39a5fd7-1b8f-411f-a615-812bbf18cf15.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2488">Retro Bakery Chocolate Bar- Cookies &amp; Cream</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>House</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443912074_bbf33ee7-3cf7-4b0a-941f-a13b5fbac9d2.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2490">Retro Bakery Chocolate Bar- Puppy Chow</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443912074_bbf33ee7-3cf7-4b0a-941f-a13b5fbac9d2.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2489">Retro Bakery Chocolate Bar- Puppy Chow</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443912072_aaa4593b-d714-4c79-8f7d-debe69d615ad.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2491">Retro Bakery Chocolate Bar- White Chocolate</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443912072_aaa4593b-d714-4c79-8f7d-debe69d615ad.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2490">Retro Bakery Chocolate Bar- White Chocolate</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
@@ -521,61 +547,61 @@
     <td style="text-align:right">$16.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/408/523/avatar/1778619910-1774316763-442266293_519f919c-c22f-4e4f-80d7-aaa350ff753d.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0141">Minny Grown - 50mg THC Gummies - Berry Bliss | Gummies | 10pk | 5mg/ea</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/002/408/523/avatar/1778619910-1774316763-442266293_519f919c-c22f-4e4f-80d7-aaa350ff753d.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0140">Minny Grown - 50mg THC Gummies - Berry Bliss | Gummies | 10pk | 5mg/ea</a></td>
     <td>Minny Grown - 50mg THC Gummies - Berry Bliss</td>
     <td style="text-align:right" class="price">$20.00</td>
     <td style="text-align:right">$15.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443911450_45ab35c8-a3ae-490c-85b5-b783a971a981.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1500">Gigli Gummies</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443911450_45ab35c8-a3ae-490c-85b5-b783a971a981.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1498">Gigli Gummies</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1761">Kite Orange Gummies</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1759">Kite Orange Gummies</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443911548_0e14b8b3-99b9-41ba-b2e3-d34eabdd356d.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1781">Kuribl Cookies</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443911548_0e14b8b3-99b9-41ba-b2e3-d34eabdd356d.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1780">Kuribl Cookies</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1817">LOTW Gummies</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1816">LOTW Gummies</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443954759_42aeaa4d-66c1-4ad5-945e-a75aa4771240.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2104">Minny Grown Gummies- Apple</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443954759_42aeaa4d-66c1-4ad5-945e-a75aa4771240.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2103">Minny Grown Gummies- Apple</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340076_f351a204-f947-46b1-94f0-18c188f6c73f.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2105">Minny Grown Gummies- Highbernate (blue)</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340076_f351a204-f947-46b1-94f0-18c188f6c73f.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2104">Minny Grown Gummies- Highbernate (blue)</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340071_779ef91e-7f8b-42a7-b768-7e0bf5b4690d.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2106">Minny Grown Gummies- Mango</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340071_779ef91e-7f8b-42a7-b768-7e0bf5b4690d.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2105">Minny Grown Gummies- Mango</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340067_d95b3210-e3e5-46e6-991a-9298168227f1.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2107">Minny Grown Gummies- Peach</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340067_d95b3210-e3e5-46e6-991a-9298168227f1.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2106">Minny Grown Gummies- Peach</a> <span style="font-size:0.72em;font-weight:700;color:#22c55e;text-transform:capitalize">hybrid</span></td>
     <td>House</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340073_f8cb51e1-e2fb-4533-978e-79d6194bd99c.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2108">Minny Grown Gummies- Sunrise</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443340073_f8cb51e1-e2fb-4533-978e-79d6194bd99c.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2107">Minny Grown Gummies- Sunrise</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$20.00 ✓</td>
     <td style="text-align:right">$20.00</td>
@@ -588,13 +614,13 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Lake Superior Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443911545_60799d90-c0d0-45ac-8526-3f8ed722df4c.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1780">Kuribl Bath Bomb</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/443911545_60799d90-c0d0-45ac-8526-3f8ed722df4c.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1779">Kuribl Bath Bomb</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$9.99 ✓</td>
     <td style="text-align:right">$9.99</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/336/444/avatar/1641243984-cbdfx-photo-render-muscle-joint-cream-1000mg-apr-07-2021.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0909">CBD Cream For Muscle &amp; Joint: Cooling Formula 1000mg</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/products/000/336/444/avatar/1641243984-cbdfx-photo-render-muscle-joint-cream-1000mg-apr-07-2021.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0908">CBD Cream For Muscle &amp; Joint: Cooling Formula 1000mg</a></td>
     <td>CBDfx</td>
     <td style="text-align:right" class="price">$35.99 ✓</td>
     <td style="text-align:right">$35.99</td>
@@ -607,19 +633,19 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Lake Superior Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/444511930_1a4a9543-6abb-4f5a-a0b2-ad27d72f13d6.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2399">Pre-Rolls-IX | MN Roots | Mendo Breath | 1 g | 1 ct</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/444511930_1a4a9543-6abb-4f5a-a0b2-ad27d72f13d6.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2398">Pre-Rolls-IX | MN Roots | Mendo Breath | 1 g | 1 ct</a></td>
     <td>Pre-Roll-IX</td>
     <td style="text-align:right" class="price">$16.15 ✓</td>
     <td style="text-align:right">$16.15</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/444346438_908fe21f-7b22-4904-8918-6acf9f354970.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0854">Blueberry Muffin 5pk Pre-Roll&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/444346438_908fe21f-7b22-4904-8918-6acf9f354970.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0853">Blueberry Muffin 5pk Pre-Roll&#39;s</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$43.59 ✓</td>
     <td style="text-align:right">$43.59</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/444346443_731c646f-5a62-46d8-855d-c885819735b6.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2346">Pineapple Muffins Pre-rolls</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/949/189/776/444346443_731c646f-5a62-46d8-855d-c885819735b6.jpeg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p2345">Pineapple Muffins Pre-rolls</a></td>
     <td>House</td>
     <td style="text-align:right" class="price">$43.59 ✓</td>
     <td style="text-align:right">$43.59</td>
@@ -632,13 +658,13 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Lake Superior Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/p1034">Cheetah Piss- 3.5 G</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/p1033">Cheetah Piss- 3.5 G</a></td>
     <td>Native Cuts</td>
     <td style="text-align:right" class="price">$48.43 ✓</td>
     <td style="text-align:right">$48.43</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/579/477/443236772_1st.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1328">First Class Funk | 3.5g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/users/018/579/477/443236772_1st.JPG" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p1326">First Class Funk | 3.5g</a></td>
     <td>First Class Funk</td>
     <td style="text-align:right" class="price">$52.47 ✓</td>
     <td style="text-align:right">$52.47</td>

@@ -236,6 +236,32 @@
 <a class="cta" href="https://flameandfloramn.com/" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit Flame &amp; Flora's website →</a>
 
 
+<div id="specials-section" data-slug="flame-flora" hidden>
+  <h2>Current specials at Flame &amp; Flora</h2>
+  <div id="specials-list"></div>
+  <p class="tcc-ad-warning tcc-ad-warning--unit">Specials are posted by the dispensary. Warning: Cannabis products are not for use by anyone under the age of 21. Cannabis use may cause drowsiness, affect focus, reaction time, and decision-making.</p>
+</div>
+<script>
+(function () {
+  var labels = { 'bogo': 'BOGO', 'percent-off': 'Percent off', 'dollar-off': 'Dollars off', 'flash': 'Flash sale', 'happy-hour': 'Happy hour', 'loyalty': 'Loyalty', 'veteran': 'Veterans', 'new-customer': 'New customer' };
+  var clean = function (s) { return String(s || '').replace(/[<>&"]/g, ''); };
+  fetch('https://dashboard.twincitycannabis.com/deals/owner?shop=' + "flame-flora").then(function (r) { return r.json(); }).then(function (rows) {
+    if (!rows || !rows.length) return;
+    document.getElementById('specials-list').innerHTML = rows.map(function (x) {
+      var through = x.ends ? new Date(x.ends + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      return '<div style="padding:.6rem 0;border-bottom:1px solid var(--border,#22302a)">' +
+        '<span style="display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green-text,#4ade80);border:1px solid var(--green-dim,#16a34a);border-radius:999px;padding:.1rem .5rem;margin-right:.5rem">' + (labels[x.type] || clean(x.type)) + '</span>' +
+        '<strong>' + clean(x.title) + '</strong>' +
+        (x.details ? '<div style="font-size:.88rem;color:var(--text-secondary,#cdd2d8);margin-top:.2rem">' + clean(x.details) + '</div>' : '') +
+        (through ? '<div style="font-size:.78rem;color:var(--text-muted,#8b909a);margin-top:.15rem">Through ' + through + '</div>' : '') +
+        '</div>';
+    }).join('');
+    document.getElementById('specials-section').hidden = false;
+  }).catch(function () {});
+})();
+</script>
+
+
 <div id="checkins-section" data-slug="flame-flora">
   <h2 id="checkins-title" hidden>What shoppers actually paid here</h2>
   <div id="checkins-list"></div>
@@ -243,7 +269,7 @@
   <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
   <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
     <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <datalist id="checkin-products"><option value="CBD Sparkling Water BLISS 20mg - BLNCD"><option value="CBD Sparkling Water BALANCE 20mg - BLNCD"><option value="CBD Sparkling Water CHILL 20mg - BLNCD"><option value="Tart Lime 10mg - Plift"><option value="Daytime Blood Orange Lime Drink 10mg - You Betcha!"><option value="Mango Guava 10mg - Odder"><option value="Jasmine Lemon Green Tea 10mg THC 5mg CBG - You Betcha!"><option value="Crisp Ginger 10mg - Plift"><option value="Juicy Grapefruit 10mg - Plift"><option value="Wild Berry Lemonade 10mg - Birdie"><option value="Pineapple Mango - Birdie"><option value="Passion Fruit Guava Juice 10MG - Birdie"><option value="Orange Soda Pop 10mg - Uncle Arnie&#39;s"><option value="Grape Soda Pop 10mg - Uncle Arnie&#39;s"><option value="Pineapple Passionfruit Elixir 10mg - Granny&#39;s"><option value="Cherry Limeade 10mg - Uncle Arnie&#39;s"><option value="Berry Pineapple 10mg - Odder"><option value="Lemon Lime Cherry 10mg - Odder"><option value="Strawberry Kiwi Anytime Seltzer 10mg - You Betcha!"><option value="Nighttime Blackberry Lemon Drink 5mg THC/CBD - You Betcha!"><option value="Blueberry Pomegranate Elixir 10mg - Granny&#39;s"><option value="Watermelon Elixir 10mg - Granny&#39;s"><option value="Zen Magic Tea 10mg - Uncle Arnie&#39;s"><option value="Nighttime Hibiscus Mint Drink 5MG THC/CBN, 10MG CBD - You Betcha!"><option value="Grape Shot 39MG - Trap Packz by Retro Bakery"><option value="Pink Lemonade 10mg - Retro Bakery"><option value="Grapefruit Tangerine Elixir 10mg - Granny&#39;s"><option value="Raspberry Lemonade 10mg - Uncle Arnie&#39;s"><option value="Blueberry Cream Botanical Soda 10mg - Grasslandz"><option value="Birch Beer Botanical Soda 10mg - Grasslandz"><option value="Cranberry Pomegranate Mule Mocktail 10mg – BLNCD"><option value="Cream Soda Two Scoops THC Float 10mg - Foundry"><option value="Brain Boost THC + Adaptogens Hibiscus Punch 5mg THC 5mg CBD - BLNCD"><option value="Prickly Pear Bee’s Knees Mocktail 10mg - BLNCD"><option value="Zen Blend THC + Adaptogens Blackberry Lime Drink - BLNCD"><option value="Tahitian Trip Shot - 10mg - Uncle Arnie&#39;s"><option value="Lemon Mint Shot 10mg - Uncle Arnie&#39;s"><option value="Sunrise Orange Shot - Uncle Arnie&#39;s"><option value="Strawberry Kiwi Shot 10mg - Uncle Arnie&#39;s"><option value="Magic Mango Shot 10mg - Uncle Arnie&#39;s"><option value="Blueberry Nightcap Shot 10mg THC 5mg CBN - Uncle Arnie&#39;s"><option value="Lemon Pound Cake White Chocolate Bar 50mg - JVF"><option value="Berry Gelato Bitz Gummy - 50mg"><option value="Creamy White Chocolate Bar 50mg - Retro Bakery"><option value="Hunters Blood Orange Milk Chocolate Bar 50mg - JVF"><option value="Sour Apple Bitz 50mg - Retro Bakery"><option value="Blue Dream THC Soda 20mg - Foundry Nation"><option value="Strawberry Fields THC Soda 20mg - Foundry Nation"><option value="Brain Boost THC + Adaptogen Elixir 20MG - BLNCD"><option value="Zen Blend THC + Adaptogen Elixir 20mg - BLNCD"><option value="Blueberry Lemonade Shooter 10mg - Nuqanna"><option value="Strawberry Guava - Nuqanna Shooter 10mg"><option value="Retro Days Gummies 150mg CBD+150mg CBG - Retro Bakery"><option value="Retro Nights Gummies 250mg CBD+80mg CBN - Retro Bakery"><option value="Flavor Pack Gummies 50mg - Granny&#39;s"><option value="Very Berry Grape Wheels Gummies 50mg - Retro Bakery"><option value="Cirtus Punch Wheels Gummies 50mg - Retro Bakery"><option value="Pear Ginger Gummies 50mg - Granny&#39;s"><option value="Limited Edition! Cranberry Apple Rosin Gummies 50mg - Granny&#39;s"><option value="Sour Pink Lemonade Wheels Gummies 50mg - Retro Bakery"><option value="Watermelon Wheels Gummies 50mg - Retro Bakery"><option value="Blue Raspberry Wheels Gummies 50mg - Retro Bakery"><option value="Orange Creamsicle Gummies 50mg - Granny&#39;s"><option value="Rainbow Sherbert Gummies 50mg - Granny&#39;s"><option value="Sour Cherry Wheels Gummies 50mg - Retro Bakery"><option value="Granny Smith Apple Gummies 50mg - Granny&#39;s"><option value="Sour Apple Wheels Gummies 50mg - Retro Bakery"><option value="Root Beer Float Wheels Gummies 50mg - Retro Bakery"><option value="Vital Cleansing Oil - BLNCD"><option value="Peach Daytime Gummies 50mg - KURIBL"><option value="Blueberry Pomegranate Gummies 50mg - KURIBL"><option value="Cherry Daytime Gummies 50mg - KURIBL"><option value="Powered Passion Orange Guava Daytime FOCUS CBG Gummies 50mg THC 250mg CBG - Raiden Labs"><option value="Static Strawberry Daytime FOCUS Gummies 50mg - Raiden Labs"><option value="Daytime FOCUS CBG Gummies 50mg - Raiden Labs"><option value="Nighttime Blueberry Black Currant Gummies 24mg - Raiden Labs"><option value="Citrus Blood Orange Tangerine Gummies 50mg - BLNCD"><option value="Elevated Mocktail Variety Pack - BLNCD"><option value="Mini S&#39;mores by Retro Bakery"><option value="Bubble Bath Pre-Roll by Campfire Cannabis"></datalist>
+    <datalist id="checkin-products"><option value="CBD Sparkling Water BLISS 20mg - BLNCD"><option value="CBD Sparkling Water BALANCE 20mg - BLNCD"><option value="CBD Sparkling Water CHILL 20mg - BLNCD"><option value="Tart Lime 10mg - Plift"><option value="Daytime Blood Orange Lime Drink 10mg - You Betcha!"><option value="Mango Guava 10mg - Odder"><option value="Jasmine Lemon Green Tea 10mg THC 5mg CBG - You Betcha!"><option value="Crisp Ginger 10mg - Plift"><option value="Juicy Grapefruit 10mg - Plift"><option value="Wild Berry Lemonade 10mg - Birdie"><option value="Pineapple Mango - Birdie"><option value="Passion Fruit Guava Juice 10MG - Birdie"><option value="Orange Soda Pop 10mg - Uncle Arnie&#39;s"><option value="Grape Soda Pop 10mg - Uncle Arnie&#39;s"><option value="Pineapple Passionfruit Elixir 10mg - Granny&#39;s"><option value="Cherry Limeade 10mg - Uncle Arnie&#39;s"><option value="Berry Pineapple 10mg - Odder"><option value="Lemon Lime Cherry 10mg - Odder"><option value="Strawberry Kiwi Anytime Seltzer 10mg - You Betcha!"><option value="Nighttime Blackberry Lemon Drink 5mg THC/CBD - You Betcha!"><option value="Blueberry Pomegranate Elixir 10mg - Granny&#39;s"><option value="Watermelon Elixir 10mg - Granny&#39;s"><option value="Zen Magic Tea 10mg - Uncle Arnie&#39;s"><option value="Grape Shot 39MG - Trap Packz by Retro Bakery"><option value="Pink Lemonade 10mg - Retro Bakery"><option value="Grapefruit Tangerine Elixir 10mg - Granny&#39;s"><option value="Raspberry Lemonade 10mg - Uncle Arnie&#39;s"><option value="Nighttime Hibiscus Mint Drink 5MG THC/CBN, 10MG CBD - You Betcha!"><option value="Blueberry Cream Botanical Soda 10mg - Grasslandz"><option value="Birch Beer Botanical Soda 10mg - Grasslandz"><option value="Cranberry Pomegranate Mule Mocktail 10mg – BLNCD"><option value="Cream Soda Two Scoops THC Float 10mg - Foundry"><option value="Brain Boost THC + Adaptogens Hibiscus Punch 5mg THC 5mg CBD - BLNCD"><option value="Prickly Pear Bee’s Knees Mocktail 10mg - BLNCD"><option value="Zen Blend THC + Adaptogens Blackberry Lime Drink - BLNCD"><option value="Tahitian Trip Shot - 10mg - Uncle Arnie&#39;s"><option value="Lemon Mint Shot 10mg - Uncle Arnie&#39;s"><option value="Sunrise Orange Shot - Uncle Arnie&#39;s"><option value="Strawberry Kiwi Shot 10mg - Uncle Arnie&#39;s"><option value="Magic Mango Shot 10mg - Uncle Arnie&#39;s"><option value="Blueberry Nightcap Shot 10mg THC 5mg CBN - Uncle Arnie&#39;s"><option value="Lemon Pound Cake White Chocolate Bar 50mg - JVF"><option value="Creamy White Chocolate Bar 50mg - Retro Bakery"><option value="Hunters Blood Orange Milk Chocolate Bar 50mg - JVF"><option value="Sour Apple Bitz 50mg - Retro Bakery"><option value="Berry Gelato Bitz Gummy - 50mg"><option value="Blue Dream THC Soda 20mg - Foundry Nation"><option value="Strawberry Fields THC Soda 20mg - Foundry Nation"><option value="Brain Boost THC + Adaptogen Elixir 20MG - BLNCD"><option value="Zen Blend THC + Adaptogen Elixir 20mg - BLNCD"><option value="Blueberry Lemonade Shooter 10mg - Nuqanna"><option value="Strawberry Guava - Nuqanna Shooter 10mg"><option value="Retro Days Gummies 150mg CBD+150mg CBG - Retro Bakery"><option value="Retro Nights Gummies 250mg CBD+80mg CBN - Retro Bakery"><option value="Flavor Pack Gummies 50mg - Granny&#39;s"><option value="Very Berry Grape Wheels Gummies 50mg - Retro Bakery"><option value="Cirtus Punch Wheels Gummies 50mg - Retro Bakery"><option value="Pear Ginger Gummies 50mg - Granny&#39;s"><option value="Limited Edition! Cranberry Apple Rosin Gummies 50mg - Granny&#39;s"><option value="Sour Pink Lemonade Wheels Gummies 50mg - Retro Bakery"><option value="Watermelon Wheels Gummies 50mg - Retro Bakery"><option value="Blue Raspberry Wheels Gummies 50mg - Retro Bakery"><option value="Orange Creamsicle Gummies 50mg - Granny&#39;s"><option value="Rainbow Sherbert Gummies 50mg - Granny&#39;s"><option value="Sour Cherry Wheels Gummies 50mg - Retro Bakery"><option value="Granny Smith Apple Gummies 50mg - Granny&#39;s"><option value="Sour Apple Wheels Gummies 50mg - Retro Bakery"><option value="Root Beer Float Wheels Gummies 50mg - Retro Bakery"><option value="Vital Cleansing Oil - BLNCD"><option value="Peach Daytime Gummies 50mg - KURIBL"><option value="Blueberry Pomegranate Gummies 50mg - KURIBL"><option value="Cherry Daytime Gummies 50mg - KURIBL"><option value="Powered Passion Orange Guava Daytime FOCUS CBG Gummies 50mg THC 250mg CBG - Raiden Labs"><option value="Static Strawberry Daytime FOCUS Gummies 50mg - Raiden Labs"><option value="Daytime FOCUS CBG Gummies 50mg - Raiden Labs"><option value="Nighttime Blueberry Black Currant Gummies 24mg - Raiden Labs"><option value="Citrus Blood Orange Tangerine Gummies 50mg - BLNCD"><option value="Elevated Mocktail Variety Pack - BLNCD"><option value="Mini S&#39;mores by Retro Bakery"><option value="Bubble Bath Pre-Roll by Campfire Cannabis"></datalist>
     <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
     <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
     <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
@@ -342,7 +368,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Flame &amp; Flora</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/86a48e79-96dc-402c-bc95-442aa79df364" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0017">CBD Sparkling Water BLISS 20mg - BLNCD</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/86a48e79-96dc-402c-bc95-442aa79df364" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0000">CBD Sparkling Water BLISS 20mg - BLNCD</a></td>
     <td>Blncd</td>
     <td style="text-align:right" class="price">$4.00 ✓</td>
     <td style="text-align:right">$4.00</td>
@@ -420,74 +446,74 @@
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/e329af0e-ae79-4733-96c2-258159035b68" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0089">Grape Soda Pop 10mg - Uncle Arnie&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/e329af0e-ae79-4733-96c2-258159035b68" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0086">Grape Soda Pop 10mg - Uncle Arnie&#39;s</a></td>
     <td>Uncle Arnie&#39;s</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/2b5037d5-c409-4537-861c-c42faabfa829" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0090">Pineapple Passionfruit Elixir 10mg - Granny&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/2b5037d5-c409-4537-861c-c42faabfa829" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0087">Pineapple Passionfruit Elixir 10mg - Granny&#39;s</a></td>
     <td>Granny&#39;s</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/b4e428e3-11c2-4d8f-853f-0db4a5978a08" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0091">Cherry Limeade 10mg - Uncle Arnie&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/b4e428e3-11c2-4d8f-853f-0db4a5978a08" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0088">Cherry Limeade 10mg - Uncle Arnie&#39;s</a></td>
     <td>Uncle Arnie&#39;s</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/5e2d6c9d-22be-48ce-a250-c4f3913d30de" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0101">Berry Pineapple 10mg - Odder</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/5e2d6c9d-22be-48ce-a250-c4f3913d30de" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0098">Berry Pineapple 10mg - Odder</a></td>
     <td>Odder</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/2f2aa0a6-deeb-4b14-b480-75969f8225ad" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0102">Lemon Lime Cherry 10mg - Odder</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/2f2aa0a6-deeb-4b14-b480-75969f8225ad" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0099">Lemon Lime Cherry 10mg - Odder</a></td>
     <td>Odder</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/2756a9e4-b2ea-4894-bf70-5edbc583dee2" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0111">Strawberry Kiwi Anytime Seltzer 10mg - You Betcha!</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/2756a9e4-b2ea-4894-bf70-5edbc583dee2" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0108">Strawberry Kiwi Anytime Seltzer 10mg - You Betcha!</a></td>
     <td>You Betcha!</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/tz0112">Nighttime Blackberry Lemon Drink 5mg THC/CBD - You Betcha!</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/tz0109">Nighttime Blackberry Lemon Drink 5mg THC/CBD - You Betcha!</a></td>
     <td>You Betcha!</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/fd230694-a236-49d7-b12e-b520f8aa25bf" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0116">Blueberry Pomegranate Elixir 10mg - Granny&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/fd230694-a236-49d7-b12e-b520f8aa25bf" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0113">Blueberry Pomegranate Elixir 10mg - Granny&#39;s</a></td>
     <td>Granny&#39;s</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/948a3ba2-2778-4032-9c01-77182f3ac9fa" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0124">Watermelon Elixir 10mg - Granny&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/948a3ba2-2778-4032-9c01-77182f3ac9fa" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0121">Watermelon Elixir 10mg - Granny&#39;s</a></td>
     <td>Granny&#39;s</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/50f42313-c304-422d-8e9c-2eb619915f15" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0125">Zen Magic Tea 10mg - Uncle Arnie&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/50f42313-c304-422d-8e9c-2eb619915f15" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0122">Zen Magic Tea 10mg - Uncle Arnie&#39;s</a></td>
     <td>Uncle Arnie&#39;s</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/tz0149">Nighttime Hibiscus Mint Drink 5MG THC/CBN, 10MG CBD - You Betcha!</a></td>
-    <td>You Betcha!</td>
-    <td style="text-align:right" class="price">$5.00 ✓</td>
-    <td style="text-align:right">$5.00</td>
-  </tr>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/57400163-88ec-4a3f-a99a-59f7deef059a" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0160">Grape Shot 39MG - Trap Packz by Retro Bakery</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/57400163-88ec-4a3f-a99a-59f7deef059a" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0155">Grape Shot 39MG - Trap Packz by Retro Bakery</a></td>
     <td>Trap Packz</td>
+    <td style="text-align:right" class="price">$5.00 ✓</td>
+    <td style="text-align:right">$5.00</td>
+  </tr>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/5bda051d-b00d-4595-a42d-ff8a7a54410d" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0156">Pink Lemonade 10mg - Retro Bakery</a></td>
+    <td>Retro Bakery</td>
     <td style="text-align:right" class="price">$5.00 ✓</td>
     <td style="text-align:right">$5.00</td>
   </tr>
@@ -499,7 +525,7 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Flame &amp; Flora</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/83c9eaf1-ee86-4441-ae3c-a84ca9436d02" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0020">Lemon Mint Shot 10mg - Uncle Arnie&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/83c9eaf1-ee86-4441-ae3c-a84ca9436d02" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0003">Lemon Mint Shot 10mg - Uncle Arnie&#39;s</a></td>
     <td>Uncle Arnie&#39;s</td>
     <td style="text-align:right" class="price">$8.00 ✓</td>
     <td style="text-align:right">$8.00</td>
@@ -511,26 +537,26 @@
     <td style="text-align:right">$8.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/5b78bf82-b6d2-4eb3-97be-518df5464c6a" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0083">Berry Gelato Bitz Gummy - 50mg</a></td>
-    <td>Jvf</td>
-    <td style="text-align:right" class="price">$8.00 ✓</td>
-    <td style="text-align:right">$8.00</td>
-  </tr>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/c0f207b5-69b6-409f-847e-f8825a4a54a0" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0118">Creamy White Chocolate Bar 50mg - Retro Bakery</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/c0f207b5-69b6-409f-847e-f8825a4a54a0" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0115">Creamy White Chocolate Bar 50mg - Retro Bakery</a></td>
     <td>Retro Bakery</td>
     <td style="text-align:right" class="price">$8.00 ✓</td>
     <td style="text-align:right">$8.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/f660c88b-01df-406e-8f3c-0e7f7b6bd887" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0170">Hunters Blood Orange Milk Chocolate Bar 50mg - JVF</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/f660c88b-01df-406e-8f3c-0e7f7b6bd887" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0164">Hunters Blood Orange Milk Chocolate Bar 50mg - JVF</a></td>
     <td>Jvf</td>
     <td style="text-align:right" class="price">$8.00 ✓</td>
     <td style="text-align:right">$8.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/8efe5ef6-2dab-40be-9c61-1f582b2153de" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0188">Sour Apple Bitz 50mg - Retro Bakery</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/8efe5ef6-2dab-40be-9c61-1f582b2153de" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0177">Sour Apple Bitz 50mg - Retro Bakery</a></td>
     <td>Retro Bakery</td>
+    <td style="text-align:right" class="price">$8.00 ✓</td>
+    <td style="text-align:right">$8.00</td>
+  </tr>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/5b78bf82-b6d2-4eb3-97be-518df5464c6a" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0182">Berry Gelato Bitz Gummy - 50mg</a></td>
+    <td>Jvf</td>
     <td style="text-align:right" class="price">$8.00 ✓</td>
     <td style="text-align:right">$8.00</td>
   </tr>
@@ -541,7 +567,7 @@
     <td style="text-align:right">$11.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/628d036a-f401-42cd-9c70-28c9b9a5f612" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0075">Retro Nights Gummies 250mg CBD+80mg CBN - Retro Bakery</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/628d036a-f401-42cd-9c70-28c9b9a5f612" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0074">Retro Nights Gummies 250mg CBD+80mg CBN - Retro Bakery</a></td>
     <td>Retro Bakery</td>
     <td style="text-align:right" class="price">$11.00 ✓</td>
     <td style="text-align:right">$11.00</td>
@@ -559,73 +585,73 @@
     <td style="text-align:right">$12.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/54ea8143-a12c-4ce9-bf6f-2878c2916b59" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0081">Cirtus Punch Wheels Gummies 50mg - Retro Bakery</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/54ea8143-a12c-4ce9-bf6f-2878c2916b59" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0079">Cirtus Punch Wheels Gummies 50mg - Retro Bakery</a></td>
     <td>Retro Bakery</td>
     <td style="text-align:right" class="price">$12.00 ✓</td>
     <td style="text-align:right">$12.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/2a50e7ef-f385-4ed6-8d9b-0ffb0c724f7b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0082">Pear Ginger Gummies 50mg - Granny&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/2a50e7ef-f385-4ed6-8d9b-0ffb0c724f7b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0080">Pear Ginger Gummies 50mg - Granny&#39;s</a></td>
     <td>Granny&#39;s</td>
     <td style="text-align:right" class="price">$12.00 ✓</td>
     <td style="text-align:right">$12.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/ea130be4-7b12-4b16-a868-a3900a6969dc" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0099">Limited Edition! Cranberry Apple Rosin Gummies 50mg - Granny&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/ea130be4-7b12-4b16-a868-a3900a6969dc" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0096">Limited Edition! Cranberry Apple Rosin Gummies 50mg - Granny&#39;s</a></td>
     <td>Granny&#39;s</td>
     <td style="text-align:right" class="price">$12.00 ✓</td>
     <td style="text-align:right">$12.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/82fb07ab-f191-433a-9a9b-4d2be768e3dd" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0104">Sour Pink Lemonade Wheels Gummies 50mg - Retro Bakery</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/82fb07ab-f191-433a-9a9b-4d2be768e3dd" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0101">Sour Pink Lemonade Wheels Gummies 50mg - Retro Bakery</a></td>
     <td>Retro Bakery</td>
     <td style="text-align:right" class="price">$12.00 ✓</td>
     <td style="text-align:right">$12.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/a7810777-5553-448c-b880-21eb42f000b9" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0105">Watermelon Wheels Gummies 50mg - Retro Bakery</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/a7810777-5553-448c-b880-21eb42f000b9" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0102">Watermelon Wheels Gummies 50mg - Retro Bakery</a></td>
     <td>Retro Bakery</td>
     <td style="text-align:right" class="price">$12.00 ✓</td>
     <td style="text-align:right">$12.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/b8bc2d87-b390-46b2-b1f0-bb7761ca0d95" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0131">Blue Raspberry Wheels Gummies 50mg - Retro Bakery</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/b8bc2d87-b390-46b2-b1f0-bb7761ca0d95" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0128">Blue Raspberry Wheels Gummies 50mg - Retro Bakery</a></td>
     <td>Retro Bakery</td>
     <td style="text-align:right" class="price">$12.00 ✓</td>
     <td style="text-align:right">$12.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/f5f6cef5-0356-4301-85a4-8102d61ac9fb" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0134">Orange Creamsicle Gummies 50mg - Granny&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/f5f6cef5-0356-4301-85a4-8102d61ac9fb" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0132">Orange Creamsicle Gummies 50mg - Granny&#39;s</a></td>
     <td>Granny&#39;s</td>
     <td style="text-align:right" class="price">$12.00 ✓</td>
     <td style="text-align:right">$12.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/387e756e-8644-4ff4-b114-e1ba6aefd882" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0135">Rainbow Sherbert Gummies 50mg - Granny&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/387e756e-8644-4ff4-b114-e1ba6aefd882" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0133">Rainbow Sherbert Gummies 50mg - Granny&#39;s</a></td>
     <td>Granny&#39;s</td>
     <td style="text-align:right" class="price">$12.00 ✓</td>
     <td style="text-align:right">$12.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/5d46972a-a99d-48ff-aeb2-7c4fc677c37f" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0136">Sour Cherry Wheels Gummies 50mg - Retro Bakery</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/5d46972a-a99d-48ff-aeb2-7c4fc677c37f" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0134">Sour Cherry Wheels Gummies 50mg - Retro Bakery</a></td>
     <td>Retro Bakery</td>
     <td style="text-align:right" class="price">$12.00 ✓</td>
     <td style="text-align:right">$12.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/0cc52ca9-d6bd-4a8d-83c7-8820ae5b6dd8" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0147">Granny Smith Apple Gummies 50mg - Granny&#39;s</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/0cc52ca9-d6bd-4a8d-83c7-8820ae5b6dd8" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0144">Granny Smith Apple Gummies 50mg - Granny&#39;s</a></td>
     <td>Granny&#39;s</td>
     <td style="text-align:right" class="price">$12.00 ✓</td>
     <td style="text-align:right">$12.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/84bb5299-7330-499f-8a31-3033bd7a894b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0157">Sour Apple Wheels Gummies 50mg - Retro Bakery</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/84bb5299-7330-499f-8a31-3033bd7a894b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0152">Sour Apple Wheels Gummies 50mg - Retro Bakery</a></td>
     <td>Retro Bakery</td>
     <td style="text-align:right" class="price">$12.00 ✓</td>
     <td style="text-align:right">$12.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/516bf18e-3484-4038-ab77-90c12ee6b53d" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0159">Root Beer Float Wheels Gummies 50mg - Retro Bakery</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/516bf18e-3484-4038-ab77-90c12ee6b53d" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0154">Root Beer Float Wheels Gummies 50mg - Retro Bakery</a></td>
     <td>Retro Bakery</td>
     <td style="text-align:right" class="price">$12.00 ✓</td>
     <td style="text-align:right">$12.00</td>
@@ -637,13 +663,13 @@
     <td style="text-align:right">$14.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/3622c0df-0907-40e3-a3a0-b51601664516" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0163">Blueberry Pomegranate Gummies 50mg - KURIBL</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/3622c0df-0907-40e3-a3a0-b51601664516" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0158">Blueberry Pomegranate Gummies 50mg - KURIBL</a></td>
     <td>Kuribl</td>
     <td style="text-align:right" class="price">$14.00 ✓</td>
     <td style="text-align:right">$14.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/f54d44e7-9a17-46da-8c44-54048e76ad92" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0164">Cherry Daytime Gummies 50mg - KURIBL</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/f54d44e7-9a17-46da-8c44-54048e76ad92" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0159">Cherry Daytime Gummies 50mg - KURIBL</a></td>
     <td>Kuribl</td>
     <td style="text-align:right" class="price">$14.00 ✓</td>
     <td style="text-align:right">$14.00</td>
@@ -669,19 +695,19 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Flame &amp; Flora</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><a href="/#compare/tz0192">Bubble Bath Pre-Roll by Campfire Cannabis</a></td>
+    <td style="display:flex;align-items:center"><a href="/#compare/tz0196">Bubble Bath Pre-Roll by Campfire Cannabis</a></td>
     <td>Campfire Cannabis</td>
     <td style="text-align:right" class="price">$19.00 ✓</td>
     <td style="text-align:right">$19.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/e2d5b2f5-2c24-4b82-a49d-b5886b1bd2c1" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0193">Cherry Purgatory Infused Kief Coated Preroll 1.2g - Lakeside Canna</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/e2d5b2f5-2c24-4b82-a49d-b5886b1bd2c1" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0180">Cherry Purgatory Infused Kief Coated Preroll 1.2g - Lakeside Canna</a></td>
     <td>Lakeside Cannabis Co.</td>
     <td style="text-align:right" class="price">$32.00 ✓</td>
     <td style="text-align:right">$32.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/3fa3adf8-cf54-4500-8784-2013ba63534c" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0194">Infused Kief Coated Preroll Forbidden Diesel 1g - Lakeside Canna</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/3fa3adf8-cf54-4500-8784-2013ba63534c" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0187">Infused Kief Coated Preroll Forbidden Diesel 1g - Lakeside Canna</a></td>
     <td>Lakeside Cannabis Co.</td>
     <td style="text-align:right" class="price">$32.00 ✓</td>
     <td style="text-align:right">$32.00</td>
@@ -700,7 +726,7 @@
     <td style="text-align:right">$30.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/2501bcbe-34d5-4a71-8eec-b3d64310294a" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0011">Relief Muscle &amp; Joint CBD Gel Roll-On 1000mg - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/2501bcbe-34d5-4a71-8eec-b3d64310294a" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0016">Relief Muscle &amp; Joint CBD Gel Roll-On 1000mg - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$40.00 ✓</td>
     <td style="text-align:right">$40.00</td>
@@ -712,19 +738,19 @@
     <td style="text-align:right">$40.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/bb6b3c00-088e-4f59-94f3-8c4979869eb1" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0002">Soft Gel Caps 750mg - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/bb6b3c00-088e-4f59-94f3-8c4979869eb1" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0007">Soft Gel Caps 750mg - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/76b93c51-2206-4b41-86bd-1d1dbc62ded5" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0006">Focus CBD Oil 1500 mg Full-Spectrum Mint - 1500mg</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/76b93c51-2206-4b41-86bd-1d1dbc62ded5" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0011">Focus CBD Oil 1500 mg Full-Spectrum Mint - 1500mg</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/45438d8c-9b66-4498-b8ee-115530eab257" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0014">Focus CBD Oil 1500 mg (THC-Free) - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/45438d8c-9b66-4498-b8ee-115530eab257" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0019">Focus CBD Oil 1500 mg (THC-Free) - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
@@ -736,49 +762,49 @@
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/e7bc0631-8686-4871-9fb1-62e095a752fa" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0079">Lemon Blueberry Tincture 1500mg - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/e7bc0631-8686-4871-9fb1-62e095a752fa" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0077">Lemon Blueberry Tincture 1500mg - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/e58479d8-e0f4-4d99-9607-7669180b2cf7" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0001">Lavender Lotion 2000mg - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/e58479d8-e0f4-4d99-9607-7669180b2cf7" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0006">Lavender Lotion 2000mg - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/9a5074db-5d59-41d5-bd45-c19977def90b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0005">Silver Cream 1500mg CBD - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/9a5074db-5d59-41d5-bd45-c19977def90b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0010">Silver Cream 1500mg CBD - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/56036cd4-ec87-4cd3-ae2d-c9a3969045b8" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0007">Sleep CBD Oil 2500 mg Full-Spectrum Mint - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/56036cd4-ec87-4cd3-ae2d-c9a3969045b8" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0012">Sleep CBD Oil 2500 mg Full-Spectrum Mint - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/f916b028-5f8f-4870-8991-ef2464d7332f" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0009">Sleep CBD Oil 2500 mg Full-Spectrum - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/f916b028-5f8f-4870-8991-ef2464d7332f" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0014">Sleep CBD Oil 2500 mg Full-Spectrum - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/b95954aa-166f-471b-bf13-cd65459730ea" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0012">White Jasmine Lotion 2000mg CBD - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/b95954aa-166f-471b-bf13-cd65459730ea" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0017">White Jasmine Lotion 2000mg CBD - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/b4747898-986c-4245-94b7-189373489430" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0013">Lemon Blueberry Tincture 2500mg - Carpe diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/b4747898-986c-4245-94b7-189373489430" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0018">Lemon Blueberry Tincture 2500mg - Carpe diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/0d17381f-1511-4ae9-baae-6b8d3cbc5431" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0015">Sleep CBD Oil 2500 mg (THC-Free) - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/0d17381f-1511-4ae9-baae-6b8d3cbc5431" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0020">Sleep CBD Oil 2500 mg (THC-Free) - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
@@ -802,37 +828,37 @@
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/56af024d-cfb7-40e4-872a-dd3230fae0ff" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0092">NightTime Tincture 419mg - True Canna</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/56af024d-cfb7-40e4-872a-dd3230fae0ff" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0089">NightTime Tincture 419mg - True Canna</a></td>
     <td>True Canna</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/ef4e09c2-5996-478a-8a62-0db582faa144" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0123">Red Cream 1,500 MG CBD - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/ef4e09c2-5996-478a-8a62-0db582faa144" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0120">Red Cream 1,500 MG CBD - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/d8d61626-a0da-4eb9-b746-16e2cd4127b1" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0004">Lemon Blueberry Tincture 5000mg - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/d8d61626-a0da-4eb9-b746-16e2cd4127b1" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0009">Lemon Blueberry Tincture 5000mg - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$120.00 ✓</td>
     <td style="text-align:right">$120.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/c59d9df3-b949-4063-a253-1ab6da6b5e0b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0008">Recover CBD Oil 5000 mg Full-Spectrum Mint - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/c59d9df3-b949-4063-a253-1ab6da6b5e0b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0013">Recover CBD Oil 5000 mg Full-Spectrum Mint - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$120.00 ✓</td>
     <td style="text-align:right">$120.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/19ccc7f0-fc8f-46b0-b4e7-a7ac5bc135a5" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0010">Recover CBD Oil 5000 mg Full-Spectrum - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/19ccc7f0-fc8f-46b0-b4e7-a7ac5bc135a5" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0015">Recover CBD Oil 5000 mg Full-Spectrum - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$120.00 ✓</td>
     <td style="text-align:right">$120.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/6680c1ee-aa38-4c09-aace-c5df015633a0" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0016">Recover CBD Oil 5000 mg (THC-Free) - Carpe Diem</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/6680c1ee-aa38-4c09-aace-c5df015633a0" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0021">Recover CBD Oil 5000 mg (THC-Free) - Carpe Diem</a></td>
     <td>Carpe Diem</td>
     <td style="text-align:right" class="price">$120.00 ✓</td>
     <td style="text-align:right">$120.00</td>
@@ -845,13 +871,13 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Flame &amp; Flora</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/99254af4-2cd8-47c5-bebe-d436a547724c" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0178">ATF Cartridge 0.5g - Nebula</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/99254af4-2cd8-47c5-bebe-d436a547724c" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0193">ATF Cartridge 0.5g - Nebula</a></td>
     <td>Nebula</td>
     <td style="text-align:right" class="price">$35.00 ✓</td>
     <td style="text-align:right">$35.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/2c1ba0e8-5bf7-46d6-9dbc-da54043ffe32" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0022">Grape Jelly Cartridge 1g - NativeCare</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/2c1ba0e8-5bf7-46d6-9dbc-da54043ffe32" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0004">Grape Jelly Cartridge 1g - NativeCare</a></td>
     <td>Nativecare</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
@@ -863,80 +889,80 @@
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/2ebe32e7-6084-4623-aaf8-110575268984" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0187">Do Si Do&#39;s Cart 1 Gram - Grasslandz</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/1944fe73-9ce3-4fcc-af9e-bbb01b8e35f2" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0184">Banana Kush Cart - Grasslandz</a></td>
     <td>Grasslandz</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/1944fe73-9ce3-4fcc-af9e-bbb01b8e35f2" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0189">Banana Kush Cart - Grasslandz</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/2ebe32e7-6084-4623-aaf8-110575268984" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0194">Do Si Do&#39;s Cart 1 Gram - Grasslandz</a></td>
     <td>Grasslandz</td>
     <td style="text-align:right" class="price">$50.00 ✓</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/34b43535-fd28-4b65-8663-91177e63d3f6" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0021">Blue Dream 1g Disposable - NativeCare</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/34b43535-fd28-4b65-8663-91177e63d3f6" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0022">Blue Dream 1g Disposable - NativeCare</a></td>
     <td>Nativecare</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/fe95cd92-6c2d-461d-819b-83e11f63b76c" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0138">Platinum OG 1g Disposable - Grasslandz</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/fe95cd92-6c2d-461d-819b-83e11f63b76c" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0135">Platinum OG 1g Disposable - Grasslandz</a></td>
     <td>Grasslandz</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/9c6acc10-dff7-4b77-9650-8323222a9ae1" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0154">Rainbow Belt 1g Disposable - NativeCare</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/74008af4-ee08-4052-a1d6-b0f147abcafa" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0148">Grape Jelly 1g Disposable - NativeCare</a></td>
     <td>Nativecare</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/74008af4-ee08-4052-a1d6-b0f147abcafa" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0155">Grape Jelly 1g Disposable - NativeCare</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/9c6acc10-dff7-4b77-9650-8323222a9ae1" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0150">Rainbow Belt 1g Disposable - NativeCare</a></td>
     <td>Nativecare</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/bb19d7a3-e162-4b61-938e-a5025def55a4" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0158">God&#39;s Gift 1g Disposable - Lakeside Canna</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/bb19d7a3-e162-4b61-938e-a5025def55a4" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0153">God&#39;s Gift 1g Disposable - Lakeside Canna</a></td>
     <td>Lakeside Cannabis Co.</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/c1351aad-2844-4fff-92f4-04adb966fc24" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0168">Live Rosin Disposable 0.5 Grams - OREOZ (Sativa) - Grasslandz</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/6e8f91bc-8eb0-4a3e-baf4-0eb9803bf708" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0163">Pound Cake Live Rosin Disposable 0.5 Grams - Grasslandz</a></td>
     <td>Grasslandz</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/6e8f91bc-8eb0-4a3e-baf4-0eb9803bf708" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0169">Pound Cake Live Rosin Disposable 0.5 Grams - Grasslandz</a></td>
-    <td>Grasslandz</td>
-    <td style="text-align:right" class="price">$60.00 ✓</td>
-    <td style="text-align:right">$60.00</td>
-  </tr>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/86d42f07-1bc8-4fcc-9fe6-daf8bbcced6e" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0171">LSC - DISPOSABLE - KANESINO - 1G</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/86d42f07-1bc8-4fcc-9fe6-daf8bbcced6e" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0165">LSC - DISPOSABLE - KANESINO - 1G</a></td>
     <td>Lakeside Cannabis Co.</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/029912e2-252b-4fc7-aef1-d2c4f52d6544" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0181">Orange Creamsicle 1g Disposable - NativeCare</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/4771ce7f-9917-45e2-a328-1954ef11e4ff" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0173">Sour Diesel 1g Disposable - Grasslandz</a></td>
+    <td>Grasslandz</td>
+    <td style="text-align:right" class="price">$60.00 ✓</td>
+    <td style="text-align:right">$60.00</td>
+  </tr>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/4b0a43f0-ed32-488b-b784-1ea83599cf25" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0181">Blue Dream 1g Disposable - Grasslandz</a></td>
+    <td>Grasslandz</td>
+    <td style="text-align:right" class="price">$60.00 ✓</td>
+    <td style="text-align:right">$60.00</td>
+  </tr>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/c1351aad-2844-4fff-92f4-04adb966fc24" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0191">Live Rosin Disposable 0.5 Grams - OREOZ (Sativa) - Grasslandz</a></td>
+    <td>Grasslandz</td>
+    <td style="text-align:right" class="price">$60.00 ✓</td>
+    <td style="text-align:right">$60.00</td>
+  </tr>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/029912e2-252b-4fc7-aef1-d2c4f52d6544" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0195">Orange Creamsicle 1g Disposable - NativeCare</a></td>
     <td>Nativecare</td>
-    <td style="text-align:right" class="price">$60.00 ✓</td>
-    <td style="text-align:right">$60.00</td>
-  </tr>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/4771ce7f-9917-45e2-a328-1954ef11e4ff" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0184">Sour Diesel 1g Disposable - Grasslandz</a></td>
-    <td>Grasslandz</td>
-    <td style="text-align:right" class="price">$60.00 ✓</td>
-    <td style="text-align:right">$60.00</td>
-  </tr>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/4b0a43f0-ed32-488b-b784-1ea83599cf25" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0195">Blue Dream 1g Disposable - Grasslandz</a></td>
-    <td>Grasslandz</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
@@ -948,62 +974,62 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Flame &amp; Flora</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/d34831a9-ee82-4df6-900b-e499d2d14edd" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0074">Jet Fuel Gelato Pre-Packaged Flower 3.5 Grams - Waabigwan Mashkiki</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/3156d00c-3ca2-4c2b-b6c3-ffb78c295397" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0100">Purple Octane 3.5g - Campfire Cannabis</a></td>
+    <td>Campfire Cannabis</td>
+    <td style="text-align:right" class="price">$60.00 ✓</td>
+    <td style="text-align:right">$60.00</td>
+  </tr>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/d2e951a2-e35f-4759-9fb3-682afe1c77e6" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0107">Glitter Bomb 3.5G Pre-Packaged Flower - Waabigwan Mashkiki</a></td>
     <td>Waabigwan Mashkiki</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/3156d00c-3ca2-4c2b-b6c3-ffb78c295397" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0103">Purple Octane 3.5g - Campfire Cannabis</a></td>
-    <td>Campfire Cannabis</td>
-    <td style="text-align:right" class="price">$60.00 ✓</td>
-    <td style="text-align:right">$60.00</td>
-  </tr>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/d2e951a2-e35f-4759-9fb3-682afe1c77e6" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0110">Glitter Bomb 3.5G Pre-Packaged Flower - Waabigwan Mashkiki</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/9dd10163-b305-4aeb-8d92-0e1792978f00" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0123">Biscotti Pre-Packaged Flower 3.5 Grams - Waabigwan Mashkiki</a></td>
     <td>Waabigwan Mashkiki</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/9dd10163-b305-4aeb-8d92-0e1792978f00" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0126">Biscotti Pre-Packaged Flower 3.5 Grams - Waabigwan Mashkiki</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/00e89b46-9dab-43b3-ba9d-993f60b695a6" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0140">Lit OG 3.5 Gram Pre-Packaged Flower - Campfire Cannabis</a></td>
+    <td>Campfire Cannabis</td>
+    <td style="text-align:right" class="price">$60.00 ✓</td>
+    <td style="text-align:right">$60.00</td>
+  </tr>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/05419448-9325-45b3-a94f-86c2ec2c34ef" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0149">MAC 3.5G Pre-Packaged Flower - Waabigwan Mashkiki</a></td>
     <td>Waabigwan Mashkiki</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/00e89b46-9dab-43b3-ba9d-993f60b695a6" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0143">Lit OG 3.5 Gram Pre-Packaged Flower - Campfire Cannabis</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/813be8cd-1105-4a93-8f8d-74723c61e658" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0166">Bubble Bath 3.5 Grams Pre-Packaged Flower</a></td>
     <td>Campfire Cannabis</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/05419448-9325-45b3-a94f-86c2ec2c34ef" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0152">MAC 3.5G Pre-Packaged Flower - Waabigwan Mashkiki</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/94557ad3-1304-4595-830b-d0f1aa7fc794" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0170">Grape Canyon Zkittlez 3.5g - Campfire Cannabis</a></td>
+    <td>Campfire Cannabis</td>
+    <td style="text-align:right" class="price">$60.00 ✓</td>
+    <td style="text-align:right">$60.00</td>
+  </tr>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/c6b20cb7-1b64-435f-bd7e-e79d94a9551c" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0171">Grape Cream Cake 3.5 Grams Pre-Packaged Flower - Campfire Cannabis</a></td>
+    <td>Campfire Cannabis</td>
+    <td style="text-align:right" class="price">$60.00 ✓</td>
+    <td style="text-align:right">$60.00</td>
+  </tr>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/7cf3b5cb-29f5-44bc-b367-a73ab3867c21" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0178">Mac Stomper 3.5g - Campfire Cannabis</a></td>
+    <td>Campfire Cannabis</td>
+    <td style="text-align:right" class="price">$60.00 ✓</td>
+    <td style="text-align:right">$60.00</td>
+  </tr>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/d34831a9-ee82-4df6-900b-e499d2d14edd" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0185">Jet Fuel Gelato Pre-Packaged Flower 3.5 Grams - Waabigwan Mashkiki</a></td>
     <td>Waabigwan Mashkiki</td>
-    <td style="text-align:right" class="price">$60.00 ✓</td>
-    <td style="text-align:right">$60.00</td>
-  </tr>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/813be8cd-1105-4a93-8f8d-74723c61e658" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0172">Bubble Bath 3.5 Grams Pre-Packaged Flower</a></td>
-    <td>Campfire Cannabis</td>
-    <td style="text-align:right" class="price">$60.00 ✓</td>
-    <td style="text-align:right">$60.00</td>
-  </tr>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/94557ad3-1304-4595-830b-d0f1aa7fc794" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0179">Grape Canyon Zkittlez 3.5g - Campfire Cannabis</a></td>
-    <td>Campfire Cannabis</td>
-    <td style="text-align:right" class="price">$60.00 ✓</td>
-    <td style="text-align:right">$60.00</td>
-  </tr>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/c6b20cb7-1b64-435f-bd7e-e79d94a9551c" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0180">Grape Cream Cake 3.5 Grams Pre-Packaged Flower - Campfire Cannabis</a></td>
-    <td>Campfire Cannabis</td>
-    <td style="text-align:right" class="price">$60.00 ✓</td>
-    <td style="text-align:right">$60.00</td>
-  </tr>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/7cf3b5cb-29f5-44bc-b367-a73ab3867c21" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0190">Mac Stomper 3.5g - Campfire Cannabis</a></td>
-    <td>Campfire Cannabis</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
@@ -1014,7 +1040,7 @@
     <td style="text-align:right">$120.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/5c984e9f-eae6-44b0-b695-1c924956c9e0" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0133">Lit OG 7 Gram Pre-Packaged Flower - Campfire Cannabis</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/5c984e9f-eae6-44b0-b695-1c924956c9e0" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0131">Lit OG 7 Gram Pre-Packaged Flower - Campfire Cannabis</a></td>
     <td>Campfire Cannabis</td>
     <td style="text-align:right" class="price">$120.00 ✓</td>
     <td style="text-align:right">$120.00</td>
@@ -1027,37 +1053,37 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Flame &amp; Flora</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/961eef58-c3fc-415d-b0fd-3a9852ef278e" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0127">Orange Malt Live Rosin Pen .5g - Grasslandz</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/961eef58-c3fc-415d-b0fd-3a9852ef278e" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0124">Orange Malt Live Rosin Pen .5g - Grasslandz</a></td>
     <td>Grasslandz</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/c4703174-e1d9-4ad0-9502-547cc481ed62" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0151">Gelato Sorbet Sugar 1g - NativeCare</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/c4703174-e1d9-4ad0-9502-547cc481ed62" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0147">Gelato Sorbet Sugar 1g - NativeCare</a></td>
     <td>Nativecare</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/e6c6c786-1d32-4a3c-96cf-8b747c1d6bc3" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0166">Sunset OG Crumble 1g - NativeCare</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/e6c6c786-1d32-4a3c-96cf-8b747c1d6bc3" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0161">Sunset OG Crumble 1g - NativeCare</a></td>
     <td>Nativecare</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/9c6eeb1e-932e-4914-a26d-bd71b2064665" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0174">Ice Cream Cake Live Rosin Pen .5g - Grasslandz</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/9c6eeb1e-932e-4914-a26d-bd71b2064665" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0168">Ice Cream Cake Live Rosin Pen .5g - Grasslandz</a></td>
     <td>Grasslandz</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/ad7b5954-5f7a-40a3-ba2f-905d6301200b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0175">Space Rocks Live Rosin Pen .5g - Grasslandz</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/ad2cfe92-63a5-4482-885e-d3ed1796eb22" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0190">Apple Fritter Live Rosin Pen .5g - Grasslandz</a></td>
     <td>Grasslandz</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/ad2cfe92-63a5-4482-885e-d3ed1796eb22" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0176">Apple Fritter Live Rosin Pen .5g - Grasslandz</a></td>
+    <td style="display:flex;align-items:center"><img src="https://d1hhy58mqsa6c3.cloudfront.net/34ef7aac-a377-44d8-a2fb-35ecbbbc7da2/ad7b5954-5f7a-40a3-ba2f-905d6301200b" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/tz0192">Space Rocks Live Rosin Pen .5g - Grasslandz</a></td>
     <td>Grasslandz</td>
     <td style="text-align:right" class="price">$60.00 ✓</td>
     <td style="text-align:right">$60.00</td>
