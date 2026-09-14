@@ -3036,6 +3036,48 @@
             }
         }
 
+        // Owner's own specials (needs the owner access link): list + remove.
+        (async () => {
+            const box = document.getElementById('dash-my-specials');
+            const listEl = document.getElementById('dash-my-specials-list');
+            if (!box || !listEl) return;
+            const tok = ownerToken();
+            if (!tok) return;
+            const load = async () => {
+                let rows = [];
+                try {
+                    const r = await fetch(`${TCC_WORKER_URL}/deals/mine?shop=${encodeURIComponent(d.id)}`, { headers: { Authorization: 'Bearer ' + tok }, cache: 'no-store' });
+                    if (!r.ok) return false;
+                    rows = await r.json();
+                } catch (_) { return false; }
+                const labels = { bogo: 'BOGO', 'percent-off': 'Percent off', 'dollar-off': 'Dollars off', flash: 'Flash sale', 'happy-hour': 'Happy hour', loyalty: 'Loyalty', veteran: 'Veterans', 'new-customer': 'New customer' };
+                const status = { unconfirmed: ['Waiting for your email click', 'var(--amber, #eab308)'], pending: ['Waiting for review', 'var(--text-muted)'], approved: ['Live', 'var(--green)'] };
+                listEl.innerHTML = rows.length ? rows.map(x => `
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.55rem 0;border-bottom:1px solid var(--border)">
+                        <div style="min-width:0">
+                            <div class="text-sm font-semibold" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><span class="tag tag-sm" style="margin-right:.4rem">${labels[x.type] || esc(x.type)}</span>${esc(x.title)}</div>
+                            <div class="text-xs" style="color:${(status[x.status] || status.pending)[1]}">${(status[x.status] || status.pending)[0]} &middot; through ${esc(x.ends)}</div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-secondary" data-remove="${esc(x.id)}" style="flex-shrink:0">Remove</button>
+                    </div>`).join('') : '<p class="text-sm text-muted" style="margin:0">No specials posted yet.</p>';
+                listEl.querySelectorAll('[data-remove]').forEach(b => b.onclick = async () => {
+                    if (!confirm('Remove this special? It comes off the site immediately.')) return;
+                    b.disabled = true;
+                    try {
+                        await fetch(`${TCC_WORKER_URL}/deals/remove`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok }, body: JSON.stringify({ shop: d.id, id: b.dataset.remove }) });
+                    } catch (_) {}
+                    load();
+                });
+                box.style.display = '';
+                return true;
+            };
+            if (await load()) {
+                // Refresh the list after a new post lands.
+                const sf = document.getElementById('dash-special-form');
+                if (sf) sf.addEventListener('submit', () => setTimeout(load, 1500));
+            }
+        })();
+
         // Post-a-special form -> worker /deal (pending until approved)
         const specialForm = document.getElementById('dash-special-form');
         if (specialForm) {

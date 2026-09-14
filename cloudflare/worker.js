@@ -161,6 +161,14 @@ export default {
       return handleDealConfirm(request, env);
     }
 
+    if (url.pathname === '/deals/mine' && request.method === 'GET') {
+      return handleOwnerDealsMine(request, env, cors);
+    }
+
+    if (url.pathname === '/deals/remove' && request.method === 'POST') {
+      return handleOwnerDealRemove(request, env, cors);
+    }
+
     if (url.pathname === '/deals/owner' && request.method === 'GET') {
       return handleOwnerDealsPublic(request, env, cors);
     }
@@ -1725,6 +1733,50 @@ async function handleDealConfirm(request, env) {
     } catch (e) { console.error('deal ops email failed:', e); }
   }
   return page('Confirmed', 'Thanks. We review every special before it goes live, usually the same day. It will show on your page and in Deals until your end date.');
+}
+
+// Owner-side management, authorized by the owner session (the emailed
+// access link). Lists every special for the shop with its status; removes
+// one the owner no longer wants — pending or live, no Josh needed.
+async function _ownerSessionShop(request, env) {
+  const auth = request.headers.get('Authorization') || '';
+  const token = String(auth.startsWith('Bearer ') ? auth.slice(7) : '').replace(/[^a-z0-9]/gi, '').slice(0, 80);
+  if (!token) return null;
+  const sess = await env.TCC_OVERRIDES.get(`owner-session:${token}`, { type: 'json' });
+  return sess && sess.shop ? sess.shop : null;
+}
+
+async function handleOwnerDealsMine(request, env, cors) {
+  const url = new URL(request.url);
+  const shop = String(url.searchParams.get('shop') || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
+  const sessShop = await _ownerSessionShop(request, env);
+  if (!shop || sessShop !== shop) {
+    return new Response(JSON.stringify({ ok: false }), { status: 401, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...cors } });
+  }
+  const list = (await env.TCC_OVERRIDES.get('index:owner-deals', { type: 'json' })) || [];
+  const mine = list.filter((d) => d.shop === shop)
+    .map((d) => ({ id: d.id, type: d.type, title: d.title, details: d.details, ends: d.ends, status: d.status, submitted_at: d.submitted_at }));
+  return new Response(JSON.stringify(mine), { status: 200, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...cors } });
+}
+
+async function handleOwnerDealRemove(request, env, cors) {
+  let body;
+  try { body = await request.json(); } catch {
+    return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const shop = String(body.shop || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
+  const sessShop = await _ownerSessionShop(request, env);
+  if (!shop || sessShop !== shop) {
+    return new Response(JSON.stringify({ ok: false }), { status: 401, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const list = (await env.TCC_OVERRIDES.get('index:owner-deals', { type: 'json' })) || [];
+  const idx = list.findIndex((d) => d.id === body.id && d.shop === shop);
+  if (idx === -1) {
+    return new Response(JSON.stringify({ ok: false, error: 'not found' }), { status: 404, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  list.splice(idx, 1);
+  await env.TCC_OVERRIDES.put('index:owner-deals', JSON.stringify(list));
+  return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
 }
 
 // Public, edge-cached: approved, unexpired specials (optionally for one shop).
