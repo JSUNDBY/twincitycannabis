@@ -2025,7 +2025,8 @@ async function sendLeadNotification(lead, env) {
     headers: { 'Authorization': `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       from: 'TCC Leads <notifications@send.twincitycannabis.com>',
-      to: ['hello@twincitycannabis.com'],
+      // Josh reads his personal inbox; hello@ is the paper trail.
+      to: ['hello@twincitycannabis.com', 'j.sundby@gmail.com'],
       reply_to: lead.email,
       subject,
       html,
@@ -2168,7 +2169,8 @@ async function sendMenuUploadNotification(sub, env) {
     headers: { 'Authorization': `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       from: 'TCC Menus <notifications@send.twincitycannabis.com>',
-      to: ['hello@twincitycannabis.com'],
+      // Josh reads his personal inbox; hello@ is the paper trail.
+      to: ['hello@twincitycannabis.com', 'j.sundby@gmail.com'],
       reply_to: sub.email,
       subject, html, text,
     }),
