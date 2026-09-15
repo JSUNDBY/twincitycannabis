@@ -1850,7 +1850,8 @@ async function sendOpsEmail(env, subject, text) {
     headers: { 'Authorization': `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       from: 'TCC Ops <notifications@send.twincitycannabis.com>',
-      to: ['hello@twincitycannabis.com'],
+      // Josh reads his personal inbox; hello@ is the paper trail.
+      to: ['hello@twincitycannabis.com', 'j.sundby@gmail.com'],
       subject,
       text,
     }),
