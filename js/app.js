@@ -6403,6 +6403,9 @@
                         phone: val('phone'),
                         message: val('message'),
                         kind: kind,
+                        // Standing consent to read their public menu. Only the
+                        // dispensary form asks; brands have no menu to read.
+                        menu_consent: !!form.querySelector('[name="menu_consent"]:checked'),
                     }),
                 });
                 ok = res.ok;

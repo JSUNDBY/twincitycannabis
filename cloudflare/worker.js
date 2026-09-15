@@ -1946,6 +1946,9 @@ async function handleContact(request, env, cors) {
     brand: String(body.brand || '').slice(0, 200),
     brand_slug: String(body.brand_slug || '').slice(0, 100),
     message: String(body.message || '').slice(0, 2000),
+    // Written consent to read their public menu, ticked on the claim form.
+    // Recorded on the lead so there is a dated record per shop.
+    menu_consent: body.menu_consent === true || body.menu_consent === 'yes',
     submitted_at: new Date().toISOString(),
   };
 
@@ -2010,6 +2013,7 @@ async function sendLeadNotification(lead, env) {
       ${lead.phone ? `<tr><td style="color:#8b909a;padding:.3rem 0">Phone</td><td style="padding:.3rem 0;color:#f5f6f8">${escHtml(lead.phone)}</td></tr>` : ''}
       ${lead.role ? `<tr><td style="color:#8b909a;padding:.3rem 0">Role</td><td style="padding:.3rem 0;color:#f5f6f8">${escHtml(lead.role)}</td></tr>` : ''}
       ${lead.dispensary ? `<tr><td style="color:#8b909a;padding:.3rem 0">Dispensary</td><td style="padding:.3rem 0;color:#f5f6f8">${escHtml(lead.dispensary)}</td></tr>` : ''}
+      ${lead.kind !== 'brand' ? `<tr><td style="color:#8b909a;padding:.3rem 0">Menu consent</td><td style="padding:.3rem 0;color:${lead.menu_consent ? '#22c55e' : '#f59e0b'}">${lead.menu_consent ? 'YES \u2014 they ticked the box, on the record' : 'not ticked \u2014 ask before pulling their menu'}</td></tr>` : ''}
       ${lead.brand ? `<tr><td style="color:#8b909a;padding:.3rem 0">Brand</td><td style="padding:.3rem 0;color:#f5f6f8"><strong>${escHtml(lead.brand)}</strong>${lead.brand_slug ? ` <span style="color:#8b909a">(${escHtml(lead.brand_slug)})</span>` : ''}</td></tr>` : ''}
     </table>
     ${lead.message ? `<div style="margin-top:1.2rem;padding:1rem;background:rgba(255,255,255,.04);border-left:3px solid #22c55e;border-radius:0 8px 8px 0"><div style="color:#8b909a;font-size:.7rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem">Message</div><div style="color:#f5f6f8;white-space:pre-wrap;line-height:1.5">${escHtml(lead.message)}</div></div>` : ''}
@@ -2018,7 +2022,7 @@ async function sendLeadNotification(lead, env) {
       Or <a href="${adminLink}" style="color:#22c55e">open your admin dashboard</a> to see all leads.
     </div>
   </div>`;
-  const text = `New lead from Twin City Cannabis\n\nName: ${lead.name}\nEmail: ${lead.email}${lead.phone ? '\nPhone: ' + lead.phone : ''}${lead.role ? '\nRole: ' + lead.role : ''}${lead.dispensary ? '\nDispensary: ' + lead.dispensary : ''}\n${lead.message ? '\nMessage:\n' + lead.message + '\n' : ''}\nReply to this email — it goes directly to ${lead.email}.`;
+  const text = `New lead from Twin City Cannabis\n\nName: ${lead.name}\nEmail: ${lead.email}${lead.kind !== 'brand' ? '\nMenu consent: ' + (lead.menu_consent ? 'YES (ticked on the form)' : 'NOT ticked — ask first') : ''}${lead.phone ? '\nPhone: ' + lead.phone : ''}${lead.role ? '\nRole: ' + lead.role : ''}${lead.dispensary ? '\nDispensary: ' + lead.dispensary : ''}\n${lead.message ? '\nMessage:\n' + lead.message + '\n' : ''}\nReply to this email — it goes directly to ${lead.email}.`;
 
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',

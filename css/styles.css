@@ -6133,3 +6133,29 @@ table td a:hover { text-decoration: underline; }
     .intel-table td:first-child::before { display: none; }
     .intel-table td .text-xs { display: inline; margin-left: .35rem; }
 }
+
+/* Standing menu-consent tick on the claim form. Quiet by design: it is a
+   record, not a sales moment, so it reads as fine print next to the button. */
+.claim-consent {
+    display: flex;
+    gap: .55rem;
+    align-items: flex-start;
+    margin: .2rem 0 .9rem;
+    font-size: .78rem;
+    line-height: 1.45;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+.claim-consent input[type="checkbox"] {
+    /* .claim-form input sets width:100% + padding for text fields; undo it. */
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+    margin: .15rem 0 0;
+    padding: 0;
+    background: none;
+    border-radius: 3px;
+    accent-color: var(--green);
+    cursor: pointer;
+}
+.claim-consent:hover { color: var(--text-secondary); }

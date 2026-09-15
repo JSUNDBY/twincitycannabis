@@ -1965,6 +1965,14 @@
                     <input type="tel" name="phone" placeholder="Phone (optional)" maxlength="50" autocomplete="tel">
                 </div>
                 <textarea name="message" rows="4" maxlength="2000" placeholder="What can we do for you? Claim your listing, fix a detail, ask about Featured — anything."></textarea>
+                <!-- Standing menu consent (2026-09-15). Asked here so every claim
+                     arrives with it answered instead of a follow-up email each
+                     time. Unchecked by default: an affirmative tick is a real
+                     record, a blank one tells Josh to ask. -->
+                <label class="claim-consent">
+                    <input type="checkbox" name="menu_consent" value="yes">
+                    <span>You can read my shop's public online menu (product names, prices, sizes, THC, photos) to keep my listing current. Nothing else, and I can turn it off any time.</span>
+                </label>
                 <button type="submit" class="btn btn-primary" style="width:100%;font-size:1rem;padding:0.85rem">Send it</button>
                 <p class="text-xs text-danger claim-error" hidden style="margin-top:.6rem;text-align:center"></p>
             </form>
