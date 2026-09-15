@@ -2353,26 +2353,36 @@
             if (/\b(1\/4|quarter)\b/.test(norm(p.name))) return 7;
             return null;
         };
-        // Total THC mg per package. "10mg THC 4 Can" -> 40; "Gummy (5mg THC /
-        // 10mg CBN) 10 pack" -> 50; "50mg (5mg/Gummy)" -> 50; "12 x 10mg" -> 120.
-        const mgOf = (p) => {
+        // Edible/drink size key. Same total THC is not the same product: a
+        // 10-pack of 2mg gummies is not a 20mg chocolate bar. When the label
+        // gives a piece count or a per-piece dose, the key carries it
+        // ("10×2mg", "4×10mg"); otherwise it is the total ("20mg").
+        //   "10mg THC 4 Can" -> 4×10mg   "50mg (5mg/Gummy)" -> 10×5mg
+        //   "12 x 10mg" -> 12×10mg       "Chocolate Bar 20mg" -> 20mg
+        const mgKey = (p) => {
             const n = norm(p.name);
-            let m = n.match(/(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)\s*mg/) || n.match(/(\d+(?:\.\d+)?)\s*mg\s*[x×]\s*(\d+)\b/);
-            if (m) return Math.round(parseFloat(m[1]) * parseFloat(m[2]));
+            // mg figures that belong to CBD/CBN/CBG are not THC; skip them.
+            const all = [...n.matchAll(/(\d+(?:\.\d+)?)\s*mg(?!\s*(?:cbd|cbn|cbg|cbc))/g)].map(x => parseFloat(x[1]));
+            if (!all.length) return '';
+            const key = (c, u) => `${c}×${Math.round(u * 10) / 10}mg`;
+            let m = n.match(/(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)\s*mg/);
+            if (m) return key(parseInt(m[1], 10), parseFloat(m[2]));
+            m = n.match(/(\d+(?:\.\d+)?)\s*mg\s*[x×]\s*(\d+)\b/);
+            if (m) return key(parseInt(m[2], 10), parseFloat(m[1]));
+            const total = Math.max(...all);
             const thc = n.match(/(\d+(?:\.\d+)?)\s*mg\s*(?:of\s*)?thc/);
-            const all = [...n.matchAll(/(\d+(?:\.\d+)?)\s*mg/g)].map(x => parseFloat(x[1]));
-            if (!all.length) return null;
-            const unit = thc ? parseFloat(thc[1]) : all[0];
+            const per = n.match(/(\d+(?:\.\d+)?)\s*mg\s*(?:thc\s*)?(?:\/|\bper\b|\beach\b)/);
+            const unit = thc ? parseFloat(thc[1]) : per ? parseFloat(per[1]) : all[0];
             const cnt = n.match(/\b(\d{1,3})\s*(?:pk|pack|ct|count|cans?|pcs?|pieces?)\b/);
+            const count = cnt ? parseInt(cnt[1], 10) : 0;
             // MN caps a serving at 10mg, so a per-unit dose is small; a bigger
             // stated number next to a count ("100mg 20pc") is already the total.
-            const packed = cnt && parseInt(cnt[1], 10) >= 2 && unit <= 25 ? unit * parseInt(cnt[1], 10) : 0;
-            return Math.round(Math.max(packed, Math.max(...all)));
+            if (count >= 2) return key(count, unit <= 25 ? unit : total / count);
+            if ((thc || per) && unit > 0 && unit < total) { const c = Math.round(total / unit); if (c >= 2) return key(c, unit); }
+            return `${Math.round(total)}mg`;
         };
         const sizeOf = (p) => {
-            if (p.category === 'edible' || p.category === 'beverage' || p.category === 'tincture') {
-                const mg = mgOf(p); return mg ? `${mg}mg` : '';
-            }
+            if (p.category === 'edible' || p.category === 'beverage' || p.category === 'tincture') return mgKey(p);
             const g = gramsOf(p); return g ? `${g}g` : '';
         };
         const catLabel = { flower: 'Flower', 'pre-roll': 'Pre-rolls', cartridge: 'Carts', concentrate: 'Concentrates', edible: 'Edibles', beverage: 'Drinks', tincture: 'Tinctures', topical: 'Topicals' };
@@ -2381,7 +2391,8 @@
         // Brand families: "Dizgo" and "Dizgo Collective" are the same shelf.
         const bkey = (s) => norm(s).replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
         const sameBrand = (a, b) => a === b || a.startsWith(b + ' ') || b.startsWith(a + ' ');
-        const menuOf = (id) => TCC.products.filter(p => p.prices && p.prices[id] != null);
+        // Rec menus only: a shop's medical shelf is a different market.
+        const menuOf = (id) => TCC.products.filter(p => p.prices && p.prices[id] != null && p.menu_type !== 'med');
 
         const mine = menuOf(d.id);
         // Rings: start at 4.20 miles and widen until at least three shops with
@@ -2417,7 +2428,7 @@
         const metroIds = new Set(TCC.dispensaries.filter(x => x.lat != null && _haversine(44.9778, -93.265, x.lat, x.lng) <= 25).map(x => x.id));
         const metro = {};
         TCC.products.forEach(p => {
-            if (!p.prices) return; const s = sizeOf(p); if (!s) return; const k = p.category + '|' + s;
+            if (!p.prices || p.menu_type === 'med') return; const s = sizeOf(p); if (!s) return; const k = p.category + '|' + s;
             Object.entries(p.prices).forEach(([id, v]) => { if (metroIds.has(id) && v > 0) (metro[k] = metro[k] || []).push(v); });
         });
         const nearIds = nearby.map(o => o.x.id);
@@ -2520,7 +2531,7 @@
         const td = (label, inner, extra) => `<td data-l="${label}" style="${extra || 'text-align:right;white-space:nowrap'}">${inner}</td>`;
         const tdName = (inner) => `<td data-l="" style="padding:.35rem 0">${inner}</td>`;
         const tbl = (head, rows) => {
-            const shown = rows.slice(0, 8), more = rows.slice(8);
+            const shown = rows.slice(0, 10), more = rows.slice(10);
             return `<div style="overflow-x:auto"><table class="intel-table" style="width:100%;font-size:.85rem;border-collapse:collapse">${head}<tbody>${shown.join('')}</tbody>${more.length ? `<tbody class="intel-more" hidden>${more.join('')}</tbody><tbody><tr><td colspan="7" data-l="" style="padding:.5rem 0 .2rem"><button type="button" class="btn btn-sm btn-secondary" onclick="this.closest('table').querySelector('.intel-more').hidden=false;this.closest('tbody').remove()">Show all ${rows.length}</button></td></tr></tbody>` : ''}</table></div>`;
         };
         const h3 = (t, sub) => `<div class="font-display font-semibold" style="margin:1.1rem 0 .15rem">${t}</div>${sub ? `<div class="text-xs text-muted" style="margin-bottom:.4rem">${sub}</div>` : ''}`;
@@ -3069,8 +3080,11 @@
         // to be actionable advice based on that fake signal.
 
         // Reviews
-        const reviews = TCC.getReviewsForDispensary(d.id);
-        document.getElementById('dash-review-count').textContent = `${d.review_count} total reviews`;
+        // Reviews on TCC are the shop's Google reviews; there is no TCC review form.
+        const gReviews = (d.google && d.google.reviews) || [];
+        const reviews = gReviews.length ? gReviews : TCC.getReviewsForDispensary(d.id);
+        const gCount = (d.google && d.google.review_count) || d.review_count || 0;
+        document.getElementById('dash-review-count').textContent = gCount ? `${gCount.toLocaleString()} on Google${d.google && d.google.rating ? ` · ${d.google.rating}★` : ''}` : '';
         document.getElementById('dash-reviews').innerHTML = reviews.length ? reviews.map(r => `
             <div class="review-item">
                 <div class="review-header">
@@ -3080,7 +3094,7 @@
                 <div class="review-stars">${'&#9733;'.repeat(r.rating)}${'&#9734;'.repeat(5 - r.rating)}</div>
                 <div class="review-text">${esc(r.text)}</div>
             </div>
-        `).join('') : '<p class="text-secondary text-sm">No reviews on TCC yet. Share your profile link to start collecting reviews.</p>';
+        `).join('') : '<p class="text-secondary text-sm">No Google reviews on file for this listing yet. They appear here after the next Google refresh.</p>';
 
         // Competitor Intel (real data, blurred for demo)
         const compContainer = document.getElementById('dash-competitors');
