@@ -2407,7 +2407,7 @@
         offers.forEach(o => { if (!o.size) return; const k = o.p.category + '|' + o.size; if (buckets[k]) buckets[k].theirs.push(o); });
         const standRows = Object.values(buckets)
             .filter(b => b.theirs.length >= 3)
-            .map(b => { const my = median(b.mine); const th = median(b.theirs.map(o => o.price)); const low = b.theirs.reduce((a, o) => o.price < a.price ? o : a); return { ...b, my, th, low, pct: (my - th) / th * 100 }; })
+            .map(b => { const my = median(b.mine); const ps = b.theirs.map(o => o.price); const th = median(ps); const low = b.theirs.reduce((a, o) => o.price < a.price ? o : a); return { ...b, my, th, low, lo: Math.min(...ps), hi: Math.max(...ps), pct: (my - th) / th * 100 }; })
             .sort((a, b) => b.pct - a.pct);
 
         // 2. Same brand, same size
@@ -2449,11 +2449,42 @@
             const my = mine.filter(p => p.category === c).length;
             const th = nearby.map(o => o.menu.filter(p => p.category === c).length).sort((a, b) => a - b);
             return { cat: c, my, med: th[Math.floor(th.length / 2)], lo: th[0], hi: th[th.length - 1] };
-        }).filter(r => r.my || r.hi);
+        }).filter(r => r.my || r.med);
         const lowestOn = brandList.filter(r => r.diff > 0).length;
         const undercutOn = brandList.filter(r => r.diff < 0).length;
 
         const gap = (diff) => diff < 0 ? 'var(--red)' : diff > 0 ? 'var(--green)' : 'var(--text-secondary)';
+        // Quiet marks that carry the comparison so the reader doesn't have to
+        // do it in their head. Tokens only; no animation.
+        const clamp01 = (x) => Math.max(0, Math.min(1, x));
+        // Your price as a dot on the nearby low-to-high track, median as a tick.
+        const strip = (lo, med, hi, my) => {
+            const min = Math.min(lo, my), max = Math.max(hi, my), span = (max - min) || 1;
+            const x = (v) => clamp01((v - min) / span) * 100;
+            const c = my > med ? 'var(--red)' : my < med ? 'var(--green)' : 'var(--text-muted)';
+            return `<span style="position:relative;display:inline-block;width:150px;height:14px;vertical-align:middle">
+                <span style="position:absolute;left:${x(lo).toFixed(1)}%;width:${Math.max(1, x(hi) - x(lo)).toFixed(1)}%;top:5px;height:4px;border-radius:2px;background:var(--border-light)"></span>
+                <span style="position:absolute;left:${x(med).toFixed(1)}%;top:2px;width:2px;height:10px;margin-left:-1px;background:var(--text-muted)"></span>
+                <span style="position:absolute;left:${x(my).toFixed(1)}%;top:2px;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:${c};box-shadow:0 0 0 2px var(--bg-card)"></span>
+            </span>`;
+        };
+        // Signed gap as a bar from a center line: left red, right green.
+        const dbar = (diff, maxAbs) => {
+            const w = maxAbs ? Math.round(clamp01(Math.abs(diff) / maxAbs) * 54) : 0;
+            const pos = diff > 0;
+            return `<span style="position:relative;display:inline-block;width:110px;height:6px;vertical-align:middle;margin-right:.5rem"><span style="position:absolute;left:55px;top:-2px;width:1px;height:10px;background:var(--border-light)"></span><span style="position:absolute;top:0;height:6px;border-radius:3px;${pos ? 'left:55px' : 'right:55px'};width:${w}px;background:${pos ? 'var(--green)' : 'var(--red)'}"></span></span>`;
+        };
+        // Filled dots for "n of total nearby shops".
+        const dots = (k, total) => `<span style="font-size:.7rem;letter-spacing:2px;white-space:nowrap"><span style="color:var(--text-primary)">${'\u25CF'.repeat(k)}</span><span style="color:var(--text-muted)">${'\u25CB'.repeat(Math.max(0, total - k))}</span></span>`;
+        // Your count as a bar with the nearby median as a tick, all on one scale.
+        const depthMax = Math.max(1, ...depthRows.map(r => Math.max(r.my, r.hi)));
+        const hbar = (my, med) => {
+            const w = (v) => Math.round(clamp01(v / depthMax) * 140);
+            const c = my < med ? 'var(--amber)' : my > med ? 'var(--green)' : 'var(--text-muted)';
+            return `<span style="position:relative;display:inline-block;width:140px;height:8px;vertical-align:middle;background:var(--bg-secondary);border-radius:4px"><span style="position:absolute;left:0;top:0;height:8px;width:${w(my)}px;border-radius:4px;background:${c};opacity:.85"></span><span style="position:absolute;left:${w(med)}px;top:-2px;width:2px;height:12px;background:var(--text-secondary)"></span></span>`;
+        };
+        const brandMax = Math.max(0, ...brandList.map(r => Math.abs(r.diff)));
+        const exactMax = Math.max(0, ...exact.map(r => Math.abs(r.diff)));
         const th = (t, r) => `<th style="text-align:${r ? 'right' : 'left'};font-size:.72rem;color:var(--text-muted);font-weight:600;padding:.3rem 0">${t}</th>`;
         const tbl = (head, rows) => `<div style="overflow-x:auto"><table style="width:100%;font-size:.85rem;border-collapse:collapse">${head}<tbody>${rows}</tbody></table></div>`;
         const h3 = (t, sub) => `<div class="font-display font-semibold" style="margin:1.1rem 0 .15rem">${t}</div>${sub ? `<div class="text-xs text-muted" style="margin-bottom:.4rem">${sub}</div>` : ''}`;
@@ -2461,15 +2492,16 @@
 
         let html = `<div class="text-xs text-muted" style="margin-bottom:.4rem">Compared against ${nearby.length} shops within ${nearby[nearby.length - 1].dist.toFixed(1)} miles: ${nearby.map(o => esc(o.x.name)).join(', ')} &middot; refreshed with every menu pull</div>`;
 
-        const tile = (n, label) => `<div style="flex:1;min-width:130px;padding:.6rem .8rem;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-secondary)"><div class="font-display font-bold text-xl">${n}</div><div class="text-xs text-muted">${label}</div></div>`;
-        html += `<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin:.6rem 0 .2rem">${tile(`${lowestOn} of ${brandList.length}`, 'brand-and-size matches where you are the lowest price nearby')}${tile(undercutOn, 'brand-and-size matches where a nearby shop undercuts you')}${tile(gapRows.length, 'brands two or more nearby shops carry that you don\'t')}${tile(exclRows.length, 'brands only you carry within 12 miles')}</div>`;
+        const tile = (n, label, pct) => `<div style="flex:1;min-width:130px;padding:.6rem .8rem;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-secondary)"><div class="font-display font-bold text-xl">${n}</div><div class="text-xs text-muted">${label}</div>${pct == null ? '' : `<div style="height:3px;margin-top:.45rem;border-radius:2px;background:var(--border)"><div style="width:${Math.round(pct * 100)}%;height:3px;border-radius:2px;background:var(--green)"></div></div>`}</div>`;
+        html += `<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin:.6rem 0 .2rem">${tile(`${lowestOn} of ${brandList.length}`, 'brand-and-size matches where you are the lowest price nearby', brandList.length ? lowestOn / brandList.length : null)}${tile(undercutOn, 'brand-and-size matches where a nearby shop undercuts you')}${tile(gapRows.length, 'brands two or more nearby shops carry that you don\'t')}${tile(exclRows.length, 'brands only you carry within 12 miles')}</div>`;
 
-        html += h3('Where you stand', 'Your median price vs the nearby median, by category and size. Red means the neighborhood is cheaper than you.');
-        html += standRows.length ? tbl(`<thead><tr>${th('Category')}${th('You', 1)}${th('Nearby median', 1)}${th('Gap', 1)}${th('Cheapest nearby', 1)}</tr></thead>`,
+        html += h3('Where you stand', 'Your median price vs the nearby median, by category and size. The track is the nearby low to high, the tick is the median, the dot is you. Red means the neighborhood is cheaper than you.');
+        html += standRows.length ? tbl(`<thead><tr>${th('Category')}${th('You', 1)}${th('Nearby median', 1)}${th('Nearby low &rarr; high', 1)}${th('Gap', 1)}${th('Cheapest nearby', 1)}</tr></thead>`,
             standRows.map(r => `<tr>
                 <td style="padding:.35rem 0">${catLabel[r.cat] || esc(r.cat)} ${esc(r.size)} <span class="text-xs text-muted">(${r.mine.length} of yours)</span></td>
                 <td style="text-align:right;white-space:nowrap">${money(r.my)}</td>
                 <td style="text-align:right;white-space:nowrap">${money(r.th)}</td>
+                <td style="text-align:right;white-space:nowrap">${strip(r.lo, r.th, r.hi, r.my)}</td>
                 <td style="text-align:right;white-space:nowrap;font-weight:600;color:${gap(-r.pct)}">${r.pct > 0 ? '+' : ''}${r.pct.toFixed(0)}%</td>
                 <td style="text-align:right;white-space:nowrap">${money(r.low.price)}<div class="text-xs text-muted">${esc(nameOf[r.low.shop])}</div></td>
             </tr>`).join('')) : '<p class="text-sm text-muted">No category has three or more comparable nearby listings yet.</p>';
@@ -2480,7 +2512,7 @@
                 <td style="padding:.35rem 0">${esc(r.product)}</td>
                 <td style="text-align:right;white-space:nowrap">${money(r.mine)}</td>
                 <td style="text-align:right;white-space:nowrap">${money(r.low.price)}<div class="text-xs text-muted">${esc(nameOf[r.low.shop])} &middot; ${esc(r.low.p.name.slice(0, 40))}</div></td>
-                <td style="text-align:right;white-space:nowrap;font-weight:600;color:${gap(r.diff)}">${r.diff < 0 ? '−' : r.diff > 0 ? '+' : ''}${money(Math.abs(r.diff))}</td>
+                <td style="text-align:right;white-space:nowrap;font-weight:600;color:${gap(r.diff)}">${dbar(r.diff, brandMax)}${r.diff < 0 ? '−' : r.diff > 0 ? '+' : ''}${money(Math.abs(r.diff))}</td>
             </tr>`).join('')) : '<p class="text-sm text-muted">No nearby shop carries your brands in matching sizes right now.</p>';
 
         html += h3('Same product', 'Exact matches by name. Rare across different menu systems; the two sections above are the useful ones.');
@@ -2489,14 +2521,14 @@
                 <td style="padding:.35rem 0">${esc(r.name)}</td>
                 <td style="text-align:right;white-space:nowrap">${money(r.mine)}</td>
                 <td style="text-align:right;white-space:nowrap">${money(r.low)}<div class="text-xs text-muted">${esc(r.shop)}</div></td>
-                <td style="text-align:right;white-space:nowrap;font-weight:600;color:${gap(r.diff)}">${r.diff < 0 ? '−' : r.diff > 0 ? '+' : ''}${money(Math.abs(r.diff))}</td>
+                <td style="text-align:right;white-space:nowrap;font-weight:600;color:${gap(r.diff)}">${dbar(r.diff, exactMax)}${r.diff < 0 ? '−' : r.diff > 0 ? '+' : ''}${money(Math.abs(r.diff))}</td>
             </tr>`).join('')) : '<p class="text-sm text-muted">No exact name matches with nearby shops.</p>';
 
         html += h3('Brands nearby shops carry that you don\'t', 'Stocked by two or more shops within 12 miles. Shoppers looking for these leave your menu empty-handed.');
-        html += gapRows.length ? tbl(`<thead><tr>${th('Brand')}${th('Shops carrying it', 1)}${th('Products', 1)}${th('Categories', 1)}</tr></thead>`,
+        html += gapRows.length ? tbl(`<thead><tr>${th('Brand')}${th(`Shops carrying it (of ${nearby.length})`, 1)}${th('Products', 1)}${th('Categories', 1)}</tr></thead>`,
             gapRows.map(g => `<tr>
                 <td style="padding:.35rem 0">${esc(g.name)}</td>
-                <td style="text-align:right">${g.shops.size}</td>
+                <td style="text-align:right;white-space:nowrap">${dots(g.shops.size, nearby.length)} <span style="display:inline-block;min-width:1.2em">${g.shops.size}</span></td>
                 <td style="text-align:right">${g.n}</td>
                 <td style="text-align:right;white-space:nowrap" class="text-xs text-muted">${[...g.cats].map(c => catLabel[c] || esc(c)).join(', ')}</td>
             </tr>`).join('')) : '<p class="text-sm text-muted">None. You carry every brand that two or more nearby shops stock.</p>';
@@ -2504,11 +2536,11 @@
         html += h3('Only you carry', 'No shop within 12 miles lists these brands. Nobody competes with you on them, so they are the ones to put in front of shoppers.');
         html += exclRows.length ? `<div class="text-sm" style="line-height:1.9">${exclRows.map(e => `${esc(e.name)} <span class="text-xs text-muted">(${e.n})</span>`).join(' &middot; ')}</div>` : '<p class="text-sm text-muted">Every brand you carry is also on a nearby menu.</p>';
 
-        html += h3('Menu depth', 'Products you list per category vs the nearby median. Amber means you are thinner than the shops around you.');
+        html += h3('Menu depth', 'Products you list per category vs the nearby median (the tick). Amber means you are thinner than the shops around you.');
         html += tbl(`<thead><tr>${th('Category')}${th('You', 1)}${th('Nearby median', 1)}${th('Nearby range', 1)}</tr></thead>`,
             depthRows.map(r => `<tr>
                 <td style="padding:.35rem 0">${catLabel[r.cat] || esc(r.cat)}</td>
-                <td style="text-align:right;font-weight:600;color:${r.my < r.med ? 'var(--amber, #eab308)' : r.my > r.med ? 'var(--green)' : 'var(--text-secondary)'}">${r.my}</td>
+                <td style="text-align:right;white-space:nowrap;font-weight:600;color:${r.my < r.med ? 'var(--amber)' : r.my > r.med ? 'var(--green)' : 'var(--text-secondary)'}">${hbar(r.my, r.med)} <span style="display:inline-block;min-width:1.6em">${r.my}</span></td>
                 <td style="text-align:right">${r.med}</td>
                 <td style="text-align:right" class="text-xs text-muted">${r.lo}&ndash;${r.hi}</td>
             </tr>`).join(''));
