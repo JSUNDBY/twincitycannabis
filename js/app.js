@@ -2485,7 +2485,7 @@
         // Your price as a dot on the nearby low-to-high track, median as a tick.
         const strip = (lo, med, hi, my) => {
             const min = Math.min(lo, my), max = Math.max(hi, my), span = (max - min) || 1;
-            const x = (v) => clamp01((v - min) / span) * 100;
+            const x = (v) => 4 + clamp01((v - min) / span) * 92; // keep the end dots inside the track
             const c = my > med ? 'var(--red)' : my < med ? 'var(--green)' : 'var(--text-muted)';
             return `<span style="position:relative;display:inline-block;width:150px;height:14px;vertical-align:middle">
                 <span style="position:absolute;left:${x(lo).toFixed(1)}%;width:${Math.max(1, x(hi) - x(lo)).toFixed(1)}%;top:5px;height:4px;border-radius:2px;background:var(--border-light)"></span>
