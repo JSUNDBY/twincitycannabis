@@ -84,7 +84,9 @@ def scrape_store(slug, config):
     page = 1
     total = None
 
-    while True:
+    # Cap the page walk. Every other paginator here has one; without it a
+    # bogus "total" that keeps serving items spins forever against the API.
+    while page <= 60:
         body = {
             "filters": {},
             "page": page,
@@ -180,6 +182,12 @@ def main():
             print(f"  ERROR scraping {config['name']}: {e}")
 
     print(f"\nTotal Sweed products: {len(all_products)}")
+    if not all_products:
+        # Never clobber the last good file with an empty scrape: the
+        # merge falls back to it, so an empty write deletes these shops
+        # from the site until a later scrape succeeds.
+        print("No products scraped \u2014 leaving the existing file untouched")
+        raise SystemExit(1)
     with open(OUTPUT_FILE, "w") as f:
         json.dump(all_products, f, indent=2)
     print(f"Saved to {OUTPUT_FILE}")

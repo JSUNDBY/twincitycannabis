@@ -255,6 +255,12 @@ def main():
         name = CARROT_STORES.get(slug, {}).get("name", slug)
         print(f"  {name}: {count}")
 
+    if not all_products:
+        # Never clobber the last good file with an empty scrape: the
+        # merge falls back to it, so an empty write deletes these shops
+        # from the site until a later scrape succeeds.
+        print("No products scraped \u2014 leaving the existing file untouched")
+        raise SystemExit(1)
     with open(OUTPUT_FILE, "w") as f:
         json.dump(all_products, f, indent=2)
     print(f"Saved to {OUTPUT_FILE}")

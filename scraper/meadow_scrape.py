@@ -187,6 +187,12 @@ def main():
     all_products = []
     for dispensary_id, org_id in KNOWN_SHOPS:
         all_products.extend(scrape_shop(dispensary_id, org_id))
+    if not all_products:
+        # Never clobber the last good file with an empty scrape: the
+        # merge falls back to it, so an empty write deletes these shops
+        # from the site until a later scrape succeeds.
+        print("No products scraped \u2014 leaving the existing file untouched")
+        raise SystemExit(1)
     payload = {
         "scraped_at": datetime.utcnow().isoformat() + "Z",
         "shop_count": len(KNOWN_SHOPS),

@@ -72,6 +72,19 @@ python3 scraper/scraper.py --export 2>/dev/null || echo "Dispensary scrape skipp
 # 2. Update dispensaries in data.js
 python3 scraper/update_site.py 2>/dev/null || echo "Dispensary update skipped"
 
+# WHOLE-CYCLE CATALOG GUARD (added 2026-09-15).
+# The data-quality guard further down only snapshots AFTER every scraper and
+# merge has already rewritten data.js, so it can only catch a bad quality step.
+# The steps most likely to hollow the catalog are the scrapes themselves:
+# direct_menu_scrape writes whatever it got (Weedmaps answering 406 to the Pi's
+# residential IP yields an empty menu per shop) and clean_orphans filters with
+# no floor. The platform merges then add a few hundred products back, so the
+# "-lt 1" check passes and a 90%-empty site ships looking fresh.
+# Snapshot here, before anything touches data.js this cycle.
+cp js/data.js /tmp/tcc_data_precycle.js
+PRODUCTS_CYCLE_START=$("$NODE_BIN" -e 'global.window={};require("./js/data.js");console.log(window.TCC.products.length)' 2>/dev/null || echo 0)
+echo "Catalog at cycle start: $PRODUCTS_CYCLE_START products"
+
 # 3. Scrape ALL menus (full product data) — applies smart name-based
 #    categorization via scraper/normalize.py to keep cartridges as cartridges,
 #    edibles as edibles, etc.
@@ -206,6 +219,21 @@ elif [ "$PRODUCTS_BEFORE" -gt 0 ] && [ "$PRODUCTS_AFTER" -lt $((PRODUCTS_BEFORE 
     echo "data.js shrank $PRODUCTS_BEFORE -> $PRODUCTS_AFTER after data-quality steps — reverting"
     cp /tmp/tcc_data_prebrand.js js/data.js
     _tcc_alert "data.js shrank $PRODUCTS_BEFORE -> $PRODUCTS_AFTER products after the data-quality steps and was reverted. A scraper or filter is misbehaving; investigate before the next cycle compounds it."
+fi
+
+# Whole-cycle catalog check. Canonicalization legitimately folds ~6% and
+# day-to-day churn runs ~3%, so a drop past a third means a scraper came back
+# empty and the merges papered over it. Revert rather than publish a hollow
+# site; alert on a smaller-but-suspicious drop without blocking fresh prices.
+PRODUCTS_CYCLE_END=$("$NODE_BIN" -e 'global.window={};require("./js/data.js");console.log(window.TCC.products.length)' 2>/dev/null || echo 0)
+if [ "$PRODUCTS_CYCLE_START" -gt 100 ] 2>/dev/null; then
+    if [ "$PRODUCTS_CYCLE_END" -lt $((PRODUCTS_CYCLE_START * 65 / 100)) ] 2>/dev/null; then
+        echo "CATALOG COLLAPSE: $PRODUCTS_CYCLE_START -> $PRODUCTS_CYCLE_END — reverting to the pre-cycle copy"
+        cp /tmp/tcc_data_precycle.js js/data.js
+        _tcc_alert "Catalog collapsed this cycle: $PRODUCTS_CYCLE_START -> $PRODUCTS_CYCLE_END products. data.js was reverted to the pre-cycle copy, so the site keeps serving the previous menu. Check whether Weedmaps is blocking the Pi (direct_menu_scrape 406) or a platform scraper returned empty: journalctl -u tcc-scrape.service -n 200"
+    elif [ "$PRODUCTS_CYCLE_END" -lt $((PRODUCTS_CYCLE_START * 85 / 100)) ] 2>/dev/null; then
+        _tcc_alert "Catalog shrank this cycle: $PRODUCTS_CYCLE_START -> $PRODUCTS_CYCLE_END products (more than 15%). Not reverted — the site is live with the smaller catalog. Worth checking which scraper came back thin."
+    fi
 fi
 
 # 7.95. Generate the real price-drop deals feed from priceHistory (no fakes).

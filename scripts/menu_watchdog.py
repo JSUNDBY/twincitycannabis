@@ -78,10 +78,25 @@ def main():
             alerts.append({"shop": shop, "before": before, "after": after,
                            "kind": "MENU COLLAPSED"})
 
-    SNAPSHOT.write_text(json.dumps({
-        "date": date.today().isoformat(),
-        "counts": counts,
-    }, indent=0))
+    # Only advance the baseline when nothing died. Overwriting it on the very
+    # cycle that alerts means the next cycle compares 0 -> 0, reports "no
+    # deaths", and the watchdog goes quiet about a permanently broken shop
+    # after exactly one email. Keep the last-good counts until they recover.
+    if not alerts:
+        SNAPSHOT.write_text(json.dumps({
+            "date": date.today().isoformat(),
+            "counts": counts,
+        }, indent=0))
+    else:
+        prev["stale_since"] = prev.get("stale_since") or date.today().isoformat()
+        # Keep the healthy baseline, but record shops that newly appeared so a
+        # brand-new menu isn't compared against nothing forever.
+        merged = dict(prev_counts)
+        for shop, c in counts.items():
+            if shop not in merged and c > 0:
+                merged[shop] = c
+        prev["counts"] = merged
+        SNAPSHOT.write_text(json.dumps(prev, indent=0))
 
     if alerts:
         existing = json.loads(ALERTS.read_text()) if ALERTS.exists() else []
