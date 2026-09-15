@@ -6099,3 +6099,17 @@ table td a:hover { text-decoration: underline; }
     font-size: 0.88rem; line-height: 1.55; color: var(--text-secondary);
 }
 .post-health-note strong { color: var(--text-primary); }
+
+/* Market Intel tables stack into labeled rows on phones (no side scroll).
+   Each cell carries its column label in data-l. */
+@media (max-width: 640px) {
+    #dash-stats { grid-template-columns: repeat(2, 1fr) !important; }
+    .intel-table thead { display: none; }
+    .intel-table, .intel-table tbody, .intel-table tr, .intel-table td { display: block; width: 100%; box-sizing: border-box; }
+    .intel-table tr { padding: .55rem 0; border-bottom: 1px solid var(--border); }
+    .intel-table td { display: flex; justify-content: space-between; align-items: center; gap: .75rem; text-align: right !important; white-space: normal !important; padding: .12rem 0 !important; }
+    .intel-table td::before { content: attr(data-l); color: var(--text-muted); font-size: .72rem; text-align: left; flex-shrink: 0; }
+    .intel-table td:first-child { display: block; text-align: left !important; font-weight: 600; margin-bottom: .15rem; }
+    .intel-table td:first-child::before { display: none; }
+    .intel-table td .text-xs { display: inline; margin-left: .35rem; }
+}
