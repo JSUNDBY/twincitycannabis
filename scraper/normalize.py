@@ -44,7 +44,10 @@ _PATTERNS = {
 
     # Pre-rolls — checked first since "joint/blunt/pre-roll" is unambiguous
     'PRE_ROLL': re.compile(
-        r'\b(pre[\s\-]?roll|preroll|pre[\s\-]?rolls|prerolls|infused\s*roll|hash\s*hole|spliff|rolled\s*joint|joint\s*pack|blunts?|pre[\s\-]?packed\s*joint)\b',
+        # A "DIY Pre-Roll Kit" is loose flower plus empty cones: it competes on
+        # price per gram with flower, not with finished joints, so don't call
+        # it a pre-roll.
+        r'\b(pre[\s\-]?roll|preroll|pre[\s\-]?rolls|prerolls|infused\s*roll|hash\s*hole|spliff|rolled\s*joint|joint\s*pack|blunts?|pre[\s\-]?packed\s*joint)\b(?!\s*kit)',
         re.IGNORECASE
     ),
 
@@ -159,7 +162,12 @@ _PATTERNS = {
 
     # Accessories catch-all (final pass)
     'ACCESSORIES': re.compile(
-        r'\b(grinder|lighter|backpack|case|pouch|cap|beanie|merch|apparel|magazine)\b',
+        # 'case' alone was here and excluded real flower: every product on the
+        # site whose name contains it is a case OF flower ("Fight Club Case |
+        # Grade A Flower", "Permanent Markers Case"), never a carrying case.
+        # Checked across all platforms 2026-09-15: 27 matches, 0 accessories.
+        r'\b(grinder|lighter|backpack|pouch|cap|beanie|merch|apparel|magazine)\b'
+        r'|\b(?:vape|battery|storage|carrying|travel|glass|pipe|stash|smell[\s-]?proof)\s*case\b',
         re.IGNORECASE
     ),
 }
@@ -237,6 +245,15 @@ def categorize_by_name(name, brand='', original_category='', weight='', trust_so
                 or re.search(r'\b(?:sativa|indica|hybrid)\b[^|]{0,30}\d+(?:\.\d+)?\s*%', text, re.IGNORECASE)
                 or _PATTERNS['FLOWER_KEYWORD'].search(text)):
             return 'flower'
+
+    # 5.7) The same trap on the pre-roll shelf: "Brownie Scout [.35g]" and
+    # "Chem 'n Cookies [.5g]" are strains on joints, not baked goods. A
+    # pre-roll carries a gram weight and no mg dose, so when the store shelved
+    # it as a pre-roll and the weight agrees, keep it.
+    if (original_category or '').strip().lower() in ('pre-roll', 'preroll') \
+            and not re.search(r'\d+\s*mg', text, re.IGNORECASE) \
+            and re.search(r'\b\d*\.?\d+\s*(?:g|gram|grams)\b', text, re.IGNORECASE):
+        return 'pre-roll'
 
     # 6) Edible formats — gummy, chocolate, cookie, peach rings, almonds, etc.
     # Beats CONCENTRATE_STRONG so "Live Rosin Gummies" → edible.
