@@ -1,6 +1,6 @@
 {
  "merged_groups": 276,
- "absorbed": 382,
+ "absorbed": 381,
  "groups": [
   {
    "key": "soap|flower|3.5g|big",
@@ -3394,6 +3394,22 @@
    "shops_after": 2
   },
   {
+   "key": "camino|edible|50mg|cherry excite wild",
+   "kept": {
+    "name": "Camino Excite Wild Cherry THC Gummy 50mg (5mg THC)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Camino EXCITE Wild Cherry Gummies - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "dizgo collective|flower|3.5g|medusa",
    "kept": {
     "name": "Dizgo Medusa 3.5g",
@@ -3458,6 +3474,22 @@
    "shops_after": 2
   },
   {
+   "key": "camino|edible|50mg|bliss lemonade watermelon",
+   "kept": {
+    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "granny's|edible|50mg|dill pickle pretzels",
    "kept": {
     "name": "Granny's Pretzels - Dill Pickle [50pk] (50mg)",
@@ -3486,22 +3518,6 @@
    "shops_after": 10
   },
   {
-   "key": "camino|edible|50mg|bliss lemonade watermelon",
-   "kept": {
-    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "unbound|flower|3.5g|2 mac v",
    "kept": {
     "name": "Mac V2",
@@ -3516,6 +3532,22 @@
     }
    ],
    "shops_after": 6
+  },
+  {
+   "key": "flor|flower|3.5g|breath mendo",
+   "kept": {
+    "name": "Flor Mendo Breath 3.5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Mendo Breath (Bulk) | 3.5g",
+     "shops": [
+      "the-flower-shop-mn-llc"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "granny's|edible|50mg|mores pretzels",
@@ -3538,50 +3570,6 @@
     }
    ],
    "shops_after": 6
-  },
-  {
-   "key": "granny's|edible|50mg|cheddar pretzels",
-   "kept": {
-    "name": "Granny's Pretzels - Cheddar [50pk] (50mg)",
-    "shops_before": 5
-   },
-   "absorbed": [
-    {
-     "name": "Granny's THC Pretzels Cheddar 50mg (1mg/Pretzel)",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    },
-    {
-     "name": "Cheddar Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
-     "name": "Granny's Cheddar Pretzels - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 8
-  },
-  {
-   "key": "flor|flower|3.5g|breath mendo",
-   "kept": {
-    "name": "Flor Mendo Breath 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Mendo Breath (Bulk) | 3.5g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 2
   },
   {
    "key": "granny's|edible|50mg|original pretzels",
@@ -4315,7 +4303,6 @@
      "shops": [
       "green-goods-burnsville",
       "green-goods-duluth",
-      "green-goods-woodbury",
       "minnesota-medical-solutions",
       "minnesota-medical-solutions-bloomington"
      ]
@@ -4327,7 +4314,7 @@
    "key": "vireo|flower|7g|death garlic",
    "kept": {
     "name": "Garlic Death",
-    "shops_before": 5
+    "shops_before": 6
    },
    "absorbed": [
     {
@@ -4339,7 +4326,7 @@
      ]
     }
    ],
-   "shops_after": 6
+   "shops_after": 7
   },
   {
    "key": "vireo|flower|3.5g|gmo pie",
@@ -4383,8 +4370,8 @@
     {
      "name": "Hellcat #15",
      "shops": [
-      "green-goods-blaine",
-      "minnesota-medical-solutions-bloomington"
+      "minnesota-medical-solutions-bloomington",
+      "minnesota-medical-solutions-rochester"
      ]
     }
    ],
@@ -4408,13 +4395,13 @@
      ]
     }
    ],
-   "shops_after": 7
+   "shops_after": 6
   },
   {
    "key": "vireo|flower|3.5g|boof super",
    "kept": {
     "name": "Super Boof",
-    "shops_before": 4
+    "shops_before": 5
    },
    "absorbed": [
     {
@@ -4424,7 +4411,7 @@
      ]
     }
    ],
-   "shops_after": 5
+   "shops_after": 6
   },
   {
    "key": "&shine|beverage|100mg|fruit punch",
@@ -4608,6 +4595,7 @@
     {
      "name": "Garlic Death",
      "shops": [
+      "green-goods-blaine",
       "minnesota-medical-solutions-moorhead",
       "minnesota-medical-solutions-rochester"
      ]
@@ -4692,22 +4680,6 @@
      "name": "Znow Flakes | 3.5g",
      "shops": [
       "green-goods-woodbury"
-     ]
-    }
-   ],
-   "shops_after": 3
-  },
-  {
-   "key": "simple|flower|28g|black maple",
-   "kept": {
-    "name": "Black Maple",
-    "shops_before": 2
-   },
-   "absorbed": [
-    {
-     "name": "Black Maple | 28g",
-     "shops": [
-      "minnesota-medical-solutions-bloomington"
      ]
     }
    ],
@@ -4931,6 +4903,28 @@
    "shops_after": 8
   },
   {
+   "key": "granny's|edible|50mg|cheddar pretzels",
+   "kept": {
+    "name": "Granny's Pretzels - Cheddar [50pk] (50mg)",
+    "shops_before": 5
+   },
+   "absorbed": [
+    {
+     "name": "Cheddar Pretzels 50mg - Granny's",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
+     "name": "Granny's Cheddar Pretzels - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 7
+  },
+  {
    "key": "granny's|edible|50mg|cinnamon maple pretzels",
    "kept": {
     "name": "Granny's Pretzels - Maple Cinnamon [50pk] (50mg)",
@@ -5127,6 +5121,22 @@
    "shops_after": 2
   },
   {
+   "key": "grasslandz|edible|100mg|blueberry sour",
+   "kept": {
+    "name": "Sour Blueberry Gummies 100mg - Grasslandz",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Grasslandz Sour Blueberry Gummies - 100mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "grasslandz|edible|100mg|pineapple sour",
    "kept": {
     "name": "Sour Pineapple Gummies 100mg - Grasslandz",
@@ -5137,22 +5147,6 @@
      "name": "Grasslandz Sour Pineapple Gummies - 100mg THC",
      "shops": [
       "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "nebula|edible|100mg|bar candy cotton",
-   "kept": {
-    "name": "Cotton Candy Gummy Bar 100mg - Nebula",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Nebula Cotton Candy Gummy Bar - 100mg | .1g",
-     "shops": [
-      "high-10-dispensary"
      ]
     }
    ],
@@ -5175,16 +5169,16 @@
    "shops_after": 2
   },
   {
-   "key": "grasslandz|edible|100mg|blueberry sour",
+   "key": "nebula|edible|100mg|bar candy cotton",
    "kept": {
-    "name": "Sour Blueberry Gummies 100mg - Grasslandz",
+    "name": "Cotton Candy Gummy Bar 100mg - Nebula",
     "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Grasslandz Sour Blueberry Gummies - 100mg THC",
+     "name": "Nebula Cotton Candy Gummy Bar - 100mg | .1g",
      "shops": [
-      "island-pezi"
+      "high-10-dispensary"
      ]
     }
    ],
