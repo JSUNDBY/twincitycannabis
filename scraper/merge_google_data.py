@@ -101,10 +101,11 @@ def merge():
         reviews = details.get("reviews", [])
         hours_text = format_hours(details.get("hours", {}))
 
-        # Replace website (only if Google has one)
+        # Replace website (only if Google has one). String patterns are quote-aware:
+        # a note like 'See the dispensary\'s website' has an escaped quote inside.
         if website:
             entry = re.sub(
-                r"website:\s*'[^']*'",
+                r"website:\s*'(?:[^'\\]|\\.)*'",
                 f"website: '{_esc(website)}'",
                 entry, count=1
             )
@@ -112,7 +113,7 @@ def merge():
         # Replace phone (only if Google has one and looks well-formatted)
         if phone:
             entry = re.sub(
-                r"phone:\s*'[^']*'",
+                r"phone:\s*'(?:[^'\\]|\\.)*'",
                 f"phone: '{_esc(phone)}'",
                 entry, count=1
             )
@@ -120,7 +121,7 @@ def merge():
         # Replace hours.note with today's hours from Google (if available)
         if hours_text:
             entry = re.sub(
-                r"(hours:\s*\{[^}]*?note:\s*)'[^']*'",
+                r"(hours:\s*\{[^}]*?note:\s*)'(?:[^'\\]|\\.)*'",
                 f"\\1'{_esc(hours_text)}'",
                 entry, count=1
             )
