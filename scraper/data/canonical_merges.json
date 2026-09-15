@@ -1,5 +1,5 @@
 {
- "merged_groups": 277,
+ "merged_groups": 276,
  "absorbed": 382,
  "groups": [
   {
@@ -747,22 +747,6 @@
     }
    ],
    "shops_after": 3
-  },
-  {
-   "key": "gg4|flower|4g|4 big gg",
-   "kept": {
-    "name": "GG4 | Big Buds | 4g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "GG4 | Big Buds | 4g",
-     "shops": [
-      "feelin-mn"
-     ]
-    }
-   ],
-   "shops_after": 2
   },
   {
    "key": "gg4|pre-roll|1g|4 gg",
@@ -2036,6 +2020,22 @@
    "shops_after": 2
   },
   {
+   "key": "gg4|flower|4g|4 big gg",
+   "kept": {
+    "name": "GG4 | Big Buds | 4g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "GG4 | Big Buds | 4g",
+     "shops": [
+      "feelin-mn"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "nativecare brand|flower|3.5g|big godfather og",
    "kept": {
     "name": "Godfather OG | Big Buds | 3.5g",
@@ -3302,6 +3302,22 @@
    "shops_after": 2
   },
   {
+   "key": "verist fields|concentrate|1g|berry cured dream ix pappy resin sappy",
+   "kept": {
+    "name": "Cured Resin-IX | Sappy Pappy by Verist Fields | Dream Berry | 1g",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "Cured Resin-IX | Sappy Pappy by Verist Fields | Dream Berry | 1g",
+     "shops": [
+      "coastless"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
    "key": "verist fields|pre-roll|1g|1 big birch ct ix mr stick tart uptown",
    "kept": {
     "name": "Big Stick-IX | Mr. Birch | Uptown Tart | 1 g | 1 ct",
@@ -3372,22 +3388,6 @@
      "name": "ORION DIZGO | 3.5g",
      "shops": [
       "altitude-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "camino|edible|50mg|cherry excite wild",
-   "kept": {
-    "name": "Camino Excite Wild Cherry THC Gummy 50mg (5mg THC)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Camino EXCITE Wild Cherry Gummies - 50mg THC",
-     "shops": [
-      "island-pezi"
      ]
     }
    ],
@@ -3518,22 +3518,6 @@
    "shops_after": 6
   },
   {
-   "key": "flor|flower|3.5g|breath mendo",
-   "kept": {
-    "name": "Flor Mendo Breath 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Mendo Breath (Bulk) | 3.5g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "granny's|edible|50mg|mores pretzels",
    "kept": {
     "name": "Granny's Pretzels - S'mores [50pk] (50mg)",
@@ -3554,6 +3538,50 @@
     }
    ],
    "shops_after": 6
+  },
+  {
+   "key": "granny's|edible|50mg|cheddar pretzels",
+   "kept": {
+    "name": "Granny's Pretzels - Cheddar [50pk] (50mg)",
+    "shops_before": 5
+   },
+   "absorbed": [
+    {
+     "name": "Granny's THC Pretzels Cheddar 50mg (1mg/Pretzel)",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    },
+    {
+     "name": "Cheddar Pretzels 50mg - Granny's",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
+     "name": "Granny's Cheddar Pretzels - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 8
+  },
+  {
+   "key": "flor|flower|3.5g|breath mendo",
+   "kept": {
+    "name": "Flor Mendo Breath 3.5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Mendo Breath (Bulk) | 3.5g",
+     "shops": [
+      "the-flower-shop-mn-llc"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "granny's|edible|50mg|original pretzels",
@@ -4386,7 +4414,7 @@
    "key": "vireo|flower|3.5g|boof super",
    "kept": {
     "name": "Super Boof",
-    "shops_before": 5
+    "shops_before": 4
    },
    "absorbed": [
     {
@@ -4396,7 +4424,7 @@
      ]
     }
    ],
-   "shops_after": 6
+   "shops_after": 5
   },
   {
    "key": "&shine|beverage|100mg|fruit punch",
@@ -4670,22 +4698,6 @@
    "shops_after": 3
   },
   {
-   "key": "simple|flower|28g|ai sherbert",
-   "kept": {
-    "name": "A\u00e7ai Sherbert",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "A\u00e7ai Sherbert | 28g",
-     "shops": [
-      "minnesota-medical-solutions-bloomington"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "simple|flower|28g|black maple",
    "kept": {
     "name": "Black Maple",
@@ -4917,28 +4929,6 @@
     }
    ],
    "shops_after": 8
-  },
-  {
-   "key": "granny's|edible|50mg|cheddar pretzels",
-   "kept": {
-    "name": "Granny's Pretzels - Cheddar [50pk] (50mg)",
-    "shops_before": 5
-   },
-   "absorbed": [
-    {
-     "name": "Cheddar Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
-     "name": "Granny's Cheddar Pretzels - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 7
   },
   {
    "key": "granny's|edible|50mg|cinnamon maple pretzels",
