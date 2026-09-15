@@ -106,13 +106,20 @@ const ACCESSORY_RE = new RegExp(
   [
     // glass / hardware / accessories
     'bowl', 'pipe', 'bong', '\\brig\\b', 'banger', 'nail\\b', 'carb cap', 'dabber',
-    'dab tool', 'dab rag', 'rags?\\b', '\\btray', 'holder', '\\bcase\\b', '\\bjar\\b',
+    // 'case' and 'jar' were here and dropped real flower from every page:
+    // "Fight Club Case | Grade A Flower", "Turtle Taffy 3.5G Jar". Checked
+    // every platform feed 2026-09-15: no product named with either is an
+    // accessory. Real accessory cases are matched explicitly below.
+    'dab tool', 'dab rag', 'rags?\\b', '\\btray', 'holder',
+    '(?:vape|battery|storage|carrying|travel|glass|pipe|stash|smell[\\s-]?proof)\\s*case',
     'ashtray', 'grinder', 'lighter', 'matches?', 'torch', 'butane',
     'mill plate', '\\bmill\\b', '\\bplate\\b', 'replacement plate',
     'battery', 'batteries', 'wick', '510 thread', 'mod\\b', '\\bcoil',
     'capsule', 'dosing capsule', 'humidor', 'boveda', 'humidipak',
     'cleaner', 'cleaning', 'cotton bud', 'cotton swab', 'q.?tip',
-    '\\bkit\\b', 'starter kit', 'happy kit', 'dab kit',
+    // A bare 'kit' dropped 12 real DIY pre-roll kits (loose flower + cones)
+    // to catch one grinder, which 'mill' already catches. Accessory kits only.
+    '(?:starter|dab|smoking|smoke|vape|grinder|rolling|glass)\\s*kit', 'happy kit',
     'nectar collector', 'dab grab', 'honey straw', 'silicone container',
     // vape devices / hardware (NOT cartridges with cannabis)
     'bud kup', '\\bkup\\b', '\\bgo stik\\b', '\\bstik\\b', 'roller\\b',
@@ -125,7 +132,7 @@ const ACCESSORY_RE = new RegExp(
     'wraps?\\b', 'blunt wrap', 'hemp wrap',
     'filter tip', 'filter\\b', 'wood tip', 'glass tip', 'roach',
     // brands of accessories/papers
-    '^raw ', '\\braw\\s', 'blazy', 'futurola', 'ooze', 'barbasol', 'king palm',
+    '^raw ', '\\braw\\s', 'blazy', 'futurola', '\\booze\\b', 'barbasol', 'king palm',
     'juicy jay', 'zig.?zag', 'elements\\b', 'ocb\\b',
     // labels / stickers / merch
     'velcro label', 'sticker', 'merch\\b', 't.?shirt', 'hoodie', 'hat\\b', 'beanie',
@@ -201,8 +208,14 @@ const isRealCannabisProduct = (p) => {
   if (lo == null) return false;
   const floor = MIN_PRICE_BY_CATEGORY[p.category];
   if (floor != null && lo < floor) return false;
-  if (p.category === 'flower' && !looksLikeFlower(p)) return false;
-  if (p.category === 'cartridge' && !looksLikeCart(p)) return false;
+  // Only re-judge Weedmaps products ('p' ids). Their categories are famously
+  // wrong, which is why these heuristics exist. Every other source carries the
+  // store's own shelf through normalize.py, and second-guessing it here hid 21
+  // of Great Cannabis's 25 flower listings behind "no flower evidence" just
+  // because the strain name had no gram weight in it (2026-09-15).
+  const fromWeedmaps = typeof p.id === 'string' && /^p\d/.test(p.id);
+  if (fromWeedmaps && p.category === 'flower' && !looksLikeFlower(p)) return false;
+  if (fromWeedmaps && p.category === 'cartridge' && !looksLikeCart(p)) return false;
   return true;
 };
 
