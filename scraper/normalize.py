@@ -165,7 +165,7 @@ _PATTERNS = {
 }
 
 
-def categorize_by_name(name, brand='', original_category='', weight=''):
+def categorize_by_name(name, brand='', original_category='', weight='', trust_source=False):
     """
     Determine the true category of a product based on its name.
 
@@ -219,6 +219,24 @@ def categorize_by_name(name, brand='', original_category='', weight=''):
     # "Apple Cinnamon Crumble - 12oz" matching crumble→concentrate).
     if _PATTERNS['BEVERAGE_SIZE'].search(text):
         return 'beverage'
+
+    # 5.6) The store's own shelf says flower AND the name carries real flower
+    # evidence: a gram weight, an ounce/eighth/quarter, a strain-type marker,
+    # or a THC percentage. Trust that over a food word in the strain name.
+    # "Turtle Taffy", "Cotton Candy", "Froot by the Foot" and "Popcorn Buds"
+    # are strains and flower formats, not candy, and a 1oz Zoap is not an
+    # edible. Without this, 38 real flower listings were published as edibles
+    # (found 2026-09-15 when Great Cannabis's flower shelf came up empty).
+    # Runs after pre-roll / cartridge / bottle-size so genuinely different
+    # formats still win, and only fires when the source already said flower,
+    # so it can never invent flower out of nothing.
+    if (original_category or '').strip().lower() == 'flower' and not re.search(r'\d+\s*mg', text, re.IGNORECASE):
+        if (re.search(r'\b\d+(?:\.\d+)?\s*(?:g|gram|grams)\b', text, re.IGNORECASE)
+                or re.search(r'\b1\s*(?:oz|ounce)\b|\b1/[248]\s*(?:oz|ounce)?\b|\beighth\b|\bquarter\b', text, re.IGNORECASE)
+                or re.search(r'\((?:sativa|indica|hybrid)\b[^)]*\)', text, re.IGNORECASE)
+                or re.search(r'\b(?:sativa|indica|hybrid)\b[^|]{0,30}\d+(?:\.\d+)?\s*%', text, re.IGNORECASE)
+                or _PATTERNS['FLOWER_KEYWORD'].search(text)):
+            return 'flower'
 
     # 6) Edible formats — gummy, chocolate, cookie, peach rings, almonds, etc.
     # Beats CONCENTRATE_STRONG so "Live Rosin Gummies" → edible.
@@ -278,6 +296,14 @@ def categorize_by_name(name, brand='', original_category='', weight=''):
     # here (it always carries a weight). So reclassify by best guess instead
     # of trusting the mislabel: bottle sizes → beverage, everything else →
     # edible (the dominant no-weight, flavor-named format).
+    # Platforms with a real taxonomy (Dutchie, Jane, Treez, Blaze, Sweed,
+    # Carrot) publish the shelf the store itself chose. If nothing above
+    # matched, a name-based guess has no evidence and the shelf does, so keep
+    # it. Only the platforms that dump everything into one bucket
+    # (Weedmaps, dispensary.shop, Meadow) fall through to the guess below.
+    if trust_source and orig in CANNABIS_CATEGORIES:
+        return orig
+
     if orig == 'flower':
         if _PATTERNS['BEVERAGE_SIZE'].search(text) or re.search(r'\bfl\s*oz\b', text, re.IGNORECASE):
             return 'beverage'

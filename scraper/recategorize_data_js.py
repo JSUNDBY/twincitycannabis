@@ -56,6 +56,12 @@ def main():
         # menus (2026-09-02). Recategorize may still fix their category, but
         # never drops them.
         is_weedmaps = re.match(r"\{\s*id:\s*'p\d+", entry) is not None
+        # Platforms whose merge maps the store's OWN shelf (Dutchie, Jane,
+        # Treez, Blaze, Sweed, Carrot). Their category is evidence; a
+        # name-based guess with nothing to go on is not. Weedmaps ('p'),
+        # dispensary.shop ('ds') and Meadow ('m') dump everything into one
+        # bucket, so those still get re-guessed.
+        trusted_source = re.match(r"\{\s*id:\s*'(?:du|j|tz|bz|sw|c)\d+", entry) is not None
         # Extract name, brand, category
         name_m = re.search(r"name:\s*'((?:[^'\\]|\\.)*)'", entry)
         brand_m = re.search(r"brand:\s*'((?:[^'\\]|\\.)*)'", entry)
@@ -70,7 +76,7 @@ def main():
         old_cat = cat_m.group(1)
         weight = weight_m.group(1) if weight_m else ''
 
-        new_cat = categorize_by_name(name, brand, old_cat, weight)
+        new_cat = categorize_by_name(name, brand, old_cat, weight, trust_source=trusted_source)
         if new_cat == 'EXCLUDE':
             if is_weedmaps:
                 excluded_count += 1

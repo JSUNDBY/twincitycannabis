@@ -107,7 +107,7 @@ def load_jane_products():
         # strain-name flower products often get tagged "topical" by the
         # dispensary, etc. categorize_by_name uses name patterns to fix this.
         raw_cat = p.get("category", "flower")
-        normalized_cat = categorize_by_name(name, brand, raw_cat)
+        normalized_cat = categorize_by_name(name, brand, raw_cat, trust_source=True)
         if normalized_cat == "EXCLUDE":
             excluded_count += 1
             continue

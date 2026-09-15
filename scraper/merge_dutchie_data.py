@@ -53,7 +53,7 @@ def main():
         # detection has no opinion (Dutchie categories are the store's real
         # taxonomy — same policy as merge_carrot_data.py).
         raw_cat = p.get("category", "flower")
-        normalized_cat = categorize_by_name(name, brand, raw_cat)
+        normalized_cat = categorize_by_name(name, brand, raw_cat, trust_source=True)
         if normalized_cat == "EXCLUDE":
             from normalize import _PATTERNS
             probe = f"{name} {brand}"

@@ -50,7 +50,7 @@ def main():
         # Re-normalize the category — Treez source data can mislabel flower
         # as topical etc. (same fix as merge_jane_data.py).
         raw_cat = p.get("category", "flower")
-        normalized_cat = categorize_by_name(name, brand, raw_cat)
+        normalized_cat = categorize_by_name(name, brand, raw_cat, trust_source=True)
         if normalized_cat == "EXCLUDE":
             # Unlike dispensary.shop/Meadow, Treez categories are the store's
             # own taxonomy (accessory/merch categories are skipped at scrape
