@@ -1,6 +1,6 @@
 {
- "merged_groups": 260,
- "absorbed": 361,
+ "merged_groups": 268,
+ "absorbed": 372,
  "groups": [
   {
    "key": "soap|flower|3.5g|big",
@@ -502,7 +502,7 @@
    "shops_after": 3
   },
   {
-   "key": "lakeside cannabis|concentrate|1g|bubblegum coated infused kief",
+   "key": "lakeside cannabis|flower|1g|bubblegum coated infused kief",
    "kept": {
     "name": "Bubblegum | Kief Coated & Infused Joints | 1g",
     "shops_before": 2
@@ -1254,6 +1254,22 @@
    "shops_after": 5
   },
   {
+   "key": "valhalla|flower|3.5g|primal punch",
+   "kept": {
+    "name": "Valhalla - 3.5g Flower- Primal Punch (H)",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "Primal Punch 1/8's",
+     "shops": [
+      "coastless"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
    "key": "verist fields|flower|3.5g|og swedish",
    "kept": {
     "name": "Verist Fields - 3.5g Flower - Swedish OG (I/H)",
@@ -1462,10 +1478,16 @@
   {
    "key": "blncd|edible|50mg|citrus",
    "kept": {
-    "name": "BLNCD | Citrus Gummies (10ct) | 5mg THC",
-    "shops_before": 1
+    "name": "Citrus [10pk] (50mg)",
+    "shops_before": 8
    },
    "absorbed": [
+    {
+     "name": "BLNCD | Citrus Gummies (10ct) | 5mg THC",
+     "shops": [
+      "pot-mama-s-edina"
+     ]
+    },
     {
      "name": "BLNCD | Gummies | Citrus | THC:50mg",
      "shops": [
@@ -1473,7 +1495,7 @@
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 10
   },
   {
    "key": "blncd|edible|50mg|tropical",
@@ -1881,6 +1903,22 @@
      "name": "Crested River Soda 10mg - Hex on the Beach - 16oz",
      "shops": [
       "wildflower-north-loop-1"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "erba|flower|1g|taffy turtle",
+   "kept": {
+    "name": "Erba | Turtle Taffy | Flower 1G",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "TURTLE TAFFY (Bulk) | 1g",
+     "shops": [
+      "the-flower-shop-mn-llc"
      ]
     }
    ],
@@ -2399,9 +2437,15 @@
      "shops": [
       "pot-mama-s"
      ]
+    },
+    {
+     "name": "Retro Bakery Chocolate Covered Cookies 50mg",
+     "shops": [
+      "levitated-cannabis"
+     ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "retro bakery|edible|50mg|bar chocolate dark espresso",
@@ -2540,6 +2584,22 @@
     }
    ],
    "shops_after": 4
+  },
+  {
+   "key": "valhalla|flower|3.5g|cookies mandarin",
+   "kept": {
+    "name": "Valhalla - 3.5g Flower- Mandarin Cookies (I/H)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Mandarin Cookies 1/8's",
+     "shops": [
+      "coastless"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "verist fields|flower|3.5g|gush kush",
@@ -2842,22 +2902,6 @@
    "shops_after": 2
   },
   {
-   "key": "carpe diem|tincture|1000mg|gel muscle on relief",
-   "kept": {
-    "name": "Relief Muscle & Joint CBD Gel Roll-On 1000 mg",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Relief Muscle & Joint CBD Gel Roll-On 1000mg - Carpe Diem",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "carpe diem|tincture|1500mg|cream full relax spectrum",
    "kept": {
     "name": "Relax CBD Cream 1500 mg Full-Spectrum",
@@ -2978,22 +3022,6 @@
      "name": "Purple Ice Water Preroll 1g",
      "shops": [
       "twin-cities-cannabis-richfield"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "mllw|edible|48mg|bar chocolate covered strawberry",
-   "kept": {
-    "name": "MLLW Chocolate Covered Strawberry 48 MG Bar",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "MLLW- Chocolate Covered Strawberry Bar (48mg)",
-     "shops": [
-      "winona-dispensary"
      ]
     }
    ],
@@ -3347,6 +3375,22 @@
    "shops_after": 6
   },
   {
+   "key": "flor|flower|3.5g|breath mendo",
+   "kept": {
+    "name": "Flor Mendo Breath 3.5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Mendo Breath (Bulk) | 3.5g",
+     "shops": [
+      "the-flower-shop-mn-llc"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "granny's|edible|50mg|mores pretzels",
    "kept": {
     "name": "Granny's Pretzels - S'mores [50pk] (50mg)",
@@ -3369,32 +3413,26 @@
    "shops_after": 6
   },
   {
-   "key": "granny's|edible|50mg|cheddar pretzels",
+   "key": "granny's|edible|50mg|original pretzels",
    "kept": {
-    "name": "Granny's Pretzels - Cheddar [50pk] (50mg)",
-    "shops_before": 5
+    "name": "Granny's THC Pretzels Original 50mg (1mg/Pretzel)",
+    "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Granny's THC Pretzels Cheddar 50mg (1mg/Pretzel)",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    },
-    {
-     "name": "Cheddar Pretzels 50mg - Granny's",
+     "name": "Original Pretzels 50mg - Granny's",
      "shops": [
       "flame-flora"
      ]
     },
     {
-     "name": "Granny's Cheddar Pretzels - 50mg THC",
+     "name": "Granny's Original Pretzels - 50mg THC",
      "shops": [
       "island-pezi"
      ]
     }
    ],
-   "shops_after": 8
+   "shops_after": 3
   },
   {
    "key": "campfire cannabis|flower|3.5g|canyon grape zkittlez",
@@ -3805,6 +3843,54 @@
    "shops_after": 2
   },
   {
+   "key": "tasty gems|cartridge|0.5g|4 grape pie",
+   "kept": {
+    "name": "Grape Pie #4 [500mg]",
+    "shops_before": 5
+   },
+   "absorbed": [
+    {
+     "name": "Grape Pie #4 | Vape | 0.5g",
+     "shops": [
+      "green-rose"
+     ]
+    }
+   ],
+   "shops_after": 6
+  },
+  {
+   "key": "tasty gems|cartridge|0.5g|crack green",
+   "kept": {
+    "name": "Green Crack [500mg]",
+    "shops_before": 4
+   },
+   "absorbed": [
+    {
+     "name": "Green Crack | Vape | 0.5g",
+     "shops": [
+      "green-rose"
+     ]
+    }
+   ],
+   "shops_after": 5
+  },
+  {
+   "key": "tasty gems|cartridge|0.5g|zimosa",
+   "kept": {
+    "name": "Zimosa [500mg]",
+    "shops_before": 4
+   },
+   "absorbed": [
+    {
+     "name": "Zimosa | Vape | 0.5g",
+     "shops": [
+      "green-rose"
+     ]
+    }
+   ],
+   "shops_after": 5
+  },
+  {
    "key": "blncd|beverage|20mg|balance sparkling water",
    "kept": {
     "name": "Balance | CBD Sparkling Water | 20mg",
@@ -3935,6 +4021,78 @@
    "shops_after": 2
   },
   {
+   "key": "&shine|edible|100mg|blackberry",
+   "kept": {
+    "name": "Blackberry [10pk] (100mg)",
+    "shops_before": 16
+   },
+   "absorbed": [
+    {
+     "name": "Blackberry [10pk] (100mg)",
+     "shops": [
+      "leafline-labs-eagan",
+      "leafline-labs-st-cloud",
+      "leafline-labs-st-paul",
+      "rise-baxter",
+      "rise-mankato",
+      "rise-new-hope",
+      "rise-willmar"
+     ]
+    },
+    {
+     "name": "&SHINE BLACKBERRY GUMMIES (INDICA) 100MG | .1g",
+     "shops": [
+      "altitude-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 17
+  },
+  {
+   "key": "(inc)ensored|edible|100mg|peach summer",
+   "kept": {
+    "name": "Summer Peach [10pk] (100mg)",
+    "shops_before": 15
+   },
+   "absorbed": [
+    {
+     "name": "Summer Peach [10pk] (100mg)",
+     "shops": [
+      "leafline-labs-eagan",
+      "leafline-labs-st-cloud",
+      "leafline-labs-st-paul",
+      "rise-baxter",
+      "rise-mankato",
+      "rise-new-hope",
+      "rise-willmar"
+     ]
+    }
+   ],
+   "shops_after": 16
+  },
+  {
+   "key": "beboe|edible|100mg|anytime blend huckleberry",
+   "kept": {
+    "name": "Anytime Blend Huckleberry [20pk] (100mg)",
+    "shops_before": 15
+   },
+   "absorbed": [
+    {
+     "name": "Anytime Blend Huckleberry [20pk] (100mg)",
+     "shops": [
+      "leafline-labs-eagan",
+      "leafline-labs-st-cloud",
+      "leafline-labs-st-paul",
+      "rise-baxter",
+      "rise-mankato",
+      "rise-new-hope",
+      "rise-willmar"
+     ]
+    }
+   ],
+   "shops_after": 16
+  },
+  {
    "key": "simple|flower|7g|boof super",
    "kept": {
     "name": "Super Boof",
@@ -3954,7 +4112,7 @@
    "key": "vireo|flower|3.5g|blue runtz",
    "kept": {
     "name": "Blue Runtz",
-    "shops_before": 4
+    "shops_before": 3
    },
    "absorbed": [
     {
@@ -3972,7 +4130,7 @@
      ]
     }
    ],
-   "shops_after": 6
+   "shops_after": 5
   },
   {
    "key": "vireo|flower|3.5g|cherry paloma",
@@ -4606,6 +4764,28 @@
    "shops_after": 8
   },
   {
+   "key": "granny's|edible|50mg|cheddar pretzels",
+   "kept": {
+    "name": "Granny's Pretzels - Cheddar [50pk] (50mg)",
+    "shops_before": 5
+   },
+   "absorbed": [
+    {
+     "name": "Cheddar Pretzels 50mg - Granny's",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
+     "name": "Granny's Cheddar Pretzels - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 7
+  },
+  {
    "key": "granny's|edible|50mg|cinnamon maple pretzels",
    "kept": {
     "name": "Granny's Pretzels - Maple Cinnamon [50pk] (50mg)",
@@ -4748,22 +4928,6 @@
      "name": "Lit OG - 3.5g - Campfire Cannabis",
      "shops": [
       "mn-thc-co-2"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "granny's|edible|50mg|original pretzels",
-   "kept": {
-    "name": "Original Pretzels 50mg - Granny's",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Granny's Original Pretzels - 50mg THC",
-     "shops": [
-      "island-pezi"
      ]
     }
    ],
