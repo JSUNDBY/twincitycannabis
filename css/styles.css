@@ -1183,6 +1183,28 @@ ul, ol { list-style: none; }
 .disp-view-btn.active { background: var(--green); color: #fff; }
 .disp-view-btn svg { flex-shrink: 0; }
 
+/* The paid-placement warning lives inside the grid; span both columns and
+   sit under the list + map, or it takes the map's column and the map drops
+   into a second row below the list. */
+.split-layout > .tcc-ad-warning {
+    grid-column: 1 / -1;
+    order: 10;
+}
+
+/* Map view at any width: the map takes the whole row, the list hides. On
+   desktop, List view keeps the split (list + sticky map). */
+.split-layout.view-map {
+    grid-template-columns: 1fr;
+}
+.split-layout.view-map .dispensary-list-view { display: none; }
+.split-layout.view-map .map-container {
+    display: block;
+    position: relative;
+    top: 0;
+    height: 70vh;
+    min-height: 400px;
+}
+
 @media (max-width: 1024px) {
     .split-layout {
         grid-template-columns: 1fr;
@@ -1192,9 +1214,7 @@ ul, ol { list-style: none; }
         top: 0;
         height: 300px;
     }
-    /* Mobile view toggle: show one or the other */
-    .split-layout.view-map .dispensary-list-view { display: none; }
-    .split-layout.view-map .map-container { display: block; height: 70vh; min-height: 400px; }
+    /* Phone: show one or the other */
     .split-layout.view-list .map-container { display: none; }
     .split-layout.view-list .dispensary-list-view { display: flex; }
 }
