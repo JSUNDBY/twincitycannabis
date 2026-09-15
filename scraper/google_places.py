@@ -23,6 +23,7 @@ API_KEY = os.environ.get("GOOGLE_PLACES_API_KEY", "")
 DATA_DIR = Path(__file__).parent / "data"
 PLACES_CACHE = DATA_DIR / "google_places.json"
 DISPENSARIES_FILE = DATA_DIR / "dispensaries.json"
+MANUAL_FILE = DATA_DIR / "manual_dispensaries.json"  # shops added by hand (Levitated etc.)
 
 PLACES_API_URL = "https://places.googleapis.com/v1/places:searchText"
 PLACE_DETAILS_URL = "https://places.googleapis.com/v1/places/{place_id}"
@@ -129,6 +130,13 @@ def discover_place_ids(force=False):
         sys.exit(1)
 
     dispensaries = json.loads(DISPENSARIES_FILE.read_text())
+    # Manually added shops live in a second file and used to be skipped here,
+    # so they never got ratings or reviews. Same shape, dedupe by id.
+    if MANUAL_FILE.exists():
+        manual = json.loads(MANUAL_FILE.read_text())
+        manual = manual if isinstance(manual, list) else manual.get("dispensaries", [])
+        seen = {d["id"] for d in dispensaries}
+        dispensaries += [d for d in manual if d.get("id") and d["id"] not in seen]
     cache = load_cache()
     found = 0
     skipped = 0
