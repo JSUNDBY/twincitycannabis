@@ -51,6 +51,8 @@ DUTCHIE_STORES = {
     "the-flower-shop-mn-llc": {"name": "The Flower Shop (Luverne)", "dispensary_id": "69447b2b59020a2ed20af5d5"},
     "altitude-dispensary": {"name": "Altitude (Monticello)", "dispensary_id": "6920f9c3971c1924b1085bb4"},
     "bloom-wellness-dispensary-st-paul": {"name": "Bloom Wellness (St. Paul)", "dispensary_id": "689e3bce5fdd58a4d2320cf5"},
+    # Added 2026-09-15 after Lucas Lapham (manager) claimed the listing.
+    "great-cannabis-llc": {"name": "Great Cannabis (Becker)", "dispensary_id": "69e78e26089fe02a3ec832cf"},
 }
 
 SKIP_TYPES = {"accessories", "apparel", "merch", "gear", "n/a"}
