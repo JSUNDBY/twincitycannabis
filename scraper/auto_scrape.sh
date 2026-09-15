@@ -144,6 +144,12 @@ python3 scraper/merge_treez_data.py
 python3 scraper/dutchie_scrape.py || echo "Dutchie scrape failed (non-fatal)"
 python3 scraper/merge_dutchie_data.py
 
+# 7.951. Platform merges above re-insert their shops' dispensary entries from
+# manual_dispensaries.json, which drops the google block merged at step 4.
+# Re-run the Google merge so every shop with a Place ID keeps its rating,
+# reviews and hours (idempotent: skips entries that already carry google).
+python3 scraper/merge_google_data.py || echo "Google re-merge failed (non-fatal)"
+
 
 # 7.9. Backfill strain type (indica/sativa/hybrid) onto any products the live
 #      scrape didn't tag, using the dispensaries' own labels. Never invents one.
