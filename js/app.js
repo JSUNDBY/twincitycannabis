@@ -41,13 +41,17 @@
     // a name regex blocklist + per-category minimum price floors.
     const ACCESSORY_RE = new RegExp([
         'bowl', 'pipe', 'bong', '\\brig\\b', 'banger', 'nail\\b', 'carb cap', 'dabber',
-        'dab tool', 'dab rag', 'rags?\\b', '\\btray', 'holder', '\\bcase\\b', '\\bjar\\b',
+        // 'case' and 'jar' are how flower is sold, not accessories. Real
+        // accessory cases are matched explicitly below. (2026-09-15)
+        'dab tool', 'dab rag', 'rags?\\b', '\\btray', 'holder',
+        '(?:vape|battery|storage|carrying|travel|glass|pipe|stash|smell[\\s-]?proof)\\s*case',
         'ashtray', 'grinder', 'lighter', 'matches?', 'torch', 'butane',
         'mill plate', '\\bmill\\b', '\\bplate\\b', 'replacement plate',
         'battery', 'batteries', 'wick', '510 thread', 'mod\\b', '\\bcoil',
         'capsule', 'dosing capsule', 'humidor', 'boveda', 'humidipak',
         'cleaner', 'cleaning', 'cotton bud', 'cotton swab', 'q.?tip',
-        '\\bkit\\b', 'starter kit', 'happy kit', 'dab kit',
+        // A bare 'kit' dropped DIY pre-roll kits, which are loose flower.
+        '(?:starter|dab|smoking|smoke|vape|grinder|rolling|glass)\\s*kit', 'happy kit',
         'nectar collector', 'dab grab', 'honey straw', 'silicone container',
         'bud kup', '\\bkup\\b', '\\bgo stik\\b', '\\bstik\\b', 'roller\\b',
         '\\bpax\\b', 'dynavap', 'storz', 'volcano\\b', '\\bccell\\b', 'ccell go',
@@ -57,7 +61,7 @@
         'pre.?rolled tips?', 'pre.?roll case', 'pre.?roll card', 'preroll card',
         'wraps?\\b', 'blunt wrap', 'hemp wrap',
         'filter tip', 'filter\\b', 'wood tip', 'glass tip', 'roach',
-        '^raw ', '\\braw\\s', 'blazy', 'futurola', 'ooze', 'barbasol', 'king palm',
+        '^raw ', '\\braw\\s', 'blazy', 'futurola', '\\booze\\b', 'barbasol', 'king palm',
         'juicy jay', 'zig.?zag', 'elements\\b', 'ocb\\b',
         'velcro label', 'sticker', 'merch\\b', 't.?shirt', 'hoodie', 'hat\\b', 'beanie',
         'coloring book', 'color book', 'exit bag', 'koozie', 'magnifier',
@@ -166,10 +170,15 @@
         if (lo == null) return false;
         const floor = MIN_PRICE_BY_CATEGORY[p.category];
         if (floor != null && lo < floor) return false;
-        // Category-specific sanity checks
-        if (p.category === 'flower' && !looksLikeFlower(p)) return false;
-        if (p.category === 'edible' && !looksLikeEdible(p)) return false;
-        if (p.category === 'cartridge' && !looksLikeCart(p)) return false;
+        // Category-specific sanity checks, but only for Weedmaps products
+        // ('p' ids). Their categories are famously wrong, which is why these
+        // heuristics exist. Every other source carries the store's own shelf
+        // through normalize.py, and second-guessing it here hid 21 of Great
+        // Cannabis's 25 flower listings from the app (2026-09-15).
+        const fromWeedmaps = typeof p.id === 'string' && /^p\d/.test(p.id);
+        if (fromWeedmaps && p.category === 'flower' && !looksLikeFlower(p)) return false;
+        if (fromWeedmaps && p.category === 'edible' && !looksLikeEdible(p)) return false;
+        if (fromWeedmaps && p.category === 'cartridge' && !looksLikeCart(p)) return false;
         return true;
     };
 
