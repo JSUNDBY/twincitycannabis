@@ -1,6 +1,6 @@
 {
- "merged_groups": 275,
- "absorbed": 379,
+ "merged_groups": 277,
+ "absorbed": 382,
  "groups": [
   {
    "key": "soap|flower|3.5g|big",
@@ -534,22 +534,6 @@
    "shops_after": 3
   },
   {
-   "key": "lakeside cannabis|flower|1g|bubblegum coated infused kief",
-   "kept": {
-    "name": "Bubblegum | Kief Coated & Infused Joints | 1g",
-    "shops_before": 2
-   },
-   "absorbed": [
-    {
-     "name": "Bubblegum | Kief Coated & Infused Joints | 1g",
-     "shops": [
-      "fullmelt-factory"
-     ]
-    }
-   ],
-   "shops_after": 3
-  },
-  {
    "key": "native cuts|flower|3.5g|blintz buttery nuttery",
    "kept": {
     "name": "Buttery Nuttery Blintz- 3.5 G",
@@ -872,7 +856,7 @@
    "key": "good green|flower|3.5g|delight jack",
    "kept": {
     "name": "Jack's Delight | 3.5g",
-    "shops_before": 8
+    "shops_before": 7
    },
    "absorbed": [
     {
@@ -1675,6 +1659,22 @@
    "shops_after": 2
   },
   {
+   "key": "lakeside cannabis|flower|1g|bubblegum coated infused kief",
+   "kept": {
+    "name": "Bubblegum | Kief Coated & Infused Joints | 1g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Bubblegum | Kief Coated & Infused Joints | 1g",
+     "shops": [
+      "fullmelt-factory"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "bud doctor|flower|3.5g|amanda",
    "kept": {
     "name": "Amanda",
@@ -1733,6 +1733,22 @@
     }
    ],
    "shops_after": 5
+  },
+  {
+   "key": "campfire cannabis|flower|3.5g|guava",
+   "kept": {
+    "name": "Campfire Cannabis - 3.5g Flower - Guava (S)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Guava | 3.5g",
+     "shops": [
+      "legit-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "campfire cannabis|flower|3.5g|mac stomper",
@@ -3286,22 +3302,6 @@
    "shops_after": 2
   },
   {
-   "key": "verist fields|concentrate|1g|berry cured dream ix pappy resin sappy",
-   "kept": {
-    "name": "Cured Resin-IX | Sappy Pappy by Verist Fields | Dream Berry | 1g",
-    "shops_before": 2
-   },
-   "absorbed": [
-    {
-     "name": "Cured Resin-IX | Sappy Pappy by Verist Fields | Dream Berry | 1g",
-     "shops": [
-      "coastless"
-     ]
-    }
-   ],
-   "shops_after": 3
-  },
-  {
    "key": "verist fields|pre-roll|1g|1 big birch ct ix mr stick tart uptown",
    "kept": {
     "name": "Big Stick-IX | Mr. Birch | Uptown Tart | 1 g | 1 ct",
@@ -3458,22 +3458,6 @@
    "shops_after": 2
   },
   {
-   "key": "camino|edible|50mg|bliss lemonade watermelon",
-   "kept": {
-    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "granny's|edible|50mg|dill pickle pretzels",
    "kept": {
     "name": "Granny's Pretzels - Dill Pickle [50pk] (50mg)",
@@ -3500,6 +3484,22 @@
     }
    ],
    "shops_after": 10
+  },
+  {
+   "key": "camino|edible|50mg|bliss lemonade watermelon",
+   "kept": {
+    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "unbound|flower|3.5g|2 mac v",
@@ -4383,6 +4383,22 @@
    "shops_after": 7
   },
   {
+   "key": "vireo|flower|3.5g|boof super",
+   "kept": {
+    "name": "Super Boof",
+    "shops_before": 5
+   },
+   "absorbed": [
+    {
+     "name": "Super Boof",
+     "shops": [
+      "green-goods-woodbury"
+     ]
+    }
+   ],
+   "shops_after": 6
+  },
+  {
    "key": "&shine|beverage|100mg|fruit punch",
    "kept": {
     "name": "Fruit Punch [10pk] (100mg)",
@@ -4874,6 +4890,35 @@
    "shops_after": 8
   },
   {
+   "key": "good green|flower|7g|delight jack",
+   "kept": {
+    "name": "Jack's Delight | 7g",
+    "shops_before": 7
+   },
+   "absorbed": [
+    {
+     "name": "Jack's Delight | 7g",
+     "shops": [
+      "leafline-labs-eagan",
+      "leafline-labs-st-cloud",
+      "leafline-labs-st-paul",
+      "rise-baxter",
+      "rise-mankato",
+      "rise-new-hope",
+      "rise-willmar"
+     ]
+    },
+    {
+     "name": "Jack's Delight",
+     "shops": [
+      "leafline-labs-st-cloud",
+      "rise-willmar"
+     ]
+    }
+   ],
+   "shops_after": 8
+  },
+  {
    "key": "granny's|edible|50mg|cheddar pretzels",
    "kept": {
     "name": "Granny's Pretzels - Cheddar [50pk] (50mg)",
@@ -5124,22 +5169,6 @@
    "shops_after": 2
   },
   {
-   "key": "grasslandz|edible|100mg|blueberry sour",
-   "kept": {
-    "name": "Sour Blueberry Gummies 100mg - Grasslandz",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Grasslandz Sour Blueberry Gummies - 100mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "grasslandz|cartridge|1g|banana kush",
    "kept": {
     "name": "Banana Kush Cart - Grasslandz",
@@ -5148,6 +5177,22 @@
    "absorbed": [
     {
      "name": "Grasslandz CART - Banana Kush (Indica) | 1g",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "grasslandz|edible|100mg|blueberry sour",
+   "kept": {
+    "name": "Sour Blueberry Gummies 100mg - Grasslandz",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Grasslandz Sour Blueberry Gummies - 100mg THC",
      "shops": [
       "island-pezi"
      ]
