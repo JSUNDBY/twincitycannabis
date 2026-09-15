@@ -176,6 +176,22 @@ _tcc_alert() {
         >/dev/null 2>&1 || echo "Alert POST failed (non-fatal)"
 }
 
+# The Google cache must keep refreshing (tcc-google.timer, weekly). If the
+# newest fetch is more than 10 days old, say so once a day.
+GOOGLE_AGE=$(python3 -c '
+import json,time,datetime
+d=json.load(open("scraper/data/google_places.json"))
+days=[(v.get("details") or {}).get("fetched_at") for v in d.values()]
+days=[x for x in days if x]
+print((datetime.date.today()-datetime.date.fromisoformat(max(days))).days if days else 999)' 2>/dev/null || echo 999)
+if [ "$GOOGLE_AGE" -gt 10 ] 2>/dev/null; then
+    STAMP=/tmp/tcc-google-stale-alerted
+    if [ ! -f "$STAMP" ] || [ -n "$(find "$STAMP" -mmin +1380 2>/dev/null)" ]; then
+        _tcc_alert "Google Places cache is $GOOGLE_AGE days old. tcc-google.timer may have lapsed (journalctl -u tcc-google.service)."
+        touch "$STAMP"
+    fi
+fi
+
 if [ "$PRODUCTS_AFTER" -lt 1 ] 2>/dev/null; then
     echo "data.js failed to parse after data-quality steps — reverting"
     cp /tmp/tcc_data_prebrand.js js/data.js
