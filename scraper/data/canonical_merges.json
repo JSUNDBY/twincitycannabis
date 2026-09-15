@@ -1,6 +1,6 @@
 {
- "merged_groups": 259,
- "absorbed": 362,
+ "merged_groups": 257,
+ "absorbed": 360,
  "groups": [
   {
    "key": "soap|flower|3.5g|big",
@@ -1232,9 +1232,15 @@
      "shops": [
       "black-bear-weed-dispensary-winona"
      ]
+    },
+    {
+     "name": "Unbound Orangade 3.5g",
+     "shops": [
+      "levitated-cannabis"
+     ]
     }
    ],
-   "shops_after": 4
+   "shops_after": 5
   },
   {
    "key": "verist fields|flower|3.5g|og swedish",
@@ -1486,15 +1492,9 @@
      "shops": [
       "green-rose"
      ]
-    },
-    {
-     "name": "Cranberry Pomegranate Mule Mocktail 10mg \u2013 BLNCD",
-     "shops": [
-      "flame-flora"
-     ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
   },
   {
    "key": "blncd|beverage|10mg|margarita mocktail watermelon",
@@ -2832,38 +2832,6 @@
    "shops_after": 2
   },
   {
-   "key": "carpe diem|tincture|1000mg|gel muscle on relief",
-   "kept": {
-    "name": "Relief Muscle & Joint CBD Gel Roll-On 1000 mg",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Relief Muscle & Joint CBD Gel Roll-On 1000mg - Carpe Diem",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "carpe diem|tincture|1500mg|cream full relax spectrum",
-   "kept": {
-    "name": "Relax CBD Cream 1500 mg Full-Spectrum",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Carpe Diem CBD Cream - 1500mg CBD - Full Spectrum - RELAX",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "northpark|cartridge|1g|41 gelato",
    "kept": {
     "name": "Gelato 41 1g Cart",
@@ -3213,6 +3181,22 @@
    "shops_after": 2
   },
   {
+   "key": "camino|edible|50mg|cherry excite wild",
+   "kept": {
+    "name": "Camino Excite Wild Cherry THC Gummy 50mg (5mg THC)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Camino EXCITE Wild Cherry Gummies - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "dizgo collective|flower|3.5g|medusa",
    "kept": {
     "name": "Dizgo Medusa 3.5g",
@@ -3277,22 +3261,6 @@
    "shops_after": 2
   },
   {
-   "key": "camino|edible|50mg|bliss lemonade watermelon",
-   "kept": {
-    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "granny's|edible|50mg|dill pickle pretzels",
    "kept": {
     "name": "Granny's Pretzels - Dill Pickle [50pk] (50mg)",
@@ -3319,6 +3287,22 @@
     }
    ],
    "shops_after": 10
+  },
+  {
+   "key": "camino|edible|50mg|bliss lemonade watermelon",
+   "kept": {
+    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "unbound|flower|3.5g|2 mac v",
@@ -3929,22 +3913,6 @@
     }
    ],
    "shops_after": 3
-  },
-  {
-   "key": "retro bakery|edible|50mg|berry grape very wheels",
-   "kept": {
-    "name": "Retro Bakery 50mg THC | Very Berry Grape Wheels",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Very Berry Grape Wheels Gummies 50mg - Retro Bakery",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 2
   },
   {
    "key": "grasslandz|cartridge|1g|citrus slushy",
