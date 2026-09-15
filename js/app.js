@@ -260,16 +260,28 @@
         }
     } catch (_) {}
     const ownerToken = () => { try { return localStorage.getItem('tcc-owner-token') || ''; } catch (_) { return ''; } };
+    // KV is eventually consistent, so an owner clicking the link in their email
+    // within a few seconds can read a miss on a session that genuinely exists.
+    // Without the retry they're told the dashboard isn't theirs AND the resend
+    // button is throttled for 10 minutes — the worst first impression we have.
     async function verifyOwner(shopId) {
         const tok = ownerToken();
         if (!tok) return null;
-        try {
-            const r = await fetch(`${TCC_WORKER_URL}/owner/verify?shop=${encodeURIComponent(shopId)}`, {
-                headers: { Authorization: 'Bearer ' + tok }, cache: 'no-store',
-            });
-            if (!r.ok) return null;
-            return await r.json();
-        } catch (_) { return null; }
+        const ask = async () => {
+            try {
+                const r = await fetch(`${TCC_WORKER_URL}/owner/verify?shop=${encodeURIComponent(shopId)}&_=${Date.now()}`, {
+                    headers: { Authorization: 'Bearer ' + tok }, cache: 'no-store',
+                });
+                if (!r.ok) return r.status === 401 ? null : undefined;
+                return await r.json();
+            } catch (_) { return undefined; }
+        };
+        for (let attempt = 0; attempt < 3; attempt++) {
+            const v = await ask();
+            if (v) return v;
+            if (attempt < 2) await new Promise(r => setTimeout(r, 1200 * (attempt + 1)));
+        }
+        return null;
     }
 
     // Founding Partners — dispensaries that verified early and partner with
@@ -1726,9 +1738,19 @@
         const nearMeBtn = document.getElementById('map-page-near-me');
         if (!canvasEl || !listEl) return;
         if (typeof L === 'undefined') {
-            setTimeout(renderMapPage, 200);
+            // Leaflet comes from a CDN. If it never arrives (blocked network,
+            // CDN down) this used to re-arm every 200ms for as long as the tab
+            // stayed open, burning CPU behind a blank box. Give it ~8s, then
+            // say so and point at the list instead.
+            App._mapPageTries = (App._mapPageTries || 0) + 1;
+            if (App._mapPageTries <= 40) { setTimeout(renderMapPage, 200); return; }
+            App._mapPageTries = 0;
+            canvasEl.innerHTML = '<div style="padding:2rem;text-align:center" class="text-sm text-secondary">'
+                + 'The map couldn\u2019t load \u2014 your network may be blocking it. '
+                + '<a href="#dispensaries" style="color:var(--green-text,#4ade80)">Browse the list instead</a>.</div>';
             return;
         }
+        App._mapPageTries = 0;
 
         if (App.mapPageInstance) {
             try { App.mapPageInstance.remove(); } catch (e) {}
@@ -2624,6 +2646,9 @@
                 window.__ownerDeals = (rows || []).map(x => ({
                     id: 'od-' + x.id, dispensaryId: x.shop, type: x.type,
                     title: x.title, details: x.details, expires: x.ends, ownerPosted: true,
+                    // Paid owner content. The pitch says these pin to the top
+                    // of Deals, so they sort above the automatic price drops.
+                    featured: true,
                 }));
                 if (window.__ownerDeals.length) renderDeals(filter);
             }).catch(() => {});
@@ -2634,11 +2659,9 @@
             deals = deals.filter(d => d.type === filter);
         }
 
-        deals.sort((a, b) => {
-            if (a.featured && !b.featured) return -1;
-            if (!a.featured && b.featured) return 1;
-            return 0;
-        });
+        // Owner-posted specials first, then featured shops' drops, then the rest.
+        const rank = (d) => (d.ownerPosted ? 0 : d.featured ? 1 : 2);
+        deals.sort((a, b) => rank(a) - rank(b));
 
         container.innerHTML = deals.length ? deals.map(d => dealCard(d)).join('') :
             `<div class="empty-state" style="grid-column:1/-1">
@@ -2951,13 +2974,31 @@
                 data.role = 'brand';
                 const btn = form.querySelector('button[type="submit"]');
                 if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+                // Only claim success once the worker actually took it, or a
+                // brand owner walks away thinking they reached us.
+                let sent = false;
                 try {
-                    await fetch(`${TCC_WORKER_URL}/contact`, {
+                    const res = await fetch(`${TCC_WORKER_URL}/contact`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(data),
                     });
-                } catch (_) {}
+                    sent = res.ok;
+                } catch (_) { sent = false; }
+                if (!sent) {
+                    if (btn) { btn.disabled = false; btn.textContent = 'Send it'; }
+                    let err = document.getElementById('brand-claim-error');
+                    if (!err) {
+                        err = document.createElement('p');
+                        err.id = 'brand-claim-error';
+                        err.className = 'text-xs text-danger';
+                        err.style.marginTop = '.6rem';
+                        form.appendChild(err);
+                    }
+                    err.innerHTML = 'That didn\u2019t go through \u2014 email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+                    err.hidden = false;
+                    return;
+                }
                 trackEvent('generate_lead', { event_category: 'brand', event_label: 'brand_claim', brand: slug });
                 form.style.display = 'none';
                 document.getElementById('brand-claim-success').style.display = 'block';
@@ -3290,13 +3331,31 @@
                 const submitBtn = contactForm.querySelector('button[type="submit"]');
                 if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending...'; }
 
+                // This is an owner writing to us from their own dashboard.
+                // Don't show a thank-you unless the worker took it.
+                let sent = false;
                 try {
-                    await fetch(`${TCC_WORKER_URL}/contact`, {
+                    const res = await fetch(`${TCC_WORKER_URL}/contact`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(data),
                     });
-                } catch (_) {}
+                    sent = res.ok;
+                } catch (_) { sent = false; }
+                if (!sent) {
+                    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send'; }
+                    let err = document.getElementById('dash-contact-error');
+                    if (!err) {
+                        err = document.createElement('p');
+                        err.id = 'dash-contact-error';
+                        err.className = 'text-xs text-danger';
+                        err.style.marginTop = '.6rem';
+                        contactForm.appendChild(err);
+                    }
+                    err.innerHTML = 'That didn\u2019t go through \u2014 email us at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
+                    err.hidden = false;
+                    return;
+                }
 
                 trackEvent('generate_lead', { event_category: 'dispensary', event_label: 'claim_form', dispensary_id: d.id });
                 contactForm.style.display = 'none';
@@ -6288,51 +6347,78 @@
     prep(document.body);
 })();
 
-// ─── Homepage claim form (2026-09-12) ───────────────────────────────────────
-// Native form on the /contact worker path (emails hello@, feeds the Leads
-// dashboard, mirrors into Kit). Replaced the silent Kit embed.
+// ─── Homepage claim forms: dispensary + brand (2026-09-12) ─────────────
+// Native forms on the /contact worker path (emails hello@, feeds the Leads
+// dashboard, mirrors into Kit). Replaced the silent Kit embed that swallowed
+// months of claim attempts.
+//
+// Everything is scoped to the form element — fields by name, the error line
+// and thank-you block found relative to the form — so both forms share one
+// handler and neither can break by drifting away from a hard-coded id.
+// (It did: the first version read ids the markup never had, so clicking
+// "Send it" threw before the fetch and showed the visitor nothing at all.)
 (function () {
-    var form = document.getElementById('claim-form');
-    if (!form) return;
-    form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        var errEl = document.getElementById('claim-error');
-        errEl.hidden = true;
-        var name = document.getElementById('claim-name').value.trim();
-        var email = document.getElementById('claim-email').value.trim();
-        if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-            errEl.textContent = 'Name and a real email are all we need.';
-            errEl.hidden = false;
-            return;
-        }
+    var ENDPOINT = 'https://dashboard.twincitycannabis.com/contact';
+    var MAILTO = '<a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>';
+
+    document.querySelectorAll('form.claim-form').forEach(function (form) {
         var btn = form.querySelector('button[type="submit"]');
-        btn.disabled = true; btn.textContent = 'Sending…';
-        var ok = false;
-        try {
-            var res = await fetch('https://dashboard.twincitycannabis.com/contact', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: name,
-                    email: email,
-                    dispensary: document.getElementById('claim-dispensary').value.trim(),
-                    phone: document.getElementById('claim-phone').value.trim(),
-                    message: document.getElementById('claim-message').value.trim(),
-                    kind: 'dispensary',
-                }),
-            });
-            ok = res.ok;
-        } catch (err) { ok = false; }
-        if (ok) {
-            if (typeof trackEvent === 'function') trackEvent('generate_lead', { event_category: 'dispensary', event_label: 'homepage_claim_form' });
+        var errEl = form.querySelector('.claim-error');
+        var thanksEl = form.parentElement && form.parentElement.querySelector('.claim-thanks');
+        if (!btn || !errEl) return;
+        var kind = form.dataset.kind || 'dispensary';
+        var label = btn.textContent;
+        var val = function (n) {
+            var el = form.querySelector('[name="' + n + '"]');
+            return el ? el.value.trim() : '';
+        };
+        var showError = function (html) {
+            btn.disabled = false; btn.textContent = label;
+            errEl.innerHTML = html; errEl.hidden = false;
+        };
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            errEl.hidden = true;
+            var name = val('name');
+            var email = val('email');
+            if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+                errEl.textContent = 'Name and a real email are all we need.';
+                errEl.hidden = false;
+                return;
+            }
+            btn.disabled = true; btn.textContent = 'Sending\u2026';
+            var ok = false;
+            try {
+                var res = await fetch(ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        // The brand form labels this field "brand"; send it as
+                        // both so the notification subject reads right either way.
+                        dispensary: val('dispensary') || val('brand'),
+                        brand: val('brand'),
+                        phone: val('phone'),
+                        message: val('message'),
+                        kind: kind,
+                    }),
+                });
+                ok = res.ok;
+            } catch (err) { ok = false; }
+
+            if (!ok) {
+                // Never eat a lead silently again — fall back to email.
+                showError('That didn\u2019t go through \u2014 email us directly at ' + MAILTO + '.');
+                return;
+            }
+            if (typeof trackEvent === 'function') {
+                trackEvent('generate_lead', { event_category: kind, event_label: 'homepage_claim_form' });
+            }
             form.hidden = true;
-            document.getElementById('claim-thanks').hidden = false;
-        } else {
-            // Never eat a lead silently again — fall back to email.
-            btn.disabled = false; btn.textContent = 'Send it';
-            errEl.innerHTML = 'That didn’t go through — email us directly at <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a>.';
-            errEl.hidden = false;
-        }
+            if (thanksEl) thanksEl.hidden = false;
+        });
     });
 })();
 
@@ -6350,8 +6436,9 @@
             e.preventDefault();
             var text = document.getElementById('suggest-text').value.trim();
             if (!text) return;
+            var sent = false;
             try {
-                await fetch('https://dashboard.twincitycannabis.com/suggest', {
+                var res = await fetch('https://dashboard.twincitycannabis.com/suggest', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -6360,9 +6447,18 @@
                         page: location.pathname + location.hash,
                     }),
                 });
-            } catch (err) { /* store-and-forward not worth the complexity */ }
+                sent = res.ok;
+            } catch (err) { sent = false; }
+            // A visitor taking the time to write deserves the truth about
+            // whether it reached us.
+            var thanks = document.getElementById('suggest-thanks');
+            if (!sent) {
+                thanks.innerHTML = 'That didn\u2019t send \u2014 please email it to <a href="mailto:hello@twincitycannabis.com" style="color:var(--green-text,#4ade80)">hello@twincitycannabis.com</a> so it isn\u2019t lost.';
+                thanks.hidden = false;
+                return;
+            }
             document.getElementById('suggest-form').hidden = true;
-            document.getElementById('suggest-thanks').hidden = false;
+            thanks.hidden = false;
             setTimeout(close, 2600);
         });
     }
