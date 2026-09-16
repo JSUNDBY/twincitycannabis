@@ -2003,7 +2003,9 @@ async function sendLeadNotification(lead, env) {
   if (!env.RESEND_API_KEY) return;
   const escHtml = (s) => String(s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const subject = `New ${lead.kind === 'brand' ? 'brand claim' : 'lead'}: ${lead.name}${lead.brand ? ' — ' + lead.brand : lead.dispensary ? ' — ' + lead.dispensary : ''}`;
-  const adminLink = 'https://dashboard.twincitycannabis.com/admin?key=' + (env.ADMIN_TOKEN || '');
+  // Never put the admin token in an email: this message is designed to be replied
+  // to the lead, and a reply quotes the HTML (links intact) back to them.
+  const adminLink = 'https://dashboard.twincitycannabis.com/admin';
   const html = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:560px;margin:0 auto;padding:1.5rem;background:#0a1410;color:#e8e9eb;border-radius:12px">
     <div style="color:#22c55e;font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:.5rem">Twin City Cannabis</div>
     <h2 style="margin:0 0 1rem;color:#f5f6f8;font-size:1.3rem">New lead from the site</h2>
@@ -2031,7 +2033,7 @@ async function sendLeadNotification(lead, env) {
       from: 'TCC Leads <notifications@send.twincitycannabis.com>',
       // Josh reads his personal inbox; hello@ is the paper trail.
       to: ['hello@twincitycannabis.com', 'j.sundby@gmail.com'],
-      reply_to: lead.email,
+      reply_to: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email) ? lead.email : undefined,
       subject,
       html,
       text,
