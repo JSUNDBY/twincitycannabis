@@ -1,6 +1,6 @@
 {
- "merged_groups": 278,
- "absorbed": 380,
+ "merged_groups": 277,
+ "absorbed": 378,
  "groups": [
   {
    "key": "soap|flower|3.5g|big",
@@ -359,22 +359,6 @@
    "shops_after": 4
   },
   {
-   "key": "first class funk|pre-roll|0.5g|5 minis pk",
-   "kept": {
-    "name": "First Class Funk | Minis | 0.5g | 5pk",
-    "shops_before": 3
-   },
-   "absorbed": [
-    {
-     "name": "First Class Funk | Minis | 0.5g | 5pk",
-     "shops": [
-      "dinky-dope-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 4
-  },
-  {
    "key": "grasslandz|cartridge|1g|blue dream",
    "kept": {
     "name": "Grasslandz | Blue Dream | Cartridge | 1g",
@@ -578,22 +562,6 @@
    "shops_after": 4
   },
   {
-   "key": "campfire cannabis|pre-roll|1g|runtz",
-   "kept": {
-    "name": "Campfire Cannabis - 1g Pre-Roll - Runtz (H)",
-    "shops_before": 2
-   },
-   "absorbed": [
-    {
-     "name": "1G Preroll Campfire Cannabis Runtz",
-     "shops": [
-      "high-fidelity"
-     ]
-    }
-   ],
-   "shops_after": 3
-  },
-  {
    "key": "campfire cannabis|flower|7g|club fight",
    "kept": {
     "name": "Campfire Cannabis - 7g Flower - Fight Club (S/H)",
@@ -721,6 +689,22 @@
     }
    ],
    "shops_after": 2
+  },
+  {
+   "key": "first class funk|pre-roll|0.5g|5 minis pk",
+   "kept": {
+    "name": "First Class Funk | Minis | 0.5g | 5pk",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "First Class Funk | Minis | 0.5g | 5pk",
+     "shops": [
+      "dinky-dope-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 3
   },
   {
    "key": "purple prince|flower|3.5g|big blueprint forbidden",
@@ -862,7 +846,7 @@
    "key": "good green|flower|3.5g|delight jack",
    "kept": {
     "name": "Jack's Delight | 3.5g",
-    "shops_before": 7
+    "shops_before": 8
    },
    "absorbed": [
     {
@@ -1369,8 +1353,7 @@
       "leafline-labs-st-paul",
       "rise-baxter",
       "rise-brooklyn-park",
-      "rise-mankato",
-      "rise-willmar"
+      "rise-mankato"
      ]
     }
    ],
@@ -2409,6 +2392,28 @@
    "shops_after": 2
   },
   {
+   "key": "northpark|cartridge|1g|41 gelato",
+   "kept": {
+    "name": "Northpark - 1g Vape Cartridge - Gelato #41 (I/H)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Gelato 41 1g Cart",
+     "shops": [
+      "twin-cities-cannabis-richfield"
+     ]
+    },
+    {
+     "name": "Gelato #41 1g Cart",
+     "shops": [
+      "voyager-cannabis-co"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
    "key": "oma|cartridge|1g|disposable herer jack",
    "kept": {
     "name": "Oma - Jack Herer - 1g Disposable",
@@ -2953,28 +2958,6 @@
    "shops_after": 2
   },
   {
-   "key": "nebula|edible|100mg|apple bar green",
-   "kept": {
-    "name": "Nebula - Green Apple Gummy Bar 100mg",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Green Apple Gummy Bar 100mg - Nebula",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
-     "name": "Nebula Green Apple Gummy Bar - 100mg | .1g",
-     "shops": [
-      "high-10-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 3
-  },
-  {
    "key": "northpark|pre-roll|1g|3 gummibears pk",
    "kept": {
     "name": "Gummibears - PreRolls 1g 3pk",
@@ -3017,38 +3000,6 @@
      "name": "Relief Muscle & Joint CBD Gel Roll-On 1000mg - Carpe Diem",
      "shops": [
       "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "carpe diem|tincture|1500mg|cream full relax spectrum",
-   "kept": {
-    "name": "Relax CBD Cream 1500 mg Full-Spectrum",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Carpe Diem CBD Cream - 1500mg CBD - Full Spectrum - RELAX",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "northpark|cartridge|1g|41 gelato",
-   "kept": {
-    "name": "Gelato 41 1g Cart",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Gelato #41 1g Cart",
-     "shops": [
-      "voyager-cannabis-co"
      ]
     }
    ],
@@ -3197,6 +3148,22 @@
      "name": "Grasslandz Peach Gummies - 100mg THC",
      "shops": [
       "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "moonlight cannabis|edible|10mg|interstellar kiwi live rosin",
+   "kept": {
+    "name": "Moonlight Interstellar 10mg Live Rosin Kiwi Gummies",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Interstellar Kiwi 10mg LIVE ROSIN Gummies - Moonlight Cannabis",
+     "shops": [
+      "healing-harvest"
      ]
     }
    ],
@@ -3388,6 +3355,38 @@
    "shops_after": 2
   },
   {
+   "key": "unbound|flower|3.5g|wilfunk",
+   "kept": {
+    "name": "Wilfunk",
+    "shops_before": 6
+   },
+   "absorbed": [
+    {
+     "name": "Unbound Wilfunk 3.5g",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 7
+  },
+  {
+   "key": "flor|flower|7g|breath mendo",
+   "kept": {
+    "name": "Flor Mendo Breath 7g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Mendo Breath (Bulk) | 7g",
+     "shops": [
+      "the-flower-shop-mn-llc"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "dizgo collective|flower|3.5g|medusa",
    "kept": {
     "name": "Dizgo Medusa 3.5g",
@@ -3402,22 +3401,6 @@
     }
    ],
    "shops_after": 2
-  },
-  {
-   "key": "unbound|flower|3.5g|wilfunk",
-   "kept": {
-    "name": "Wilfunk",
-    "shops_before": 5
-   },
-   "absorbed": [
-    {
-     "name": "Unbound Wilfunk 3.5g",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    }
-   ],
-   "shops_after": 6
   },
   {
    "key": "camino|edible|50mg|berry chill wild",
@@ -3436,16 +3419,32 @@
    "shops_after": 2
   },
   {
-   "key": "flor|flower|7g|breath mendo",
+   "key": "unbound|flower|3.5g|2 mac v",
    "kept": {
-    "name": "Flor Mendo Breath 7g",
+    "name": "Mac V2",
+    "shops_before": 6
+   },
+   "absorbed": [
+    {
+     "name": "Unbound MAC V2 3.5g",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 7
+  },
+  {
+   "key": "camino|edible|50mg|bliss lemonade watermelon",
+   "kept": {
+    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
     "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Mendo Breath (Bulk) | 7g",
+     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
      "shops": [
-      "the-flower-shop-mn-llc"
+      "island-pezi"
      ]
     }
    ],
@@ -3478,38 +3477,6 @@
     }
    ],
    "shops_after": 11
-  },
-  {
-   "key": "camino|edible|50mg|bliss lemonade watermelon",
-   "kept": {
-    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "unbound|flower|3.5g|2 mac v",
-   "kept": {
-    "name": "Mac V2",
-    "shops_before": 5
-   },
-   "absorbed": [
-    {
-     "name": "Unbound MAC V2 3.5g",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    }
-   ],
-   "shops_after": 6
   },
   {
    "key": "flor|flower|3.5g|breath mendo",
@@ -3983,7 +3950,7 @@
    "key": "tasty gems|cartridge|0.5g|4 grape pie",
    "kept": {
     "name": "Grape Pie #4 [500mg]",
-    "shops_before": 5
+    "shops_before": 6
    },
    "absorbed": [
     {
@@ -3993,7 +3960,7 @@
      ]
     }
    ],
-   "shops_after": 6
+   "shops_after": 7
   },
   {
    "key": "tasty gems|cartridge|0.5g|crack green",
@@ -4015,7 +3982,7 @@
    "key": "tasty gems|cartridge|0.5g|zimosa",
    "kept": {
     "name": "Zimosa [500mg]",
-    "shops_before": 3
+    "shops_before": 4
    },
    "absorbed": [
     {
@@ -4025,7 +3992,7 @@
      ]
     }
    ],
-   "shops_after": 4
+   "shops_after": 5
   },
   {
    "key": "blncd|beverage|20mg|balance sparkling water",
@@ -4184,6 +4151,32 @@
     }
    ],
    "shops_after": 17
+  },
+  {
+   "key": "(inc)ensored|edible|100mg|acting express fast pineapple",
+   "kept": {
+    "name": "Fast-Acting Pineapple Express [10pk] (100mg)",
+    "shops_before": 15
+   },
+   "absorbed": [
+    {
+     "name": "Fast-Acting Pineapple Express [10pk] (100mg)",
+     "shops": [
+      "green-goods-blaine",
+      "green-goods-burnsville",
+      "green-goods-duluth",
+      "green-goods-woodbury",
+      "leafline-labs-st-cloud",
+      "minnesota-medical-solutions",
+      "minnesota-medical-solutions-moorhead",
+      "minnesota-medical-solutions-rochester",
+      "rise-baxter",
+      "rise-mankato",
+      "rise-willmar"
+     ]
+    }
+   ],
+   "shops_after": 16
   },
   {
    "key": "(inc)ensored|edible|100mg|peach summer",
@@ -4377,10 +4370,34 @@
    "shops_after": 6
   },
   {
+   "key": "vireo|flower|3.5g|pave",
+   "kept": {
+    "name": "PAVE",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "PAVE",
+     "shops": [
+      "green-goods-blaine",
+      "minnesota-medical-solutions-moorhead"
+     ]
+    },
+    {
+     "name": "PAVE | 3.5g",
+     "shops": [
+      "green-goods-burnsville",
+      "minnesota-medical-solutions-rochester"
+     ]
+    }
+   ],
+   "shops_after": 6
+  },
+  {
    "key": "vireo|flower|3.5g|boof super",
    "kept": {
     "name": "Super Boof",
-    "shops_before": 5
+    "shops_before": 6
    },
    "absorbed": [
     {
@@ -4390,7 +4407,7 @@
      ]
     }
    ],
-   "shops_after": 6
+   "shops_after": 7
   },
   {
    "key": "&shine|beverage|100mg|fruit punch",
@@ -4793,29 +4810,6 @@
    "shops_after": 3
   },
   {
-   "key": "vireo|flower|3.5g|pave",
-   "kept": {
-    "name": "PAVE",
-    "shops_before": 2
-   },
-   "absorbed": [
-    {
-     "name": "PAVE | 3.5g",
-     "shops": [
-      "green-goods-burnsville",
-      "minnesota-medical-solutions-rochester"
-     ]
-    },
-    {
-     "name": "PAVE",
-     "shops": [
-      "green-goods-duluth"
-     ]
-    }
-   ],
-   "shops_after": 5
-  },
-  {
    "key": "&shine|flower|7g|animal face",
    "kept": {
     "name": "Animal Face | 7g",
@@ -4847,35 +4841,6 @@
       "leafline-labs-st-cloud",
       "leafline-labs-st-paul",
       "rise-mankato",
-      "rise-willmar"
-     ]
-    }
-   ],
-   "shops_after": 8
-  },
-  {
-   "key": "good green|flower|7g|delight jack",
-   "kept": {
-    "name": "Jack's Delight | 7g",
-    "shops_before": 7
-   },
-   "absorbed": [
-    {
-     "name": "Jack's Delight | 7g",
-     "shops": [
-      "leafline-labs-eagan",
-      "leafline-labs-st-cloud",
-      "leafline-labs-st-paul",
-      "rise-baxter",
-      "rise-mankato",
-      "rise-new-hope",
-      "rise-willmar"
-     ]
-    },
-    {
-     "name": "Jack's Delight",
-     "shops": [
-      "leafline-labs-st-cloud",
       "rise-willmar"
      ]
     }
@@ -5136,6 +5101,22 @@
    "shops_after": 2
   },
   {
+   "key": "nebula|edible|100mg|bar candy cotton",
+   "kept": {
+    "name": "Cotton Candy Gummy Bar 100mg - Nebula",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Nebula Cotton Candy Gummy Bar - 100mg | .1g",
+     "shops": [
+      "high-10-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "grasslandz|edible|100mg|pineapple sour",
    "kept": {
     "name": "Sour Pineapple Gummies 100mg - Grasslandz",
@@ -5152,14 +5133,14 @@
    "shops_after": 2
   },
   {
-   "key": "nebula|edible|100mg|bar candy cotton",
+   "key": "nebula|edible|100mg|apple bar green",
    "kept": {
-    "name": "Cotton Candy Gummy Bar 100mg - Nebula",
+    "name": "Green Apple Gummy Bar 100mg - Nebula",
     "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Nebula Cotton Candy Gummy Bar - 100mg | .1g",
+     "name": "Nebula Green Apple Gummy Bar - 100mg | .1g",
      "shops": [
       "high-10-dispensary"
      ]
