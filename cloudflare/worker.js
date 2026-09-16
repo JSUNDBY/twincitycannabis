@@ -1834,8 +1834,10 @@ async function sendMail(env, to, subject, text) {
       from: 'Twin City Cannabis <notifications@send.twincitycannabis.com>',
       to: [to], reply_to: 'hello@twincitycannabis.com', subject, text,
       html: '<pre style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif;white-space:pre-wrap;font-size:15px;line-height:1.5">'
-        + text.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))
-              .replace(/(https:\/\/\S+)/g, '<a href="$1" style="color:#22c55e">$1</a>')
+        + text.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+              // Only our own links become anchors. Owner-submitted title/details
+              // ride in this text, so a stranger's https:// must stay plain text.
+              .replace(/(https:\/\/dashboard\.twincitycannabis\.com\/[^\s<]+)/g, '<a href="$1" style="color:#22c55e">$1</a>')
         + '</pre>',
     }),
   });
