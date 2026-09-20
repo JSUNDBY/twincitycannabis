@@ -1,6 +1,6 @@
 {
- "merged_groups": 247,
- "absorbed": 340,
+ "merged_groups": 244,
+ "absorbed": 337,
  "groups": [
   {
    "key": "soap|flower|3.5g|big",
@@ -17,22 +17,6 @@
     }
    ],
    "shops_after": 4
-  },
-  {
-   "key": "&shine|edible|100mg|10 fruit pk punch",
-   "kept": {
-    "name": "&Shine | 10pk Gummies | Fruit Punch - 100mg",
-    "shops_before": 4
-   },
-   "absorbed": [
-    {
-     "name": "&Shine - Fruit Punch - Gummies - 10pk - (100mg) - S | .1g",
-     "shops": [
-      "bloom-wellness-dispensary-st-paul"
-     ]
-    }
-   ],
-   "shops_after": 5
   },
   {
    "key": "bubble bath|flower|3.5g|big",
@@ -116,6 +100,22 @@
    "absorbed": [
     {
      "name": "&Shine - Blackberry (Indica Inspired) - Gummies - 10pk - (100mg) - I | .1g",
+     "shops": [
+      "bloom-wellness-dispensary-st-paul"
+     ]
+    }
+   ],
+   "shops_after": 4
+  },
+  {
+   "key": "&shine|edible|100mg|10 fruit pk punch",
+   "kept": {
+    "name": "&Shine | 10pk Gummies | Fruit Punch - 100mg",
+    "shops_before": 3
+   },
+   "absorbed": [
+    {
+     "name": "&Shine - Fruit Punch - Gummies - 10pk - (100mg) - S | .1g",
      "shops": [
       "bloom-wellness-dispensary-st-paul"
      ]
@@ -392,19 +392,13 @@
      ]
     },
     {
-     "name": "Rocket Pop | 1 G",
-     "shops": [
-      "legit-cannabis"
-     ]
-    },
-    {
      "name": "Nebula CART - Rocket Pop (Indica) | 1g",
      "shops": [
       "island-pezi"
      ]
     }
    ],
-   "shops_after": 6
+   "shops_after": 5
   },
   {
    "key": "nativecare brand|flower|3.5g|big haze silver super",
@@ -896,13 +890,19 @@
    },
    "absorbed": [
     {
+     "name": "Prickly Pear Bee\u2019s Knees Mocktail 10mg - BLNCD",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
      "name": "BLNCD - 10mg THC Mocktail - PRICKLY PEAR BEE'S KNEES | 0.01g",
      "shops": [
       "off-the-path-cannabis-dispensary"
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "blncd|beverage|50mg|fuse spirits",
@@ -973,6 +973,22 @@
     }
    ],
    "shops_after": 3
+  },
+  {
+   "key": "birdie|beverage|10mg|berry lemonade wild",
+   "kept": {
+    "name": "Birdie | 12oz - Wild Berry Lemonade | THC:10mg",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Wild Berry Lemonade 10mg - Birdie",
+     "shops": [
+      "flame-flora"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "bud doctor|flower|3.5g|amanda",
@@ -1889,22 +1905,6 @@
    "shops_after": 2
   },
   {
-   "key": "grasslandz|cartridge|1g|disposable kush og",
-   "kept": {
-    "name": "Grasslandz | OG Kush | Disposable | 1g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Grasslandz Disposable Vape - OG Kush (Hybrid) | 1g",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "grasslandz|cartridge|1g|apple sour",
    "kept": {
     "name": "Grasslandz | Sour Apple | Cartridge | 1g",
@@ -2310,7 +2310,7 @@
    "key": "rythm|flower|7g|durban z",
    "kept": {
     "name": "Durban Z",
-    "shops_before": 12
+    "shops_before": 11
    },
    "absorbed": [
     {
@@ -2381,9 +2381,15 @@
      "shops": [
       "pot-mama-s"
      ]
+    },
+    {
+     "name": "Retro Bakery Chocolate Covered Cookies 50mg",
+     "shops": [
+      "levitated-cannabis"
+     ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "retro bakery|edible|50mg|bar chocolate dark espresso",
@@ -2681,15 +2687,9 @@
      "shops": [
       "urban-green-dispensary"
      ]
-    },
-    {
-     "name": "Swedish OG - 3.5g",
-     "shops": [
-      "wildflower-5"
-     ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
   },
   {
    "key": "verist fields|flower|3.5g|top torch",
@@ -2734,6 +2734,22 @@
      "name": "Fog Dog | 1g Pre-Roll",
      "shops": [
       "lake-daze"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "carpe diem|tincture|1000mg|gel muscle on relief",
+   "kept": {
+    "name": "Relief Muscle & Joint CBD Gel Roll-On 1000 mg",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Relief Muscle & Joint CBD Gel Roll-On 1000mg - Carpe Diem",
+     "shops": [
+      "flame-flora"
      ]
     }
    ],
@@ -2794,6 +2810,28 @@
     }
    ],
    "shops_after": 13
+  },
+  {
+   "key": "unbound|flower|3.5g|ice purple water",
+   "kept": {
+    "name": "Unbound Purple Ice Water 3.5g",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "Purple Ice Water | 3.5g",
+     "shops": [
+      "lake-daze"
+     ]
+    },
+    {
+     "name": "Purple Ice Water (Pre-packed) | 3.5g",
+     "shops": [
+      "the-flower-shop-mn-llc"
+     ]
+    }
+   ],
+   "shops_after": 4
   },
   {
    "key": "unbound|pre-roll|1g|rosanna",
@@ -3147,28 +3185,6 @@
    "shops_after": 2
   },
   {
-   "key": "unbound|flower|3.5g|ice purple water",
-   "kept": {
-    "name": "Unbound Purple Ice Water 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Purple Ice Water | 3.5g",
-     "shops": [
-      "lake-daze"
-     ]
-    },
-    {
-     "name": "Purple Ice Water (Pre-packed) | 3.5g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 3
-  },
-  {
    "key": "dizgo collective|flower|3.5g|medusa",
    "kept": {
     "name": "Dizgo Medusa 3.5g",
@@ -3217,34 +3233,6 @@
    "shops_after": 8
   },
   {
-   "key": "granny's|edible|50mg|dill pickle pretzels",
-   "kept": {
-    "name": "Granny's Pretzels - Dill Pickle [50pk] (50mg)",
-    "shops_before": 8
-   },
-   "absorbed": [
-    {
-     "name": "Granny's THC Pretzels Dill Pickle 50mg (1mg/Pretzel)",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    },
-    {
-     "name": "Dill Pickle Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
-     "name": "Granny's Dill Pickle Pretzels - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 11
-  },
-  {
    "key": "camino|edible|50mg|bliss lemonade watermelon",
    "kept": {
     "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
@@ -3290,19 +3278,13 @@
    },
    "absorbed": [
     {
-     "name": "Original Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
      "name": "Granny's Original Pretzels - 50mg THC",
      "shops": [
       "island-pezi"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
   },
   {
    "key": "granny's|edible|50mg|cheddar pretzels",
@@ -3366,9 +3348,15 @@
      "shops": [
       "lake-leaf-dispensary-1"
      ]
+    },
+    {
+     "name": "Grape Canyon Zkittlez 3.5g - Campfire Cannabis",
+     "shops": [
+      "flame-flora"
+     ]
     }
    ],
-   "shops_after": 4
+   "shops_after": 5
   },
   {
    "key": "dizgo|pre-roll|0.99g|3 blue dream pk",
@@ -3487,22 +3475,6 @@
    "absorbed": [
     {
      "name": "Donny Burger | 3.5g",
-     "shops": [
-      "legit-cannabis"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "campfire cannabis|flower|3.5g|marker permanent",
-   "kept": {
-    "name": "Permanent Marker - 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Permanent Marker | 3.5g",
      "shops": [
       "legit-cannabis"
      ]
@@ -3631,20 +3603,20 @@
    "shops_after": 2
   },
   {
-   "key": "northpark|pre-roll|3g|3 gummibears pk",
+   "key": "tasty gems|cartridge|0.5g|zimosa",
    "kept": {
-    "name": "Gummibears | Pre-Roll | 1g | 3pk",
-    "shops_before": 1
+    "name": "Zimosa [500mg]",
+    "shops_before": 2
    },
    "absorbed": [
     {
-     "name": "Gummibears 3pk | 3g",
+     "name": "Zimosa | Vape | 0.5g",
      "shops": [
-      "the-flower-shop-mn-llc"
+      "green-rose"
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "blncd|beverage|20mg|balance sparkling water",
@@ -3654,13 +3626,19 @@
    },
    "absorbed": [
     {
+     "name": "CBD Sparkling Water BALANCE 20mg - BLNCD",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
      "name": "BLNCD - Sparkling Water BALANCE - 20mg CBD - 12oz",
      "shops": [
       "off-the-path-cannabis-dispensary"
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "blncd|beverage|20mg|chill sparkling water",
@@ -3670,9 +3648,31 @@
    },
    "absorbed": [
     {
+     "name": "CBD Sparkling Water CHILL 20mg - BLNCD",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
      "name": "BLNCD - Sparkling Water CHILL - 20mg CBD - 12oz",
      "shops": [
       "off-the-path-cannabis-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
+   "key": "blncd|beverage|10mg|cranberry mocktail mule pomegranate",
+   "kept": {
+    "name": "Cranberry Pomegranate Mule | THC Mocktail | 10mg",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Cranberry Pomegranate Mule Mocktail 10mg \u2013 BLNCD",
+     "shops": [
+      "flame-flora"
      ]
     }
    ],
@@ -3747,22 +3747,6 @@
     }
    ],
    "shops_after": 3
-  },
-  {
-   "key": "retro bakery|edible|50mg|berry grape very wheels",
-   "kept": {
-    "name": "Retro Bakery 50mg THC | Very Berry Grape Wheels",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Very Berry Grape Wheels Gummies 50mg - Retro Bakery",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 2
   },
   {
    "key": "grasslandz|cartridge|1g|citrus slushy",
@@ -3850,12 +3834,13 @@
    "key": "vireo|flower|3.5g|grape mochi",
    "kept": {
     "name": "Grape Mochi | 3.5g",
-    "shops_before": 6
+    "shops_before": 5
    },
    "absorbed": [
     {
      "name": "Grape Mochi",
      "shops": [
+      "minnesota-medical-solutions-bloomington",
       "minnesota-medical-solutions-moorhead"
      ]
     }
@@ -3916,7 +3901,7 @@
    "key": "vireo|flower|3.5g|drops rain",
    "kept": {
     "name": "Rain Drops",
-    "shops_before": 6
+    "shops_before": 5
    },
    "absorbed": [
     {
@@ -4051,13 +4036,14 @@
    "key": "simple|flower|28g|pave",
    "kept": {
     "name": "PAVE | 28g",
-    "shops_before": 4
+    "shops_before": 3
    },
    "absorbed": [
     {
      "name": "PAVE",
      "shops": [
-      "minnesota-medical-solutions-bloomington"
+      "minnesota-medical-solutions-bloomington",
+      "minnesota-medical-solutions-rochester"
      ]
     }
    ],
@@ -4132,14 +4118,13 @@
    "key": "vireo|flower|3.5g|dream durban",
    "kept": {
     "name": "Durban Dream",
-    "shops_before": 4
+    "shops_before": 5
    },
    "absorbed": [
     {
      "name": "Durban Dream | 3.5g",
      "shops": [
       "minnesota-medical-solutions",
-      "minnesota-medical-solutions-bloomington",
       "minnesota-medical-solutions-rochester"
      ]
     }
@@ -4208,20 +4193,20 @@
   {
    "key": "vireo|flower|7g|drops rain",
    "kept": {
-    "name": "Rain Drops",
-    "shops_before": 4
+    "name": "Rain Drops | 7g",
+    "shops_before": 3
    },
    "absorbed": [
     {
-     "name": "Rain Drops | 7g",
+     "name": "Rain Drops",
      "shops": [
-      "green-goods-burnsville",
-      "green-goods-duluth",
-      "minnesota-medical-solutions"
+      "green-goods-woodbury",
+      "minnesota-medical-solutions-bloomington",
+      "minnesota-medical-solutions-rochester"
      ]
     }
    ],
-   "shops_after": 7
+   "shops_after": 6
   },
   {
    "key": "vireo|flower|3.5g|4 citrus rotten",
@@ -4321,36 +4306,20 @@
    "shops_after": 3
   },
   {
-   "key": "vireo|flower|3.5g|cream fried ice",
+   "key": "granny's|edible|50mg|dill pickle pretzels",
    "kept": {
-    "name": "Fried Ice Cream | 3.5g",
-    "shops_before": 1
+    "name": "Granny's Pretzels - Dill Pickle [50pk] (50mg)",
+    "shops_before": 8
    },
    "absorbed": [
     {
-     "name": "Fried Ice Cream",
+     "name": "Granny's Dill Pickle Pretzels - 50mg THC",
      "shops": [
-      "minnesota-medical-solutions-rochester"
+      "island-pezi"
      ]
     }
    ],
-   "shops_after": 2
-  },
-  {
-   "key": "granny's|edible|50mg|cinnamon maple pretzels",
-   "kept": {
-    "name": "Granny's Pretzels - Maple Cinnamon [50pk] (50mg)",
-    "shops_before": 6
-   },
-   "absorbed": [
-    {
-     "name": "Maple Cinnamon Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 7
+   "shops_after": 9
   },
   {
    "key": "rythm|flower|14g|brownie scout",
@@ -4378,7 +4347,7 @@
    "key": "rythm|flower|3.5g|gogurtz",
    "kept": {
     "name": "Gogurtz",
-    "shops_before": 7
+    "shops_before": 6
    },
    "absorbed": [
     {
@@ -4394,22 +4363,6 @@
     }
    ],
    "shops_after": 8
-  },
-  {
-   "key": "&shine|flower|7g|gogurtz",
-   "kept": {
-    "name": "Gogurtz",
-    "shops_before": 2
-   },
-   "absorbed": [
-    {
-     "name": "Gogurtz | 7g",
-     "shops": [
-      "rise-willmar"
-     ]
-    }
-   ],
-   "shops_after": 3
   },
   {
    "key": "rythm|flower|28g|bananaconda",
@@ -4508,6 +4461,22 @@
    "shops_after": 2
   },
   {
+   "key": "blncd|beverage|20mg|adaptogen blend elixir zen",
+   "kept": {
+    "name": "Zen Blend THC + Adaptogen Elixir 20mg - BLNCD",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "BLNCD - Cannabis + Adaptogen - 20mg THC Elixir - ZEN BLEND | 0.02g",
+     "shops": [
+      "off-the-path-cannabis-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "grasslandz|edible|100mg|blueberry sour",
    "kept": {
     "name": "Sour Blueberry Gummies 100mg - Grasslandz",
@@ -4540,38 +4509,6 @@
    "shops_after": 2
   },
   {
-   "key": "granny's|edible|50mg|honey mustard pretzels",
-   "kept": {
-    "name": "Honey Mustard Pretzels 50mg - Granny's",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Granny's Honey Mustard Pretzels - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "nebula|edible|100mg|apple bar green",
-   "kept": {
-    "name": "Green Apple Gummy Bar 100mg - Nebula",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Nebula Green Apple Gummy Bar - 100mg | .1g",
-     "shops": [
-      "high-10-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "grasslandz|cartridge|1g|banana kush",
    "kept": {
     "name": "Banana Kush Cart - Grasslandz",
@@ -4596,6 +4533,22 @@
    "absorbed": [
     {
      "name": "Nebula Cotton Candy Gummy Bar - 100mg | .1g",
+     "shops": [
+      "high-10-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "nebula|edible|100mg|apple bar green",
+   "kept": {
+    "name": "Green Apple Gummy Bar 100mg - Nebula",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Nebula Green Apple Gummy Bar - 100mg | .1g",
      "shops": [
       "high-10-dispensary"
      ]
