@@ -3588,6 +3588,22 @@
             case 'name':
                 list.sort((a, b) => a.name.localeCompare(b.name));
                 break;
+            case 'newest': {
+                // Build-injected map of products first seen in the last 30
+                // days, market-new only (see build_seo.js). Anything without a
+                // date is older than the window and sorts after.
+                const seen = window.TCC_NEW || {};
+                const when = (p) => seen[(p.name || '').trim().toLowerCase()] || '';
+                list.sort((a, b) => {
+                    const da = when(a), db = when(b);
+                    if (da && db && da !== db) return db.localeCompare(da);
+                    if (da && !db) return -1;
+                    if (!da && db) return 1;
+                    // Same day, or both older: most widely carried first.
+                    return Object.keys(b.prices || {}).length - Object.keys(a.prices || {}).length;
+                });
+                break;
+            }
             case 'popular':
             default:
                 // Popular = most dispensaries carrying it

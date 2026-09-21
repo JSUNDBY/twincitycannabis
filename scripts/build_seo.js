@@ -5439,6 +5439,37 @@ if (!indexHtml.includes('/* fresh-ts client */')) {
   indexHtml = indexHtml.replace('</body>', freshScript + '</body>');
 }
 
+// ---------- "Newest first" sort data (2026-09-21) ----------
+// Sam Wagner at Irie asked for a way to sort by what just hit the market.
+// The date lives in the price history, which the browser never loads, so the
+// build hands the page a small map of genuinely-new products: first seen in
+// the last 30 days, and NOT sold only at a shop we just started reading (that
+// shop's whole menu looks new on day one). Same rule as /new-cannabis-minnesota/.
+(() => {
+  const trendsPath = path.join(ROOT, 'scraper/data/price_trends.json');
+  if (!fs.existsSync(trendsPath)) {
+    console.log('price_trends.json missing — no "newest" sort data injected');
+    return;
+  }
+  let firstSeen = {};
+  try { firstSeen = JSON.parse(fs.readFileSync(trendsPath, 'utf8')).first_seen || {}; }
+  catch (e) { console.log('price_trends.json unreadable — no "newest" sort data'); return; }
+  const cutoff = new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10);
+  const map = {};
+  for (const p of TCC.products) {
+    const key = (p.name || '').trim().toLowerCase();
+    const seen = firstSeen[key];
+    if (!seen || seen < cutoff) continue;
+    const shops = Object.entries(p.prices || {}).filter(([, v]) => v > 0);
+    if (!shops.length) continue;
+    if (shops.every(([id]) => RECENTLY_ONBOARDED.has(id))) continue;
+    map[key] = seen;
+  }
+  const tag = '<script>window.TCC_NEW=' + JSON.stringify(map) + ';</script>\n';
+  indexHtml = indexHtml.replace('</body>', tag + '</body>');
+  console.log(`Newest-sort data: ${Object.keys(map).length} products first seen since ${cutoff}`);
+})();
+
 // Replace dead footer links with real /privacy/, /terms/, /contact/ paths.
 // Idempotent — only matches the literal href="#" instances next to those labels.
 indexHtml = indexHtml
