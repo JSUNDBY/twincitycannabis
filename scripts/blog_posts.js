@@ -1372,4 +1372,103 @@ module.exports = [
       { href: '/blog/flower-vapes-edibles-minnesota/', label: 'Flower vs vapes vs edibles' },
     ],
   },
+
+  {
+    slug: 'rochester-dispensaries-minnesota',
+    title: 'Rochester dispensaries: two shops, and a $22 gap on the same eighth',
+    dek: 'The third biggest city in Minnesota has exactly two licensed shops. One is where you buy flower, the other is where you buy everything else, and the price data makes it obvious which is which.',
+    date: '2026-10-12',
+    updated: '2026-10-12',
+    category: 'Buying smart',
+    read: 7,
+    body: `
+<p>Rochester is the third biggest city in Minnesota. It has the Mayo Clinic, it has around 120,000 people, and it has exactly two licensed cannabis dispensaries. Two. That is fewer than Albert Lea, a town a fifth its size an hour down I-90.</p>
+<p>The upside of a two shop town is that comparison shopping takes about ninety seconds. Here is what our price data actually says about them, and it is not subtle.</p>
+
+<h2>The two shops</h2>
+<p><strong>Green Goods Rochester</strong>, 3456 E Circle Drive NE, (507) 481-3140, Sunday through Wednesday 10am to 8pm and Thursday through Saturday 10am to 9pm. This is the medical and adult-use location on the northeast side, part of the statewide Green Goods chain. It has 670 Google reviews at a 4.5 average, the deepest review record of any shop in this half of the state.</p>
+<p><strong>Hempire</strong>, 3135 Superior Dr NW Suite B, (507) 281-4367, over on the northwest side near the highway. Newer and much smaller, 59 reviews at a 4.5 average. It takes debit cards, which is rarer than it should be in this business, and does online ordering. Its posted hours keep moving around in our data, so call before you drive over.</p>
+<p>Both are listed on our <a href="/rochester-cannabis-dispensaries/">Rochester dispensary page</a>.</p>
+
+<h2>The flower gap is enormous</h2>
+<p>This is the whole reason to read this page. Every eighth of flower we have on file at Hempire is priced at $61.99. Not roughly, exactly, straight across the menu. Green Goods Rochester sells most of its eighths at $40, a few at $41.89, and the occasional one at $50.</p>
+<p>That is a $22 difference on the same unit, in the same city, ten minutes apart. For scale, the median eighth across every dispensary we track in Minnesota sits at $44.99, so Hempire is running roughly 38 percent above the state middle and Green Goods is below it.</p>
+<p>You do not have to take our word for it. Hempire's own Google reviews include a one star that opens with that exact price, and a two star from someone who said the staff were lovely and the prices made her leave without buying anything. If flower is what you came for, you drive to E Circle Drive. Live numbers are on <a href="/cheapest-flower-rochester/">cheapest flower in Rochester</a>.</p>
+
+<h2>Hempire earns its keep on everything else</h2>
+<p>A $22 gap on flower is not the whole story.</p>
+<p>Hempire carries ten THC beverages, from $7.99 singles up to $40 multipacks. Green Goods Rochester carries two, both at $25. If you are shopping for seltzers, and a lot of Minnesota is, that is not close. Hempire also lists four pre-rolls against Green Goods' two, and a wider spread of edible price points.</p>
+<p>It posts the best service score in town as well, and review after review says the same thing: the staff take real time with you. That is worth something if this is new to you, and our <a href="/blog/first-time-dispensary-guide-minnesota/">first time guide</a> covers what to ask at the counter.</p>
+
+<h2>Call ahead about carts</h2>
+<p>Worth knowing before you make the trip. Green Goods Rochester shows zero cartridges in our current data, and its reviewers keep raising it, with more than one person noting they could not buy a cart or a disposable because of a shortage. Hempire has exactly one on the menu, at $75.01.</p>
+<p>So if you vape, call first, every time. This is not a Rochester problem specifically, it is the statewide supply squeeze we went through in the <a href="/blog/vape-cartridges-minnesota/">cartridge buying guide</a>. But with two shops in town, you have no backup plan.</p>
+
+<h2>You are not paying an outstate premium here</h2>
+<p>Here is the surprise. Northern Minnesota shoppers reliably pay more than the metro does, which we wrote about in the <a href="/blog/duluth-dispensaries-minnesota/">Duluth guide</a>. Rochester does not work that way at the chain.</p>
+<p>Green Goods stocks 59 of the same products in Rochester and Minneapolis, and 48 of them carry the identical price in both cities. The chain sets a number and holds it across all eight of its Minnesota locations. Where Rochester does differ it is usually an edible, and usually the pricier side, so it is worth a look at <a href="/cheapest-edible-rochester/">cheapest edibles in Rochester</a> before you stock up on gummies.</p>
+<p>The lesson is bigger than Rochester. At a chain, driving to another location to compare buys you nothing, because the price is the price. At independents it is worth real money, which is why the <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a> pays off most in the metro.</p>
+
+<h2>If you are willing to drive</h2>
+<p>Forty one miles east, <a href="/winona-cannabis-dispensaries/">Winona</a> has two shops, and Winona Dispensary is among the best reviewed in southern Minnesota. About the same distance northeast, Island Peži in <a href="/welch-cannabis-dispensaries/">Welch</a> is a tribal operation, running under its own sovereign regulations. Mn THC Co in <a href="/dundas-cannabis-dispensaries/">Dundas</a> is forty five miles north, right off the highway if you are heading to the Cities anyway.</p>
+<p>And an hour southwest on I-90 is <a href="/albert-lea-cannabis-dispensaries/">Albert Lea</a>, which has six dispensaries for 18,000 people and all the price pressure that comes with it. We covered that town in the <a href="/blog/albert-lea-dispensaries-minnesota/">Albert Lea guide</a>. If you are making a real run of it, that is where the competition actually lives.</p>
+
+<h2>The short version</h2>
+<p>Flower at Green Goods, drinks and pre-rolls and unhurried help at Hempire, call ahead about carts, and do not assume outstate means overpaying, because on flower in this town it does not. Prices move, so check the <a href="/rochester-cannabis-dispensaries/">Rochester page</a> the morning you go, and the <a href="/tax-calculator/">tax calculator</a> for the real out the door number.</p>
+`,
+    related: [
+      { href: '/rochester-cannabis-dispensaries/', label: 'Rochester dispensaries' },
+      { href: '/cheapest-flower-rochester/', label: 'Cheapest flower in Rochester' },
+      { href: '/blog/albert-lea-dispensaries-minnesota/', label: 'Albert Lea guide' },
+    ],
+  },
+
+  {
+    slug: 'cannabis-winter-minnesota',
+    title: 'Cannabis and a Minnesota winter: what actually changes',
+    dek: 'Cold kills vape batteries, furnace air turns good flower to dust, and the dark months change how cannabis lands. Here is what to do about each one.',
+    date: '2026-10-19',
+    updated: '2026-10-19',
+    category: 'Wellness',
+    read: 7,
+    body: `
+<p>Winter here is not a mood, it is six months of logistics. It changes your car, your house, your sleep, and how far you are willing to drive for anything. It changes cannabis too, in a few specific ways worth knowing before the first real cold snap.</p>
+
+<h2>Your cartridge will not work in a cold car</h2>
+<p>This is the one people learn the hard way in a parking lot in January. Cannabis oil thickens when it is cold, and lithium batteries lose voltage in the cold on top of that. Leave a vape in the console overnight at fifteen below and in the morning it will either produce nothing at all, or you will pull hard on it and get a mouthful of oil once it finally moves.</p>
+<p>The fix is simple. Do not store a cart in the car. If it has been out in the cold, bring it inside and give it twenty minutes in your pocket before you use it, then take gentle draws rather than forcing it. Charge the battery indoors. What you are actually buying is covered in our <a href="/blog/vape-cartridges-minnesota/">cartridge guide</a>.</p>
+
+<h2>Furnace air is what actually dries your flower</h2>
+<p>People blame summer heat for stale weed. In Minnesota it is winter that does the damage. Forced air heat in a closed up house routinely drops indoor humidity into the twenties, drier than any other time of year, and flower left in a baggie or sitting in a grinder goes brittle in a week or two.</p>
+<p>A two way humidity pack in a sealed glass jar fixes it for a couple of dollars. In winter that stops being a nice upgrade and starts being the thing that keeps a $45 eighth from turning harsh before you finish it. Our <a href="/blog/how-to-store-cannabis-minnesota/">storage guide</a> has the rest, including why the freezer is a bad idea, which is the other thing people try once it is cold out.</p>
+
+<h2>The cold car is a legal problem too</h2>
+<p>Cold or not, cannabis in a vehicle in Minnesota needs to be sealed and out of reach, ideally in the trunk. Winter makes people sloppy about this, because nobody wants to stand in a parking lot in a parka reorganizing the car. Do it anyway. Our <a href="/blog/cannabis-and-driving-minnesota/">driving guide</a> has the rules, and the <a href="/minnesota-cannabis-laws/">Minnesota cannabis laws</a> page has the full set.</p>
+<p>The other winter driving point is the boring one. Impairment does not care about road conditions, and road conditions in February are already asking enough of you. Plan the ride first.</p>
+
+<h2>The dark months change how it lands</h2>
+<p>Here is the part the industry does not much like saying out loud. The Twin Cities lose close to seven hours of daylight between the June solstice and the December one, and for a lot of people that comes with a real drop in mood and energy. Cannabis is not a treatment for that, and for some people it makes it worse.</p>
+<p>The pattern we hear most is the same loop every time. The evening gets long and dark, cannabis makes the couch easier, the couch quietly replaces the walk and the phone call and the gym, and by February the low mood has a lot more to work with than it did in November. That is not a character flaw. It is what happens when the thing that feels best indoors is also the thing that keeps you indoors.</p>
+<p>If winter is hard for you, the honest advice is to keep cannabis as something you do after the day rather than instead of the day, watch whether your dose is drifting upward, and take a break if the answer is yes. Our <a href="/blog/tolerance-break-minnesota/">tolerance break guide</a> is written for exactly that, and the piece on <a href="/blog/cannabis-for-anxiety-minnesota/">cannabis and anxiety</a> covers when it helps and when it backfires. If the low is bigger than a winter slump, that is a doctor conversation, not a dispensary one.</p>
+
+<h2>Winter sleep, and why more is not better</h2>
+<p>Dark mornings push your sleep later and dark evenings pull it earlier, and plenty of people reach for something indica leaning to force the issue. It works, up to a point. THC can shorten the time it takes to fall asleep while also cutting into REM sleep, which is why heavy nightly use can leave you groggy rather than rested. Our <a href="/blog/cannabis-for-sleep-minnesota/">sleep guide</a> walks through it honestly, including why a smaller dose often does the job better than a bigger one.</p>
+
+<h2>Shop like it is winter</h2>
+<p>Practical stuff, because a January trip is a bigger deal than a July one.</p>
+<ul>
+  <li><strong>Check hours before you leave.</strong> Winter hours shift and holiday closures catch people out. Our <a href="/open-now/">open now page</a> tracks what is actually open right now.</li>
+  <li><strong>Buy up a size.</strong> Fewer trips in bad weather, and a quarter is almost always cheaper per gram than two eighths. More in the <a href="/blog/how-to-save-money-minnesota-dispensaries/">saving money guide</a>.</li>
+  <li><strong>Use curbside and online ordering.</strong> Plenty of shops offer both, and it is the difference between a two minute stop and standing in a line in your boots.</li>
+  <li><strong>Compare before you go.</strong> You are far less likely to shop around when it is ten below, which is exactly when overpaying happens. Two minutes on the <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a> or the <a href="/weed-deals-twin-cities/">deals page</a> beats making a second trip.</li>
+</ul>
+
+<p>None of this is dramatic. Keep the cart warm, keep the flower sealed, keep the car legal, and keep an honest eye on whether winter is using cannabis more than you are. That last one is the only one that really matters by March.</p>
+`,
+    related: [
+      { href: '/blog/cannabis-for-sleep-minnesota/', label: 'Cannabis for sleep' },
+      { href: '/blog/how-to-store-cannabis-minnesota/', label: 'How to store cannabis' },
+      { href: '/blog/tolerance-break-minnesota/', label: 'Taking a tolerance break' },
+    ],
+  },
 ];
