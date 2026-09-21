@@ -5076,6 +5076,11 @@ const RECENTLY_ONBOARDED = new Set([
   'island-pezi', 'the-lakes-dispensary', 'the-flower-shop-mn-llc', 'altitude-dispensary',
   'higher-place', 'twin-cities-high-llc', 'flipside-dispensary-and-music', 'green-leaf-depot',
   'green-apple-cannabis', 'black-bear-weed-dispensary-winona', 'coastless',
+  // Onboarded Sept 2026. Their whole menu reads as new the day we start
+  // reading it, which is not the same as new to the market. A product they
+  // share with an established shop still qualifies.
+  'flame-flora', 'mn-thc-co-1', 'mn-thc-co-2', 'winona-dispensary',
+  'great-cannabis-llc', 'irie-cannabis-dispensary',
 ]);
 
 const buildNewArrivalsPage = () => {
