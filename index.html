@@ -607,6 +607,13 @@
             <div class="section-label">Dispensary Directory</div>
             <h1 class="section-title">Every dispensary in Minnesota</h1>
             <p class="section-desc" style="margin-bottom:1rem">Browse, compare, and find your perfect dispensary — Twin Cities metro and statewide.</p>
+            <!-- A shop owner notices they are missing HERE, not on the
+                 pricing page. Sam at Irie had to use the suggestion box to
+                 ask to be added (2026-09-03) because nothing here said he
+                 could. Free, and it lands in Leads with his email. -->
+            <p class="section-desc" style="margin:-0.4rem 0 1rem;font-size:0.92rem">
+                Run a dispensary that isn't here? <a href="#for-dispensaries-claim" style="color:var(--green-text,#4ade80)">Add your shop</a> &mdash; free, and we'll pull your menu automatically.
+            </p>
 
             <!-- Near me: one-tap proximity sort (uses the browser's location) -->
             <button type="button" id="disp-near-me" class="near-me-btn" aria-pressed="false">
@@ -1949,7 +1956,7 @@
             <div class="kit-form-brand">
                 <img src="img/twin-city-cannabis-logo-128.png" alt="Twin City Cannabis" class="kit-form-logo" loading="lazy" width="80" height="80">
                 <h2 class="kit-form-title">Say hi in 2 minutes</h2>
-                <p class="kit-form-subtitle">Claim your listing, ask about Featured, or just say hi. A real human replies within 24 hours.</p>
+                <p class="kit-form-subtitle">Not listed yet? Ask us to add you. Already listed? Claim it, fix a detail, or ask about Featured. A real human replies within 24 hours.</p>
             </div>
             <!-- Native claim form -> worker /contact (emails hello@ + Leads
                  dashboard + mirrors into Kit). Replaced the Kit embed 2026-09:
@@ -2590,7 +2597,7 @@
     <div class="suggest-card">
         <button type="button" class="suggest-close" id="suggest-close" aria-label="Close">×</button>
         <div class="font-display font-bold" style="font-size:1.05rem;margin-bottom:.3rem">Make the site better</div>
-        <p class="text-sm text-secondary" style="margin-bottom:.8rem">A missing shop, a broken thing, a feature you wish existed — tell us and we'll get on it.</p>
+        <p class="text-sm text-secondary" style="margin-bottom:.8rem">A missing shop, a broken thing, a feature you wish existed — tell us and we'll get on it. <br><span style="opacity:.8">Own the shop? <a href="#for-dispensaries-claim" style="color:var(--green-text,#4ade80)">Add it here</a> so we can reply to you.</span></p>
         <form id="suggest-form">
             <textarea id="suggest-text" rows="4" maxlength="1500" required placeholder="What should we add, fix, or track?"></textarea>
             <input id="suggest-contact" type="text" maxlength="200" placeholder="Email or @handle (optional — only if you want a reply)">

@@ -58,6 +58,14 @@ CARROT_STORES = {
     # Newer Carrot stores authenticate with a space KEY (carrot-space-key)
     # instead of a numeric id — capture it from the store page's fetch
     # headers the same way.
+    # Added 2026-09-21. Sam asked to be listed on 2026-09-03 through the
+    # suggestion box, the day before they opened; this is that request.
+    "irie-cannabis-dispensary": {
+        "name": "Irie Cannabis (South Minneapolis)",
+        "region": "nevada",
+        "space_key": "sp_5f4iEQjjTx3CCmcfdxJ73y",
+        "loc_id": "1",
+    },
     "green-rose": {
         "name": "Green Rose (Minneapolis)",
         "region": "nevada",
@@ -85,11 +93,21 @@ HEADERS = {
 }
 
 # Junk filter
+# Junk filter. Four terms used to be bare words and threw away real product
+# the store had shelved as cannabis: 'jar' (Trailhead's 3.5g flower jars),
+# 'bag' (gummies sold in a bag), 'stash' (the brand "Stash & Co"), and
+# 'battery' (a cartridge sold with one). Measured across every Carrot store
+# 2026-09-21: 12 real priced products discarded, 0 genuine accessories caught
+# by those four. Each is now bound to an actual accessory phrase.
 JUNK_RE = re.compile(
-    r'\b(battery|lighter|grinder|rolling paper|raw cone|ashtray|tray|'
-    r'pipe|bong|rig|scale|stash|bag|jar|container|clipper|boveda|'
+    r'\b(lighter|grinder|rolling papers?|raw cones?|ashtray|tray|'
+    r'pipe|bong|rig|scale|container|clipper|boveda|'
     r'blazy susan|bic |filter tip|doob tube|joint holder|rolling tray|'
-    r'tightvac|smell proof|dugout|one hitter|chillum|papers)\b',
+    r'tightvac|smell proof|dugout|one hitter|chillum|papers)\b'
+    r'|\b(?:stash|glass|storage|mason)\s*(?:jar|bag|box|case)\b'
+    r'|\bsmell[\s-]?proof\s*bag\b'
+    r'|\b(?:510|vape|replacement|spare)\s*batter(?:y|ies)\b'
+    r'|\bbatter(?:y|ies)\b(?=\s*(?:pack|charger|kit)\b)',
     re.IGNORECASE
 )
 
