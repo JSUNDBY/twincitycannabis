@@ -1,6 +1,6 @@
 {
- "merged_groups": 258,
- "absorbed": 365,
+ "merged_groups": 246,
+ "absorbed": 346,
  "groups": [
   {
    "key": "bubble bath|flower|3.5g|big",
@@ -52,12 +52,13 @@
     {
      "name": "Orion | Big Buds | 3.5g",
      "shops": [
+      "green-rose",
       "highrx",
       "unanimous-cannabis"
      ]
     }
    ],
-   "shops_after": 5
+   "shops_after": 6
   },
   {
    "key": "rythm|flower|3.5g|bananaconda premium",
@@ -798,13 +799,19 @@
    },
    "absorbed": [
     {
+     "name": "Mimosa Ice | 3.5G",
+     "shops": [
+      "aurora-cannabis-prior-lake"
+     ]
+    },
+    {
      "name": "Verist Fields | Mimosa Ice | 3.5g",
      "shops": [
       "verist-fields"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 4
   },
   {
    "key": "wilfunk|flower|3.5g|big",
@@ -966,22 +973,6 @@
    "shops_after": 2
   },
   {
-   "key": "blncd|edible|25mg|caramels chocolate",
-   "kept": {
-    "name": "BLNCD | Chocolate Caramels (5ct) | 5mg THC",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Chocolate | THC Caramels | 25mg",
-     "shops": [
-      "green-rose"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "blncd|edible|50mg|citrus",
    "kept": {
     "name": "Citrus [10pk] (50mg)",
@@ -1005,19 +996,29 @@
    },
    "absorbed": [
     {
-     "name": "Blood Orange Cardamom | THC Sparkling Water | 5mg",
-     "shops": [
-      "green-rose"
-     ]
-    },
-    {
      "name": "BLNCD - 5mg THC Sparkling Water - Blood Orange Cardamom | 0.005g",
      "shops": [
       "off-the-path-cannabis-dispensary"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
+  },
+  {
+   "key": "birdie|beverage|10mg|berry lemonade wild",
+   "kept": {
+    "name": "Birdie | 12oz - Wild Berry Lemonade | THC:10mg",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Wild Berry Lemonade 10mg - Birdie",
+     "shops": [
+      "flame-flora"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "nebula|cartridge|1g|berry blast blue disposable off",
@@ -2247,22 +2248,6 @@
    "shops_after": 3
   },
   {
-   "key": "mischief|flower|3.5g|premium taffy turtle",
-   "kept": {
-    "name": "Mischief | Turtle Taffy | Premium Flower | 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Turtle Taffy | Premium | Flower | 3.5g",
-     "shops": [
-      "green-rose"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "northpark|cartridge|1g|41 gelato",
    "kept": {
     "name": "Northpark - 1g Vape Cartridge - Gelato #41 (I/H)",
@@ -2331,22 +2316,6 @@
     }
    ],
    "shops_after": 3
-  },
-  {
-   "key": "oma|cartridge|1g|battery herer jack",
-   "kept": {
-    "name": "Oma - Thc Vape Cartridge with Battery 1g - Jack Herer",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Jack Herer | THC Vape Cartridge with Battery | 1g",
-     "shops": [
-      "green-rose"
-     ]
-    }
-   ],
-   "shops_after": 2
   },
   {
    "key": "purple octane|flower|4g|big",
@@ -2428,6 +2397,22 @@
    "shops_after": 9
   },
   {
+   "key": "retro bakery|edible|50mg|bar chocolate milk",
+   "kept": {
+    "name": "Retro Bakery 50mg THC | Milk Chocolate Bar",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Retro Bakery - Milk Chocolate Bar - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "retro bakery|edible|50mg|chocolate cookies covered",
    "kept": {
     "name": "Retro Bakery | Chocolate Covered Cookies (5ct) | 10mg THC",
@@ -2463,24 +2448,18 @@
      ]
     },
     {
-     "name": "Espresso Dark Chocolate Bar | THC | 50mg",
-     "shops": [
-      "green-rose"
-     ]
-    },
-    {
      "name": "Retro Bakery- Espresso Dark Chocolate Bar (sativa) 50mg THC",
      "shops": [
       "winona-dispensary"
      ]
     }
    ],
-   "shops_after": 4
+   "shops_after": 3
   },
   {
    "key": "retro bakery|edible|50mg|chocolate dark mores",
    "kept": {
-    "name": "Dark Chocolate S'mores | THC | 50mg",
+    "name": "Retro Bakery- Dark Chocolate S'mores (50mg)",
     "shops_before": 1
    },
    "absorbed": [
@@ -2489,15 +2468,9 @@
      "shops": [
       "pot-mama-s-edina"
      ]
-    },
-    {
-     "name": "Retro Bakery- Dark Chocolate S'mores (50mg)",
-     "shops": [
-      "winona-dispensary"
-     ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
   },
   {
    "key": "nebula|cartridge|1g|disposable pop rocket",
@@ -2685,31 +2658,9 @@
      "shops": [
       "lake-daze"
      ]
-    },
-    {
-     "name": "Frosted Runtz | Flower | 3.5g",
-     "shops": [
-      "green-rose"
-     ]
     }
    ],
-   "shops_after": 4
-  },
-  {
-   "key": "unbound|pre-roll|2.5g|5 ct illemonati",
-   "kept": {
-    "name": "Unbound | Illemonati | 5ct | 0.5G",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Illemonati | Pre-Rolls | 0.5g | 5ct",
-     "shops": [
-      "green-rose"
-     ]
-    }
-   ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "unbound|pre-roll|1g|illemonati",
@@ -2896,20 +2847,32 @@
    "shops_after": 2
   },
   {
-   "key": "&shine|edible|100mg|fruit punch",
+   "key": "(inc)ensored|edible|100mg|apple pucker sour",
    "kept": {
-    "name": "&Shine - Fruit Punch Gummies (100mg THC)",
-    "shops_before": 1
+    "name": "Sour Apple Pucker [10pk] (100mg)",
+    "shops_before": 14
    },
    "absorbed": [
     {
-     "name": "&SHINE FRUIT PUNCH GUMMIES (SATIVA) 100MG | .1g",
+     "name": "(inc)ensored - Sour Apple Pucker (100mg)",
      "shops": [
-      "altitude-dispensary"
+      "fort-road-cannabis-llc"
+     ]
+    },
+    {
+     "name": "Sour Apple Pucker [10pk] (100mg)",
+     "shops": [
+      "leafline-labs-eagan",
+      "leafline-labs-st-cloud",
+      "leafline-labs-st-paul",
+      "rise-baxter",
+      "rise-mankato",
+      "rise-new-hope",
+      "rise-willmar"
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 15
   },
   {
    "key": "carpe diem|tincture|1500mg|cream full relax spectrum",
@@ -2926,6 +2889,50 @@
     }
    ],
    "shops_after": 2
+  },
+  {
+   "key": "&shine|edible|100mg|fruit punch",
+   "kept": {
+    "name": "&Shine - Fruit Punch Gummies (100mg THC)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "&SHINE FRUIT PUNCH GUMMIES (SATIVA) 100MG | .1g",
+     "shops": [
+      "altitude-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "(inc)ensored|edible|100mg|peach summer",
+   "kept": {
+    "name": "Summer Peach [10pk] (100mg)",
+    "shops_before": 16
+   },
+   "absorbed": [
+    {
+     "name": "(inc)ensored  Summer Peach (100mg THC)",
+     "shops": [
+      "fort-road-cannabis-llc"
+     ]
+    },
+    {
+     "name": "Summer Peach [10pk] (100mg)",
+     "shops": [
+      "leafline-labs-eagan",
+      "leafline-labs-st-cloud",
+      "leafline-labs-st-paul",
+      "rise-baxter",
+      "rise-mankato",
+      "rise-new-hope",
+      "rise-willmar"
+     ]
+    }
+   ],
+   "shops_after": 17
   },
   {
    "key": "&shine|edible|100mg|tropical",
@@ -2969,19 +2976,13 @@
      ]
     },
     {
-     "name": "Orion| Flower | 3.5g",
-     "shops": [
-      "green-rose"
-     ]
-    },
-    {
      "name": "Orion | 3.5g",
      "shops": [
       "legit-cannabis"
      ]
     }
    ],
-   "shops_after": 13
+   "shops_after": 12
   },
   {
    "key": "unbound|flower|3.5g|ice purple water",
@@ -3022,22 +3023,6 @@
    "shops_after": 2
   },
   {
-   "key": "unbound|pre-roll|1g|ice purple water",
-   "kept": {
-    "name": "Purple Ice Water | Pre-Roll | 1g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Purple Ice Water Preroll 1g",
-     "shops": [
-      "twin-cities-cannabis-richfield"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "mllw|edible|48mg|bar chocolate covered strawberry",
    "kept": {
     "name": "MLLW Chocolate Covered Strawberry 48 MG Bar",
@@ -3061,19 +3046,13 @@
    },
    "absorbed": [
     {
-     "name": "Raspberry Gummies 100mg - Grasslandz",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
      "name": "Grasslandz Raspberry Gummies - 100mg THC",
      "shops": [
       "island-pezi"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
   },
   {
    "key": "grasslandz|edible|100mg|peach",
@@ -3140,22 +3119,6 @@
    "shops_after": 2
   },
   {
-   "key": "minneleaf|edible|50mg|bar chocolate dark",
-   "kept": {
-    "name": "Dark Chocolate Bar (Premium 54.5% Cacao) 50mg THC",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Dark Chocolate Bar | THC | 50mg",
-     "shops": [
-      "green-rose"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "good green|flower|3.5g|fuel jet og",
    "kept": {
     "name": "Jet Fuel OG",
@@ -3204,17 +3167,17 @@
    "key": "verist fields|concentrate|1g|berry cured dream ix pappy resin sappy",
    "kept": {
     "name": "Cured Resin-IX | Sappy Pappy by Verist Fields | Dream Berry | 1g",
-    "shops_before": 2
+    "shops_before": 1
    },
    "absorbed": [
     {
      "name": "Cured Resin-IX | Sappy Pappy by Verist Fields | Dream Berry | 1g",
      "shops": [
-      "coastless"
+      "verist-fields"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
   },
   {
    "key": "verist fields|pre-roll|1g|1 big birch ct ix mr stick tart uptown",
@@ -3227,22 +3190,6 @@
      "name": "Big Stick-IX | Mr. Birch | Uptown Tart | 1 g | 1 ct",
      "shops": [
       "verist-fields"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "flor|flower|3.5g|dog fog",
-   "kept": {
-    "name": "Flor Fog Dog 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Fog Dog | Flower | 3.5g",
-     "shops": [
-      "green-rose"
      ]
     }
    ],
@@ -3262,19 +3209,13 @@
      ]
     },
     {
-     "name": "Illemonati | Flower | 3.5g",
-     "shops": [
-      "green-rose"
-     ]
-    },
-    {
      "name": "ILLEMONATI UNBOUND | 3.5g",
      "shops": [
       "altitude-dispensary"
      ]
     }
    ],
-   "shops_after": 4
+   "shops_after": 3
   },
   {
    "key": "flor|flower|7g|breath mendo",
@@ -3460,15 +3401,9 @@
      "shops": [
       "levitated-cannabis"
      ]
-    },
-    {
-     "name": "S'mores Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
     }
    ],
-   "shops_after": 9
+   "shops_after": 8
   },
   {
    "key": "granny's|edible|50mg|original pretzels",
@@ -3537,22 +3472,6 @@
    "shops_after": 2
   },
   {
-   "key": "minneleaf|edible|25mg|cbn nite peaceful pineapple sleep",
-   "kept": {
-    "name": "Minneleaf Nite CBN, CBD Sleep Gummies - Peaceful Pineapple 25mg CBD 10mg CBN",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "NITE Peaceful Pineapple Sleep | Gummy | 25mg CBD / 10mg CBN",
-     "shops": [
-      "green-rose"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "campfire cannabis|flower|3.5g|canyon grape zkittlez",
    "kept": {
     "name": "Grape Canyon Zkittlez - 3.5g",
@@ -3588,31 +3507,9 @@
    },
    "absorbed": [
     {
-     "name": "OG Kush | Flower | 3.5g",
-     "shops": [
-      "green-rose"
-     ]
-    },
-    {
      "name": "OG Kush | 3.5g",
      "shops": [
       "legit-cannabis"
-     ]
-    }
-   ],
-   "shops_after": 3
-  },
-  {
-   "key": "unbound|pre-roll|2.5g|5 kush og pk",
-   "kept": {
-    "name": "OG Kush | 5 PK of .5G Pre-rolls",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "OG Kush | Pre-Roll | 0.5g | 5pk",
-     "shops": [
-      "green-rose"
      ]
     }
    ],
@@ -3639,22 +3536,6 @@
     }
    ],
    "shops_after": 3
-  },
-  {
-   "key": "dizgo|pre-roll|0.99g|3 lemonade pk purple",
-   "kept": {
-    "name": "Purple Lemonade | 0.33g Pre-roll | 3pk",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Purple Lemonade | Pre-roll | 0.33g | 3pk",
-     "shops": [
-      "green-rose"
-     ]
-    }
-   ],
-   "shops_after": 2
   },
   {
    "key": "campfire cannabis|flower|3.5g|bath bubble",
@@ -3775,188 +3656,6 @@
     }
    ],
    "shops_after": 3
-  },
-  {
-   "key": "northpark|pre-roll|3g|3 bumper og pk",
-   "kept": {
-    "name": "Bumper OG | Pre-Roll | 1g | 3pk",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Bumper OG 3pk | 3g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "northpark|pre-roll|3g|3 dog fog pk",
-   "kept": {
-    "name": "Fog Dog | Pre-Rolls | 1g | 3pk",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Fog Dog 3pk | 3g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "tasty gems|cartridge|0.5g|zimosa",
-   "kept": {
-    "name": "Zimosa | Vape | 0.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Zimosa [500mg]",
-     "shops": [
-      "rise-willmar"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "blncd|beverage|20mg|balance sparkling water",
-   "kept": {
-    "name": "Balance | CBD Sparkling Water | 20mg",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "BLNCD - Sparkling Water BALANCE - 20mg CBD - 12oz",
-     "shops": [
-      "off-the-path-cannabis-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "blncd|beverage|20mg|chill sparkling water",
-   "kept": {
-    "name": "Chill | CBD Sparkling Water | 20mg",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "BLNCD - Sparkling Water CHILL - 20mg CBD - 12oz",
-     "shops": [
-      "off-the-path-cannabis-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "blncd|beverage|10mg|cranberry mocktail mule pomegranate",
-   "kept": {
-    "name": "Cranberry Pomegranate Mule | THC Mocktail | 10mg",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Cranberry Pomegranate Mule Mocktail 10mg \u2013 BLNCD",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "blncd|beverage|10mg|margarita mocktail watermelon",
-   "kept": {
-    "name": "Watermelon Margarita | THC Mocktail | 10mg",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "BLNCD - 10mg THC Mocktail - WATERMELON MARGARITA | 0.01g",
-     "shops": [
-      "off-the-path-cannabis-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "retro bakery|edible|50mg|bar chocolate dubai",
-   "kept": {
-    "name": "Dubai Chocolate Bar | THC | 50mg",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Dubai Chocolate Bar 50mg - Retro Bakery",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "retro bakery|edible|50mg|bar chocolate milk",
-   "kept": {
-    "name": "Retro Bakery 50mg THC | Milk Chocolate Bar",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Retro Bakery - Milk Chocolate Bar - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "retro bakery|edible|50mg|apple sour wheels",
-   "kept": {
-    "name": "Retro Bakery 50mg THC | Sour Apple Wheels",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Retro Bakery- Sour Apple Wheels (50mg)",
-     "shops": [
-      "winona-dispensary"
-     ]
-    },
-    {
-     "name": "Sour Apple Wheels Gummies 50mg - Retro Bakery",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 3
-  },
-  {
-   "key": "retro bakery|edible|50mg|berry grape very wheels",
-   "kept": {
-    "name": "Retro Bakery 50mg THC | Very Berry Grape Wheels",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Very Berry Grape Wheels Gummies 50mg - Retro Bakery",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 2
   },
   {
    "key": "grasslandz|cartridge|1g|citrus slushy",
@@ -4468,12 +4167,11 @@
      "name": "GMO Punch | 3.5g",
      "shops": [
       "green-goods-duluth",
-      "green-goods-woodbury",
       "minnesota-medical-solutions-moorhead"
      ]
     }
    ],
-   "shops_after": 7
+   "shops_after": 6
   },
   {
    "key": "vireo|flower|3.5g|cough minnesota",
@@ -4547,6 +4245,22 @@
     }
    ],
    "shops_after": 7
+  },
+  {
+   "key": "vireo|flower|7g|gmo punch",
+   "kept": {
+    "name": "GMO Punch | 7g",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "GMO Punch",
+     "shops": [
+      "green-goods-woodbury"
+     ]
+    }
+   ],
+   "shops_after": 3
   },
   {
    "key": "simple|flower|14g|death garlic",
@@ -4696,6 +4410,22 @@
    "shops_after": 8
   },
   {
+   "key": "&shine|flower|7g|gogurtz",
+   "kept": {
+    "name": "Gogurtz",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Gogurtz | 7g",
+     "shops": [
+      "leafline-labs-eagan"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "rythm|flower|28g|bananaconda",
    "kept": {
     "name": "Bananaconda | 28g",
@@ -4792,6 +4522,54 @@
    "shops_after": 2
   },
   {
+   "key": "retro bakery|edible|50mg|apple sour wheels",
+   "kept": {
+    "name": "Retro Bakery- Sour Apple Wheels (50mg)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Sour Apple Wheels Gummies 50mg - Retro Bakery",
+     "shops": [
+      "flame-flora"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "blncd|beverage|20mg|balance sparkling water",
+   "kept": {
+    "name": "CBD Sparkling Water BALANCE 20mg - BLNCD",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "BLNCD - Sparkling Water BALANCE - 20mg CBD - 12oz",
+     "shops": [
+      "off-the-path-cannabis-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "blncd|beverage|20mg|chill sparkling water",
+   "kept": {
+    "name": "CBD Sparkling Water CHILL 20mg - BLNCD",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "BLNCD - Sparkling Water CHILL - 20mg CBD - 12oz",
+     "shops": [
+      "off-the-path-cannabis-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "granny's|edible|50mg|honey mustard pretzels",
    "kept": {
     "name": "Honey Mustard Pretzels 50mg - Granny's",
@@ -4856,22 +4634,6 @@
    "shops_after": 2
   },
   {
-   "key": "grasslandz|edible|100mg|blueberry sour",
-   "kept": {
-    "name": "Sour Blueberry Gummies 100mg - Grasslandz",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Grasslandz Sour Blueberry Gummies - 100mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "grasslandz|edible|100mg|pineapple sour",
    "kept": {
     "name": "Sour Pineapple Gummies 100mg - Grasslandz",
@@ -4880,6 +4642,22 @@
    "absorbed": [
     {
      "name": "Grasslandz Sour Pineapple Gummies - 100mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "grasslandz|edible|100mg|blueberry sour",
+   "kept": {
+    "name": "Sour Blueberry Gummies 100mg - Grasslandz",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Grasslandz Sour Blueberry Gummies - 100mg THC",
      "shops": [
       "island-pezi"
      ]
