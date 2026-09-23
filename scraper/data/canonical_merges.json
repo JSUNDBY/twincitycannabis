@@ -1,6 +1,6 @@
 {
- "merged_groups": 249,
- "absorbed": 357,
+ "merged_groups": 254,
+ "absorbed": 365,
  "groups": [
   {
    "key": "highbernate moon melon|edible|50mg|10 pk",
@@ -623,6 +623,49 @@
    "shops_after": 3
   },
   {
+   "key": "good green|flower|3.5g|omg",
+   "kept": {
+    "name": "OMG",
+    "shops_before": 9
+   },
+   "absorbed": [
+    {
+     "name": "OMG Popcorn 3.5g",
+     "shops": [
+      "cali-cannabis-dispensary-uptown",
+      "sweet-leaves"
+     ]
+    },
+    {
+     "name": "OMG Popcorn 3.5g",
+     "shops": [
+      "legacy-cannabis-1"
+     ]
+    },
+    {
+     "name": "OMG | 3.5g",
+     "shops": [
+      "leafline-labs-eagan",
+      "leafline-labs-st-cloud",
+      "leafline-labs-st-paul",
+      "minnesota-medical-solutions",
+      "rise-baxter",
+      "rise-mankato",
+      "rise-new-hope",
+      "rise-willmar"
+     ]
+    },
+    {
+     "name": "OMG",
+     "shops": [
+      "green-goods-duluth",
+      "rise-brooklyn-park"
+     ]
+    }
+   ],
+   "shops_after": 14
+  },
+  {
    "key": "rythm|flower|3.5g|brownie scout",
    "kept": {
     "name": "Brownie Scout",
@@ -670,6 +713,13 @@
     {
      "name": "RYTHM Smalls - Brownie Scout 7g",
      "shops": [
+      "cali-cannabis-dispensary-uptown",
+      "jens-consulting-llc-dba-fridley-dispensary"
+     ]
+    },
+    {
+     "name": "RYTHM Smalls - Brownie Scout 7g",
+     "shops": [
       "legacy-cannabis-1"
      ]
     },
@@ -688,7 +738,7 @@
      ]
     }
    ],
-   "shops_after": 14
+   "shops_after": 15
   },
   {
    "key": "nebula|cartridge|1g|disposable pop rocket",
@@ -964,22 +1014,6 @@
     }
    ],
    "shops_after": 3
-  },
-  {
-   "key": "birdie|beverage|10mg|berry lemonade wild",
-   "kept": {
-    "name": "Birdie | 12oz - Wild Berry Lemonade | THC:10mg",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Wild Berry Lemonade 10mg - Birdie",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 2
   },
   {
    "key": "nebula|cartridge|1g|berry blast blue disposable off",
@@ -1735,42 +1769,6 @@
       "rise-mankato",
       "rise-new-hope",
       "rise-willmar"
-     ]
-    }
-   ],
-   "shops_after": 12
-  },
-  {
-   "key": "good green|flower|3.5g|omg",
-   "kept": {
-    "name": "OMG",
-    "shops_before": 9
-   },
-   "absorbed": [
-    {
-     "name": "Good Green - 3.5g Flower - OMG (I/H)",
-     "shops": [
-      "legacy-cannabis-1"
-     ]
-    },
-    {
-     "name": "OMG | 3.5g",
-     "shops": [
-      "leafline-labs-eagan",
-      "leafline-labs-st-cloud",
-      "leafline-labs-st-paul",
-      "minnesota-medical-solutions",
-      "rise-baxter",
-      "rise-mankato",
-      "rise-new-hope",
-      "rise-willmar"
-     ]
-    },
-    {
-     "name": "OMG",
-     "shops": [
-      "green-goods-duluth",
-      "rise-brooklyn-park"
      ]
     }
    ],
@@ -2792,6 +2790,22 @@
    "shops_after": 18
   },
   {
+   "key": "carpe diem|tincture|1000mg|gel muscle on relief",
+   "kept": {
+    "name": "Relief Muscle & Joint CBD Gel Roll-On 1000 mg",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Relief Muscle & Joint CBD Gel Roll-On 1000mg - Carpe Diem",
+     "shops": [
+      "flame-flora"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "(inc)ensored|edible|100mg|apple pucker sour",
    "kept": {
     "name": "Sour Apple Pucker [10pk] (100mg)",
@@ -2820,20 +2834,20 @@
    "shops_after": 15
   },
   {
-   "key": "&shine|edible|100mg|tropical",
+   "key": "carpe diem|tincture|1500mg|cream full relax spectrum",
    "kept": {
-    "name": "Tropical [10pk] (100mg)",
-    "shops_before": 8
+    "name": "Relax CBD Cream 1500 mg Full-Spectrum",
+    "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "&Shine - Tropical Gummies (100mg THC)",
+     "name": "Carpe Diem CBD Cream - 1500mg CBD - Full Spectrum - RELAX",
      "shops": [
-      "fort-road-cannabis-llc"
+      "island-pezi"
      ]
     }
    ],
-   "shops_after": 9
+   "shops_after": 2
   },
   {
    "key": "&shine|edible|100mg|fruit punch",
@@ -2850,6 +2864,50 @@
     }
    ],
    "shops_after": 2
+  },
+  {
+   "key": "(inc)ensored|edible|100mg|peach summer",
+   "kept": {
+    "name": "Summer Peach [10pk] (100mg)",
+    "shops_before": 16
+   },
+   "absorbed": [
+    {
+     "name": "(inc)ensored  Summer Peach (100mg THC)",
+     "shops": [
+      "fort-road-cannabis-llc"
+     ]
+    },
+    {
+     "name": "Summer Peach [10pk] (100mg)",
+     "shops": [
+      "leafline-labs-eagan",
+      "leafline-labs-st-cloud",
+      "leafline-labs-st-paul",
+      "rise-baxter",
+      "rise-mankato",
+      "rise-new-hope",
+      "rise-willmar"
+     ]
+    }
+   ],
+   "shops_after": 17
+  },
+  {
+   "key": "&shine|edible|100mg|tropical",
+   "kept": {
+    "name": "Tropical [10pk] (100mg)",
+    "shops_before": 8
+   },
+   "absorbed": [
+    {
+     "name": "&Shine - Tropical Gummies (100mg THC)",
+     "shops": [
+      "fort-road-cannabis-llc"
+     ]
+    }
+   ],
+   "shops_after": 9
   },
   {
    "key": "dizgo|flower|3.5g|orion",
@@ -3401,13 +3459,19 @@
    },
    "absorbed": [
     {
+     "name": "Original Pretzels 50mg - Granny's",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
      "name": "Granny's Original Pretzels - 50mg THC",
      "shops": [
       "island-pezi"
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "granny's|edible|50mg|cheddar pretzels",
@@ -3701,19 +3765,13 @@
    },
    "absorbed": [
     {
-     "name": "CBD Sparkling Water BALANCE 20mg - BLNCD",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
      "name": "BLNCD - Sparkling Water BALANCE - 20mg CBD - 12oz",
      "shops": [
       "off-the-path-cannabis-dispensary"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
   },
   {
    "key": "blncd|beverage|20mg|chill sparkling water",
@@ -3764,6 +3822,22 @@
      "name": "BLNCD - 10mg THC Mocktail - WATERMELON MARGARITA | 0.01g",
      "shops": [
       "off-the-path-cannabis-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "retro bakery|edible|50mg|bar chocolate dubai",
+   "kept": {
+    "name": "Dubai Chocolate Bar | THC | 50mg",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Dubai Chocolate Bar 50mg - Retro Bakery",
+     "shops": [
+      "flame-flora"
      ]
     }
    ],
@@ -4604,6 +4678,22 @@
    "shops_after": 8
   },
   {
+   "key": "granny's|edible|50mg|cinnamon maple pretzels",
+   "kept": {
+    "name": "Granny's Pretzels - Maple Cinnamon [50pk] (50mg)",
+    "shops_before": 6
+   },
+   "absorbed": [
+    {
+     "name": "Maple Cinnamon Pretzels 50mg - Granny's",
+     "shops": [
+      "flame-flora"
+     ]
+    }
+   ],
+   "shops_after": 7
+  },
+  {
    "key": "rythm|flower|3.5g|gogurtz",
    "kept": {
     "name": "Gogurtz",
@@ -4716,6 +4806,22 @@
      "name": "Lit OG - 3.5g - Campfire Cannabis",
      "shops": [
       "mn-thc-co-2"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "granny's|edible|50mg|honey mustard pretzels",
+   "kept": {
+    "name": "Honey Mustard Pretzels 50mg - Granny's",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Granny's Honey Mustard Pretzels - 50mg THC",
+     "shops": [
+      "island-pezi"
      ]
     }
    ],
