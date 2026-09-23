@@ -1,6 +1,6 @@
 {
- "merged_groups": 254,
- "absorbed": 365,
+ "merged_groups": 255,
+ "absorbed": 367,
  "groups": [
   {
    "key": "highbernate moon melon|edible|50mg|10 pk",
@@ -340,22 +340,6 @@
    "shops_after": 4
   },
   {
-   "key": "grasslandz|cartridge|1g|blue dream",
-   "kept": {
-    "name": "Grasslandz | Blue Dream | Cartridge | 1g",
-    "shops_before": 2
-   },
-   "absorbed": [
-    {
-     "name": "Grasslandz | Blue Dream | Cartridge | 1g",
-     "shops": [
-      "legacy-cannabis-1"
-     ]
-    }
-   ],
-   "shops_after": 3
-  },
-  {
    "key": "grasslandz|flower|3.5g|45 big gelato",
    "kept": {
     "name": "Grasslandz | Gelato 45 | Big Buds | 3.5g",
@@ -372,22 +356,6 @@
      "name": "Grasslandz | Gelato 45 | Big Buds | 3.5g",
      "shops": [
       "anoka-cannabis-company"
-     ]
-    }
-   ],
-   "shops_after": 4
-  },
-  {
-   "key": "true canna|cartridge|1g|cooler disposable hibiscus",
-   "kept": {
-    "name": "Hibiscus Cooler | Disposable | 1G",
-    "shops_before": 3
-   },
-   "absorbed": [
-    {
-     "name": "Hibiscus Cooler | Disposable | 1G",
-     "shops": [
-      "lucid-leaf-2"
      ]
     }
    ],
@@ -607,6 +575,22 @@
    "shops_after": 2
   },
   {
+   "key": "true canna|cartridge|1g|cooler disposable hibiscus",
+   "kept": {
+    "name": "Hibiscus Cooler | Disposable | 1G",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "Hibiscus Cooler | Disposable | 1G",
+     "shops": [
+      "lucid-leaf-2"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
    "key": "native care|flower|3.5g|cake cream ice",
    "kept": {
     "name": "Native Care | Pre-packed 3.5g | Ice Cream Cake",
@@ -739,22 +723,6 @@
     }
    ],
    "shops_after": 15
-  },
-  {
-   "key": "nebula|cartridge|1g|disposable pop rocket",
-   "kept": {
-    "name": "Rocket Pop | Disposable | 1g",
-    "shops_before": 2
-   },
-   "absorbed": [
-    {
-     "name": "Nebula Disposable Vape - Rocket Pop (Indica) | 1g",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 3
   },
   {
    "key": "nativecare brand|flower|3.5g|big canyon topanga",
@@ -1014,6 +982,22 @@
     }
    ],
    "shops_after": 3
+  },
+  {
+   "key": "birdie|beverage|10mg|berry lemonade wild",
+   "kept": {
+    "name": "Birdie | 12oz - Wild Berry Lemonade | THC:10mg",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Wild Berry Lemonade 10mg - Birdie",
+     "shops": [
+      "flame-flora"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "nebula|cartridge|1g|berry blast blue disposable off",
@@ -2442,6 +2426,22 @@
    "shops_after": 3
   },
   {
+   "key": "nebula|cartridge|1g|disposable pop rocket",
+   "kept": {
+    "name": "Rocket Pop | Disposable | 1g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Nebula Disposable Vape - Rocket Pop (Indica) | 1g",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "nebula|cartridge|1g|romulan",
    "kept": {
     "name": "Romulan | Cartridge | 1g",
@@ -2759,7 +2759,7 @@
    "key": "&shine|edible|100mg|blackberry",
    "kept": {
     "name": "Blackberry [10pk] (100mg)",
-    "shops_before": 16
+    "shops_before": 15
    },
    "absorbed": [
     {
@@ -2787,7 +2787,7 @@
      ]
     }
    ],
-   "shops_after": 18
+   "shops_after": 17
   },
   {
    "key": "carpe diem|tincture|1000mg|gel muscle on relief",
@@ -2850,26 +2850,10 @@
    "shops_after": 2
   },
   {
-   "key": "&shine|edible|100mg|fruit punch",
-   "kept": {
-    "name": "&Shine - Fruit Punch Gummies (100mg THC)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "&SHINE FRUIT PUNCH GUMMIES (SATIVA) 100MG | .1g",
-     "shops": [
-      "altitude-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "(inc)ensored|edible|100mg|peach summer",
    "kept": {
     "name": "Summer Peach [10pk] (100mg)",
-    "shops_before": 16
+    "shops_before": 15
    },
    "absorbed": [
     {
@@ -2891,7 +2875,7 @@
      ]
     }
    ],
-   "shops_after": 17
+   "shops_after": 16
   },
   {
    "key": "&shine|edible|100mg|tropical",
@@ -2908,6 +2892,22 @@
     }
    ],
    "shops_after": 9
+  },
+  {
+   "key": "&shine|edible|100mg|fruit punch",
+   "kept": {
+    "name": "&Shine - Fruit Punch Gummies (100mg THC)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "&SHINE FRUIT PUNCH GUMMIES (SATIVA) 100MG | .1g",
+     "shops": [
+      "altitude-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "dizgo|flower|3.5g|orion",
@@ -3459,19 +3459,13 @@
    },
    "absorbed": [
     {
-     "name": "Original Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
      "name": "Granny's Original Pretzels - 50mg THC",
      "shops": [
       "island-pezi"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
   },
   {
    "key": "granny's|edible|50mg|cheddar pretzels",
@@ -3500,6 +3494,22 @@
     }
    ],
    "shops_after": 10
+  },
+  {
+   "key": "minneleaf|edible|25mg|cbn nite peaceful pineapple sleep",
+   "kept": {
+    "name": "Minneleaf Nite CBN, CBD Sleep Gummies - Peaceful Pineapple 25mg CBD 10mg CBN",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "NITE Peaceful Pineapple Sleep | Gummy | 25mg CBD / 10mg CBN",
+     "shops": [
+      "green-rose"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "campfire cannabis|flower|3.5g|canyon grape zkittlez",
@@ -3758,6 +3768,22 @@
    "shops_after": 2
   },
   {
+   "key": "tasty gems|cartridge|0.5g|maui wowie",
+   "kept": {
+    "name": "Maui Wowie | Vape | 0.5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Maui Wowie | 0.5g",
+     "shops": [
+      "legit-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "blncd|beverage|20mg|balance sparkling water",
    "kept": {
     "name": "Balance | CBD Sparkling Water | 20mg",
@@ -3765,13 +3791,19 @@
    },
    "absorbed": [
     {
+     "name": "CBD Sparkling Water BALANCE 20mg - BLNCD",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
      "name": "BLNCD - Sparkling Water BALANCE - 20mg CBD - 12oz",
      "shops": [
       "off-the-path-cannabis-dispensary"
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "blncd|beverage|20mg|chill sparkling water",
@@ -3914,22 +3946,46 @@
    "shops_after": 2
   },
   {
-   "key": "vireo|flower|3.5g|blue runtz",
+   "key": "simple|flower|14g|death garlic",
    "kept": {
-    "name": "Blue Runtz | 3.5g",
+    "name": "Garlic Death | 14g",
     "shops_before": 7
    },
    "absorbed": [
     {
-     "name": "Blue Runtz",
+     "name": "Garlic Death | 14g",
      "shops": [
       "green-goods-blaine"
      ]
     },
     {
-     "name": "Blue Runtz | 3.5g",
+     "name": "Garlic Death",
      "shops": [
-      "green-goods-burnsville"
+      "green-goods-duluth",
+      "minnesota-medical-solutions-moorhead"
+     ]
+    }
+   ],
+   "shops_after": 8
+  },
+  {
+   "key": "simple|flower|28g|death garlic",
+   "kept": {
+    "name": "Garlic Death | 28g",
+    "shops_before": 7
+   },
+   "absorbed": [
+    {
+     "name": "Garlic Death",
+     "shops": [
+      "green-goods-burnsville",
+      "minnesota-medical-solutions-bloomington"
+     ]
+    },
+    {
+     "name": "Garlic Death | 28g",
+     "shops": [
+      "green-goods-blaine"
      ]
     }
    ],
@@ -3973,18 +4029,17 @@
     {
      "name": "Garlic Death | 7g",
      "shops": [
-      "green-goods-blaine",
       "green-goods-duluth"
      ]
     }
    ],
-   "shops_after": 4
+   "shops_after": 3
   },
   {
    "key": "vireo|flower|3.5g|grape mochi",
    "kept": {
     "name": "Grape Mochi | 3.5g",
-    "shops_before": 5
+    "shops_before": 4
    },
    "absorbed": [
     {
@@ -3994,7 +4049,7 @@
      ]
     }
    ],
-   "shops_after": 6
+   "shops_after": 5
   },
   {
    "key": "vireo|flower|3.5g|15 hellcat",
@@ -4042,7 +4097,6 @@
     {
      "name": "Hellcat #15",
      "shops": [
-      "green-goods-blaine",
       "minnesota-medical-solutions-moorhead",
       "minnesota-medical-solutions-rochester"
      ]
@@ -4082,7 +4136,7 @@
    "key": "vireo|flower|7g|pave",
    "kept": {
     "name": "PAVE",
-    "shops_before": 6
+    "shops_before": 5
    },
    "absorbed": [
     {
@@ -4106,7 +4160,7 @@
      ]
     }
    ],
-   "shops_after": 8
+   "shops_after": 7
   },
   {
    "key": "&shine|beverage|100mg|fruit punch",
@@ -4135,7 +4189,7 @@
    "key": "(inc)ensored|edible|100mg|acting express fast pineapple",
    "kept": {
     "name": "Fast-Acting Pineapple Express [10pk] (100mg)",
-    "shops_before": 15
+    "shops_before": 14
    },
    "absorbed": [
     {
@@ -4490,22 +4544,6 @@
    "shops_after": 4
   },
   {
-   "key": "vireo|flower|3.5g|cough minnesota",
-   "kept": {
-    "name": "Minnesota Cough | 3.5g",
-    "shops_before": 3
-   },
-   "absorbed": [
-    {
-     "name": "Minnesota Cough",
-     "shops": [
-      "minnesota-medical-solutions-moorhead"
-     ]
-    }
-   ],
-   "shops_after": 4
-  },
-  {
    "key": "vireo|flower|3.5g|4 citrus rotten",
    "kept": {
     "name": "Rotten Citrus #4",
@@ -4569,7 +4607,7 @@
    "key": "vireo|flower|3.5g|boof super",
    "kept": {
     "name": "Super Boof",
-    "shops_before": 4
+    "shops_before": 3
    },
    "absorbed": [
     {
@@ -4670,28 +4708,11 @@
     {
      "name": "Gogurtz",
      "shops": [
-      "rise-mankato",
-      "rise-willmar"
+      "rise-mankato"
      ]
     }
    ],
    "shops_after": 8
-  },
-  {
-   "key": "granny's|edible|50mg|cinnamon maple pretzels",
-   "kept": {
-    "name": "Granny's Pretzels - Maple Cinnamon [50pk] (50mg)",
-    "shops_before": 6
-   },
-   "absorbed": [
-    {
-     "name": "Maple Cinnamon Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 7
   },
   {
    "key": "rythm|flower|3.5g|gogurtz",
@@ -4860,22 +4881,6 @@
    "shops_after": 2
   },
   {
-   "key": "nebula|edible|100mg|bar candy cotton",
-   "kept": {
-    "name": "Cotton Candy Gummy Bar 100mg - Nebula",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Nebula Cotton Candy Gummy Bar - 100mg | .1g",
-     "shops": [
-      "high-10-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "grasslandz|edible|100mg|pineapple sour",
    "kept": {
     "name": "Sour Pineapple Gummies 100mg - Grasslandz",
@@ -4886,6 +4891,22 @@
      "name": "Grasslandz Sour Pineapple Gummies - 100mg THC",
      "shops": [
       "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "nebula|edible|100mg|bar candy cotton",
+   "kept": {
+    "name": "Cotton Candy Gummy Bar 100mg - Nebula",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Nebula Cotton Candy Gummy Bar - 100mg | .1g",
+     "shops": [
+      "high-10-dispensary"
      ]
     }
    ],
