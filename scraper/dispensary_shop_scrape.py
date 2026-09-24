@@ -23,6 +23,8 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+import raw_archive
+
 import requests
 
 DATA_DIR = Path(__file__).parent / "data"
@@ -217,6 +219,7 @@ def scrape_shop(dispensary_id, hostname):
         r.raise_for_status()
     except Exception as e:
         print(f"  HTTP error: {e}")
+        raw_archive.record("dispensary.shop", dispensary_id, [], status="failed")
         return []
 
     m = re.search(r'href="(/rec/all-products/nb/[a-z0-9]+)"', r.text)
@@ -228,10 +231,13 @@ def scrape_shop(dispensary_id, hostname):
         browse_path = "/rec/search"
     else:
         print("  could not find all-products browse link on menu page")
+        raw_archive.record("dispensary.shop", dispensary_id, [], status="failed")
         return []
 
     seen = set()
     products = []
+    raw_items = []
+    error = False
     page = 1
     total = None
     while True:
@@ -241,11 +247,13 @@ def scrape_shop(dispensary_id, hostname):
             r.raise_for_status()
         except Exception as e:
             print(f"  HTTP error on page {page}: {e}")
+            error = True
             break
 
         ctx = extract_remix_context(r.text)
         if not ctx:
             print(f"  could not parse remix context on page {page}")
+            error = True
             break
 
         page_new = 0
@@ -255,6 +263,7 @@ def scrape_shop(dispensary_id, hostname):
                 if not pid or pid in seen:
                     continue
                 seen.add(pid)
+                raw_items.append(p)
                 normalized = normalize_product(p, dispensary_id)
                 if normalized:
                     products.append(normalized)
@@ -270,6 +279,8 @@ def scrape_shop(dispensary_id, hostname):
         time.sleep(0.5)  # gentle pacing
 
     print(f"  parsed {len(products)} unique products" + (f" of {total} listed" if total else ""))
+    status = "ok" if not error else ("partial" if raw_items else "failed")
+    raw_archive.record("dispensary.shop", dispensary_id, raw_items, status=status, expected=total)
     return products
 
 

@@ -234,9 +234,11 @@ export default {
     return new Response('Not found', { status: 404 });
   },
 
-  // Monday-morning intake digest — see sendWeeklyDigest.
+  // Two crons (wrangler.toml): the Monday-morning intake digest, and an
+  // hourly off-Pi monitor of the live site. See monitorSite.
   async scheduled(event, env, ctx) {
-    ctx.waitUntil(sendWeeklyDigest(env));
+    if (event.cron === '0 14 * * 1') ctx.waitUntil(sendWeeklyDigest(env));
+    else ctx.waitUntil(monitorSite(env));
   },
 };
 
@@ -1861,6 +1863,91 @@ async function sendOpsEmail(env, subject, text) {
   if (!r.ok) throw new Error(`Resend API ${r.status}: ${await r.text()}`);
 }
 
+// ─── Off-Pi monitor (hourly cron) ────────────────────────────────────────
+// Every alert the pipeline sends comes from the Pi, so a dead Pi, a push that
+// never landed, or a Pages build that failed would all be silent. This runs on
+// Cloudflare and looks at the live site the way a visitor would:
+//   1. status.json (written by scripts/publish_gate.py each cycle) must show a
+//      publish from the most recent scheduled cycle (7/11/15/19/23 Central,
+//      with 90 minutes for the cycle and the Pages build).
+//   2. both claim forms must have passed the daily smoke test in the last 30h.
+// One email when a problem starts, a reminder every 24h while it lasts, and
+// one when it clears. State lives in KV key monitor:open (writes on change).
+const SMOKE_EMAIL = 'smoke-test@twincitycannabis.com';
+const SCRAPE_HOURS_CT = [7, 11, 15, 19, 23];
+
+function chicagoHour(d) {
+  return Number(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', hour: 'numeric', hourCycle: 'h23' }).format(d));
+}
+
+function fmtCT(ms) {
+  return new Date(ms).toLocaleString('en-US', { timeZone: 'America/Chicago', weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+}
+
+// Start of the latest scheduled cycle that should already be live.
+function dueCycleStart(now) {
+  let t = Math.floor((now - 90 * 60e3) / 3600e3) * 3600e3; // Central is whole hours off UTC
+  for (let i = 0; i < 26; i++, t -= 3600e3) {
+    if (SCRAPE_HOURS_CT.includes(chicagoHour(new Date(t)))) return t;
+  }
+  return null;
+}
+
+async function monitorSite(env) {
+  const now = Date.now();
+  const problems = {};   // kind -> message
+
+  let status = null;
+  try {
+    const r = await fetch(`https://twincitycannabis.com/status.json?monitor=${now}`,
+      { headers: { 'User-Agent': 'TCC-monitor/1.0' }, cf: { cacheTtl: 0 } });
+    if (r.ok) status = await r.json();
+    else problems.status = `https://twincitycannabis.com/status.json answered HTTP ${r.status}.`;
+  } catch (e) {
+    problems.status = `status.json could not be read: ${e.message}`;
+  }
+  if (status) {
+    const pub = Date.parse(status.published_at);
+    const due = dueCycleStart(now);
+    if (due && !(pub >= due - 10 * 60e3)) {
+      problems.publish = `The site has not published since ${fmtCT(pub)} Central. The ${fmtCT(due)} cycle should be live by now. ` +
+        `Either the Pi did not run (ssh josh@100.91.125.83 'journalctl -u tcc-scrape.service -n 80'), ` +
+        `the push failed, or GitHub Pages did not deploy (github.com/JSUNDBY/twincitycannabis/actions).`;
+    }
+  }
+
+  for (const kind of ['dispensary', 'brand']) {
+    const at = await env.TCC_OVERRIDES.get('smoke:contact:' + kind);
+    if (!at || now - Date.parse(at) > 30 * 3600e3) {
+      problems['smoke:' + kind] = `The ${kind} claim form has not passed its daily live test since ${at ? fmtCT(Date.parse(at)) + ' Central' : 'ever'}. ` +
+        `Either the form is broken for real owners or the test stopped running (Actions tab, "Smoke test claim forms").`;
+    }
+  }
+
+  const open = (await env.TCC_OVERRIDES.get('monitor:open', { type: 'json' })) || {};
+  const started = Object.keys(problems).filter((k) => !open[k]);
+  const cleared = Object.keys(open).filter((k) => !problems[k]);
+  const remind = Object.keys(problems).filter((k) => open[k] && now - Date.parse(open[k].told) > 24 * 3600e3);
+  if (!started.length && !cleared.length && !remind.length) return;
+
+  const nowIso = new Date(now).toISOString();
+  const next = {};
+  for (const k of Object.keys(problems)) {
+    next[k] = { since: open[k] ? open[k].since : nowIso, told: (started.includes(k) || remind.includes(k)) ? nowIso : open[k].told };
+  }
+  const lines = [];
+  for (const k of started) lines.push('NEW: ' + problems[k], '');
+  for (const k of remind) lines.push(`STILL OPEN since ${fmtCT(Date.parse(open[k].since))}: ` + problems[k], '');
+  for (const k of cleared) lines.push(`CLEARED: ${k} (open since ${fmtCT(Date.parse(open[k].since))}).`);
+  const subject = started.length || remind.length ? '🚨 TCC site monitor' : '✅ TCC site monitor: all clear';
+  try {
+    await sendOpsEmail(env, subject, lines.join('\n').trim());
+    await env.TCC_OVERRIDES.put('monitor:open', JSON.stringify(next));
+  } catch (e) {
+    console.error('monitor email failed:', e);   // state unchanged, so it retries next hour
+  }
+}
+
 // ─── /alert ───────────────────────────────────────────────────────────────
 // Machine-to-inbox bridge for the Pi scraper: the menu watchdog and the
 // data-quality count guard POST here so a dying menu or a reverted build
@@ -1957,6 +2044,16 @@ async function handleContact(request, env, cors) {
   if (!lead.name || !lead.email) {
     return new Response(JSON.stringify({ ok: false, error: 'name and email required' }), {
       status: 400, headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+
+  // Daily smoke test (tests/smoke_claim_forms.js, GitHub Actions) submits the
+  // real forms on the live page. Record that it got here, then stop: no lead,
+  // no email, no Kit. monitorSite alerts when these timestamps go stale.
+  if (lead.email.toLowerCase() === SMOKE_EMAIL) {
+    await env.TCC_OVERRIDES.put('smoke:contact:' + lead.kind, lead.submitted_at);
+    return new Response(JSON.stringify({ ok: true, smoke: true }), {
+      status: 200, headers: { 'Content-Type': 'application/json', ...cors },
     });
   }
 

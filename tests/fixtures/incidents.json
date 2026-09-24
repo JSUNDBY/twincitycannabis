@@ -1,0 +1,61 @@
+{
+  "_about": "One case per real incident. Every case here is a listing that was once published wrong. Add a case whenever a classifier or filter bug ships, before fixing it. Run: python3 tests/check_fixtures.py",
+
+  "normalize": [
+    {"name": "Turtle Taffy | 3.5g", "shelf": "flower", "expect": "flower", "incident": "2026-09-15 Great Cannabis flower published as edibles (candy words in strain names)"},
+    {"name": "Cotton Candy (Hybrid) 28%", "shelf": "flower", "expect": "flower", "incident": "2026-09-15 Great Cannabis"},
+    {"name": "Froot by the Foot 3.5g", "shelf": "flower", "expect": "flower", "incident": "2026-09-15 Great Cannabis"},
+    {"name": "Popcorn Buds 7g", "shelf": "flower", "expect": "flower", "incident": "2026-09-15 Great Cannabis"},
+    {"name": "Zoap 1oz", "shelf": "flower", "expect": "flower", "incident": "2026-09-15 Great Cannabis"},
+    {"name": "Brownie Scout [.35g]", "shelf": "pre-roll", "expect": "pre-roll", "incident": "2026-09-15 pre-roll strains read as baked goods"},
+    {"name": "Chem 'n Cookies [.5g]", "shelf": "pre-roll", "expect": "pre-roll", "incident": "2026-09-15 pre-roll strains read as baked goods"},
+    {"name": "Peach Rings 100mg", "shelf": "flower", "expect": "edible", "incident": "guard must not keep a dosed edible on a flower shelf"},
+    {"name": "Live Rosin Gummies 5mg - 10ct", "shelf": "concentrate", "expect": "edible", "incident": "normalize round 1"},
+    {"name": "Campfire Cannabis | Donny Burger | 1/8oz Flower", "shelf": "flower", "expect": "flower", "incident": "1/8oz matched the 8oz beverage rule"},
+    {"name": "Wellness Drops 30ml", "shelf": "tincture", "trust_source": true, "expect": "tincture", "incident": "2026-09-15 trusted platforms keep the store's own shelf"}
+  ],
+
+  "carrot_junk": [
+    {"name": "Gelato 41 | 3.5g Jar", "junk": false, "incident": "2026-09-21 Irie flower jars dropped as accessories"},
+    {"name": "Stash & Co Watermelon Gummies 10pk", "junk": false, "incident": "2026-09-21 brand 'Stash & Co' dropped"},
+    {"name": "Sour Belts Bag 100mg", "junk": false, "incident": "2026-09-21 gummies sold in a bag dropped"},
+    {"name": "Live Resin Cart + Battery 1g", "junk": false, "incident": "2026-09-21 cart sold with a battery dropped"},
+    {"name": "RAW Cones 1 1/4", "junk": true, "incident": "still an accessory"},
+    {"name": "510 Battery Silver", "junk": true, "incident": "still an accessory"},
+    {"name": "Rolling Papers King Size", "junk": true, "incident": "still an accessory"}
+  ],
+
+  "dshop_shelf": [
+    {"shelf": "Vapes", "expect": "cartridge", "incident": "2026-09 Levitated vapes missing (shelf name not mapped)"},
+    {"shelf": "Live Resin Vapes", "expect": "cartridge", "incident": "2026-09 Levitated: shelf names vary by shop, so the word fallback must map them"},
+    {"shelf": "Edibles - D9 THC/CBD", "expect": "edible", "incident": "dispensary.shop shelf words"},
+    {"shelf": "THC Drinks", "expect": "beverage", "incident": "dispensary.shop shelf words"},
+    {"shelf": "Accessories", "expect": null, "incident": "hardware shelves never map"}
+  ],
+
+  "site_filter": [
+    {"id": "du0001", "name": "Turtle Taffy 3.5G Jar", "category": "flower", "weight": "3.5g", "price": 35, "keep": true, "incident": "2026-09-15 'jar' in ACCESSORY_RE hid real flower"},
+    {"id": "du0002", "name": "Fight Club Case | Grade A Flower", "category": "flower", "weight": "", "price": 45, "keep": true, "incident": "2026-09-15 'case' in ACCESSORY_RE hid real flower"},
+    {"id": "du0003", "name": "Cotton Candy | 3.5g", "category": "flower", "weight": "3.5g", "price": 30, "keep": true, "incident": "2026-09-15 Weedmaps-only validators hid 21 of Great Cannabis's 25 flower"},
+    {"id": "c0004", "name": "DIY Pre-Roll Kit | Blue Dream 3.5g", "category": "flower", "weight": "3.5g", "price": 30, "keep": true, "incident": "2026-09-15 bare 'kit' dropped loose flower kits"},
+    {"id": "p0005", "name": "RAW Cones 1 1/4 - 6pk", "category": "flower", "weight": "", "price": 14, "keep": false, "incident": "accessory must stay out"},
+    {"id": "p0006", "name": "Glass Pipe Spoon", "category": "flower", "weight": "", "price": 20, "keep": false, "incident": "accessory must stay out"},
+    {"id": "p0007", "name": "510 Battery Silver", "category": "cartridge", "weight": "", "price": 25, "keep": false, "incident": "accessory must stay out"}
+  ],
+
+  "edible_size_key": [
+    {"name": "Gummies 10pk 2mg", "expect": "10×2mg", "incident": "2026-09 Market Intel +300% row: 10×2mg gummies compared to a 20mg bar"},
+    {"name": "Chocolate Bar 20mg", "expect": "20mg", "incident": "same"},
+    {"name": "10mg THC 4 Can", "expect": "4×10mg", "incident": "same"},
+    {"name": "50mg (5mg/Gummy)", "expect": "10×5mg", "incident": "same"},
+    {"name": "12 x 10mg", "expect": "12×10mg", "incident": "same"},
+    {"name": "Sleep Gummies 10mg THC 5mg CBN 10pk", "expect": "10×10mg", "incident": "CBD/CBN mg must not count as THC"}
+  ],
+
+  "site_invariants": {
+    "_about": "Checked on the built js/data.js with the site's own filter. A shop's shelf mostly hidden by the filter is the Great Cannabis failure: in data.js, invisible on the site.",
+    "min_offers_shop_category": 10,
+    "min_visible_share": 0.5,
+    "min_site_visible_share": 0.85
+  }
+}

@@ -28,6 +28,8 @@ import time
 import urllib.parse
 from pathlib import Path
 
+import raw_archive
+
 try:
     from curl_cffi import requests as creq
 except ImportError:
@@ -151,6 +153,7 @@ def fetch_page(dispensary_id, page, per_page=100):
 
 def scrape_store(slug, config):
     all_products = []
+    raw_items = []
     page = 0
     total_pages = 1
     listed = 0
@@ -161,6 +164,7 @@ def scrape_store(slug, config):
         total_pages = qi.get("totalPages") or 1
         listed = qi.get("totalCount") or 0
 
+        raw_items.extend(result.get("products") or [])
         for p in result.get("products") or []:
             name = (p.get("Name") or "").strip()
             if not name:
@@ -209,6 +213,7 @@ def scrape_store(slug, config):
         time.sleep(1.5)  # pace: stay friendly with Cloudflare
 
     print(f"  {config['name']}: {listed} listed -> {len(all_products)} cannabis variants")
+    raw_archive.record("dutchie", slug, raw_items, expected=listed)
     return all_products
 
 
@@ -217,24 +222,17 @@ def main():
         print("curl_cffi not installed — skipping Dutchie scrape")
         return
     print(f"Dutchie scraper: {len(DUTCHIE_STORES)} stores")
-    # Last-good carry-over: a store that errors this cycle keeps its
-    # products from the previous run instead of vanishing from the site.
-    previous = {}
-    try:
-        for p in json.loads(OUTPUT_FILE.read_text()):
-            previous.setdefault(p["dispensary_id"], []).append(p)
-    except Exception:
-        pass
+    # No per-store carry-over here (removed 2026-09-24): this file records
+    # what Dutchie returned this cycle. scripts/publish_gate.py holds a
+    # failed store's last good menu on the site, dated, for up to 3 days.
 
     all_products = []
     for slug, config in DUTCHIE_STORES.items():
         try:
             all_products.extend(scrape_store(slug, config))
         except Exception as e:
-            carried = previous.get(slug, [])
-            print(f"  ERROR scraping {config['name']}: {e}"
-                  + (f" — carrying over {len(carried)} products from last good run" if carried else ""))
-            all_products.extend(carried)
+            print(f"  ERROR scraping {config['name']}: {e}")
+            raw_archive.record("dutchie", slug, [], status="failed")
         time.sleep(2)
 
     print(f"\nTotal Dutchie products: {len(all_products)}")

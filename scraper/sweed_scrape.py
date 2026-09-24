@@ -21,6 +21,8 @@ import json
 import re
 from pathlib import Path
 
+import raw_archive
+
 import requests
 
 DATA_DIR = Path(__file__).parent / "data"
@@ -81,6 +83,7 @@ def strain_type(product):
 def scrape_store(slug, config):
     url = f"{config['base']}/_api/Products/GetProductList"
     all_products = []
+    raw_items = []
     page = 1
     total = None
 
@@ -103,6 +106,7 @@ def scrape_store(slug, config):
         data = resp.json()
         items = data.get("list") or []
         total = data.get("total") or len(items)
+        raw_items.extend(items)
 
         for p in items:
             cat_canonical = ((p.get("category") or {}).get("canonicalName") or "")
@@ -169,6 +173,7 @@ def scrape_store(slug, config):
         page += 1
 
     print(f"  {config['name']}: {total} listed -> {len(all_products)} cannabis variants")
+    raw_archive.record("sweed", slug, raw_items, expected=total)
     return all_products
 
 
@@ -180,6 +185,7 @@ def main():
             all_products.extend(scrape_store(slug, config))
         except Exception as e:
             print(f"  ERROR scraping {config['name']}: {e}")
+            raw_archive.record("sweed", slug, [], status="failed")
 
     print(f"\nTotal Sweed products: {len(all_products)}")
     if not all_products:

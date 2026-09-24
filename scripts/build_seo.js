@@ -276,6 +276,16 @@ const FRESH = {
   trackedDaily:   DATA_STALE ? `last updated ${dataDayHuman}`   : 'tracked daily',
 };
 
+// One shop's menu can be older than the rest: when its menu fails to load,
+// scripts/publish_gate.py keeps the last good read for up to 3 days and
+// records when that was in TCC.menuObserved. Say so on that shop's page.
+function heldMenuNote(id) {
+  const t = Date.parse((TCC.menuObserved || {})[id] || '');
+  if (!isFinite(t) || Date.now() - t < 12 * 3600e3) return '';
+  const day = new Date(t).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'America/Chicago' });
+  return `This menu was last read ${day}; the shop's online menu hasn't loaded since, so prices may have changed.`;
+}
+
 if (DATA_STALE) {
   const age = SCRAPED_AT ? `${Math.floor(SCRAPE_AGE_HOURS)}h old` : 'MISSING';
   console.warn(`\n  !! STALE PRICE DATA (${age}) — last scrape ${SCRAPED_AT ? SCRAPED_AT.toISOString() : 'unknown'}`);
@@ -942,7 +952,7 @@ ${d.google && d.google.maps_url ? `<p><a href="${esc(d.google.maps_url)}" rel="n
   </div>
 </div>
 
-<p>${esc(d.name)} is a ${products.length > 0 ? '' : 'licensed '}cannabis dispensary in ${esc(d.city || 'the Twin Cities')}, Minnesota. ${products.length > 0 ? `Below is the current menu (${products.length} products), with each price compared against every other dispensary in the metro. ${FRESH.pricesDaily}` : `${d.name}'s online menu isn't published in a form we can track yet, so live prices aren't shown here — call ahead${d.phone ? ` at ${esc(d.phone)}` : ''} or check their website for today's selection. Everything else on this page is current: location, hours, and real Google reviews below.`}</p>
+<p>${esc(d.name)} is a ${products.length > 0 ? '' : 'licensed '}cannabis dispensary in ${esc(d.city || 'the Twin Cities')}, Minnesota. ${products.length > 0 ? `Below is the current menu (${products.length} products), with each price compared against every other dispensary in the metro. ${heldMenuNote(d.id) || FRESH.pricesDaily}` : `${d.name}'s online menu isn't published in a form we can track yet, so live prices aren't shown here — call ahead${d.phone ? ` at ${esc(d.phone)}` : ''} or check their website for today's selection. Everything else on this page is current: location, hours, and real Google reviews below.`}</p>
 
 ${(() => {
   // ── Hook 1: savings teaser / cheapest badge ──

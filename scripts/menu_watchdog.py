@@ -18,7 +18,7 @@ import sys
 from datetime import date
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).resolve().parent.parent
 SNAPSHOT = ROOT / "scraper" / "data" / "shop_counts.json"
 ALERTS = ROOT / "scraper" / "data" / "menu_alerts.json"
 
@@ -136,8 +136,25 @@ def main():
                   f"down since {r['since']}).")
         lines = []
         if new_deaths:
+            # Several shops on one platform dying together is one problem
+            # (the platform, or our scraper for it), so say that first.
+            plat = {}
+            try:
+                sys.path.insert(0, str(ROOT / "scraper"))
+                import raw_archive
+                plat = {k: v.get("platform", "?") for k, v in raw_archive.cycle_status().items()}
+            except Exception:
+                pass
+            groups = {}
+            for a in new_deaths:
+                groups.setdefault(plat.get(a["shop"], "?"), []).append(a["shop"])
+            for p_name, shops_on in sorted(groups.items(), key=lambda kv: -len(kv[1])):
+                if p_name != "?" and len(shops_on) >= 3:
+                    lines.append(f"{len(shops_on)} of these are on {p_name}: check {p_name} "
+                                 f"or our scraper for it before chasing each shop.")
             lines.append("Menus that just went dark:")
-            lines += [f"  {a['shop']}: {a['before']} -> 0" for a in new_deaths]
+            lines += [f"  {a['shop']}" + (f" [{plat[a['shop']]}]" if a['shop'] in plat else "")
+                      + f": {a['before']} -> {a['after']}" for a in new_deaths]
             lines.append("")
             lines.append("Check scraper/data/menu_probe.json — the nightly probe may "
                          "already have found where they moved.")

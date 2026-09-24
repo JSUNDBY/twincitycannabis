@@ -2034,6 +2034,17 @@
     }
 
     // ---- RENDER: DISPENSARY DETAIL ----
+    // When a shop's menu failed to load, the publish gate keeps its last good
+    // read for up to 3 days and records when that read happened. Say so,
+    // rather than letting old prices pass as today's.
+    function menuAsOf(id) {
+        const seen = TCC.menuObserved && TCC.menuObserved[id];
+        const t = seen ? Date.parse(seen) : NaN;
+        if (!isFinite(t) || Date.now() - t < 12 * 3600e3) return '';
+        const when = new Date(t).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric' });
+        return ` · menu as of ${when}`;
+    }
+
     function renderDispensaryDetail(id) {
         const d = TCC.getDispensary(id);
         if (!d) {
@@ -2279,7 +2290,7 @@
             }
 
             const countElInner = document.getElementById('detail-product-count');
-            countElInner.textContent = `${sorted.length} product${sorted.length !== 1 ? 's' : ''}`;
+            countElInner.textContent = `${sorted.length} product${sorted.length !== 1 ? 's' : ''}` + menuAsOf(id);
 
             document.getElementById('detail-products').innerHTML = sorted.length ? sorted.map(p => {
                 const price = p.prices[id];

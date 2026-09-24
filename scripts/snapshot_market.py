@@ -33,11 +33,14 @@ import argparse
 import gzip
 import json
 import os
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "scraper" / "data"
+sys.path.insert(0, str(ROOT / "scraper"))
+import raw_archive  # noqa: E402
 REPO_SNAPSHOTS = DATA / "snapshots"
 SCHEMA = 1
 
@@ -98,15 +101,19 @@ def _rows_from(path, platform):
 
 
 def collect():
+    """Rows observed this cycle. A shop whose fetch failed is left out: its
+    platform feed still holds the last good file (scrapers refuse to write an
+    empty one), and archiving that again would record old prices as new."""
+    failed = {s for s, r in raw_archive.cycle_status().items() if r.get("status") == "failed"}
     rows, per_platform = [], {}
     for fname, platform in FEEDS:
         path = DATA / fname
         if not path.exists():
             continue
-        got = list(_rows_from(path, platform))
+        got = [r for r in _rows_from(path, platform) if r["shop"] not in failed]
         rows.extend(got)
         per_platform[platform] = len(got)
-    return rows, per_platform
+    return rows, per_platform, sorted(failed)
 
 
 def write_gz(path, header, rows):
@@ -129,7 +136,7 @@ def main():
     args = ap.parse_args()
 
     now = datetime.now(timezone.utc)
-    rows, per_platform = collect()
+    rows, per_platform, failed = collect()
     if not rows:
         print("No feed rows found — refusing to write an empty snapshot")
         return 1
@@ -141,10 +148,13 @@ def main():
         "rows": len(rows),
         "shops": shops,
         "by_platform": per_platform,
+        "not_observed": failed,
     }
 
     # Every cycle, on the Pi.
-    cycle_path = Path(args.archive) / now.strftime("%Y/%m") / (now.strftime("%Y-%m-%dT%H") + ".jsonl.gz")
+    # HHMM, not HH: a recovery run in the same hour must not overwrite the
+    # scheduled run's snapshot (2026-09-24 20:10 was lost to the 20:55 rerun).
+    cycle_path = Path(args.archive) / now.strftime("%Y/%m") / (now.strftime("%Y-%m-%dT%H%M") + ".jsonl.gz")
     size = write_gz(cycle_path, header, rows)
     print(f"Snapshot: {len(rows):,} rows from {shops} shops -> {cycle_path} ({size/1024:.0f} KB)")
     print(f"  by platform: {per_platform}")

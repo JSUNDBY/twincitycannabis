@@ -27,6 +27,8 @@ import json
 import time
 from pathlib import Path
 
+import raw_archive
+
 try:
     from curl_cffi import requests as creq
 except ImportError:
@@ -109,6 +111,7 @@ def _weight(a):
 def scrape_store(slug, cfg):
     headers = {"X-Store": cfg["site_id"], "origin": cfg["origin"], "referer": cfg["origin"] + "/"}
     products = []
+    raw_items = []
     seen = 0
     offset = 0
     total = None
@@ -120,6 +123,7 @@ def scrape_store(slug, cfg):
         d = r.json()
         total = d.get("meta", {}).get("total_count") or 0
         rows = d.get("data") or []
+        raw_items.extend(rows)
         if not rows:
             break
         for p in rows:
@@ -162,6 +166,7 @@ def scrape_store(slug, cfg):
         offset += len(rows)
         time.sleep(0.3)
     print(f"  {cfg['name']}: {seen} listed -> {len(products)} cannabis products")
+    raw_archive.record("blaze", slug, raw_items, expected=total)
     return products
 
 
@@ -176,6 +181,7 @@ def main():
             all_products.extend(scrape_store(slug, cfg))
         except Exception as e:
             print(f"  ERROR scraping {cfg['name']}: {e}")
+            raw_archive.record("blaze", slug, [], status="failed")
         time.sleep(1)
     print(f"Total Blaze products: {len(all_products)}")
     if not all_products:

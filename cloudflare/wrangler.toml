@@ -34,5 +34,6 @@ enabled = true
 
 # Weekly intake digest — Mondays 14:00 UTC (9am Central). The safety net:
 # even if a per-event notification breaks, silence lasts at most a week.
+# Hourly at :17 — off-Pi monitor of the live site (worker.js monitorSite).
 [triggers]
-crons = ["0 14 * * 1"]
+crons = ["0 14 * * 1", "17 * * * *"]

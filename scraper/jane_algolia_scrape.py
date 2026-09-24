@@ -28,6 +28,8 @@ import json
 import time
 from pathlib import Path
 
+import raw_archive
+
 try:
     from curl_cffi import requests as creq
     _IMPERSONATE = {"impersonate": "chrome"}
@@ -188,7 +190,9 @@ def main():
                 hits = fetch_store(store_id)
             except Exception as e:
                 print(f"  ERROR {cfg['name']} [{menu_type}]: {e}")
+                raw_archive.record("jane", slug, [], status="failed")
                 continue
+            raw_archive.record("jane", slug, hits)
             n0 = len(all_products)
             for p in hits:
                 all_products.extend(normalize(p, slug, menu_type))

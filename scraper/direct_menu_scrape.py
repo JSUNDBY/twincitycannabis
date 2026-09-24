@@ -20,6 +20,8 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
+import raw_archive
+
 # Weedmaps fingerprints the TLS handshake (JA3) and returns 406 to non-browser
 # clients. curl_cffi presents a real Chrome TLS fingerprint, so the scrape works
 # regardless of the local OpenSSL version. (Plain `requests` only worked by luck
@@ -138,6 +140,7 @@ def scrape_menu(slug, name=""):
     all_items = []
     page = 1
     timeouts = {}
+    error = None
 
     while True:
         url = f"{WM_API}/{slug}/menu_items"
@@ -152,7 +155,8 @@ def scrape_menu(slug, name=""):
 
             if r.status_code == 406:
                 print(f"  Blocked (406) - try from different network")
-                return all_items
+                error = "406"
+                break
             r.raise_for_status()
 
             data = r.json()
@@ -184,14 +188,20 @@ def scrape_menu(slug, name=""):
                 time.sleep(wait)
                 continue
             print(f"  Timeout on page {page} after 3 attempts, giving up on this menu: {e}")
+            error = "timeout"
             break
         except requests.exceptions.HTTPError as e:
             print(f"  Error on page {page}: {e}")
+            error = "http"
             break
         except Exception as e:
             print(f"  Error: {e}")
+            error = "exception"
             break
 
+    # An error after some pages is a truncated menu, not a smaller one.
+    status = "ok" if not error else ("partial" if all_items else "failed")
+    raw_archive.record("weedmaps", slug, all_items, status=status)
     return all_items
 
 
@@ -523,51 +533,22 @@ def main():
         dispensaries = dispensaries[:1]
         print(f"TEST MODE: {dispensaries[0]['name']}")
 
-    # Last-good carry-over, per shop. Weedmaps rate-limits or 406s the Pi's
-    # residential IP from time to time, and when it does, every shop on it
-    # comes back empty at once: 2026-09-23 lost 18 menus and a third of the
-    # catalogue in one cycle, and the site served the hole for four hours.
-    # A shop that returns nothing keeps what it had rather than vanishing.
-    # The menu watchdog still reports the zero, so a genuine departure is
-    # not hidden by this — it just isn't published as an empty shelf.
-    previous = {}
-    try:
-        for entry in json.loads((DATA_DIR / "full_menu_products.json").read_text()):
-            for slug, price in (entry.get("prices") or {}).items():
-                previous.setdefault(slug, []).append({
-                    "name": entry.get("name", ""), "brand": entry.get("brand", "House"),
-                    "category": entry.get("category", ""), "weight": entry.get("weight", ""),
-                    "thc": entry.get("thc", ""), "cbd": entry.get("cbd", ""),
-                    "image": entry.get("image", ""), "strain_type": entry.get("strainType", ""),
-                    "dispensary": slug, "price": price,
-                })
-    except Exception:
-        pass
-
+    # No carry-over here any more (removed 2026-09-24). This file records
+    # what Weedmaps actually returned this cycle, so the market archive never
+    # stores last week's menu as today's. When a shop comes back empty or
+    # truncated, scripts/publish_gate.py puts its last good menu back on the
+    # site with its real read date, and stops after 3 days.
     all_products = []
-    carried_shops = []
     for d in dispensaries:
         print(f"\n{d['name']} ({d['menu_count']} expected)...")
         raw_items = scrape_menu(d["slug"], d["name"])
 
-        before = len(all_products)
         for item in raw_items:
             parsed = parse_menu_item(item, d["slug"])
             if parsed["name"] and parsed["price"] > 0:
                 all_products.append(parsed)
 
-        if len(all_products) == before:
-            carried = previous.get(d["slug"], [])
-            if carried:
-                all_products.extend(carried)
-                carried_shops.append(f"{d['slug']}({len(carried)})")
-                print(f"  0 items this run — carried over {len(carried)} from the last good run")
-
         time.sleep(1)
-
-    if carried_shops:
-        print(f"\nCarried over {len(carried_shops)} shop(s) that returned nothing: "
-              + ", ".join(carried_shops[:12]) + ("..." if len(carried_shops) > 12 else ""))
 
     print(f"\n{'='*60}")
     print(f"TOTAL: {len(all_products)} products from {len(dispensaries)} dispensaries")

@@ -66,6 +66,30 @@ if [ "$TCC_REEXEC" != "1" ] && [ "$(_sha "$SELF")" != "$SELF_HASH_BEFORE" ]; the
     exec bash "$SELF" "$@"
 fi
 
+# One id for the whole cycle, so every platform's raw responses land in one
+# archive folder (scraper/raw_archive.py) and the publish gate can read how
+# each shop's fetch ended.
+export TCC_CYCLE_ID="$(date -u +%Y-%m-%dT%H%M)"
+
+# Alert helper: pushes a message to hello@ via the worker /alert endpoint
+# (env from /etc/tcc-scrape.env). Non-fatal, no-op when env is missing.
+_tcc_alert() {
+    [ -n "$TCC_ALERT_URL" ] && [ -n "$TCC_ALERT_TOKEN" ] || return 0
+    curl -fsS --max-time 15 -X POST "$TCC_ALERT_URL" \
+        -H "Content-Type: application/json" -H "x-alert-token: $TCC_ALERT_TOKEN" \
+        -d "{\"source\":\"auto_scrape\",\"text\":$(printf '%s' "$1" | python3 -c 'import json,sys;print(json.dumps(sys.stdin.read()))')}" \
+        >/dev/null 2>&1 || echo "Alert POST failed (non-fatal)"
+}
+
+# Regression fixtures, before anything is scraped: every listing this site
+# once published wrong (tests/fixtures/incidents.json), run against the code
+# that just synced. A failure means a classifier or filter regressed, so stop
+# here and keep the site on its last good data rather than publish the bug.
+if ! python3 tests/check_fixtures.py; then
+    _tcc_alert "Cycle stopped before scraping: a regression fixture failed, so a classifier or site filter change would republish a bug we already fixed once. The site keeps its last good data. Run: python3 tests/check_fixtures.py (on the Pi or any clone) to see which case."
+    exit 1
+fi
+
 # 1. Scrape dispensary listings
 python3 scraper/scraper.py --export 2>/dev/null || echo "Dispensary scrape skipped"
 
@@ -80,10 +104,9 @@ python3 scraper/update_site.py 2>/dev/null || echo "Dispensary update skipped"
 # residential IP yields an empty menu per shop) and clean_orphans filters with
 # no floor. The platform merges then add a few hundred products back, so the
 # "-lt 1" check passes and a 90%-empty site ships looking fresh.
-# Snapshot here, before anything touches data.js this cycle.
+# Snapshot here, before anything touches data.js this cycle. The publish
+# gate below compares against this copy and restores from it.
 cp js/data.js /tmp/tcc_data_precycle.js
-PRODUCTS_CYCLE_START=$("$NODE_BIN" -e 'global.window={};require("./js/data.js");console.log(window.TCC.products.length)' 2>/dev/null || echo 0)
-echo "Catalog at cycle start: $PRODUCTS_CYCLE_START products"
 
 # 3. Scrape ALL menus (full product data) — applies smart name-based
 #    categorization via scraper/normalize.py to keep cartridges as cartridges,
@@ -185,15 +208,6 @@ python3 scraper/recategorize_data_js.py
 # product with two prices. Self-aborts if it would absorb >15% of entries.
 python3 scripts/canonicalize_products.py || echo "Canonicalize failed (non-fatal)"
 PRODUCTS_AFTER=$("$NODE_BIN" -e 'global.window={};require("./js/data.js");console.log(window.TCC.products.length)' 2>/dev/null || echo 0)
-# Alert helper: pushes a message to hello@ via the worker /alert endpoint
-# (env from /etc/tcc-scrape.env). Non-fatal, no-op when env is missing.
-_tcc_alert() {
-    [ -n "$TCC_ALERT_URL" ] && [ -n "$TCC_ALERT_TOKEN" ] || return 0
-    curl -fsS --max-time 15 -X POST "$TCC_ALERT_URL" \
-        -H "Content-Type: application/json" -H "x-alert-token: $TCC_ALERT_TOKEN" \
-        -d "{\"source\":\"auto_scrape\",\"text\":$(printf '%s' "$1" | python3 -c 'import json,sys;print(json.dumps(sys.stdin.read()))')}" \
-        >/dev/null 2>&1 || echo "Alert POST failed (non-fatal)"
-}
 
 # The Google cache must keep refreshing (tcc-google.timer, weekly). If the
 # newest fetch is more than 10 days old, say so once a day.
@@ -221,20 +235,36 @@ elif [ "$PRODUCTS_BEFORE" -gt 0 ] && [ "$PRODUCTS_AFTER" -lt $((PRODUCTS_BEFORE 
     _tcc_alert "data.js shrank $PRODUCTS_BEFORE -> $PRODUCTS_AFTER products after the data-quality steps and was reverted. A scraper or filter is misbehaving; investigate before the next cycle compounds it."
 fi
 
-# Whole-cycle catalog check. Canonicalization legitimately folds ~6% and
-# day-to-day churn runs ~3%, so a drop past a third means a scraper came back
-# empty and the merges papered over it. Revert rather than publish a hollow
-# site; alert on a smaller-but-suspicious drop without blocking fresh prices.
-PRODUCTS_CYCLE_END=$("$NODE_BIN" -e 'global.window={};require("./js/data.js");console.log(window.TCC.products.length)' 2>/dev/null || echo 0)
-if [ "$PRODUCTS_CYCLE_START" -gt 100 ] 2>/dev/null; then
-    if [ "$PRODUCTS_CYCLE_END" -lt $((PRODUCTS_CYCLE_START * 65 / 100)) ] 2>/dev/null; then
-        echo "CATALOG COLLAPSE: $PRODUCTS_CYCLE_START -> $PRODUCTS_CYCLE_END — reverting to the pre-cycle copy"
-        cp /tmp/tcc_data_precycle.js js/data.js
-        _tcc_alert "Catalog collapsed this cycle: $PRODUCTS_CYCLE_START -> $PRODUCTS_CYCLE_END products. data.js was reverted to the pre-cycle copy, so the site keeps serving the previous menu. Check whether Weedmaps is blocking the Pi (direct_menu_scrape 406) or a platform scraper returned empty: journalctl -u tcc-scrape.service -n 200"
-    elif [ "$PRODUCTS_CYCLE_END" -lt $((PRODUCTS_CYCLE_START * 85 / 100)) ] 2>/dev/null; then
-        _tcc_alert "Catalog shrank this cycle: $PRODUCTS_CYCLE_START -> $PRODUCTS_CYCLE_END products (more than 15%). Not reverted — the site is live with the smaller catalog. Worth checking which scraper came back thin."
-    fi
+# Publish gate (replaced the unique-product 65%/85% check, 2026-09-24; that
+# check let a 32% fall through and never saw a single shop go dark). Per shop:
+# a failed or truncated fetch, or a 20+ listing shop losing over half, gets
+# last cycle's menu back with its real read date, for up to 3 days. Site-wide:
+# under 85% of last cycle's listings after that means something structural
+# broke, and the gate reverts data.js itself. Details: scripts/publish_gate.py.
+# A crash here fails closed: publish last cycle's data, never an unchecked one.
+if ! python3 scripts/publish_gate.py; then
+    echo "PUBLISH GATE CRASHED — reverting data.js to the pre-cycle copy"
+    cp /tmp/tcc_data_precycle.js js/data.js
+    _tcc_alert "The publish gate crashed this cycle, so data.js was reverted to last cycle's copy and nothing unchecked went live. Prices on the site are one cycle old. See: journalctl -u tcc-scrape.service -n 300 | grep -A5 'PUBLISH GATE'"
 fi
+
+# Invariants on the data about to ship, through the site's own filter: a
+# shop's shelf that is in data.js but mostly hidden on the site is the Great
+# Cannabis failure (2026-09-15). The data itself is fine, the site code is
+# not, so this alerts (once a day per finding) instead of blocking.
+INV_OUT=$(python3 tests/check_fixtures.py --data js/data.js 2>&1) || {
+    # set -e applies inside this block: every grep must tolerate no match.
+    INV_FAILS=$(echo "$INV_OUT" | grep FAIL || echo "$INV_OUT" | tail -5)
+    echo "$INV_FAILS"
+    INV_SIG=$(echo "$INV_FAILS" | sha1sum | cut -c1-12)
+    STAMP=/tmp/tcc-invariant-$INV_SIG
+    if [ ! -f "$STAMP" ] || [ -n "$(find "$STAMP" -mmin +1380 2>/dev/null)" ]; then
+        _tcc_alert "Listings are in the data but hidden on the site:
+$(echo "$INV_FAILS" | head -20)
+The site filter in js/app.js or scripts/build_seo.js is dropping real products. Published anyway; fix the filter."
+        touch "$STAMP"
+    fi
+}
 
 # 7.94. Market snapshot — keep every price we see, per shop, forever.
 #       price_history.json is not an archive: {date, price} per product NAME,
@@ -270,6 +300,14 @@ python3 scripts/menu_watchdog.py || echo "Watchdog failed (non-fatal)"
 #       Once a day (23:00 cycle): it makes outbound requests to ~25 sites.
 if [ "$(date +%H)" = "23" ]; then
     python3 scripts/probe_menus.py --limit 30 || echo "Menu probe failed (non-fatal)"
+    # Raw archive: every cycle for 14 days, then the last cycle of each day.
+    # Exit 2 means under 2 GB free on the Pi.
+    # (set -e is on: capture the code with ||, never with a bare `; rc=$?`)
+    PRUNE_RC=0
+    python3 scripts/prune_raw_archive.py || PRUNE_RC=$?
+    if [ "$PRUNE_RC" = "2" ]; then
+        _tcc_alert "aries-pi has under 2 GB of disk left. The market archive lives there (~/tcc-archive). Free space or move the archive before scrapes start failing."
+    fi
 fi
 
 # 8. Rebuild static SEO pages (per-dispensary, per-category, sitemap.xml)
@@ -302,7 +340,8 @@ git add js/data.js index.html sitemap.xml \
     llms.txt
 # Written only by the 23:00 cycle, so they are absent the rest of the day.
 # `git add` on a missing path exits 128 and set -e would kill the publish.
-for optional in scraper/data/menu_probe.json scraper/data/snapshots; do
+for optional in scraper/data/menu_probe.json scraper/data/snapshots \
+                status.json scraper/data/menu_observed.json; do
     [ -e "$optional" ] && git add "$optional" || true
 done
 grep -o '<loc>https://twincitycannabis.com/[^<]*</loc>' sitemap.xml \

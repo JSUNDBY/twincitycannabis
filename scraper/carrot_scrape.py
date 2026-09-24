@@ -24,6 +24,8 @@ import re
 from datetime import datetime
 from pathlib import Path
 
+import raw_archive
+
 import requests
 
 DATA_DIR = Path(__file__).parent / "data"
@@ -175,6 +177,7 @@ def scrape_store(slug, config):
         categories = categories.get("categories", [])
 
     all_products = []
+    raw_items = []
     seen = 0
 
     for cat in categories:
@@ -186,6 +189,7 @@ def scrape_store(slug, config):
         if not isinstance(items, list):
             continue
         seen += len(items)
+        raw_items.extend(items)
 
         for doc in items:
             name = (doc.get("name") or "").strip()
@@ -249,6 +253,7 @@ def scrape_store(slug, config):
             })
 
     print(f"  {config['name']}: {seen} listed -> {len(all_products)} cannabis products")
+    raw_archive.record("carrot", slug, raw_items)
     return all_products
 
 
@@ -262,6 +267,7 @@ def main():
             all_products.extend(products)
         except Exception as e:
             print(f"  ERROR scraping {config['name']}: {e}")
+            raw_archive.record("carrot", slug, [], status="failed")
 
     print(f"\nTotal Carrot products: {len(all_products)}")
 

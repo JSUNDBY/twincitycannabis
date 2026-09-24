@@ -1,0 +1,34 @@
+name: Smoke test claim forms
+
+# Submits both claim forms on the LIVE site once a day, the way an owner
+# would, and fails if either one does not reach the worker and show its
+# thank-you panel. See tests/smoke_claim_forms.js.
+#
+# Runs off the Pi on purpose: it must still run when the Pi is down. The
+# worker records each pass (KV smoke:contact:<kind>) and its hourly monitor
+# emails Josh when a pass is more than 30 hours old, so a failing form and
+# a job that stopped running both get reported.
+
+on:
+  schedule:
+    - cron: '20 15 * * *'   # 10:20am Central (CDT), 9:20am (CST)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      # puppeteer-core is already a pinned repo dependency (package-lock.json);
+      # the runner image ships Google Chrome, so nothing new is downloaded.
+      - run: npm ci --ignore-scripts
+      - run: node tests/smoke_claim_forms.js
+        env:
+          CHROME_PATH: /usr/bin/google-chrome

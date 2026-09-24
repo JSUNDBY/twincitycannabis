@@ -26,6 +26,8 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+import raw_archive
+
 import requests
 
 DATA_DIR = Path(__file__).parent / "data"
@@ -171,8 +173,10 @@ def scrape_shop(dispensary_id, org_id):
         payload = fetch_products(org_id)
     except Exception as e:
         print(f"  HTTP error: {e}")
+        raw_archive.record("meadow", dispensary_id, [], status="failed")
         return []
     raw_products = payload.get("data", {}).get("products") or []
+    raw_archive.record("meadow", dispensary_id, raw_products)
     print(f"  raw: {len(raw_products)} products")
     out = []
     for raw in raw_products:
