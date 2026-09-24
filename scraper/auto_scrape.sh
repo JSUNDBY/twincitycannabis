@@ -236,6 +236,20 @@ if [ "$PRODUCTS_CYCLE_START" -gt 100 ] 2>/dev/null; then
     fi
 fi
 
+# 7.94. Market snapshot — keep every price we see, per shop, forever.
+#       price_history.json is not an archive: {date, price} per product NAME,
+#       capped at 60 entries, no shop dimension. The platform feeds are
+#       overwritten every cycle, so the raw record of a day lasts four hours.
+#       This writes one immutable row per shop x product x cycle (~12k rows,
+#       ~190 KB gzipped). Every cycle goes to ~/tcc-archive on the Pi; the
+#       23:00 run also drops one file into the repo so a copy survives the
+#       SD card. Non-fatal: losing a snapshot must never stop the site.
+if [ "$(date +%H)" = "23" ]; then
+    python3 scripts/snapshot_market.py --git-copy || echo "Snapshot failed (non-fatal)"
+else
+    python3 scripts/snapshot_market.py || echo "Snapshot failed (non-fatal)"
+fi
+
 # 7.95. Generate the real price-drop deals feed from priceHistory (no fakes).
 "$NODE_BIN" scraper/generate_deals.js
 
@@ -284,6 +298,7 @@ git add js/data.js index.html sitemap.xml \
     scraper/data/treez_products.json scraper/data/blaze_products.json \
     scraper/data/canonical_merges.json \
     scraper/data/shop_counts.json scraper/data/menu_alerts.json scraper/data/menu_probe.json \
+    scraper/data/snapshots \
     scraper/data/page_lastmod.json scraper/data/price_trends.json \
     llms.txt
 grep -o '<loc>https://twincitycannabis.com/[^<]*</loc>' sitemap.xml \
