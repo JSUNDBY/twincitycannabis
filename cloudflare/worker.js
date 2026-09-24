@@ -1896,6 +1896,7 @@ function dueCycleStart(now) {
 async function monitorSite(env) {
   const now = Date.now();
   const problems = {};   // kind -> message
+  const open = (await env.TCC_OVERRIDES.get('monitor:open', { type: 'json' })) || {};
 
   let status = null;
   try {
@@ -1914,6 +1915,9 @@ async function monitorSite(env) {
         `Either the Pi did not run (ssh josh@100.91.125.83 'journalctl -u tcc-scrape.service -n 80'), ` +
         `the push failed, or GitHub Pages did not deploy (github.com/JSUNDBY/twincitycannabis/actions).`;
     }
+  } else if (open.publish) {
+    // Can't see status.json, so can't say publishing recovered either.
+    problems.publish = 'Publishing was already late, and status.json cannot be read to confirm otherwise.';
   }
 
   for (const kind of ['dispensary', 'brand']) {
@@ -1924,7 +1928,6 @@ async function monitorSite(env) {
     }
   }
 
-  const open = (await env.TCC_OVERRIDES.get('monitor:open', { type: 'json' })) || {};
   const started = Object.keys(problems).filter((k) => !open[k]);
   const cleared = Object.keys(open).filter((k) => !problems[k]);
   const remind = Object.keys(problems).filter((k) => open[k] && now - Date.parse(open[k].told) > 24 * 3600e3);
