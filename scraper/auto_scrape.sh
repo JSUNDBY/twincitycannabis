@@ -297,10 +297,14 @@ git add js/data.js index.html sitemap.xml \
     scraper/data/sweed_products.json scraper/data/dutchie_products.json \
     scraper/data/treez_products.json scraper/data/blaze_products.json \
     scraper/data/canonical_merges.json \
-    scraper/data/shop_counts.json scraper/data/menu_alerts.json scraper/data/menu_probe.json \
-    scraper/data/snapshots \
+    scraper/data/shop_counts.json scraper/data/menu_alerts.json \
     scraper/data/page_lastmod.json scraper/data/price_trends.json \
     llms.txt
+# Written only by the 23:00 cycle, so they are absent the rest of the day.
+# `git add` on a missing path exits 128 and set -e would kill the publish.
+for optional in scraper/data/menu_probe.json scraper/data/snapshots; do
+    [ -e "$optional" ] && git add "$optional" || true
+done
 grep -o '<loc>https://twincitycannabis.com/[^<]*</loc>' sitemap.xml \
   | sed 's|<loc>https://twincitycannabis.com/||;s|</loc>||;s|/$||' \
   | while read -r p; do
