@@ -248,6 +248,16 @@ python3 scripts/build_price_trends.py || echo "Price trends aggregation failed (
 #       last cycle (the leave-Weedmaps pattern). Non-fatal, loud.
 python3 scripts/menu_watchdog.py || echo "Watchdog failed (non-fatal)"
 
+# 7.98. Menu-platform probe: for every shop with no menu, fetch their own
+#       website and work out which platform they moved to, with the id the
+#       scraper needs. The watchdog says a menu died; this says where it went.
+#       Report-only on purpose — wiring a shop to the wrong scraper publishes
+#       another shop's prices on their page, so a human confirms the match.
+#       Once a day (23:00 cycle): it makes outbound requests to ~25 sites.
+if [ "$(date +%H)" = "23" ]; then
+    python3 scripts/probe_menus.py --limit 30 || echo "Menu probe failed (non-fatal)"
+fi
+
 # 8. Rebuild static SEO pages (per-dispensary, per-category, sitemap.xml)
 #    These are crawler-facing pages with LocalBusiness/Product Schema.org markup
 #    so Google indexes every dispensary + category as its own URL.
@@ -273,7 +283,7 @@ git add js/data.js index.html sitemap.xml \
     scraper/data/sweed_products.json scraper/data/dutchie_products.json \
     scraper/data/treez_products.json scraper/data/blaze_products.json \
     scraper/data/canonical_merges.json \
-    scraper/data/shop_counts.json scraper/data/menu_alerts.json \
+    scraper/data/shop_counts.json scraper/data/menu_alerts.json scraper/data/menu_probe.json \
     scraper/data/page_lastmod.json scraper/data/price_trends.json \
     llms.txt
 grep -o '<loc>https://twincitycannabis.com/[^<]*</loc>' sitemap.xml \

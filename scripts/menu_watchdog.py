@@ -55,12 +55,18 @@ def _post_alert(alerts):
         req = urllib.request.Request(
             url,
             data=json.dumps({"source": "menu-watchdog", "text": text}).encode(),
-            headers={"Content-Type": "application/json", "x-alert-token": token},
+            # Cloudflare 403s the default "Python-urllib/3.x" agent, so every
+            # menu-death alert this script ever sent was rejected at the edge
+            # and logged as non-fatal. Found 2026-09-24. curl was unaffected,
+            # which is why the bash alerts in auto_scrape.sh kept working.
+            headers={"Content-Type": "application/json", "x-alert-token": token,
+                     "User-Agent": "TCC-menu-watchdog/1.0 (+https://twincitycannabis.com)"},
         )
         urllib.request.urlopen(req, timeout=15)
         print("Watchdog alert emailed via worker /alert")
     except Exception as e:  # never kill the scrape over a notification
-        print(f"Watchdog alert POST failed (non-fatal): {e}")
+        # Loud on purpose: this is the notification path itself failing.
+        print(f"!!! WATCHDOG ALERT POST FAILED — nobody was told: {e}")
 
 
 def main():
