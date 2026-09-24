@@ -28,7 +28,7 @@ import urllib.request
 from datetime import date, datetime
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).resolve().parent.parent   # resolve(): node needs an absolute path
 DATA_DIR = ROOT / "scraper" / "data"
 OUT = DATA_DIR / "menu_probe.json"
 DATA_JS = ROOT / "js" / "data.js"
