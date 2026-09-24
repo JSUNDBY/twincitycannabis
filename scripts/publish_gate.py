@@ -147,6 +147,17 @@ def parse_iso(s):
         return None
 
 
+def published_at(path):
+    """When the pre-cycle copy was published, from its header line
+    ("// Last auto-updated: 2026-09-24 15:49", Central time)."""
+    try:
+        from zoneinfo import ZoneInfo
+        m = re.search(r"Last auto-updated: (\d{4}-\d{2}-\d{2} \d{2}:\d{2})", path.read_text()[:200])
+        return datetime.strptime(m.group(1), "%Y-%m-%d %H:%M").replace(tzinfo=ZoneInfo("America/Chicago"))
+    except Exception:
+        return None
+
+
 def rewrite(content, pm, entries):
     block = ",\n".join(entries)
     return content[:pm.start()] + pm.group(1) + "\n" + block + "\n" + pm.group(3) + content[pm.end():]
@@ -176,6 +187,7 @@ def main():
     b_off = offers_by_shop(before["products"])
     a_off = offers_by_shop(after["products"])
     status = raw_archive.cycle_status()
+    first_seen = iso(published_at(before_path) or now)
 
     state_before = STATE.read_text() if STATE.exists() else "{}"
     state = json.loads(state_before)
@@ -199,8 +211,8 @@ def main():
         b, a = b_off.get(shop, 0), a_off.get(shop, 0)
         st = (status.get(shop) or {}).get("status")
         rec = shops.setdefault(shop, {})
-        # First run with no state: treat last cycle's menu as read then.
-        rec.setdefault("observed_at", now_s)
+        # First run with no state: last cycle's menu was read when it published.
+        rec.setdefault("observed_at", first_seen)
 
         failed = st in ("partial", "failed")
         dropped = b >= SHOP_MIN and a < b * SHOP_KEEP

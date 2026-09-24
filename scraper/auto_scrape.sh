@@ -134,11 +134,16 @@ python3 scraper/price_tracker.py export
 # 7.5. Pull menus from dispensary.shop platform (e.g. Fort Road Cannabis)
 #      and merge them into TCC.products with id prefix 'ds####'. Must run
 #      AFTER direct_menu_scrape.py since that step wipes TCC.products.
-python3 scraper/dispensary_shop_scrape.py
+# Non-fatal like every other platform: these scrapers exit 1 rather than
+# write an empty file, and under set -e that exit used to stop the whole
+# cycle. 2026-09-24 17:22: dispensary.shop's domain went NXDOMAIN and took
+# every shop's prices down with it. The merge keeps the last good file and
+# the publish gate dates and expires it.
+python3 scraper/dispensary_shop_scrape.py || echo "dispensary.shop scrape failed (non-fatal)"
 python3 scraper/merge_dispensary_shop_data.py
 
 # 7.6. Pull menus from Meadow platform (e.g. Lake Daze).
-python3 scraper/meadow_scrape.py
+python3 scraper/meadow_scrape.py || echo "Meadow scrape failed (non-fatal)"
 python3 scraper/merge_meadow_data.py
 
 # 7.7. Pull menus from Carrot platform (Wildflower NE + North Loop, Verist
