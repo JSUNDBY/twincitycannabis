@@ -68,11 +68,28 @@ async function check(browser, f) {
   }
 }
 
+// The worker's hourly monitor must have run in the last 2 hours. It emails
+// Josh about everything else; this is the one thing it cannot report itself.
+async function checkMonitor() {
+  try {
+    const r = await fetch('https://dashboard.twincitycannabis.com/monitor-status', { headers: { 'Cache-Control': 'no-cache' } });
+    const s = await r.json();
+    const age = s.at ? (Date.now() - Date.parse(s.at)) / 3600e3 : Infinity;
+    if (age > 2) throw new Error(s.at ? `last ran ${age.toFixed(1)}h ago (${s.at})` : 'has never run');
+    console.log(`ok   hourly monitor: last ran ${Math.round(age * 60)} min ago` + (s.problems && s.problems.length ? `, open: ${s.problems.join(', ')}` : ', all clear'));
+    return true;
+  } catch (e) {
+    console.log(`FAIL hourly monitor: ${e.message}`);
+    return false;
+  }
+}
+
 (async () => {
   const browser = await puppeteer.launch({ executablePath: CHROME, headless: true,
     args: ['--no-sandbox', '--disable-dev-shm-usage'] });
   let ok = true;
   for (const f of FORMS) ok = (await check(browser, f)) && ok;
   await browser.close();
+  if (process.env.SKIP_MONITOR_CHECK !== '1') ok = (await checkMonitor()) && ok;
   process.exit(ok ? 0 : 1);
 })();

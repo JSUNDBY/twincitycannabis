@@ -231,6 +231,15 @@ export default {
       return new Response('TCC Stripe webhook worker — alive', { status: 200 });
     }
 
+    // When the hourly monitor last ran, and what it found. Read by the daily
+    // smoke test so a monitor that silently stopped is itself reported.
+    if (url.pathname === '/monitor-status') {
+      const last = await env.TCC_OVERRIDES.get('monitor:last_run', { type: 'json' });
+      return new Response(JSON.stringify(last || { at: null }), {
+        status: 200, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...cors },
+      });
+    }
+
     return new Response('Not found', { status: 404 });
   },
 
@@ -1931,6 +1940,12 @@ async function monitorSite(env) {
   const started = Object.keys(problems).filter((k) => !open[k]);
   const cleared = Object.keys(open).filter((k) => !problems[k]);
   const remind = Object.keys(problems).filter((k) => open[k] && now - Date.parse(open[k].told) > 24 * 3600e3);
+  // Proof of life, every run: without it a monitor that stopped firing looks
+  // exactly like a monitor with nothing to report.
+  const problemKinds = Object.keys(problems);
+  console.log(`monitor: ${problemKinds.length ? 'open ' + problemKinds.join(', ') : 'all clear'}`);
+  await env.TCC_OVERRIDES.put('monitor:last_run', JSON.stringify({ at: new Date(now).toISOString(), problems: problemKinds }));
+
   if (!started.length && !cleared.length && !remind.length) return;
 
   const nowIso = new Date(now).toISOString();
