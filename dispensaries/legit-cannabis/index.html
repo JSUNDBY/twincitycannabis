@@ -269,7 +269,7 @@
   <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
   <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
     <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <datalist id="checkin-products"><option value="PR Hyperion F1  2pk (0.5 G ea)"><option value="PR Sunset Tea"><option value="PR Cap Junky"><option value="PR Halle Berry"><option value="PR Block Party"><option value="PR Gastro Pop"><option value="PR Wilfunk"><option value="PR Mendo Breath"><option value="Donny Burger"><option value="Bubble Bath"><option value="PR Burger Breath"><option value="PR Jacked up Boof - Keif Coated"><option value="Raspberry"><option value="Sour Blueberry"><option value="Strawberry"><option value="Blue Raspberry"><option value="PR Pineapple Muffin Mini Pre-rolls 5pk (0.5 G ea)"><option value="Lemon Cherry Gelato"><option value="Golden Goat"><option value="Zoap"><option value="PR OG Kush 5pk (0.5 G ea)"><option value="Cherry Lady Slipper"><option value="Campfire Cannabis - 3.5g Flower - Purple Octane (I/H)"><option value="Runtz - 3.5g"><option value="Terp Poison - 3.5g"><option value="Sunset Sherbert - 3.5g"><option value="Guava"><option value="Swedish OG"><option value="Double Sour Grape"><option value="Campfire Cannabis - 3.5g Flower Grape Cream Cake (I/H)"><option value="Campfire Cannabis"><option value="OG Kush"><option value="Papaya Fuel"><option value="Orion"><option value="Killer Cupcake"><option value="Permanent Marker"><option value="Octane Mintz"><option value="Cap Junky - 3.5g"><option value="Donny Burger - 3.5g"><option value="LIT OG"><option value="Mac Stomper"><option value="Dulce De Fresa"><option value="Tropic Fresa"><option value="Campfire Cannabis - 7g Flower - Mac Stomper (I/H)"><option value="Campfire Cannabis - 7g Flower - Runtz (H)"><option value="Campfire Cannabis - 7g Flower -Bubble Bath (I/H)"><option value="Campfire Cannabis - 7g Flower Guava (S/H)"><option value="Campfire Cannabis - 7g Flower Terp Poison (S/H)"><option value="Grape Cream Cake"><option value="Campfire Cannabis - 7g Flower - Lit OG (I/H)"></datalist>
+    <datalist id="checkin-products"><option value="PR Hyperion F1  2pk (0.5 G ea)"><option value="PR Sunset Tea"><option value="PR Cap Junky"><option value="PR Halle Berry"><option value="PR Block Party"><option value="PR Gastro Pop"><option value="PR Wilfunk"><option value="PR Burger Breath"><option value="PR Mendo Breath"><option value="Donny Burger"><option value="Bubble Bath"><option value="PR Jacked up Boof - Keif Coated"><option value="Raspberry"><option value="Sour Blueberry"><option value="Strawberry"><option value="Blue Raspberry"><option value="PR Pineapple Muffin Mini Pre-rolls 5pk (0.5 G ea)"><option value="Lemon Cherry Gelato"><option value="Golden Goat"><option value="Zoap"><option value="PR OG Kush 5pk (0.5 G ea)"><option value="Cherry Lady Slipper"><option value="Campfire Cannabis - 3.5g Flower - Purple Octane (I/H)"><option value="Runtz - 3.5g"><option value="Terp Poison - 3.5g"><option value="Sunset Sherbert - 3.5g"><option value="Guava"><option value="Swedish OG"><option value="Double Sour Grape"><option value="Campfire Cannabis - 3.5g Flower Grape Cream Cake (I/H)"><option value="Campfire Cannabis"><option value="OG Kush"><option value="Papaya Fuel"><option value="Orion"><option value="Killer Cupcake"><option value="Permanent Marker"><option value="Octane Mintz"><option value="Cap Junky - 3.5g"><option value="LIT OG"><option value="Mac Stomper"><option value="Dulce De Fresa"><option value="Tropic Fresa"><option value="Campfire Cannabis - 7g Flower - Mac Stomper (I/H)"><option value="Campfire Cannabis - 7g Flower - Runtz (H)"><option value="Campfire Cannabis - 7g Flower -Bubble Bath (I/H)"><option value="Campfire Cannabis - 7g Flower Guava (S/H)"><option value="Campfire Cannabis - 7g Flower Terp Poison (S/H)"><option value="Grape Cream Cake"><option value="Campfire Cannabis - 7g Flower - Lit OG (I/H)"></datalist>
     <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
     <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
     <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
@@ -410,6 +410,12 @@
     <td style="text-align:right">$16.00</td>
   </tr>
 <tr>
+    <td style="display:flex;align-items:center"><img src="https://media-prime.sweedpos.com/store/prime/1790121397_51cf807a-626f-405b-b2de-81819cd76e1f.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/sw0047">PR Burger Breath | 1 G</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td>Tasty Gems</td>
+    <td style="text-align:right" class="price">$16.00 ✓</td>
+    <td style="text-align:right">$16.00</td>
+  </tr>
+<tr>
     <td style="display:flex;align-items:center"><img src="https://media-prime.sweedpos.com/store/prime/1786372267_2d866728-1c5b-418c-bf55-f03418591da0.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/sw0012">PR Mendo Breath | 1 G</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Avió</td>
     <td style="text-align:right" class="price">$18.00 ✓</td>
@@ -424,12 +430,6 @@
 <tr>
     <td style="display:flex;align-items:center"><img src="https://media-prime.sweedpos.com/store/prime/1788987909_99b35731-b827-4274-88a2-024d0257fe08.avif" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/sw0018">Bubble Bath | 1 G</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
     <td>Campfire Cannabis</td>
-    <td style="text-align:right" class="price">$18.00 ✓</td>
-    <td style="text-align:right">$18.00</td>
-  </tr>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://media-prime.sweedpos.com/store/prime/1790121397_51cf807a-626f-405b-b2de-81819cd76e1f.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/sw0047">PR Burger Breath | 1 G</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
-    <td>Tasty Gems</td>
     <td style="text-align:right" class="price">$18.00 ✓</td>
     <td style="text-align:right">$18.00</td>
   </tr>
@@ -496,7 +496,7 @@
     <td style="text-align:right">$44.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/526/843/325/444112277_1785182826_9284ef5f-0bf8-4402-9b46-57e38e28e5f6.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/j0554">Golden Goat</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/526/843/325/444112277_1785182826_9284ef5f-0bf8-4402-9b46-57e38e28e5f6.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/j0560">Golden Goat</a></td>
     <td>Unbound</td>
     <td style="text-align:right" class="price">$45.00</td>
     <td style="text-align:right">$36.00</td>
@@ -514,19 +514,19 @@
     <td style="text-align:right">$45.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/654/714/103/444529918_4de09d6c-054d-47c6-9d4b-729107798229.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0928">Campfire Cannabis - 3.5g Flower - Purple Octane (I/H)</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/654/714/103/444529918_4de09d6c-054d-47c6-9d4b-729107798229.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0927">Campfire Cannabis - 3.5g Flower - Purple Octane (I/H)</a></td>
     <td>Campfire Cannabis</td>
     <td style="text-align:right" class="price">$48.00 ✓</td>
     <td style="text-align:right">$48.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://carrot-nevada-media.sfo2.cdn.digitaloceanspaces.com/products/webp/ae53c822ba0694092e108cbff28d2823b8542864ba109936cf201d5dc90ba710-500.webp" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/c0008">Runtz - 3.5g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://carrot-nevada-media.sfo2.cdn.digitaloceanspaces.com/products/webp/ae53c822ba0694092e108cbff28d2823b8542864ba109936cf201d5dc90ba710-500.webp" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/c0007">Runtz - 3.5g</a></td>
     <td>Campfire Cannabis</td>
     <td style="text-align:right" class="price">$48.00 ✓</td>
     <td style="text-align:right">$48.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://carrot-nevada-media.sfo2.cdn.digitaloceanspaces.com/products/webp/b7e4f8671903c1ad0131b6ad83e18698161889333714fe649d2b68c8e401f0d2-500.webp" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/c0010">Terp Poison - 3.5g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://carrot-nevada-media.sfo2.cdn.digitaloceanspaces.com/products/webp/b7e4f8671903c1ad0131b6ad83e18698161889333714fe649d2b68c8e401f0d2-500.webp" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/c0009">Terp Poison - 3.5g</a></td>
     <td>Campfire Cannabis</td>
     <td style="text-align:right" class="price">$48.00 ✓</td>
     <td style="text-align:right">$48.00</td>
@@ -538,7 +538,7 @@
     <td style="text-align:right">$48.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://carrot-nevada-media.sfo2.cdn.digitaloceanspaces.com/products/webp/db66c7d81ff8a3b3c41794959a2f3ad954dbe4e59f6970bcea8072041618efed-500.webp" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/c0009">Sunset Sherbert - 3.5g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://carrot-nevada-media.sfo2.cdn.digitaloceanspaces.com/products/webp/db66c7d81ff8a3b3c41794959a2f3ad954dbe4e59f6970bcea8072041618efed-500.webp" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/c0008">Sunset Sherbert - 3.5g</a></td>
     <td>Campfire Cannabis</td>
     <td style="text-align:right" class="price">$50.00</td>
     <td style="text-align:right">$48.00</td>
@@ -562,13 +562,13 @@
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/654/714/103/444529918_4de09d6c-054d-47c6-9d4b-729107798229.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0930">Campfire Cannabis - 3.5g Flower Grape Cream Cake (I/H)</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/654/714/103/444529918_4de09d6c-054d-47c6-9d4b-729107798229.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0929">Campfire Cannabis - 3.5g Flower Grape Cream Cake (I/H)</a></td>
     <td>Campfire Cannabis</td>
     <td style="text-align:right" class="price">$52.00</td>
     <td style="text-align:right">$48.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/927/364/850/444782077_product_images_937a38b9-3589-4739-969f-b9c7d01c9d86_65c705c9-f0ee-4e76-a5e0-942353af44c4_original.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0968">Campfire Cannabis | Fight Club | 3.5g</a></td>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/927/364/850/444782077_product_images_937a38b9-3589-4739-969f-b9c7d01c9d86_65c705c9-f0ee-4e76-a5e0-942353af44c4_original.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0967">Campfire Cannabis | Fight Club | 3.5g</a></td>
     <td>Campfire Cannabis</td>
     <td style="text-align:right" class="price">$52.00</td>
     <td style="text-align:right">$50.00</td>
@@ -616,25 +616,25 @@
     <td style="text-align:right">$48.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://carrot-nevada-media.sfo2.cdn.digitaloceanspaces.com/products/webp/623bb32c7c982a18864eccb8d98154a4903a09516f124e3512d3ad84e2ca538f-500.webp" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/c0002">Donny Burger - 3.5g</a></td>
-    <td>Campfire Cannabis</td>
-    <td style="text-align:right" class="price">$55.00</td>
-    <td style="text-align:right">$51.00</td>
-  </tr>
-<tr>
     <td style="display:flex;align-items:center"><img src="https://carrot-nevada-media.sfo2.cdn.digitaloceanspaces.com/products/webp/8004bf1d491c5f0027aefa1c068232c234c1f7ebdec42207361be7fa9a46c301-500.webp" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/products/flower/lit-og-3-5g-flower/">LIT OG | 3.5G Flower</a></td>
     <td>Campfire Cannabis</td>
     <td style="text-align:right" class="price">$55.00</td>
     <td style="text-align:right">$50.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://carrot-nevada-media.sfo2.cdn.digitaloceanspaces.com/products/webp/02dd66bad39cb6bd2b61e9d6719f063a431285439fdf47777ec26d6a759d2b5d-500.webp" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/c0389">Mac Stomper | 3.5g Flower</a></td>
+    <td style="display:flex;align-items:center"><img src="https://carrot-nevada-media.sfo2.cdn.digitaloceanspaces.com/products/webp/02dd66bad39cb6bd2b61e9d6719f063a431285439fdf47777ec26d6a759d2b5d-500.webp" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/c0388">Mac Stomper | 3.5g Flower</a></td>
     <td>Campfire Cannabis</td>
     <td style="text-align:right" class="price">$55.00</td>
     <td style="text-align:right">$48.00</td>
   </tr>
 <tr>
-    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/654/714/103/444529918_4de09d6c-054d-47c6-9d4b-729107798229.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0941">Campfire Cannabis - 7g Flower - Mac Stomper (I/H)</a></td>
+    <td style="display:flex;align-items:center"><img src="https://media-prime.sweedpos.com/store/prime/1773943731_a20cf591-6ef1-47a8-9e00-81bbe7f2291e.jpg" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/sw0029">Donny Burger | 3.5g</a> <span style="font-size:0.72em;font-weight:700;color:#a855f7;text-transform:capitalize">indica</span></td>
+    <td>Campfire Cannabis</td>
+    <td style="text-align:right" class="price">$55.00 ✓</td>
+    <td style="text-align:right">$55.00</td>
+  </tr>
+<tr>
+    <td style="display:flex;align-items:center"><img src="https://images.weedmaps.com/pictures/listings/654/714/103/444529918_4de09d6c-054d-47c6-9d4b-729107798229.png" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/p0940">Campfire Cannabis - 7g Flower - Mac Stomper (I/H)</a></td>
     <td>Campfire Cannabis</td>
     <td style="text-align:right" class="price">$85.00 ✓</td>
     <td style="text-align:right">$85.00</td>
