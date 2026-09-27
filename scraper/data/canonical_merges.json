@@ -1,6 +1,6 @@
 {
- "merged_groups": 253,
- "absorbed": 369,
+ "merged_groups": 259,
+ "absorbed": 381,
  "groups": [
   {
    "key": "highbernate moon melon|edible|50mg|10 pk",
@@ -1625,18 +1625,18 @@
   {
    "key": "dulce de fresa|concentrate|0.5g|live marawanna rosin",
    "kept": {
-    "name": "Dulce De Fresa - Live Rosin - .5g - Marawanna",
-    "shops_before": 2
+    "name": "Dulce de Fresa | 0.5g | Live Rosin | MaraWanna",
+    "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Dulce de Fresa | 0.5g | Live Rosin | MaraWanna",
+     "name": "Dulce De Fresa - Live Rosin - .5g - Marawanna",
      "shops": [
-      "dna-dispensary"
+      "mn-thc-co-1"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
   },
   {
    "key": "erba|flower|1g|taffy turtle",
@@ -1836,6 +1836,22 @@
    "shops_after": 10
   },
   {
+   "key": "granny's|edible|50mg|flavor live resin",
+   "kept": {
+    "name": "Granny's - Live Resin Gummies - 50mg THC - Flavor Pack",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Granny's Flavor Pack Live Resin THC Gummy 50mg (5mg/Gummy)",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "granny's|beverage|10mg|elixir live resin watermelon",
    "kept": {
     "name": "Granny's | 12oz Elixir - Watermelon | Live Resin - 10mg",
@@ -1977,13 +1993,19 @@
    },
    "absorbed": [
     {
+     "name": "Hiza Kyte Grape Escape THC Gummy 50mg (5mg)",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    },
+    {
      "name": "HIZA KYTE GUMMIES GRAPE ESCAPE 50MG",
      "shops": [
       "altitude-dispensary"
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "hiza kyte|edible|50mg|groovy pebbles",
@@ -1993,13 +2015,19 @@
    },
    "absorbed": [
     {
+     "name": "Hiza Kyte Groovy Pebbles THC Gummy 50mg (5mg)",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    },
+    {
      "name": "HIZA KYTE GUMMIES GROOVY PEBBLES 50MG",
      "shops": [
       "altitude-dispensary"
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "hiza kyte|edible|50mg|cherry gelato lemon",
@@ -2250,20 +2278,36 @@
    "shops_after": 2
   },
   {
-   "key": "octane mintz|concentrate|0.5g|live marawanna rosin",
+   "key": "northpark|flower|3.5g|taffy turtle",
    "kept": {
-    "name": "Octane Mintz - Live Rosin - .5g - Marawanna",
-    "shops_before": 2
+    "name": "Northpark | Flower | Turtle Taffy | 3.5g",
+    "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Octane Mintz | 0.5g | Live Rosin | MaraWanna",
+     "name": "Northpark Turtle Taffy 3.5g",
      "shops": [
-      "dna-dispensary"
+      "levitated-cannabis"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
+  },
+  {
+   "key": "octane mintz|concentrate|0.5g|live marawanna rosin",
+   "kept": {
+    "name": "Octane Mintz | 0.5g | Live Rosin | MaraWanna",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Octane Mintz - Live Rosin - .5g - Marawanna",
+     "shops": [
+      "mn-thc-co-1"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "oma|cartridge|1g|battery herer jack",
@@ -2341,9 +2385,15 @@
      "shops": [
       "pot-mama-s"
      ]
+    },
+    {
+     "name": "Retro Bakery Chocolate Covered Cookies 50mg",
+     "shops": [
+      "levitated-cannabis"
+     ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "retro bakery|edible|50mg|bar chocolate dark espresso",
@@ -2478,6 +2528,22 @@
    "shops_after": 2
   },
   {
+   "key": "trailhead|flower|3.5g|mintz octane",
+   "kept": {
+    "name": "Trailhead - 3.5g Flower - Octane Mintz (I/H)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Trailhead Octane Mintz 3.5g",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "unbound|flower|3.5g|goat golden",
    "kept": {
     "name": "Unbound - 3.5g Flower- Golden Goat (S/H)",
@@ -2517,9 +2583,15 @@
      "shops": [
       "black-bear-weed-dispensary-winona"
      ]
+    },
+    {
+     "name": "Unbound Orangade 3.5g",
+     "shops": [
+      "levitated-cannabis"
+     ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 4
   },
   {
    "key": "unbound|pre-roll|2.5g|5 ct illemonati",
@@ -2750,6 +2822,34 @@
    "shops_after": 9
   },
   {
+   "key": "(inc)ensored|edible|100mg|peach summer",
+   "kept": {
+    "name": "Summer Peach [10pk] (100mg)",
+    "shops_before": 15
+   },
+   "absorbed": [
+    {
+     "name": "(inc)ensored  Summer Peach (100mg THC)",
+     "shops": [
+      "fort-road-cannabis-llc"
+     ]
+    },
+    {
+     "name": "Summer Peach [10pk] (100mg)",
+     "shops": [
+      "leafline-labs-eagan",
+      "leafline-labs-st-cloud",
+      "leafline-labs-st-paul",
+      "rise-baxter",
+      "rise-mankato",
+      "rise-new-hope",
+      "rise-willmar"
+     ]
+    }
+   ],
+   "shops_after": 16
+  },
+  {
    "key": "carpe diem|tincture|1500mg|cream full relax spectrum",
    "kept": {
     "name": "Relax CBD Cream 1500 mg Full-Spectrum",
@@ -2760,6 +2860,22 @@
      "name": "Carpe Diem CBD Cream - 1500mg CBD - Full Spectrum - RELAX",
      "shops": [
       "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "carpe diem|tincture|1000mg|gel muscle on relief",
+   "kept": {
+    "name": "Relief Muscle & Joint CBD Gel Roll-On 1000 mg",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Relief Muscle & Joint CBD Gel Roll-On 1000mg - Carpe Diem",
+     "shops": [
+      "flame-flora"
      ]
     }
    ],
@@ -2946,22 +3062,6 @@
     }
    ],
    "shops_after": 4
-  },
-  {
-   "key": "voyageur edibles|edible|100mg|strawberry",
-   "kept": {
-    "name": "Strawberry I Gummies | (10pk) 100mg",
-    "shops_before": 2
-   },
-   "absorbed": [
-    {
-     "name": "Strawberry Gummies | 100mg",
-     "shops": [
-      "higher-place"
-     ]
-    }
-   ],
-   "shops_after": 3
   },
   {
    "key": "avio|pre-roll|1g|breath mendo",
@@ -3219,6 +3319,202 @@
    "shops_after": 2
   },
   {
+   "key": "unbound|flower|3.5g|2 mac v",
+   "kept": {
+    "name": "Mac V2",
+    "shops_before": 4
+   },
+   "absorbed": [
+    {
+     "name": "Unbound MAC V2 3.5g",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 5
+  },
+  {
+   "key": "camino|edible|50mg|berry chill wild",
+   "kept": {
+    "name": "Camino Chill Wild Berry THC Gummy 50mg (5mg THC)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Camino CHILL Wild Berry Gummies - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "dizgo collective|flower|3.5g|medusa",
+   "kept": {
+    "name": "Dizgo Medusa 3.5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "MEDUSA DIZGO | 3.5g",
+     "shops": [
+      "altitude-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "camino|edible|50mg|bliss lemonade watermelon",
+   "kept": {
+    "name": "Camino Bliss Watermelon Lemonade THC Gummy 50mg (5mg THC)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Camino BLISS Watermelon Lemonade Gummies - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "granny's|edible|50mg|dill pickle pretzels",
+   "kept": {
+    "name": "Granny's Pretzels - Dill Pickle [50pk] (50mg)",
+    "shops_before": 6
+   },
+   "absorbed": [
+    {
+     "name": "Granny's THC Pretzels Dill Pickle 50mg (1mg/Pretzel)",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    },
+    {
+     "name": "Dill Pickle Pretzels 50mg - Granny's",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
+     "name": "Granny's Dill Pickle Pretzels - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 9
+  },
+  {
+   "key": "hiza kyte|edible|50mg|headz lemon",
+   "kept": {
+    "name": "Hiza Kyte Lemon Headz THC Gummy 50mg (5mg)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "HIZA KYTE GUMMIES LEMON HEADZ 50MG",
+     "shops": [
+      "altitude-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "granny's|edible|50mg|cheddar pretzels",
+   "kept": {
+    "name": "Granny's Pretzels - Cheddar [50pk] (50mg)",
+    "shops_before": 7
+   },
+   "absorbed": [
+    {
+     "name": "Granny's THC Pretzels Cheddar 50mg (1mg/Pretzel)",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    },
+    {
+     "name": "Cheddar Pretzels 50mg - Granny's",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
+     "name": "Granny's Cheddar Pretzels - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 10
+  },
+  {
+   "key": "granny's|edible|50mg|mores pretzels",
+   "kept": {
+    "name": "Granny's Pretzels - S'mores [50pk] (50mg)",
+    "shops_before": 7
+   },
+   "absorbed": [
+    {
+     "name": "Granny's THC Pretzels S'mores 50mg (1mg/Pretzel)",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    },
+    {
+     "name": "S'mores Pretzels 50mg - Granny's",
+     "shops": [
+      "flame-flora"
+     ]
+    }
+   ],
+   "shops_after": 9
+  },
+  {
+   "key": "granny's|edible|50mg|original pretzels",
+   "kept": {
+    "name": "Granny's THC Pretzels Original 50mg (1mg/Pretzel)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Original Pretzels 50mg - Granny's",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
+     "name": "Granny's Original Pretzels - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
+   "key": "minneleaf|edible|25mg|cbn nite peaceful pineapple sleep",
+   "kept": {
+    "name": "Minneleaf Nite CBN, CBD Sleep Gummies - Peaceful Pineapple 25mg CBD 10mg CBN",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "NITE Peaceful Pineapple Sleep | Gummy | 25mg CBD / 10mg CBN",
+     "shops": [
+      "green-rose"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "redwood county weed management|flower|3.5g|cherry gelato lemon",
    "kept": {
     "name": "Lemon Cherry Gelato | 3.5g",
@@ -3424,12 +3720,11 @@
     {
      "name": "Granny's - Live Resin Gummies 5mg - Orange Creamsicle - 10ct",
      "shops": [
-      "mn-thc-co-1",
-      "mn-thc-co-2"
+      "mn-thc-co-1"
      ]
     }
    ],
-   "shops_after": 4
+   "shops_after": 3
   },
   {
    "key": "granny's|edible|50mg|10 ct live rainbow resin sherbert",
@@ -3441,12 +3736,11 @@
     {
      "name": "Granny's - Live Resin Gummies 5mg - Rainbow Sherbert - 10ct",
      "shops": [
-      "mn-thc-co-1",
-      "mn-thc-co-2"
+      "mn-thc-co-1"
      ]
     }
    ],
-   "shops_after": 4
+   "shops_after": 3
   },
   {
    "key": "campfire cannabis|flower|3.5g|mac stomper",
@@ -3795,52 +4089,13 @@
    },
    "absorbed": [
     {
-     "name": "Blue Runtz | 3.5g",
-     "shops": [
-      "green-goods-burnsville"
-     ]
-    },
-    {
      "name": "Blue Runtz",
      "shops": [
       "minnesota-medical-solutions-moorhead"
      ]
     }
    ],
-   "shops_after": 6
-  },
-  {
-   "key": "vireo|flower|7g|blue runtz",
-   "kept": {
-    "name": "Blue Runtz",
-    "shops_before": 7
-   },
-   "absorbed": [
-    {
-     "name": "Blue Runtz | 7g",
-     "shops": [
-      "green-goods-duluth",
-      "green-goods-woodbury",
-      "minnesota-medical-solutions",
-      "minnesota-medical-solutions-bloomington"
-     ]
-    },
-    {
-     "name": "Blue Runtz",
-     "shops": [
-      "green-goods-blaine",
-      "green-goods-burnsville",
-      "minnesota-medical-solutions-rochester"
-     ]
-    },
-    {
-     "name": "Blue Runtz | 7g",
-     "shops": [
-      "green-goods-burnsville"
-     ]
-    }
-   ],
-   "shops_after": 8
+   "shops_after": 5
   },
   {
    "key": "vireo|flower|3.5g|death garlic",
@@ -4146,7 +4401,7 @@
    "key": "good green|flower|3.5g|gelato lavender",
    "kept": {
     "name": "Lavender Gelato",
-    "shops_before": 9
+    "shops_before": 8
    },
    "absorbed": [
     {
@@ -4505,28 +4760,6 @@
    "shops_after": 9
   },
   {
-   "key": "granny's|edible|50mg|cheddar pretzels",
-   "kept": {
-    "name": "Granny's Pretzels - Cheddar [50pk] (50mg)",
-    "shops_before": 7
-   },
-   "absorbed": [
-    {
-     "name": "Cheddar Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
-     "name": "Granny's Cheddar Pretzels - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 9
-  },
-  {
    "key": "granny's|edible|50mg|cinnamon maple pretzels",
    "kept": {
     "name": "Granny's Pretzels - Maple Cinnamon [50pk] (50mg)",
@@ -4541,22 +4774,6 @@
     }
    ],
    "shops_after": 7
-  },
-  {
-   "key": "granny's|edible|50mg|mores pretzels",
-   "kept": {
-    "name": "Granny's Pretzels - S'mores [50pk] (50mg)",
-    "shops_before": 7
-   },
-   "absorbed": [
-    {
-     "name": "S'mores Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 8
   },
   {
    "key": "rythm|flower|3.5g|gogurtz",
@@ -4630,28 +4847,6 @@
    "shops_after": 6
   },
   {
-   "key": "granny's|edible|50mg|dill pickle pretzels",
-   "kept": {
-    "name": "Granny's Pretzels - Dill Pickle [50pk] (50mg)",
-    "shops_before": 6
-   },
-   "absorbed": [
-    {
-     "name": "Dill Pickle Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
-     "name": "Granny's Dill Pickle Pretzels - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 8
-  },
-  {
    "key": "erba|flower|3.5g|taffy turtle",
    "kept": {
     "name": "Turtle Taffy",
@@ -4700,70 +4895,6 @@
      "name": "TURTLE TAFFY (Bulk) | 7g",
      "shops": [
       "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "hiza|beverage|10mg|infused kush orange pineapple terps",
-   "kept": {
-    "name": "Hiza - Orange Pineapple Kush - 10mg THC Infused Terps - 12 oz",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Hiza - Orange Pineapple Kush - 10 mg THC Infused Terps - 12 oz",
-     "shops": [
-      "mn-thc-co-2"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "jack herer|cartridge|1g|botanical disposable infused pen terpene",
-   "kept": {
-    "name": "Jack Herer- Disposable Vape Pen - 1g-Botanical Terpene Infused",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Jack Herer-Disposable Vape Pen - 1g-Botanical Terpene Infused",
-     "shops": [
-      "mn-thc-co-2"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "lit og|flower|3.5g|campfire",
-   "kept": {
-    "name": "LIT OG - 3.5g - Campfire Cannabis",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Lit OG - 3.5g - Campfire Cannabis",
-     "shops": [
-      "mn-thc-co-2"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "granny's|edible|50mg|original pretzels",
-   "kept": {
-    "name": "Original Pretzels 50mg - Granny's",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Granny's Original Pretzels - 50mg THC",
-     "shops": [
-      "island-pezi"
      ]
     }
    ],
