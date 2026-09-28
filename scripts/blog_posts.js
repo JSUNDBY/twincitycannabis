@@ -1331,31 +1331,31 @@ module.exports = [
     category: 'Buying smart',
     read: 7,
     body: `
-<p>Cartridges were an afterthought in Minnesota until about a month ago. In August we could find 49 of them in the entire state. There are more than 300 now. The shelf filled in fast, which is good news, and it also means a lot of people are about to buy their first cart from a menu that is genuinely confusing on purpose.</p>
+<p>Cartridges were an afterthought in Minnesota until about a month ago. In August we could find 49 of them in the entire state. There are more than 400 now. The shelf filled in fast, which is good news, and it also means a lot of people are about to buy their first cart from a menu that is genuinely confusing on purpose.</p>
 <p>Here is what our price tracking says about how to do it without getting worked.</p>
 
 <h2>The size is the whole game</h2>
 <p>Start here, because nothing else on this page will save you as much money.</p>
-<p>Across every cartridge listing we track, the median half gram costs $60 and the median full gram also costs $60. Read that twice. Same money, twice the oil. Per gram, the half gram works out to about $120 and the full gram to about $60. The small one is literally double the price of the big one for the same thing.</p>
-<p>The two gram carts that have started appearing are cheaper still, a median of $95, which is under $48 a gram. So the size ladder runs exactly the way it does with flower: the bigger you buy, the less each gram costs, and the gap here is much wider than most people assume.</p>
+<p>Across every cartridge listing we track, the median half gram costs $58.25 and the median full gram costs $60. Read that twice. Under two dollars more buys you twice the oil. Per gram, the half gram works out to about $117 and the full gram to $60. The small one is close to double the price of the big one for the same thing.</p>
+<p>The two gram carts that have started appearing are cheaper still, a median of $110, which is $55 a gram. So the size ladder runs the way it does with flower, the bigger you buy the less each gram costs, though the step from one gram to two saves you far less than the step from a half gram to a full one.</p>
 <p>This is the same arithmetic that makes a quarter cheaper than two eighths, which we walked through in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a>. It just bites harder on carts.</p>
 
 <h2>Fifty one listings do not tell you the size at all</h2>
-<p>Now the annoying part. Of the cartridge listings on our tracker, 51 show no weight whatsoever. They are listed as "each" and nothing more. Plenty of others use four different spellings of the same size, so you will see 1g, 1 g, 1 Grams and 1 Milliliters on menus in the same city.</p>
+<p>Now the annoying part. Of the cartridge listings on our tracker, 71 show no weight whatsoever. They are listed as "each" and nothing more. Plenty of others use four different spellings of the same size, so you will see 1g, 1 g, 1 Grams and 1 Milliliters on menus in the same city.</p>
 <p>That is not shops being sneaky, it is mostly menu software and rushed data entry. But the effect on you is the same. A $45 cart is a bargain at a gram and a bad deal at a half gram, and the menu will happily not tell you which one it is.</p>
 <p>So ask. "Is this a half or a full gram" is a completely normal question and the budtender will answer it in two seconds. Ask it before you ask anything about strain or flavor.</p>
 
 <h2>What a cart should cost</h2>
-<p>The median cartridge in Minnesota is $60. A quarter of them are under $50 and a quarter are over $65. The cheap tail runs well under $20 on clearance and small listings, and the top ten percent start around $78.</p>
+<p>The median cartridge in Minnesota is $60. A quarter of them are under $52 and a quarter are over $65. The cheap tail runs well under $20 on clearance and small listings, and the top ten percent start around $78.</p>
 <p>If you are being quoted much past $65 for a single gram, you are in the top quarter of the market and you should have a reason for being there, like a live resin or rosin cart rather than a standard distillate. Under about $30 a gram, look closely at what it actually is before you assume you found a deal.</p>
 <p>Live prices are on the <a href="/products/cartridge/">cartridge page</a>, and the city pages like <a href="/cheapest-cartridge-minneapolis/">cheapest cartridges in Minneapolis</a> and <a href="/cheapest-cartridge-saint-paul/">Saint Paul</a> track the current bottom.</p>
 
 <h2>About one menu in four has no carts at all</h2>
-<p>This one catches people out. We can see live menus for 88 of the dispensaries we track, and 25 of those have no cartridge listed whatsoever. That is better than one in four. Flower is on essentially every menu in Minnesota. Carts are not, yet. For the shops where we cannot see a live menu, calling is the only way to know either way.</p>
+<p>This one catches people out. We can see live menus for 91 of the dispensaries we track, and 25 of those have no cartridge listed whatsoever. That is better than one in four. Flower is on essentially every menu in Minnesota. Carts are not, yet. For the shops where we cannot see a live menu, calling is the only way to know either way.</p>
 <p>So do not drive somewhere assuming. Check the shop's menu first, or use the <a href="/dispensaries/">directory</a> and <a href="/open-now/">open now</a> to find one that actually stocks the category before you get in the car. Outside the metro this matters even more, and it is the same coverage gap we found writing up <a href="/blog/duluth-dispensaries-minnesota/">Duluth</a>.</p>
 
 <h2>Who is actually making them</h2>
-<p>The cart shelf here is mostly homegrown. Off The Path has the most listings at 62, then Grasslandz at 51, then a rotating set of shop house brands and smaller producers like Nebula. A few national names have started to appear, but the supply chain is still overwhelmingly in state, so you will not find most of what you may know from Colorado or Michigan.</p>
+<p>The cart shelf here is mostly homegrown. Off The Path has the most listings at 63, then Grasslandz at 60, then a rotating set of shop house brands and smaller producers like Nebula. A few national names have started to appear, but the supply chain is still overwhelmingly in state, so you will not find most of what you may know from Colorado or Michigan.</p>
 <p>That is worth knowing for expectation setting. Selection is thinner than a mature market, prices are a bit higher, and the same few producers show up on most menus. It also means a cart at $70 here is not automatically premium, it may just be the only one the shop could get.</p>
 
 <h2>Battery, hardware and the honest caveats</h2>
@@ -1386,13 +1386,13 @@ module.exports = [
 <p>The upside of a two shop town is that comparison shopping takes about ninety seconds. Here is what our price data actually says about them, and it is not subtle.</p>
 
 <h2>The two shops</h2>
-<p><strong>Green Goods Rochester</strong>, 3456 E Circle Drive NE, (507) 481-3140, Sunday through Wednesday 10am to 8pm and Thursday through Saturday 10am to 9pm. This is the medical and adult-use location on the northeast side, part of the statewide Green Goods chain. It has 670 Google reviews at a 4.5 average, the deepest review record of any shop in this half of the state.</p>
-<p><strong>Hempire</strong>, 3135 Superior Dr NW Suite B, (507) 281-4367, over on the northwest side near the highway. Newer and much smaller, 59 reviews at a 4.5 average. It takes debit cards, which is rarer than it should be in this business, and does online ordering. Its posted hours keep moving around in our data, so call before you drive over.</p>
+<p><strong>Green Goods Rochester</strong>, 3456 E Circle Drive NE, (507) 481-3140, Sunday through Wednesday 10am to 8pm and Thursday through Saturday 10am to 9pm. This is the medical and adult-use location on the northeast side, part of the statewide Green Goods chain. It has 673 Google reviews at a 4.5 average, the deepest review record of any shop in this half of the state.</p>
+<p><strong>Hempire</strong>, 3135 Superior Dr NW Suite B, (507) 281-4367, over on the northwest side near the highway. Newer and much smaller, 60 reviews at a 4.4 average. It takes debit cards, which is rarer than it should be in this business, and does online ordering. Its posted hours keep moving around in our data, so call before you drive over.</p>
 <p>Both are listed on our <a href="/rochester-cannabis-dispensaries/">Rochester dispensary page</a>.</p>
 
 <h2>The flower gap is enormous</h2>
-<p>This is the whole reason to read this page. Every eighth of flower we have on file at Hempire is priced at $61.99. Not roughly, exactly, straight across the menu. Green Goods Rochester sells most of its eighths at $40, a few at $41.89, and the occasional one at $50.</p>
-<p>That is a $22 difference on the same unit, in the same city, ten minutes apart. For scale, the median eighth across every dispensary we track in Minnesota sits at $44.99, so Hempire is running roughly 38 percent above the state middle and Green Goods is below it.</p>
+<p>This is the whole reason to read this page. Every eighth of flower we have on file at Hempire is priced at $61.99. Not roughly, exactly, straight across the menu. Green Goods Rochester sells most of its eighths at $40, a few in the low forties, and the occasional one at $50.</p>
+<p>That is a $22 difference on the same unit, in the same city, ten minutes apart. For scale, the median eighth across every dispensary we track in Minnesota sits at $48, so Hempire is running roughly 29 percent above the state middle and Green Goods is well below it.</p>
 <p>You do not have to take our word for it. Hempire's own Google reviews include a one star that opens with that exact price, and a two star from someone who said the staff were lovely and the prices made her leave without buying anything. If flower is what you came for, you drive to E Circle Drive. Live numbers are on <a href="/cheapest-flower-rochester/">cheapest flower in Rochester</a>.</p>
 
 <h2>Hempire earns its keep on everything else</h2>
@@ -1406,7 +1406,7 @@ module.exports = [
 
 <h2>You are not paying an outstate premium here</h2>
 <p>Here is the surprise. Northern Minnesota shoppers reliably pay more than the metro does, which we wrote about in the <a href="/blog/duluth-dispensaries-minnesota/">Duluth guide</a>. Rochester does not work that way at the chain.</p>
-<p>Green Goods stocks 59 of the same products in Rochester and Minneapolis, and 48 of them carry the identical price in both cities. The chain sets a number and holds it across all eight of its Minnesota locations. Where Rochester does differ it is usually an edible, and usually the pricier side, so it is worth a look at <a href="/cheapest-edible-rochester/">cheapest edibles in Rochester</a> before you stock up on gummies.</p>
+<p>Green Goods stocks 95 of the same products in Rochester and Minneapolis, and 85 of them carry the identical price in both cities. The chain sets a number and holds it across all eight of its Minnesota locations. Where Rochester does differ it is usually an edible, and usually the pricier side, so it is worth a look at <a href="/cheapest-edible-rochester/">cheapest edibles in Rochester</a> before you stock up on gummies.</p>
 <p>The lesson is bigger than Rochester. At a chain, driving to another location to compare buys you nothing, because the price is the price. At independents it is worth real money, which is why the <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a> pays off most in the metro.</p>
 
 <h2>If you are willing to drive</h2>
