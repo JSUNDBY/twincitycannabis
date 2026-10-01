@@ -502,6 +502,48 @@
         </div>
     </section>
 
+    <!-- This Week on TCC — weekly editorial strip -->
+    <section class="section section-dark">
+        <div class="container">
+            <style>
+.tw-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:2rem}
+.tw-card{background:var(--bg-card);border-radius:12px;padding:1.5rem;display:flex;flex-direction:column;gap:.5rem}
+.tw-kicker{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;font-weight:600;color:var(--green)}
+.tw-title{font-size:1.05rem;font-weight:700;color:var(--text-primary);margin:0;line-height:1.3}
+.tw-body{font-size:.9rem;color:var(--text-secondary);line-height:1.6;margin:0;flex:1}
+.tw-link{font-size:.85rem;color:var(--green);font-weight:600;text-decoration:none;margin-top:.5rem}
+.tw-link:hover{text-decoration:underline}
+.tw-updated{font-size:.78rem;color:var(--text-muted);margin-top:1.5rem;text-align:right}
+            </style>
+            <div class="section-label fade-in">This Week on TCC</div>
+            <h2 class="section-title fade-in">What&rsquo;s worth knowing this week.</h2>
+            <div class="tw-strip stagger">
+
+                <article class="tw-card">
+                    <span class="tw-kicker">Strain Spotlight</span>
+                    <h3 class="tw-title">Animal Scout is tracking across Minnesota.</h3>
+                    <p class="tw-body">Animal Scout &mdash; an earthy, cookie-forward hybrid &mdash; is one of fall&rsquo;s most-stocked newcomers in the state. TCC now tracks it across more than a dozen Minnesota cities: Minneapolis, Saint Paul, Mankato, St. Cloud, and beyond. Compare prices and find which shops near you have it in stock.</p>
+                    <a class="tw-link" href="/animal-scout-minneapolis/">Find Animal Scout near you &rarr;</a>
+                </article>
+
+                <article class="tw-card">
+                    <span class="tw-kicker">Price Watch</span>
+                    <h3 class="tw-title">Minnesota issued 95 new cultivation licenses. Prices could ease soon.</h3>
+                    <p class="tw-body">The Office of Cannabis Management issued 95 new grow licenses this summer, putting nearly 500,000 plants into the state&rsquo;s tracking system. OCM says that surge is expected to ease consumer prices in the coming months &mdash; compare what Minnesota shops are charging right now while the market shifts.</p>
+                    <a class="tw-link" href="/answers/flower-prices-minnesota/">Compare flower prices statewide &rarr;</a>
+                </article>
+
+                <article class="tw-card">
+                    <span class="tw-kicker">Shop Smart</span>
+                    <h3 class="tw-title">Price per milligram beats price per gram, every time.</h3>
+                    <p class="tw-body">A $25 eighth at 22% THC gives you more active cannabinoid than a $20 eighth at 16%. Price per milligram of THC is the metric that matters &mdash; and TCC does the math for you. Use the compare view to check potency-adjusted pricing across nearby shops before you buy.</p>
+                    <a class="tw-link" href="#compare">Open the compare tool &rarr;</a>
+                </article>
+
+            </div>
+            <p class="tw-updated">Updated September 21, 2026</p>
+        </div>
+    </section>
     <!-- Featured Dispensaries — only renders when one or more shops have a paid tier.
          The "be the first" pitch fallback was removed in Phase 2: empty space beats
          a fake placeholder. /for-dispensaries handles the sales pitch. -->
