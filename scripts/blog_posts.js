@@ -1397,7 +1397,7 @@ module.exports = [
 
 <h2>Hempire earns its keep on everything else</h2>
 <p>A $22 gap on flower is not the whole story.</p>
-<p>Hempire carries ten THC beverages, from $7.99 singles up to $40 multipacks. Green Goods Rochester carries two, both at $25. If you are shopping for seltzers, and a lot of Minnesota is, that is not close. Hempire also lists four pre-rolls against Green Goods' two, and a wider spread of edible price points.</p>
+<p>Hempire carries nine THC beverages, from $7.99 singles up to $40 multipacks. Green Goods Rochester carries two, both at $25. If you are shopping for seltzers, and a lot of Minnesota is, that is not close. Hempire also runs a wider spread of edible price points, from $4.39 up to $34.99. Pre-rolls are the one place Green Goods pulls ahead on selection, seventeen listings against Hempire's four.</p>
 <p>It posts the best service score in town as well, and review after review says the same thing: the staff take real time with you. That is worth something if this is new to you, and our <a href="/blog/first-time-dispensary-guide-minnesota/">first time guide</a> covers what to ask at the counter.</p>
 
 <h2>Call ahead about carts</h2>
@@ -1474,7 +1474,7 @@ module.exports = [
   {
     slug: 'mankato-dispensaries-minnesota',
     title: 'Mankato dispensaries: a $25 gap on an eighth, in opposite directions',
-    dek: 'Two shops you can walk into, and the cheaper one depends entirely on what you came for. Flower at one, edibles at the other, and the half ounce currently beats the ounce.',
+    dek: 'Two shops you can walk into, and the cheaper one depends entirely on what you came for. Flower at one, edibles at the other, and a quarter that costs exactly the same per gram as an eighth.',
     date: '2026-10-26',
     updated: '2026-10-26',
     category: 'Buying smart',
@@ -1488,16 +1488,16 @@ module.exports = [
 <p>There is a third entry on our <a href="/mankato-cannabis-dispensaries/">Mankato dispensary page</a>, Crafty Canna Mist LLC on Sioux Road. It shares Voyager's phone number and website, so it reads as the same operation under its license name rather than a third storefront. Shop Mankato as a two shop town.</p>
 
 <h2>Flower: a $25 gap on the same unit</h2>
-<p>This is the headline. The eighths we have on file at RISE Mankato run a median of $40 across 29 listings, from $32 up to $50. Voyager's eighths sit at a median of $65, from $55 to $70.</p>
+<p>This is the headline. The eighths we have on file at RISE Mankato run a median of $40 across 30 listings, from $32 up to $50. Voyager's eighths sit at a median of $65, from $45 up to $70.</p>
 <p>The median eighth across all 152 dispensaries we track in Minnesota is $48. So RISE is meaningfully under the state middle and Voyager is well over it, in the same city. If flower is the errand, that is not a close call. Live numbers are on <a href="/cheapest-flower-mankato/">cheapest flower in Mankato</a>.</p>
 
-<h2>The half ounce is currently the sweet spot</h2>
-<p>Worth knowing if you buy in volume. At RISE the ladder runs $40 for an eighth, a median of $80 for a seven gram, $122.50 for a half ounce and $275 for a full ounce.</p>
-<p>Run the per gram math and the half ounce wins. It lands around $8.75 a gram, against roughly $9.82 for the ounce and $11.43 for the eighth. That is backwards from how it usually works, because normally the biggest unit is the cheapest per gram, which is the pattern in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a>. Here the ounce listings are thin and priced high enough that the half ounce beats them. Do the arithmetic on the day rather than trusting this paragraph, because four ounce listings is a small sample and it will move.</p>
+<h2>The size ladder barely pays until you reach an ounce</h2>
+<p>Worth knowing if you buy in volume. At RISE the ladder runs $40 for an eighth, a median of $80 for a seven gram, $150 for a half ounce and $275 for a full ounce.</p>
+<p>Run the per gram math and the ladder is flatter than it should be. The eighth works out to $11.43 a gram. The quarter works out to $11.43 a gram. Identical. Buying twice as much buys you nothing at that step, which is not how the size ladder is supposed to work and is the opposite of the pattern in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a>. The half ounce finally drops you to $10.71 and the ounce to $9.82, so the only step that genuinely pays here is going all the way to an ounce. Do the arithmetic on the day rather than trusting this paragraph, because the ounce and half ounce listings are thin and these numbers move week to week.</p>
 
 <h2>Voyager owns the edible shelf</h2>
-<p>Flip the story and Voyager wins clean. Its edibles run a median of $11, from $3 to $60. RISE's run a median of $25, from $8 to $110. The state median is $20.</p>
-<p>Topicals go the same way, two listings at $5 and $10 against a $28 median at RISE. A microbusiness making its own product can price like that and a national chain working through distribution cannot. If gummies or a balm are the reason you are going out, the trip to Madison Avenue pays for itself. Current numbers are on <a href="/cheapest-edible-mankato/">cheapest edibles in Mankato</a>, and our <a href="/blog/edibles-dosing-guide-minnesota/">edibles dosing guide</a> covers how to actually take them.</p>
+<p>Flip the story and Voyager wins clean. Its edibles run a median of $12, from $3 to $60. RISE's run a median of $25, from $8 to $110. The state median is $20.</p>
+<p>Topicals go the same way, two listings at $5 and $10 against a $37.50 median at RISE. A microbusiness making its own product can price like that and a national chain working through distribution cannot. If gummies or a balm are the reason you are going out, the trip to Madison Avenue pays for itself. Current numbers are on <a href="/cheapest-edible-mankato/">cheapest edibles in Mankato</a>, and our <a href="/blog/edibles-dosing-guide-minnesota/">edibles dosing guide</a> covers how to actually take them.</p>
 <p>Drinks are a wash. Both shops land near the $7 state median, but RISE lists ten against Voyager's two, so selection goes to RISE. Our <a href="/blog/thc-drinks-minnesota/">THC drinks guide</a> has what to look for on the label.</p>
 
 <h2>Carts and pre-rolls both run high here</h2>
@@ -1513,7 +1513,7 @@ module.exports = [
 <p>Forty six miles east is <a href="/albert-lea-cannabis-dispensaries/">Albert Lea</a>, which has six dispensaries serving 18,000 people and all the price pressure that comes with it. We wrote that town up in the <a href="/blog/albert-lea-dispensaries-minnesota/">Albert Lea guide</a>. If you are making a real trip of it, that is where the competition actually lives.</p>
 
 <h2>The short version</h2>
-<p>Flower at RISE, edibles and topicals at Voyager, call Voyager about hours first, and check the per gram math before you size up, because right now the half ounce beats the ounce. Prices move constantly, so look at the <a href="/mankato-cannabis-dispensaries/">Mankato page</a> the morning you go, and the <a href="/tax-calculator/">tax calculator</a> for the real out the door number.</p>
+<p>Flower at RISE, edibles and topicals at Voyager, call Voyager about hours first, and check the per gram math before you size up, because a quarter at RISE costs the same per gram as an eighth. Prices move constantly, so look at the <a href="/mankato-cannabis-dispensaries/">Mankato page</a> the morning you go, and the <a href="/tax-calculator/">tax calculator</a> for the real out the door number.</p>
 `,
     related: [
       { href: '/mankato-cannabis-dispensaries/', label: 'Mankato dispensaries' },
@@ -1541,23 +1541,23 @@ module.exports = [
 <p>Geography matters here. Green Goods and Loon Leaf are less than a mile apart on the west side near Highway 10. Blaine Dispensary is about six miles east. All three are on our <a href="/blaine-cannabis-dispensaries/">Blaine dispensary page</a>.</p>
 
 <h2>The chain wins flower, clearly</h2>
-<p>Green Goods eighths run a median of $41.60 across 19 listings, mostly $40 with a few at $50. Blaine Dispensary eighths run a median of $55 across 17 listings, from $40 up to $61.</p>
+<p>Green Goods eighths run a median of $40 across 19 listings, mostly $40 with a few at $50. Blaine Dispensary eighths run a median of $56 across 16 listings, from $40 up to $61.</p>
 <p>The state median eighth is $48, so the chain is under it and the independent is over it, which is the reverse of what most people assume walking in. That is a $13 swing on the median eighth, six miles apart. Live numbers are on <a href="/cheapest-flower-blaine/">cheapest flower in Blaine</a>.</p>
 <p>Green Goods takes the pre-roll aisle too, 11 listings at a $12 median against 20 listings at $17 next door, and a $17 median statewide. Cheap pre-rolls at a chain is unusual enough to be worth the drive if that is your thing.</p>
 <p>These two do not stock a single identical product between them in our data, so there is no item to item price match to be had, only category comparisons like these. The lesson holds anyway: do not assume the independent is cheaper, and do not assume the chain is. Two minutes on the <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a> beats any rule of thumb, including ours.</p>
 
 <h2>The independent owns drinks and edibles</h2>
 <p>Now it flips, and hard.</p>
-<p>Blaine Dispensary lists ten THC beverages at a median of $6.99, starting at $5.99. Green Goods Blaine lists two, both at $25. The state median is $7. If you are shopping for seltzers, and a lot of Minnesota is, that is not a comparison, it is a rout. Same story on edibles: $19.50 median at Blaine Dispensary against $31 at Green Goods, with a $20 state median. See <a href="/cheapest-edible-blaine/">cheapest edibles in Blaine</a> and <a href="/cheapest-beverage-blaine/">cheapest drinks in Blaine</a>.</p>
-<p>One more to watch. Green Goods tinctures run a $76.50 median, from $49 to $160, against a $40 median statewide. If a tincture is what you want, price it elsewhere first. Our <a href="/blog/cannabis-tinctures-minnesota/">tincture guide</a> explains what you are paying for.</p>
+<p>Blaine Dispensary lists ten THC beverages at a median of $6.99, starting at $5.99. Green Goods Blaine lists two, both at $25. The state median is $7. If you are shopping for seltzers, and a lot of Minnesota is, that is not a comparison, it is a rout. Same story on edibles: $19.50 median at Blaine Dispensary against $32 at Green Goods, with a $20 state median. See <a href="/cheapest-edible-blaine/">cheapest edibles in Blaine</a> and <a href="/cheapest-beverage-blaine/">cheapest drinks in Blaine</a>.</p>
+<p>One more to watch. Green Goods tinctures run a $94 median, from $49 to $189, against a $45 median statewide. If a tincture is what you want, price it elsewhere first. Our <a href="/blog/cannabis-tinctures-minnesota/">tincture guide</a> explains what you are paying for.</p>
 
 <h2>Carts are the weak spot in this town</h2>
-<p>Green Goods Blaine shows exactly one cartridge in our current data, at $42. Blaine Dispensary has six, at a $65 to $89 spread and a $70 median, against a $60 median statewide. Loon Leaf we cannot see at all.</p>
+<p>Green Goods Blaine shows no cartridges at all in our current data. Blaine Dispensary has six, at a $65 to $89 spread and a $70 median, against a $60 median statewide. Loon Leaf we cannot see at all.</p>
 <p>So Blaine has one cheap cart, a handful of pricey ones, and no real selection anywhere. Call ahead if that is the trip, because a quarter of the menus we track have no carts on them whatsoever, which we went through in the <a href="/blog/vape-cartridges-minnesota/">cartridge buying guide</a>. Six miles southwest, <a href="/brooklyn-park-cannabis-dispensaries/">Brooklyn Park</a> is a better bet.</p>
 
 <h2>The ounce ladder at Green Goods is steep</h2>
-<p>If you buy in volume, this is the most useful number on the page. Green Goods Blaine runs a median of $41.60 for an eighth, $70 for a seven gram, $120 for a half ounce and $220 for an ounce.</p>
-<p>That is about $11.89 a gram at the eighth and about $7.86 at the ounce. Buying an ounce instead of eight eighths cuts roughly a third off the per gram price, which is a steeper ladder than most Minnesota shops offer and is the single cheapest way to buy flower in this part of the metro right now. Only worth it if you will actually get through it, so read the <a href="/blog/how-to-store-cannabis-minnesota/">storage guide</a> first, especially heading into furnace season.</p>
+<p>If you buy in volume, this is the most useful number on the page. Green Goods Blaine runs a median of $40 for an eighth, $70 for a seven gram, $120 for a half ounce and $220 for an ounce.</p>
+<p>That is about $11.43 a gram at the eighth and about $7.86 at the ounce. Buying an ounce instead of eight eighths cuts roughly a third off the per gram price, which is a steeper ladder than most Minnesota shops offer and is the single cheapest way to buy flower in this part of the metro right now. Only worth it if you will actually get through it, so read the <a href="/blog/how-to-store-cannabis-minnesota/">storage guide</a> first, especially heading into furnace season.</p>
 
 <h2>Ten minutes gets you a lot more</h2>
 <p>Blaine sits in the densest cluster of dispensaries outside Minneapolis. <a href="/fridley-cannabis-dispensaries/">Fridley</a> is three miles south with two shops, <a href="/anoka-cannabis-dispensaries/">Anoka</a> is seven miles west, and <a href="/brooklyn-park-cannabis-dispensaries/">Brooklyn Park</a> is six miles southwest with Urban Green and a RISE, which we covered in the <a href="/blog/brooklyn-park-dispensaries-minnesota/">Brooklyn Park guide</a>. Mounds View and New Brighton each add one within a few miles.</p>
@@ -1570,6 +1570,55 @@ module.exports = [
       { href: '/blaine-cannabis-dispensaries/', label: 'Blaine dispensaries' },
       { href: '/cheapest-flower-blaine/', label: 'Cheapest flower in Blaine' },
       { href: '/blog/brooklyn-park-dispensaries-minnesota/', label: 'Brooklyn Park guide' },
+    ],
+  },
+
+  {
+    slug: 'minnesota-cannabis-numbers-october-2026',
+    title: 'Minnesota cannabis by the numbers: the price of an eighth finally moved',
+    dek: 'For two months the median eighth cost fifty dollars. This month it is $48, and seventeen shops now sell a $40 eighth. Sixteen of them are chains.',
+    date: '2026-10-12',
+    updated: '2026-10-12',
+    category: 'Market watch',
+    read: 5,
+    body: `
+<p>Once a month we write down what our own data says about Minnesota's legal market. No predictions, just what is on the shelves and what it costs, from our tracking as of mid October 2026. Where we could not verify a number we left it out.</p>
+
+<h2>The price of an eighth finally moved</h2>
+<p>For two months straight the median eighth of flower in Minnesota was fifty dollars. In August it was right around $50. In September it was $49.97. Today it is $48.</p>
+<p>Two dollars is not a crash. But it is the first time the middle of this market has moved at all, and where it moved from matters more than how far. The ninetieth percentile eighth was $60 in September and is $56 today. The tenth percentile has not budged off $40 all year.</p>
+<p>The floor is holding and the ceiling is sagging. The honest range for an ordinary eighth is now forty to fifty six dollars. The rest of the medians sit on our <a href="/minnesota-cannabis-prices/">price page</a>.</p>
+
+<h2>Seventeen shops sell a $40 eighth, and sixteen are chains</h2>
+<p>The statewide median is the least useful number here, because nobody shops statewide.</p>
+<p>Seventeen dispensaries run a median eighth of exactly $40. Sixteen of them are RISE or Green Goods locations. The only one that is not is Bloom Wellness in St. Paul.</p>
+<p>Now the other end. The four priciest shops for an ordinary eighth are Voyager Cannabis Co in Mankato at a $65 median, Hempire in Rochester which prices every eighth we can see at $61.99, and Flame &amp; Flora in Prior Lake and Nativecare in West St. Paul, both at $60. All four are independents.</p>
+<p>That cuts against the usual instinct, so we will say it plainly. On flower, right now, the chains are the cheap ones and it is not close. Mankato holds both ends of it: RISE runs a $40 median eighth and Voyager runs $65, in the same town, and nothing about either storefront tells you which one you walked into until you read a price tag. The <a href="/mankato-cannabis-dispensaries/">Mankato page</a> and <a href="/cheapest-flower-mankato/">cheapest flower in Mankato</a> have the live numbers.</p>
+
+<h2>Chains run one price list. Independents run 167 of them.</h2>
+<p>Last month we found most products sold at three or more shops were priced identically, and said the cause was chains arriving, not prices converging. Another month of data makes that sharper.</p>
+<p>Of the 621 products carried at three or more shops, 357 are priced identically everywhere they appear. RISE has eight Minnesota locations, and of the 283 products it stocks at three or more of its own stores, 232 are the same price at every one. Green Goods also has eight, and 188 of its 227 match. Two statewide price lists run off a spreadsheet, and that is most of the convergence.</p>
+<p>Take those two out and only independents are left. Of the 167 products carried at three or more independent shops, eleven are priced the same at all of them. A Brownie Scout .35 gram sits on eleven menus from $31 to $65.</p>
+<p>So at a chain, comparing locations is a waste of your afternoon. At independents it is the highest paid ten minutes in this hobby: the median gap on a product that varies at all is $5, and the tail runs to $27. That is what the <a href="/price-spread-index/">price spread index</a> is for.</p>
+
+<h2>146 of the 152 shops we track are confirmed open</h2>
+<p>We hold 152 dispensary records and 146 clear our bar for confirmed operating, which is the number the site shows you. Last month those were 156 and 138. Four records came out because they did not hold up and eight more shops started showing real menus or hours, so the gap between tracked and confirmed open went from eighteen shops to six.</p>
+<p>Those last six are all single license holders in smaller towns, two of them in Albert Lea, with no menu we can read yet. That is the honest edge of what we can see.</p>
+<p>Of the 146 open shops, 75 are in the metro and 71 are in greater Minnesota across 88 cities, a near even split that has held every month we have measured it. Behind all of it sits 7,091 products from 90 shops with readable menus and just under 11,000 priced listings. <a href="/dispensaries/">The directory</a> has every shop and <a href="/open-now/">open now</a> says who is selling this minute.</p>
+
+<h2>Carts doubled again and the labeling got worse</h2>
+<p>In August we counted 49 cartridges statewide. In September, 242. Today, 454. Still the fastest growing shelf on the site.</p>
+<p>The good news is that the size penalty is shrinking. The median half gram is $58 and the median full gram is $60.75, where last month that gap was closer to six dollars. Per gram that is about $116 against $61, so the full gram is roughly half price for the same oil.</p>
+<p>The bad news is that 81 cartridge listings show no size at all, up from 41 last month. The shelf is filling faster than anyone's menu software can track. Check the size before the price, every time. The method is in <a href="/blog/vape-cartridges-minnesota/">the cartridge buying guide</a>, or <a href="/products/cartridge/">browse carts here</a>.</p>
+
+<h2>What we would actually do with this</h2>
+<p>Drop the fifty dollar rule of thumb and carry $48. More than $56 for an ordinary eighth puts you in the top tenth of this market, so know what you are paying for. Check the size on every cart. And if flower is most of your basket, price a chain before you assume the shop down the road is the better deal, because this month the data says otherwise.</p>
+<p>The fundamentals are in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a> and <a href="/blog/thc-percentage-myth-minnesota/">why the THC number is a bad filter</a>. We will run these again next month and tell you what moved.</p>
+`,
+    related: [
+      { href: '/price-spread-index/', label: 'Price spread index' },
+      { href: '/minnesota-cannabis-prices/', label: 'Minnesota price medians' },
+      { href: '/blog/how-to-save-money-minnesota-dispensaries/', label: 'How to actually save money' },
     ],
   },
 ];
