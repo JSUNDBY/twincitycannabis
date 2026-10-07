@@ -255,6 +255,20 @@ def main():
         # (Weedmaps vs the OCM license + dispensary.shop entry); the site showed
         # the shop twice in every price comparison. Found 2026-10-07.
         "twin-cities-high": "twin-cities-high-llc",
+        # Empty OCM-license twins of a shop that is already listed, each with the
+        # same street address, phone and Google place. Dropped 2026-10-07 after a
+        # per-pair check; left alone on purpose: Lake Leaf, Legit/Dinky Dope,
+        # Wildflower, Pot Mama's (separate locations), High Fidelity/Green Grass
+        # (different business, shared building), Voyager/Crafty Canna, Matchbox/
+        # Smoking Tree, Splitrock (different addresses, need a human look).
+        "adhi-enterprise-llc": "cali-cannabis-dispensary-uptown",
+        "deep-roots-llc": "deep-roots-dispensary-1",
+        "flipside-dispensary-music": "flipside-dispensary-and-music",
+        "green-apple-cannabis-1": "green-apple-cannabis",
+        "grounded-gardens-llc": "grounded-gardens",
+        "ouidhaus-llc": "la-canna",
+        "serene-acres-dispensary-inc": "pipestone-recreational-dispensary",
+        "abc-cannabis-co-llp": "mn-roots-alexandria",
     }
     before = len(all_dispensaries)
     all_dispensaries = [d for d in all_dispensaries if d.get("id") not in DUPLICATE_OF]

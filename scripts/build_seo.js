@@ -597,7 +597,7 @@ const footer = `</main>
   <p><strong class="footer-brand">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Minnesota dispensary.</p>
   <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a></p>
   <p><a href="/minnesota-cannabis/">Cannabis in Minnesota</a> &middot; <a href="/minnesota-cannabis-prices/">MN Cannabis Prices</a> &middot; <a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/price-spread-index/">Price Spread Index</a> &middot; <a href="/minnesota-price-trends/">Price Trends</a> &middot; <a href="/strongest-cannabis-minnesota/">Strongest Flower</a> &middot; <a href="/new-cannabis-minnesota/">New Arrivals</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
-  <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/for-brands/">For Brands</a> &middot; <a href="/founding-partners/">Founding Partners</a> &middot; <a href="https://venmo.com/u/Josh-Sundby" rel="noopener">Support TCC</a></p>
+  <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/#for-dispensaries-claim">Add your shop</a> &middot; <a href="/for-brands/">For Brands</a> &middot; <a href="/founding-partners/">Founding Partners</a> &middot; <a href="https://venmo.com/u/Josh-Sundby" rel="noopener">Support TCC</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
   <p class="tcc-ad-warning">Listings marked Featured or Sponsored are paid placements. ${AD_WARNING}</p>
 </footer>
@@ -2813,6 +2813,27 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
     <p class="event-desc">The classic craft-beer festival, now pouring hemp-derived THC beverages and special brewery collaborations alongside the taps. Unlimited tastings and live entertainment on the river.</p>
     <p class="event-audience">Good for the drinks-curious &mdash; the most Minnesota way to try THC beverages in one afternoon.</p>
     <a class="event-cta" href="https://www.minneapolis.org/things-to-do/cannabis/events/" rel="noopener" target="_blank">Event details &rarr;</a>
+  </div>
+</article>
+
+<!-- OCM Resource and Hiring Fair -->
+<article class="event-card" data-event-date="2026-10-22">
+  <div class="event-date">
+    <div class="event-date-month">Oct</div>
+    <div class="event-date-day">22</div>
+    <div class="event-date-year">2026</div>
+    <span class="event-countdown" data-countdown>&nbsp;</span>
+  </div>
+  <div class="event-body">
+    <div class="event-type"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Hiring Fair</div>
+    <div class="event-title">OCM Resource and Hiring Fair</div>
+    <div class="event-meta">
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/></svg> Thu 1:00 &ndash; 6:00 PM</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></svg> Robert J. Jones UROC, 2001 Plymouth Ave N, Minneapolis</span>
+    </div>
+    <p class="event-desc">Minnesota&rsquo;s first Resource and Hiring Fair, hosted by the state&rsquo;s Office of Cannabis Management. It connects licensed cannabis businesses, ancillary service providers and workforce partners with job seekers from social equity eligible communities.</p>
+    <p class="event-audience">Good for job seekers and for anyone hiring in Minnesota&rsquo;s cannabis industry.</p>
+    <a class="event-cta" href="https://mn.gov/ocm/development/workforce/hiring-fairs.jsp" rel="noopener" target="_blank">Event details &rarr;</a>
   </div>
 </article>
 
