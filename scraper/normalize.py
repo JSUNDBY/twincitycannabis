@@ -281,7 +281,12 @@ def categorize_by_name(name, brand='', original_category='', weight='', trust_so
 
     # 11) Concentrate WEAK — just "live rosin" / "rosin" / "hash" without
     # a beverage/edible context. Probably an actual extract.
-    if _PATTERNS['CONCENTRATE_WEAK'].search(text):
+    # A platform with a real taxonomy already told us this is an edible,
+    # drink, tincture or topical, and "live resin" / "rosin" in a flavor name
+    # ("Orange Creamsicle Live Resin" gummies, 2026-10-07 My Dealer) says what
+    # is in it, not what it is. Only guess concentrate when the shelf can't say.
+    if _PATTERNS['CONCENTRATE_WEAK'].search(text) and not (
+            trust_source and (original_category or '').strip().lower() in ('edible', 'beverage', 'tincture', 'topical')):
         return 'concentrate'
 
     # 12) Explicit "Flower" / "Bud" keyword

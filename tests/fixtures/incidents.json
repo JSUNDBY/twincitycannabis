@@ -12,7 +12,10 @@
     {"name": "Peach Rings 100mg", "shelf": "flower", "expect": "edible", "incident": "guard must not keep a dosed edible on a flower shelf"},
     {"name": "Live Rosin Gummies 5mg - 10ct", "shelf": "concentrate", "expect": "edible", "incident": "normalize round 1"},
     {"name": "Campfire Cannabis | Donny Burger | 1/8oz Flower", "shelf": "flower", "expect": "flower", "incident": "1/8oz matched the 8oz beverage rule"},
-    {"name": "Wellness Drops 30ml", "shelf": "tincture", "trust_source": true, "expect": "tincture", "incident": "2026-09-15 trusted platforms keep the store's own shelf"}
+    {"name": "Wellness Drops 30ml", "shelf": "tincture", "trust_source": true, "expect": "tincture", "incident": "2026-09-15 trusted platforms keep the store's own shelf"},
+    {"name": "Orange Creamsicle Live Resin", "shelf": "edible", "trust_source": true, "expect": "edible", "incident": "2026-10-07 My Dealer: Granny's gummies named for live resin were published as concentrates; the same bug hid 12 edibles and drinks across Carrot, Blaze and Sweed"},
+    {"name": "Blast Off - ROSIN Infused 10mg THC Beverages", "shelf": "beverage", "trust_source": true, "expect": "beverage", "incident": "2026-10-07 same trap, Granny's drinks"},
+    {"name": "Live Rosin Badder 1g", "shelf": "concentrate", "trust_source": true, "expect": "concentrate", "incident": "the fix must not stop real concentrates on a concentrate shelf"}
   ],
 
   "carrot_junk": [

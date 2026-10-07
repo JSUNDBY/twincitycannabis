@@ -12,7 +12,7 @@ To add a new Sweed-powered dispensary:
   2. The storeId is in the page's embedded state ("storeId": NNN) or any
      API request body. Add {slug: {base, store_id}} to SWEED_STORES below.
 
-Currently: Legit Cannabis (Rosemount / "South Metro")
+Currently: Legit Cannabis (Rosemount / "South Metro"), My Dealer (Bayport)
 
 Output: scraper/data/sweed_products.json
 """
@@ -33,6 +33,16 @@ SWEED_STORES = {
         "name": "Legit Cannabis (Rosemount)",
         "base": "https://shop.mnlegitcannabis.com",
         "store_id": 434,
+    },
+    # Added 2026-10-07 after the owner (Brandon Van Asten) gave written
+    # permission by email to read the public menu. His storefront runs on
+    # Sweed's newer web-ui-prime platform: the shared API host answers the same
+    # GetProductList POST and the storeId (from the page's embedded state)
+    # picks the store. His own domain 404s on /_api, so base is the shared host.
+    "my-dealer-bayport": {
+        "name": "My Dealer (Bayport)",
+        "base": "https://web-ui-prime.sweedpos.com",
+        "store_id": 931,
     },
 }
 
