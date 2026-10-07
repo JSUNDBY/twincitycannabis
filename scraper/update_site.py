@@ -251,6 +251,10 @@ def main():
         "the-cannabis-co-4": "the-cannabis-co",
         "feelin-mn-llc": "feelin-mn",
         "black-bear-dispensary": "black-bear-weed-dispensary-winona",
+        # Same Google place, address and 15 identical menu items under two ids
+        # (Weedmaps vs the OCM license + dispensary.shop entry); the site showed
+        # the shop twice in every price comparison. Found 2026-10-07.
+        "twin-cities-high": "twin-cities-high-llc",
     }
     before = len(all_dispensaries)
     all_dispensaries = [d for d in all_dispensaries if d.get("id") not in DUPLICATE_OF]

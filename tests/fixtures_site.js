@@ -93,6 +93,23 @@ if (dataArg > 0 && filters) {
   if (all && seen / all < inv.min_site_visible_share) {
     failures.push(`invariant: the site filter hides ${all - seen} of ${all} listings (${Math.round((1 - seen / all) * 100)}%)`);
   }
+
+  // The same shop listed twice (a Weedmaps entry and an OCM-license entry, say)
+  // shows twice in every price comparison and doubles its reviews. Two listings
+  // at one street address that BOTH carry products is that bug; an empty twin is
+  // a separate, quieter cleanup. Found 2026-10-07 (Twin Cities High).
+  const offersBy = {};
+  for (const p of T.products) for (const s of Object.keys(p.prices || {})) offersBy[s] = (offersBy[s] || 0) + 1;
+  const addrKey = (d) => String(d.address || '').toLowerCase().split(',')[0]
+    .replace(/[.#]/g, ' ').replace(/\b(street)\b/g, 'st').replace(/\b(avenue)\b/g, 'ave')
+    .replace(/\b(suite|ste|unit)\s*\w+/g, '').replace(/\s+/g, ' ').trim() + '|' + String(d.city || '').toLowerCase().replace(/\./g, '');
+  const byAddr = {};
+  for (const d of T.dispensaries) {
+    if ((offersBy[d.id] || 0) > 0 && String(d.address || '').length > 8) (byAddr[addrKey(d)] = byAddr[addrKey(d)] || []).push(d.id);
+  }
+  for (const ids of Object.values(byAddr)) {
+    if (ids.length > 1) failures.push(`invariant: ${ids.join(' and ')} share an address and both carry products (a duplicate listing)`);
+  }
 }
 
 for (const f of failures) console.log('FAIL ' + f);
