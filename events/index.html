@@ -391,6 +391,13 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
 .event-meta span{display:inline-flex;align-items:center;gap:.3rem;white-space:nowrap}
 .event-desc{color:#b8bcc4;font-size:.95rem;line-height:1.55;margin:.4rem 0}
 .event-audience{color:#7a7f88;font-size:.8rem;font-style:italic;margin:.5rem 0 .9rem}
+.event-card-featured{border-color:rgba(34,197,94,.55) !important;box-shadow:0 0 60px rgba(34,197,94,.12)}
+.event-badges{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.7rem}
+.event-badge{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:.28rem .6rem;border-radius:999px;border:1px solid rgba(34,197,94,.45);color:#22c55e;background:rgba(34,197,94,.08)}
+.event-badge.solid{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;border-color:transparent}
+.event-actions{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.event-cta.alt{background:none !important;box-shadow:none !important;border:1px solid #355544;color:#f5f6f8 !important}
+.event-card-featured .tcc-ad-warning{margin-top:1rem}
 .event-cta{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.1rem;
   background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff !important;font-weight:700;
   font-size:.85rem;border-radius:10px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;
@@ -519,6 +526,33 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
     <div class="events-hero-stat"><span class="events-hero-stat-num">Free</span><span class="events-hero-stat-label">Always</span></div>
   </div>
 </section>
+
+<!-- CannaFest Fall: Featured Event (partner), pinned above the list -->
+<article class="event-card event-card-featured" data-event-date="2026-11-12">
+  <div class="event-date">
+    <div class="event-date-month">Nov</div>
+    <div class="event-date-day">12</div>
+    <div class="event-date-year">2026</div>
+    <span class="event-countdown" data-countdown>&nbsp;</span>
+  </div>
+  <div class="event-body">
+    <div class="event-badges"><span class="event-badge solid">Featured event</span><span class="event-badge">Partner event</span></div>
+    <div class="event-type"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 22h8"/><path d="M7 10h10"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-5-8-4.5 4-5 6-5 8a5 5 0 0 0 5 5z"/></svg> Product Showcase</div>
+    <div class="event-title">CannaFest Minnesota &mdash; Fall Edition</div>
+    <div class="event-meta">
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/></svg> Thu 6:00 &ndash; 9:00 PM</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></svg> The Lowlands, 160 Wabasha St S, St. Paul</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M13 5v14"/></svg> $40 plus tax and fees</span>
+    </div>
+    <p class="event-desc">Now in its sixth year. Meet 50+ Minnesota and national cannabis and hemp brands, sample products, and shop on-site. Hosted by Minnesota Monthly, presented by Island Pe&#382;i.</p>
+    <p class="event-audience">21+ with valid ID. Good for consumers who want to sample widely and talk to the people who make the products.</p>
+    <div class="event-actions">
+      <a class="event-cta" href="https://www.cannafestmn.com/?utm_source=twincitycannabis&utm_medium=partner&utm_campaign=cannafest-fall-2026" rel="noopener sponsored" target="_blank">Get tickets &rarr;</a>
+      <a class="event-cta alt" href="/cannafest/">Plan your night</a>
+    </div>
+    <p class="tcc-ad-warning tcc-ad-warning--unit">Partner event. Warning: Cannabis products are not for use by anyone under the age of 21. Cannabis use may cause drowsiness, affect focus, reaction time, and decision-making.</p>
+  </div>
+</article>
 
 <div class="events-section-head">
   <h2>Upcoming events</h2>
@@ -667,28 +701,6 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
   </div>
 </article>
 
-<!-- CannaFest Fall -->
-<article class="event-card" data-event-date="2026-11-12">
-  <div class="event-date">
-    <div class="event-date-month">Nov</div>
-    <div class="event-date-day">12</div>
-    <div class="event-date-year">2026</div>
-    <span class="event-countdown" data-countdown>&nbsp;</span>
-  </div>
-  <div class="event-body">
-    <div class="event-type"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 22h8"/><path d="M7 10h10"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-5-8-4.5 4-5 6-5 8a5 5 0 0 0 5 5z"/></svg> Product Showcase</div>
-    <div class="event-title">CannaFest &mdash; Fall Edition</div>
-    <div class="event-meta">
-      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/></svg> Thu 6:00 &ndash; 9:00 PM</span>
-      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></svg> The Lowlands, 160 Wabasha St S, St. Paul</span>
-      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M13 5v14"/></svg> $40</span>
-    </div>
-    <p class="event-desc">The fall edition of the twice-yearly showcase: 45+ Minnesota hemp businesses sampling THC and CBD foods, beverages, and wellness products in a meet-the-makers format.</p>
-    <p class="event-audience">Good for consumers who want to sample widely and talk to the people who make the products.</p>
-    <a class="event-cta" href="https://www.minnesotamonthly.com/cannafest/" rel="noopener" target="_blank">Get tickets &rarr;</a>
-  </div>
-</article>
-
 <div class="events-submit-cta" id="event-submit">
   <div class="events-submit-cta-text" style="flex:1 1 100%">
     <p class="events-submit-cta-title">Got an event? Tell us about it.</p>
@@ -745,7 +757,7 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
   <p>Use the <a href="#event-submit">submission form above</a> and we&rsquo;ll add it.</p>
 
   <h2 style="margin-top:2rem">Want to partner on an event?</h2>
-  <p>Twin City Cannabis tracks 7,135+ products across 144 dispensaries with real-time pricing. If you&rsquo;re organizing a cannabis event in Minnesota and want a data partner or media coverage, <a href="/contact/">get in touch</a>.</p>
+  <p>Twin City Cannabis tracks 7,133+ products across 144 dispensaries with real-time pricing. If you&rsquo;re organizing a cannabis event in Minnesota and want a data partner or media coverage, <a href="/contact/">get in touch</a>.</p>
 </div>
 
 <script>

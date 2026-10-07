@@ -1,6 +1,6 @@
 {
- "merged_groups": 273,
- "absorbed": 429,
+ "merged_groups": 274,
+ "absorbed": 430,
  "groups": [
   {
    "key": "&shine|edible|100mg|10 blackberry pk",
@@ -214,12 +214,6 @@
      ]
     },
     {
-     "name": "RYTHM 3.5g Durban Z (S)",
-     "shops": [
-      "frostbite-dispensary"
-     ]
-    },
-    {
      "name": "Durban Z",
      "shops": [
       "leafline-labs-eagan",
@@ -244,7 +238,7 @@
      ]
     }
    ],
-   "shops_after": 13
+   "shops_after": 12
   },
   {
    "key": "rythm|flower|3.5g|bananaconda premium",
@@ -3328,6 +3322,22 @@
    "shops_after": 3
   },
   {
+   "key": "minneleaf|edible|25mg|cbn nite peaceful pineapple sleep",
+   "kept": {
+    "name": "Minneleaf Nite CBN, CBD Sleep Gummies - Peaceful Pineapple 25mg CBD 10mg CBN",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "NITE Peaceful Pineapple Sleep | Gummy | 25mg CBD / 10mg CBN",
+     "shops": [
+      "green-rose"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "campfire cannabis|pre-roll|1g|soap",
    "kept": {
     "name": "Soap 1g Preroll",
@@ -3358,6 +3368,34 @@
     }
    ],
    "shops_after": 2
+  },
+  {
+   "key": "campfire cannabis|flower|3.5g|sherbert sunset",
+   "kept": {
+    "name": "Sunset Sherbert 3.5G",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Sunset Sherbert - 3.5g",
+     "shops": [
+      "wildflower-north-loop-1"
+     ]
+    },
+    {
+     "name": "Sunset Sherbert | 3.5g",
+     "shops": [
+      "legit-cannabis"
+     ]
+    },
+    {
+     "name": "SUNSET SHERBERT (Pre-packed) | 3.5g",
+     "shops": [
+      "the-flower-shop-mn-llc"
+     ]
+    }
+   ],
+   "shops_after": 4
   },
   {
    "key": "unbound|flower|3.5g|illemonati",
@@ -3534,28 +3572,6 @@
     }
    ],
    "shops_after": 5
-  },
-  {
-   "key": "campfire cannabis|flower|3.5g|sherbert sunset",
-   "kept": {
-    "name": "Sunset Sherbert - 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Sunset Sherbert | 3.5g",
-     "shops": [
-      "legit-cannabis"
-     ]
-    },
-    {
-     "name": "SUNSET SHERBERT (Pre-packed) | 3.5g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 3
   },
   {
    "key": "mischief|flower|3.5g|taffy turtle",
@@ -4763,12 +4779,13 @@
     {
      "name": "Rotten Citrus #4",
      "shops": [
+      "green-goods-blaine",
       "green-goods-burnsville",
       "minnesota-medical-solutions-bloomington"
      ]
     }
    ],
-   "shops_after": 7
+   "shops_after": 8
   },
   {
    "key": "vireo|flower|3.5g|jack sour",
@@ -5413,22 +5430,6 @@
    "shops_after": 2
   },
   {
-   "key": "nebula|edible|100mg|apple bar green",
-   "kept": {
-    "name": "Green Apple Gummy Bar 100mg - Nebula",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Nebula Green Apple Gummy Bar - 100mg | .1g",
-     "shops": [
-      "high-10-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "flor|pre-roll|1g|garlic jam",
    "kept": {
     "name": "Garlic Jam 1G Pre-Roll by Flor",
@@ -5503,6 +5504,22 @@
      "name": "Grasslandz Sour Pineapple Gummies - 100mg THC",
      "shops": [
       "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "nebula|edible|100mg|apple bar green",
+   "kept": {
+    "name": "Green Apple Gummy Bar 100mg - Nebula",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Nebula Green Apple Gummy Bar - 100mg | .1g",
+     "shops": [
+      "high-10-dispensary"
      ]
     }
    ],
