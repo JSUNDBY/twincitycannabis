@@ -2345,6 +2345,244 @@ ${partnerCards || '<p>The first partners are being onboarded now.</p>'}
 };
 
 // ---------- EVENTS PAGE ----------
+// ---------- CANNAFEST GUIDE (partner event page) ----------
+// Landing page for Minnesota Monthly's CannaFest, built to rank for
+// "CannaFest Minnesota" style searches and to connect brands to their
+// Twin City Cannabis pages. Compliance: this is a partner event, so the page
+// is labeled as one and carries the OCM warning directly beneath the hero
+// actions (MN Stat. 342.64), the same pattern as the other labeled placements.
+// Event facts come from Minnesota Monthly's Oct 5, 2026 press release and
+// cannafestmn.com; if they change, change them here once and the schema,
+// calendar file and copy all follow.
+const CANNAFEST = {
+  slug: 'cannafest',
+  name: 'CannaFest Minnesota',
+  edition: 'Fall Edition 2026',
+  host: 'Minnesota Monthly',
+  hostUrl: 'https://www.minnesotamonthly.com',
+  presenter: 'Island Peži',
+  presenterDispensary: 'island-pezi',   // TCC dispensary id, linked from the page
+  siteUrl: 'https://www.cannafestmn.com/',
+  // UTM tags let Minnesota Monthly see the traffic this page sends them.
+  ticketUrl: 'https://www.cannafestmn.com/?utm_source=twincitycannabis&utm_medium=partner&utm_campaign=cannafest-fall-2026',
+  startLocal: '2026-11-12T18:00:00-06:00',   // Thu, 6:00 PM CST
+  endLocal: '2026-11-12T21:00:00-06:00',     // Thu, 9:00 PM CST
+  startUtc: '20261113T000000Z',
+  endUtc: '20261113T030000Z',
+  venue: 'The Lowlands',
+  street: '160 Wabasha St S',
+  city: 'St. Paul',
+  region: 'MN',
+  zip: '55107',
+  price: '40',
+  // Named as taking part in the press release ("and more"; 50+ in all). Names
+  // that match a Twin City Cannabis brand page link to it; others are plain.
+  exhibitors: ['Island Peži', "Uncle Arnie's", 'Minny Grown', 'RISE', 'Rhythm Drinks', 'Top Ten Liquors'],
+};
+
+const buildCannaFestPage = () => {
+  const c = CANNAFEST;
+  const pagePath = `/${c.slug}/`;
+  const canonical = `${SITE}${pagePath}`;
+  const fullAddress = `${c.venue}, ${c.street}, ${c.city}, ${c.region} ${c.zip}`;
+  const title = 'CannaFest Minnesota Fall 2026: Date, Tickets & Guide';
+  const description = `CannaFest Fall Edition is Thursday, November 12, 2026, 6 to 9 PM at ${c.venue} in St. Paul. 21+. Date, tickets, location, what to expect, and the 50+ Minnesota brands taking part.`;
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
+  const gcalUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+    + `&text=${encodeURIComponent('CannaFest Minnesota (Fall Edition)')}`
+    + `&dates=${c.startUtc}/${c.endUtc}`
+    + `&location=${encodeURIComponent(fullAddress)}`
+    + `&details=${encodeURIComponent(`21+ cannabis and hemp showcase hosted by ${c.host}. Details: ${SITE}${pagePath}`)}`;
+  const icsPath = `${c.slug}/cannafest-2026.ics`;
+  const stPaul = TCC.dispensaries.filter(d => /^(st\.?|saint) paul$/i.test(String(d.city || '').trim()));
+  const presenterShop = TCC.dispensaries.find(d => d.id === c.presenterDispensary);
+  const brandIndex = getBrands();
+  const exhibitorHtml = c.exhibitors.map(name => {
+    const hit = brandIndex.find(b => b.name.toLowerCase() === String(name).toLowerCase());
+    return hit
+      ? `<a class="cf-brand" href="/brands/${hit.slug}/">${esc(hit.name)}<span>At CannaFest &middot; Nov 12</span></a>`
+      : `<div class="cf-brand">${esc(name)}<span>At CannaFest &middot; Nov 12</span></div>`;
+  }).join('\n');
+
+  const faqs = [
+    ['When is CannaFest?', 'The Fall Edition is Thursday, November 12, 2026, from 6:00 to 9:00 PM.'],
+    ['Where is CannaFest?', `${c.venue}, ${c.street}, ${c.city}, ${c.region} ${c.zip}.`],
+    ['How much are tickets?', `Tickets are $${c.price} plus tax and fees, sold by ${c.host}. Use the ticket link on this page.`],
+    ['Is CannaFest 21+?', 'Yes. Guests must be 21 or older and show a valid ID to enter.'],
+    ['Can I buy products at CannaFest?', `Yes. ${c.host} says the Fall Edition adds licensed cannabis flower sales alongside shopping from 50+ vendors.`],
+    ['Is there on-site consumption?', `${c.host} says the Fall Edition adds an outdoor area for on-site consumption, new this year, for guests 21 and older. Check ${c.siteUrl.replace('https://www.', '').replace(/\/$/, '')} for the rules before you go.`],
+    ['Who runs CannaFest?', `${c.host} hosts CannaFest, presented by ${c.presenter}. Twin City Cannabis is a partner and helps promote it. Tickets and any event changes come from ${c.host}.`],
+  ];
+
+  const schema = [{
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: `CannaFest Minnesota ${c.edition}`,
+    description: 'A 21+ evening to meet 50+ Minnesota and national cannabis and hemp brands, with product sampling, experiences, and on-site shopping.',
+    startDate: c.startLocal,
+    endDate: c.endLocal,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    typicalAgeRange: '21-',
+    location: {
+      '@type': 'Place',
+      name: c.venue,
+      address: { '@type': 'PostalAddress', streetAddress: c.street, addressLocality: 'St. Paul', addressRegion: c.region, postalCode: c.zip, addressCountry: 'US' },
+    },
+    organizer: { '@type': 'Organization', name: c.host, url: c.hostUrl },
+    offers: { '@type': 'Offer', url: c.ticketUrl, price: c.price, priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
+    image: [`${SITE}/og-image.png`],
+    url: canonical,
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+  }, {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Events', item: `${SITE}/events/` },
+      { '@type': 'ListItem', position: 3, name: 'CannaFest', item: canonical },
+    ],
+  }];
+
+  // Calendar file: UTC times so every calendar app reads it the same way.
+  const ics = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Twin City Cannabis//CannaFest//EN', 'CALSCALE:GREGORIAN',
+    'BEGIN:VEVENT',
+    'UID:cannafest-fall-2026@twincitycannabis.com',
+    `DTSTAMP:${c.startUtc}`,
+    `DTSTART:${c.startUtc}`, `DTEND:${c.endUtc}`,
+    'SUMMARY:CannaFest Minnesota (Fall Edition)',
+    `LOCATION:${fullAddress.replace(/,/g, '\\,')}`,
+    `DESCRIPTION:21+ cannabis and hemp showcase hosted by ${c.host}. Details: ${SITE}${pagePath}`,
+    `URL:${SITE}${pagePath}`,
+    'END:VEVENT', 'END:VCALENDAR',
+  ].join('\r\n') + '\r\n';
+  fs.mkdirSync(path.join(ROOT, c.slug), { recursive: true });
+  fs.writeFileSync(path.join(ROOT, icsPath), ics);
+
+  const track = (label) => `onclick="window.gtag&&gtag('event','cannafest_click',{event_category:'cannafest',event_label:'${label}'})"`;
+
+  return headOpen({ title, description, canonical, schema }) + `
+<style>
+.cf-hero{position:relative;margin:1rem 0 2rem;padding:2rem 1.75rem 1.75rem;border-radius:22px;overflow:hidden;
+  border:1px solid rgba(34,197,94,.28);
+  background:radial-gradient(ellipse at 12% 0%,rgba(34,197,94,.22),transparent 55%),
+             radial-gradient(ellipse at 100% 100%,rgba(34,197,94,.10),transparent 60%),
+             linear-gradient(160deg,var(--bg-card,#122019),var(--bg-secondary,#0d1a14));
+  box-shadow:0 0 60px rgba(34,197,94,.08)}
+.cf-badges{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-bottom:.9rem}
+.cf-badge{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.62rem;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;
+  padding:.3rem .65rem;border-radius:999px;border:1px solid rgba(34,197,94,.45);color:var(--green-text,#22c55e);background:var(--green-bg,rgba(34,197,94,.1))}
+.cf-badge.solid{background:linear-gradient(135deg,var(--green-dim,#16a34a),var(--green,#22c55e));color:#fff;border-color:transparent}
+.cf-hero h1{margin:.2rem 0 .6rem;font-size:clamp(2rem,5.2vw,3.1rem);letter-spacing:-1px}
+.cf-hero h1 span{color:var(--green-text,#22c55e)}
+.cf-lede{font-size:1.1rem;line-height:1.6;max-width:56ch;margin:0 0 1.4rem;color:var(--text-secondary,#cdd2d8)}
+.cf-facts{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:0 0 1.4rem;border-top:1px solid var(--border,rgba(255,255,255,.1));border-bottom:1px solid var(--border,rgba(255,255,255,.1))}
+.cf-fact{padding:.9rem 1rem .9rem 0}
+.cf-fact:not(:first-child){padding-left:1rem;border-left:1px solid var(--border,rgba(255,255,255,.1))}
+.cf-fact-label{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.58rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted,#8b909a)}
+.cf-fact-value{margin-top:.3rem;font-family:var(--font-display,'Outfit',sans-serif);font-weight:700;font-size:1.05rem;line-height:1.3;color:var(--text-primary,#f5f6f8)}
+.cf-fact-sub{font-size:.8rem;color:var(--text-muted,#8b909a);margin-top:.15rem}
+.cf-actions{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}
+.cf-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.5rem;border-radius:12px;text-decoration:none;font-weight:700;font-size:1rem;
+  background:linear-gradient(135deg,var(--green-dim,#16a34a),var(--green,#22c55e));color:#fff;box-shadow:0 8px 28px rgba(34,197,94,.28)}
+.cf-btn:hover{filter:brightness(1.07)}
+.cf-btn.ghost{background:none;box-shadow:none;border:1px solid var(--border-hover,#355544);color:var(--text-primary,#f5f6f8);font-weight:600;padding:.8rem 1.2rem}
+.cf-btn.ghost:hover{border-color:var(--green,#22c55e);color:var(--green-text,#22c55e)}
+.cf-count{margin-left:auto;font-family:var(--font-display,'Outfit',sans-serif);font-weight:700;color:var(--green-text,#22c55e);font-size:1rem}
+.cf-cal{margin:.9rem 0 0;font-size:.88rem;color:var(--text-muted,#8b909a)}
+.cf-cal a{margin-left:.35rem}
+/* The shared unit style is deliberately quiet; on a promotional hero the required warning should be easy to read. */
+.cf-warning{margin-top:1.1rem !important;opacity:.9 !important;font-size:.72rem !important;line-height:1.45 !important;color:var(--text-secondary,#b8bcc4)}
+.cf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.85rem;margin:1rem 0 .5rem}
+.cf-card{background:var(--bg-card,rgba(255,255,255,.03));border:1px solid var(--border,rgba(255,255,255,.08));border-radius:14px;padding:1.15rem 1.2rem}
+.cf-card h3{margin:0 0 .35rem;font-size:1.02rem;color:var(--text-primary,#f5f6f8)}
+.cf-card p{margin:0;font-size:.93rem;line-height:1.55}
+.cf-brands{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.75rem;margin:1rem 0}
+.cf-brand{display:block;text-decoration:none;color:var(--text-primary,#f5f6f8);font-weight:600;background:var(--bg-card,rgba(255,255,255,.03));border:1px solid var(--border,rgba(255,255,255,.08));border-radius:12px;padding:.85rem 1rem}
+.cf-brand span{display:block;margin-top:.2rem;font-weight:500;font-size:.72rem;color:var(--green-text,#22c55e)}
+a.cf-brand:hover{border-color:var(--green,#22c55e)}
+.cf-note{font-size:.88rem;color:var(--text-muted,#8b909a);margin-top:1.5rem}
+@media (max-width:760px){.cf-facts{grid-template-columns:1fr 1fr}.cf-fact:nth-child(3){border-left:0;padding-left:0}.cf-fact:nth-child(n+3){border-top:1px solid var(--border,rgba(255,255,255,.1))}.cf-count{margin-left:0;width:100%}}
+@media (max-width:480px){.cf-hero{padding:1.5rem 1.15rem 1.3rem}.cf-btn{width:100%;justify-content:center}}
+</style>
+<div class="crumbs"><a href="/">Home</a> / <a href="/events/">Events</a> / CannaFest</div>
+
+<section class="cf-hero">
+  <div class="cf-badges">
+    <span class="cf-badge solid">Partner event</span>
+    <span class="cf-badge">Hosted by ${esc(c.host)}</span>
+    <span class="cf-badge">Presented by ${esc(c.presenter)}</span>
+    <span class="cf-badge">21+</span>
+  </div>
+  <h1>CannaFest Minnesota<span style="display:block">${esc(c.edition)}</span></h1>
+  <p class="cf-lede">Now in its sixth year. Meet 50+ Minnesota and national cannabis and hemp brands, sample products, and shop on-site. Everything you need to plan your night is below.</p>
+  <div class="cf-facts">
+    <div class="cf-fact"><div class="cf-fact-label">Date</div><div class="cf-fact-value">Thu, Nov 12</div><div class="cf-fact-sub">2026</div></div>
+    <div class="cf-fact"><div class="cf-fact-label">Time</div><div class="cf-fact-value">6 to 9 PM</div><div class="cf-fact-sub">Central</div></div>
+    <div class="cf-fact"><div class="cf-fact-label">Where</div><div class="cf-fact-value">${esc(c.venue)}</div><div class="cf-fact-sub">${esc(c.street)}, ${esc(c.city)}</div></div>
+    <div class="cf-fact"><div class="cf-fact-label">Tickets</div><div class="cf-fact-value">$${esc(c.price)}</div><div class="cf-fact-sub">plus tax and fees &middot; 21+ with ID</div></div>
+  </div>
+  <div class="cf-actions">
+    <a class="cf-btn" href="${esc(c.ticketUrl)}" target="_blank" rel="noopener sponsored" ${track('tickets')}>Get tickets</a>
+    <a class="cf-btn ghost" href="${esc(mapsUrl)}" target="_blank" rel="noopener" ${track('directions')}>Directions</a>
+    <span class="cf-count" id="cf-count" aria-live="polite"></span>
+  </div>
+  <p class="cf-cal">Add to calendar:
+    <a href="${esc(gcalUrl)}" target="_blank" rel="noopener" ${track('gcal')}>Google</a> &middot;
+    <a href="/${c.slug}/cannafest-2026.ics" ${track('ics')}>Apple / Outlook (.ics)</a></p>
+  <p class="tcc-ad-warning tcc-ad-warning--unit cf-warning">Partner event. ${AD_WARNING}</p>
+</section>
+
+<h2>What to expect</h2>
+<div class="cf-grid">
+  <div class="cf-card"><h3>Meet the brands</h3><p>50+ Minnesota and national cannabis and hemp brands in one room, with the people who make the products.</p></div>
+  <div class="cf-card"><h3>Sampling and experiences</h3><p>Product sampling and hands-on experiences, 21+ only.</p></div>
+  <div class="cf-card"><h3>Learn what is new</h3><p>Hear about the latest products and industry innovations from the brands themselves.</p></div>
+  <div class="cf-card"><h3>Shop on-site</h3><p>New this year, ${esc(c.host)} says guests can buy flower and other products at the event.</p></div>
+</div>
+
+<h2>Brands at CannaFest</h2>
+<p>Named by ${esc(c.host)} as taking part, with 50+ brands and producers in all. We will add brands as the list grows.</p>
+${c.exhibitors.length ? `<div class="cf-brands">\n${exhibitorHtml}\n</div>` : ''}
+${presenterShop ? `<p>Presented by ${esc(c.presenter)}, which is also a Twin City Cannabis listing: <a href="/dispensaries/${esc(presenterShop.id)}/">see ${esc(presenterShop.name)} and its menu</a>.</p>` : ''}
+<div class="brand-claim"><div class="brand-claim-inner">
+  <p class="brand-claim-eyebrow">Exhibiting at CannaFest?</p>
+  <p class="brand-claim-line">Claim your free brand page on Twin City Cannabis so shoppers can see where your products are sold across Minnesota, and share it with your own followers.</p>
+  <a class="brand-claim-cta" href="/for-brands/" ${track('brand-claim')}>Claim your brand page</a>
+</div></div>
+
+<h2>Getting there</h2>
+<p>${esc(fullAddress)}. <a href="${esc(mapsUrl)}" target="_blank" rel="noopener">Open directions</a>.</p>
+<p>Making a night of it in the city? Browse the <a href="/saint-paul-cannabis-dispensaries/">${stPaul.length} dispensaries in Saint Paul</a> on Twin City Cannabis.</p>
+
+<h2>After CannaFest</h2>
+<p>Found something you liked? After the event we will list which Minnesota dispensaries carry the brands that were there, so you can find them again.</p>
+
+<h2>CannaFest questions</h2>
+<div class="faq">
+${faqs.map(([q, a]) => `  <details class="faq-item"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('\n')}
+</div>
+
+<p class="cf-note">Twin City Cannabis partners with ${esc(c.host)} to help promote CannaFest. Tickets, event details and any changes come from <a href="${esc(c.siteUrl)}" target="_blank" rel="noopener">${esc(c.siteUrl.replace('https://www.', '').replace(/\/$/, ''))}</a>.</p>
+<script>
+(function () {
+  var el = document.getElementById('cf-count');
+  if (!el) return;
+  var start = new Date('${c.startLocal}'), end = new Date('${c.endLocal}');
+  var now = new Date();
+  if (now > end) { el.textContent = 'This event has passed'; return; }
+  if (now >= start) { el.textContent = 'Happening now'; return; }
+  var days = Math.floor((start - now) / 864e5);
+  el.textContent = days >= 1 ? days + (days === 1 ? ' day to go' : ' days to go') : 'Tonight at 6 PM';
+})();
+</script>
+` + footer;
+};
+
 const buildEventsPage = () => {
   const title = 'Minnesota Cannabis Events 2026 — Twin City Cannabis';
   const description = 'Upcoming cannabis events, expos, and industry meetups in Minnesota. CannaFest, NECANN, Legacy Cup, and more.';
@@ -2561,6 +2799,13 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
 .event-meta span{display:inline-flex;align-items:center;gap:.3rem;white-space:nowrap}
 .event-desc{color:#b8bcc4;font-size:.95rem;line-height:1.55;margin:.4rem 0}
 .event-audience{color:#7a7f88;font-size:.8rem;font-style:italic;margin:.5rem 0 .9rem}
+.event-card-featured{border-color:rgba(34,197,94,.55) !important;box-shadow:0 0 60px rgba(34,197,94,.12)}
+.event-badges{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.7rem}
+.event-badge{font-family:'SF Mono',Menlo,Monaco,monospace;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:.28rem .6rem;border-radius:999px;border:1px solid rgba(34,197,94,.45);color:#22c55e;background:rgba(34,197,94,.08)}
+.event-badge.solid{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;border-color:transparent}
+.event-actions{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.event-cta.alt{background:none !important;box-shadow:none !important;border:1px solid #355544;color:#f5f6f8 !important}
+.event-card-featured .tcc-ad-warning{margin-top:1rem}
 .event-cta{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.1rem;
   background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff !important;font-weight:700;
   font-size:.85rem;border-radius:10px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;
@@ -2689,6 +2934,33 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
     <div class="events-hero-stat"><span class="events-hero-stat-num">Free</span><span class="events-hero-stat-label">Always</span></div>
   </div>
 </section>
+
+<!-- CannaFest Fall: Featured Event (partner), pinned above the list -->
+<article class="event-card event-card-featured" data-event-date="2026-11-12">
+  <div class="event-date">
+    <div class="event-date-month">Nov</div>
+    <div class="event-date-day">12</div>
+    <div class="event-date-year">2026</div>
+    <span class="event-countdown" data-countdown>&nbsp;</span>
+  </div>
+  <div class="event-body">
+    <div class="event-badges"><span class="event-badge solid">Featured event</span><span class="event-badge">Partner event</span></div>
+    <div class="event-type"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 22h8"/><path d="M7 10h10"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-5-8-4.5 4-5 6-5 8a5 5 0 0 0 5 5z"/></svg> Product Showcase</div>
+    <div class="event-title">CannaFest Minnesota &mdash; Fall Edition</div>
+    <div class="event-meta">
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/></svg> Thu 6:00 &ndash; 9:00 PM</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></svg> The Lowlands, 160 Wabasha St S, St. Paul</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M13 5v14"/></svg> $40 plus tax and fees</span>
+    </div>
+    <p class="event-desc">Now in its sixth year. Meet 50+ Minnesota and national cannabis and hemp brands, sample products, and shop on-site. Hosted by Minnesota Monthly, presented by Island Pe&#382;i.</p>
+    <p class="event-audience">21+ with valid ID. Good for consumers who want to sample widely and talk to the people who make the products.</p>
+    <div class="event-actions">
+      <a class="event-cta" href="https://www.cannafestmn.com/?utm_source=twincitycannabis&utm_medium=partner&utm_campaign=cannafest-fall-2026" rel="noopener sponsored" target="_blank">Get tickets &rarr;</a>
+      <a class="event-cta alt" href="/cannafest/">Plan your night</a>
+    </div>
+    <p class="tcc-ad-warning tcc-ad-warning--unit">Partner event. ${AD_WARNING}</p>
+  </div>
+</article>
 
 <div class="events-section-head">
   <h2>Upcoming events</h2>
@@ -2834,28 +3106,6 @@ footer{position:relative;z-index:5;background:rgba(6,18,16,.95) !important;paddi
     <p class="event-desc">Minnesota&rsquo;s first Resource and Hiring Fair, hosted by the state&rsquo;s Office of Cannabis Management. It connects licensed cannabis businesses, ancillary service providers and workforce partners with job seekers from social equity eligible communities.</p>
     <p class="event-audience">Good for job seekers and for anyone hiring in Minnesota&rsquo;s cannabis industry.</p>
     <a class="event-cta" href="https://mn.gov/ocm/development/workforce/hiring-fairs.jsp" rel="noopener" target="_blank">Event details &rarr;</a>
-  </div>
-</article>
-
-<!-- CannaFest Fall -->
-<article class="event-card" data-event-date="2026-11-12">
-  <div class="event-date">
-    <div class="event-date-month">Nov</div>
-    <div class="event-date-day">12</div>
-    <div class="event-date-year">2026</div>
-    <span class="event-countdown" data-countdown>&nbsp;</span>
-  </div>
-  <div class="event-body">
-    <div class="event-type"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 22h8"/><path d="M7 10h10"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-5-8-4.5 4-5 6-5 8a5 5 0 0 0 5 5z"/></svg> Product Showcase</div>
-    <div class="event-title">CannaFest &mdash; Fall Edition</div>
-    <div class="event-meta">
-      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/></svg> Thu 6:00 &ndash; 9:00 PM</span>
-      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></svg> The Lowlands, 160 Wabasha St S, St. Paul</span>
-      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M13 5v14"/></svg> $40</span>
-    </div>
-    <p class="event-desc">The fall edition of the twice-yearly showcase: 45+ Minnesota hemp businesses sampling THC and CBD foods, beverages, and wellness products in a meet-the-makers format.</p>
-    <p class="event-audience">Good for consumers who want to sample widely and talk to the people who make the products.</p>
-    <a class="event-cta" href="https://www.minnesotamonthly.com/cannafest/" rel="noopener" target="_blank">Get tickets &rarr;</a>
   </div>
 </article>
 
@@ -3574,6 +3824,9 @@ writePage('best-cannabis-vaporizers-minnesota/index.html', buildVaporizersGuide(
 extraSitemap.push({ loc: `${SITE}/best-cannabis-vaporizers-minnesota/`, priority: '0.7', changefreq: 'monthly' });
 count++;
 writePage('events/index.html', buildEventsPage());
+count++;
+writePage('cannafest/index.html', buildCannaFestPage());
+extraSitemap.push({ loc: `${SITE}/cannafest/`, priority: '0.8', changefreq: 'weekly' });
 count++;
 writePage('terms/index.html', buildTermsPage());
 count++;
