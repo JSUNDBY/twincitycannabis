@@ -1,6 +1,6 @@
 {
- "merged_groups": 310,
- "absorbed": 479,
+ "merged_groups": 312,
+ "absorbed": 480,
  "groups": [
   {
    "key": "&shine|edible|100mg|10 blackberry pk",
@@ -1464,6 +1464,22 @@
    "shops_after": 2
   },
   {
+   "key": "campfire cannabis|flower|7g|club fight",
+   "kept": {
+    "name": "Campfire Cannabis - 7g Flower - Fight Club (S/H)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Fight Club | 7g",
+     "shops": [
+      "legit-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "campfire cannabis|flower|7g|guava",
    "kept": {
     "name": "Campfire Cannabis - 7g Flower - Guava (S/H)",
@@ -1722,22 +1738,6 @@
      "name": "TURTLE TAFFY (Bulk) | 1g",
      "shops": [
       "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "gg4|pre-roll|1g|4 gg",
-   "kept": {
-    "name": "GG4 | Joints | 1g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "GG4 | Joints | 1g",
-     "shops": [
-      "legacy-cannabis-1"
      ]
     }
    ],
@@ -3055,22 +3055,6 @@
    "shops_after": 16
   },
   {
-   "key": "carpe diem|tincture|1000mg|gel muscle on relief",
-   "kept": {
-    "name": "Relief Muscle & Joint CBD Gel Roll-On 1000 mg",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Relief Muscle & Joint CBD Gel Roll-On 1000mg - Carpe Diem",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "carpe diem|tincture|1500mg|cream full relax spectrum",
    "kept": {
     "name": "Relax CBD Cream 1500 mg Full-Spectrum",
@@ -3081,6 +3065,22 @@
      "name": "Carpe Diem CBD Cream - 1500mg CBD - Full Spectrum - RELAX",
      "shops": [
       "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "carpe diem|tincture|1000mg|gel muscle on relief",
+   "kept": {
+    "name": "Relief Muscle & Joint CBD Gel Roll-On 1000 mg",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Relief Muscle & Joint CBD Gel Roll-On 1000mg - Carpe Diem",
+     "shops": [
+      "flame-flora"
      ]
     }
    ],
@@ -3453,6 +3453,22 @@
    "shops_after": 2
   },
   {
+   "key": "minneleaf|edible|50mg|bar chocolate dark",
+   "kept": {
+    "name": "Dark Chocolate Bar (Premium 54.5% Cacao) 50mg THC",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Dark Chocolate Bar | THC | 50mg",
+     "shops": [
+      "green-rose"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "good green|flower|3.5g|fuel jet og",
    "kept": {
     "name": "Jet Fuel OG",
@@ -3511,22 +3527,6 @@
    "shops_after": 9
   },
   {
-   "key": "tasty gems|cartridge|0.5g|king louis xlll",
-   "kept": {
-    "name": "King Louis xlll | Vape | .5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Tasty Gems King Louis xlll 0.5g",
-     "shops": [
-      "coastless"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "tasty gems|cartridge|0.5g|maui wowie",
    "kept": {
     "name": "Tasty Gems- Maui Wowie Vape- .5g (Sativa)",
@@ -3543,22 +3543,38 @@
    "shops_after": 2
   },
   {
-   "key": "tasty gems|cartridge|0.5g|crack green",
+   "key": "tasty gems|cartridge|0.5g|king louis xlll",
    "kept": {
-    "name": "Tasty Gems- Green Crack Vape- .5g (Sativa)",
+    "name": "Tasty Gems King Louis xlll 0.5g",
     "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Tasty Gems Green Crack Vape 0.5g",
+     "name": "King Louis xlll | Vape | .5g",
      "shops": [
-      "coastless"
+      "green-rose"
      ]
-    },
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "tasty gems|cartridge|0.5g|crack green",
+   "kept": {
+    "name": "Tasty Gems Green Crack Vape 0.5g",
+    "shops_before": 1
+   },
+   "absorbed": [
     {
      "name": "Green Crack [500mg]",
      "shops": [
       "rise-willmar"
+     ]
+    },
+    {
+     "name": "Tasty Gems- Green Crack Vape- .5g (Sativa)",
+     "shops": [
+      "winona-dispensary"
      ]
     }
    ],
@@ -3825,72 +3841,6 @@
    "shops_after": 11
   },
   {
-   "key": "granny's|edible|50mg|original pretzels",
-   "kept": {
-    "name": "Granny's THC Pretzels Original 50mg (1mg/Pretzel)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Original Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
-     "name": "Granny's Original Pretzels - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 3
-  },
-  {
-   "key": "campfire cannabis|flower|3.5g|club fight",
-   "kept": {
-    "name": "Fight Club - 3.5g",
-    "shops_before": 2
-   },
-   "absorbed": [
-    {
-     "name": "Campfire Cannabis Fight Club 3.5g",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    },
-    {
-     "name": "Fight Club | 3.5g",
-     "shops": [
-      "legit-cannabis"
-     ]
-    }
-   ],
-   "shops_after": 4
-  },
-  {
-   "key": "campfire cannabis|flower|3.5g|soap",
-   "kept": {
-    "name": "Campfire Cannabis The Soap 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Soap 3.5g",
-     "shops": [
-      "voyager-cannabis-co"
-     ]
-    },
-    {
-     "name": "Soap | 3.5g",
-     "shops": [
-      "my-dealer-bayport"
-     ]
-    }
-   ],
-   "shops_after": 3
-  },
-  {
    "key": "campfire cannabis|flower|3.5g|sherbert sunset",
    "kept": {
     "name": "Sunset Sherbert - 3.5g",
@@ -3923,6 +3873,50 @@
     }
    ],
    "shops_after": 6
+  },
+  {
+   "key": "campfire cannabis|flower|3.5g|soap",
+   "kept": {
+    "name": "Campfire Cannabis The Soap 3.5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Soap 3.5g",
+     "shops": [
+      "voyager-cannabis-co"
+     ]
+    },
+    {
+     "name": "Soap | 3.5g",
+     "shops": [
+      "my-dealer-bayport"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
+   "key": "campfire cannabis|flower|3.5g|club fight",
+   "kept": {
+    "name": "Fight Club - 3.5g",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "Campfire Cannabis Fight Club 3.5g",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    },
+    {
+     "name": "Fight Club | 3.5g",
+     "shops": [
+      "legit-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 4
   },
   {
    "key": "minneleaf|edible|25mg|cbn nite peaceful pineapple sleep",
@@ -4957,7 +4951,7 @@
    "key": "rythm|flower|3.5g|bananaconda",
    "kept": {
     "name": "Bananaconda",
-    "shops_before": 14
+    "shops_before": 13
    },
    "absorbed": [
     {
@@ -5039,10 +5033,26 @@
    "shops_after": 4
   },
   {
+   "key": "simple|flower|14g|dream durban",
+   "kept": {
+    "name": "Durban Dream | 14g",
+    "shops_before": 3
+   },
+   "absorbed": [
+    {
+     "name": "Durban Dream",
+     "shops": [
+      "green-goods-woodbury"
+     ]
+    }
+   ],
+   "shops_after": 4
+  },
+  {
    "key": "simple|flower|28g|dream durban",
    "kept": {
     "name": "Durban Dream | 28g",
-    "shops_before": 4
+    "shops_before": 3
    },
    "absorbed": [
     {
@@ -5054,7 +5064,7 @@
      ]
     }
    ],
-   "shops_after": 7
+   "shops_after": 6
   },
   {
    "key": "simple|flower|14g|flap jacks",
@@ -6054,14 +6064,14 @@
    "shops_after": 2
   },
   {
-   "key": "grasslandz|edible|100mg|blueberry sour",
+   "key": "granny's|edible|50mg|original pretzels",
    "kept": {
-    "name": "Sour Blueberry Gummies 100mg - Grasslandz",
+    "name": "Original Pretzels 50mg - Granny's",
     "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Grasslandz Sour Blueberry Gummies - 100mg THC",
+     "name": "Granny's Original Pretzels - 50mg THC",
      "shops": [
       "island-pezi"
      ]
@@ -6086,22 +6096,6 @@
    "shops_after": 2
   },
   {
-   "key": "flor|pre-roll|1g|garlic jam",
-   "kept": {
-    "name": "Garlic Jam 1G Pre-Roll by Flor",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Garlic Jam | 1g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "nebula|edible|100mg|apple bar green",
    "kept": {
     "name": "Green Apple Gummy Bar 100mg - Nebula",
@@ -6112,6 +6106,22 @@
      "name": "Nebula Green Apple Gummy Bar - 100mg | .1g",
      "shops": [
       "high-10-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "grasslandz|edible|100mg|blueberry sour",
+   "kept": {
+    "name": "Sour Blueberry Gummies 100mg - Grasslandz",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Grasslandz Sour Blueberry Gummies - 100mg THC",
+     "shops": [
+      "island-pezi"
      ]
     }
    ],
@@ -6144,6 +6154,22 @@
      "name": "Nebula Cotton Candy Gummy Bar - 100mg | .1g",
      "shops": [
       "high-10-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "flor|pre-roll|1g|garlic jam",
+   "kept": {
+    "name": "Garlic Jam 1G Pre-Roll by Flor",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Garlic Jam | 1g",
+     "shops": [
+      "the-flower-shop-mn-llc"
      ]
     }
    ],
@@ -6198,22 +6224,6 @@
    "shops_after": 2
   },
   {
-   "key": "mn first|cartridge|1g|68 9 cap disposable junky live resin",
-   "kept": {
-    "name": "Cap Junky - Hybrid Disposable Live Resin Vape | 68.9% THC | 1g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "CAP JUNKY DISPOSABLE LIVE RESIN VAPE MN FIRST 68.9%THC HYBRID | 1g",
-     "shops": [
-      "the-lakes-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "mn first|cartridge|1g|1 72 blue disposable jelly live resin",
    "kept": {
     "name": "Blue Jelly - Indica/Hybrid Disposable Live Resin Vape | 72.1% THC | 1g",
@@ -6222,6 +6232,22 @@
    "absorbed": [
     {
      "name": "BLUE JELLY DISPOSABLE LIVE RESIN VAPE MN FIRST 72.1%THC HYBRID | 1g",
+     "shops": [
+      "the-lakes-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "mn first|cartridge|1g|68 9 cap disposable junky live resin",
+   "kept": {
+    "name": "Cap Junky - Hybrid Disposable Live Resin Vape | 68.9% THC | 1g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "CAP JUNKY DISPOSABLE LIVE RESIN VAPE MN FIRST 68.9%THC HYBRID | 1g",
      "shops": [
       "the-lakes-dispensary"
      ]
