@@ -1,6 +1,6 @@
 {
- "merged_groups": 318,
- "absorbed": 483,
+ "merged_groups": 321,
+ "absorbed": 486,
  "groups": [
   {
    "key": "&shine|edible|100mg|10 blackberry pk",
@@ -128,11 +128,12 @@
     {
      "name": "King Louis XIII | Disposable | 0.5g",
      "shops": [
+      "feelin-mn",
       "legacy-cannabis-1"
      ]
     }
    ],
-   "shops_after": 5
+   "shops_after": 6
   },
   {
    "key": "rythm|flower|3.5g|bananaconda premium",
@@ -568,6 +569,22 @@
      "name": "Black Haze | Big Buds | 3.5g",
      "shops": [
       "dna-dispensary",
+      "legacy-cannabis-1"
+     ]
+    }
+   ],
+   "shops_after": 4
+  },
+  {
+   "key": "blue jelly|cartridge|1g|disposable live resin",
+   "kept": {
+    "name": "Blue Jelly | Live Resin Disposable | 1g",
+    "shops_before": 3
+   },
+   "absorbed": [
+    {
+     "name": "Blue Jelly | Live Resin Disposable | 1g",
+     "shops": [
       "legacy-cannabis-1"
      ]
     }
@@ -1285,12 +1302,34 @@
    "shops_after": 3
   },
   {
+   "key": "watermelon rolex|cartridge|1g|disposable live resin",
+   "kept": {
+    "name": "Watermelon Rolex | Live Resin Disposable | 1g",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "Watermelon Rolex | Live Resin Disposable | 1g",
+     "shops": [
+      "legacy-cannabis-1"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
    "key": "mischief|flower|3.5g|white widow",
    "kept": {
     "name": "White Widow | Smalls | 3.5g",
     "shops_before": 2
    },
    "absorbed": [
+    {
+     "name": "Mischief | White Widow | Flower | 3.5g",
+     "shops": [
+      "anoka-cannabis-company"
+     ]
+    },
     {
      "name": "White Widow | Smalls | 3.5g",
      "shops": [
@@ -1304,7 +1343,7 @@
      ]
     }
    ],
-   "shops_after": 4
+   "shops_after": 5
   },
   {
    "key": "wilfunk|pre-roll|0.5g|5 minis pk",
@@ -2859,6 +2898,22 @@
    "shops_after": 2
   },
   {
+   "key": "carpe diem|tincture|1000mg|gel muscle on relief",
+   "kept": {
+    "name": "Relief Muscle & Joint CBD Gel Roll-On 1000 mg",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Relief Muscle & Joint CBD Gel Roll-On 1000mg - Carpe Diem",
+     "shops": [
+      "flame-flora"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "lake leaf|flower|3.5g|guava",
    "kept": {
     "name": "Guava 3.5g",
@@ -2979,22 +3034,6 @@
    "shops_after": 12
   },
   {
-   "key": "emerald fire|flower|3.5g|melon mochi",
-   "kept": {
-    "name": "Mochi Melon 3.5G",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Emerald Fire Flower- Mochi Melon 3.5g",
-     "shops": [
-      "northern-crown-cannabis"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "emerald fire|flower|3.5g|inferno white",
    "kept": {
     "name": "White Inferno 3.5G",
@@ -3011,16 +3050,16 @@
    "shops_after": 2
   },
   {
-   "key": "stigma|beverage|10mg|iced peach tea",
+   "key": "emerald fire|flower|3.5g|melon mochi",
    "kept": {
-    "name": "Stigma Peach Iced Tea 10 MG THC",
+    "name": "Mochi Melon 3.5G",
     "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Stigma Peach Iced Tea (10mg THC 16oz.)",
+     "name": "Emerald Fire Flower- Mochi Melon 3.5g",
      "shops": [
-      "higher-place"
+      "northern-crown-cannabis"
      ]
     }
    ],
@@ -3037,6 +3076,22 @@
      "name": "Cap Junky - 1 g Pre-Roll",
      "shops": [
       "lake-daze"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "stigma|beverage|10mg|iced peach tea",
+   "kept": {
+    "name": "Stigma Peach Iced Tea 10 MG THC",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Stigma Peach Iced Tea (10mg THC 16oz.)",
+     "shops": [
+      "higher-place"
      ]
     }
    ],
@@ -3167,6 +3222,22 @@
      "name": "Blueberry I Gummies | (10pk) 100mg",
      "shops": [
       "lake-leaf-dispensary-1"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "moonlight cannabis|edible|10mg|interstellar kiwi live rosin",
+   "kept": {
+    "name": "Moonlight Interstellar 10mg Live Rosin Kiwi Gummies",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Interstellar Kiwi 10mg LIVE ROSIN Gummies - Moonlight Cannabis",
+     "shops": [
+      "healing-harvest"
      ]
     }
    ],
@@ -3351,22 +3422,6 @@
    "shops_after": 2
   },
   {
-   "key": "unbound|flower|3.5g|ice purple water",
-   "kept": {
-    "name": "Unbound Purple Ice Water 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Purple Ice Water (Pre-packed) | 3.5g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "flor|flower|3.5g|breath mendo",
    "kept": {
     "name": "Flor Mendo Breath 3.5g",
@@ -3381,6 +3436,28 @@
     }
    ],
    "shops_after": 2
+  },
+  {
+   "key": "campfire cannabis|flower|7g|lit og",
+   "kept": {
+    "name": "Lit OG -7g",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "Campfire Cannabis LIT OG 7g",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    },
+    {
+     "name": "LIT OG | 7g",
+     "shops": [
+      "legit-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 4
   },
   {
    "key": "unbound|flower|3.5g|2 mac v",
@@ -3405,26 +3482,20 @@
    "shops_after": 6
   },
   {
-   "key": "campfire cannabis|flower|7g|lit og",
+   "key": "unbound|flower|3.5g|ice purple water",
    "kept": {
-    "name": "Lit OG -7g",
-    "shops_before": 2
+    "name": "Unbound Purple Ice Water 3.5g",
+    "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Campfire Cannabis LIT OG 7g",
+     "name": "Purple Ice Water (Pre-packed) | 3.5g",
      "shops": [
-      "levitated-cannabis"
-     ]
-    },
-    {
-     "name": "LIT OG | 7g",
-     "shops": [
-      "legit-cannabis"
+      "the-flower-shop-mn-llc"
      ]
     }
    ],
-   "shops_after": 4
+   "shops_after": 2
   },
   {
    "key": "unbound|flower|3.5g|wilfunk",
@@ -3459,67 +3530,20 @@
    "shops_after": 2
   },
   {
-   "key": "campfire cannabis|flower|3.5g|cap junky",
+   "key": "dizgo collective|flower|3.5g|orion",
    "kept": {
-    "name": "Cap Junky - 3.5g",
-    "shops_before": 2
-   },
-   "absorbed": [
-    {
-     "name": "Campfire Cannabis Cap Junky 3.5g",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    },
-    {
-     "name": "Cap Junky | 3.5g Flower",
-     "shops": [
-      "lake-leaf-dispensary",
-      "lake-leaf-dispensary-1"
-     ]
-    },
-    {
-     "name": "Cap Junky | 3.5g",
-     "shops": [
-      "legit-cannabis"
-     ]
-    },
-    {
-     "name": "Cap Junky 3.5g - Campfire Cannabis",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
-     "name": "CAP JUNKY (Pre-packed) | 3.5g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 8
-  },
-  {
-   "key": "unbound|flower|3.5g|frosted runtz",
-   "kept": {
-    "name": "Unbound Frosted Runtz 3.5g",
+    "name": "Dizgo Orion 3.5g",
     "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Frosted Runtz | 3.5g",
+     "name": "ORION DIZGO | 3.5g",
      "shops": [
-      "lake-daze"
-     ]
-    },
-    {
-     "name": "Frosted Runtz | Flower | 3.5g",
-     "shops": [
-      "green-rose"
+      "altitude-dispensary"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
   },
   {
    "key": "campfire cannabis|flower|3.5g|soap",
@@ -3544,20 +3568,26 @@
    "shops_after": 4
   },
   {
-   "key": "dizgo collective|flower|3.5g|orion",
+   "key": "unbound|flower|3.5g|frosted runtz",
    "kept": {
-    "name": "Dizgo Orion 3.5g",
+    "name": "Unbound Frosted Runtz 3.5g",
     "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "ORION DIZGO | 3.5g",
+     "name": "Frosted Runtz | 3.5g",
      "shops": [
-      "altitude-dispensary"
+      "lake-daze"
+     ]
+    },
+    {
+     "name": "Frosted Runtz | Flower | 3.5g",
+     "shops": [
+      "green-rose"
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "hiza kyte|edible|50mg|headz lemon",
@@ -3610,22 +3640,6 @@
    "shops_after": 5
   },
   {
-   "key": "campfire cannabis|flower|3.5g|club fight",
-   "kept": {
-    "name": "Campfire Cannabis Fight Club 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Fight Club - 3.5g",
-     "shops": [
-      "wildflower-north-loop-1"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "granny's|edible|50mg|dill pickle pretzels",
    "kept": {
     "name": "Granny's Pretzels - Dill Pickle [50pk] (50mg)",
@@ -3652,28 +3666,6 @@
     }
    ],
    "shops_after": 9
-  },
-  {
-   "key": "granny's|edible|50mg|mores pretzels",
-   "kept": {
-    "name": "Granny's Pretzels - S'mores [50pk] (50mg)",
-    "shops_before": 6
-   },
-   "absorbed": [
-    {
-     "name": "Granny's THC Pretzels S'mores 50mg (1mg/Pretzel)",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    },
-    {
-     "name": "S'mores Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 8
   },
   {
    "key": "granny's|edible|50mg|cheddar pretzels",
@@ -3704,20 +3696,26 @@
    "shops_after": 10
   },
   {
-   "key": "minneleaf|edible|25mg|cbn nite peaceful pineapple sleep",
+   "key": "granny's|edible|50mg|mores pretzels",
    "kept": {
-    "name": "Minneleaf Nite CBN, CBD Sleep Gummies - Peaceful Pineapple 25mg CBD 10mg CBN",
-    "shops_before": 1
+    "name": "Granny's Pretzels - S'mores [50pk] (50mg)",
+    "shops_before": 6
    },
    "absorbed": [
     {
-     "name": "NITE Peaceful Pineapple Sleep | Gummy | 25mg CBD / 10mg CBN",
+     "name": "Granny's THC Pretzels S'mores 50mg (1mg/Pretzel)",
      "shops": [
-      "green-rose"
+      "levitated-cannabis"
+     ]
+    },
+    {
+     "name": "S'mores Pretzels 50mg - Granny's",
+     "shops": [
+      "flame-flora"
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 8
   },
   {
    "key": "granny's|edible|50mg|original pretzels",
@@ -3762,6 +3760,22 @@
     }
    ],
    "shops_after": 3
+  },
+  {
+   "key": "minneleaf|edible|25mg|cbn nite peaceful pineapple sleep",
+   "kept": {
+    "name": "Minneleaf Nite CBN, CBD Sleep Gummies - Peaceful Pineapple 25mg CBD 10mg CBN",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "NITE Peaceful Pineapple Sleep | Gummy | 25mg CBD / 10mg CBN",
+     "shops": [
+      "green-rose"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "campfire cannabis|pre-roll|1g|soap",
@@ -3972,6 +3986,41 @@
     }
    ],
    "shops_after": 2
+  },
+  {
+   "key": "campfire cannabis|flower|3.5g|cap junky",
+   "kept": {
+    "name": "Cap Junky - 3.5g",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "Cap Junky | 3.5g Flower",
+     "shops": [
+      "lake-leaf-dispensary",
+      "lake-leaf-dispensary-1"
+     ]
+    },
+    {
+     "name": "Cap Junky | 3.5g",
+     "shops": [
+      "legit-cannabis"
+     ]
+    },
+    {
+     "name": "Cap Junky 3.5g - Campfire Cannabis",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
+     "name": "CAP JUNKY (Pre-packed) | 3.5g",
+     "shops": [
+      "the-flower-shop-mn-llc"
+     ]
+    }
+   ],
+   "shops_after": 7
   },
   {
    "key": "campfire cannabis|flower|3.5g|canyon grape zkittlez",
@@ -6225,38 +6274,6 @@
    "shops_after": 2
   },
   {
-   "key": "nebula|edible|100mg|apple bar green",
-   "kept": {
-    "name": "Green Apple Gummy Bar 100mg - Nebula",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Nebula Green Apple Gummy Bar - 100mg | .1g",
-     "shops": [
-      "high-10-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "flor|pre-roll|1g|garlic jam",
-   "kept": {
-    "name": "Garlic Jam 1G Pre-Roll by Flor",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Garlic Jam | 1g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "grasslandz|edible|100mg|pineapple sour",
    "kept": {
     "name": "Sour Pineapple Gummies 100mg - Grasslandz",
@@ -6273,6 +6290,22 @@
    "shops_after": 2
   },
   {
+   "key": "nebula|edible|100mg|apple bar green",
+   "kept": {
+    "name": "Green Apple Gummy Bar 100mg - Nebula",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Nebula Green Apple Gummy Bar - 100mg | .1g",
+     "shops": [
+      "high-10-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "grasslandz|edible|100mg|raspberry",
    "kept": {
     "name": "Raspberry Gummies 100mg - Grasslandz",
@@ -6283,6 +6316,22 @@
      "name": "Grasslandz Raspberry Gummies - 100mg THC",
      "shops": [
       "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "flor|pre-roll|1g|garlic jam",
+   "kept": {
+    "name": "Garlic Jam 1G Pre-Roll by Flor",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Garlic Jam | 1g",
+     "shops": [
+      "the-flower-shop-mn-llc"
      ]
     }
    ],
