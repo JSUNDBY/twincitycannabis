@@ -1619,4 +1619,112 @@ module.exports = [
       { href: '/blog/how-to-save-money-minnesota-dispensaries/', label: 'How to actually save money' },
     ],
   },
+  {
+    slug: 'winona-dispensaries-minnesota',
+    title: 'Winona dispensaries: a real guide to both shops',
+    dek: 'Two licensed shops, four blocks apart, with menus that do not overlap on a single product. Here is how to shop them, and what the river has to do with it.',
+    date: '2026-11-09',
+    updated: '2026-11-09',
+    category: 'Buying smart',
+    read: 7,
+    body: `
+<p>Winona has two licensed cannabis dispensaries and they sit four blocks from each other in the same downtown. That looks like the setup for a price war. It is not, and the reason why is the single most useful thing to know before you shop here.</p>
+
+<h2>The two shops</h2>
+<ul>
+  <li><strong>Winona Dispensary</strong>, 173 East 2nd Street. Open 9am to 9pm. (507) 615-0017. 4.9 stars across 153 Google reviews.</li>
+  <li><strong>Black Bear Weed Dispensary</strong>, 104 East 4th Street. Open 11am to 7pm. (507) 474-0097. 4.9 stars across 46 Google reviews.</li>
+</ul>
+<p>Both are downtown and walkable from each other, and both are genuinely well liked. A 4.9 average is not a normal retail score, and having two of them in one small city says something real about how people are being treated at the counter here. Maps and whatever menu data each shop publishes sit on our <a href="/winona-cannabis-dispensaries/">Winona dispensary page</a>.</p>
+
+<h2>Their menus do not overlap, at all</h2>
+<p>We track 234 priced listings at Winona Dispensary and 114 at Black Bear. The number of products that appear on both menus is zero. Not a handful. Zero.</p>
+<p>That matters because it changes your whole strategy. In the metro you can price the same jar at four shops and pocket the difference, which is the entire trick behind our <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a>. In Winona there is no same jar. You are not picking between two prices for one product, you are picking between two stores that happen to stock the same categories from different suppliers.</p>
+<p>So compare by shelf instead of by product. Here is how that shakes out right now.</p>
+
+<h2>Who is cheaper on what</h2>
+<ul>
+  <li><strong>Flower:</strong> Winona Dispensary. Median eighth of $53 against $55, and the cheapest eighth on their menu is $44.85 against Black Bear's $50.</li>
+  <li><strong>Pre-rolls:</strong> Winona Dispensary, and it is not close. Median $17 against $25.</li>
+  <li><strong>Cartridges:</strong> Winona Dispensary, $61 against $65.</li>
+  <li><strong>Edibles:</strong> Black Bear, $18.75 against $20.38.</li>
+  <li><strong>Drinks:</strong> Black Bear, and this is the biggest gap on the board. Median $5 against $7.33.</li>
+  <li><strong>Tinctures:</strong> Black Bear, $42 against $51.</li>
+</ul>
+<p>Read that as a rule of thumb and not gospel. Because the menus share nothing, these medians are comparing different products, so a $53 eighth at one shop and a $55 eighth at the other are not the same eighth. What the pattern does tell you honestly: Winona Dispensary is the deeper flower and smokeables shop with twice the menu, and Black Bear is the better stop for drinks, edibles and tinctures. If you want both, you can genuinely do both in one walk.</p>
+
+<h2>Winona pays a little more than the metro</h2>
+<p>Statewide, the median 3.5 grams of flower across the 1,145 priced listings we track sits at $48.63. Both Winona shops run above that. That is a normal outstate premium and not anybody gouging you: fewer shops means less price pressure, and product has to travel further to get here. It does mean the metro trick of walking away from an overpriced eighth has less leverage in Winona, so judge the jar on its merits. Our piece on <a href="/blog/thc-percentage-myth-minnesota/">why the THC number is a bad filter</a> is the better tool here than price alone.</p>
+
+<h2>About the river</h2>
+<p>Wisconsin starts on the far bank of the Mississippi, which in Winona means it starts about a mile from the counter. Wisconsin has not legalized adult-use cannabis. Legalization bills were introduced there again in 2026 and did not advance. So for a lot of people in Buffalo County, or up the road around La Crosse, the nearest legal dispensary is in Minnesota, and Winona is the first one across the water.</p>
+<p>Two things follow from that. If you are coming over from Wisconsin, you can buy here legally at 21 or older with any valid government ID, and your state of residence does not matter to the shop. Taking it home is the different question, and the answer is that it becomes a crime the moment you cross the bridge. We spelled that out in <a href="/blog/traveling-with-cannabis-minnesota/">traveling with cannabis</a>. If you are local, expect weekend afternoons to be busier than a city of 25,000 people would otherwise explain.</p>
+
+<h2>Two practical notes</h2>
+<p>Watch the hours. Black Bear closes at 7pm, which is early enough to catch people out, while Winona Dispensary runs 9am to 9pm. If you are making an evening run, you have one option, not two.</p>
+<p>And bring cash. Card workarounds at dispensaries carry a fee per transaction, and small shops lean on them harder than big ones. The rest of the first-visit mechanics are in our <a href="/blog/first-time-dispensary-guide-minnesota/">first dispensary visit guide</a>.</p>
+
+<h2>Is it worth a drive from the metro?</h2>
+<p>No, and we will keep saying this about every outstate town. The metro has far more shops competing on price, and the <a href="/dispensaries/">full directory</a> will find you a closer and cheaper option. But if you are already in Winona for the bluffs, a Great River Shakespeare weekend or a kid at the university, both of these shops are a good stop, and the four blocks between them make comparison shopping a walk instead of a trip.</p>
+`,
+    related: [
+      { href: '/winona-cannabis-dispensaries/', label: 'Winona dispensaries' },
+      { href: '/cheapest-flower-winona/', label: 'Cheapest flower in Winona' },
+      { href: '/dispensaries/', label: 'Full dispensary directory' },
+    ],
+  },
+
+  {
+    slug: 'terpenes-explained-minnesota',
+    title: 'Terpenes, explained: why the jar that smells best is usually the one you want',
+    dek: 'Minnesota menus almost never publish a terpene profile. Here is what terpenes actually do, what the science honestly supports, and how to shop by nose instead.',
+    date: '2026-11-16',
+    updated: '2026-11-16',
+    category: 'Buying smart',
+    read: 6,
+    body: `
+<p>Ask a budtender what makes one eighth better than another and a good one will eventually get to terpenes. Then you look at the menu and there is not a terpene number anywhere on it. That gap is the whole problem, so let us close it.</p>
+
+<h2>What a terpene actually is</h2>
+<p>Terpenes are the aromatic compounds that give a plant its smell. They are not unique to cannabis at all. The sharpness in a lemon peel, the resin smell of a pine stand off Highway 61, the bite of cracked black pepper: all terpenes. Cannabis just happens to make a lot of them, in combinations that differ noticeably from one cultivar to the next.</p>
+<p>THC is why cannabis is intoxicating. Terpenes are most of why one intoxicating jar smells like diesel and another smells like a fruit snack, and quite possibly part of why they do not feel identical at the same potency.</p>
+
+<h2>Minnesota menus do not tell you this</h2>
+<p>We price 7,343 product listings across the state. The number that mention terpenes anywhere in the listing is 22, and most of those are gummies advertising terpenes added back in, not flower publishing a lab profile. Call it three listings in a thousand.</p>
+<p>That is not shops hiding something. Full terpene panels cost money on top of the required potency testing, and in a market this young most operators are not paying for them yet. It does mean the data-driven approach that works for price does not work here. You cannot filter a menu by myrcene in Minnesota in 2026. You have to use your nose and your budtender.</p>
+
+<h2>The six you will actually run into</h2>
+<ul>
+  <li><strong>Myrcene.</strong> Earthy, musky, a little like ripe mango. The most common terpene in cannabis.</li>
+  <li><strong>Limonene.</strong> Citrus peel. Bright and sharp, common in the lemon and haze lineages.</li>
+  <li><strong>Caryophyllene.</strong> Black pepper and clove. Peppery heat on the nose.</li>
+  <li><strong>Pinene.</strong> Pine and rosemary. Clean and sappy.</li>
+  <li><strong>Linalool.</strong> Lavender, faintly floral and soapy.</li>
+  <li><strong>Terpinolene.</strong> Hard to pin down, usually described as fruity and herbal with an almost chemical edge.</li>
+</ul>
+<p>You will smell two or three of these dominating any given jar, and once you have named them a few times you will start recognizing them instantly. That skill is worth more at the counter than any number on a label.</p>
+
+<h2>What the science honestly supports</h2>
+<p>Here is where most cannabis writing goes wrong, so let us be straight. The popular claim is the entourage effect: terpenes shaping and steering the effects of THC. It is a plausible idea with real laboratory support and genuinely thin human evidence. Controlled studies in people are few, small, and not consistent.</p>
+<p>What is solid: caryophyllene binds a cannabinoid receptor directly, which is actual pharmacology rather than marketing. What is shakier than the internet suggests: the confident charts telling you myrcene makes flower sedating and limonene makes it energizing. Those come mostly from lab work on isolated compounds at doses far above what is in a joint, and they get repeated as fact because they are tidy.</p>
+<p>So treat terpenes as a reliable guide to <em>flavor and aroma</em>, which they definitely determine, and as a loose, interesting hint about effect. That is a smaller claim than you will hear in a shop, and it is the honest one. The same caution applies to the indica and sativa labels, which we took apart in <a href="/blog/indica-sativa-hybrid-minnesota/">indica, sativa and hybrid</a>.</p>
+
+<h2>How to shop when nobody lists the numbers</h2>
+<p>Three moves, in order of usefulness.</p>
+<p><strong>Ask to smell it.</strong> Many Minnesota shops keep sniff jars behind the counter and will hand one over if you ask. If a jar smells like hay, wet cardboard or nothing at all, the terpenes are gone and the flower is old, whatever the THC number says. Potency survives storage far better than aroma does, which is exactly why the number on the label can look great on a mediocre jar.</p>
+<p><strong>Describe a smell, not a strain name.</strong> "I want something citrusy and bright" gets a budtender working with you. Naming a strain you saw online gets you whatever they have with that name on it, and strain names in this industry are not controlled in any meaningful way.</p>
+<p><strong>Buy a terpene-forward format.</strong> If flavor is what you are after, live resin and live rosin are made from fresh-frozen plants specifically to preserve aroma that normal drying loses. We track 300 such listings statewide right now. The format is explained in our <a href="/blog/concentrates-dabs-minnesota/">concentrates guide</a>, or <a href="/products/concentrate/">browse concentrates here</a>.</p>
+
+<h2>Terpenes are fragile, so your storage matters</h2>
+<p>Terpenes are volatile. Heat, light and air drive them off, and a jar left on a sunny windowsill or in a hot car loses its smell long before it loses its potency. That is most of what people mean when they say weed went stale. Cool, dark, airtight, and the method is in <a href="/blog/how-to-store-cannabis-minnesota/">how to store cannabis</a>. A Minnesota winter is actually kind to flower as long as you are not cycling it in and out of a freezing car.</p>
+
+<h2>The one sentence version</h2>
+<p>Terpenes are why cannabis smells like anything, they are probably part of why two jars at the same THC feel different, Minnesota menus almost never publish them, and until that changes the jar that smells best to you is the most reliable signal on the shelf. Use your nose, then use <a href="/cheapest-cannabis-twin-cities/">the price tracker</a> so you are not paying metro-premium money for it.</p>
+`,
+    related: [
+      { href: '/blog/thc-percentage-myth-minnesota/', label: 'The THC percentage myth' },
+      { href: '/blog/indica-sativa-hybrid-minnesota/', label: 'Indica, sativa and hybrid' },
+      { href: '/products/flower/', label: 'Browse flower' },
+    ],
+  },
 ];
