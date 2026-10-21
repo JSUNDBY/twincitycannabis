@@ -1,6 +1,6 @@
 {
- "merged_groups": 306,
- "absorbed": 471,
+ "merged_groups": 319,
+ "absorbed": 493,
  "groups": [
   {
    "key": "&shine|edible|100mg|10 blackberry pk",
@@ -1491,6 +1491,22 @@
    "shops_after": 2
   },
   {
+   "key": "classified crops|flower|3.5g|7 sigma",
+   "kept": {
+    "name": "Classified Crops - 3.5g Flower - Sigma 7 (I/H)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Classified Crops Flower- Sigma 7 3.5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "classified crops|flower|3.5g|panda trash",
    "kept": {
     "name": "Classified Crops - 3.5g Flower - Trash Panda (I/H)",
@@ -1502,9 +1518,15 @@
      "shops": [
       "levitated-cannabis"
      ]
+    },
+    {
+     "name": "Classified Crops Flower- Trash Panda 3.5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "lakeside cannabis|flower|0.5g|5 candy coated cotton infused kief minis pk",
@@ -1777,6 +1799,12 @@
      ]
     },
     {
+     "name": "Good Green Flower- Chem N Cookies 3.5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
+    },
+    {
      "name": "Chem n' Cookies | 3.5g",
      "shops": [
       "leafline-labs-eagan",
@@ -1795,7 +1823,7 @@
      ]
     }
    ],
-   "shops_after": 11
+   "shops_after": 12
   },
   {
    "key": "good green|flower|3.5g|omg",
@@ -2153,12 +2181,6 @@
      ]
     },
     {
-     "name": "Minny Grown Zesty Parm 3.5g",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    },
-    {
      "name": "Zesty Parm - 3.5g",
      "shops": [
       "lake-daze"
@@ -2177,7 +2199,7 @@
      ]
     }
    ],
-   "shops_after": 16
+   "shops_after": 15
   },
   {
    "key": "minny grown|flower|3.5g|1 bumper og",
@@ -2950,6 +2972,22 @@
    "shops_after": 2
   },
   {
+   "key": "lake leaf|flower|3.5g|guava",
+   "kept": {
+    "name": "Guava 3.5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Lake Leaf Flower- Guava 3.5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "dizgo|cartridge|1g|disposable live pink resin runtz",
    "kept": {
     "name": "Pink Runtz Live Resin 1g Disposable",
@@ -2966,6 +3004,22 @@
    "shops_after": 2
   },
   {
+   "key": "emerald fire|flower|3.5g|burst pineapple",
+   "kept": {
+    "name": "Pineapple Burst 3.5G",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Emerald Fire Flower- Pineapple Burst 3.5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "unbound|pre-roll|1g|ice purple water",
    "kept": {
     "name": "Purple Ice Water | Pre-Roll | 1g",
@@ -2976,6 +3030,22 @@
      "name": "Purple Ice Water Preroll 1g",
      "shops": [
       "twin-cities-cannabis-richfield"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "emerald fire|flower|3.5g|candy cigarette",
+   "kept": {
+    "name": "Candy Cigarette 3.5G",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Emerald Fire Flower- Candy Cigarette 3.5g",
+     "shops": [
+      "northern-crown-cannabis"
      ]
     }
    ],
@@ -3014,6 +3084,38 @@
    "shops_after": 2
   },
   {
+   "key": "emerald fire|flower|3.5g|inferno white",
+   "kept": {
+    "name": "White Inferno 3.5G",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Emerald Fire Flower- White Inferno 3.5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "emerald fire|flower|3.5g|melon mochi",
+   "kept": {
+    "name": "Mochi Melon 3.5G",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Emerald Fire Flower- Mochi Melon 3.5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "redwood county weed management|pre-roll|1g|berry halle",
    "kept": {
     "name": "Halle Berry - 1 g Pre-Roll",
@@ -3022,6 +3124,22 @@
    "absorbed": [
     {
      "name": "Redwood County Weed Management Halle Berry Preroll 1g",
+     "shops": [
+      "twin-cities-cannabis-richfield"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "redwood county weed management|pre-roll|1g|gastro pop",
+   "kept": {
+    "name": "Gastro Pop | 1g Pre-Roll",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Gastro Pop Preroll 1g",
      "shops": [
       "twin-cities-cannabis-richfield"
      ]
@@ -3073,9 +3191,15 @@
      "shops": [
       "verist-fields"
      ]
+    },
+    {
+     "name": "Verist Fields Flower- Double Sour Grape 3.5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "verist fields|flower|3.5g|ice mimosa",
@@ -3091,13 +3215,19 @@
      ]
     },
     {
+     "name": "Verist Fields Flower- Mimosa Ice 3.5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
+    },
+    {
      "name": "Mimosa Ice - Flower - Verist Fields - 3.5g",
      "shops": [
       "leafline-labs-st-cloud"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 4
   },
   {
    "key": "moonlight cannabis|edible|10mg|interstellar kiwi live rosin",
@@ -3297,6 +3427,28 @@
      "shops": [
       "black-bear-weed-dispensary-winona"
      ]
+    },
+    {
+     "name": "Tasty Gems Disposable- Chocolate Diamond Biscotti .5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
+   "key": "tasty gems|cartridge|0.5g|aquamarine disposable dream",
+   "kept": {
+    "name": "Tasty Gems Disposable- Aquamarine Dream .5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Aquamarine Dream | Disposable | 0.5g | Tasty Gems |",
+     "shops": [
+      "black-bear-weed-dispensary-winona"
+     ]
     }
    ],
    "shops_after": 2
@@ -3318,22 +3470,6 @@
    "shops_after": 2
   },
   {
-   "key": "tasty gems|cartridge|0.5g|disposable original tanzanite z",
-   "kept": {
-    "name": "Tanzanite Original Z | Disposable Vape | .5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Tanzanite Original Z | Disposable | 0.5g | Tasty Gems |",
-     "shops": [
-      "black-bear-weed-dispensary-winona"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "tasty gems|cartridge|0.5g|citrine disposable golden motornana",
    "kept": {
     "name": "Golden Citrine Motornana | Disposable Vape | .5g",
@@ -3345,9 +3481,37 @@
      "shops": [
       "black-bear-weed-dispensary-winona"
      ]
+    },
+    {
+     "name": "Tasty Gems Disposable- Golden Citrine Motornana .5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
+  },
+  {
+   "key": "tasty gems|cartridge|0.5g|disposable original tanzanite z",
+   "kept": {
+    "name": "Tanzanite Original Z | Disposable Vape | .5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Tanzanite Original Z | Disposable | 0.5g | Tasty Gems |",
+     "shops": [
+      "black-bear-weed-dispensary-winona"
+     ]
+    },
+    {
+     "name": "Tasty Gems Disposable- Tanzanite Original Z .5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 3
   },
   {
    "key": "northpark|pre-roll|3g|3 ct gummibears ix",
@@ -3679,19 +3843,41 @@
      ]
     },
     {
-     "name": "Cheddar Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
      "name": "Granny's Cheddar Pretzels - 50mg THC",
      "shops": [
       "island-pezi"
      ]
     }
    ],
-   "shops_after": 10
+   "shops_after": 9
+  },
+  {
+   "key": "granny's|edible|50mg|dill pickle pretzels",
+   "kept": {
+    "name": "Granny's Pretzels - Dill Pickle [50pk] (50mg)",
+    "shops_before": 6
+   },
+   "absorbed": [
+    {
+     "name": "Granny's Dill Pickle Pretzels 50mg THC (50 pack)",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    },
+    {
+     "name": "Dill Pickle Pretzels 50mg - Granny's",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
+     "name": "Granny's Dill Pickle Pretzels - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 9
   },
   {
    "key": "granny's|edible|50mg|original pretzels",
@@ -3883,9 +4069,15 @@
      "shops": [
       "lake-daze"
      ]
+    },
+    {
+     "name": "Dizgo Flower Orion 3.5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
     }
    ],
-   "shops_after": 7
+   "shops_after": 8
   },
   {
    "key": "emerald fire farms|flower|3.5g|burst pineapple",
@@ -4098,6 +4290,22 @@
    "shops_after": 5
   },
   {
+   "key": "verist fields|flower|3.5g|gush kush",
+   "kept": {
+    "name": "Gush Kush - Flower - Verist Fields - 3.5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Verist Fields Flower- Gush Kush 3.5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "verist fields|flower|3.5g|og uffda",
    "kept": {
     "name": "Uffda OG - Flower - Verist Fields - 3.5g",
@@ -4207,13 +4415,19 @@
      ]
     },
     {
+     "name": "CBD Sparkling Water BALANCE 20mg - BLNCD",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
      "name": "BLNCD - Sparkling Water BALANCE - 20mg CBD - 12oz",
      "shops": [
       "off-the-path-cannabis-dispensary"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 4
   },
   {
    "key": "blncd|beverage|5mg|blood cardamom orange sparkling water",
@@ -4239,13 +4453,19 @@
    },
    "absorbed": [
     {
+     "name": "CBD Sparkling Water CHILL 20mg - BLNCD",
+     "shops": [
+      "flame-flora"
+     ]
+    },
+    {
      "name": "BLNCD - Sparkling Water CHILL - 20mg CBD - 12oz",
      "shops": [
       "off-the-path-cannabis-dispensary"
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "blncd|beverage|10mg|margarita mocktail watermelon",
@@ -4381,6 +4601,38 @@
     }
    ],
    "shops_after": 4
+  },
+  {
+   "key": "verist fields|flower|3.5g|og swedish",
+   "kept": {
+    "name": "Swedish OG - Flower - Verist Fields - 3.5g",
+    "shops_before": 8
+   },
+   "absorbed": [
+    {
+     "name": "Verist Fields Flower- Swedish OG 3.5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 9
+  },
+  {
+   "key": "fl\u00f6r|pre-roll|1g|garlic jam",
+   "kept": {
+    "name": "FL\u00d6R Pre Rolls- Garlic Jam 1g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Garlic Jam 1g Pre-roll",
+     "shops": [
+      "my-dealer-bayport"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "rythm|flower|7g|durban z",
@@ -5863,28 +6115,6 @@
    "shops_after": 5
   },
   {
-   "key": "granny's|edible|50mg|dill pickle pretzels",
-   "kept": {
-    "name": "Granny's Pretzels - Dill Pickle [50pk] (50mg)",
-    "shops_before": 6
-   },
-   "absorbed": [
-    {
-     "name": "Dill Pickle Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    },
-    {
-     "name": "Granny's Dill Pickle Pretzels - 50mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 8
-  },
-  {
    "key": "minny grown cannabis|flower|3.5g|parm zesty",
    "kept": {
     "name": "Zesty Parm | 3.5g",
@@ -5991,6 +6221,38 @@
      "name": "Granny's Honey Mustard Pretzels - 50mg THC",
      "shops": [
       "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "blncd|beverage|20mg|adaptogen boost brain elixir",
+   "kept": {
+    "name": "Brain Boost THC + Adaptogen Elixir 20MG - BLNCD",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "BLNCD - Cannabis + Adaptogen - 20mg THC Elixir - BRAIN BOOST | 0.02g",
+     "shops": [
+      "off-the-path-cannabis-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "blncd|beverage|20mg|adaptogen blend elixir zen",
+   "kept": {
+    "name": "Zen Blend THC + Adaptogen Elixir 20mg - BLNCD",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "BLNCD - Cannabis + Adaptogen - 20mg THC Elixir - ZEN BLEND | 0.02g",
+     "shops": [
+      "off-the-path-cannabis-dispensary"
      ]
     }
    ],
