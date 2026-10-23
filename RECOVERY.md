@@ -87,13 +87,15 @@ loses a key (extremely rare).
 
 **Recover:**
 
-A daily snapshot runs in `.github/workflows/kv-backup.yml`. Snapshots are
-stored as **GitHub Actions artifacts** (private, 90-day retention) — not
-committed to git, because the repo is public and KV holds PII.
+A daily snapshot runs in the **private** repo `JSUNDBY/tcc-private`
+(`.github/workflows/kv-backup.yml` there). Snapshots are stored as GitHub
+Actions artifacts (90-day retention). Moved out of this repo on 2026-10-23:
+this repo is public, and artifacts on a public repo can be downloaded by any
+signed-in GitHub user, while KV holds PII (claim leads, outreach emails).
 
 ```bash
 # 1. Find the most recent successful "KV Backup" run on GitHub:
-#    https://github.com/JSUNDBY/twincitycannabis/actions/workflows/kv-backup.yml
+#    https://github.com/JSUNDBY/tcc-private/actions/workflows/kv-backup.yml
 
 # 2. Download the artifact (it's named kv-tcc-overrides-<run-id>) — unzip it.
 #    You'll get a file called kv-tcc-overrides.json in wrangler bulk format.
@@ -111,7 +113,7 @@ restore is safe; you can also restore individual keys with `kv:key put`.
 **Trigger an out-of-cycle backup before doing anything risky:**
 
 ```bash
-gh workflow run "KV Backup" --repo JSUNDBY/twincitycannabis
+gh workflow run "KV Backup" --repo JSUNDBY/tcc-private
 ```
 
 ---
