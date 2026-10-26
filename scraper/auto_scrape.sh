@@ -318,7 +318,34 @@ fi
 # 8. Rebuild static SEO pages (per-dispensary, per-category, sitemap.xml)
 #    These are crawler-facing pages with LocalBusiness/Product Schema.org markup
 #    so Google indexes every dispensary + category as its own URL.
-"$NODE_BIN" scripts/build_seo.js
+#    The build log is kept so the blog claim checker's DRIFT lines can be
+#    alerted on below. pipefail keeps a failed build fatal through the tee.
+BUILD_LOG="$(mktemp -t tcc-build.XXXXXX)"
+set -o pipefail
+"$NODE_BIN" scripts/build_seo.js 2>&1 | tee "$BUILD_LOG"
+set +o pipefail
+
+# 8.1. Blog claim drift (D58, 2026-10-26). build_seo.js checks every declared
+#      claim in blog_posts.js against live data and prints `DRIFT` for any
+#      argument that has reversed. That is deliberately non-fatal so a drifted
+#      adjective never stops fresh prices publishing, but before D58 the line
+#      only reached this log and the heartbeat still pinged green. Now it
+#      alerts like every other failure here, once per day: the same drift
+#      recurring five times a day is one problem, not five.
+#      (set -e is on: grep with no match exits 1, hence the `|| true`.)
+DRIFT_LINES="$(grep '^  DRIFT  ' "$BUILD_LOG" || true)"
+rm -f "$BUILD_LOG"
+if [ -n "$DRIFT_LINES" ]; then
+    DRIFT_STAMP="$HOME/.tcc-drift-alerted"
+    DRIFT_COUNT="$(printf '%s\n' "$DRIFT_LINES" | wc -l | tr -d ' ')"
+    if [ "$(cat "$DRIFT_STAMP" 2>/dev/null)" != "$(date +%F)" ]; then
+        _tcc_alert "Blog claim drift: $DRIFT_COUNT declared claim(s) in scripts/blog_posts.js no longer hold against live prices, so a live or queued post now argues the wrong way round. Prices on the page are fresh (tokens); the prose needs a human. Fix the sentence or the claim, then push. Alerting once per day; the Pi log shows every cycle.
+$DRIFT_LINES"
+        date +%F > "$DRIFT_STAMP"
+    else
+        echo "Blog claim drift: $DRIFT_COUNT line(s), already alerted today"
+    fi
+fi
 
 # 8.5. Remove orphaned page directories the build no longer emits (stale
 #      strain/product/city pages from earlier runs). Uses git rm so the
