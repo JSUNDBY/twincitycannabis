@@ -244,6 +244,18 @@ const lastmodFor = (loc) => {
 };
 
 const today = new Date().toISOString().slice(0, 10);
+// TCC_BUILD_DATE lets the weekly content run preview queued posts, and the
+// price tokens inside them, before their publish date. It is deliberately NOT
+// wired into `today`: `today` stamps lastmod, sitemap, JSON-LD and page
+// titles, so overriding it would write future dates across all 984 pages and
+// poison the committed lastmod ledger. This gates the blog publish date only,
+// and ignores anything that is not an ISO date.
+const BLOG_PREVIEW_DATE = /^\d{4}-\d{2}-\d{2}$/.test(process.env.TCC_BUILD_DATE || '')
+  ? process.env.TCC_BUILD_DATE
+  : null;
+if (process.env.TCC_BUILD_DATE && !BLOG_PREVIEW_DATE) {
+  console.log('Ignoring TCC_BUILD_DATE: not an ISO date (YYYY-MM-DD)');
+}
 
 // ---------------------------------------------------------------------------
 // Price-data freshness. `today` above is BUILD time, which is the honest stamp
@@ -669,6 +681,36 @@ const shopEighthMedian = (shopId) => {
   return { med: prices[Math.floor(prices.length / 2)], n: prices.length };
 };
 
+// Statewide median eighth, computed once. Used by the per-shop price verdict.
+const STATE_EIGHTH = (() => {
+  const prices = [];
+  TCC.products.forEach((p) => {
+    if (p.category !== 'flower') return;
+    if (eighthGrams(p) !== 3.5) return;
+    Object.values(p.prices || {}).forEach((v) => { if (v > 0 && v <= 150) prices.push(v); });
+  });
+  if (prices.length < 50) return null;
+  prices.sort((a, b) => a - b);
+  return prices[Math.floor(prices.length / 2)];
+})();
+
+// Per-shop price verdict (decision D34). Search visitors land on a dispensary
+// page, read one fact and leave, so the one fact should be whether this shop is
+// dear or cheap. Only renders where the shop has enough eighths to mean it.
+const priceVerdict = (d) => {
+  const mine = shopEighthMedian(d.id);
+  if (!mine || !STATE_EIGHTH) return '';
+  const state = Math.round(STATE_EIGHTH);
+  // Computed from the rounded figure we actually print, so the percentage and
+  // the two dollar amounts beside it never disagree.
+  const shown = Math.round(mine.med);
+  const pct = Math.round((Math.abs(shown - state) / state) * 100);
+  const verdict = pct < 5
+    ? `right about the $${state} statewide median`
+    : `${pct}% ${mine.med < state ? 'under' : 'over'} the $${state} statewide median`;
+  return `<p class="shop-price-verdict" style="font-size:.95rem;margin:.6rem 0 0"><strong>Price check:</strong> eighths at ${esc(d.name)} run a median of $${shown}, ${verdict}, across ${mine.n} listings we track today.</p>`;
+};
+
 // Nearest open shops with menus + their eighth medians.
 const nearbyWithEighths = (d, maxMiles = 40, count = 3) => {
   if (!d.lat || !d.lng) return [];
@@ -982,7 +1024,7 @@ ${(() => {
 </div>` : '';
   // ── Hook 3: nearby shops row ──
   const nearbyHtml = near.length ? `<p style="font-size:.92rem;color:var(--text-muted,#8b909a);margin:.6rem 0 1.2rem">Also nearby: ${near.map(x => `<a href="/dispensaries/${esc(x.n.id)}/">${esc(x.n.name)}</a> (${x.miles.toFixed(0)} mi · eighths ~$${x.e.med.toFixed(0)})`).join(' · ')}</p>` : '';
-  return teaser + dropsHtml + nearbyHtml;
+  return priceVerdict(d) + teaser + dropsHtml + nearbyHtml;
 })()}
 
 ${products.length === 0 ? (() => {
@@ -3614,6 +3656,267 @@ const imgVer = (slug) => {
 // Health note on guides that touch conditions or effects (MN Stat. 342.64 subd. 1: no unverified health or therapeutic claims).
 const HEALTH_NOTE_SLUGS = new Set(['cbd-vs-thc-minnesota', 'cannabis-tinctures-minnesota', 'cannabis-topicals-minnesota', 'edibles-dosing-guide-minnesota', 'thc-drinks-minnesota']);
 const healthNote = `<aside class="post-health-note"><strong>Health note.</strong> This guide shares general information and what people commonly report. It is not medical advice, and nothing here is a verified health or therapeutic claim. Cannabis affects everyone differently and can interact with medications. Talk to a doctor before using cannabis for a health condition.</aside>`;
+// ─── Blog price tokens (authorized 2026-10-19, decision D34) ─────────────
+// City guides carry 15-25 live numbers each. Hand-checking them every week
+// caught a wrong figure four weeks running, which is a streak, not a process.
+// So the numbers live in the post as tokens and are expanded from js/data.js
+// on every build. The Pi rebuilds 5x/day, so a published post re-prices
+// itself all day instead of decaying until someone notices.
+//
+//   {{eighth:rise-mankato|not published right now}}  ->  "$45"
+//
+// Every token carries a fallback after the pipe. If the shop goes dark or a
+// shelf thins below what we will call a median, the fallback prose prints
+// instead, so the sentence still reads true. A token name we do not know is
+// an authoring mistake rather than a data one, so it throws here and never
+// reaches the Pi: the weekly run builds before it commits.
+// Coerces first: a price arriving as a string from an upstream merge script
+// would otherwise hit .toFixed and take the whole build down.
+const money = (n) => {
+  const v = Number(n);
+  if (!Number.isFinite(v)) return null;
+  return Number.isInteger(v) ? `$${v}` : `$${v.toFixed(2)}`;
+};
+const commas = (n) => n.toLocaleString('en-US');
+const medianOf = (a) => {
+  if (!a.length) return null;
+  const s = a.slice().sort((x, y) => x - y);
+  return s[Math.floor(s.length / 2)];
+};
+const shopFlowerAtSize = (shopId, grams) => {
+  const prices = [];
+  TCC.products.forEach((p) => {
+    if (p.category !== 'flower') return;
+    if (eighthGrams(p) !== grams) return;
+    const v = (p.prices || {})[shopId];
+    // Same sanity cap the rest of the file uses for eighths; larger pack
+    // sizes get a proportional one so a legitimate $220 ounce is not dropped.
+    const cap = grams <= 3.5 ? 150 : Math.round((150 / 3.5) * grams);
+    if (v > 0 && v <= cap) prices.push(v);
+  });
+  return prices;
+};
+const shopCatPrices = (shopId, cat) => {
+  const prices = [];
+  TCC.products.forEach((p) => {
+    if (p.category !== cat) return;
+    const v = (p.prices || {})[shopId];
+    if (v > 0) prices.push(v);
+  });
+  return prices;
+};
+const statePrices = (cat, grams) => {
+  const prices = [];
+  TCC.products.forEach((p) => {
+    if (p.category !== cat) return;
+    if (grams && eighthGrams(p) !== grams) return;
+    Object.values(p.prices || {}).forEach((v) => {
+      if (v > 0 && (!grams || v <= 150)) prices.push(v);
+    });
+  });
+  return prices;
+};
+const shopById = (id) => TCC.dispensaries.find((d) => d.id === id) || null;
+// A median we will print needs at least MIN_N listings behind it. Below that
+// one new jar moves the number, which is how the Mankato quarter swung $70 to
+// $80 inside a month.
+const MIN_N = 3;
+const medStat = (rawPrices, minN = MIN_N) => {
+  const prices = rawPrices.filter((p) => Number.isFinite(Number(p))).map(Number);
+  if (prices.length < minN) return null;
+  const m = medianOf(prices);
+  const s = prices.slice().sort((a, b) => a - b);
+  return { v: m, n: prices.length, lo: s[0], hi: s[s.length - 1] };
+};
+
+// Each resolver returns { v } for a claim check and { t } for printing.
+// Returning null anywhere means "we cannot stand behind this number today",
+// and the fallback prose prints instead.
+const BLOG_TOKENS = {
+  eighth: (shop) => {
+    const s = medStat(shopFlowerAtSize(shop, 3.5));
+    return s && { v: s.v, t: money(s.v) };
+  },
+  eighthN: (shop) => {
+    const s = medStat(shopFlowerAtSize(shop, 3.5));
+    return s && { v: s.n, t: String(s.n) };
+  },
+  eighthLo: (shop) => {
+    const s = medStat(shopFlowerAtSize(shop, 3.5), 2);
+    return s && { v: s.lo, t: money(s.lo) };
+  },
+  eighthHi: (shop) => {
+    const s = medStat(shopFlowerAtSize(shop, 3.5), 2);
+    return s && { v: s.hi, t: money(s.hi) };
+  },
+  size: (shop, grams) => {
+    const s = medStat(shopFlowerAtSize(shop, parseFloat(grams)));
+    return s && { v: s.v, t: money(s.v) };
+  },
+  pergram: (shop, grams) => {
+    const g = parseFloat(grams);
+    const s = medStat(shopFlowerAtSize(shop, g));
+    if (!s) return null;
+    const per = Math.round((s.v / g) * 100) / 100;
+    return { v: per, t: `$${per.toFixed(2)}` };
+  },
+  cat: (shop, c) => {
+    const s = medStat(shopCatPrices(shop, c));
+    return s && { v: s.v, t: money(s.v) };
+  },
+  catN: (shop, c) => {
+    const s = medStat(shopCatPrices(shop, c), 1);
+    return s && { v: s.n, t: String(s.n) };
+  },
+  catLo: (shop, c) => {
+    const s = medStat(shopCatPrices(shop, c), 2);
+    return s && { v: s.lo, t: money(s.lo) };
+  },
+  catHi: (shop, c) => {
+    const s = medStat(shopCatPrices(shop, c), 2);
+    return s && { v: s.hi, t: money(s.hi) };
+  },
+  listings: (shop) => {
+    const n = TCC.products.filter((p) => (p.prices || {})[shop] > 0).length;
+    return n ? { v: n, t: commas(n) } : null;
+  },
+  reviews: (shop) => {
+    const d = shopById(shop);
+    if (!d) return null;
+    const n = (d.google && d.google.review_count) ?? d.review_count;
+    return Number.isFinite(n) && n > 0 ? { v: n, t: commas(n) } : null;
+  },
+  rating: (shop) => {
+    const d = shopById(shop);
+    const r = d && d.google && d.google.rating;
+    return r ? { v: r, t: String(r) } : null;
+  },
+  stateEighth: () => {
+    const s = medStat(statePrices('flower', 3.5));
+    return s && { v: s.v, t: money(Math.round(s.v)) };
+  },
+  stateCat: (c) => {
+    const s = medStat(statePrices(c));
+    return s && { v: s.v, t: money(s.v) };
+  },
+  // Lowest per-shop median at one pack size, across every shop with enough
+  // listings to measure. Guards the claims that say nobody is cheaper.
+  stateCheapestSize: (grams) => {
+    const g = parseFloat(grams);
+    const meds = TCC.dispensaries
+      .map((d) => medStat(shopFlowerAtSize(d.id, g)))
+      .filter(Boolean)
+      .map((x) => x.v);
+    if (!meds.length) return null;
+    const lo = Math.min(...meds);
+    return { v: lo, t: money(lo) };
+  },
+  shopCount: () => ({ v: TCC.dispensaries.length, t: commas(TCC.dispensaries.length) }),
+  overlap: (a, b) => {
+    // Returns null when either shop is gone, so a "these two share nothing"
+    // claim fails loudly instead of passing because both menus vanished.
+    if (!shopById(a) || !shopById(b)) return null;
+    const n = TCC.products.filter((p) => (p.prices || {})[a] > 0 && (p.prices || {})[b] > 0).length;
+    return { v: n, t: commas(n) };
+  },
+  // Verdict tokens. These are the ones that stop a post arguing the wrong way
+  // round: the sentence names whichever shop is actually cheaper today, so a
+  // shelf that flips rewrites the prose instead of falsifying it.
+  cheaper: (a, b, c) => {
+    const A = medStat(shopCatPrices(a, c));
+    const B = medStat(shopCatPrices(b, c));
+    if (!A || !B || A.v === B.v) return null;
+    const win = A.v < B.v ? a : b;
+    const d = shopById(win);
+    // The only token that emits data-derived text rather than a number, so it
+    // is the only one that needs escaping. Ten shop names contain & or '.
+    return d && { v: Math.min(A.v, B.v), t: esc(d.name) };
+  },
+  gap: (a, b, c) => {
+    const A = medStat(shopCatPrices(a, c));
+    const B = medStat(shopCatPrices(b, c));
+    if (!A || !B) return null;
+    const g = Math.round(Math.abs(A.v - B.v) * 100) / 100;
+    return { v: g, t: money(g) };
+  },
+  gapEighth: (a, b) => {
+    const A = medStat(shopFlowerAtSize(a, 3.5));
+    const B = medStat(shopFlowerAtSize(b, 3.5));
+    if (!A || !B) return null;
+    const g = Math.round(Math.abs(A.v - B.v) * 100) / 100;
+    return { v: g, t: money(g) };
+  },
+};
+
+const TOKEN_RE = /\{\{([a-zA-Z]+)((?::[^|}]*)*)\|([^}]*)\}\}/g;
+// Only flags a leftover that actually names a token we know, so a post is free
+// to contain {{ in prose, CSS or a code sample without blowing up the build.
+const BARE_TOKEN_RE = /\{\{\s*([a-zA-Z]+)\s*[:|}]/g;
+const tokenStats = { expanded: 0, fellBack: [], suspicious: [] };
+
+const resolveToken = (name, args) => {
+  const fn = BLOG_TOKENS[name];
+  if (!fn) throw new Error(`blog_posts.js: unknown price token "${name}"`);
+  return fn(...args) || null;
+};
+
+const expandTokens = (str, slug) => {
+  if (!str || str.indexOf('{{') === -1) return str;
+  const out = str.replace(TOKEN_RE, (_m, name, rawArgs, fallback) => {
+    const args = rawArgs ? rawArgs.split(':').slice(1) : [];
+    const r = resolveToken(name, args);
+    if (r && r.t !== null && r.t !== undefined) {
+      tokenStats.expanded++;
+      return r.t;
+    }
+    tokenStats.fellBack.push(`${slug}: {{${name}${rawArgs}}} -> "${fallback}"`);
+    return fallback;
+  });
+  // A leftover {{...}} means a malformed token (usually a missing fallback).
+  // Shipping that to a reader is worse than failing the build here.
+  let m;
+  BARE_TOKEN_RE.lastIndex = 0;
+  while ((m = BARE_TOKEN_RE.exec(out)) !== null) {
+    if (BLOG_TOKENS[m[1]]) throw new Error(`blog_posts.js (${slug}): malformed price token {{${m[1]}...}} — every token needs a |fallback`);
+  }
+  // Anything else still carrying {{ is not ours, so it must not stop the Pi
+  // publishing. It is still wrong on the page, so say so in the build log.
+  if (out.indexOf('{{') !== -1) {
+    tokenStats.suspicious.push(`${slug}: body still contains "{{" after expansion`);
+  }
+  return out;
+};
+
+// Claims are the things a token cannot fix: a title, a section heading, an
+// argument that only holds while one shop stays cheaper than another. The
+// build cannot rewrite those, so it checks them and says so loudly. The
+// weekly run reads this list; it is deliberately not fatal, because a drifted
+// adjective should never stop the Pi from publishing fresh prices.
+const claimFailures = [];
+const claimValue = (expr) => {
+  if (typeof expr === 'number') return expr;
+  const [name, ...args] = String(expr).split(':');
+  const r = resolveToken(name, args);
+  return r ? r.v : null;
+};
+const checkClaims = (post) => {
+  (post.claims || []).forEach(([note, a, op, b]) => {
+    const A = claimValue(a);
+    const B = claimValue(b);
+    if (A === null || B === null) {
+      claimFailures.push(`${post.slug}: ${note} — cannot check (no data)`);
+      return;
+    }
+    const ok = op === '<' ? A < B
+      : op === '>' ? A > B
+      : op === '<=' ? A <= B
+      : op === '>=' ? A >= B
+      : op === '==' ? Math.abs(A - B) < 0.01
+      : (() => { throw new Error(`blog_posts.js (${post.slug}): unknown claim operator "${op}"`); })();
+    if (!ok) claimFailures.push(`${post.slug}: ${note} — claims ${A} ${op} ${B}, which is no longer true`);
+  });
+};
+
 const buildBlogPost = (post, allPosts) => {
   const canonical = `${SITE}/blog/${post.slug}/`;
   const title = `${post.title} | Twin City Cannabis`;
@@ -5574,9 +5877,35 @@ console.log('Wrote market-insights page');
 // rebuilds this script 5x/day (auto_scrape.sh), so a future-dated post goes
 // live automatically the first build on/after its date — the existing scrape
 // cron IS the publishing scheduler. Write posts ahead, date them, done.
-const blogLive = BLOG_POSTS.filter((p) => p.date <= today);
-const blogQueued = BLOG_POSTS.length - blogLive.length;
+// Price tokens expand from js/data.js on every build (D34), so a live post
+// re-prices itself all day instead of going stale between weekly runs.
+// Claims are checked on every post, queued ones included, so an argument that
+// has quietly reversed shows up here before a reader finds it.
+const blogToday = BLOG_PREVIEW_DATE || today;
+BLOG_POSTS.forEach(checkClaims);
+const expandPost = (p) => Object.assign({}, p, {
+  title: expandTokens(p.title, p.slug),
+  dek: expandTokens(p.dek, p.slug),
+  body: expandTokens(p.body, p.slug),
+});
+// Expand FIRST, then filter. Expanding only live posts would mean a typo in a
+// queued post's token went unvalidated until the morning it published, and
+// then threw on the Pi every cycle with nobody there to fix it. Expanding
+// everything means this build, and the weekly run's build before it commits,
+// touch every token in the file.
+const blogExpanded = BLOG_POSTS.map(expandPost);
+const blogLive = blogExpanded.filter((p) => p.date <= blogToday);
+const blogQueued = blogExpanded.length - blogLive.length;
 if (blogQueued) console.log(`Blog: ${blogQueued} future-dated post(s) queued, publishing on their dates`);
+console.log(`Blog price tokens: ${tokenStats.expanded} expanded from live data, ${tokenStats.fellBack.length} fell back (queued posts included)`);
+tokenStats.fellBack.forEach((l) => console.log('  fallback  ' + l));
+tokenStats.suspicious.forEach((l) => console.log('  SUSPECT  ' + l));
+if (claimFailures.length) {
+  console.log(`Blog claim drift: ${claimFailures.length} claim(s) no longer hold — prose needs a human`);
+  claimFailures.forEach((l) => console.log('  DRIFT  ' + l));
+} else {
+  console.log('Blog claim drift: none, every declared claim still holds');
+}
 const blogSorted = blogLive.sort((a, b) => (a.date < b.date ? 1 : -1));
 blogSorted.forEach((p) => {
   writePage(`blog/${p.slug}/index.html`, buildBlogPost(p, blogSorted));

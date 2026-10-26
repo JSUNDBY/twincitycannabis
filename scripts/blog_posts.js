@@ -1480,43 +1480,59 @@ module.exports = [
     updated: '2026-10-26',
     category: 'Buying smart',
     read: 7,
+    // Checked on every build. A token fixes a number; these catch an argument
+    // that has quietly reversed, which is what actually went wrong here.
+    claims: [
+      ['title says a $20 gap on an eighth', 'gapEighth:rise-mankato:voyager-cannabis-co', '==', 20],
+      ['RISE is the cheaper shop on eighths', 'eighth:rise-mankato', '<', 'eighth:voyager-cannabis-co'],
+      ['size ladder: the quarter beats the eighth per gram', 'pergram:rise-mankato:7', '<', 'pergram:rise-mankato:3.5'],
+      ['size ladder: the half ounce beats the quarter per gram', 'pergram:rise-mankato:14', '<', 'pergram:rise-mankato:7'],
+      ['size ladder: the ounce beats the half ounce per gram', 'pergram:rise-mankato:28', '<', 'pergram:rise-mankato:14'],
+      ['Voyager owns the edible shelf', 'cat:voyager-cannabis-co:edible', '<', 'cat:rise-mankato:edible'],
+      ['even Voyager dearest topical undercuts RISE median', 'catHi:voyager-cannabis-co:topical', '<', 'cat:rise-mankato:topical'],
+      ['RISE carries more drinks than Voyager', 'catN:rise-mankato:beverage', '>', 'catN:voyager-cannabis-co:beverage'],
+      ['both shops sit above the state median on pre-rolls', 'cat:rise-mankato:pre-roll', '>', 'stateCat:pre-roll'],
+      ['both shops sit above the state median on pre-rolls (Voyager)', 'cat:voyager-cannabis-co:pre-roll', '>', 'stateCat:pre-roll'],
+      ['the two Mankato shops still share no products', 'overlap:rise-mankato:voyager-cannabis-co', '==', 0],
+      ['RISE Mankato still the most reviewed shop south of the metro', 'reviews:rise-mankato', '>', 'reviews:minnesota-medical-solutions-rochester'],
+    ],
     body: `
 <p>Mankato has a state university, roughly 45,000 people, and three cannabis listings on our map. Two of them are places you can actually walk into. The price gap between those two is one of the widest we have found in any city this size, and the surprise is that it runs in opposite directions depending on what is on your list.</p>
 
 <h2>The two shops, and the third listing</h2>
-<p><strong>RISE Dispensary Mankato</strong>, 1 Sioux Rd Suite 100, (507) 405-0369, Monday through Saturday 9am to 9pm and Sunday 10am to 8pm. Medical and adult-use, part of the statewide RISE chain. It has 1,344 Google reviews at a 4.8 average, which makes it the most reviewed dispensary anywhere south of the Twin Cities, half again as many as the next one down, and fifth most reviewed in the state.</p>
-<p><strong>Voyager Cannabis Co</strong>, 1889 Madison Avenue, (507) 779-7013. A microbusiness, newly licensed, 70 reviews at a 4.8 average. Our data lists its hours as check website, which is our way of saying they move around, so call before you drive over.</p>
+<p><strong>RISE Dispensary Mankato</strong>, 1 Sioux Rd Suite 100, (507) 405-0369, Monday through Saturday 9am to 9pm and Sunday 10am to 8pm. Medical and adult-use, part of the statewide RISE chain. It has {{reviews:rise-mankato|over 1,300}} Google reviews at a {{rating:rise-mankato|4.8}} average, which makes it the most reviewed dispensary anywhere south of the Twin Cities, by roughly double the next one down.</p>
+<p><strong>Voyager Cannabis Co</strong>, 1889 Madison Avenue, (507) 779-7013. A microbusiness, newly licensed, {{reviews:voyager-cannabis-co|about 70}} reviews at a {{rating:voyager-cannabis-co|4.8}} average. Our data lists its hours as check website, which is our way of saying they move around, so call before you drive over.</p>
 <p>There is a third entry on our <a href="/mankato-cannabis-dispensaries/">Mankato dispensary page</a>, Crafty Canna Mist LLC on Sioux Road. It shares Voyager's phone number and website, so it reads as the same operation under its license name rather than a third storefront. Shop Mankato as a two shop town.</p>
 
-<h2>Flower: a $20 gap on the same unit</h2>
-<p>This is the headline. The eighths we have on file at RISE Mankato run a median of $45 across 44 listings, from $25 up to $60. Voyager's eighths sit at a median of $65, from $55 up to $70, though that is only three listings deep so treat it as a direction rather than a precise number.</p>
-<p>The median eighth across the 144 dispensaries we track in Minnesota is $50. So RISE sits just under the state middle and Voyager runs about a third over it, in the same city. If flower is the errand, that is not a close call. Live numbers are on <a href="/cheapest-flower-mankato/">cheapest flower in Mankato</a>.</p>
+<h2>Flower: a {{gapEighth:rise-mankato:voyager-cannabis-co|$20}} gap on the same unit</h2>
+<p>This is the headline. The eighths we have on file at RISE Mankato run a median of {{eighth:rise-mankato|around $45}} across {{eighthN:rise-mankato|forty odd}} listings, from {{eighthLo:rise-mankato|$25}} up to {{eighthHi:rise-mankato|$55}}. Voyager's eighths sit at a median of {{eighth:voyager-cannabis-co|around $65}}, from {{eighthLo:voyager-cannabis-co|$55}} up to {{eighthHi:voyager-cannabis-co|$70}}, though that is only {{eighthN:voyager-cannabis-co|three}} listings deep so treat it as a direction rather than a precise number.</p>
+<p>The median eighth across the {{shopCount|144}} dispensaries we track in Minnesota is {{stateEighth|$50}}. So RISE sits just under the state middle and Voyager runs well over it, in the same city. If flower is the errand, that is not a close call. Live numbers are on <a href="/cheapest-flower-mankato/">cheapest flower in Mankato</a>.</p>
 
 <h2>Every step up the ladder pays here</h2>
-<p>This is the most useful arithmetic on the page. At RISE the ladder runs $45 for an eighth, a median of $80 for a seven gram, $150 for a half ounce and $275 for a full ounce.</p>
-<p>Per gram that is $12.86 at the eighth, $11.43 at the quarter, $10.71 at the half ounce and $9.82 at the ounce. Every number on that list is smaller than the one above it, by about a dollar a gram each time. The biggest single saving is the first step: going from an eighth to a quarter knocks $1.43 off every gram, roughly eleven percent, for the smallest commitment on the ladder.</p>
-<p>From there it keeps paying, but you are buying a lot of flower to collect it. The full ounce is $3.04 a gram cheaper than the eighth, a real twenty four percent, and it is also four times as much flower sitting in your house through furnace season. Buy the size you will actually finish, not the size with the best per-gram number. The general version is in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a>, and the keeping-it-fresh half is in the <a href="/blog/how-to-store-cannabis-minnesota/">storage guide</a>.</p>
+<p>This is the most useful arithmetic on the page. At RISE the ladder runs {{size:rise-mankato:3.5|$45}} for an eighth, a median of {{size:rise-mankato:7|$80}} for a seven gram, {{size:rise-mankato:14|$150}} for a half ounce and {{size:rise-mankato:28|$275}} for a full ounce.</p>
+<p>Per gram that is {{pergram:rise-mankato:3.5|$12.86}} at the eighth, {{pergram:rise-mankato:7|$11.43}} at the quarter, {{pergram:rise-mankato:14|$10.71}} at the half ounce and {{pergram:rise-mankato:28|$9.82}} at the ounce. Every number on that list is smaller than the one above it, by about a dollar a gram each time. The biggest single saving is the first step up, from an eighth to a quarter, which is also the smallest commitment on the ladder.</p>
+<p>From there it keeps paying, but you are buying a lot of flower to collect it. The full ounce runs about three dollars a gram under the eighth, close to a quarter off, and it is also eight times as much flower sitting in your house through furnace season. Buy the size you will actually finish, not the size with the best per-gram number. The general version is in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a>, and the keeping-it-fresh half is in the <a href="/blog/how-to-store-cannabis-minnesota/">storage guide</a>.</p>
 <p>One warning, and we mean it. This ladder moves. The quarter here has swung between $70 and $80 inside a month, which is enough to change which step is the smart one, and the half ounce and ounce listings are thin enough that a single new jar shifts the median. Do the division on the day, with the shelf in front of you, rather than trusting this paragraph.</p>
 
 <h2>Voyager owns the edible shelf</h2>
-<p>Flip the story and Voyager wins clean. Its edibles run a median of $15, from $3 to $60. RISE's run a median of $25, from $8 to $110. The state median is $20.</p>
-<p>Topicals go the same way, two listings at $5 and $10 against a $30 median at RISE. A microbusiness making its own product can price like that and a national chain working through distribution cannot. If gummies or a balm are the reason you are going out, the trip to Madison Avenue pays for itself. Current numbers are on <a href="/cheapest-edible-mankato/">cheapest edibles in Mankato</a>, and our <a href="/blog/edibles-dosing-guide-minnesota/">edibles dosing guide</a> covers how to actually take them.</p>
-<p>Drinks are a wash. Both shops land near the $7 state median, but RISE lists seven against Voyager's two, so selection goes to RISE. Our <a href="/blog/thc-drinks-minnesota/">THC drinks guide</a> has what to look for on the label.</p>
+<p>Flip the story and Voyager wins. Its edibles run a median of {{cat:voyager-cannabis-co:edible|around $15}}, from {{catLo:voyager-cannabis-co:edible|$3}} to {{catHi:voyager-cannabis-co:edible|$60}}. RISE's run a median of {{cat:rise-mankato:edible|around $20}}, from {{catLo:rise-mankato:edible|$6}} to {{catHi:rise-mankato:edible|$83}}. The state median is {{stateCat:edible|$20}}.</p>
+<p>Topicals go the same way. Voyager's run from {{catLo:voyager-cannabis-co:topical|$5}} to {{catHi:voyager-cannabis-co:topical|$10}} against a {{cat:rise-mankato:topical|$40}} median at RISE. A microbusiness making its own product can price like that and a national chain working through distribution cannot. If gummies or a balm are the reason you are going out, the trip to Madison Avenue pays for itself. Current numbers are on <a href="/cheapest-edible-mankato/">cheapest edibles in Mankato</a>, and our <a href="/blog/edibles-dosing-guide-minnesota/">edibles dosing guide</a> covers how to actually take them.</p>
+<p>Drinks are a wash. Both shops land near the {{stateCat:beverage|$7}} state median, but RISE lists {{catN:rise-mankato:beverage|eight}} against Voyager's {{catN:voyager-cannabis-co:beverage|two}}, so selection goes to RISE. Our <a href="/blog/thc-drinks-minnesota/">THC drinks guide</a> has what to look for on the label.</p>
 
-<h2>Carts and pre-rolls both run high here</h2>
-<p>RISE has 29 cartridges at a $65 median, a little over the $60 state middle. Voyager has four, all between $70 and $75. So carts are slightly rich at RISE and properly expensive at Voyager. Either way, ask whether it is a half or a full gram before you ask anything else, for the reasons in the <a href="/blog/vape-cartridges-minnesota/">cartridge guide</a>.</p>
-<p>Pre-rolls are the odd category. RISE lists 55 of them at a median of $28 and Voyager seven at $20, against a $17 median statewide. Both shops sit above the state middle on the one thing you would expect a college town to be cheap on, and RISE is the dear one here by eight dollars a joint, which is the reverse of how their flower runs. What you are actually buying is in the <a href="/blog/pre-rolls-minnesota/">pre-roll guide</a>.</p>
+<h2>Carts and pre-rolls, shop by shop</h2>
+<p>RISE has {{catN:rise-mankato:cartridge|about thirty}} cartridges at a {{cat:rise-mankato:cartridge|$60}} median, against a {{stateCat:cartridge|$60}} state middle. Voyager has {{catN:voyager-cannabis-co:cartridge|four}}, all between {{catLo:voyager-cannabis-co:cartridge|$70}} and {{catHi:voyager-cannabis-co:cartridge|$75}}. So the cheaper cart in this town is at {{cheaper:rise-mankato:voyager-cannabis-co:cartridge|RISE}}, and Voyager's handful is a thin shelf to judge a shop on. Either way, ask whether it is a half or a full gram before you ask anything else, for the reasons in the <a href="/blog/vape-cartridges-minnesota/">cartridge guide</a>.</p>
+<p>Pre-rolls are the odd category. RISE lists {{catN:rise-mankato:pre-roll|dozens}} of them at a median of {{cat:rise-mankato:pre-roll|$24}} and Voyager {{catN:voyager-cannabis-co:pre-roll|a handful}} at {{cat:voyager-cannabis-co:pre-roll|$25}}, against a {{stateCat:pre-roll|$17}} median statewide. Both shops sit above the state middle on the one thing you would expect a college town to be cheap on. Which of the two is cheaper keeps changing: it has flipped direction three times since September, and as of this build it is {{cheaper:rise-mankato:voyager-cannabis-co:pre-roll|too close to call}}, by {{gap:rise-mankato:voyager-cannabis-co:pre-roll|a dollar or two}}. Look at the shelf rather than trusting this sentence. What you are actually buying is in the <a href="/blog/pre-rolls-minnesota/">pre-roll guide</a>.</p>
 
 <h2>You cannot price match item for item</h2>
 <p>One honest limit on all of this. Across every product we track, these two shops do not stock a single identical item. Not one. So you cannot walk in with a screenshot from the other menu and ask them to match it, the way you can with two metro independents carrying the same Grasslandz gummies.</p>
 <p>That is why the numbers above are medians by category rather than product by product. It also tells you something real: these two are not competing on price so much as stocking different shelves in the same town.</p>
 
 <h2>If you are willing to drive</h2>
-<p>Eleven miles north on 169, <a href="/st-peter-cannabis-dispensaries/">St. Peter</a> has Healing Harvest, 185 reviews at a 4.9 average. Twenty five miles west, <a href="/new-ulm-cannabis-dispensaries/">New Ulm</a> has 4 North. Neither moves the math much on its own.</p>
+<p>Eleven miles north on 169, <a href="/st-peter-cannabis-dispensaries/">St. Peter</a> has Healing Harvest, {{reviews:healing-harvest|185}} reviews at a {{rating:healing-harvest|4.9}} average. Twenty five miles west, <a href="/new-ulm-cannabis-dispensaries/">New Ulm</a> has 4 North. Neither moves the math much on its own.</p>
 <p>Forty six miles east is <a href="/albert-lea-cannabis-dispensaries/">Albert Lea</a>, which has six dispensaries serving 18,000 people and all the price pressure that comes with it. We wrote that town up in the <a href="/blog/albert-lea-dispensaries-minnesota/">Albert Lea guide</a>. If you are making a real trip of it, that is where the competition actually lives.</p>
 
 <h2>The short version</h2>
-<p>Flower at RISE, edibles and topicals and pre-rolls at Voyager, call Voyager about hours first, and buy the biggest size you will genuinely finish, because at RISE right now every step up the ladder saves you about a dollar a gram. Prices move constantly, so look at the <a href="/mankato-cannabis-dispensaries/">Mankato page</a> the morning you go, and the <a href="/tax-calculator/">tax calculator</a> for the real out the door number.</p>
+<p>Flower at RISE, edibles and topicals at Voyager, pre-rolls at whichever one is cheaper on the day, call Voyager about hours first, and buy the biggest size you will genuinely finish, because at RISE right now every step up the ladder saves you about a dollar a gram. Prices move constantly, so look at the <a href="/mankato-cannabis-dispensaries/">Mankato page</a> the morning you go, and the <a href="/tax-calculator/">tax calculator</a> for the real out the door number.</p>
 `,
     related: [
       { href: '/mankato-cannabis-dispensaries/', label: 'Mankato dispensaries' },
@@ -1528,43 +1544,57 @@ module.exports = [
   {
     slug: 'blaine-dispensaries-minnesota',
     title: 'Blaine dispensaries: a $20 gap on an eighth, and the cheapest ounce in Minnesota',
-    dek: 'Three licensed shops, two with menus we can read, and a $20 spread on the same unit between them. One holds the cheapest ounce in the state. Here is who wins which shelf.',
+    dek: 'Three licensed shops, two with menus we can read, and a $20 spread on the same unit between them. One ties for the cheapest ounce in the state. Here is who wins which shelf.',
     date: '2026-11-02',
     updated: '2026-11-02',
     category: 'Buying smart',
     read: 7,
+    claims: [
+      ['title says a $20 gap on an eighth', 'gapEighth:green-goods-blaine:lucid-leaf-2', '==', 20],
+      ['Green Goods is the cheaper shop on eighths', 'eighth:green-goods-blaine', '<', 'eighth:lucid-leaf-2'],
+      ['the ounce here still ties for the cheapest in the state', 'size:green-goods-blaine:28', '==', 'stateCheapestSize:28'],
+      ['Green Goods ounce ladder still descends per gram', 'pergram:green-goods-blaine:28', '<', 'pergram:green-goods-blaine:14'],
+      ['Blaine Dispensary cheaper on edibles', 'cat:lucid-leaf-2:edible', '<', 'cat:green-goods-blaine:edible'],
+      ['Blaine Dispensary drinks sit at or under the state middle', 'cat:lucid-leaf-2:beverage', '<=', 'stateCat:beverage'],
+      ['Green Goods still barely stocks drinks', 'catN:green-goods-blaine:beverage', '<', 5],
+      ['Blaine Dispensary cheaper on tinctures', 'cat:lucid-leaf-2:tincture', '<', 'cat:green-goods-blaine:tincture'],
+      ['Green Goods cheaper on pre-rolls', 'cat:green-goods-blaine:pre-roll', '<', 'cat:lucid-leaf-2:pre-roll'],
+      ['carts are a wash between the two', 'cat:lucid-leaf-2:cartridge', '==', 'cat:green-goods-blaine:cartridge'],
+      ['both shops sit over the state median on carts', 'cat:lucid-leaf-2:cartridge', '>', 'stateCat:cartridge'],
+      ['Loon Leaf is still the best rated shop in Blaine', 'rating:loon-leaf', '>', 'rating:lucid-leaf-2'],
+    ],
     body: `
 <p>Blaine has three licensed dispensaries, which is more than most suburbs its size. Two of them publish menus we can read, and those two disagree by twenty dollars on an eighth of flower. That gap, six miles apart inside one suburb, is the whole reason to read this before you go.</p>
 
 <h2>The three shops</h2>
-<p><strong>Green Goods Blaine</strong>, 672 County Highway 10, (763) 400-4777, 10am to 8pm. Medical and adult-use, part of the eight location Green Goods chain. It has 938 Google reviews at a 4.4 average, the most reviews and the lowest rating of the three, which usually just means it has been open the longest. Deepest menu in town at 176 priced listings.</p>
-<p><strong>Blaine Dispensary</strong>, 1536 NE 125th Avenue, (763) 703-4202, 10am to 9pm, 75 reviews at a 4.7 average. Independent, online ordering, and open latest in town. Its menu went dark on us earlier this fall and has come back, 119 listings deep.</p>
-<p><strong>Loon Leaf</strong>, 8700 University Ave NE, (763) 215-8828, 10am to 6pm, 137 reviews at a 4.9 average. Best rated shop in Blaine and the one we have never been able to price. It closes at six, earlier than anywhere else in town, so it is the easiest one to accidentally drive to after work and find shut.</p>
+<p><strong>Green Goods Blaine</strong>, 672 County Highway 10, (763) 400-4777, 10am to 8pm. Medical and adult-use, part of the eight location Green Goods chain. It has {{reviews:green-goods-blaine|around 940}} Google reviews at a {{rating:green-goods-blaine|4.4}} average, the most reviews and the lowest rating of the three, which usually just means it has been open the longest. Deepest menu in town at {{listings:green-goods-blaine|close to 200}} priced listings.</p>
+<p><strong>Blaine Dispensary</strong>, 1536 NE 125th Avenue, (763) 703-4202, 10am to 9pm, {{reviews:lucid-leaf-2|about 75}} reviews at a {{rating:lucid-leaf-2|4.7}} average. Independent, online ordering, and open latest in town. Its menu went dark on us earlier this fall and has come back, {{listings:lucid-leaf-2|over 100}} listings deep.</p>
+<p><strong>Loon Leaf</strong>, 8700 University Ave NE, (763) 215-8828, 10am to 6pm, {{reviews:loon-leaf|about 140}} reviews at a {{rating:loon-leaf|4.9}} average. Best rated shop in Blaine and the one we have never been able to price. It closes at six, earlier than anywhere else in town, so it is the easiest one to accidentally drive to after work and find shut.</p>
 <p>Geography matters. Green Goods and Loon Leaf are less than a mile apart on the west side near Highway 10. Blaine Dispensary is about six miles east. All three are on our <a href="/blaine-cannabis-dispensaries/">Blaine dispensary page</a>.</p>
 
-<h2>Flower: $40 against $60, in the same suburb</h2>
-<p>Green Goods runs a median eighth of $40 across 26 listings. Blaine Dispensary runs $60 across 18. The median eighth statewide is $50, so one of these shops sits well under the market and the other sits well over it, and they are a ten minute drive apart.</p>
+<h2>Flower: {{eighth:green-goods-blaine|$40}} against {{eighth:lucid-leaf-2|$60}}, in the same suburb</h2>
+<p>Green Goods runs a median eighth of {{eighth:green-goods-blaine|$40}} across {{eighthN:green-goods-blaine|two dozen odd}} listings. Blaine Dispensary runs {{eighth:lucid-leaf-2|$60}} across {{eighthN:lucid-leaf-2|eighteen}}. The median eighth statewide is {{stateEighth|$50}}, so one of these shops sits well under the market and the other sits well over it, and they are a ten minute drive apart.</p>
 <p>If flower is the errand, that is not a close call, and the gap is wide enough to be worth crossing town for. Live numbers are on <a href="/cheapest-flower-blaine/">cheapest flower in Blaine</a>, and the reason not to shop by the THC number on the label is in <a href="/blog/thc-percentage-myth-minnesota/">the THC percentage myth</a>.</p>
 
 <h2>The cheapest ounce in the state is sitting in Blaine</h2>
-<p>This is the find. Green Goods Blaine's size ladder runs $40 for an eighth, $70 for a seven gram, $120 for a half ounce and $220 for a full ounce.</p>
-<p>Per gram that is $11.43, then $10.00, then $8.57, then $7.86. That last number ties for the lowest ounce price at any dispensary in Minnesota we can price, across the nineteen shops with enough ounce listings to measure. Buying one ounce instead of eight separate eighths cuts almost a third off what you pay per gram, which is a steeper volume discount than most Minnesota shops offer at any size.</p>
-<p>One honest asterisk. Green Goods charges the same $220 at all eight of its Minnesota locations, so this is a chain price rather than a Blaine price. Nobody should drive across the metro for it. The point is that if you already live up here, the cheapest flower in the state by volume is a few minutes away.</p>
+<p>This is the find. Green Goods Blaine's size ladder runs {{size:green-goods-blaine:3.5|$40}} for an eighth, {{size:green-goods-blaine:7|$70}} for a seven gram, {{size:green-goods-blaine:14|$120}} for a half ounce and {{size:green-goods-blaine:28|$220}} for a full ounce.</p>
+<p>Per gram that is {{pergram:green-goods-blaine:3.5|$11.43}}, then {{pergram:green-goods-blaine:7|$10.00}}, then {{pergram:green-goods-blaine:14|$8.57}}, then {{pergram:green-goods-blaine:28|$7.86}}. That last number ties for the lowest ounce price at any dispensary in Minnesota we can price, across every shop with enough ounce listings to measure. Buying one ounce instead of eight separate eighths cuts almost a third off what you pay per gram, which is a steeper volume discount than most Minnesota shops offer at any size.</p>
+<p>One honest asterisk. Green Goods charges the same {{size:green-goods-blaine:28|$220}} at all eight of its Minnesota locations, so this is a chain price rather than a Blaine price. Nobody should drive across the metro for it. The point is that if you already live up here, the cheapest flower in the state by volume is a few minutes away.</p>
 <p>Only buy the ounce if you will actually get through it, which means reading the <a href="/blog/how-to-store-cannabis-minnesota/">storage guide</a> first, especially heading into furnace season.</p>
 
 <h2>Then the two shops swap places</h2>
-<p>Here is the part that makes Blaine worth shopping properly instead of defaulting to the cheap flower. On nearly everything that is not flower, Blaine Dispensary is the better buy.</p>
+<p>Here is the part that makes Blaine worth shopping properly instead of defaulting to the cheap flower. On most of what is not flower, Blaine Dispensary is the better buy.</p>
 <ul>
-  <li><strong>Edibles:</strong> Blaine Dispensary, 60 listings at a $19.50 median against Green Goods' 52 at $30. The state median is $20, so one shop is at the market and the other is fifty percent over it.</li>
-  <li><strong>Drinks:</strong> Blaine Dispensary, ten listings at a $6.99 median, right at the $7 state middle. Green Goods has two, at $10 and $25.</li>
-  <li><strong>Tinctures:</strong> Blaine Dispensary, three listings all at $20. Green Goods runs a $94 median from $49 up to $189 against $40 statewide, which is more than double the middle of the market.</li>
-  <li><strong>Cartridges:</strong> Blaine Dispensary, six at a $70 median against Green Goods' twelve at $75. Both sit over the $60 state middle, so neither is a bargain.</li>
-  <li><strong>Pre-rolls:</strong> Green Goods, the one non-flower category it wins. Sixteen listings at a $12 median against Blaine Dispensary's seventeen at $17, which is exactly the state median.</li>
+  <li><strong>Edibles:</strong> Blaine Dispensary, {{catN:lucid-leaf-2:edible|60}} listings at a {{cat:lucid-leaf-2:edible|$19.50}} median against Green Goods' {{catN:green-goods-blaine:edible|52}} at {{cat:green-goods-blaine:edible|$29}}. The state median is {{stateCat:edible|$20}}, so one shop is at the market and the other runs well over it.</li>
+  <li><strong>Drinks:</strong> Blaine Dispensary, {{catN:lucid-leaf-2:beverage|ten}} listings at a {{cat:lucid-leaf-2:beverage|$6.99}} median, right at the {{stateCat:beverage|$7}} state middle. Green Goods barely stocks the shelf at all.</li>
+  <li><strong>Tinctures:</strong> Blaine Dispensary, {{catN:lucid-leaf-2:tincture|three}} listings at a {{cat:lucid-leaf-2:tincture|$20}} median. Green Goods runs a {{cat:green-goods-blaine:tincture|$94}} median against {{stateCat:tincture|$45}} statewide, which is more than double the middle of the market.</li>
+  <li><strong>Cartridges:</strong> A wash. Blaine Dispensary lists {{catN:lucid-leaf-2:cartridge|six}} at a {{cat:lucid-leaf-2:cartridge|$70}} median, Green Goods {{catN:green-goods-blaine:cartridge|twelve}} at {{cat:green-goods-blaine:cartridge|$70}}. Both sit over the {{stateCat:cartridge|$60}} state middle, so neither is a bargain.</li>
+  <li><strong>Pre-rolls:</strong> Green Goods, the one non-flower category it wins. {{catN:green-goods-blaine:pre-roll|Sixteen}} listings at a {{cat:green-goods-blaine:pre-roll|$12}} median against Blaine Dispensary's {{catN:lucid-leaf-2:pre-roll|seventeen}} at {{cat:lucid-leaf-2:pre-roll|$17}}, which is exactly the state median.</li>
 </ul>
-<p>Green Goods' concentrates land at a $65 median, which is precisely the statewide middle, so that shelf is a wash rather than a reason to go. Blaine Dispensary lists none. What you are actually buying in each of those categories is in the <a href="/blog/cannabis-tinctures-minnesota/">tincture guide</a>, the <a href="/blog/thc-drinks-minnesota/">drinks guide</a>, the <a href="/blog/vape-cartridges-minnesota/">cartridge guide</a> and the <a href="/blog/pre-rolls-minnesota/">pre-roll guide</a>.</p>
+<p>Green Goods' concentrates land at a {{cat:green-goods-blaine:concentrate|$65}} median against {{stateCat:concentrate|$65}} statewide, so that shelf is a wash rather than a reason to go. Blaine Dispensary lists none. What you are actually buying in each of those categories is in the <a href="/blog/cannabis-tinctures-minnesota/">tincture guide</a>, the <a href="/blog/thc-drinks-minnesota/">drinks guide</a>, the <a href="/blog/vape-cartridges-minnesota/">cartridge guide</a> and the <a href="/blog/pre-rolls-minnesota/">pre-roll guide</a>.</p>
 
 <h2>The shop we still cannot price</h2>
-<p>Loon Leaf publishes nothing we can read, and we are not going to guess. Call them. Its 4.9 across 137 reviews is the best rating in Blaine by a clear margin and people do not leave that score for a shop that overcharges them, but a rating is not a price.</p>
+<p>Loon Leaf publishes nothing we can read, and we are not going to guess. Call them. Its {{rating:loon-leaf|4.9}} across {{reviews:loon-leaf|about 140}} reviews is the best rating in Blaine by a clear margin and people do not leave that score for a shop that overcharges them, but a rating is not a price.</p>
 <p>Worth knowing how fast this moves. Blaine Dispensary's entire menu vanished from our data this fall and came back within weeks, which is why the shape of this town looks different from month to month. Any price quoted for a shop whose menu has gone dark, ours included, deserves suspicion until the menu returns. If Loon Leaf starts publishing, it will show up on the <a href="/blaine-cannabis-dispensaries/">Blaine page</a> within a day.</p>
 
 <h2>Ten minutes gets you a lot more</h2>
@@ -1572,7 +1602,7 @@ module.exports = [
 <p>Twenty of the dispensaries we track sit within ten miles of Blaine, so comparison shopping costs you almost nothing up here. That is where the <a href="/weed-deals-twin-cities/">deals page</a>, <a href="/open-now/">open now</a> and the <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a> earn their keep, and it is the opposite of the <a href="/blog/mankato-dispensaries-minnesota/">two shop towns</a> where you take what you get.</p>
 
 <h2>The short version</h2>
-<p>Flower and pre-rolls at Green Goods, and buy the ounce if you will genuinely finish it, because it ties for the cheapest in Minnesota. Nearly everything else at Blaine Dispensary, which is cheaper on edibles, drinks, tinctures and carts. Call Loon Leaf rather than trusting any published price for it, ours included. Check the <a href="/blaine-cannabis-dispensaries/">Blaine page</a> the morning you go, and the <a href="/tax-calculator/">tax calculator</a> before you decide what you can afford.</p>
+<p>Flower and pre-rolls at Green Goods, and buy the ounce if you will genuinely finish it, because it ties for the cheapest in Minnesota. Most of the rest at Blaine Dispensary, which is cheaper on edibles, drinks and tinctures, with carts a wash. Call Loon Leaf rather than trusting any published price for it, ours included. Check the <a href="/blaine-cannabis-dispensaries/">Blaine page</a> the morning you go, and the <a href="/tax-calculator/">tax calculator</a> before you decide what you can afford.</p>
 `,
     related: [
       { href: '/blaine-cannabis-dispensaries/', label: 'Blaine dispensaries' },
@@ -1637,34 +1667,46 @@ module.exports = [
     updated: '2026-11-09',
     category: 'Buying smart',
     read: 7,
+    claims: [
+      ['the two Winona menus still share no products', 'overlap:winona-dispensary:black-bear-weed-dispensary-winona', '==', 0],
+      ['Winona Dispensary cheaper on the median eighth', 'eighth:winona-dispensary', '<', 'eighth:black-bear-weed-dispensary-winona'],
+      ['Winona Dispensary cheaper on carts', 'cat:winona-dispensary:cartridge', '<', 'cat:black-bear-weed-dispensary-winona:cartridge'],
+      ['Black Bear cheaper on edibles', 'cat:black-bear-weed-dispensary-winona:edible', '<', 'cat:winona-dispensary:edible'],
+      ['Black Bear cheaper on drinks', 'cat:black-bear-weed-dispensary-winona:beverage', '<', 'cat:winona-dispensary:beverage'],
+      ['Black Bear tincture shelf still deep enough to price', 'catN:black-bear-weed-dispensary-winona:tincture', '>=', 3],
+      ['Winona tincture shelf still too thin to price', 'catN:winona-dispensary:tincture', '<', 3],
+      ['both Winona shops run above the state median eighth', 'eighth:winona-dispensary', '>', 'stateEighth'],
+      ['both Winona shops run above the state median eighth (Black Bear)', 'eighth:black-bear-weed-dispensary-winona', '>', 'stateEighth'],
+      ['Winona Dispensary still the deeper menu', 'listings:winona-dispensary', '>', 'listings:black-bear-weed-dispensary-winona'],
+    ],
     body: `
 <p>Winona has two licensed cannabis dispensaries and they sit four blocks from each other in the same downtown. That looks like the setup for a price war. It is not, and the reason why is the single most useful thing to know before you shop here.</p>
 
 <h2>The two shops</h2>
 <ul>
-  <li><strong>Winona Dispensary</strong>, 173 East 2nd Street. Open 9am to 9pm. (507) 615-0017. 4.9 stars across 153 Google reviews.</li>
-  <li><strong>Black Bear Weed Dispensary</strong>, 104 East 4th Street. Open 11am to 7pm. (507) 474-0097. 4.9 stars across 46 Google reviews.</li>
+  <li><strong>Winona Dispensary</strong>, 173 East 2nd Street. Open 9am to 9pm. (507) 615-0017. {{rating:winona-dispensary|4.9}} stars across {{reviews:winona-dispensary|about 150}} Google reviews.</li>
+  <li><strong>Black Bear Weed Dispensary</strong>, 104 East 4th Street. Open 11am to 7pm. (507) 474-0097. {{rating:black-bear-weed-dispensary-winona|4.9}} stars across {{reviews:black-bear-weed-dispensary-winona|about 50}} Google reviews.</li>
 </ul>
 <p>Both are downtown and walkable from each other, and both are genuinely well liked. A 4.9 average is not a normal retail score, and having two of them in one small city says something real about how people are being treated at the counter here. Maps and whatever menu data each shop publishes sit on our <a href="/winona-cannabis-dispensaries/">Winona dispensary page</a>.</p>
 
 <h2>Their menus do not overlap, at all</h2>
-<p>We track 234 priced listings at Winona Dispensary and 114 at Black Bear. The number of products that appear on both menus is zero. Not a handful. Zero.</p>
+<p>We track {{listings:winona-dispensary|over 200}} priced listings at Winona Dispensary and {{listings:black-bear-weed-dispensary-winona|over 100}} at Black Bear. The number of products that appear on both menus is zero. Not a handful. Zero.</p>
 <p>That matters because it changes your whole strategy. In the metro you can price the same jar at four shops and pocket the difference, which is the entire trick behind our <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a>. In Winona there is no same jar. You are not picking between two prices for one product, you are picking between two stores that happen to stock the same categories from different suppliers.</p>
 <p>So compare by shelf instead of by product. Here is how that shakes out right now.</p>
 
 <h2>Who is cheaper on what</h2>
 <ul>
-  <li><strong>Flower:</strong> Winona Dispensary. Median eighth of $53 against $55, and the cheapest eighth on their menu is $44.85 against Black Bear's $50.</li>
-  <li><strong>Pre-rolls:</strong> Winona Dispensary, and it is not close. Median $17 against $25.</li>
-  <li><strong>Cartridges:</strong> Winona Dispensary, $61 against $65.</li>
-  <li><strong>Edibles:</strong> Black Bear, $18.75 against $20.38.</li>
-  <li><strong>Drinks:</strong> Black Bear, and this is the biggest gap on the board. Median $5 against $7.33.</li>
-  <li><strong>Tinctures:</strong> Black Bear, $42 against $51.</li>
+  <li><strong>Flower:</strong> Winona Dispensary on the median eighth, {{eighth:winona-dispensary|$53}} against {{eighth:black-bear-weed-dispensary-winona|$60}}. Black Bear's single cheapest eighth is the lower of the two though, at {{eighthLo:black-bear-weed-dispensary-winona|$40}}, so if flower is the errand it is worth a look at both shelves.</li>
+  <li><strong>Pre-rolls:</strong> {{cheaper:winona-dispensary:black-bear-weed-dispensary-winona:pre-roll|too close to call today}}, by {{gap:winona-dispensary:black-bear-weed-dispensary-winona:pre-roll|a couple of dollars}}. This one has traded places between the two shops, so check rather than assume.</li>
+  <li><strong>Cartridges:</strong> Winona Dispensary, {{cat:winona-dispensary:cartridge|$57}} against {{cat:black-bear-weed-dispensary-winona:cartridge|$65}}.</li>
+  <li><strong>Edibles:</strong> Black Bear, {{cat:black-bear-weed-dispensary-winona:edible|$18.75}} against {{cat:winona-dispensary:edible|$20.38}}.</li>
+  <li><strong>Drinks:</strong> Black Bear, and this is the biggest gap on the board. Median {{cat:black-bear-weed-dispensary-winona:beverage|$5}} against {{cat:winona-dispensary:beverage|$7.33}}.</li>
+  <li><strong>Tinctures:</strong> Black Bear, {{cat:black-bear-weed-dispensary-winona:tincture|$44}} across {{catN:black-bear-weed-dispensary-winona:tincture|six}} listings. Winona Dispensary carries too few for us to put a median on, so this one is Black Bear by default rather than by a beating.</li>
 </ul>
-<p>Read that as a rule of thumb and not gospel. Because the menus share nothing, these medians are comparing different products, so a $53 eighth at one shop and a $55 eighth at the other are not the same eighth. What the pattern does tell you honestly: Winona Dispensary is the deeper flower and smokeables shop with twice the menu, and Black Bear is the better stop for drinks, edibles and tinctures. If you want both, you can genuinely do both in one walk.</p>
+<p>Read that as a rule of thumb and not gospel. Because the menus share nothing, these medians are comparing different products, so an eighth at one shop and an eighth at the other are not the same eighth. What the pattern does tell you honestly: Winona Dispensary is the deeper flower and smokeables shop, with a menu close to twice the size, and Black Bear is the better stop for drinks, edibles and tinctures. If you want both, you can genuinely do both in one walk.</p>
 
 <h2>Winona pays a little more than the metro</h2>
-<p>Statewide, the median 3.5 grams of flower across the 1,145 priced listings we track sits at $48.63. Both Winona shops run above that. That is a normal outstate premium and not anybody gouging you: fewer shops means less price pressure, and product has to travel further to get here. It does mean the metro trick of walking away from an overpriced eighth has less leverage in Winona, so judge the jar on its merits. Our piece on <a href="/blog/thc-percentage-myth-minnesota/">why the THC number is a bad filter</a> is the better tool here than price alone.</p>
+<p>Statewide, the median eighth across the {{shopCount|144}} dispensaries we track sits at {{stateEighth|$50}}. Both Winona shops run above that. That is a normal outstate premium and not anybody gouging you: fewer shops means less price pressure, and product has to travel further to get here. It does mean the metro trick of walking away from an overpriced eighth has less leverage in Winona, so judge the jar on its merits. Our piece on <a href="/blog/thc-percentage-myth-minnesota/">why the THC number is a bad filter</a> is the better tool here than price alone.</p>
 
 <h2>About the river</h2>
 <p>Wisconsin starts on the far bank of the Mississippi, which in Winona means it starts about a mile from the counter. Wisconsin has not legalized adult-use cannabis. Legalization bills were introduced there again in 2026 and did not advance. So for a lot of people in Buffalo County, or up the road around La Crosse, the nearest legal dispensary is in Minnesota, and Winona is the first one across the water.</p>
