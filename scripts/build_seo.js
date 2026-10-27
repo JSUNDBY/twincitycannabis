@@ -397,6 +397,7 @@ const NAV_SECTIONS = [
   { label: 'Featured',     appHref: '/featured/',    appId: null,               staticHref: '/featured/' },
   { label: 'Brands',       appHref: '/brands/',      appId: null,               staticHref: '/brands/' },
   { label: 'Guides',       appHref: '/blog/',        appId: null,               staticHref: '/blog/' },
+  { label: 'Jobs',         appHref: '/jobs/',        appId: null,               staticHref: '/jobs/' },
   { label: 'Learn',        appHref: '#learn',        appId: 'nav-learn',        staticHref: '/minnesota-cannabis-laws/' },
 ];
 
