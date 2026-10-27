@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Fetch Minnesota cannabis job openings from employers' public ATS feeds
- * (Greenhouse job-board API today) into scraper/data/jobs.json, which
+ * (Greenhouse API, JazzHR public boards) and owner posts into scraper/data/jobs.json, which
  * scripts/build_jobs.js turns into the /jobs/ pages.
  *
  * Only official public feeds: never Indeed/LinkedIn scraping (D60 spec).
@@ -17,22 +17,24 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const http = require('http');
 
 const ROOT = path.resolve(__dirname, '..');
 const SOURCES = path.join(__dirname, 'jobs_sources.json');
 const OUT = path.join(__dirname, 'data', 'jobs.json');
 
-const getJson = (url) => new Promise((resolve, reject) => {
-  const req = https.get(url, { headers: { 'User-Agent': 'TwinCityCannabis/1.0 (+https://twincitycannabis.com/jobs/)' }, timeout: 20000 }, (res) => {
+const getText = (url) => new Promise((resolve, reject) => {
+  const req = (url.startsWith('http:') ? http : https).get(url, { headers: { 'User-Agent': 'TwinCityCannabis/1.0 (+https://twincitycannabis.com/jobs/)' }, timeout: 20000 }, (res) => {
     if (res.statusCode !== 200) { res.resume(); return reject(new Error(`HTTP ${res.statusCode}`)); }
     let body = '';
     res.setEncoding('utf8');
     res.on('data', (c) => { body += c; });
-    res.on('end', () => { try { resolve(JSON.parse(body)); } catch (e) { reject(e); } });
+    res.on('end', () => resolve(body));
   });
   req.on('timeout', () => req.destroy(new Error('timeout')));
   req.on('error', reject);
 });
+const getJson = async (url) => JSON.parse(await getText(url));
 
 const decodeEntities = (s) => String(s || '')
   .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
@@ -47,6 +49,9 @@ const sanitize = (raw) => decodeEntities(raw)
     if (!ALLOWED.has(t)) return '';
     return m.startsWith('</') ? `</${t}>` : (t === 'br' ? '<br>' : `<${t}>`);
   })
+  // A tag left unclosed (no ">") survives the pass above; neutralize every "<"
+  // that doesn't start an allowlisted tag so the browser can't complete it.
+  .replace(/<(?!\/?(?:p|ul|ol|li|strong|b|em|i|br|h2|h3|h4)>)/g, '&lt;')
   .replace(/<p>\s*<\/p>/g, '')
   .replace(/\n{3,}/g, '\n\n')
   .trim();
@@ -86,6 +91,19 @@ const parseLocation = (name) => {
   return { city: city.replace(/^MInneapolis$/i, 'Minneapolis'), region: 'MN' };
 };
 
+const fold = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+// Greenhouse offices name the store: "Baxter Canna - 14203 Edgewood Drive,
+// Suite 110, Baxter, MN 56401". Kept only when the office is in the job's own
+// city, so a regional office never lends a job someone else's address.
+const parseOffice = (name, city) => {
+  const m = String(name || '').match(/^(.+?)\s+-\s+(.+?)[,\s]+MN\s+(\d{5})\s*$/);
+  if (!m) return null;
+  const at = fold(m[2]).lastIndexOf(fold(city));
+  if (at <= 0) return null;
+  return { store: m[1].trim(), street: m[2].slice(0, at).replace(/[\s,.]+$/, '').trim(), postal_code: m[3] };
+};
+
 const fetchGreenhouse = async (src, now) => {
   const data = await getJson(`https://boards-api.greenhouse.io/v1/boards/${encodeURIComponent(src.board)}/jobs?content=true`);
   const jobs = [];
@@ -95,6 +113,7 @@ const fetchGreenhouse = async (src, now) => {
     const description = sanitize(j.content);
     const plain = text(description);
     if (!j.title || plain.length < 80) continue;
+    const office = (j.offices || []).map((o) => parseOffice(o.name, loc.city)).find(Boolean) || {};
     jobs.push({
       id: `${src.id}-${j.id}`,
       source: src.id,
@@ -109,13 +128,87 @@ const fetchGreenhouse = async (src, now) => {
       salary: parseSalary(plain),
       employment_type: employmentType(j.title, plain),
       description_html: description,
+      ...office,
       last_seen: now,
     });
   }
   return jobs;
 };
 
-const FETCHERS = { greenhouse: fetchGreenhouse };
+// JazzHR public board (<board>.applytojob.com). The list page gives id, title
+// and location; each detail page carries the employer's own JobPosting
+// JSON-LD, which supplies the description, dates, type and postal code.
+const fetchJazzhr = async (src, now) => {
+  const html = await getText(`https://${src.board}.applytojob.com/apply/jobs/`);
+  const all = [...html.matchAll(/href="\/apply\/jobs\/details\/([A-Za-z0-9]+)[^"]*">([^<]+)<\/a>[\s\S]*?<td>\s*([^<]+?)\s*<\/td>/g)]
+    .map((m) => ({ id: m[1], title: decodeEntities(m[2]).trim(), loc: m[3].trim() }));
+  // Throw (keeping the last good jobs) rather than report an empty board as ok.
+  if (!all.length) throw new Error('board layout changed: no job rows matched');
+  const rows = all.filter((r) => /,\s*(MN|Minnesota)$/i.test(r.loc));
+  const jobs = [];
+  for (const r of rows) {
+    const page = await getText(`https://${src.board}.applytojob.com/apply/jobs/details/${r.id}`);
+    const block = [...page.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
+      .map((m) => { try { return JSON.parse(m[1]); } catch { return null; } })
+      .find((o) => o && o['@type'] === 'JobPosting');
+    if (!block) continue;
+    const addr = (block.jobLocation && block.jobLocation.address) || {};
+    if (String(addr.addressRegion || '').toUpperCase() !== 'MN') continue;
+    const description = sanitize(block.description);
+    const plain = text(description);
+    if (plain.length < 80) continue;
+    const type = ['FULL_TIME', 'PART_TIME'].includes(block.employmentType) ? block.employmentType : employmentType(r.title, plain);
+    jobs.push({
+      id: `${src.id}-${r.id}`,
+      source: src.id,
+      title: r.title,
+      employer: src.employer,
+      shop_brand: src.shop_brand || null,
+      // "Otsego/Elk River" -> "Otsego": one job, one city page.
+      city: String(addr.addressLocality || r.loc.replace(/,\s*(MN|Minnesota)$/i, '')).split('/')[0].trim(),
+      region: 'MN',
+      apply_url: `https://${src.board}.applytojob.com/apply/${r.id}`,
+      date_posted: String(block.datePosted || now).slice(0, 10),
+      updated: now.slice(0, 10),
+      deadline: block.validThrough ? String(block.validThrough).slice(0, 10) : null,
+      salary: parseSalary(plain),
+      employment_type: type,
+      description_html: description,
+      // Minnesota ZIPs start 55/56; Vireo lists Burnsville as 14334.
+      postal_code: /^5[56]\d{3}$/.test(addr.postalCode || '') ? addr.postalCode : undefined,
+      last_seen: now,
+    });
+  }
+  return jobs;
+};
+
+// Owner-posted jobs: approved in the TCC dashboard, served by the worker.
+// The worker already checked the owner gate, so each job names its shop.
+const fetchTccOwner = async (src, now) => {
+  // TCC_WORKER points a local test at `wrangler dev`.
+  const rows = await getJson(`${process.env.TCC_WORKER || 'https://dashboard.twincitycannabis.com'}/jobs/owner`);
+  if (!Array.isArray(rows)) throw new Error('unexpected /jobs/owner response');
+  return rows.map((r) => ({
+    id: `${src.id}-${r.id}`,
+    source: src.id,
+    title: String(r.title).trim(),
+    // Shop name and city come from the TCC listing at build time (build_jobs.js).
+    employer: null,
+    shop: r.shop,
+    city: null,
+    region: 'MN',
+    apply_url: r.apply_url,
+    date_posted: r.approved_at ? r.approved_at.slice(0, 10) : now.slice(0, 10),
+    updated: (r.approved_at || now).slice(0, 10),
+    deadline: r.ends || null,
+    salary: r.pay_min ? { min: r.pay_min, max: r.pay_max || r.pay_min, unit: r.pay_unit === 'YEAR' ? 'YEAR' : 'HOUR' } : null,
+    employment_type: ['FULL_TIME', 'PART_TIME'].includes(r.employment_type) ? r.employment_type : null,
+    description_html: String(r.description || '').split(/\n{2,}/).map((p) => `<p>${p.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])).replace(/\n/g, '<br>')}</p>`).join('\n'),
+    last_seen: now,
+  }));
+};
+
+const FETCHERS = { greenhouse: fetchGreenhouse, jazzhr: fetchJazzhr, 'tcc-owner': fetchTccOwner };
 
 (async () => {
   const now = new Date().toISOString();

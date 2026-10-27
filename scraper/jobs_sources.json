@@ -4,6 +4,19 @@
     "type": "greenhouse",
     "board": "mcs",
     "employer": "Minnesota Cannabis Services",
-    "note": "Public Greenhouse job board API. Operator of several MN dispensaries. Verified 36 jobs on 2026-10-26."
+    "note": "Public Greenhouse job board API. Runs the Canna stores (Edina Canna, La Canna, Baxter Canna and others). Verified 36 jobs on 2026-10-26."
+  },
+  {
+    "id": "jazz-vireo",
+    "type": "jazzhr",
+    "board": "vireohealth",
+    "employer": "Vireo Health",
+    "shop_brand": "Green Goods",
+    "note": "Public JazzHR board linked from vireohealth.com/careers. Vireo runs Green Goods. Found by scripts/crawl_careers.js follow-up; 18 MN jobs on 2026-10-27."
+  },
+  {
+    "id": "tcc-owner",
+    "type": "tcc-owner",
+    "note": "Jobs posted by claimed owners at /jobs/post/, approved by Josh in the dashboard. Served by the worker at /jobs/owner."
   }
 ]

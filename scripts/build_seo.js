@@ -438,7 +438,7 @@ const headOpen = ({ title, description, canonical, ogImage = '/og-image.png', sc
 <link rel="stylesheet" href="/css/styles.css">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NEZH9HCSSH"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-NEZH9HCSSH');</script>
-${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`).join('\n')}
+${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s).replace(/</g, '\\u003c')}</script>`).join('\n')}
 <style>
   /* Static pages speak the app's design tokens (css/styles.css :root +
      [data-theme=light]) so light/dark and typography follow the visitor
@@ -757,6 +757,26 @@ const specialsBlock = (d) => `
 })();
 </script>`;
 
+// "Now hiring" on shop pages: open jobs matched to this shop by build_jobs.js
+// (owner post, street-number match, or brand feed + city). Static, so it
+// changes with each build cycle, the same as the job pages it links to.
+let _jobsByShop = null;
+const hiringBlock = (d) => {
+  if (!_jobsByShop) {
+    _jobsByShop = {};
+    require('./build_jobs.js').loadJobs({ ROOT, today, slugify, dispensaries: TCC.dispensaries })
+      .forEach(j => { if (j.shopId) (_jobsByShop[j.shopId] = _jobsByShop[j.shopId] || []).push(j); });
+  }
+  const list = _jobsByShop[d.id] || [];
+  if (!list.length) return '';
+  return `
+<div id="hiring-section">
+  <h2>Now hiring at ${esc(d.name)}</h2>
+  <ul>${list.slice(0, 6).map(j => `<li><a href="/jobs/${esc(j.slug)}/">${esc(j.title)}</a>${j.employment_type ? ` <span style="color:var(--text-muted,#8b909a);font-size:.85rem">· ${j.employment_type === 'PART_TIME' ? 'Part-time' : 'Full-time'}</span>` : ''}</li>`).join('')}</ul>
+  <p style="font-size:.9rem"><a href="/jobs/">All Minnesota cannabis jobs →</a></p>
+</div>`;
+};
+
 const checkinBlock = (d, products) => {
   const datalist = [...new Set(products.slice(0, 120).map(p => p.name.split('|')[0].trim()))]
     .slice(0, 80)
@@ -1057,6 +1077,7 @@ ${d.city ? `<p>${cityShops > 1 ? `${esc(d.city)} has ${cityShops} open dispensar
 ${d.website && !d.website.includes('weedmaps.com') ? `<a class="cta" href="${esc(d.website)}" rel="nofollow noopener" target="_blank" style="margin-left:.5rem;background:transparent;border:1px solid currentColor">Visit ${esc(d.name)}'s website →</a>` : ''}
 
 ${specialsBlock(d)}
+${hiringBlock(d)}
 
 ${checkinBlock(d, products)}
 
@@ -4629,7 +4650,7 @@ NEAR_CITIES.forEach(nc => {
 console.log(`Wrote ${nearCityCount} dispensaries-near pages`);
 
 // JOBS — Minnesota cannabis job board (D60 pilot). Data from scraper/fetch_jobs.js.
-count += require('./build_jobs.js')({ ROOT, SITE, today, esc, slugify, headOpen, footer, renderFAQ, writePage, extraSitemap });
+count += require('./build_jobs.js')({ ROOT, SITE, today, esc, slugify, headOpen, footer, renderFAQ, writePage, extraSitemap, dispensaries: TCC.dispensaries });
 
 // ============================================================================
 // ANSWERS — programmatic Q&A pages for search + answer engines (SEO/AEO)

@@ -177,6 +177,26 @@ export default {
       return handleDealUpdate(request, env, cors);
     }
 
+    if (url.pathname === '/jobs/post' && request.method === 'POST') {
+      return handleJobPost(request, env, cors);
+    }
+
+    if (url.pathname.startsWith('/jobs/confirm/') && request.method === 'GET') {
+      return handleJobConfirm(request, env);
+    }
+
+    if (url.pathname === '/jobs/owner' && request.method === 'GET') {
+      return handleOwnerJobsPublic(env, cors);
+    }
+
+    if (url.pathname === '/jobs/alerts' && request.method === 'POST') {
+      return handleJobAlertSignup(request, env, cors);
+    }
+
+    if (url.pathname === '/admin/jobs/update' && request.method === 'POST') {
+      return handleJobUpdate(request, env, cors);
+    }
+
     if (url.pathname === '/checkin' && request.method === 'POST') {
       return handleCheckin(request, env, cors);
     }
@@ -648,13 +668,14 @@ async function handleAdminData(request, env, cors) {
     });
   }
 
-  const [subscribers, overrides, site, leads, checkins, ownerDeals] = await Promise.all([
+  const [subscribers, overrides, site, leads, checkins, ownerDeals, ownerJobs] = await Promise.all([
     fetchSubscribers(env),
     fetchOverrides(env),
     fetchSiteHealth(),
     fetchLeads(env),
     env.TCC_OVERRIDES.get('index:checkins', { type: 'json' }).then((v) => v || []),
     env.TCC_OVERRIDES.get('index:owner-deals', { type: 'json' }).then((v) => v || []),
+    env.TCC_OVERRIDES.get('index:owner-jobs', { type: 'json' }).then((v) => v || []),
   ]);
 
   return new Response(JSON.stringify({
@@ -664,6 +685,7 @@ async function handleAdminData(request, env, cors) {
     leads,
     checkins,
     ownerDeals,
+    ownerJobs,
     generated_at: new Date().toISOString(),
   }), {
     status: 200,
@@ -1161,6 +1183,28 @@ function render(d) {
     </section>
 
     <section>
+      <h2>Job posts <span style="font-size:.75rem;color:var(--accent);float:right">\${(d.ownerJobs || []).filter(x => x.status === 'pending').length} pending</span></h2>
+      \${(d.ownerJobs || []).length ? '<table><thead><tr><th>When</th><th>Shop</th><th>Job</th><th>Pay</th><th>Through</th><th>Contact</th><th>Status</th><th></th></tr></thead><tbody>' +
+        (d.ownerJobs || []).slice(0, 40).map(x => '<tr id="oj-' + esc(x.id) + '">' +
+          '<td><code class="mono">' + esc(x.submitted_at ? x.submitted_at.slice(0,10) : '—') + '</code></td>' +
+          '<td><strong>' + esc(x.shop) + '</strong></td>' +
+          '<td>' + esc(x.title) + (x.employment_type ? ' <span style="color:var(--dim);font-size:.75rem">' + esc(x.employment_type) + '</span>' : '') +
+            '<br><span style="color:var(--dim);font-size:.8rem">' + esc((x.description || '').slice(0, 220)) + '</span>' +
+            '<br><a href="' + esc(x.apply_url) + '" target="_blank" rel="noopener" style="font-size:.75rem">' + esc(x.apply_url) + '</a></td>' +
+          '<td>' + (x.pay_min ? '$' + esc(x.pay_min) + (x.pay_max !== x.pay_min ? '–$' + esc(x.pay_max) : '') + (x.pay_unit === 'YEAR' ? '/yr' : '/hr') : '—') + '</td>' +
+          '<td><code class="mono">' + esc(x.ends) + '</code></td>' +
+          '<td>' + esc(x.contact || '—') + '</td>' +
+          '<td><span class="pill ' + (x.status === 'approved' ? 'active' : '') + '">' + esc(x.status) + '</span></td>' +
+          '<td>' + (x.status === 'pending'
+            ? '<button class="btn" style="padding:.2rem .6rem;font-size:.75rem" onclick="ojAct(\\'' + esc(x.id) + '\\',\\'approve\\')">Approve</button> ' +
+              '<button class="btn ghost" style="padding:.2rem .6rem;font-size:.75rem" onclick="ojAct(\\'' + esc(x.id) + '\\',\\'reject\\')">Reject</button>'
+            : '<button class="btn ghost" style="padding:.2rem .6rem;font-size:.75rem" onclick="ojAct(\\'' + esc(x.id) + '\\',\\'reject\\')">Remove</button>') + '</td>' +
+        '</tr>').join('') +
+        '</tbody></table>'
+        : '<div class="empty">No job posts yet. Claimed owners post them at twincitycannabis.com/jobs/post/. Approved jobs reach /jobs/ on the next site build.</div>'}
+    </section>
+
+    <section>
       <h2>Quick links</h2>
       <div class="links">
         <a class="btn" href="https://dashboard.stripe.com/subscriptions" target="_blank">Stripe subscriptions</a>
@@ -1400,6 +1444,25 @@ async function odAct(id, action) {
   } catch (e) { console.error('deal update failed', e); }
 }
 
+async function ojAct(id, action) {
+  const key = new URLSearchParams(location.search).get('key');
+  if (!key) return;
+  try {
+    const r = await fetch('/admin/jobs/update?key=' + encodeURIComponent(key), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, action }),
+    });
+    if (r.ok) {
+      const row = document.getElementById('oj-' + id);
+      if (row) {
+        if (action === 'reject') row.remove();
+        else row.querySelector('.pill').textContent = 'approved';
+      }
+    }
+  } catch (e) { console.error('job update failed', e); }
+}
+
 async function ckAct(id, action) {
   const key = new URLSearchParams(location.search).get('key');
   if (!key) return;
@@ -1460,7 +1523,7 @@ setInterval(load, 30000);
 // KV key scheme:
 //   stat:<id>:<event>:d<YYYY-MM-DD>   daily counter (95-day TTL)
 //   stat:<id>:<event>:total            lifetime counter (no TTL)
-const TRACK_EVENTS = new Set(['view', 'outbound', 'search_hit', 'featured_view', 'featured_click']);
+const TRACK_EVENTS = new Set(['view', 'outbound', 'search_hit', 'featured_view', 'featured_click', 'apply_click']);
 
 // ─── /contact ────────────────────────────────────────────────────────────────
 // Receives claim/inquiry form submissions, stores in KV, shows on /admin.
@@ -1828,6 +1891,183 @@ async function handleDealUpdate(request, env, cors) {
   return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
 }
 
+// ─── Owner job posts + job alerts (D60 jobs pilot, session 2) ──────────────
+// Same gate as owner specials: a claimed listing with an owner email on file
+// can post; the owner confirms from that inbox; Josh approves in the
+// dashboard. Approved jobs are served at /jobs/owner, and the site's build
+// (scraper/fetch_jobs.js, source tcc-owner) turns them into static job pages
+// with JobPosting markup on the next cycle. Basic posts are free (D60 D-a).
+const JOB_TYPES = new Set(['', 'FULL_TIME', 'PART_TIME']);
+
+async function handleJobPost(request, env, cors) {
+  const json = (status, obj) => new Response(JSON.stringify(obj), { status, headers: { 'Content-Type': 'application/json', ...cors } });
+  let body;
+  try { body = await request.json(); } catch { return json(400, { ok: false }); }
+  const shop = String(body.shop || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 80);
+  // Daily smoke test (tests/smoke_claim_forms.js) posts the live form for
+  // this fake shop. Record the pass and stop: no post, no email.
+  if (shop === 'smoke-test') {
+    await env.TCC_OVERRIDES.put('smoke:contact:jobpost', new Date().toISOString());
+    return json(200, { ok: true, smoke: true, confirm_sent_to: 's***@twincitycannabis.com' });
+  }
+  const title = String(body.title || '').trim().slice(0, 90);
+  const description = String(body.description || '').replace(/\r/g, '').trim().slice(0, 4000);
+  const employment_type = String(body.employment_type || '').toUpperCase();
+  const apply_url = String(body.apply_url || '').trim().slice(0, 500);
+  const pay_unit = body.pay_unit === 'YEAR' ? 'YEAR' : 'HOUR';
+  const num = (v) => { const n = Math.round(parseFloat(v) * 100) / 100; return n > 0 ? n : null; };
+  let pay_min = num(body.pay_min), pay_max = num(body.pay_max);
+  if (pay_max && !pay_min) pay_min = pay_max;
+  if (pay_min && (!pay_max || pay_max < pay_min)) pay_max = pay_min;
+  const payOk = !pay_min || (pay_unit === 'HOUR' ? pay_min >= 10 && pay_max <= 200 : pay_min >= 20000 && pay_max <= 500000);
+  const today = new Date().toISOString().slice(0, 10);
+  const maxEnd = new Date(Date.now() + 60 * 86400 * 1000).toISOString().slice(0, 10);
+  const defEnd = new Date(Date.now() + 30 * 86400 * 1000).toISOString().slice(0, 10);
+  let ends = _isoDate(body.ends) || defEnd;
+  if (ends > maxEnd) ends = maxEnd;
+  let urlOk = false;
+  try { urlOk = new URL(apply_url).protocol === 'https:'; } catch { /* not a URL */ }
+  if (!shop || title.length < 3 || description.length < 80 || !JOB_TYPES.has(employment_type) || !urlOk || !payOk || ends < today) {
+    return json(400, { ok: false, error: 'invalid',
+      message: !urlOk ? 'The application link must be a full https:// address.'
+        : !payOk ? 'Check the pay: hourly between $10 and $200, yearly between $20,000 and $500,000.'
+        : description.length < 80 ? 'Add a little more to the description (80 characters or more).'
+        : 'Shop, job title, application link and description are required.' });
+  }
+  const crm = (await env.TCC_OVERRIDES.get('index:crm', { type: 'json' })) || {};
+  const rec = crm[shop] || {};
+  if (!rec.claimed || !rec.owner_email) {
+    return json(403, { ok: false, error: 'not_claimed',
+      message: 'Jobs can only be posted by the claimed owner of a listing. Claim your listing first (it is free), or email hello@twincitycannabis.com.' });
+  }
+  const list = (await env.TCC_OVERRIDES.get('index:owner-jobs', { type: 'json' })) || [];
+  const hourAgo = Date.now() - 3600 * 1000;
+  if (list.filter((x) => x.shop === shop && x.status === 'unconfirmed' && Date.parse(x.submitted_at) > hourAgo).length >= 6) {
+    return json(429, { ok: false, error: 'throttled',
+      message: 'That is six unconfirmed jobs in the last hour. Confirm the ones already in your inbox, then post more.' });
+  }
+  const entry = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+    token: crypto.randomUUID().replace(/-/g, '') + Math.random().toString(36).slice(2, 10),
+    shop, title, description, employment_type, apply_url, pay_min, pay_max: pay_min ? pay_max : null, pay_unit, ends,
+    contact: rec.owner_email,
+    submitted_at: new Date().toISOString(),
+    status: 'unconfirmed',
+  };
+  list.unshift(entry);
+  // Trim without ever dropping approved or pending jobs: spam posts that no
+  // owner confirmed go first once they are 48 hours old, then any unconfirmed.
+  const stale = Date.now() - 48 * 3600 * 1000;
+  let kept = list.filter((x) => x.status !== 'unconfirmed' || Date.parse(x.submitted_at) > stale);
+  if (kept.length > 300) {
+    const keep = kept.filter((x) => x.status !== 'unconfirmed');
+    kept = keep.concat(kept.filter((x) => x.status === 'unconfirmed').slice(0, Math.max(0, 300 - keep.length)));
+  }
+  await env.TCC_OVERRIDES.put('index:owner-jobs', JSON.stringify(kept));
+  const link = 'https://dashboard.twincitycannabis.com/jobs/confirm/' + entry.token;
+  try {
+    await sendMail(env, rec.owner_email, `Confirm your job post: ${title.slice(0, 50)}`,
+      `Someone posted a job for your listing on Twin City Cannabis:\n\n${title}\nApply link: ${apply_url}\nUp through ${ends}\n\nIf that was you, confirm it here and we'll review and publish it:\n${link}\n\nIf it wasn't you, ignore this email and nothing will be posted.\n\nTwin City Cannabis\nhello@twincitycannabis.com`);
+  } catch (e) { console.error('job confirm email failed:', e); }
+  return json(200, { ok: true, confirm_sent_to: rec.owner_email.replace(/^(.).*(@.*)$/, '$1***$2') });
+}
+
+async function handleJobConfirm(request, env) {
+  const url = new URL(request.url);
+  // Token in the path, for the same quoted-printable reason as /deal/confirm.
+  const token = url.pathname.slice('/jobs/confirm/'.length).replace(/[^a-z0-9]/gi, '').slice(0, 80);
+  const page = (title, body) => new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#0a1410;color:#e8e9eb;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0"><div style="max-width:460px;padding:2rem;text-align:center"><div style="color:#22c55e;font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:.6rem">Twin City Cannabis</div><h1 style="font-size:1.3rem;margin:0 0 .6rem">${title}</h1><p style="color:#b8bcc4;margin:0">${body}</p></div></body>`, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+  if (!token) return page('That link is missing its code', 'Open the link from your confirmation email again.');
+  const list = (await env.TCC_OVERRIDES.get('index:owner-jobs', { type: 'json' })) || [];
+  const idx = list.findIndex((x) => x.token === token);
+  if (idx === -1) return page('That link has expired', 'Post the job again at twincitycannabis.com/jobs/post and confirm the new email.');
+  if (list[idx].status === 'unconfirmed') {
+    list[idx].status = 'pending';
+    list[idx].confirmed_at = new Date().toISOString();
+    await env.TCC_OVERRIDES.put('index:owner-jobs', JSON.stringify(list));
+    const x = list[idx];
+    try {
+      await sendOpsEmail(env, `💼 Job post confirmed by owner: ${x.title.slice(0, 50)} @ ${x.shop}`,
+        `Owner-confirmed job post (pending your approval)\n\nShop: ${x.shop}\nTitle: ${x.title}\nType: ${x.employment_type || 'not given'}\nPay: ${x.pay_min ? '$' + x.pay_min + (x.pay_max !== x.pay_min ? '-$' + x.pay_max : '') + (x.pay_unit === 'YEAR' ? '/yr' : '/hr') : 'not given'}\nApply link: ${x.apply_url}\nUp through: ${x.ends}\n\n${x.description}\n\nApprove or reject here (Job posts section):\n${adminUrl(env)}`);
+    } catch (e) { console.error('job ops email failed:', e); }
+  }
+  return page('Confirmed', 'Thanks. We review every job before it goes live, usually the same day. It shows on /jobs/ and your shop page after the next site update.');
+}
+
+// Public, edge-cached: approved, unexpired owner jobs. Read by fetch_jobs.js.
+async function handleOwnerJobsPublic(env, cors) {
+  const today = new Date().toISOString().slice(0, 10);
+  const list = (await env.TCC_OVERRIDES.get('index:owner-jobs', { type: 'json' })) || [];
+  const out = list
+    .filter((x) => x.status === 'approved' && x.ends >= today)
+    .map((x) => ({ id: x.id, shop: x.shop, title: x.title, description: x.description, employment_type: x.employment_type,
+      apply_url: x.apply_url, pay_min: x.pay_min, pay_max: x.pay_max, pay_unit: x.pay_unit, ends: x.ends, approved_at: x.approved_at }));
+  return new Response(JSON.stringify(out), {
+    status: 200, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300', ...cors },
+  });
+}
+
+async function handleJobUpdate(request, env, cors) {
+  if (!verifyAdminToken(request, env)) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  let body;
+  try { body = await request.json(); } catch {
+    return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const list = (await env.TCC_OVERRIDES.get('index:owner-jobs', { type: 'json' })) || [];
+  const idx = list.findIndex((x) => x.id === body.id);
+  if (idx === -1) {
+    return new Response(JSON.stringify({ ok: false, error: 'not found' }), { status: 404, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  if (body.action === 'approve') { list[idx].status = 'approved'; list[idx].approved_at = new Date().toISOString(); }
+  else if (body.action === 'reject') list.splice(idx, 1);
+  else {
+    return new Response(JSON.stringify({ ok: false, error: 'action must be approve|reject' }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  await env.TCC_OVERRIDES.put('index:owner-jobs', JSON.stringify(list));
+  return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+}
+
+// Job alert signup from /jobs/: Kit subscriber tagged tcc-jobs. This is the
+// list employers may later pay to reach (D60 pricing table). 21+ is required.
+async function handleJobAlertSignup(request, env, cors) {
+  const json = (status, obj) => new Response(JSON.stringify(obj), { status, headers: { 'Content-Type': 'application/json', ...cors } });
+  let body;
+  try { body = await request.json(); } catch { return json(400, { ok: false }); }
+  const email = String(body.email || '').trim().toLowerCase().slice(0, 200);
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json(400, { ok: false, message: 'Enter a valid email address.' });
+  if (body.adult !== true) return json(400, { ok: false, message: 'Job alerts are for adults 21 and older.' });
+  if (email === SMOKE_EMAIL) {
+    await env.TCC_OVERRIDES.put('smoke:contact:jobalert', new Date().toISOString());
+    return json(200, { ok: true, smoke: true });
+  }
+  // Five signups per IP per hour: each one costs three Kit API calls, and the
+  // same key carries the claim-lead mirror.
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const rlKey = 'rl:jobalert:' + ip;
+  const tries = parseInt((await env.TCC_OVERRIDES.get(rlKey)) || '0', 10);
+  if (tries >= 5) return json(429, { ok: false, message: 'Too many signups from this connection. Try again in an hour.' });
+  await env.TCC_OVERRIDES.put(rlKey, String(tries + 1), { expirationTtl: 3600 });
+  if (!env.KIT_API_KEY) return json(500, { ok: false, message: 'Signups are down for a moment. Try again later.' });
+  const headers = { 'X-Kit-Api-Key': env.KIT_API_KEY, 'Content-Type': 'application/json' };
+  try {
+    // Kit returns the existing tag when one with this name already exists.
+    const tag = await (await fetch('https://api.kit.com/v4/tags', { method: 'POST', headers, body: JSON.stringify({ name: 'tcc-jobs' }) })).json();
+    const tagId = tag && tag.tag && tag.tag.id;
+    if (!tagId) throw new Error('no tag id');
+    const sub = await fetch('https://api.kit.com/v4/subscribers', { method: 'POST', headers,
+      body: JSON.stringify({ email_address: email }) });
+    if (!sub.ok) throw new Error('subscriber ' + sub.status);
+    const t = await fetch(`https://api.kit.com/v4/tags/${tagId}/subscribers`, { method: 'POST', headers, body: JSON.stringify({ email_address: email }) });
+    if (!t.ok) throw new Error('tag ' + t.status);
+  } catch (e) {
+    console.error('job alert signup failed:', e);
+    return json(500, { ok: false, message: 'That did not go through. Try again in a minute.' });
+  }
+  return json(200, { ok: true });
+}
+
 // Admin dashboard link WITH the access key. These emails go only to hello@,
 // and the lead-notification email has always embedded the key this way — a
 // bare /admin link just lands on "unauthorized" (Josh hit exactly that
@@ -1929,10 +2169,11 @@ async function monitorSite(env) {
     problems.publish = 'Publishing was already late, and status.json cannot be read to confirm otherwise.';
   }
 
-  for (const kind of ['dispensary', 'brand']) {
+  const SMOKE_FORMS = { dispensary: 'dispensary claim form', brand: 'brand claim form', jobpost: 'job post form (/jobs/post/)', jobalert: 'job alert signup (/jobs/)' };
+  for (const kind of Object.keys(SMOKE_FORMS)) {
     const at = await env.TCC_OVERRIDES.get('smoke:contact:' + kind);
     if (!at || now - Date.parse(at) > 30 * 3600e3) {
-      problems['smoke:' + kind] = `The ${kind} claim form has not passed its daily live test since ${at ? fmtCT(Date.parse(at)) + ' Central' : 'ever'}. ` +
+      problems['smoke:' + kind] = `The ${SMOKE_FORMS[kind]} has not passed its daily live test since ${at ? fmtCT(Date.parse(at)) + ' Central' : 'ever'}. ` +
         `Either the form is broken for real owners or the test stopped running (Actions tab, "Smoke test claim forms").`;
     }
   }
@@ -2007,6 +2248,8 @@ async function sendWeeklyDigest(env) {
   const pendingUploads = uploads.filter((u) => !u.processed);
   const ownerDeals = (await env.TCC_OVERRIDES.get('index:owner-deals', { type: 'json' })) || [];
   const pendingDeals = ownerDeals.filter((x) => x.status === 'pending');
+  const ownerJobs = (await env.TCC_OVERRIDES.get('index:owner-jobs', { type: 'json' })) || [];
+  const pendingJobs = ownerJobs.filter((x) => x.status === 'pending');
   let alerts = [];
   try {
     const r = await fetch('https://twincitycannabis.com/scraper/data/menu_alerts.json', { cf: { cacheTtl: 0 } });
@@ -2020,6 +2263,7 @@ async function sendWeeklyDigest(env) {
     `Suggestions this week: ${newSugg.length}` + (newSugg.length ? '\n' + newSugg.map((s) => `  - ${(s.submitted_at || '').slice(0, 10)} ${s.text.slice(0, 90)}`).join('\n') : ''),
     `Menu uploads pending import: ${pendingUploads.length}` + (pendingUploads.length ? '\n' + pendingUploads.map((u) => `  - ${u.slug} (${u.submitted_at.slice(0, 10)})`).join('\n') : ''),
     `Shop specials pending approval: ${pendingDeals.length}` + (pendingDeals.length ? '\n' + pendingDeals.map((x) => `  - ${x.shop}: ${x.title} (through ${x.ends})`).join('\n') : ''),
+    `Job posts pending approval: ${pendingJobs.length}` + (pendingJobs.length ? '\n' + pendingJobs.map((x) => `  - ${x.shop}: ${x.title}`).join('\n') : ''),
     `Menu watchdog alerts this week: ${alerts.length}` + (alerts.length ? '\n' + alerts.map((a) => `  - ${a.date} ${a.kind}: ${a.shop} ${a.before}->${a.after}`).join('\n') : ''),
     '',
     'Dashboard: ' + adminUrl(env),

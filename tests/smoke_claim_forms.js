@@ -15,7 +15,7 @@
  * a broken form, or this test not running, both reach Josh.
  *
  * Run: node tests/smoke_claim_forms.js   (CHROME_PATH=... to pick a browser)
- * Exit 0 = both forms reached the worker and showed the thank-you panel.
+ * Exit 0 = every form reached the worker and showed the thank-you panel.
  */
 const puppeteer = require('puppeteer-core');
 
@@ -68,6 +68,59 @@ async function check(browser, f) {
   }
 }
 
+// Jobs board forms (D60): the owner post form on /jobs/post/ and the job
+// alert signup on /jobs/. The worker treats shop "smoke-test" and
+// SMOKE_EMAIL as test traffic (KV smoke:contact:jobpost / jobalert).
+async function checkJobPost(browser) {
+  const page = await browser.newPage();
+  try {
+    await page.goto(`${SITE}/jobs/post/?smoke=${Date.now()}`, { waitUntil: 'networkidle2', timeout: 60000 });
+    const gate = await page.$('#tcc-age-yes');
+    if (gate && await gate.isIntersectingViewport()) await gate.click();
+    await page.waitForSelector('#job-post-form [name="title"]', { visible: true, timeout: 20000 });
+    // The fake shop isn't in the dropdown; add it the way a real option looks.
+    await page.evaluate(() => {
+      const sel = document.querySelector('#job-post-form [name="shop"]');
+      sel.add(new Option('Smoke test', 'smoke-test')); sel.value = 'smoke-test';
+    });
+    await page.type('#job-post-form [name="title"]', 'Automated form check');
+    await page.type('#job-post-form [name="apply_url"]', 'https://twincitycannabis.com/jobs/');
+    await page.type('#job-post-form [name="description"]', 'Automated daily check that the job post form reaches the worker. Discarded, never published.');
+    const posted = page.waitForResponse((r) => r.url().endsWith('/jobs/post') && r.request().method() === 'POST', { timeout: 30000 });
+    await page.click('#job-post-form button[type="submit"]');
+    const res = await posted;
+    if (!res.ok()) throw new Error(`worker answered ${res.status()}`);
+    await page.waitForFunction(() => document.getElementById('job-post-form').hidden && !document.getElementById('job-post-thanks').hidden, { timeout: 15000 });
+    console.log(`ok   job post form (/jobs/post/): posted, worker ${res.status()}, thank-you shown`);
+    return true;
+  } catch (e) {
+    console.log(`FAIL job post form (/jobs/post/): ${e.message}`);
+    return false;
+  } finally { await page.close(); }
+}
+
+async function checkJobAlert(browser) {
+  const page = await browser.newPage();
+  try {
+    await page.goto(`${SITE}/jobs/?smoke=${Date.now()}`, { waitUntil: 'networkidle2', timeout: 60000 });
+    const gate = await page.$('#tcc-age-yes');
+    if (gate && await gate.isIntersectingViewport()) await gate.click();
+    await page.waitForSelector('#jobs-alert-form [name="email"]', { visible: true, timeout: 20000 });
+    await page.type('#jobs-alert-form [name="email"]', SMOKE_EMAIL);
+    await page.click('#jobs-alert-form [name="adult"]');
+    const posted = page.waitForResponse((r) => r.url().endsWith('/jobs/alerts') && r.request().method() === 'POST', { timeout: 30000 });
+    await page.click('#jobs-alert-form button[type="submit"]');
+    const res = await posted;
+    if (!res.ok()) throw new Error(`worker answered ${res.status()}`);
+    await page.waitForFunction(() => document.getElementById('jobs-alert-form').hidden, { timeout: 15000 });
+    console.log(`ok   job alert signup (/jobs/): posted, worker ${res.status()}, thank-you shown`);
+    return true;
+  } catch (e) {
+    console.log(`FAIL job alert signup (/jobs/): ${e.message}`);
+    return false;
+  } finally { await page.close(); }
+}
+
 // The worker's hourly monitor must have run in the last 2 hours. It emails
 // Josh about everything else; this is the one thing it cannot report itself.
 async function checkMonitor() {
@@ -89,6 +142,8 @@ async function checkMonitor() {
     args: ['--no-sandbox', '--disable-dev-shm-usage'] });
   let ok = true;
   for (const f of FORMS) ok = (await check(browser, f)) && ok;
+  ok = (await checkJobPost(browser)) && ok;
+  ok = (await checkJobAlert(browser)) && ok;
   await browser.close();
   if (process.env.SKIP_MONITOR_CHECK !== '1') ok = (await checkMonitor()) && ok;
   process.exit(ok ? 0 : 1);
