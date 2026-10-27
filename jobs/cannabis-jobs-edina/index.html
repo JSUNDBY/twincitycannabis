@@ -188,6 +188,7 @@
     <a href="/featured/">Featured</a>
     <a href="/brands/">Brands</a>
     <a href="/blog/">Guides</a>
+    <a href="/jobs/" class="active">Jobs</a>
     <a href="/#learn">Learn</a>
   </div>
   <div class="seo-actions">
@@ -202,7 +203,7 @@
     </button>
   </div>
 </nav>
-<div class="seo-announce"><span class="dot" aria-hidden="true"></span><strong>7,400+</strong> products &middot; <strong>144</strong> dispensaries tracked &middot; every dispensary, every price, one calm place</div>
+<div class="seo-announce"><span class="dot" aria-hidden="true"></span><strong>7,500+</strong> products &middot; <strong>144</strong> dispensaries tracked &middot; every dispensary, every price, one calm place</div>
 <main class="seo-wrap">
 
 <div class="crumbs"><a href="/">Home</a> / <a href="/jobs/">Jobs</a> / Edina</div>
@@ -267,10 +268,39 @@
   <td>Jun 13, 2025</td>
 </tr></tbody>
 </table>
-<p><a href="/jobs/">See all 35 Minnesota cannabis jobs →</a></p>
+<p><a href="/jobs/">See all 52 Minnesota cannabis jobs →</a></p>
+<div class="jobs-alert" style="margin:2rem 0;padding:1rem 1.25rem;border:1px solid var(--border, #2a2a2a);border-radius:12px;max-width:560px">
+<h2 style="margin-top:0">Get new cannabis jobs by email</h2>
+<form id="jobs-alert-form">
+<input type="email" name="email" required maxlength="200" placeholder="you@email.com" autocomplete="email" style="width:100%;padding:.6rem .75rem;margin-bottom:.6rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
+<label style="display:flex;gap:.5rem;align-items:flex-start;font-size:.88rem;margin-bottom:.7rem"><input type="checkbox" name="adult" required style="margin-top:.2rem"> <span>I'm 21 or older. Email me new Minnesota cannabis jobs. Unsubscribe any time.</span></label>
+<button type="submit" class="cta" style="border:none;cursor:pointer;font:inherit">Send me job alerts</button>
+<p class="jobs-alert-err" hidden style="color:#f87171;font-size:.85rem;margin:.5rem 0 0"></p>
+</form>
+<p class="jobs-alert-thanks" hidden style="margin:0">You're on the list. New Minnesota cannabis jobs will come to your inbox.</p>
+</div>
+<script>
+(function () {
+  var f = document.getElementById('jobs-alert-form');
+  if (!f) return;
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = f.querySelector('.jobs-alert-err');
+    err.hidden = true;
+    fetch("https://dashboard.twincitycannabis.com/jobs/alerts", { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: f.email.value, adult: f.adult.checked }) })
+      .then(function (r) { return r.json().then(function (b) { return { ok: r.ok, b: b }; }); })
+      .then(function (x) {
+        if (!x.ok || !x.b.ok) throw new Error((x.b && x.b.message) || 'Something went wrong. Try again in a minute.');
+        f.hidden = true; f.parentElement.querySelector('.jobs-alert-thanks').hidden = false;
+      })
+      .catch(function (e2) { err.textContent = e2.message; err.hidden = false; });
+  });
+})();
+</script>
 <div class="jobs-employer-cta" style="margin:2rem 0;padding:1rem 1.25rem;border:1px solid var(--border, #2a2a2a);border-radius:12px">
 <h2 style="margin-top:0">Hiring at a Minnesota dispensary?</h2>
-<p>Posting is free. Email the role, pay and your application link to <a href="mailto:hello@twincitycannabis.com?subject=Job%20post">hello@twincitycannabis.com</a> and it goes up here, set up to show in Google's job search. If your shop already lists openings on Greenhouse, Lever or Workable, send us the link and we'll keep them in sync automatically.</p>
+<p>Posting is free. <a href="/jobs/post/">Post a job</a> from your claimed listing and it goes up here, set up to show in Google's job search. If your shop already lists openings on Greenhouse, JazzHR, Lever or Workable, email the link to <a href="mailto:hello@twincitycannabis.com?subject=Job%20board%20link">hello@twincitycannabis.com</a> and we'll keep them in sync automatically.</p>
 </div>
 <p style="font-size:.9rem;color:var(--text-muted)">Minnesota requires dispensary workers to be 21 or older and to pass a background check. Every listing links to the employer's own application page; Twin City Cannabis never takes applications or fees from job seekers.</p>
 </main>
