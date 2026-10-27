@@ -1,6 +1,6 @@
 {
- "merged_groups": 342,
- "absorbed": 536,
+ "merged_groups": 345,
+ "absorbed": 540,
  "groups": [
   {
    "key": "&shine|edible|100mg|10 blackberry pk",
@@ -1637,7 +1637,7 @@
    "key": "rythm|flower|14g|gogurtz",
    "kept": {
     "name": "Gogurtz",
-    "shops_before": 8
+    "shops_before": 7
    },
    "absorbed": [
     {
@@ -1653,7 +1653,7 @@
      ]
     }
    ],
-   "shops_after": 9
+   "shops_after": 8
   },
   {
    "key": "good green|flower|3.5g|chem cookies n",
@@ -1717,7 +1717,6 @@
     {
      "name": "Chem n' Cookies | 3.5g",
      "shops": [
-      "leafline-labs-eagan",
       "leafline-labs-st-cloud",
       "leafline-labs-st-paul",
       "rise-baxter",
@@ -1728,6 +1727,7 @@
     {
      "name": "Chem n' Cookies",
      "shops": [
+      "leafline-labs-eagan",
       "rise-new-hope"
      ]
     },
@@ -2841,16 +2841,16 @@
    "shops_after": 13
   },
   {
-   "key": "carpe diem|tincture|1000mg|gel muscle on relief",
+   "key": "carpe diem|tincture|1500mg|cream full relax spectrum",
    "kept": {
-    "name": "Relief Muscle & Joint CBD Gel Roll-On 1000 mg",
+    "name": "Relax CBD Cream 1500 mg Full-Spectrum",
     "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Relief Muscle & Joint CBD Gel Roll-On 1000mg - Carpe Diem",
+     "name": "Carpe Diem CBD Cream - 1500mg CBD - Full Spectrum - RELAX",
      "shops": [
-      "flame-flora"
+      "island-pezi"
      ]
     }
    ],
@@ -3045,22 +3045,6 @@
    "shops_after": 2
   },
   {
-   "key": "emerald fire|flower|3.5g|inferno white",
-   "kept": {
-    "name": "White Inferno 3.5G",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Emerald Fire Flower- White Inferno 3.5g",
-     "shops": [
-      "northern-crown-cannabis"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "redwood county weed management|pre-roll|1g|berry halle",
    "kept": {
     "name": "Halle Berry - 1 g Pre-Roll",
@@ -3071,6 +3055,22 @@
      "name": "Redwood County Weed Management Halle Berry Preroll 1g",
      "shops": [
       "twin-cities-cannabis-richfield"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "emerald fire|flower|3.5g|inferno white",
+   "kept": {
+    "name": "White Inferno 3.5G",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Emerald Fire Flower- White Inferno 3.5g",
+     "shops": [
+      "northern-crown-cannabis"
      ]
     }
    ],
@@ -3269,6 +3269,22 @@
    "shops_after": 2
   },
   {
+   "key": "moonlight cannabis|edible|5mg|cadet live resin space",
+   "kept": {
+    "name": "Moonlight Space Cadet  5mg Live-Resin Gummies",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Space Cadet - LIVE RESIN 5mg THC Gummy - Moonlight Cannabis",
+     "shops": [
+      "healing-harvest"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "campfire cannabis|pre-roll|1g|1 ct guava",
    "kept": {
     "name": "Pre-Roll Guava - 1g - 1ct",
@@ -3289,22 +3305,6 @@
     }
    ],
    "shops_after": 4
-  },
-  {
-   "key": "moonlight cannabis|edible|5mg|cadet live resin space",
-   "kept": {
-    "name": "Moonlight Space Cadet  5mg Live-Resin Gummies",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Space Cadet - LIVE RESIN 5mg THC Gummy - Moonlight Cannabis",
-     "shops": [
-      "healing-harvest"
-     ]
-    }
-   ],
-   "shops_after": 2
   },
   {
    "key": "minny grown|flower|3.5g|frankenpine",
@@ -3530,7 +3530,7 @@
    "key": "good green|flower|3.5g|fuel jet og",
    "kept": {
     "name": "Jet Fuel OG",
-    "shops_before": 16
+    "shops_before": 15
    },
    "absorbed": [
     {
@@ -3696,6 +3696,28 @@
    "shops_after": 2
   },
   {
+   "key": "tasty gems|cartridge|0.5g|biscotti chocolate diamond disposable",
+   "kept": {
+    "name": "Chocolate Diamond Biscotti | Disposable | 0.5g | Tasty Gems |",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Chocolate Diamond Biscotti | Disposable Vape | .5g",
+     "shops": [
+      "green-rose"
+     ]
+    },
+    {
+     "name": "Tasty Gems Disposable- Chocolate Diamond Biscotti .5g",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
    "key": "tasty gems|cartridge|0.5g|disposable original tanzanite z",
    "kept": {
     "name": "Tanzanite Original Z | Disposable | 0.5g | Tasty Gems |",
@@ -3718,26 +3740,20 @@
    "shops_after": 3
   },
   {
-   "key": "tasty gems|cartridge|0.5g|biscotti chocolate diamond disposable",
+   "key": "rythm|cartridge|0.5g|gogurtz live resin",
    "kept": {
-    "name": "Chocolate Diamond Biscotti | Disposable | 0.5g | Tasty Gems |",
+    "name": "Gogurtz | Live Resin Cartridge | 0.5g | Rythm |",
     "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Chocolate Diamond Biscotti | Disposable Vape | .5g",
+     "name": "Gogurtz Live Resin Cartridge 500mg | 0.5g",
      "shops": [
-      "green-rose"
-     ]
-    },
-    {
-     "name": "Tasty Gems Disposable- Chocolate Diamond Biscotti .5g",
-     "shops": [
-      "northern-crown-cannabis"
+      "my-dealer-bayport"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 2
   },
   {
    "key": "tasty gems|cartridge|0.5g|citrine disposable golden motornana",
@@ -3782,6 +3798,22 @@
     }
    ],
    "shops_after": 9
+  },
+  {
+   "key": "rythm|cartridge|0.5g|durban live resin z",
+   "kept": {
+    "name": "Durban Z | Live Resin Cartridge | 0.5g | Rythm |",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Durban Z Live Resin Cartridge 500mg | 0.5g",
+     "shops": [
+      "my-dealer-bayport"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "northpark|pre-roll|3g|3 ct gummibears ix",
@@ -4231,22 +4263,22 @@
    "shops_after": 7
   },
   {
-   "key": "verist fields|concentrate|1g|cured glacier pappy resin sappy sour valley",
+   "key": "granny's|edible|50mg|original pretzels",
    "kept": {
-    "name": "Sappy Pappy Glacier Valley Sour 1g Cured Resin",
+    "name": "Granny's Original Pretzels 50mg THC (50 pack)",
     "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Sappy Pappy Cured Resin - Glacier Valley Sour - 1g",
+     "name": "Original Pretzels 50mg - Granny's",
      "shops": [
-      "lake-daze"
+      "flame-flora"
      ]
     },
     {
-     "name": "Glacier Valley Sour - Cured Resin - Sappy Pappy - 1g",
+     "name": "Granny's Original Pretzels - 50mg THC",
      "shops": [
-      "verist-fields"
+      "island-pezi"
      ]
     }
    ],
@@ -4281,22 +4313,22 @@
    "shops_after": 10
   },
   {
-   "key": "granny's|edible|50mg|original pretzels",
+   "key": "verist fields|concentrate|1g|cured glacier pappy resin sappy sour valley",
    "kept": {
-    "name": "Granny's Original Pretzels 50mg THC (50 pack)",
+    "name": "Sappy Pappy Glacier Valley Sour 1g Cured Resin",
     "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Original Pretzels 50mg - Granny's",
+     "name": "Sappy Pappy Cured Resin - Glacier Valley Sour - 1g",
      "shops": [
-      "flame-flora"
+      "lake-daze"
      ]
     },
     {
-     "name": "Granny's Original Pretzels - 50mg THC",
+     "name": "Glacier Valley Sour - Cured Resin - Sappy Pappy - 1g",
      "shops": [
-      "island-pezi"
+      "verist-fields"
      ]
     }
    ],
@@ -4326,13 +4358,19 @@
    },
    "absorbed": [
     {
+     "name": "1G Preroll Campfire Cannabis Runtz",
+     "shops": [
+      "high-fidelity"
+     ]
+    },
+    {
      "name": "Runtz Preroll 1g - Campfire Cannabis",
      "shops": [
       "flame-flora"
      ]
     }
    ],
-   "shops_after": 2
+   "shops_after": 3
   },
   {
    "key": "campfire cannabis|flower|3.5g|dante inferno",
@@ -4945,7 +4983,7 @@
    "key": "verist fields|flower|3.5g|og swedish",
    "kept": {
     "name": "Swedish OG - Flower - Verist Fields - 3.5g",
-    "shops_before": 8
+    "shops_before": 7
    },
    "absorbed": [
     {
@@ -4955,7 +4993,7 @@
      ]
     }
    ],
-   "shops_after": 9
+   "shops_after": 8
   },
   {
    "key": "fl\u00f6r|pre-roll|1g|garlic jam",
@@ -5010,7 +5048,7 @@
    "key": "rythm|flower|7g|animal face",
    "kept": {
     "name": "Animal Face",
-    "shops_before": 13
+    "shops_before": 12
    },
    "absorbed": [
     {
@@ -5035,7 +5073,7 @@
      ]
     }
    ],
-   "shops_after": 15
+   "shops_after": 14
   },
   {
    "key": "rythm|flower|7g|bananaconda",
@@ -5208,23 +5246,23 @@
   {
    "key": "vireo|flower|3.5g|dream durban",
    "kept": {
-    "name": "Durban Dream | 3.5g",
-    "shops_before": 5
+    "name": "Durban Dream",
+    "shops_before": 4
    },
    "absorbed": [
     {
      "name": "Durban Dream",
      "shops": [
-      "green-goods-blaine",
-      "green-goods-burnsville",
-      "minnesota-medical-solutions",
-      "minnesota-medical-solutions-bloomington"
+      "minnesota-medical-solutions"
      ]
     },
     {
-     "name": "Durban Dream",
+     "name": "Durban Dream | 3.5g",
      "shops": [
-      "minnesota-medical-solutions"
+      "green-goods-duluth",
+      "minnesota-medical-solutions-bloomington",
+      "minnesota-medical-solutions-moorhead",
+      "minnesota-medical-solutions-rochester"
      ]
     }
    ],
@@ -5234,7 +5272,7 @@
    "key": "vireo|flower|3.5g|cream fried ice",
    "kept": {
     "name": "Fried Ice Cream | 3.5g",
-    "shops_before": 6
+    "shops_before": 5
    },
    "absorbed": [
     {
@@ -5489,7 +5527,7 @@
    "key": "good green|flower|3.5g|gelato lavender",
    "kept": {
     "name": "Lavender Gelato",
-    "shops_before": 10
+    "shops_before": 9
    },
    "absorbed": [
     {
@@ -5512,7 +5550,7 @@
      ]
     }
    ],
-   "shops_after": 12
+   "shops_after": 11
   },
   {
    "key": "rythm|flower|28g|animal scout",
@@ -5761,7 +5799,6 @@
     {
      "name": "Fried Ice Cream | 7g",
      "shops": [
-      "green-goods-blaine",
       "green-goods-burnsville",
       "green-goods-duluth",
       "minnesota-medical-solutions-bloomington",
@@ -6052,7 +6089,7 @@
    "key": "simple|flower|14g|breath gator",
    "kept": {
     "name": "Gator Breath | 14g",
-    "shops_before": 4
+    "shops_before": 3
    },
    "absorbed": [
     {
@@ -6062,20 +6099,21 @@
      ]
     }
    ],
-   "shops_after": 5
+   "shops_after": 4
   },
   {
    "key": "simple|flower|28g|breath gator",
    "kept": {
     "name": "Gator Breath | 28g",
-    "shops_before": 4
+    "shops_before": 3
    },
    "absorbed": [
     {
      "name": "Gator Breath",
      "shops": [
       "green-goods-duluth",
-      "minnesota-medical-solutions-moorhead"
+      "minnesota-medical-solutions-moorhead",
+      "minnesota-medical-solutions-rochester"
      ]
     }
    ],
@@ -6138,17 +6176,33 @@
    "shops_after": 4
   },
   {
+   "key": "vireo|flower|3.5g|blue runtz",
+   "kept": {
+    "name": "Blue Runtz | 3.5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Blue Runtz",
+     "shops": [
+      "green-goods-duluth"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "simple|flower|14g|dream durban",
    "kept": {
-    "name": "Durban Dream | 14g",
+    "name": "Durban Dream",
     "shops_before": 3
    },
    "absorbed": [
     {
-     "name": "Durban Dream",
+     "name": "Durban Dream | 14g",
      "shops": [
-      "green-goods-blaine",
-      "minnesota-medical-solutions-bloomington"
+      "green-goods-burnsville",
+      "minnesota-medical-solutions-moorhead"
      ]
     }
    ],
@@ -6174,7 +6228,7 @@
    "key": "simple|flower|28g|dream durban",
    "kept": {
     "name": "Durban Dream | 28g",
-    "shops_before": 3
+    "shops_before": 2
    },
    "absorbed": [
     {
@@ -6184,7 +6238,7 @@
      ]
     }
    ],
-   "shops_after": 4
+   "shops_after": 3
   },
   {
    "key": "vireo|flower|3.5g|fruit passion pink",
@@ -6770,38 +6824,6 @@
    "shops_after": 2
   },
   {
-   "key": "grasslandz|edible|100mg|blueberry sour",
-   "kept": {
-    "name": "Sour Blueberry Gummies 100mg - Grasslandz",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Grasslandz Sour Blueberry Gummies - 100mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "blncd|beverage|20mg|adaptogen boost brain elixir",
-   "kept": {
-    "name": "Brain Boost THC + Adaptogen Elixir 20MG - BLNCD",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "BLNCD - Cannabis + Adaptogen - 20mg THC Elixir - BRAIN BOOST | 0.02g",
-     "shops": [
-      "off-the-path-cannabis-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "flor|pre-roll|1g|garlic jam",
    "kept": {
     "name": "Garlic Jam 1G Pre-Roll by Flor",
@@ -6818,22 +6840,6 @@
    "shops_after": 2
   },
   {
-   "key": "grasslandz|edible|100mg|peach",
-   "kept": {
-    "name": "Peach Gummies 100mg - Grasslandz",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Grasslandz Peach Gummies - 100mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "blncd|beverage|20mg|adaptogen blend elixir zen",
    "kept": {
     "name": "Zen Blend THC + Adaptogen Elixir 20mg - BLNCD",
@@ -6844,22 +6850,6 @@
      "name": "BLNCD - Cannabis + Adaptogen - 20mg THC Elixir - ZEN BLEND | 0.02g",
      "shops": [
       "off-the-path-cannabis-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "grasslandz|edible|100mg|pineapple sour",
-   "kept": {
-    "name": "Sour Pineapple Gummies 100mg - Grasslandz",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Grasslandz Sour Pineapple Gummies - 100mg THC",
-     "shops": [
-      "island-pezi"
      ]
     }
    ],
@@ -6890,6 +6880,70 @@
    "absorbed": [
     {
      "name": "Granny's Honey Mustard Pretzels - 50mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "grasslandz|edible|100mg|pineapple sour",
+   "kept": {
+    "name": "Sour Pineapple Gummies 100mg - Grasslandz",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Grasslandz Sour Pineapple Gummies - 100mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "blncd|beverage|20mg|adaptogen boost brain elixir",
+   "kept": {
+    "name": "Brain Boost THC + Adaptogen Elixir 20MG - BLNCD",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "BLNCD - Cannabis + Adaptogen - 20mg THC Elixir - BRAIN BOOST | 0.02g",
+     "shops": [
+      "off-the-path-cannabis-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "grasslandz|edible|100mg|peach",
+   "kept": {
+    "name": "Peach Gummies 100mg - Grasslandz",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Grasslandz Peach Gummies - 100mg THC",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "grasslandz|edible|100mg|blueberry sour",
+   "kept": {
+    "name": "Sour Blueberry Gummies 100mg - Grasslandz",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Grasslandz Sour Blueberry Gummies - 100mg THC",
      "shops": [
       "island-pezi"
      ]
@@ -6994,22 +7048,6 @@
    "shops_after": 2
   },
   {
-   "key": "mn first|cartridge|1g|5 60 disposable live resin rolex watermelon",
-   "kept": {
-    "name": "Watermelon Rolex - Hybrid Disposable Live Resin Vape | 60.5% THC | 1g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "WATERMELON ROLEX DISPOSABLE LIVE RESIN VAPE MN FIRST 60.5%THC INDICA | 1g",
-     "shops": [
-      "the-lakes-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "mn first|cartridge|1g|68 9 cap disposable junky live resin",
    "kept": {
     "name": "Cap Junky - Hybrid Disposable Live Resin Vape | 68.9% THC | 1g",
@@ -7018,6 +7056,22 @@
    "absorbed": [
     {
      "name": "CAP JUNKY DISPOSABLE LIVE RESIN VAPE MN FIRST 68.9%THC HYBRID | 1g",
+     "shops": [
+      "the-lakes-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "mn first|cartridge|1g|5 60 disposable live resin rolex watermelon",
+   "kept": {
+    "name": "Watermelon Rolex - Hybrid Disposable Live Resin Vape | 60.5% THC | 1g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "WATERMELON ROLEX DISPOSABLE LIVE RESIN VAPE MN FIRST 60.5%THC INDICA | 1g",
      "shops": [
       "the-lakes-dispensary"
      ]
