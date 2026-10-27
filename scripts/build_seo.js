@@ -607,7 +607,7 @@ ${schema.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</scri
 const footer = `</main>
 <footer>
   <p><strong class="footer-brand">Twin City Cannabis</strong> &middot; Real prices, real reviews, every Minnesota dispensary.</p>
-  <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a></p>
+  <p><a href="/">Home</a> &middot; <a href="/products/">Products</a> &middot; <a href="/dispensaries/">Dispensaries</a> &middot; <a href="/weed-deals-twin-cities/">Deals</a> &middot; <a href="/brands/">Brands</a> &middot; <a href="/events/">Events</a> &middot; <a href="/jobs/">Jobs</a></p>
   <p><a href="/minnesota-cannabis/">Cannabis in Minnesota</a> &middot; <a href="/minnesota-cannabis-prices/">MN Cannabis Prices</a> &middot; <a href="/best-dispensaries-twin-cities/">Best-Rated Dispensaries</a> &middot; <a href="/cheapest-cannabis-twin-cities/">Cheapest Cannabis</a> &middot; <a href="/price-spread-index/">Price Spread Index</a> &middot; <a href="/minnesota-price-trends/">Price Trends</a> &middot; <a href="/strongest-cannabis-minnesota/">Strongest Flower</a> &middot; <a href="/new-cannabis-minnesota/">New Arrivals</a> &middot; <a href="/blog/">Guides</a> &middot; <a href="/answers/">Price Answers</a> &middot; <a href="/minnesota-cannabis-laws/">MN Cannabis Laws</a></p>
   <p><a href="/tax-calculator/">Tax Calculator</a> &middot; <a href="/dosage-calculator/">Dosage Calculator</a> &middot; <a href="/#for-dispensaries-claim">Add your shop</a> &middot; <a href="/for-brands/">For Brands</a> &middot; <a href="/founding-partners/">Founding Partners</a> &middot; <a href="https://venmo.com/u/Josh-Sundby" rel="noopener">Support TCC</a></p>
   <p style="margin-top:.75rem">Minneapolis &middot; Saint Paul &middot; Minnesota</p>
@@ -4627,6 +4627,9 @@ NEAR_CITIES.forEach(nc => {
   nearCityCount++;
 });
 console.log(`Wrote ${nearCityCount} dispensaries-near pages`);
+
+// JOBS — Minnesota cannabis job board (D60 pilot). Data from scraper/fetch_jobs.js.
+count += require('./build_jobs.js')({ ROOT, SITE, today, esc, slugify, headOpen, footer, renderFAQ, writePage, extraSitemap });
 
 // ============================================================================
 // ANSWERS — programmatic Q&A pages for search + answer engines (SEO/AEO)

@@ -315,6 +315,11 @@ if [ "$(date +%H)" = "23" ]; then
     fi
 fi
 
+# 7.99. Job openings from employers' public ATS feeds (D60 /jobs pilot).
+#       Non-fatal: a failed source keeps its last good jobs, which expire
+#       after 7 days in build_jobs.js.
+"$NODE_BIN" scraper/fetch_jobs.js || echo "Jobs fetch failed (non-fatal)"
+
 # 8. Rebuild static SEO pages (per-dispensary, per-category, sitemap.xml)
 #    These are crawler-facing pages with LocalBusiness/Product Schema.org markup
 #    so Google indexes every dispensary + category as its own URL.
@@ -369,6 +374,7 @@ git add js/data.js index.html sitemap.xml \
     scraper/data/canonical_merges.json \
     scraper/data/shop_counts.json scraper/data/menu_alerts.json \
     scraper/data/page_lastmod.json scraper/data/price_trends.json \
+    scraper/data/jobs.json \
     llms.txt
 # Written only by the 23:00 cycle, so they are absent the rest of the day.
 # `git add` on a missing path exits 128 and set -e would kill the publish.

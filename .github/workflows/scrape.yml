@@ -101,6 +101,11 @@ jobs:
         run: node scraper/generate_deals.js || true
         continue-on-error: true
 
+      - name: Fetch job openings
+        # Employers' public ATS feeds for the /jobs/ pages (D60 pilot).
+        run: node scraper/fetch_jobs.js
+        continue-on-error: true
+
       - name: Rebuild static SEO pages
         run: node scripts/build_seo.js
         continue-on-error: true
@@ -123,6 +128,7 @@ jobs:
             scraper/data/dispensaries.json scraper/data/full_menu_products.json \
             scraper/data/dispensary_shop_products.json \
             scraper/data/last_weedmaps_scrape.txt \
+            scraper/data/jobs.json \
             llms.txt 2>/dev/null || true
           # The sitemap is the manifest: stage every page the build just
           # declared in it, so no generated surface (compare/, cheapest-
