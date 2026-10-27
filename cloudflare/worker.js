@@ -2038,6 +2038,9 @@ async function handleJobAlertSignup(request, env, cors) {
   const email = String(body.email || '').trim().toLowerCase().slice(0, 200);
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json(400, { ok: false, message: 'Enter a valid email address.' });
   if (body.adult !== true) return json(400, { ok: false, message: 'Job alerts are for adults 21 and older.' });
+  // Checked before the smoke branch, so the smoke test fails while the Kit
+  // key is missing (2026-10-27: it passed for a day with no key set).
+  if (!env.KIT_API_KEY) return json(500, { ok: false, message: 'Signups are down for a moment. Try again later.' });
   if (email === SMOKE_EMAIL) {
     await env.TCC_OVERRIDES.put('smoke:contact:jobalert', new Date().toISOString());
     return json(200, { ok: true, smoke: true });
@@ -2049,7 +2052,6 @@ async function handleJobAlertSignup(request, env, cors) {
   const tries = parseInt((await env.TCC_OVERRIDES.get(rlKey)) || '0', 10);
   if (tries >= 5) return json(429, { ok: false, message: 'Too many signups from this connection. Try again in an hour.' });
   await env.TCC_OVERRIDES.put(rlKey, String(tries + 1), { expirationTtl: 3600 });
-  if (!env.KIT_API_KEY) return json(500, { ok: false, message: 'Signups are down for a moment. Try again later.' });
   const headers = { 'X-Kit-Api-Key': env.KIT_API_KEY, 'Content-Type': 'application/json' };
   try {
     // Kit returns the existing tag when one with this name already exists.
