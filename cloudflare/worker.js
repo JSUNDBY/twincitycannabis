@@ -193,6 +193,9 @@ export default {
       return handleJobAlertSignup(request, env, cors);
     }
 
+    if (url.pathname === '/admin/jobs/post' && request.method === 'POST') {
+      return handleAdminJobPost(request, env, cors);
+    }
     if (url.pathname === '/admin/jobs/update' && request.method === 'POST') {
       return handleJobUpdate(request, env, cors);
     }
@@ -1007,6 +1010,7 @@ function renderAdminHTML() {
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money = (cents) => '$' + (cents/100).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+const today = new Date().toISOString().slice(0, 10);
 
 const STATUS_ORDER = ['cold', 'emailed', 'replied', 'interested', 'signed', 'passed'];
 const STATUS_COLOR = {
@@ -1194,14 +1198,38 @@ function render(d) {
           '<td>' + (x.pay_min ? '$' + esc(x.pay_min) + (x.pay_max !== x.pay_min ? '–$' + esc(x.pay_max) : '') + (x.pay_unit === 'YEAR' ? '/yr' : '/hr') : '—') + '</td>' +
           '<td><code class="mono">' + esc(x.ends) + '</code></td>' +
           '<td>' + esc(x.contact || '—') + '</td>' +
-          '<td><span class="pill ' + (x.status === 'approved' ? 'active' : '') + '">' + esc(x.status) + '</span></td>' +
+          '<td><span class="pill ' + (x.status === 'approved' ? 'active' : '') + '">' + esc(x.status) + '</span>' +
+            '<span class="oj-feat" style="display:block;font-size:.7rem;color:var(--accent);margin-top:.2rem">' + (x.featured_until && x.featured_until >= today ? '★ Featured to ' + esc(x.featured_until) : '') + '</span></td>' +
           '<td>' + (x.status === 'pending'
             ? '<button class="btn" style="padding:.2rem .6rem;font-size:.75rem" onclick="ojAct(\\'' + esc(x.id) + '\\',\\'approve\\')">Approve</button> ' +
               '<button class="btn ghost" style="padding:.2rem .6rem;font-size:.75rem" onclick="ojAct(\\'' + esc(x.id) + '\\',\\'reject\\')">Reject</button>'
-            : '<button class="btn ghost" style="padding:.2rem .6rem;font-size:.75rem" onclick="ojAct(\\'' + esc(x.id) + '\\',\\'reject\\')">Remove</button>') + '</td>' +
+            : (x.status !== 'approved' ? ''
+                : x.featured_until && x.featured_until >= today
+                ? '<button class="btn ghost" style="padding:.2rem .6rem;font-size:.75rem" onclick="ojAct(\\'' + esc(x.id) + '\\',\\'unfeature\\')">Unfeature</button> '
+                : '<button class="btn" style="padding:.2rem .6rem;font-size:.75rem" onclick="ojAct(\\'' + esc(x.id) + '\\',\\'feature\\')">Feature 30d</button> ') +
+              '<button class="btn ghost" style="padding:.2rem .6rem;font-size:.75rem" onclick="ojAct(\\'' + esc(x.id) + '\\',\\'reject\\')">Remove</button>') + '</td>' +
         '</tr>').join('') +
         '</tbody></table>'
         : '<div class="empty">No job posts yet. Claimed owners post them at twincitycannabis.com/jobs/post/. Approved jobs reach /jobs/ on the next site build.</div>'}
+      <details style="margin-top:1rem">
+        <summary style="cursor:pointer;color:var(--accent);font-size:.85rem">Post a job for a shop (owner emailed it to you)</summary>
+        <form id="oj-admin-form" onsubmit="return ojAdminPost(event)" style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.75rem;max-width:720px">
+          <input name="shop" required placeholder="shop id, e.g. levitated-cannabis" list="oj-shops" style="grid-column:1/-1">
+          <datalist id="oj-shops"></datalist>
+          <input name="title" required minlength="3" maxlength="90" placeholder="Job title">
+          <select name="employment_type"><option value="">Type: not given</option><option value="FULL_TIME">Full-time</option><option value="PART_TIME">Part-time</option></select>
+          <input name="apply_url" required placeholder="https:// application link or mailto is NOT allowed; use https" style="grid-column:1/-1">
+          <input name="pay_min" type="number" step="0.01" placeholder="Pay min">
+          <input name="pay_max" type="number" step="0.01" placeholder="Pay max">
+          <select name="pay_unit"><option value="HOUR">per hour</option><option value="YEAR">per year</option></select>
+          <input name="ends" type="date" title="Up through (default 30 days, max 60)">
+          <input name="contact" type="email" placeholder="Owner email (optional; defaults to the claim email)" style="grid-column:1/-1">
+          <textarea name="description" required minlength="80" maxlength="4000" rows="5" placeholder="Description, 80+ characters. Paste the owner's words." style="grid-column:1/-1"></textarea>
+          <label style="font-size:.85rem"><input type="checkbox" name="featured"> Featured (pinned 30 days)</label>
+          <button class="btn" type="submit" style="justify-self:end">Post as approved</button>
+          <p id="oj-admin-msg" style="grid-column:1/-1;font-size:.85rem;margin:0;color:var(--dim)"></p>
+        </form>
+      </details>
     </section>
 
     <section>
@@ -1453,14 +1481,68 @@ async function ojAct(id, action) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id, action }),
     });
+    if (!r.ok) { const e = await r.json().catch(() => ({})); if (e.message) alert(e.message); }
     if (r.ok) {
+      const res = await r.json().catch(() => ({}));
       const row = document.getElementById('oj-' + id);
       if (row) {
         if (action === 'reject') row.remove();
-        else row.querySelector('.pill').textContent = 'approved';
+        else if (action === 'approve') row.querySelector('.pill').textContent = 'approved';
+        else {
+          const f = row.querySelector('.oj-feat');
+          if (f) f.textContent = res.featured_until ? '★ Featured to ' + res.featured_until : '';
+          // Buttons depend on the featured state; redraw from the server.
+          setTimeout(() => location.reload(), 400);
+        }
       }
     }
   } catch (e) { console.error('job update failed', e); }
+}
+
+// Shop ids for the admin post form come from the live site data, so a typo
+// can't produce a job the build silently drops.
+(async () => {
+  try {
+    const r = await fetch('https://twincitycannabis.com/js/data.js', { cache: 'no-store' });
+    const txt = await r.text();
+    const start = txt.indexOf('TCC.dispensaries');
+    if (start === -1) return;
+    const end = txt.indexOf('\\nTCC.', start + 20);
+    const block = txt.slice(start, end === -1 ? undefined : end);
+    const ids = Array.from(block.matchAll(/\\bid:\\s*['"]([a-z0-9-]+)['"]/g)).map(x => x[1]);
+    const dl = document.getElementById('oj-shops');
+    if (dl) dl.innerHTML = Array.from(new Set(ids)).sort().map(id => '<option value="' + id + '">').join('');
+    window.__ojShopIds = new Set(ids);
+  } catch (e) { console.error('shop id list failed', e); }
+})();
+
+async function ojAdminPost(ev) {
+  ev.preventDefault();
+  const key = new URLSearchParams(location.search).get('key');
+  const form = ev.target, msg = document.getElementById('oj-admin-msg');
+  if (!key) return false;
+  const fd = new FormData(form);
+  const body = Object.fromEntries(fd.entries());
+  body.featured = fd.get('featured') === 'on';
+  if (window.__ojShopIds && window.__ojShopIds.size && !window.__ojShopIds.has(body.shop)) {
+    msg.textContent = 'That shop id is not on the live site. Pick one from the list.';
+    return false;
+  }
+  msg.textContent = 'Posting…';
+  try {
+    const r = await fetch('/admin/jobs/post?key=' + encodeURIComponent(key), {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+    });
+    const res = await r.json().catch(() => ({}));
+    if (r.ok && res.ok) {
+      msg.textContent = 'Posted as approved' + (res.featured_until ? ', featured to ' + res.featured_until : '') + (res.claimed ? '' : ' (shop is not claimed; the owner still can’t edit it)') + '. It reaches /jobs/ on the next site build.';
+      form.reset();
+      setTimeout(() => location.reload(), 1500);
+    } else {
+      msg.textContent = res.message || ('Failed: ' + r.status);
+    }
+  } catch (e) { msg.textContent = 'Failed: ' + e.message; }
+  return false;
 }
 
 async function ckAct(id, action) {
@@ -1898,18 +1980,20 @@ async function handleDealUpdate(request, env, cors) {
 // (scraper/fetch_jobs.js, source tcc-owner) turns them into static job pages
 // with JobPosting markup on the next cycle. Basic posts are free (D60 D-a).
 const JOB_TYPES = new Set(['', 'FULL_TIME', 'PART_TIME']);
+const FEATURED_DAYS = 30;
+// D60 pilot: Featured jobs are free for the first ten shops. This is the code
+// behind that bullet (tcc-pricing rule): an eleventh shop is refused until
+// one is unfeatured or expires. Raise the cap when Featured jobs are billed.
+const FEATURED_SHOP_CAP = 10;
+function featuredCapCheck(list, shop) {
+  const today = new Date().toISOString().slice(0, 10);
+  const shops = new Set(list.filter((x) => x.status === 'approved' && x.featured_until && x.featured_until >= today).map((x) => x.shop));
+  if (shops.has(shop) || shops.size < FEATURED_SHOP_CAP) return { ok: true };
+  return { ok: false, message: `${FEATURED_SHOP_CAP} shops already have a Featured job (the pilot's free allotment). Unfeature one first.` };
+}
 
-async function handleJobPost(request, env, cors) {
-  const json = (status, obj) => new Response(JSON.stringify(obj), { status, headers: { 'Content-Type': 'application/json', ...cors } });
-  let body;
-  try { body = await request.json(); } catch { return json(400, { ok: false }); }
-  const shop = String(body.shop || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 80);
-  // Daily smoke test (tests/smoke_claim_forms.js) posts the live form for
-  // this fake shop. Record the pass and stop: no post, no email.
-  if (shop === 'smoke-test') {
-    await env.TCC_OVERRIDES.put('smoke:contact:jobpost', new Date().toISOString());
-    return json(200, { ok: true, smoke: true, confirm_sent_to: 's***@twincitycannabis.com' });
-  }
+// Field checks shared by the owner form and the admin "post for a shop" form.
+function parseJobFields(body, shop) {
   const title = String(body.title || '').trim().slice(0, 90);
   const description = String(body.description || '').replace(/\r/g, '').trim().slice(0, 4000);
   const employment_type = String(body.employment_type || '').toUpperCase();
@@ -1928,12 +2012,68 @@ async function handleJobPost(request, env, cors) {
   let urlOk = false;
   try { urlOk = new URL(apply_url).protocol === 'https:'; } catch { /* not a URL */ }
   if (!shop || title.length < 3 || description.length < 80 || !JOB_TYPES.has(employment_type) || !urlOk || !payOk || ends < today) {
-    return json(400, { ok: false, error: 'invalid',
+    return { ok: false,
       message: !urlOk ? 'The application link must be a full https:// address.'
         : !payOk ? 'Check the pay: hourly between $10 and $200, yearly between $20,000 and $500,000.'
         : description.length < 80 ? 'Add a little more to the description (80 characters or more).'
-        : 'Shop, job title, application link and description are required.' });
+        : 'Shop, job title, application link and description are required.' };
   }
+  return { ok: true, fields: { title, description, employment_type, apply_url, pay_min, pay_max: pay_min ? pay_max : null, pay_unit, ends } };
+}
+
+// Admin "post for a shop": Josh enters a job an owner sent by email (the
+// jobs-outreach "reply with the job and I'll post it" ask). The owner gate is
+// skipped because Josh is the one entering it, so it goes straight to
+// approved. The shop id must be a real TCC shop id or the build drops it.
+async function handleAdminJobPost(request, env, cors) {
+  const json = (status, obj) => new Response(JSON.stringify(obj), { status, headers: { 'Content-Type': 'application/json', ...cors } });
+  if (!verifyAdminToken(request, env)) return json(401, { error: 'unauthorized' });
+  let body;
+  try { body = await request.json(); } catch { return json(400, { ok: false }); }
+  const shop = String(body.shop || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 80);
+  const parsed = parseJobFields(body, shop);
+  if (!parsed.ok) return json(400, { ok: false, error: 'invalid', message: parsed.message });
+  const contact = String(body.contact || '').trim().toLowerCase().slice(0, 200);
+  if (contact && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)) return json(400, { ok: false, error: 'invalid', message: 'Contact must be an email address or blank.' });
+  // The build matches owner jobs to shops by id and drops any it can't place,
+  // so a typo here would vanish silently. Every TCC shop has a live page at
+  // /dispensaries/<id>/; require it.
+  let shopOk = false;
+  try { shopOk = (await fetch(`https://twincitycannabis.com/dispensaries/${shop}/`, { method: 'HEAD', cf: { cacheTtl: 3600 } })).ok; } catch { /* treat as unknown */ }
+  if (!shopOk) return json(400, { ok: false, error: 'unknown_shop', message: `No shop page at twincitycannabis.com/dispensaries/${shop}/. Check the id.` });
+  const crm = (await env.TCC_OVERRIDES.get('index:crm', { type: 'json' })) || {};
+  const list = (await env.TCC_OVERRIDES.get('index:owner-jobs', { type: 'json' })) || [];
+  const now = new Date().toISOString();
+  const entry = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+    shop, ...parsed.fields,
+    contact: contact || (crm[shop] && crm[shop].owner_email) || null,
+    submitted_at: now, approved_at: now, status: 'approved', posted_by: 'admin',
+  };
+  if (body.featured === true) {
+    const cap = featuredCapCheck(list, shop);
+    if (!cap.ok) return json(409, { ok: false, error: 'featured_cap', message: cap.message });
+    entry.featured_until = new Date(Date.now() + FEATURED_DAYS * 86400 * 1000).toISOString().slice(0, 10);
+  }
+  list.unshift(entry);
+  await env.TCC_OVERRIDES.put('index:owner-jobs', JSON.stringify(list));
+  return json(200, { ok: true, id: entry.id, featured_until: entry.featured_until || null, claimed: !!(crm[shop] && crm[shop].claimed) });
+}
+
+async function handleJobPost(request, env, cors) {
+  const json = (status, obj) => new Response(JSON.stringify(obj), { status, headers: { 'Content-Type': 'application/json', ...cors } });
+  let body;
+  try { body = await request.json(); } catch { return json(400, { ok: false }); }
+  const shop = String(body.shop || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 80);
+  // Daily smoke test (tests/smoke_claim_forms.js) posts the live form for
+  // this fake shop. Record the pass and stop: no post, no email.
+  if (shop === 'smoke-test') {
+    await env.TCC_OVERRIDES.put('smoke:contact:jobpost', new Date().toISOString());
+    return json(200, { ok: true, smoke: true, confirm_sent_to: 's***@twincitycannabis.com' });
+  }
+  const parsed = parseJobFields(body, shop);
+  if (!parsed.ok) return json(400, { ok: false, error: 'invalid', message: parsed.message });
+  const { title, description, employment_type, apply_url, pay_min, pay_max, pay_unit, ends } = parsed.fields;
   const crm = (await env.TCC_OVERRIDES.get('index:crm', { type: 'json' })) || {};
   const rec = crm[shop] || {};
   if (!rec.claimed || !rec.owner_email) {
@@ -2001,7 +2141,8 @@ async function handleOwnerJobsPublic(env, cors) {
   const out = list
     .filter((x) => x.status === 'approved' && x.ends >= today)
     .map((x) => ({ id: x.id, shop: x.shop, title: x.title, description: x.description, employment_type: x.employment_type,
-      apply_url: x.apply_url, pay_min: x.pay_min, pay_max: x.pay_max, pay_unit: x.pay_unit, ends: x.ends, approved_at: x.approved_at }));
+      apply_url: x.apply_url, pay_min: x.pay_min, pay_max: x.pay_max, pay_unit: x.pay_unit, ends: x.ends, approved_at: x.approved_at,
+      featured_until: x.featured_until && x.featured_until >= today ? x.featured_until : null }));
   return new Response(JSON.stringify(out), {
     status: 200, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300', ...cors },
   });
@@ -2022,11 +2163,21 @@ async function handleJobUpdate(request, env, cors) {
   }
   if (body.action === 'approve') { list[idx].status = 'approved'; list[idx].approved_at = new Date().toISOString(); }
   else if (body.action === 'reject') list.splice(idx, 1);
-  else {
-    return new Response(JSON.stringify({ ok: false, error: 'action must be approve|reject' }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  // Featured job = pinned to the top of /jobs/ and its city page for 30 days
+  // (D60 pricing table). Free for the first ten shops during the pilot.
+  else if (body.action === 'feature') {
+    if (list[idx].status !== 'approved') return new Response(JSON.stringify({ ok: false, error: 'not_approved' }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+    const cap = featuredCapCheck(list, list[idx].shop);
+    if (!cap.ok) return new Response(JSON.stringify({ ok: false, error: 'featured_cap', message: cap.message }), { status: 409, headers: { 'Content-Type': 'application/json', ...cors } });
+    list[idx].featured_until = new Date(Date.now() + FEATURED_DAYS * 86400 * 1000).toISOString().slice(0, 10);
   }
+  else if (body.action === 'unfeature') delete list[idx].featured_until;
+  else {
+    return new Response(JSON.stringify({ ok: false, error: 'action must be approve|reject|feature|unfeature' }), { status: 400, headers: { 'Content-Type': 'application/json', ...cors } });
+  }
+  const featured_until = body.action === 'reject' ? null : list[idx].featured_until || null;
   await env.TCC_OVERRIDES.put('index:owner-jobs', JSON.stringify(list));
-  return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
+  return new Response(JSON.stringify({ ok: true, featured_until }), { status: 200, headers: { 'Content-Type': 'application/json', ...cors } });
 }
 
 // Job alert signup from /jobs/: Kit subscriber tagged tcc-jobs. This is the

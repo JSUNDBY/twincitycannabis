@@ -203,6 +203,8 @@ const fetchTccOwner = async (src, now) => {
     deadline: r.ends || null,
     salary: r.pay_min ? { min: r.pay_min, max: r.pay_max || r.pay_min, unit: r.pay_unit === 'YEAR' ? 'YEAR' : 'HOUR' } : null,
     employment_type: ['FULL_TIME', 'PART_TIME'].includes(r.employment_type) ? r.employment_type : null,
+    // Featured job (D60): pinned on /jobs/ and its city page through this date.
+    featured_until: /^\d{4}-\d{2}-\d{2}$/.test(r.featured_until || '') ? r.featured_until : null,
     description_html: String(r.description || '').split(/\n{2,}/).map((p) => `<p>${p.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])).replace(/\n/g, '<br>')}</p>`).join('\n'),
     last_seen: now,
   }));

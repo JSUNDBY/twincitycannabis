@@ -72,7 +72,8 @@ function loadJobs({ ROOT, today, slugify, dispensaries }) {
       const shop = matchShop(j, dispensaries || []);
       // Owner posts carry only the shop id; the listing supplies the rest.
       if (j.source === 'tcc-owner') {
-        if (!shop) return null;
+        // Loud, not silent: this line lands in the Pi's build log.
+        if (!shop) { console.error(`jobs: owner job ${j.id} names unknown shop "${j.shop}", dropped`); return null; }
         j = { ...j, employer: shop.name, city: shop.city };
       }
       const addr = shop && shopAddress(shop);
@@ -87,16 +88,20 @@ function loadJobs({ ROOT, today, slugify, dispensaries }) {
         slug: `${slug(j.title).endsWith(slug(j.city)) ? slug(j.title) : `${slug(j.title)}-${slug(j.city)}`}-${String(j.id).split('-').pop()}`,
         citySlug: slug(j.city),
         validThrough: j.deadline || new Date(Date.parse(j.last_seen) + VALID_DAYS * DAY).toISOString().slice(0, 10),
+        // Featured jobs pin to the top of /jobs/ and city pages (D60 pricing).
+        featured: !!(j.featured_until && j.featured_until >= today),
       };
     })
     .filter(Boolean)
-    .sort((a, b) => b.date_posted.localeCompare(a.date_posted) || a.title.localeCompare(b.title));
+    .sort((a, b) => (b.featured - a.featured) || b.date_posted.localeCompare(a.date_posted) || a.title.localeCompare(b.title));
 }
 
 // Stats key for apply clicks: the TCC shop when matched, else the employer.
 const trackId = (j, slugify) => j.shopId || `employer-${slugify(fold(j.employer))}`.slice(0, 80);
 
 const WORKER = 'https://dashboard.twincitycannabis.com';
+// Same text as build_seo.js: MN Stat. 342.64 subd. 1(7) + OCM GM-2025-07.
+const AD_WARNING = "Warning: Cannabis products are not for use by anyone under the age of 21. Cannabis use may cause drowsiness, affect focus, reaction time, and decision-making.";
 
 function buildJobs({ ROOT, SITE, today, esc, slugify, headOpen, footer, renderFAQ, writePage, extraSitemap, dispensaries }) {
   const jobs = loadJobs({ ROOT, today, slugify, dispensaries });
@@ -111,16 +116,19 @@ function buildJobs({ ROOT, SITE, today, esc, slugify, headOpen, footer, renderFA
   const cityPages = Object.entries(cities).filter(([, c]) => c.jobs.length >= CITY_PAGE_MIN)
     .sort((a, b) => b[1].jobs.length - a[1].jobs.length || a[1].name.localeCompare(b[1].name));
 
+  // Featured rows sit first (loadJobs sorts them there) and carry the paid
+  // placement notice required on every paid surface (MN Stat. 342.64).
   const table = (list) => `<table>
 <thead><tr><th>Role</th><th>Employer</th><th>City</th><th>Pay</th><th>Posted</th></tr></thead>
-<tbody>${list.map(j => `<tr>
-  <td><a href="/jobs/${j.slug}/">${esc(j.title)}</a></td>
+<tbody>${list.map(j => `<tr${j.featured ? ' class="job-featured"' : ''}>
+  <td>${j.featured ? '<span class="job-featured-pill" style="display:inline-block;font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#0a0d0a;background:var(--accent,#22c55e);padding:.15rem .45rem;border-radius:999px;margin-right:.4rem;vertical-align:middle">Featured</span>' : ''}<a href="/jobs/${j.slug}/">${esc(j.title)}</a></td>
   <td>${esc(j.employer)}</td>
   <td>${esc(j.city)}</td>
   <td>${esc(payText(j.salary)) || '—'}</td>
   <td>${esc(humanDay(j.date_posted))}</td>
 </tr>`).join('\n')}</tbody>
-</table>`;
+</table>${list.some(j => j.featured) ? `
+<p class="tcc-ad-warning tcc-ad-warning--unit">Jobs marked Featured are paid placements. ${AD_WARNING}</p>` : ''}`;
 
   const employerCta = `<div class="jobs-employer-cta" style="margin:2rem 0;padding:1rem 1.25rem;border:1px solid var(--border, #2a2a2a);border-radius:12px">
 <h2 style="margin-top:0">Hiring at a Minnesota dispensary?</h2>
