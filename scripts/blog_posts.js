@@ -1474,7 +1474,7 @@ module.exports = [
   },
   {
     slug: 'mankato-dispensaries-minnesota',
-    title: 'Mankato dispensaries: a $20 gap on an eighth, and a size ladder that pays all the way up',
+    title: 'Mankato dispensaries: two shops, opposite bargains, and a size ladder that pays all the way up',
     dek: 'Two shops you can walk into, and the cheaper one depends entirely on what you came for. Flower at one, edibles at the other, and a size ladder where every step up genuinely pays.',
     date: '2026-10-26',
     updated: '2026-10-26',
@@ -1483,7 +1483,7 @@ module.exports = [
     // Checked on every build. A token fixes a number; these catch an argument
     // that has quietly reversed, which is what actually went wrong here.
     claims: [
-      ['title says a $20 gap on an eighth', 'gapEighth:rise-mankato:voyager-cannabis-co', '==', 20],
+      ['title implies a wide eighth gap between the two shops', 'gapEighth:rise-mankato:voyager-cannabis-co', '>=', 15],
       ['RISE is the cheaper shop on eighths', 'eighth:rise-mankato', '<', 'eighth:voyager-cannabis-co'],
       ['size ladder: the quarter beats the eighth per gram', 'pergram:rise-mankato:7', '<', 'pergram:rise-mankato:3.5'],
       ['size ladder: the half ounce beats the quarter per gram', 'pergram:rise-mankato:14', '<', 'pergram:rise-mankato:7'],
@@ -1543,14 +1543,13 @@ module.exports = [
 
   {
     slug: 'blaine-dispensaries-minnesota',
-    title: 'Blaine dispensaries: a $20 gap on an eighth, and the cheapest ounce in Minnesota',
-    dek: 'Three licensed shops, two with menus we can read, and a $20 spread on the same unit between them. One ties for the cheapest ounce in the state. Here is who wins which shelf.',
+    title: 'Blaine dispensaries: three shops, and the cheapest ounce in Minnesota',
+    dek: 'Three licensed shops, one of them running an ounce that ties for the cheapest in Minnesota. Here is who wins which shelf, and which prices you need to call and check.',
     date: '2026-11-02',
     updated: '2026-11-02',
     category: 'Buying smart',
     read: 7,
     claims: [
-      ['title says a $20 gap on an eighth', 'gapEighth:green-goods-blaine:lucid-leaf-2', '==', 20],
       ['Green Goods is the cheaper shop on eighths', 'eighth:green-goods-blaine', '<', 'eighth:lucid-leaf-2'],
       ['the ounce here still ties for the cheapest in the state', 'size:green-goods-blaine:28', '==', 'stateCheapestSize:28'],
       ['Green Goods ounce ladder still descends per gram', 'pergram:green-goods-blaine:28', '<', 'pergram:green-goods-blaine:14'],
@@ -1564,7 +1563,8 @@ module.exports = [
       ['Loon Leaf is still the best rated shop in Blaine', 'rating:loon-leaf', '>', 'rating:lucid-leaf-2'],
     ],
     body: `
-<p>Blaine has three licensed dispensaries, which is more than most suburbs its size. Two of them publish menus we can read, and those two disagree by twenty dollars on an eighth of flower. That gap, six miles apart inside one suburb, is the whole reason to read this before you go.</p>
+<p>Blaine has three licensed dispensaries, which is more than most suburbs its size. One of them publishes a deep menu we can read every day, one publishes nothing at all, and the third comes and goes. When all three are visible they disagree sharply on price, and the shop that is cheapest on flower is not the shop that is cheapest on anything else. That is the whole reason to read this before you go.</p>
+<p>One thing to know up front, because it changes how you should read every number below. Blaine Dispensary's menu drops out of our feed for weeks at a time and then comes back. Any figure we give for that shop is its last published menu, not a promise about today, so call before you drive on the strength of it. Green Goods publishes daily and its numbers re-price themselves on this page several times a day.</p>
 
 <h2>The three shops</h2>
 <p><strong>Green Goods Blaine</strong>, 672 County Highway 10, (763) 400-4777, 10am to 8pm. Medical and adult-use, part of the eight location Green Goods chain. It has {{reviews:green-goods-blaine|around 940}} Google reviews at a {{rating:green-goods-blaine|4.4}} average, the most reviews and the lowest rating of the three, which usually just means it has been open the longest. Deepest menu in town at {{listings:green-goods-blaine|close to 200}} priced listings.</p>
@@ -1777,6 +1777,196 @@ module.exports = [
       { href: '/blog/thc-percentage-myth-minnesota/', label: 'The THC percentage myth' },
       { href: '/blog/indica-sativa-hybrid-minnesota/', label: 'Indica, sativa and hybrid' },
       { href: '/products/flower/', label: 'Browse flower' },
+    ],
+  },
+
+  {
+    slug: 'minnesota-cannabis-numbers-november-2026',
+    title: 'Minnesota cannabis by the numbers: the cheapest eighth in the state is an independent',
+    dek: 'Last month’s $2 dip in the median eighth is already gone. But the lowest eighth price we can find now belongs to a single store in Minneapolis, undercutting all sixteen chain locations in Minnesota.',
+    date: '2026-11-09',
+    updated: '2026-11-09',
+    category: 'Market watch',
+    read: 5,
+    body: `
+<p>Once a month we write down what our own data says about Minnesota's legal market. No predictions, just what is on the shelves and what it costs, from our tracking as of early November 2026. Where we could not verify a number we left it out.</p>
+
+<h2>The dip lasted exactly one month</h2>
+<p>Last month we told you the median eighth had finally moved, from fifty dollars down to $48, and we said two dollars is not a crash. It was not even a trend. The median eighth in Minnesota today is $50, across 1,733 priced listings.</p>
+<p>So four months of this reads: about $50 in August, $49.97 in September, $48 in October, $50 now. The middle of this market is not falling. It is sitting on fifty dollars and wobbling by pennies, and anyone telling you legal weed is getting cheaper in Minnesota is not looking at the middle of the shelf.</p>
+<p>The edges moved a little. The ninetieth percentile eighth was $60 in September and $56 last month, and today it is just under $58, so the expensive end bounced back too. The tenth percentile is $40, which is exactly where it has sat every month we have measured it. Nothing in this market has been as stable as its floor. All the medians live on our <a href="/minnesota-cannabis-prices/">price page</a>.</p>
+
+<h2>The cheapest eighth in Minnesota is a one store shop</h2>
+<p>This is the change worth reading twice, because it reverses what we told you last month.</p>
+<p>The lowest median eighth at any dispensary we can price belongs to Unanimous Cannabis in Minneapolis, at $38. No RISE and no Green Goods in the state matches it. The two independents in Edina, Edina Canna and Minnesota Canna, both run $42 and beat every one of the eight RISE locations. My Dealer in Bayport, a single storefront, also runs $42.</p>
+<p>Last month the headline was that the chains were the cheap ones and it was not close. That is now too simple, and the reason is that the two chains do not behave alike. Green Goods really does run close to one price list: six of its eight Minnesota stores sit at exactly $40 and the other two at $41.89. RISE does not. Its eight stores run from $44 in Brooklyn Park up to $48 in St. Cloud, Mankato and Willmar, in three visible tiers.</p>
+<p>So the corrected version is this. Green Goods is the cheap chain. RISE is a mid priced chain that looks cheap next to the expensive independents. And the single best eighth price in Minnesota is at a shop with one location and {{listings:unanimous-cannabis|about fifty}} listings on its menu. One honest caveat: that $38 median rests on a handful of jars, so it is a thinner number than the chain medians, which stand on thirty or forty each. Check it live on the <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a> before you drive.</p>
+
+<h2>The expensive end is still entirely independent</h2>
+<p>Seven shops run a median eighth of $60 or more: Voyager Cannabis Co in Mankato and Lake Superior Dispensary in Duluth at $65, Hempire in Rochester at $61.99, then Black Bear in Winona, Irie Cannabis in Minneapolis, Flame &amp; Flora in Prior Lake and Nativecare in West St. Paul, all at $60. Every one of the seven is an independent.</p>
+<p>Put that beside the paragraph above and you get the real shape of this market. Independents hold both ends of it. The cheapest eighth in Minnesota and the dearest eighth in Minnesota are both single store shops, $27 apart, and nothing about either storefront tells you which one you walked into. Chains are the middle.</p>
+
+<h2>Independents are drifting further apart, not closer together</h2>
+<p>Of the 789 products sold at three or more shops, 359 carry an identical price everywhere they appear. Last month that was 357 of 621, so the pool of widely stocked products grew by a quarter while the identical half barely moved.</p>
+<p>Split it by who is selling. RISE stocks 317 products at three or more of its own stores and 229 cost the same at every one. Green Goods stocks 259 and 228 match. Two statewide price lists, and that is most of what looks like convergence from the outside.</p>
+<p>Take both chains out and it falls apart. Of the 293 products carried at three or more independent shops, fourteen are priced the same at all of them. Fourteen. And the spread on the rest is widening: the median gap on an independent product that varies at all is $6.39, up from $5 last month, and the widest single gap we can find is $42.50, up from $27.</p>
+<p>The advice sharpens rather than changes. Comparing two branches of the same chain is a waste of your afternoon. Comparing two independents is the best paid ten minutes in this hobby, and it paid better this month than last. That is what the <a href="/price-spread-index/">price spread index</a> is for.</p>
+
+<h2>We took eight shops off the map</h2>
+<p>We now hold 144 dispensary records, down from 152, and 138 of them clear our bar for confirmed operating, down from 146. Nothing closed in a hurry. Eight records did not hold up under checking and came out, which is what a monthly audit is for. A directory that only ever grows is a directory nobody is checking.</p>
+<p>Of the shops that remain, 88 publish a menu we can actually read and price. Behind those sit 7,478 products and 12,231 priced listings, up from roughly 11,000 a month ago, across 91 cities. The map got slightly smaller and the data behind it got noticeably deeper, which is the trade we want every time. <a href="/dispensaries/">The directory</a> has every shop and <a href="/open-now/">open now</a> says who is selling this minute.</p>
+
+<h2>Carts kept growing, and the labeling finally got better</h2>
+<p>Cartridges were 49 products statewide in August, 242 in September, 454 last month and 775 today. Still the fastest growing shelf on the site by a wide margin, now 1,363 priced listings deep.</p>
+<p>Two months running we complained that this shelf was being sold without stating how much oil was in the thing. That has turned around. Of the 1,363 cartridge listings we can price today, 37 do not state a size. Last month we counted 81 on a smaller shelf. So the shelf roughly doubled and the unlabeled count fell by more than half. Credit where it is due: menu software caught up.</p>
+<p>The size penalty is still real and still worth the arithmetic. The median half gram cart is $52 and the median full gram is $69.99. Per gram that is about $104 against $70, so the full gram is roughly two thirds the price for the same oil. Check the size, then the price, every time. The method is in <a href="/blog/vape-cartridges-minnesota/">the cartridge buying guide</a>, or <a href="/products/cartridge/">browse carts here</a>.</p>
+
+<h2>What we would actually do with this</h2>
+<p>Put the fifty dollar rule of thumb back in your pocket, because that is what an ordinary eighth costs again. Over $58 and you are in the top tenth of this market, so know what the extra buys. Stop assuming the chain is the cheap one: Green Goods usually is, RISE is middling, and the best and worst eighth prices in Minnesota are both independents. If you shop independents, actually compare two of them, because the gap between them is worth more this month than last. And buy the full gram cart.</p>
+<p>The fundamentals are in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a> and <a href="/blog/thc-percentage-myth-minnesota/">why the THC number is a bad filter</a>. We will run these again next month and tell you what moved.</p>
+`,
+    related: [
+      { href: '/price-spread-index/', label: 'Price spread index' },
+      { href: '/minnesota-cannabis-prices/', label: 'Minnesota price medians' },
+      { href: '/cheapest-cannabis-twin-cities/', label: 'Cheapest cannabis tracker' },
+    ],
+  },
+
+  {
+    slug: 'luverne-dispensaries-minnesota',
+    title: 'Luverne dispensaries: four shops in a town of 5,000, and the cheapest edibles in Minnesota',
+    dek: 'Minnesota’s far southwest corner has four licensed dispensaries inside a few blocks. One of them runs the lowest edible prices in the state. The flower is a completely different story.',
+    date: '2026-11-23',
+    updated: '2026-11-23',
+    category: 'Buying smart',
+    read: 7,
+    claims: [
+      ['High Fidelity has the cheapest edible median in Minnesota', 'cat:high-fidelity:edible', '<', 'cat:bloomn:edible'],
+      ['High Fidelity edibles beat the state median', 'cat:high-fidelity:edible', '<', 'stateCat:edible'],
+      ['Coastless is the cheapest of the three on eighths', 'eighth:high-fidelity', '>', 'eighth:coastless'],
+      ['Flower Shop is no dearer than High Fidelity on eighths', 'eighth:the-flower-shop-mn-llc', '<=', 'eighth:high-fidelity'],
+      ['the Luverne ounce costs well over the cheapest in the state', 'size:the-flower-shop-mn-llc:28', '>', 'stateCheapestSize:28'],
+      ['Flower Shop size ladder still pays per gram', 'pergram:the-flower-shop-mn-llc:28', '<', 'pergram:the-flower-shop-mn-llc:3.5'],
+      ['Flower Shop has the deepest menu in town', 'listings:the-flower-shop-mn-llc', '>', 'listings:high-fidelity'],
+      ['High Fidelity is cheapest in town on carts', 'cat:high-fidelity:cartridge', '<', 'cat:coastless:cartridge'],
+      ['High Fidelity carts beat the state median', 'cat:high-fidelity:cartridge', '<', 'stateCat:cartridge'],
+      ['High Fidelity drinks sit under the state middle', 'cat:high-fidelity:beverage', '<', 'stateCat:beverage'],
+      ['Coastless is cheaper than High Fidelity on concentrates', 'cat:coastless:concentrate', '<', 'cat:high-fidelity:concentrate'],
+      ['pre-rolls in Luverne sit at or under the state median', 'cat:high-fidelity:pre-roll', '<=', 'stateCat:pre-roll'],
+    ],
+    body: `
+<p>Luverne sits in the far southwest corner of Minnesota, about half an hour east of Sioux Falls on I-90, with fewer than 5,000 people in it. It has four licensed cannabis dispensaries. That is more than Mankato, more than Rochester, and the same number as Rochester and Winona put together.</p>
+<p>Three of the four publish menus we can read, and they are genuinely different shops rather than three versions of the same one. One of them has the cheapest edible shelf in Minnesota by a wide margin. None of them is anywhere near the cheapest on flower. Knowing which is which is worth a few minutes before you park.</p>
+
+<h2>The four shops</h2>
+<p><strong>High Fidelity</strong>, 206 W Main St, (507) 220-5712, 10am to 9pm. {{reviews:high-fidelity|around 120}} Google reviews at a {{rating:high-fidelity|4.8}} average, with {{listings:high-fidelity|about 150}} priced listings.</p>
+<p><strong>Coastless</strong>, 1202 South Kniss Avenue, (507) 935-4030, 10am to 9pm. {{reviews:coastless|about 130}} reviews at a {{rating:coastless|4.8}} average and {{listings:coastless|roughly 120}} listings. Kniss Avenue is Highway 75, so this one is the easy in and out if you are passing through.</p>
+<p><strong>The Flower Shop MN</strong>, 706 S Kniss Avenue, (507) 283-7870, 10am to 9pm. {{reviews:the-flower-shop-mn-llc|about 110}} reviews at a {{rating:the-flower-shop-mn-llc|4.7}} average and {{listings:the-flower-shop-mn-llc|well over 200}} priced listings, which is the deepest menu in town by a wide margin.</p>
+<p><strong>Green Grass</strong>, 206 W Main Street, (507) 283-4220. Licensed, and that is about all we can tell you. It publishes nothing we can price and has a single Google review, and its address is the same one High Fidelity uses, which usually means a shared building or a license in transition. Call before you count on it.</p>
+<p>All three readable shops close at nine, which is late for a town this size and a real convenience if you are driving in from out of county. Live hours are on our <a href="/luverne-cannabis-dispensaries/">Luverne dispensary page</a> and <a href="/open-now/">open now</a>.</p>
+
+<h2>The cheapest edibles in Minnesota are in Luverne</h2>
+<p>This is the find, and it is not close. High Fidelity runs a median edible price of {{cat:high-fidelity:edible|$5}} across {{catN:high-fidelity:edible|more than forty}} listings. The statewide median edible is {{stateCat:edible|$20}}. The next cheapest edible shelf at any dispensary in Minnesota we can price is {{cat:bloomn:edible|$10}}, in Minneapolis.</p>
+<p>So the lowest edible prices in the state are sitting in a town of 5,000 people in the southwest corner, and the shop charges roughly a quarter of what the middle of the market charges. Its range runs from {{catLo:high-fidelity:edible|$5}} up to {{catHi:high-fidelity:edible|$55}}, so the expensive end exists, but the middle of that shelf is genuinely cheap.</p>
+<p>The other two are ordinary on edibles. The Flower Shop sits at {{cat:the-flower-shop-mn-llc:edible|$16}} and Coastless at {{cat:coastless:edible|$20}}, which is exactly the state middle. Live numbers are on <a href="/cheapest-edible-luverne/">cheapest edibles in Luverne</a>, and if you have not bought edibles before, read <a href="/blog/edibles-dosing-guide-minnesota/">the dosing guide</a> first. A $5 gummy is only a bargain if you take the right amount of it.</p>
+
+<h2>Flower is where Luverne stops being a bargain</h2>
+<p>Nobody here is cheap on flower. Coastless runs a median eighth of {{eighth:coastless|$45}}, and both The Flower Shop and High Fidelity sit at {{eighth:high-fidelity|$50}}. The state median eighth is {{stateEighth|$50}}, so one shop in town comes in five dollars under the middle of the market and the other two sit exactly on it. For flower, Coastless is the answer and it is not a close call.</p>
+<p>Buying bigger is the one flower move that pays here, and only one shop lets you make it. The Flower Shop is the only dispensary in town with a full size ladder: {{size:the-flower-shop-mn-llc:3.5|$50}} for an eighth, {{size:the-flower-shop-mn-llc:7|$85}} for a quarter, {{size:the-flower-shop-mn-llc:14|$165}} for a half ounce and {{size:the-flower-shop-mn-llc:28|$300}} for an ounce. Per gram that is {{pergram:the-flower-shop-mn-llc:3.5|$14.29}}, then {{pergram:the-flower-shop-mn-llc:7|$12.14}}, then {{pergram:the-flower-shop-mn-llc:14|$11.79}}, then {{pergram:the-flower-shop-mn-llc:28|$10.71}}. Every step up genuinely pays, which is more than a lot of Minnesota shops offer.</p>
+<p>It is also an expensive ounce. The cheapest ounce at any dispensary in Minnesota we can price is {{stateCheapestSize:28|$220}}, so Luverne's best ounce costs most of a hundred dollars more than the state's best. There is no fix for that from here. The nearest Minnesota dispensary of any kind is in Pipestone, 24 miles north, and it publishes no prices either. The nearest shop with a menu we can read is about 85 miles away. Isolation is the whole explanation for the flower pricing, and it is worth understanding rather than resenting. Live numbers are on <a href="/cheapest-flower-luverne/">cheapest flower in Luverne</a>.</p>
+
+<h2>Then the shops swap places again</h2>
+<p>On most of what is not flower, the ranking changes shop by shop, which is the real argument for not just defaulting to whichever one you drove past.</p>
+<ul>
+  <li><strong>Cartridges:</strong> High Fidelity, and it is the best cart price in town by a distance. {{catN:high-fidelity:cartridge|Nineteen}} listings at a {{cat:high-fidelity:cartridge|$50}} median, against Coastless at {{cat:coastless:cartridge|$70}} and The Flower Shop at {{cat:the-flower-shop-mn-llc:cartridge|$75}}. The state median is {{stateCat:cartridge|$60}}, so one shop here beats the market and two charge well over it.</li>
+  <li><strong>Drinks:</strong> High Fidelity again, {{catN:high-fidelity:beverage|thirteen}} listings at {{cat:high-fidelity:beverage|$5}} against a {{stateCat:beverage|$7}} state middle. The Flower Shop carries the deepest drinks shelf in town at {{catN:the-flower-shop-mn-llc:beverage|25}} listings, but prices them at {{cat:the-flower-shop-mn-llc:beverage|$8}}.</li>
+  <li><strong>Concentrates:</strong> Coastless, {{catN:coastless:concentrate|ten}} listings at {{cat:coastless:concentrate|$55}} against High Fidelity's {{cat:high-fidelity:concentrate|$75}}. The state median is {{stateCat:concentrate|$65}}.</li>
+  <li><strong>Pre-rolls:</strong> A three way tie. All three shops land at {{cat:high-fidelity:pre-roll|$16}}, a dollar under the {{stateCat:pre-roll|$17}} state median. Buy them wherever you already are.</li>
+  <li><strong>Tinctures and topicals:</strong> Thin everywhere. Coastless and The Flower Shop each list a handful, High Fidelity none we can price. Call rather than drive.</li>
+</ul>
+<p>What you are actually buying in each of those is in the <a href="/blog/vape-cartridges-minnesota/">cartridge guide</a>, <a href="/blog/thc-drinks-minnesota/">the drinks guide</a>, <a href="/blog/concentrates-dabs-minnesota/">concentrates explained</a> and <a href="/blog/pre-rolls-minnesota/">the pre-roll guide</a>.</p>
+
+<h2>If you are coming from across the border</h2>
+<p>A good share of why a town this size supports four dispensaries is that it sits half an hour from Sioux Falls on the interstate, and South Dakota has no adult-use market. So we will say the unglamorous part plainly: buying legally in Minnesota is straightforward, and carrying it back across a state line is a separate problem that Minnesota law cannot help you with. We wrote up what actually applies in <a href="/blog/traveling-with-cannabis-minnesota/">traveling with cannabis</a>, and the Minnesota rules themselves are on <a href="/minnesota-cannabis-laws/">the laws page</a>.</p>
+<p>If you are shopping Luverne as a visitor rather than a local, the <a href="/blog/first-time-dispensary-guide-minnesota/">first time guide</a> covers the ID and the counter conversation, and the <a href="/tax-calculator/">tax calculator</a> tells you what the shelf price actually becomes.</p>
+
+<h2>The short version</h2>
+<p>Edibles, carts and drinks at High Fidelity, and the edibles there are the cheapest in Minnesota by a margin that is hard to believe until you see the shelf. Eighths and concentrates at Coastless. Anything bigger than an eighth at The Flower Shop, the only shop in town selling flower by the quarter, half and ounce, and the deepest menu in Luverne besides. Nobody in Luverne is cheap on flower and the ounce here costs real money, so if you are driving through on I-90 anyway, that is the purchase to make somewhere else. Call Green Grass rather than trusting any price for it, ours included. Check the <a href="/luverne-cannabis-dispensaries/">Luverne page</a> the morning you go.</p>
+`,
+    related: [
+      { href: '/luverne-cannabis-dispensaries/', label: 'Luverne dispensaries' },
+      { href: '/cheapest-edible-luverne/', label: 'Cheapest edibles in Luverne' },
+      { href: '/cheapest-flower-luverne/', label: 'Cheapest flower in Luverne' },
+    ],
+  },
+
+  {
+    slug: 'st-cloud-dispensaries-minnesota',
+    title: 'St. Cloud dispensaries: two shops at one address, and the cheap shelves are 20 miles out of town',
+    dek: 'Minnesota’s third largest metro has two licensed dispensaries sharing a street address, and only one of them publishes a price. Here is what it is good at, what it badly is not, and which drive actually pays.',
+    date: '2026-11-30',
+    updated: '2026-11-30',
+    category: 'Buying smart',
+    read: 7,
+    claims: [
+      ['the shop with no menu has more reviews than the one with a menu', 'reviews:waabigwan-mashkiki-saint-cloud', '>', 'reviews:leafline-labs-st-cloud'],
+      ['RISE St. Cloud flower comes in under the state median eighth', 'eighth:leafline-labs-st-cloud', '<', 'stateEighth'],
+      ['RISE St. Cloud is not the cheapest eighth in the state', 'eighth:leafline-labs-st-cloud', '>', 'stateCheapestSize:3.5'],
+      ['the size ladder pays at every step: quarter beats eighth', 'pergram:leafline-labs-st-cloud:7', '<', 'pergram:leafline-labs-st-cloud:3.5'],
+      ['the size ladder pays at every step: half ounce beats quarter', 'pergram:leafline-labs-st-cloud:14', '<', 'pergram:leafline-labs-st-cloud:7'],
+      ['the size ladder pays at every step: ounce beats half ounce', 'pergram:leafline-labs-st-cloud:28', '<', 'pergram:leafline-labs-st-cloud:14'],
+      ['RISE St. Cloud runs over the state median on edibles', 'cat:leafline-labs-st-cloud:edible', '>', 'stateCat:edible'],
+      ['RISE St. Cloud runs over the state median on pre-rolls', 'cat:leafline-labs-st-cloud:pre-roll', '>', 'stateCat:pre-roll'],
+      ['tinctures are the one non-flower shelf that beats the market here', 'cat:leafline-labs-st-cloud:tincture', '<', 'stateCat:tincture'],
+      ['Becker is cheaper than St. Cloud on edibles', 'cat:great-cannabis-llc:edible', '<', 'cat:leafline-labs-st-cloud:edible'],
+      ['Becker carries a deeper edible shelf than St. Cloud', 'catN:great-cannabis-llc:edible', '>', 'catN:leafline-labs-st-cloud:edible'],
+      ['Becker is the worst cart price in the corridor', 'cat:great-cannabis-llc:cartridge', '>', 'cat:leafline-labs-st-cloud:cartridge'],
+      ['Monticello flower costs more than St. Cloud flower', 'eighth:altitude-dispensary', '>', 'eighth:leafline-labs-st-cloud'],
+      ['St. Michael flower costs more than St. Cloud flower', 'eighth:the-cannabis-co', '>', 'eighth:leafline-labs-st-cloud'],
+      ['St. Michael drinks sit under the state middle', 'cat:the-cannabis-co:beverage', '<', 'stateCat:beverage'],
+    ],
+    body: `
+<p>St. Cloud anchors the third largest metro area in Minnesota and it has two licensed dispensaries. Both of them list the same street address. Only one publishes prices we can read.</p>
+<p>That makes it one of the thinnest cities to shop at its size, and the honest answer for most of what you might want is that it is 20 to 35 miles south of here. But there is one thing the shop in town does genuinely well, and it is not the thing most people would guess.</p>
+
+<h2>The two shops in town</h2>
+<p><strong>RISE Dispensary St. Cloud</strong>, 141 33rd Avenue South, (320) 443-6250, 10am to 8pm. {{reviews:leafline-labs-st-cloud|around 580}} Google reviews at a {{rating:leafline-labs-st-cloud|4.9}} average, which is the best rating of any shop in this guide, across {{listings:leafline-labs-st-cloud|roughly 250}} priced listings. One of eight RISE locations in Minnesota.</p>
+<p><strong>Waabigwan Mashkiki St. Cloud</strong>, 141 33rd Ave S, (320) 204-1555, 10am to 8pm. {{reviews:waabigwan-mashkiki-saint-cloud|nearly 1,000}} reviews at a {{rating:waabigwan-mashkiki-saint-cloud|4.7}} average. It is a tribally operated shop, and it is comfortably the most reviewed dispensary in St. Cloud, with well over half again as many reviews as the RISE. It publishes no menu we can price, so we are not going to invent one.</p>
+<p>Two licensed shops listing one address is unusual and we are not going to pretend to know exactly why. It generally means a shared building or a license in transition. The practical consequence is simple: both map pins land in the same parking lot, so if you specifically want the tribal shop, call the number above rather than trusting the pin. Both are on our <a href="/st-cloud-cannabis-dispensaries/">St. Cloud dispensary page</a>.</p>
+
+<h2>Flower: ordinary on an eighth, good if you buy bigger</h2>
+<p>RISE St. Cloud runs a median eighth of {{eighth:leafline-labs-st-cloud|$48}} against a {{stateEighth|$50}} state median. So it is a couple of dollars under the middle of the market, which is fine and is not a reason to feel clever. The cheapest median eighth in Minnesota is {{stateCheapestSize:3.5|$38}}, at an independent in Minneapolis, so there is real money being left on the table if an eighth at a time is how you buy.</p>
+<p>Where this shop earns its keep is the size ladder, and this is the part worth knowing. An eighth at {{size:leafline-labs-st-cloud:3.5|$48}} works out to {{pergram:leafline-labs-st-cloud:3.5|$13.71}} a gram. A quarter at {{size:leafline-labs-st-cloud:7|$80}} is {{pergram:leafline-labs-st-cloud:7|$11.43}}. A half ounce at {{size:leafline-labs-st-cloud:14|$150}} is {{pergram:leafline-labs-st-cloud:14|$10.71}}. An ounce at {{size:leafline-labs-st-cloud:28|$275}} is {{pergram:leafline-labs-st-cloud:28|$9.82}}.</p>
+<p>Every step up pays, and the whole ladder takes roughly a quarter off the per gram price between the eighth and the ounce. Plenty of Minnesota shops flatten out after the quarter or never publish the bigger sizes at all, so a ladder that keeps descending is worth more than a couple of dollars off a single eighth. The catch is the obvious one: only buy the ounce if you will actually finish it, which means reading <a href="/blog/how-to-store-cannabis-minnesota/">the storage guide</a> first, and that goes double once the furnace is running. Live numbers are on <a href="/cheapest-flower-st-cloud/">cheapest flower in St. Cloud</a>.</p>
+
+<h2>Where the shop in town stops being worth it</h2>
+<p>The same store loses most of the rest of the building, and on one shelf it loses badly.</p>
+<ul>
+  <li><strong>Pre-rolls:</strong> {{cat:leafline-labs-st-cloud:pre-roll|$25}} median across {{catN:leafline-labs-st-cloud:pre-roll|over seventy}} listings, against {{stateCat:pre-roll|$17}} statewide. This is the widest miss in the store, and it is not a coincidence that the deepest shelf in the shop is also the one priced furthest over the market. If you buy pre-rolls by the handful, buy them literally anywhere else. <a href="/blog/pre-rolls-minnesota/">The pre-roll guide</a> explains what the extra is supposed to be paying for.</li>
+  <li><strong>Edibles:</strong> {{cat:leafline-labs-st-cloud:edible|$25}} median across {{catN:leafline-labs-st-cloud:edible|about fifty}} listings, against {{stateCat:edible|$20}} statewide. A quarter over the middle of the market on the shelf most people actually buy from.</li>
+  <li><strong>Carts:</strong> {{cat:leafline-labs-st-cloud:cartridge|$60}} median, which is exactly the {{stateCat:cartridge|$60}} state middle. Neither a reason to come nor a reason to leave.</li>
+  <li><strong>Drinks:</strong> {{cat:leafline-labs-st-cloud:beverage|$7}} median, right at the {{stateCat:beverage|$7}} state middle, but only {{catN:leafline-labs-st-cloud:beverage|seven}} listings to choose from. Thin shelf, fair price.</li>
+  <li><strong>Tinctures:</strong> {{cat:leafline-labs-st-cloud:tincture|$35}} median against {{stateCat:tincture|$44}} statewide. This is the one non-flower shelf here that genuinely beats the market, and almost nobody thinks to look at it. See <a href="/blog/cannabis-tinctures-minnesota/">the tincture guide</a>.</li>
+</ul>
+
+<h2>The three shops worth the drive</h2>
+<p>St. Cloud sits at the top of a corridor running southeast toward the metro, and the next three dispensaries down it are all inside 35 miles. Each one beats the hometown shop at something specific.</p>
+<p><strong>Great Cannabis</strong>, 14275 Bank Street in Becker, (763) 261-5286, 11am to 8pm, about 19 miles southeast. This is the edible stop and it is not close. {{catN:great-cannabis-llc:edible|Over a hundred}} edible listings at a {{cat:great-cannabis-llc:edible|$14.99}} median, which is a deeper shelf and a better price than St. Cloud and sits under the state middle besides. Skip its carts, which run {{cat:great-cannabis-llc:cartridge|$79.99}} against a {{stateCat:cartridge|$60}} state median and are the worst cart price in this guide. Live numbers on the <a href="/becker-cannabis-dispensaries/">Becker page</a>.</p>
+<p><strong>Altitude Dispensary</strong>, 220 Sandberg Rd in Monticello, (612) 368-7103, about 25 miles southeast. Do not come here for flower: {{eighth:altitude-dispensary|$55}} an eighth and {{size:altitude-dispensary:28|$336}} an ounce, which is well over both the state median and the shop back home. Its edibles at {{cat:altitude-dispensary:edible|$15}} are worth a stop if you are already passing. The thing that will actually bite you is the hours. It closes at 6pm, so an after work run from St. Cloud does not work. <a href="/monticello-cannabis-dispensaries/">Monticello page</a>.</p>
+<p><strong>The Cannabis Co.</strong>, 12246 NE 42nd Street in St. Michael, (763) 267-7834, about 35 miles southeast. The drinks stop, with {{catN:the-cannabis-co:beverage|about fifty}} beverage listings at a {{cat:the-cannabis-co:beverage|$6}} median, under the {{stateCat:beverage|$7}} state middle and the deepest drinks shelf in the corridor. Also shuts at 6pm, and its flower runs {{eighth:the-cannabis-co|$55}}, so go for the cooler and nothing else. See <a href="/blog/thc-drinks-minnesota/">the drinks guide</a>.</p>
+<p>The pattern is tidy enough to remember: flower in St. Cloud if you are buying by the quarter or bigger, edibles in Becker, drinks in St. Michael, and Monticello only if you happen to be there. Two of the three close at six, which is the single most useful line in this guide. Check <a href="/open-now/">open now</a> before you commit to the drive.</p>
+
+<h2>What this corridor teaches about chain pricing</h2>
+<p>St. Cloud is a clean example of something we keep running into. One store here is a couple of dollars under the state median on flower and a full eight dollars over it on pre-rolls, in the same building, under the same sign, on the same day. A chain is not cheap or expensive. It is cheap on whatever its statewide price list decided to be cheap on, and nothing about the storefront tells you which shelves those are.</p>
+<p>Which is the whole argument for checking before you go instead of picking a shop and trusting it. The <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a>, the <a href="/weed-deals-twin-cities/">deals page</a> and the <a href="/price-spread-index/">price spread index</a> exist for exactly this, and the broader version is in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a>. The same split shows up in the <a href="/blog/luverne-dispensaries-minnesota/">Luverne guide</a>, where the shop with the cheapest edibles in the state is also the dearest in town on flower.</p>
+
+<h2>The short version</h2>
+<p>Buy flower at RISE St. Cloud only if you are buying a quarter or bigger, because the size ladder pays all the way up to the ounce. Buy its tinctures, which quietly beat the state median. Do not buy its pre-rolls, which are its deepest shelf and its worst value. Drive 19 miles to Becker for edibles and 35 to St. Michael for drinks, and remember that both Monticello and St. Michael lock up at six. Call Waabigwan Mashkiki directly if you want the tribal shop, because the address will not tell the two apart. The <a href="/st-cloud-cannabis-dispensaries/">St. Cloud page</a> has live hours, and the <a href="/tax-calculator/">tax calculator</a> turns a shelf price into what you actually hand over.</p>
+`,
+    related: [
+      { href: '/st-cloud-cannabis-dispensaries/', label: 'St. Cloud dispensaries' },
+      { href: '/cheapest-flower-st-cloud/', label: 'Cheapest flower in St. Cloud' },
+      { href: '/blog/luverne-dispensaries-minnesota/', label: 'Luverne guide' },
     ],
   },
 ];
