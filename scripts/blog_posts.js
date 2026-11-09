@@ -1474,10 +1474,10 @@ module.exports = [
   },
   {
     slug: 'mankato-dispensaries-minnesota',
-    title: 'Mankato dispensaries: two shops, opposite bargains, and a size ladder that pays all the way up',
-    dek: 'Two shops you can walk into, and the cheaper one depends entirely on what you came for. Flower at one, edibles at the other, and a size ladder where every step up genuinely pays.',
+    title: 'Mankato dispensaries: two shops, opposite bargains, and a size ladder with one dead rung',
+    dek: 'Two shops you can walk into, and the cheaper one depends entirely on what you came for. Flower at one, edibles at the other, and a size ladder where one rung has quietly stopped paying.',
     date: '2026-10-26',
-    updated: '2026-10-26',
+    updated: '2026-11-09',
     category: 'Buying smart',
     read: 7,
     // Checked on every build. A token fixes a number; these catch an argument
@@ -1486,7 +1486,8 @@ module.exports = [
       ['title implies a wide eighth gap between the two shops', 'gapEighth:rise-mankato:voyager-cannabis-co', '>=', 15],
       ['RISE is the cheaper shop on eighths', 'eighth:rise-mankato', '<', 'eighth:voyager-cannabis-co'],
       ['size ladder: the quarter beats the eighth per gram', 'pergram:rise-mankato:7', '<', 'pergram:rise-mankato:3.5'],
-      ['size ladder: the half ounce beats the quarter per gram', 'pergram:rise-mankato:14', '<', 'pergram:rise-mankato:7'],
+      ['size ladder: the half ounce is the dead rung, dearer per gram than the quarter', 'pergram:rise-mankato:14', '>', 'pergram:rise-mankato:7'],
+      ['size ladder: the ounce is still the cheapest rung per gram', 'pergram:rise-mankato:28', '<', 'pergram:rise-mankato:7'],
       ['size ladder: the ounce beats the half ounce per gram', 'pergram:rise-mankato:28', '<', 'pergram:rise-mankato:14'],
       ['Voyager owns the edible shelf', 'cat:voyager-cannabis-co:edible', '<', 'cat:rise-mankato:edible'],
       ['even Voyager dearest topical undercuts RISE median', 'catHi:voyager-cannabis-co:topical', '<', 'cat:rise-mankato:topical'],
@@ -1508,10 +1509,11 @@ module.exports = [
 <p>This is the headline. The eighths we have on file at RISE Mankato run a median of {{eighth:rise-mankato|around $45}} across {{eighthN:rise-mankato|forty odd}} listings, from {{eighthLo:rise-mankato|$25}} up to {{eighthHi:rise-mankato|$55}}. Voyager's eighths sit at a median of {{eighth:voyager-cannabis-co|around $65}}, from {{eighthLo:voyager-cannabis-co|$55}} up to {{eighthHi:voyager-cannabis-co|$70}}, though that is only {{eighthN:voyager-cannabis-co|three}} listings deep so treat it as a direction rather than a precise number.</p>
 <p>The median eighth across the {{shopCount|144}} dispensaries we track in Minnesota is {{stateEighth|$50}}. So RISE sits just under the state middle and Voyager runs well over it, in the same city. If flower is the errand, that is not a close call. Live numbers are on <a href="/cheapest-flower-mankato/">cheapest flower in Mankato</a>.</p>
 
-<h2>Every step up the ladder pays here</h2>
+<h2>The quarter is the sweet spot, and the half ounce is a trap</h2>
 <p>This is the most useful arithmetic on the page. At RISE the ladder runs {{size:rise-mankato:3.5|$45}} for an eighth, a median of {{size:rise-mankato:7|$80}} for a seven gram, {{size:rise-mankato:14|$150}} for a half ounce and {{size:rise-mankato:28|$275}} for a full ounce.</p>
-<p>Per gram that is {{pergram:rise-mankato:3.5|$12.86}} at the eighth, {{pergram:rise-mankato:7|$11.43}} at the quarter, {{pergram:rise-mankato:14|$10.71}} at the half ounce and {{pergram:rise-mankato:28|$9.82}} at the ounce. Every number on that list is smaller than the one above it, by about a dollar a gram each time. The biggest single saving is the first step up, from an eighth to a quarter, which is also the smallest commitment on the ladder.</p>
-<p>From there it keeps paying, but you are buying a lot of flower to collect it. The full ounce runs about three dollars a gram under the eighth, close to a quarter off, and it is also eight times as much flower sitting in your house through furnace season. Buy the size you will actually finish, not the size with the best per-gram number. The general version is in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a>, and the keeping-it-fresh half is in the <a href="/blog/how-to-store-cannabis-minnesota/">storage guide</a>.</p>
+<p>Per gram that is {{pergram:rise-mankato:3.5|$13.71}} at the eighth, {{pergram:rise-mankato:7|$10.00}} at the quarter, {{pergram:rise-mankato:14|$10.71}} at the half ounce and {{pergram:rise-mankato:28|$9.82}} at the ounce. Read that list twice, because it does not do what a size ladder is supposed to do. The big saving is the first step up, from an eighth to a quarter, and that is also the smallest commitment on the ladder. Then it stalls. The half ounce is currently dearer per gram than the quarter, so doubling what you spend buys you worse value, not better.</p>
+<p>So the honest advice at RISE right now is to buy the quarter. It captures most of the discount on offer for the least money down, and the rung above it actively costs you. The ounce is the cheapest per gram on the board, but it is barely under the quarter and it is eight eighths of commitment. Most dispensary ladders reward every step up; this one does not, and you would never know without doing the division.</p>
+<p>If you do go all the way up, the full ounce runs nearly four dollars a gram under the eighth, close to a third off, and it is also eight times as much flower sitting in your house through furnace season. Buy the size you will actually finish, not the size with the best per-gram number. The general version is in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a>, and the keeping-it-fresh half is in the <a href="/blog/how-to-store-cannabis-minnesota/">storage guide</a>.</p>
 <p>One warning, and we mean it. This ladder moves. The quarter here has swung between $70 and $80 inside a month, which is enough to change which step is the smart one, and the half ounce and ounce listings are thin enough that a single new jar shifts the median. Do the division on the day, with the shelf in front of you, rather than trusting this paragraph.</p>
 
 <h2>Voyager owns the edible shelf</h2>
@@ -1532,7 +1534,7 @@ module.exports = [
 <p>Forty six miles east is <a href="/albert-lea-cannabis-dispensaries/">Albert Lea</a>, which has six dispensaries serving 18,000 people and all the price pressure that comes with it. We wrote that town up in the <a href="/blog/albert-lea-dispensaries-minnesota/">Albert Lea guide</a>. If you are making a real trip of it, that is where the competition actually lives.</p>
 
 <h2>The short version</h2>
-<p>Flower at RISE, edibles and topicals at Voyager, pre-rolls at whichever one is cheaper on the day, call Voyager about hours first, and buy the biggest size you will genuinely finish, because at RISE right now every step up the ladder saves you about a dollar a gram. Prices move constantly, so look at the <a href="/mankato-cannabis-dispensaries/">Mankato page</a> the morning you go, and the <a href="/tax-calculator/">tax calculator</a> for the real out the door number.</p>
+<p>Flower at RISE, edibles and topicals at Voyager, pre-rolls at whichever one is cheaper on the day, call Voyager about hours first, and at RISE buy the quarter rather than the half ounce, because right now the half is the dearer of the two per gram and only the full ounce beats it. Prices move constantly, so look at the <a href="/mankato-cannabis-dispensaries/">Mankato page</a> the morning you go, and the <a href="/tax-calculator/">tax calculator</a> for the real out the door number.</p>
 `,
     related: [
       { href: '/mankato-cannabis-dispensaries/', label: 'Mankato dispensaries' },
@@ -1670,7 +1672,7 @@ module.exports = [
     claims: [
       ['the two Winona menus still share no products', 'overlap:winona-dispensary:black-bear-weed-dispensary-winona', '==', 0],
       ['Winona Dispensary cheaper on the median eighth', 'eighth:winona-dispensary', '<', 'eighth:black-bear-weed-dispensary-winona'],
-      ['Winona Dispensary cheaper on carts', 'cat:winona-dispensary:cartridge', '<', 'cat:black-bear-weed-dispensary-winona:cartridge'],
+      ['Black Bear cheaper on carts', 'cat:black-bear-weed-dispensary-winona:cartridge', '<', 'cat:winona-dispensary:cartridge'],
       ['Black Bear cheaper on edibles', 'cat:black-bear-weed-dispensary-winona:edible', '<', 'cat:winona-dispensary:edible'],
       ['Black Bear cheaper on drinks', 'cat:black-bear-weed-dispensary-winona:beverage', '<', 'cat:winona-dispensary:beverage'],
       ['Black Bear tincture shelf still deep enough to price', 'catN:black-bear-weed-dispensary-winona:tincture', '>=', 3],
@@ -1698,12 +1700,12 @@ module.exports = [
 <ul>
   <li><strong>Flower:</strong> Winona Dispensary on the median eighth, {{eighth:winona-dispensary|$53}} against {{eighth:black-bear-weed-dispensary-winona|$60}}. Black Bear's single cheapest eighth is the lower of the two though, at {{eighthLo:black-bear-weed-dispensary-winona|$40}}, so if flower is the errand it is worth a look at both shelves.</li>
   <li><strong>Pre-rolls:</strong> {{cheaper:winona-dispensary:black-bear-weed-dispensary-winona:pre-roll|too close to call today}}, by {{gap:winona-dispensary:black-bear-weed-dispensary-winona:pre-roll|a couple of dollars}}. This one has traded places between the two shops, so check rather than assume.</li>
-  <li><strong>Cartridges:</strong> Winona Dispensary, {{cat:winona-dispensary:cartridge|$57}} against {{cat:black-bear-weed-dispensary-winona:cartridge|$65}}.</li>
+  <li><strong>Cartridges:</strong> {{cheaper:winona-dispensary:black-bear-weed-dispensary-winona:cartridge|Black Bear}}, by {{gap:winona-dispensary:black-bear-weed-dispensary-winona:cartridge|about $4}}. This shelf has changed hands between the two shops, so read it on the day rather than trusting the direction.</li>
   <li><strong>Edibles:</strong> Black Bear, {{cat:black-bear-weed-dispensary-winona:edible|$18.75}} against {{cat:winona-dispensary:edible|$20.38}}.</li>
   <li><strong>Drinks:</strong> Black Bear, and this is the biggest gap on the board. Median {{cat:black-bear-weed-dispensary-winona:beverage|$5}} against {{cat:winona-dispensary:beverage|$7.33}}.</li>
   <li><strong>Tinctures:</strong> Black Bear, {{cat:black-bear-weed-dispensary-winona:tincture|$44}} across {{catN:black-bear-weed-dispensary-winona:tincture|six}} listings. Winona Dispensary carries too few for us to put a median on, so this one is Black Bear by default rather than by a beating.</li>
 </ul>
-<p>Read that as a rule of thumb and not gospel. Because the menus share nothing, these medians are comparing different products, so an eighth at one shop and an eighth at the other are not the same eighth. What the pattern does tell you honestly: Winona Dispensary is the deeper flower and smokeables shop, with a menu close to twice the size, and Black Bear is the better stop for drinks, edibles and tinctures. If you want both, you can genuinely do both in one walk.</p>
+<p>Read that as a rule of thumb and not gospel. Because the menus share nothing, these medians are comparing different products, so an eighth at one shop and an eighth at the other are not the same eighth. What the pattern does tell you honestly: Winona Dispensary is the deeper flower shop, with a menu close to twice the size, and Black Bear is the better stop for drinks, edibles, tinctures and, as of this week, carts. If you want both, you can genuinely do both in one walk.</p>
 
 <h2>Winona pays a little more than the metro</h2>
 <p>Statewide, the median eighth across the {{shopCount|144}} dispensaries we track sits at {{stateEighth|$50}}. Both Winona shops run above that. That is a normal outstate premium and not anybody gouging you: fewer shops means less price pressure, and product has to travel further to get here. It does mean the metro trick of walking away from an overpriced eighth has less leverage in Winona, so judge the jar on its merits. Our piece on <a href="/blog/thc-percentage-myth-minnesota/">why the THC number is a bad filter</a> is the better tool here than price alone.</p>
@@ -1834,15 +1836,15 @@ module.exports = [
 
   {
     slug: 'luverne-dispensaries-minnesota',
-    title: 'Luverne dispensaries: four shops in a town of 5,000, and the cheapest edibles in Minnesota',
-    dek: 'Minnesota’s far southwest corner has four licensed dispensaries inside a few blocks. One of them runs the lowest edible prices in the state. The flower is a completely different story.',
+    title: 'Luverne dispensaries: four shops in a town of 5,000, and not one of them is cheap on flower',
+    dek: 'Minnesota’s far southwest corner has four licensed dispensaries inside a few blocks. Three publish menus we can read, and the pattern is strange: the cheapest carts in town, a five dollar edible shelf, and flower that costs more than it does in the metro.',
     date: '2026-11-23',
     updated: '2026-11-23',
     category: 'Buying smart',
     read: 7,
     claims: [
-      ['High Fidelity has the cheapest edible median in Minnesota', 'cat:high-fidelity:edible', '<', 'cat:bloomn:edible'],
-      ['High Fidelity edibles beat the state median', 'cat:high-fidelity:edible', '<', 'stateCat:edible'],
+      ['High Fidelity edible shelf still starts at or under $5', 'catLo:high-fidelity:edible', '<=', 5],
+      ['High Fidelity still lists a deep edible shelf', 'catN:high-fidelity:edible', '>=', 20],
       ['Coastless is the cheapest of the three on eighths', 'eighth:high-fidelity', '>', 'eighth:coastless'],
       ['Flower Shop is no dearer than High Fidelity on eighths', 'eighth:the-flower-shop-mn-llc', '<=', 'eighth:high-fidelity'],
       ['the Luverne ounce costs well over the cheapest in the state', 'size:the-flower-shop-mn-llc:28', '>', 'stateCheapestSize:28'],
@@ -1852,11 +1854,12 @@ module.exports = [
       ['High Fidelity carts beat the state median', 'cat:high-fidelity:cartridge', '<', 'stateCat:cartridge'],
       ['High Fidelity drinks sit under the state middle', 'cat:high-fidelity:beverage', '<', 'stateCat:beverage'],
       ['Coastless is cheaper than High Fidelity on concentrates', 'cat:coastless:concentrate', '<', 'cat:high-fidelity:concentrate'],
-      ['pre-rolls in Luverne sit at or under the state median', 'cat:high-fidelity:pre-roll', '<=', 'stateCat:pre-roll'],
+      ['High Fidelity and The Flower Shop still match on pre-rolls', 'cat:high-fidelity:pre-roll', '==', 'cat:the-flower-shop-mn-llc:pre-roll'],
+      ['Coastless still the dearest in town on pre-rolls', 'cat:coastless:pre-roll', '>', 'cat:high-fidelity:pre-roll'],
     ],
     body: `
 <p>Luverne sits in the far southwest corner of Minnesota, about half an hour east of Sioux Falls on I-90, with fewer than 5,000 people in it. It has four licensed cannabis dispensaries. That is more than Mankato, more than Rochester, and the same number as Rochester and Winona put together.</p>
-<p>Three of the four publish menus we can read, and they are genuinely different shops rather than three versions of the same one. One of them has the cheapest edible shelf in Minnesota by a wide margin. None of them is anywhere near the cheapest on flower. Knowing which is which is worth a few minutes before you park.</p>
+<p>Three of the four publish menus we can read, and they are genuinely different shops rather than three versions of the same one. One of them runs a five dollar edible shelf that is hard to beat anywhere outstate. None of them is anywhere near the cheapest on flower. Knowing which is which is worth a few minutes before you park.</p>
 
 <h2>The four shops</h2>
 <p><strong>High Fidelity</strong>, 206 W Main St, (507) 220-5712, 10am to 9pm. {{reviews:high-fidelity|around 120}} Google reviews at a {{rating:high-fidelity|4.8}} average, with {{listings:high-fidelity|about 150}} priced listings.</p>
@@ -1865,10 +1868,10 @@ module.exports = [
 <p><strong>Green Grass</strong>, 206 W Main Street, (507) 283-4220. Licensed, and that is about all we can tell you. It publishes nothing we can price and has a single Google review, and its address is the same one High Fidelity uses, which usually means a shared building or a license in transition. Call before you count on it.</p>
 <p>All three readable shops close at nine, which is late for a town this size and a real convenience if you are driving in from out of county. Live hours are on our <a href="/luverne-cannabis-dispensaries/">Luverne dispensary page</a> and <a href="/open-now/">open now</a>.</p>
 
-<h2>The cheapest edibles in Minnesota are in Luverne</h2>
-<p>This is the find, and it is not close. High Fidelity runs a median edible price of {{cat:high-fidelity:edible|$5}} across {{catN:high-fidelity:edible|more than forty}} listings. The statewide median edible is {{stateCat:edible|$20}}. The next cheapest edible shelf at any dispensary in Minnesota we can price is {{cat:bloomn:edible|$10}}, in Minneapolis.</p>
-<p>So the lowest edible prices in the state are sitting in a town of 5,000 people in the southwest corner, and the shop charges roughly a quarter of what the middle of the market charges. Its range runs from {{catLo:high-fidelity:edible|$5}} up to {{catHi:high-fidelity:edible|$55}}, so the expensive end exists, but the middle of that shelf is genuinely cheap.</p>
-<p>The other two are ordinary on edibles. The Flower Shop sits at {{cat:the-flower-shop-mn-llc:edible|$16}} and Coastless at {{cat:coastless:edible|$20}}, which is exactly the state middle. Live numbers are on <a href="/cheapest-edible-luverne/">cheapest edibles in Luverne</a>, and if you have not bought edibles before, read <a href="/blog/edibles-dosing-guide-minnesota/">the dosing guide</a> first. A $5 gummy is only a bargain if you take the right amount of it.</p>
+<h2>The cheap end of the edible shelf is genuinely cheap</h2>
+<p>High Fidelity lists {{catN:high-fidelity:edible|more than forty}} edibles, running from {{catLo:high-fidelity:edible|$5}} at the bottom up to {{catHi:high-fidelity:edible|$55}} at the top. A large block of that shelf sits right on the floor: low dose gummies and single servings at five dollars apiece, against a statewide median edible of {{stateCat:edible|$20}}. If you want to try something without putting twenty dollars behind it, that is the cheapest entry point we have found outstate.</p>
+<p>One caveat, and it belongs to us rather than to the shop. High Fidelity's menu reaches us in pieces. Most days the only shelf that comes through is the edibles, and the rest of the store arrives in a full sweep every week or two. The five dollar end we see every single day and trust completely. Any median we print for this shop can shift depending on how much of the store was visible that morning, so treat the middle of its range as a direction and not a quote. The number you should actually shop on is the live one on <a href="/cheapest-edible-luverne/">cheapest edibles in Luverne</a>.</p>
+<p>The other two shops are steadier to quote. The Flower Shop sits at a {{cat:the-flower-shop-mn-llc:edible|$16}} median and Coastless at {{cat:coastless:edible|$20}}, which is exactly the state middle. If you have not bought edibles before, read <a href="/blog/edibles-dosing-guide-minnesota/">the dosing guide</a> first. A five dollar gummy is only a bargain if you take the right amount of it.</p>
 
 <h2>Flower is where Luverne stops being a bargain</h2>
 <p>Nobody here is cheap on flower. Coastless runs a median eighth of {{eighth:coastless|$45}}, and both The Flower Shop and High Fidelity sit at {{eighth:high-fidelity|$50}}. The state median eighth is {{stateEighth|$50}}, so one shop in town comes in five dollars under the middle of the market and the other two sit exactly on it. For flower, Coastless is the answer and it is not a close call.</p>
@@ -1878,11 +1881,11 @@ module.exports = [
 <h2>Then the shops swap places again</h2>
 <p>On most of what is not flower, the ranking changes shop by shop, which is the real argument for not just defaulting to whichever one you drove past.</p>
 <ul>
-  <li><strong>Cartridges:</strong> High Fidelity, and it is the best cart price in town by a distance. {{catN:high-fidelity:cartridge|Nineteen}} listings at a {{cat:high-fidelity:cartridge|$50}} median, against Coastless at {{cat:coastless:cartridge|$70}} and The Flower Shop at {{cat:the-flower-shop-mn-llc:cartridge|$75}}. The state median is {{stateCat:cartridge|$60}}, so one shop here beats the market and two charge well over it.</li>
+  <li><strong>Cartridges:</strong> High Fidelity, and by a clear margin. {{catN:high-fidelity:cartridge|Twenty odd}} listings at a {{cat:high-fidelity:cartridge|$60}} median, against Coastless at {{cat:coastless:cartridge|$70}} and The Flower Shop at {{cat:the-flower-shop-mn-llc:cartridge|$75}}. The state median is {{stateCat:cartridge|$65}}, so one shop here sits under the market and two sit over it.</li>
   <li><strong>Drinks:</strong> High Fidelity again, {{catN:high-fidelity:beverage|thirteen}} listings at {{cat:high-fidelity:beverage|$5}} against a {{stateCat:beverage|$7}} state middle. The Flower Shop carries the deepest drinks shelf in town at {{catN:the-flower-shop-mn-llc:beverage|25}} listings, but prices them at {{cat:the-flower-shop-mn-llc:beverage|$8}}.</li>
-  <li><strong>Concentrates:</strong> Coastless, {{catN:coastless:concentrate|ten}} listings at {{cat:coastless:concentrate|$55}} against High Fidelity's {{cat:high-fidelity:concentrate|$75}}. The state median is {{stateCat:concentrate|$65}}.</li>
-  <li><strong>Pre-rolls:</strong> A three way tie. All three shops land at {{cat:high-fidelity:pre-roll|$16}}, a dollar under the {{stateCat:pre-roll|$17}} state median. Buy them wherever you already are.</li>
-  <li><strong>Tinctures and topicals:</strong> Thin everywhere. Coastless and The Flower Shop each list a handful, High Fidelity none we can price. Call rather than drive.</li>
+  <li><strong>Concentrates:</strong> Coastless, {{catN:coastless:concentrate|eleven}} listings at {{cat:coastless:concentrate|$55}} against High Fidelity's {{cat:high-fidelity:concentrate|$60}}. The state median is {{stateCat:concentrate|$65}}, so the cheap end of this shelf in Luverne does beat the market.</li>
+  <li><strong>Pre-rolls:</strong> High Fidelity and The Flower Shop both land at {{cat:high-fidelity:pre-roll|$16}}, a dollar under the {{stateCat:pre-roll|$17}} state median. Coastless is the outlier at {{cat:coastless:pre-roll|$24}}, which makes it the one shelf where it is clearly the wrong stop.</li>
+  <li><strong>Tinctures and topicals:</strong> Thin everywhere. The Flower Shop is the only shop in town with enough tinctures for us to put a median on, at {{cat:the-flower-shop-mn-llc:tincture|$50}}. Topicals we cannot price at any of the three. Call rather than drive.</li>
 </ul>
 <p>What you are actually buying in each of those is in the <a href="/blog/vape-cartridges-minnesota/">cartridge guide</a>, <a href="/blog/thc-drinks-minnesota/">the drinks guide</a>, <a href="/blog/concentrates-dabs-minnesota/">concentrates explained</a> and <a href="/blog/pre-rolls-minnesota/">the pre-roll guide</a>.</p>
 
@@ -1891,7 +1894,7 @@ module.exports = [
 <p>If you are shopping Luverne as a visitor rather than a local, the <a href="/blog/first-time-dispensary-guide-minnesota/">first time guide</a> covers the ID and the counter conversation, and the <a href="/tax-calculator/">tax calculator</a> tells you what the shelf price actually becomes.</p>
 
 <h2>The short version</h2>
-<p>Edibles, carts and drinks at High Fidelity, and the edibles there are the cheapest in Minnesota by a margin that is hard to believe until you see the shelf. Eighths and concentrates at Coastless. Anything bigger than an eighth at The Flower Shop, the only shop in town selling flower by the quarter, half and ounce, and the deepest menu in Luverne besides. Nobody in Luverne is cheap on flower and the ounce here costs real money, so if you are driving through on I-90 anyway, that is the purchase to make somewhere else. Call Green Grass rather than trusting any price for it, ours included. Check the <a href="/luverne-cannabis-dispensaries/">Luverne page</a> the morning you go.</p>
+<p>Carts and drinks at High Fidelity, plus the five dollar edible shelf, which is the cheapest entry point we have found outstate. Eighths and concentrates at Coastless. Anything bigger than an eighth at The Flower Shop, the only shop in town selling flower by the quarter, half and ounce, and the deepest menu in Luverne besides. Nobody in Luverne is cheap on flower and the ounce here costs real money, so if you are driving through on I-90 anyway, that is the purchase to make somewhere else. Call Green Grass rather than trusting any price for it, ours included. Check the <a href="/luverne-cannabis-dispensaries/">Luverne page</a> the morning you go.</p>
 `,
     related: [
       { href: '/luverne-cannabis-dispensaries/', label: 'Luverne dispensaries' },
@@ -1958,7 +1961,7 @@ module.exports = [
 
 <h2>What this corridor teaches about chain pricing</h2>
 <p>St. Cloud is a clean example of something we keep running into. One store here is a couple of dollars under the state median on flower and a full eight dollars over it on pre-rolls, in the same building, under the same sign, on the same day. A chain is not cheap or expensive. It is cheap on whatever its statewide price list decided to be cheap on, and nothing about the storefront tells you which shelves those are.</p>
-<p>Which is the whole argument for checking before you go instead of picking a shop and trusting it. The <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a>, the <a href="/weed-deals-twin-cities/">deals page</a> and the <a href="/price-spread-index/">price spread index</a> exist for exactly this, and the broader version is in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a>. The same split shows up in the <a href="/blog/luverne-dispensaries-minnesota/">Luverne guide</a>, where the shop with the cheapest edibles in the state is also the dearest in town on flower.</p>
+<p>Which is the whole argument for checking before you go instead of picking a shop and trusting it. The <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a>, the <a href="/weed-deals-twin-cities/">deals page</a> and the <a href="/price-spread-index/">price spread index</a> exist for exactly this, and the broader version is in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a>. The same split shows up in the <a href="/blog/luverne-dispensaries-minnesota/">Luverne guide</a>, where the shop with the five dollar edible shelf and the cheapest carts in town is also one of the dearest on flower.</p>
 
 <h2>The short version</h2>
 <p>Buy flower at RISE St. Cloud only if you are buying a quarter or bigger, because the size ladder pays all the way up to the ounce. Buy its tinctures, which quietly beat the state median. Do not buy its pre-rolls, which are its deepest shelf and its worst value. Drive 19 miles to Becker for edibles and 35 to St. Michael for drinks, and remember that both Monticello and St. Michael lock up at six. Call Waabigwan Mashkiki directly if you want the tribal shop, because the address will not tell the two apart. The <a href="/st-cloud-cannabis-dispensaries/">St. Cloud page</a> has live hours, and the <a href="/tax-calculator/">tax calculator</a> turns a shelf price into what you actually hand over.</p>
