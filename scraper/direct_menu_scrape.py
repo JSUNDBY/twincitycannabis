@@ -574,6 +574,18 @@ def main():
         json.dump(comparison, f, indent=2)
     print(f"Saved to {save_path}")
 
+    # Total outage (2026-11-14: Weedmaps answered 406 to every menu request).
+    # Writing an empty array here left `TCC.products = [` with nothing in it,
+    # the first platform merge then produced `[,`, and two later steps crashed,
+    # so the cycle died before the publish gate and the site froze. Leave last
+    # cycle's rows in place instead: every shop's fetch is already recorded as
+    # failed in the raw archive, so the gate holds those menus with their real
+    # read date and drops them after 3 days. No freshness stamp either.
+    if dispensaries and not comparison:
+        print("\nWEEDMAPS RETURNED NOTHING for any shop. data.js products left "
+              "as they were; the publish gate will hold these menus.")
+        return
+
     # Freshness marker: committed alongside the data so CI can alarm when
     # Weedmaps menus go stale, regardless of WHERE the scrape ran (Mac or CI).
     (DATA_DIR / "last_weedmaps_scrape.txt").write_text(
