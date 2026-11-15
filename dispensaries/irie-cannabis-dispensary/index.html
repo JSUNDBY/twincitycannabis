@@ -270,7 +270,7 @@
   <p class="text-xs" style="color:var(--text-muted,#8b909a);font-size:.78rem;margin:0 0 1rem">Menu prices are one thing — the register is the truth. Your report helps everyone shop smarter. Reports are reviewed before they appear.</p>
   <form id="checkin-form" hidden style="max-width:440px;background:var(--bg-card,rgba(255,255,255,0.03));border:1px solid var(--border,#22302a);border-radius:12px;padding:1rem;margin-bottom:1.2rem">
     <input list="checkin-products" id="checkin-product" placeholder="What did you buy? *" maxlength="120" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
-    <datalist id="checkin-products"><option value="Blueberry Cheesecake Disaster"><option value="Ruin Lemonade"><option value="Smoked Peach Everyday"><option value="Super Kushy Blackberry, Raspberry, Coconut"><option value="Oliphant"><option value="BakPak"><option value="BakPak Nola Punch Make &#39;em say uhh Gummies"><option value="Natreum"><option value="FLÖR"><option value="RCWM"><option value="Natreum  (Surprise) Fast Acting Gummies 5 MG THC"><option value="Hemp Lucid"><option value="Natreum Happy Guts (honey, ginger, turmeric)"><option value="Hemp Lucid SLEEP Blueberry Lemon Reishi Gummies"><option value="Shenanigans"><option value="Pina Guava Tart - 3.5g"><option value="Z02 - 3.5g"><option value="Trailhead Octane Mintz 3.5g"><option value="Float"><option value="Trailhead - 3.5g Flower - Cherry Lady Slipper (H)"><option value="Cherry Lady Slipper - 3.5g"><option value="Octane Mintz - 3.5g"><option value="Epitome Labs"></datalist>
+    <datalist id="checkin-products"><option value="Blueberry Cheesecake Disaster"><option value="Ruin Lemonade"><option value="Smoked Peach Everyday"><option value="Super Kushy Blackberry, Raspberry, Coconut"><option value="Oliphant"><option value="BakPak"><option value="BakPak Nola Punch Make &#39;em say uhh Gummies"><option value="Natreum"><option value="RCWM"><option value="FLÖR"><option value="Natreum  (Surprise) Fast Acting Gummies 5 MG THC"><option value="Hemp Lucid"><option value="Natreum Happy Guts (honey, ginger, turmeric)"><option value="Hemp Lucid SLEEP Blueberry Lemon Reishi Gummies"><option value="Shenanigans"><option value="Pina Guava Tart - 3.5g"><option value="Z02 - 3.5g"><option value="Trailhead Octane Mintz 3.5g"><option value="Float"><option value="Trailhead - 3.5g Flower - Cherry Lady Slipper (H)"><option value="Cherry Lady Slipper - 3.5g"><option value="Octane Mintz - 3.5g"><option value="Epitome Labs"></datalist>
     <input type="number" id="checkin-price" placeholder="What you paid, before tax ($) *" min="1" max="500" step="0.01" required style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
     <input type="text" id="checkin-note" placeholder="Anything else? Deal, quality, vibe (optional)" maxlength="200" style="width:100%;margin-bottom:.6rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
     <input type="text" id="checkin-name" placeholder="First name or initials (optional)" maxlength="40" style="width:100%;margin-bottom:.7rem;padding:.6rem .75rem;background:var(--bg-secondary,#0b120e);color:var(--text-primary,#f5f6f8);border:1px solid var(--border,#22302a);border-radius:8px;font:inherit">
@@ -551,6 +551,12 @@
 <thead><tr><th>Product</th><th>Brand</th><th style="text-align:right">Price at Irie Cannabis Dispensary</th><th style="text-align:right">Lowest in metro</th></tr></thead>
 <tbody>
 <tr>
+    <td style="display:flex;align-items:center"><img src="https://carrot-nevada-media.sfo2.cdn.digitaloceanspaces.com/products/webp/90927c7688ecde6eee15c4acae164bf51e7ce64cd232d4fb98a52d7dff827fe4-500.webp" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/c0222h">RCWM | Gastro Pop | 1 g | PREROLL</a></td>
+    <td>RCWM</td>
+    <td style="text-align:right" class="price">$14.00 ✓</td>
+    <td style="text-align:right">$14.00</td>
+  </tr>
+<tr>
     <td style="display:flex;align-items:center"><img src="https://carrot-nevada-media.sfo2.cdn.digitaloceanspaces.com/products/webp/095a964c296098a055cba2c3a313dde6ee494e9d97b67ad6a6e9cae69e8019a5-500.webp" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/c0220">FLÖR | Government Oranges Sour | PREROLL | 2 Pack</a></td>
     <td>FLÖR</td>
     <td style="text-align:right" class="price">$14.00 ✓</td>
@@ -558,12 +564,6 @@
   </tr>
 <tr>
     <td style="display:flex;align-items:center"><img src="https://carrot-nevada-media.sfo2.cdn.digitaloceanspaces.com/products/webp/90927c7688ecde6eee15c4acae164bf51e7ce64cd232d4fb98a52d7dff827fe4-500.webp" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/c0221">RCWM | Lemon Cherry Gelato | 1 g | PREROLL</a></td>
-    <td>RCWM</td>
-    <td style="text-align:right" class="price">$14.00 ✓</td>
-    <td style="text-align:right">$14.00</td>
-  </tr>
-<tr>
-    <td style="display:flex;align-items:center"><img src="https://carrot-nevada-media.sfo2.cdn.digitaloceanspaces.com/products/webp/90927c7688ecde6eee15c4acae164bf51e7ce64cd232d4fb98a52d7dff827fe4-500.webp" alt="" width="40" height="40" loading="lazy" style="border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:.6rem;background:rgba(255,255,255,0.04)"><a href="/#compare/c0222h">RCWM | Gastro Pop | 1 g | PREROLL</a></td>
     <td>RCWM</td>
     <td style="text-align:right" class="price">$14.00 ✓</td>
     <td style="text-align:right">$14.00</td>
@@ -666,6 +666,11 @@
 </div>
 
 <div class="review">
+  <div class="author">Nikki Hansen <span class="stars">★★★★★</span></div>
+  <p class="text">Everyone was nice and there was a space right out front to park (thankfully- cuz the lot and the rest of the street were full (yet I was the only customer). From what I understand, they only have one strain for sale and only flower and only as 3.5g. The THC content is relatively low on this strain. $40 for the 3.5g (The deal was you get half off a joint if you buy 2 bags of flower but I declined.)</p>
+</div>
+
+<div class="review">
   <div class="author">NRG <span class="stars">★★★★★</span></div>
   <p class="text">This is by far the coolest dispensary in the entire state and then some. There&#39;s so much artwork that the vibe gives art gallery meets dispensary. Honestly ,I just wanna get stoned and stare at the walls. Staff seems exceptionally kind, knowledgeable, and down to earth! Products are super dank &amp; they have a lot of unique things I haven&#39;t seen before</p>
 </div>
@@ -673,11 +678,6 @@
 <div class="review">
   <div class="author">David S <span class="stars">★★★★</span></div>
   <p class="text">Friendly place and I appreciate small business. The part that didnt reslly impress me was the fact that I just spent $180 on an 8th and a 1/2 gram vape.. so make sure you got the cash to burn.</p>
-</div>
-
-<div class="review">
-  <div class="author">Colleen Murphy <span class="stars">★★★★★</span></div>
-  <p class="text">I love this shop! Not only is it clean and modern with welcoming vibe, but they also display beautiful art by local artists (it’s worth a trip just to check out the amazing art). The staff is also super friendly and exceptionally knowledgeable and helpful. I bought flower with an intoxicatingly delicious aroma and equally satisfying effects. I also got some sleepy time gummies and they were so del</p>
 </div>
 <p><a href="https://maps.google.com/?cid=8656661228676046999&amp;g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA" rel="nofollow noopener" target="_blank">See all reviews on Google →</a></p>
 
