@@ -126,8 +126,11 @@ def main():
     DATA.write_text(new_content)
 
     total = len(re.findall(r"\{ id: 'p\d", block))
-    print(f"Backfilled {changed}/{total} products with a strain type "
-          f"({round(changed/total*100)}%)")
+    # total is 0 when the Weedmaps scrape returned nothing (2026-11-14: every
+    # menu request answered 406). The division used to crash here and, under
+    # set -e, stop the cycle before the publish gate could hold those menus.
+    pct = round(changed / total * 100) if total else 0
+    print(f"Backfilled {changed}/{total} products with a strain type ({pct}%)")
     print("  by type:", counts)
     print(f"  learned {len(phrase_map)} strain phrases from real labels")
 
