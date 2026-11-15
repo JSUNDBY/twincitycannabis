@@ -55,6 +55,8 @@ DUTCHIE_STORES = {
     "bloom-wellness-dispensary-st-paul": {"name": "Bloom Wellness (St. Paul)", "dispensary_id": "689e3bce5fdd58a4d2320cf5"},
     # Added 2026-09-15 after Lucas Lapham (manager) claimed the listing.
     "great-cannabis-llc": {"name": "Great Cannabis (Becker)", "dispensary_id": "69e78e26089fe02a3ec832cf"},
+    # Owner claimed the listing with menu consent ticked, 2026-11-14.
+    "terrace-high-dispensary": {"name": "Terrace High (Oakdale)", "dispensary_id": "6a1a3a1565690a3289d23d81"},
 }
 
 SKIP_TYPES = {"accessories", "apparel", "merch", "gear", "n/a"}

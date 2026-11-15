@@ -73,6 +73,9 @@ MANUAL_INCLUDE_SLUGS = [
     "anang-native-cannabis-co",  # Cloquet
     "lake-superior-dispensary",  # Duluth
     "green-box-cannabis",        # Lakeville
+    # Inside Minneapolis but past the 100-listing discovery cut. Owner claimed
+    # the listing with menu consent ticked, 2026-11-14.
+    "dabney-s-cannabis-co",      # Dabney's Cannabis Co., Hiawatha Ave
 ]
 
 

@@ -2776,5 +2776,78 @@
     "ocm_license": "DIS-L24-000241",
     "ocm_license_type": "Retailer",
     "region": "metro"
+  },
+  {
+    "id": "dabney-s-cannabis-co",
+    "name": "Dabney's Cannabis Co.",
+    "tagline": "Licensed cannabis microbusiness dispensary on Hiawatha Ave",
+    "address": "5152 Hiawatha Ave, Minneapolis, MN 55417",
+    "neighborhood": "Nokomis East",
+    "city": "Minneapolis",
+    "lat": 44.90918,
+    "lng": -93.206789,
+    "phone": "(612) 242-4712",
+    "hours": {
+      "weekday": "11:00 AM - 8:00 PM",
+      "weekend": "11:00 AM - 9:00 PM",
+      "note": "Mon to Thu 11 AM to 8 PM, Fri and Sat 11 AM to 9 PM, closed Sunday"
+    },
+    "website": "https://docdabs.com/",
+    "tier": "free",
+    "tcc_score": 75,
+    "scores": {
+      "pricing": 73,
+      "selection": 73,
+      "service": 75,
+      "lab_testing": 75
+    },
+    "review_count": 0,
+    "verified": true,
+    "features": [
+      "Microbusiness",
+      "Online menu"
+    ],
+    "gradient": "linear-gradient(135deg, #14532d, #4ade80)",
+    "initial": "DC",
+    "img": "",
+    "manually_added": true,
+    "ocm_license": "MICRO-L24-000211-03",
+    "ocm_license_type": "Microbusiness",
+    "region": "metro"
+  },
+  {
+    "id": "terrace-high-dispensary",
+    "name": "Terrace High Dispensary",
+    "tagline": "Licensed cannabis dispensary in Oakdale",
+    "address": "6211 Upper 51st St N, Oakdale, MN 55128",
+    "neighborhood": "Oakdale",
+    "city": "Oakdale",
+    "lat": 45.0230722,
+    "lng": -92.9808315,
+    "phone": "(651) 330-0581",
+    "hours": {
+      "weekday": "8:00 AM - 10:00 PM",
+      "weekend": "8:00 AM - 10:00 PM",
+      "note": "Mon to Sat 8 AM to 10 PM, Sun 10 AM to 9 PM"
+    },
+    "website": "https://terracehigh.com/",
+    "tier": "free",
+    "tcc_score": 75,
+    "scores": {
+      "pricing": 73,
+      "selection": 73,
+      "service": 75,
+      "lab_testing": 75
+    },
+    "review_count": 0,
+    "verified": true,
+    "features": [
+      "Online menu"
+    ],
+    "gradient": "linear-gradient(135deg, #581c87, #c084fc)",
+    "initial": "TH",
+    "img": "",
+    "manually_added": true,
+    "region": "metro"
   }
 ]
