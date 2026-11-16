@@ -1923,7 +1923,10 @@ module.exports = [
       ['tinctures are the one non-flower shelf that beats the market here', 'cat:leafline-labs-st-cloud:tincture', '<', 'stateCat:tincture'],
       ['Becker is cheaper than St. Cloud on edibles', 'cat:great-cannabis-llc:edible', '<', 'cat:leafline-labs-st-cloud:edible'],
       ['Becker carries a deeper edible shelf than St. Cloud', 'catN:great-cannabis-llc:edible', '>', 'catN:leafline-labs-st-cloud:edible'],
-      ['Becker is the worst cart price in the corridor', 'cat:great-cannabis-llc:cartridge', '>', 'cat:leafline-labs-st-cloud:cartridge'],
+      ['St. Cloud carts run over the state median', 'cat:leafline-labs-st-cloud:cartridge', '>', 'stateCat:cartridge'],
+      ['Becker carts run over the state median', 'cat:great-cannabis-llc:cartridge', '>', 'stateCat:cartridge'],
+      ['Monticello carts run over the state median', 'cat:altitude-dispensary:cartridge', '>', 'stateCat:cartridge'],
+      ['St. Michael carts run over the state median', 'cat:the-cannabis-co:cartridge', '>', 'stateCat:cartridge'],
       ['Monticello flower costs more than St. Cloud flower', 'eighth:altitude-dispensary', '>', 'eighth:leafline-labs-st-cloud'],
       ['St. Michael flower costs more than St. Cloud flower', 'eighth:the-cannabis-co', '>', 'eighth:leafline-labs-st-cloud'],
       ['St. Michael drinks sit under the state middle', 'cat:the-cannabis-co:beverage', '<', 'stateCat:beverage'],
@@ -1947,14 +1950,14 @@ module.exports = [
 <ul>
   <li><strong>Pre-rolls:</strong> {{cat:leafline-labs-st-cloud:pre-roll|$25}} median across {{catN:leafline-labs-st-cloud:pre-roll|over seventy}} listings, against {{stateCat:pre-roll|$17}} statewide. This is the widest miss in the store, and it is not a coincidence that the deepest shelf in the shop is also the one priced furthest over the market. If you buy pre-rolls by the handful, buy them literally anywhere else. <a href="/blog/pre-rolls-minnesota/">The pre-roll guide</a> explains what the extra is supposed to be paying for.</li>
   <li><strong>Edibles:</strong> {{cat:leafline-labs-st-cloud:edible|$25}} median across {{catN:leafline-labs-st-cloud:edible|about fifty}} listings, against {{stateCat:edible|$20}} statewide. A quarter over the middle of the market on the shelf most people actually buy from.</li>
-  <li><strong>Carts:</strong> {{cat:leafline-labs-st-cloud:cartridge|$60}} median, which is exactly the {{stateCat:cartridge|$60}} state middle. Neither a reason to come nor a reason to leave.</li>
+  <li><strong>Carts:</strong> {{cat:leafline-labs-st-cloud:cartridge|$75}} median across {{catN:leafline-labs-st-cloud:cartridge|nearly fifty}} listings, against {{stateCat:cartridge|$65}} statewide. This is the second widest miss in the store, and driving does not fix it: Becker at {{cat:great-cannabis-llc:cartridge|$69.99}}, Monticello at {{cat:altitude-dispensary:cartridge|$70}} and St. Michael at {{cat:the-cannabis-co:cartridge|$72}} are all over the state middle too. There is no good cart stop anywhere in this corridor, which is worth knowing before you drive for one. <a href="/blog/vape-cartridges-minnesota/">The cart guide</a> covers what to look at instead of price.</li>
   <li><strong>Drinks:</strong> {{cat:leafline-labs-st-cloud:beverage|$7}} median, right at the {{stateCat:beverage|$7}} state middle, but only {{catN:leafline-labs-st-cloud:beverage|seven}} listings to choose from. Thin shelf, fair price.</li>
   <li><strong>Tinctures:</strong> {{cat:leafline-labs-st-cloud:tincture|$35}} median against {{stateCat:tincture|$44}} statewide. This is the one non-flower shelf here that genuinely beats the market, and almost nobody thinks to look at it. See <a href="/blog/cannabis-tinctures-minnesota/">the tincture guide</a>.</li>
 </ul>
 
 <h2>The three shops worth the drive</h2>
 <p>St. Cloud sits at the top of a corridor running southeast toward the metro, and the next three dispensaries down it are all inside 35 miles. Each one beats the hometown shop at something specific.</p>
-<p><strong>Great Cannabis</strong>, 14275 Bank Street in Becker, (763) 261-5286, 11am to 8pm, about 19 miles southeast. This is the edible stop and it is not close. {{catN:great-cannabis-llc:edible|Over a hundred}} edible listings at a {{cat:great-cannabis-llc:edible|$14.99}} median, which is a deeper shelf and a better price than St. Cloud and sits under the state middle besides. Skip its carts, which run {{cat:great-cannabis-llc:cartridge|$79.99}} against a {{stateCat:cartridge|$60}} state median and are the worst cart price in this guide. Live numbers on the <a href="/becker-cannabis-dispensaries/">Becker page</a>.</p>
+<p><strong>Great Cannabis</strong>, 14275 Bank Street in Becker, (763) 261-5286, 11am to 8pm, about 19 miles southeast. This is the edible stop and it is not close. {{catN:great-cannabis-llc:edible|Over a hundred}} edible listings at a {{cat:great-cannabis-llc:edible|$14.99}} median, which is a deeper shelf and a better price than St. Cloud and sits under the state middle besides. Skip its carts, which run {{cat:great-cannabis-llc:cartridge|$69.99}} against a {{stateCat:cartridge|$65}} state median, though as the cart section below says, that is true of every shop in this corridor. Live numbers on the <a href="/becker-cannabis-dispensaries/">Becker page</a>.</p>
 <p><strong>Altitude Dispensary</strong>, 220 Sandberg Rd in Monticello, (612) 368-7103, about 25 miles southeast. Do not come here for flower: {{eighth:altitude-dispensary|$55}} an eighth and {{size:altitude-dispensary:28|$336}} an ounce, which is well over both the state median and the shop back home. Its edibles at {{cat:altitude-dispensary:edible|$15}} are worth a stop if you are already passing. The thing that will actually bite you is the hours. It closes at 6pm, so an after work run from St. Cloud does not work. <a href="/monticello-cannabis-dispensaries/">Monticello page</a>.</p>
 <p><strong>The Cannabis Co.</strong>, 12246 NE 42nd Street in St. Michael, (763) 267-7834, about 35 miles southeast. The drinks stop, with {{catN:the-cannabis-co:beverage|about fifty}} beverage listings at a {{cat:the-cannabis-co:beverage|$6}} median, under the {{stateCat:beverage|$7}} state middle and the deepest drinks shelf in the corridor. Also shuts at 6pm, and its flower runs {{eighth:the-cannabis-co|$55}}, so go for the cooler and nothing else. See <a href="/blog/thc-drinks-minnesota/">the drinks guide</a>.</p>
 <p>The pattern is tidy enough to remember: flower in St. Cloud if you are buying by the quarter or bigger, edibles in Becker, drinks in St. Michael, and Monticello only if you happen to be there. Two of the three close at six, which is the single most useful line in this guide. Check <a href="/open-now/">open now</a> before you commit to the drive.</p>
@@ -1970,6 +1973,165 @@ module.exports = [
       { href: '/st-cloud-cannabis-dispensaries/', label: 'St. Cloud dispensaries' },
       { href: '/cheapest-flower-st-cloud/', label: 'Cheapest flower in St. Cloud' },
       { href: '/blog/luverne-dispensaries-minnesota/', label: 'Luverne guide' },
+    ],
+  },
+  {
+    slug: 'burnsville-eagan-dispensaries-minnesota',
+    title: 'Burnsville, Eagan and Prior Lake dispensaries: one ring, three completely different flower ladders',
+    dek: 'Six shops across the south metro, and the only thing they agree on is that nobody is cheap on everything. The ounce swings $55 between the two chains, pre-rolls swing more than two to one, and one shop charges the same per gram whether you buy an eighth or a quarter.',
+    date: '2026-12-07',
+    updated: '2026-12-07',
+    category: 'Buying smart',
+    read: 7,
+    claims: [
+      ['Burnsville beats the state median eighth', 'eighth:green-goods-burnsville', '<', 'stateEighth'],
+      ['Eagan beats the state median eighth', 'eighth:leafline-labs-eagan', '<', 'stateEighth'],
+      ['Prior Lake runs over the state median eighth', 'eighth:flame-flora', '>', 'stateEighth'],
+      ['the Burnsville ounce is cheaper than the Eagan ounce', 'size:green-goods-burnsville:28', '<', 'size:leafline-labs-eagan:28'],
+      ['Burnsville ladder: the quarter beats the eighth', 'pergram:green-goods-burnsville:7', '<', 'pergram:green-goods-burnsville:3.5'],
+      ['Burnsville ladder: the half ounce beats the quarter', 'pergram:green-goods-burnsville:14', '<', 'pergram:green-goods-burnsville:7'],
+      ['Burnsville ladder: the ounce beats the half ounce', 'pergram:green-goods-burnsville:28', '<', 'pergram:green-goods-burnsville:14'],
+      ['Eagan ladder descends too: the quarter beats the eighth', 'pergram:leafline-labs-eagan:7', '<', 'pergram:leafline-labs-eagan:3.5'],
+      ['Eagan ladder descends too: the ounce beats the half ounce', 'pergram:leafline-labs-eagan:28', '<', 'pergram:leafline-labs-eagan:14'],
+      ['Prior Lake’s quarter saves nothing per gram over its eighth', 'pergram:flame-flora:7', '>=', 'pergram:flame-flora:3.5'],
+      ['Burnsville pre-rolls beat the state median', 'cat:green-goods-burnsville:pre-roll', '<', 'stateCat:pre-roll'],
+      ['Lakeville pre-rolls beat the state median', 'cat:mn-thc-co-2:pre-roll', '<', 'stateCat:pre-roll'],
+      ['Prior Lake pre-rolls run over the state median', 'cat:flame-flora:pre-roll', '>', 'stateCat:pre-roll'],
+      ['Prior Lake is the dearest pre-roll in the ring, over Savage', 'cat:flame-flora:pre-roll', '>', 'cat:green-leaf-depot:pre-roll'],
+      ['Prior Lake drinks beat the state median', 'cat:flame-flora:beverage', '<', 'stateCat:beverage'],
+      ['Lakeville drinks run over the state median', 'cat:mn-thc-co-2:beverage', '>', 'stateCat:beverage'],
+      ['Prior Lake edibles sit at or under the state median', 'cat:flame-flora:edible', '<=', 'stateCat:edible'],
+      ['Burnsville edibles run over the state median', 'cat:green-goods-burnsville:edible', '>', 'stateCat:edible'],
+      ['Eagan tinctures beat the state median', 'cat:leafline-labs-eagan:tincture', '<', 'stateCat:tincture'],
+      ['Burnsville tinctures run over the state median', 'cat:green-goods-burnsville:tincture', '>', 'stateCat:tincture'],
+      ['Eagan carts run over the state median', 'cat:leafline-labs-eagan:cartridge', '>', 'stateCat:cartridge'],
+      ['Burnsville carts beat the state median', 'cat:green-goods-burnsville:cartridge', '<', 'stateCat:cartridge'],
+      ['Eagan is the most reviewed shop in the ring, over Burnsville', 'reviews:leafline-labs-eagan', '>', 'reviews:green-goods-burnsville'],
+    ],
+    body: `
+<p>The southern suburbs are the easiest part of the metro to shop badly. Six licensed dispensaries sit inside a twenty minute arc from Burnsville to Rosemount, they all look about the same from the parking lot, and the gap between the best and worst buy in that arc is bigger than the gap between Minneapolis and outstate.</p>
+<p>The useful way to read this ring is not shop by shop. It is to look at what each one does to the price when you buy more, because that is where the whole difference lives.</p>
+
+<h2>The six shops</h2>
+<ul>
+  <li><strong>Green Goods Burnsville</strong>, 14334 Burnhaven Drive, (952) 856-8603. {{reviews:green-goods-burnsville|roughly 490}} Google reviews at {{rating:green-goods-burnsville|4.5}}, across {{listings:green-goods-burnsville|over 200}} priced listings. Sun to Wed 10am to 8pm, Thu to Sat 9am to 9pm.</li>
+  <li><strong>RISE Dispensary Eagan</strong>, 1340 Town Centre Dr, (651) 846-9245. {{reviews:leafline-labs-eagan|nearly 1,500}} reviews at {{rating:leafline-labs-eagan|4.5}}, the most reviewed shop in the ring by a wide margin, and {{listings:leafline-labs-eagan|over 300}} priced listings, the deepest menu out here. Listed 9am to 9pm, so it opens earliest.</li>
+  <li><strong>Flame &amp; Flora</strong>, 2571 Credit Union Drive in Prior Lake, (612) 491-9459. {{reviews:flame-flora|about 140}} reviews at {{rating:flame-flora|4.6}}. Mon to Thu 10am to 8pm, Fri and Sat to 10pm.</li>
+  <li><strong>Legit Cannabis</strong>, 16000 Cedar Ave in Rosemount, (612) 315-5882. {{reviews:legit-cannabis|about 200}} reviews at {{rating:legit-cannabis|4.8}}, the best rating in the ring.</li>
+  <li><strong>MN THC Co.</strong>, 16085 Buck Hill Rd in Lakeville, (952) 388-1036. {{reviews:mn-thc-co-2|over 160}} reviews at {{rating:mn-thc-co-2|4.7}}.</li>
+  <li><strong>Green Leaf Depot</strong>, 4126 Egan Drive in Savage, (952) 388-4269. {{reviews:green-leaf-depot|about 100}} reviews at {{rating:green-leaf-depot|4.7}}, but only {{listings:green-leaf-depot|about 35}} priced listings.</li>
+</ul>
+<p>One honest warning about hours before you drive anywhere. For three of these six shops, the hours we hold from two different sources disagree with each other, and Legit Rosemount is the worst of it: one source lists it closing at 10pm, which would be the latest in the ring, and the other says 9pm. Check <a href="/open-now/">open now</a> or call. This is not a thing we can fix from a desk.</p>
+
+<h2>Flower: the ladder is the whole story</h2>
+<p>All three shops with a measurable flower ladder start in roughly the same place and end up nowhere near each other.</p>
+<p><strong>Green Goods Burnsville</strong> runs {{eighth:green-goods-burnsville|$41.89}} an eighth, under the {{stateEighth|$50}} state median, and then keeps going: {{size:green-goods-burnsville:7|$70}} a quarter, {{size:green-goods-burnsville:14|$120}} a half ounce, {{size:green-goods-burnsville:28|$220}} an ounce. Per gram that is {{pergram:green-goods-burnsville:3.5|$11.97}} down to {{pergram:green-goods-burnsville:28|$7.86}}, which takes about a third off the price of a gram between the smallest and biggest jar. Every rung pays.</p>
+<p><strong>RISE Eagan</strong> descends too, but it starts higher and falls slower: {{eighth:leafline-labs-eagan|$48}} an eighth down to {{size:leafline-labs-eagan:28|$275}} an ounce, which is {{pergram:leafline-labs-eagan:28|$9.82}} a gram. That is a {{gapEighth:leafline-labs-eagan:green-goods-burnsville|six dollar}} difference on an eighth turning into a fifty five dollar difference on an ounce, between two shops about ten miles apart. If you buy by the ounce, that one fact is worth more than everything else in this guide.</p>
+<p><strong>Flame &amp; Flora in Prior Lake</strong> is the interesting one. It runs {{eighth:flame-flora|$60}} an eighth, which is over the state median and the dearest flower in the ring, and its quarter at {{size:flame-flora:7|$120}} works out to {{pergram:flame-flora:7|$17.14}} a gram against {{pergram:flame-flora:3.5|$17.14}} for the eighth. That is the same number. Buying double saves you nothing at all here, which is rare enough that it is worth saying plainly: at this shop, there is no reason to buy more than you need. Everywhere else in Minnesota, there usually is. <a href="/blog/how-to-store-cannabis-minnesota/">The storage guide</a> matters most at the shops where the ladder does pay.</p>
+<p>Live numbers are on <a href="/cheapest-flower-burnsville/">cheapest flower in Burnsville</a> and <a href="/cheapest-flower-eagan/">cheapest flower in Eagan</a>.</p>
+
+<h2>Where each shop actually wins</h2>
+<p>Nobody out here is cheap across the board, and the splits are sharp.</p>
+<ul>
+  <li><strong>Pre-rolls: Burnsville, and it is not close.</strong> {{cat:green-goods-burnsville:pre-roll|$15}} median against {{stateCat:pre-roll|$19}} statewide, with Lakeville right behind at {{cat:mn-thc-co-2:pre-roll|$15.99}}. Prior Lake is {{cat:flame-flora:pre-roll|$32}}, over double Burnsville and the dearest in the ring. Same product category, same twenty minute drive. <a href="/blog/pre-rolls-minnesota/">The pre-roll guide</a> explains what you are and are not paying for.</li>
+  <li><strong>Drinks: Prior Lake.</strong> {{cat:flame-flora:beverage|$5}} median across {{catN:flame-flora:beverage|about forty}} listings, under the {{stateCat:beverage|$7}} state middle. Lakeville runs {{cat:mn-thc-co-2:beverage|$9.99}} on a similarly deep shelf, so the two shops closest together on the map are furthest apart on the cooler. See <a href="/blog/thc-drinks-minnesota/">the drinks guide</a>.</li>
+  <li><strong>Edibles: Prior Lake again.</strong> {{cat:flame-flora:edible|$20}} across {{catN:flame-flora:edible|over seventy}} listings, right at the {{stateCat:edible|$20}} state median and the deepest edible shelf out here. Burnsville is {{cat:green-goods-burnsville:edible|$26}}, a quarter over the market. Start with <a href="/blog/edibles-dosing-guide-minnesota/">the dosing guide</a> if edibles are new to you.</li>
+  <li><strong>Tinctures: Eagan, and almost nobody looks.</strong> {{cat:leafline-labs-eagan:tincture|$23}} against {{stateCat:tincture|$35}} statewide, while Burnsville runs {{cat:green-goods-burnsville:tincture|$59}} on the same shelf. That is the single widest in-ring gap on anything. <a href="/blog/cannabis-tinctures-minnesota/">What tinctures are for</a>.</li>
+  <li><strong>Carts: Burnsville, barely.</strong> {{cat:green-goods-burnsville:cartridge|$62.83}} just under the {{stateCat:cartridge|$65}} state middle, while Eagan runs {{cat:leafline-labs-eagan:cartridge|$75}} across {{catN:leafline-labs-eagan:cartridge|over fifty}} listings. Ten dollars over the market on its deepest non-flower shelf. <a href="/cheapest-cartridge-burnsville/">Cheapest carts in Burnsville</a>.</li>
+</ul>
+
+<h2>The two shops that cannot tell you much yet</h2>
+<p><strong>Green Leaf Depot in Savage</strong> has a good rating and {{listings:green-leaf-depot|about 35}} priced listings, which is a tenth of what Eagan publishes. It lists no flower we can measure at standard sizes, and what it does publish runs over the market. Nothing against the shop; there is just not enough on the page to recommend a drive.</p>
+<p><strong>Green Box Cannabis in Lakeville</strong> publishes almost nothing, on single digit review counts. If you are in Lakeville, MN THC Co. down the road is the one with a readable menu. Both are on the <a href="/lakeville-cannabis-dispensaries/">Lakeville page</a>, and Savage is <a href="/savage-cannabis-dispensaries/">here</a>.</p>
+<p>We would rather say "we cannot price this shop" than guess. That is the same call we made in <a href="/blog/st-cloud-dispensaries-minnesota/">the St. Cloud guide</a>, where the most reviewed shop in town publishes no menu at all.</p>
+
+<h2>The short version</h2>
+<p>Buy flower in Burnsville if you are buying a quarter or more, because its ladder is the only one out here that keeps paying all the way to the ounce, and its ounce undercuts Eagan's by fifty five dollars. Buy pre-rolls in Burnsville or Lakeville and never in Prior Lake. Buy drinks and edibles in Prior Lake and do not buy its flower. Buy tinctures in Eagan. In Prior Lake specifically, buy only what you need, because the quarter costs exactly what two eighths cost.</p>
+<p>The ring is also a clean reminder that a chain is not a price. Two large chains sit ten miles apart here, both under the state median on an eighth, and one is ten dollars over the market on carts while the other is twenty seven dollars over it on tinctures. The <a href="/cheapest-cannabis-twin-cities/">cheapest cannabis tracker</a>, the <a href="/weed-deals-twin-cities/">deals page</a> and the <a href="/price-spread-index/">price spread index</a> recompute all of this several times a day, and the broader method is in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money at a Minnesota dispensary</a>. The <a href="/tax-calculator/">tax calculator</a> turns any of these shelf prices into what you hand over.</p>
+`,
+    related: [
+      { href: '/burnsville-cannabis-dispensaries/', label: 'Burnsville dispensaries' },
+      { href: '/eagan-cannabis-dispensaries/', label: 'Eagan dispensaries' },
+      { href: '/prior-lake-cannabis-dispensaries/', label: 'Prior Lake dispensaries' },
+      { href: '/blog/how-to-save-money-minnesota-dispensaries/', label: 'How to actually save money' },
+    ],
+  },
+  {
+    slug: 'woodbury-oakdale-dispensaries-minnesota',
+    title: 'Woodbury, Oakdale and the east metro: the two cheapest cart shelves out here, and two shops that will not quote you anything',
+    dek: 'East of the river there are seven licensed dispensaries, and two of them publish no prices at all. Of the five that do, two beat the state median on cartridges by real money and the most loved shop in the east metro runs ten dollars over it.',
+    date: '2026-12-14',
+    updated: '2026-12-14',
+    category: 'Buying smart',
+    read: 7,
+    claims: [
+      ['Woodbury carts beat the state median', 'cat:green-goods-woodbury:cartridge', '<', 'stateCat:cartridge'],
+      ['Oakdale carts beat the state median', 'cat:terrace-high-dispensary:cartridge', '<', 'stateCat:cartridge'],
+      ['Woodbury is the cheaper of the two on carts', 'cat:green-goods-woodbury:cartridge', '<', 'cat:terrace-high-dispensary:cartridge'],
+      ['White Bear Lake carts run over the state median', 'cat:the-lakes-dispensary:cartridge', '>', 'stateCat:cartridge'],
+      ['Lakeland Shores carts run over the state median', 'cat:green-canopy-inc:cartridge', '>', 'stateCat:cartridge'],
+      ['White Bear Lake is rated at or above Woodbury', 'rating:the-lakes-dispensary', '>=', 'rating:green-goods-woodbury'],
+      ['White Bear Lake has real review volume behind that rating', 'reviews:the-lakes-dispensary', '>', 'reviews:terrace-high-dispensary'],
+      ['Woodbury is the most reviewed shop out here, over White Bear Lake', 'reviews:green-goods-woodbury', '>', 'reviews:the-lakes-dispensary'],
+      ['Woodbury beats the state median eighth', 'eighth:green-goods-woodbury', '<', 'stateEighth'],
+      ['Bayport beats the state median eighth', 'eighth:my-dealer-bayport', '<', 'stateEighth'],
+      ['Woodbury ladder: the quarter beats the eighth', 'pergram:green-goods-woodbury:7', '<', 'pergram:green-goods-woodbury:3.5'],
+      ['Woodbury ladder: the half ounce beats the quarter', 'pergram:green-goods-woodbury:14', '<', 'pergram:green-goods-woodbury:7'],
+      ['Woodbury ladder: the ounce beats the half ounce', 'pergram:green-goods-woodbury:28', '<', 'pergram:green-goods-woodbury:14'],
+      ['Bayport’s quarter beats its eighth per gram', 'pergram:my-dealer-bayport:7', '<', 'pergram:my-dealer-bayport:3.5'],
+      ['Oakdale’s quarter beats its eighth per gram', 'pergram:terrace-high-dispensary:7', '<', 'pergram:terrace-high-dispensary:3.5'],
+      ['Oakdale tinctures beat the state median', 'cat:terrace-high-dispensary:tincture', '<', 'stateCat:tincture'],
+      ['Lakeland Shores tinctures run over the state median', 'cat:green-canopy-inc:tincture', '>', 'stateCat:tincture'],
+      ['Woodbury tinctures run over the state median', 'cat:green-goods-woodbury:tincture', '>', 'stateCat:tincture'],
+      ['Oakdale edibles beat the state median', 'cat:terrace-high-dispensary:edible', '<', 'stateCat:edible'],
+      ['Bayport edibles beat the state median', 'cat:my-dealer-bayport:edible', '<', 'stateCat:edible'],
+      ['Woodbury edibles run over the state median', 'cat:green-goods-woodbury:edible', '>', 'stateCat:edible'],
+      ['Lakeland Shores edibles run over the state median', 'cat:green-canopy-inc:edible', '>', 'stateCat:edible'],
+      ['Lakeland Shores drinks sit at or under the state median', 'cat:green-canopy-inc:beverage', '<=', 'stateCat:beverage'],
+      ['Woodbury pre-rolls beat the state median', 'cat:green-goods-woodbury:pre-roll', '<', 'stateCat:pre-roll'],
+      ['Bayport pre-rolls run over the state median', 'cat:my-dealer-bayport:pre-roll', '>', 'stateCat:pre-roll'],
+      ['Oakdale pre-rolls run over the state median', 'cat:terrace-high-dispensary:pre-roll', '>', 'stateCat:pre-roll'],
+    ],
+    body: `
+<p>If you live east of the river, you have been handed a worse version of the metro's cannabis map than people in Minneapolis got. Seven licensed dispensaries from Woodbury up to White Bear Lake and out to the St. Croix, and two of them publish nothing we can price. One of those two has {{reviews:legacy-cannabis|over 300}} Google reviews, so it is clearly doing business. It just is not doing it on a readable menu.</p>
+<p>What is left is still worth knowing, because the east metro quietly holds the two best cartridge shelves in this half of the Twin Cities, and the shop everybody loves is not one of them.</p>
+
+<h2>The shops you can price</h2>
+<ul>
+  <li><strong>Green Goods Woodbury</strong>, 803 Bielenberg Drive, (612) 260-1222. {{reviews:green-goods-woodbury|about 770}} reviews at {{rating:green-goods-woodbury|4.5}}, {{listings:green-goods-woodbury|over 200}} priced listings. Sun to Wed 10am to 8pm, Thu to Sat to 9pm.</li>
+  <li><strong>Terrace High Dispensary</strong>, 6211 Upper 51st St N in Oakdale, (651) 330-0581. {{rating:terrace-high-dispensary|4.9}} stars on only {{reviews:terrace-high-dispensary|27}} reviews, so read that rating as promising rather than proven, but {{listings:terrace-high-dispensary|over 150}} priced listings, which is a real menu.</li>
+  <li><strong>Green Canopy Craft Dispensary</strong>, 177 Saint Croix Trail South in Lakeland Shores, (651) 337-2661. {{reviews:green-canopy-inc|about 80}} reviews at {{rating:green-canopy-inc|4.7}}, {{listings:green-canopy-inc|over 160}} listings.</li>
+  <li><strong>My Dealer</strong>, 243 3rd St N in Bayport, (651) 323-1266. {{rating:my-dealer-bayport|5.0}} stars on {{reviews:my-dealer-bayport|22}} reviews, {{listings:my-dealer-bayport|around 130}} listings. Opens at noon, which is the thing to know.</li>
+  <li><strong>The Lakes Dispensary</strong>, 1599 E County Road E in White Bear Lake, (612) 469-7688. {{reviews:the-lakes-dispensary|over 700}} reviews at {{rating:the-lakes-dispensary|4.9}}, the highest rating out here that has real review volume behind it. Only {{listings:the-lakes-dispensary|about 65}} priced listings though, and no flower we can measure.</li>
+</ul>
+<p>And the two we cannot: <strong>Legacy Cannabis Woodbury</strong>, 9891 Hudson Pl, (651) 421-4088, and <strong>Silver Therapeutics</strong>, 1778 Greeley Street S in Stillwater, (651) 342-2412. Both are licensed, both are well reviewed, neither publishes a menu we can read. Call them. We are not going to invent prices for a shop that has not published any.</p>
+
+<h2>Carts: the one thing the east metro is genuinely best at</h2>
+<p>Green Goods Woodbury runs a {{cat:green-goods-woodbury:cartridge|$50}} median cartridge across {{catN:green-goods-woodbury:cartridge|nearly thirty}} listings, against {{stateCat:cartridge|$65}} statewide. Terrace High in Oakdale is next at {{cat:terrace-high-dispensary:cartridge|$54.99}}. Those are the two cheapest cart shelves anywhere in this half of the metro, and fifteen dollars under the state middle is not a rounding error, it is a third of another cart.</p>
+<p>Then it falls apart fast. Green Canopy in Lakeland Shores runs {{cat:green-canopy-inc:cartridge|$70}} and The Lakes in White Bear Lake runs {{cat:the-lakes-dispensary:cartridge|$74.97}}, both over the state median. So the best rated shop out here is also the most expensive place in the east metro to buy a cart, by about {{gap:the-lakes-dispensary:green-goods-woodbury:cartridge|twenty five dollars}} against Woodbury, which has both the cheapest carts and the most reviews of any shop east of the river. A {{rating:the-lakes-dispensary|4.9}} rating is telling you about the staff and the room, and it is telling you nothing at all about the price. Live numbers on <a href="/cheapest-cartridge-woodbury/">cheapest carts in Woodbury</a> and <a href="/cheapest-cartridge-white-bear-lake/">White Bear Lake</a>, and <a href="/blog/vape-cartridges-minnesota/">the cart guide</a> covers what else to check.</p>
+
+<h2>Flower: two shops with a real ladder, and three without one</h2>
+<p>Green Goods Woodbury runs {{eighth:green-goods-woodbury|$40}} an eighth, under the {{stateEighth|$50}} state median, and the ladder descends the whole way: {{size:green-goods-woodbury:7|$70}} a quarter, {{size:green-goods-woodbury:14|$120}} a half, {{size:green-goods-woodbury:28|$220}} an ounce, or {{pergram:green-goods-woodbury:3.5|$11.43}} a gram down to {{pergram:green-goods-woodbury:28|$7.86}}. If you buy flower in bulk and you live east of the river, that is the answer and the rest of this section is detail.</p>
+<p>My Dealer in Bayport is the surprise. It is a tiny shop with {{reviews:my-dealer-bayport|22}} reviews, and it runs {{eighth:my-dealer-bayport|$42}} an eighth and {{size:my-dealer-bayport:7|$70}} a quarter, which is {{pergram:my-dealer-bayport:7|$10.00}} a gram and matches the big chain's quarter exactly. An independent in a town of three thousand holding chain prices on flower is not something we see often.</p>
+<p>Terrace High in Oakdale starts dearer at {{eighth:terrace-high-dispensary|$49.99}} but its quarter at {{size:terrace-high-dispensary:7|$69.99}} drops it to {{pergram:terrace-high-dispensary:7|$10.00}} a gram, the steepest single step out here. Buy the quarter or do not buy flower there. Green Canopy sits at {{eighth:green-canopy-inc|$50}}, right on the state median, with no bigger sizes we can price. The Lakes publishes no measurable flower at all. See <a href="/cheapest-flower-woodbury/">cheapest flower in Woodbury</a> and <a href="/cheapest-flower-bayport/">Bayport</a>.</p>
+
+<h2>Everything else, shop by shop</h2>
+<ul>
+  <li><strong>Edibles: Bayport and Oakdale.</strong> {{cat:my-dealer-bayport:edible|$18}} and {{cat:terrace-high-dispensary:edible|$18.99}} against {{stateCat:edible|$20}} statewide, and Oakdale's shelf is {{catN:terrace-high-dispensary:edible|over sixty}} listings deep. Skip Woodbury at {{cat:green-goods-woodbury:edible|$30}} and Lakeland Shores at {{cat:green-canopy-inc:edible|$29.99}}, both half again over the market. <a href="/blog/edibles-dosing-guide-minnesota/">Dosing guide</a> first if you are new.</li>
+  <li><strong>Tinctures: Oakdale, and it is the best deal in this guide.</strong> {{cat:terrace-high-dispensary:tincture|$12.99}} against {{stateCat:tincture|$35}} statewide, roughly a third of the market, while Woodbury runs {{cat:green-goods-woodbury:tincture|$59}} and Lakeland Shores {{cat:green-canopy-inc:tincture|$59.99}} on the same shelf. The shelf nobody checks is where the real gaps hide. <a href="/blog/cannabis-tinctures-minnesota/">What tinctures are for</a>.</li>
+  <li><strong>Drinks: Lakeland Shores.</strong> {{cat:green-canopy-inc:beverage|$6.97}} across {{catN:green-canopy-inc:beverage|about fifty}} listings, at or under the {{stateCat:beverage|$7}} state middle and the deepest cooler out here. <a href="/cheapest-beverage-lakeland-shores/">Live prices</a>, and <a href="/blog/thc-drinks-minnesota/">the drinks guide</a>.</li>
+  <li><strong>Pre-rolls: Woodbury.</strong> {{cat:green-goods-woodbury:pre-roll|$15}} against {{stateCat:pre-roll|$19}} statewide. Bayport at {{cat:my-dealer-bayport:pre-roll|$28.74}} and Oakdale at {{cat:terrace-high-dispensary:pre-roll|$27.99}} are both well over, which is a neat inversion: the two shops with the best edibles out here have the worst pre-rolls. <a href="/blog/pre-rolls-minnesota/">The pre-roll guide</a>.</li>
+</ul>
+
+<h2>The short version</h2>
+<p>Green Goods Woodbury is the default for flower, carts and pre-rolls, and it is genuinely good at all three, so if you only want one stop east of the river that is it. Do not buy its edibles or its tinctures. Drive to Oakdale for tinctures, which are about a third of the state median there, and for edibles. Lakeland Shores for the cooler. Bayport if you are out that way and want chain flower prices from a five star corner shop, remembering it opens at noon. The Lakes in White Bear Lake is the best rated room out here and the dearest carts, which is a combination worth sitting with.</p>
+<p>And if you were planning on Legacy in Woodbury or Silver Therapeutics in Stillwater, call first, because nothing on this site can tell you what they charge. The same pattern shows up in <a href="/blog/burnsville-eagan-dispensaries-minnesota/">the south metro ring</a>, where two of six shops publish too little to recommend. <a href="/woodbury-cannabis-dispensaries/">Woodbury</a>, <a href="/oakdale-cannabis-dispensaries/">Oakdale</a> and <a href="/stillwater-cannabis-dispensaries/">Stillwater</a> have live hours, <a href="/open-now/">open now</a> saves a wasted drive, and the <a href="/tax-calculator/">tax calculator</a> turns a shelf price into the real one.</p>
+`,
+    related: [
+      { href: '/woodbury-cannabis-dispensaries/', label: 'Woodbury dispensaries' },
+      { href: '/oakdale-cannabis-dispensaries/', label: 'Oakdale dispensaries' },
+      { href: '/blog/burnsville-eagan-dispensaries-minnesota/', label: 'South metro ring guide' },
+      { href: '/cheapest-cartridge-woodbury/', label: 'Cheapest carts in Woodbury' },
     ],
   },
 ];
