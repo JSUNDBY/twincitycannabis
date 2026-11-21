@@ -1,6 +1,6 @@
 {
- "merged_groups": 336,
- "absorbed": 615,
+ "merged_groups": 334,
+ "absorbed": 607,
  "groups": [
   {
    "key": "flor|flower|3.5g|breath mendo",
@@ -73,28 +73,6 @@
     }
    ],
    "shops_after": 4
-  },
-  {
-   "key": "&shine|edible|100mg|fruit punch",
-   "kept": {
-    "name": "&Shine Fruit Punch Gummy 100mg THC (10 pack)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "&Shine - Fruit Punch Gummies (100mg THC)",
-     "shops": [
-      "fort-road-cannabis-llc"
-     ]
-    },
-    {
-     "name": "&Shine Fruit Punch Gummy 100mg THC (10 pack)",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    }
-   ],
-   "shops_after": 2
   },
   {
    "key": "campfire cannabis|flower|7g|cap junky",
@@ -343,12 +321,6 @@
     "shops_before": 1
    },
    "absorbed": [
-    {
-     "name": "Granny's Original Pretzels 50mg THC (50 pack)",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    },
     {
      "name": "Original Pretzels 50mg - Granny's",
      "shops": [
@@ -880,6 +852,28 @@
    "shops_after": 7
   },
   {
+   "key": "minny grown|edible|200mg|high sky watermelon",
+   "kept": {
+    "name": "MG - Sky High Watermelon Gummies (200mg THC)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Minny Grown Sky High Watermelon Gummy 200mg THC (20 pack)",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    },
+    {
+     "name": "SKY HIGH WATERMELON GUMMIES 200MG - MINNY GROWN | .2g",
+     "shops": [
+      "altitude-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
    "key": "carpe diem|tincture|1000mg|gel muscle on relief",
    "kept": {
     "name": "Relief Muscle & Joint CBD Gel Roll-On 1000 mg",
@@ -928,6 +922,44 @@
    "shops_after": 2
   },
   {
+   "key": "minny grown|cartridge|1g|aio lights northern",
+   "kept": {
+    "name": "Northern Lights - 1g AIO Vape Cart",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Minny Grown | Northern Lights AIO Vape | 1g",
+     "shops": [
+      "terrace-high-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "minny grown|edible|200mg|croix st sunrise tropical",
+   "kept": {
+    "name": "MG - St. Croix Tropical Sunrise Gummies (200mg THC)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Minny Grown St. Croix Tropical Sunrise Gummy 200mg THC (20 pack)",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    },
+    {
+     "name": "ST. CROIX TROPICAL SUNRISE 200MG - MINNY GROWN | .2g",
+     "shops": [
+      "altitude-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
    "key": "minny grown|edible|200mg|aurora beary bliss borealis",
    "kept": {
     "name": "MG - Aurora Borealis Beary Bliss Gummies  (200mg THC)",
@@ -950,34 +982,6 @@
    "shops_after": 3
   },
   {
-   "key": "minny grown|edible|200mg|croix st sunrise tropical",
-   "kept": {
-    "name": "MG - St. Croix Tropical Sunrise Gummies (200mg THC)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "St. Croix Tropical Sunrise Gummies | 200mg",
-     "shops": [
-      "higher-place"
-     ]
-    },
-    {
-     "name": "Minny Grown St. Croix Tropical Sunrise Gummy 200mg THC (20 pack)",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    },
-    {
-     "name": "ST. CROIX TROPICAL SUNRISE 200MG - MINNY GROWN | .2g",
-     "shops": [
-      "altitude-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 4
-  },
-  {
    "key": "minny grown|edible|200mg|bluebeary boundary waters",
    "kept": {
     "name": "MG - Boundary Waters Bluebeary Gummies (200mg THC)",
@@ -998,44 +1002,6 @@
     }
    ],
    "shops_after": 3
-  },
-  {
-   "key": "minny grown|edible|200mg|high sky watermelon",
-   "kept": {
-    "name": "MG - Sky High Watermelon Gummies (200mg THC)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Minny Grown Sky High Watermelon Gummy 200mg THC (20 pack)",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    },
-    {
-     "name": "SKY HIGH WATERMELON GUMMIES 200MG - MINNY GROWN | .2g",
-     "shops": [
-      "altitude-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 3
-  },
-  {
-   "key": "minny grown|cartridge|1g|aio lights northern",
-   "kept": {
-    "name": "Northern Lights - 1g AIO Vape Cart",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Minny Grown | Northern Lights AIO Vape | 1g",
-     "shops": [
-      "terrace-high-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
   },
   {
    "key": "stigma|beverage|10mg|iced peach tea",
@@ -1214,6 +1180,22 @@
    "shops_after": 2
   },
   {
+   "key": "stigma|beverage|10mg|berry iced tea",
+   "kept": {
+    "name": "Stigma Berry Iced Tea 10 MG THC",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Stigma Berry Iced Tea -  (10mg THC 12 oz.)",
+     "shops": [
+      "higher-place"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "redwood county weed management|pre-roll|1g|block party",
    "kept": {
     "name": "Block Party - 1g Pre-Roll",
@@ -1244,6 +1226,58 @@
     }
    ],
    "shops_after": 2
+  },
+  {
+   "key": "minny grown|flower|3.5g|scotch soda",
+   "kept": {
+    "name": "Scotch & Soda",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "Minny Grown | Flower | Scotch & Soda | 3.5g",
+     "shops": [
+      "twin-cities-cannabis-richfield"
+     ]
+    },
+    {
+     "name": "Scotch and Soda | 3.5g",
+     "shops": [
+      "higher-place"
+     ]
+    },
+    {
+     "name": "Scotch & Soda 1/8",
+     "shops": [
+      "twin-cities-high-llc"
+     ]
+    },
+    {
+     "name": "Minny Grown Scotch & Soda 3.5g",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    },
+    {
+     "name": "Scotch & Soda - 3.5g",
+     "shops": [
+      "wildflower-5"
+     ]
+    },
+    {
+     "name": "SCOTCH&SODA (Pre-packed) | 3.5g",
+     "shops": [
+      "the-flower-shop-mn-llc"
+     ]
+    },
+    {
+     "name": "Minny Grown | Scotch & Soda | 3.5g",
+     "shops": [
+      "terrace-high-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 9
   },
   {
    "key": "stigma|beverage|10mg|relax tonic",
@@ -1314,10 +1348,156 @@
    "shops_after": 15
   },
   {
+   "key": "minny grown|flower|3.5g|purple starfruit",
+   "kept": {
+    "name": "Minny Grown | Flower | Purple Starfruit | 3.5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Purple Starfruit 1/8",
+     "shops": [
+      "twin-cities-high-llc"
+     ]
+    },
+    {
+     "name": "Purple Starfruit - 3.5g",
+     "shops": [
+      "wildflower-5"
+     ]
+    },
+    {
+     "name": "Purple Starfruit | Flower |  3.5g",
+     "shops": [
+      "green-rose"
+     ]
+    },
+    {
+     "name": "PURPLE STARFRUIT (Pre-packed) | 3.5g",
+     "shops": [
+      "the-flower-shop-mn-llc"
+     ]
+    }
+   ],
+   "shops_after": 5
+  },
+  {
+   "key": "minny grown|flower|3.5g|cheddar cheeze",
+   "kept": {
+    "name": "Cheddar Cheeze",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "Minny Grown | Flower | Cheddar Cheeze | 3.5g",
+     "shops": [
+      "twin-cities-cannabis-richfield"
+     ]
+    },
+    {
+     "name": "Cheddar Cheeze 1/8",
+     "shops": [
+      "twin-cities-high-llc"
+     ]
+    },
+    {
+     "name": "Cheddar Cheeze - 3.5g",
+     "shops": [
+      "wildflower-5"
+     ]
+    },
+    {
+     "name": "Cheddar Cheeze | Flower | 3.5g",
+     "shops": [
+      "green-rose"
+     ]
+    },
+    {
+     "name": "CHEDDAR CHEEZE (Pre-packed) | 3.5g",
+     "shops": [
+      "the-flower-shop-mn-llc"
+     ]
+    }
+   ],
+   "shops_after": 7
+  },
+  {
+   "key": "stigma|beverage|10mg|club soda",
+   "kept": {
+    "name": "Stigma THC Club Soda 10 MG THC",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Stigma | Club Soda 10mg THC",
+     "shops": [
+      "terrace-high-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "minny grown|flower|3.5g|lemons sour",
+   "kept": {
+    "name": "Minny Grown | Flower | Sour Lemons | 3.5g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Sour Lemons 1/8",
+     "shops": [
+      "twin-cities-high-llc"
+     ]
+    },
+    {
+     "name": "Minny Grown Sour Lemons 3.5g",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    },
+    {
+     "name": "Sour Lemons - 3.5g",
+     "shops": [
+      "wildflower-5"
+     ]
+    },
+    {
+     "name": "SOUR LEMONS (Pre-packed) | 3.5g",
+     "shops": [
+      "the-flower-shop-mn-llc"
+     ]
+    },
+    {
+     "name": "Minny Grown | Sour Lemons | 3.5g",
+     "shops": [
+      "terrace-high-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 6
+  },
+  {
+   "key": "mllw|edible|48mg|bar chocolate covered strawberry",
+   "kept": {
+    "name": "MLLW Chocolate Covered Strawberry 48 MG Bar",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "MLLW- Chocolate Covered Strawberry Bar (48mg)",
+     "shops": [
+      "winona-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "minny grown|flower|3.5g|tamarindo",
    "kept": {
     "name": "Tamarindo",
-    "shops_before": 3
+    "shops_before": 2
    },
    "absorbed": [
     {
@@ -1363,121 +1543,7 @@
      ]
     }
    ],
-   "shops_after": 10
-  },
-  {
-   "key": "minny grown|flower|3.5g|lemons sour",
-   "kept": {
-    "name": "Minny Grown | Flower | Sour Lemons | 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Sour Lemons 1/8",
-     "shops": [
-      "twin-cities-high-llc"
-     ]
-    },
-    {
-     "name": "Minny Grown Sour Lemons 3.5g",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    },
-    {
-     "name": "Sour Lemons - 3.5g",
-     "shops": [
-      "wildflower-5"
-     ]
-    },
-    {
-     "name": "SOUR LEMONS (Pre-packed) | 3.5g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    },
-    {
-     "name": "Minny Grown | Sour Lemons | 3.5g",
-     "shops": [
-      "terrace-high-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 6
-  },
-  {
-   "key": "minny grown|flower|3.5g|cheddar cheeze",
-   "kept": {
-    "name": "Cheddar Cheeze",
-    "shops_before": 3
-   },
-   "absorbed": [
-    {
-     "name": "Minny Grown | Flower | Cheddar Cheeze | 3.5g",
-     "shops": [
-      "twin-cities-cannabis-richfield"
-     ]
-    },
-    {
-     "name": "Cheddar Cheeze 1/8",
-     "shops": [
-      "twin-cities-high-llc"
-     ]
-    },
-    {
-     "name": "Cheddar Cheeze - 3.5g",
-     "shops": [
-      "wildflower-5"
-     ]
-    },
-    {
-     "name": "Cheddar Cheeze | Flower | 3.5g",
-     "shops": [
-      "green-rose"
-     ]
-    },
-    {
-     "name": "CHEDDAR CHEEZE (Pre-packed) | 3.5g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 8
-  },
-  {
-   "key": "minny grown|flower|3.5g|purple starfruit",
-   "kept": {
-    "name": "Minny Grown | Flower | Purple Starfruit | 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Purple Starfruit 1/8",
-     "shops": [
-      "twin-cities-high-llc"
-     ]
-    },
-    {
-     "name": "Purple Starfruit - 3.5g",
-     "shops": [
-      "wildflower-5"
-     ]
-    },
-    {
-     "name": "Purple Starfruit | Flower |  3.5g",
-     "shops": [
-      "green-rose"
-     ]
-    },
-    {
-     "name": "PURPLE STARFRUIT (Pre-packed) | 3.5g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 5
+   "shops_after": 9
   },
   {
    "key": "stigma|beverage|10mg|iced lemonade tea",
@@ -1500,90 +1566,6 @@
     }
    ],
    "shops_after": 3
-  },
-  {
-   "key": "stigma|beverage|10mg|club soda",
-   "kept": {
-    "name": "Stigma THC Club Soda 10 MG THC",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Stigma | Club Soda 10mg THC",
-     "shops": [
-      "terrace-high-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "stigma|beverage|10mg|berry iced tea",
-   "kept": {
-    "name": "Stigma Berry Iced Tea 10 MG THC",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Stigma Berry Iced Tea -  (10mg THC 12 oz.)",
-     "shops": [
-      "higher-place"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "minny grown|flower|3.5g|scotch soda",
-   "kept": {
-    "name": "Scotch & Soda",
-    "shops_before": 3
-   },
-   "absorbed": [
-    {
-     "name": "Minny Grown | Flower | Scotch & Soda | 3.5g",
-     "shops": [
-      "twin-cities-cannabis-richfield"
-     ]
-    },
-    {
-     "name": "Scotch and Soda | 3.5g",
-     "shops": [
-      "higher-place"
-     ]
-    },
-    {
-     "name": "Scotch & Soda 1/8",
-     "shops": [
-      "twin-cities-high-llc"
-     ]
-    },
-    {
-     "name": "Minny Grown Scotch & Soda 3.5g",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    },
-    {
-     "name": "Scotch & Soda - 3.5g",
-     "shops": [
-      "wildflower-5"
-     ]
-    },
-    {
-     "name": "SCOTCH&SODA (Pre-packed) | 3.5g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    },
-    {
-     "name": "Minny Grown | Scotch & Soda | 3.5g",
-     "shops": [
-      "terrace-high-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 10
   },
   {
    "key": "verist fields|flower|3.5g|ice mimosa",
@@ -1891,12 +1873,6 @@
      ]
     },
     {
-     "name": "Chem 'n Cookies",
-     "shops": [
-      "minnesota-medical-solutions-bloomington"
-     ]
-    },
-    {
      "name": "Chem 'n Cookies | 3.5g",
      "shops": [
       "green-goods-duluth"
@@ -1932,7 +1908,7 @@
    "key": "rythm|flower|3.5g|animal scout",
    "kept": {
     "name": "Animal Scout",
-    "shops_before": 16
+    "shops_before": 15
    },
    "absorbed": [
     {
@@ -1972,13 +1948,13 @@
      ]
     }
    ],
-   "shops_after": 20
+   "shops_after": 19
   },
   {
    "key": "rythm|flower|3.5g|brownie scout",
    "kept": {
     "name": "Brownie Scout",
-    "shops_before": 16
+    "shops_before": 15
    },
    "absorbed": [
     {
@@ -2029,38 +2005,6 @@
    "shops_after": 20
   },
   {
-   "key": "avio supply co.|pre-roll|1g|black infused phantom",
-   "kept": {
-    "name": "Phantom Black | Infused Pre-Roll | 1g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Phantom Black Infused Pre-Roll (1 x 1g)",
-     "shops": [
-      "twin-cities-high-llc"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "avio supply co.|pre-roll|1g|infused rainbow run",
-   "kept": {
-    "name": "Rainbow Run | Infused Pre-Roll | 1g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Rainbow Run Infused Pre-Roll (1 x 1g)",
-     "shops": [
-      "twin-cities-high-llc"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "good green|flower|3.5g|gelato lavender",
    "kept": {
     "name": "Lavender Gelato | 3.5g",
@@ -2093,6 +2037,38 @@
     }
    ],
    "shops_after": 10
+  },
+  {
+   "key": "avio supply co.|pre-roll|1g|black infused phantom",
+   "kept": {
+    "name": "Phantom Black | Infused Pre-Roll | 1g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Phantom Black Infused Pre-Roll (1 x 1g)",
+     "shops": [
+      "twin-cities-high-llc"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "avio supply co.|pre-roll|1g|infused rainbow run",
+   "kept": {
+    "name": "Rainbow Run | Infused Pre-Roll | 1g",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Rainbow Run Infused Pre-Roll (1 x 1g)",
+     "shops": [
+      "twin-cities-high-llc"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "good green|flower|3.5g|mint mystic",
@@ -2172,12 +2148,12 @@
     {
      "name": "Evercrisp",
      "shops": [
+      "green-goods-blaine",
       "green-goods-burnsville",
       "green-goods-duluth",
       "minnesota-medical-solutions",
       "minnesota-medical-solutions-bloomington",
-      "minnesota-medical-solutions-moorhead",
-      "minnesota-medical-solutions-rochester"
+      "minnesota-medical-solutions-moorhead"
      ]
     },
     {
@@ -2234,7 +2210,7 @@
    "key": "rythm|flower|7g|1 runtz",
    "kept": {
     "name": "Runtz S1",
-    "shops_before": 13
+    "shops_before": 12
    },
    "absorbed": [
     {
@@ -2268,13 +2244,13 @@
      ]
     }
    ],
-   "shops_after": 16
+   "shops_after": 15
   },
   {
    "key": "good green|flower|3.5g|delight jack",
    "kept": {
     "name": "Jack's Delight | 3.5g",
-    "shops_before": 12
+    "shops_before": 11
    },
    "absorbed": [
     {
@@ -2286,7 +2262,6 @@
     {
      "name": "Jack's Delight | 3.5g",
      "shops": [
-      "green-goods-blaine",
       "green-goods-woodbury",
       "leafline-labs-eagan",
       "leafline-labs-st-cloud",
@@ -2316,23 +2291,17 @@
     {
      "name": "Jack's Delight | 3.5g",
      "shops": [
-      "my-dealer-bayport"
-     ]
-    },
-    {
-     "name": "Jack's Delight | 3.5g",
-     "shops": [
       "bloom-wellness-dispensary-st-paul"
      ]
     }
    ],
-   "shops_after": 19
+   "shops_after": 17
   },
   {
    "key": "rythm|flower|7g|durban z",
    "kept": {
     "name": "Durban Z",
-    "shops_before": 11
+    "shops_before": 10
    },
    "absorbed": [
     {
@@ -2366,7 +2335,7 @@
      ]
     }
    ],
-   "shops_after": 14
+   "shops_after": 13
   },
   {
    "key": "northpark|cartridge|1g|disposable express pineapple",
@@ -2420,7 +2389,7 @@
    "key": "minny grown|cartridge|1g|lights northern",
    "kept": {
     "name": "Northern Lights",
-    "shops_before": 10
+    "shops_before": 9
    },
    "absorbed": [
     {
@@ -2436,7 +2405,7 @@
      ]
     }
    ],
-   "shops_after": 12
+   "shops_after": 11
   },
   {
    "key": "minneleaf|edible|50mg|bar chocolate dark",
@@ -2502,7 +2471,7 @@
    "key": "rythm|flower|7g|velcroz",
    "kept": {
     "name": "Velcroz",
-    "shops_before": 10
+    "shops_before": 9
    },
    "absorbed": [
     {
@@ -2530,7 +2499,7 @@
      ]
     }
    ],
-   "shops_after": 12
+   "shops_after": 11
   },
   {
    "key": "rythm|cartridge|0.5g|gogurtz live resin",
@@ -2623,22 +2592,6 @@
    "shops_after": 5
   },
   {
-   "key": "unbound|cartridge|1g|distillate zelato",
-   "kept": {
-    "name": "Zelato | Distillate Cartridge | 1g | Unbound |",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Unbound Zelato 1g Distillate Cartridge",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "unbound|cartridge|1g|daddy distillate grand purple",
    "kept": {
     "name": "Grand Daddy Purple | Distillate Cartridge | 1g | Unbound |",
@@ -2659,6 +2612,22 @@
     }
    ],
    "shops_after": 3
+  },
+  {
+   "key": "unbound|cartridge|1g|distillate zelato",
+   "kept": {
+    "name": "Zelato | Distillate Cartridge | 1g | Unbound |",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Unbound Zelato 1g Distillate Cartridge",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    }
+   ],
+   "shops_after": 2
   },
   {
    "key": "unbound|cartridge|1g|distillate maui wowie",
@@ -2695,6 +2664,28 @@
    "shops_after": 5
   },
   {
+   "key": "rythm|cartridge|0.5g|durban live resin z",
+   "kept": {
+    "name": "Durban Z | Live Resin Cartridge | 0.5g | Rythm |",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Durban Z Live Resin Cartridge 500mg | 0.5g",
+     "shops": [
+      "my-dealer-bayport"
+     ]
+    },
+    {
+     "name": "Durban Z Live Resin Cart | 0.5g",
+     "shops": [
+      "bloom-wellness-dispensary-st-paul"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
    "key": "good green|flower|7g|gelato lavender",
    "kept": {
     "name": "Lavender Gelato | 7g",
@@ -2729,28 +2720,6 @@
     }
    ],
    "shops_after": 12
-  },
-  {
-   "key": "rythm|cartridge|0.5g|durban live resin z",
-   "kept": {
-    "name": "Durban Z | Live Resin Cartridge | 0.5g | Rythm |",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Durban Z Live Resin Cartridge 500mg | 0.5g",
-     "shops": [
-      "my-dealer-bayport"
-     ]
-    },
-    {
-     "name": "Durban Z Live Resin Cart | 0.5g",
-     "shops": [
-      "bloom-wellness-dispensary-st-paul"
-     ]
-    }
-   ],
-   "shops_after": 3
   },
   {
    "key": "northpark|cartridge|1g|1 all ct express in ix mixed one pineapple",
@@ -2855,7 +2824,7 @@
    "key": "good green|flower|7g|delight jack",
    "kept": {
     "name": "Jack's Delight | 7g",
-    "shops_before": 12
+    "shops_before": 11
    },
    "absorbed": [
     {
@@ -2867,6 +2836,7 @@
     {
      "name": "Jack's Delight",
      "shops": [
+      "green-goods-blaine",
       "minnesota-medical-solutions",
       "minnesota-medical-solutions-rochester"
      ]
@@ -2881,7 +2851,6 @@
     {
      "name": "Jack's Delight | 7g",
      "shops": [
-      "green-goods-blaine",
       "green-goods-woodbury",
       "leafline-labs-eagan",
       "minnesota-medical-solutions-moorhead",
@@ -3062,8 +3031,7 @@
      "shops": [
       "green-goods-woodbury",
       "minnesota-medical-solutions",
-      "minnesota-medical-solutions-moorhead",
-      "minnesota-medical-solutions-rochester"
+      "minnesota-medical-solutions-moorhead"
      ]
     },
     {
@@ -3191,8 +3159,7 @@
      "name": "Bananaconda | 3.5g",
      "shops": [
       "green-goods-blaine",
-      "green-goods-duluth",
-      "minnesota-medical-solutions-rochester"
+      "green-goods-duluth"
      ]
     },
     {
@@ -3220,7 +3187,7 @@
    "key": "rythm|flower|7g|animal scout",
    "kept": {
     "name": "Animal Scout",
-    "shops_before": 16
+    "shops_before": 15
    },
    "absorbed": [
     {
@@ -3264,7 +3231,7 @@
    "key": "rythm|flower|7g|animal face",
    "kept": {
     "name": "Animal Face",
-    "shops_before": 12
+    "shops_before": 11
    },
    "absorbed": [
     {
@@ -3292,7 +3259,7 @@
      ]
     }
    ],
-   "shops_after": 14
+   "shops_after": 13
   },
   {
    "key": "rythm|flower|7g|gogurtz",
@@ -3310,12 +3277,33 @@
     {
      "name": "Gogurtz | 7g",
      "shops": [
-      "green-goods-woodbury",
-      "minnesota-medical-solutions-rochester"
+      "green-goods-woodbury"
      ]
     }
    ],
-   "shops_after": 9
+   "shops_after": 8
+  },
+  {
+   "key": "granny's|edible|50mg|mores pretzels",
+   "kept": {
+    "name": "Granny's Pretzels - S'mores [50pk] (50mg)",
+    "shops_before": 3
+   },
+   "absorbed": [
+    {
+     "name": "Granny's S'mores Pretzels 50mg THC (50 pack)",
+     "shops": [
+      "levitated-cannabis"
+     ]
+    },
+    {
+     "name": "S'mores Pretzels 50mg - Granny's",
+     "shops": [
+      "flame-flora"
+     ]
+    }
+   ],
+   "shops_after": 5
   },
   {
    "key": "granny's|edible|50mg|cheddar pretzels",
@@ -3346,28 +3334,6 @@
    "shops_after": 9
   },
   {
-   "key": "granny's|edible|50mg|mores pretzels",
-   "kept": {
-    "name": "Granny's Pretzels - S'mores [50pk] (50mg)",
-    "shops_before": 3
-   },
-   "absorbed": [
-    {
-     "name": "Granny's S'mores Pretzels 50mg THC (50 pack)",
-     "shops": [
-      "levitated-cannabis"
-     ]
-    },
-    {
-     "name": "S'mores Pretzels 50mg - Granny's",
-     "shops": [
-      "flame-flora"
-     ]
-    }
-   ],
-   "shops_after": 5
-  },
-  {
    "key": "good green|flower|7g|omg",
    "kept": {
     "name": "OMG | 7g",
@@ -3384,8 +3350,7 @@
      "name": "OMG",
      "shops": [
       "green-goods-woodbury",
-      "minnesota-medical-solutions-moorhead",
-      "minnesota-medical-solutions-rochester"
+      "minnesota-medical-solutions-moorhead"
      ]
     },
     {
@@ -3414,13 +3379,13 @@
      ]
     }
    ],
-   "shops_after": 18
+   "shops_after": 17
   },
   {
    "key": "granny's|edible|50mg|dill pickle pretzels",
    "kept": {
     "name": "Granny's Pretzels - Dill Pickle [50pk] (50mg)",
-    "shops_before": 5
+    "shops_before": 4
    },
    "absorbed": [
     {
@@ -3442,7 +3407,29 @@
      ]
     }
    ],
-   "shops_after": 8
+   "shops_after": 7
+  },
+  {
+   "key": "tasty gems|edible|100mg|berry blue sapphire",
+   "kept": {
+    "name": "Tasty Gems Blue Sapphire Berry Gummy 100mg THC (10 pack)",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Tasty Gems Gummies- Blue Sapphire Berry 100mg",
+     "shops": [
+      "northern-crown-cannabis"
+     ]
+    },
+    {
+     "name": "Blue Sapphire Berry [10pk] (100mg)",
+     "shops": [
+      "rise-willmar"
+     ]
+    }
+   ],
+   "shops_after": 3
   },
   {
    "key": "rythm|flower|3.5g|glove velvet",
@@ -3527,44 +3514,6 @@
    "shops_after": 4
   },
   {
-   "key": "tasty gems|edible|100mg|berry blue sapphire",
-   "kept": {
-    "name": "Tasty Gems Blue Sapphire Berry Gummy 100mg THC (10 pack)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Tasty Gems Gummies- Blue Sapphire Berry 100mg",
-     "shops": [
-      "northern-crown-cannabis"
-     ]
-    },
-    {
-     "name": "Blue Sapphire Berry [10pk] (100mg)",
-     "shops": [
-      "rise-willmar"
-     ]
-    }
-   ],
-   "shops_after": 3
-  },
-  {
-   "key": "tasty gems|edible|100mg|lemonade pink tourmaline",
-   "kept": {
-    "name": "Tasty Gems Pink Tourmaline Lemonade Gummy 100mg THC (10 pack)",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Tasty Gems Gummies- Pink Tourmaline Lemonade 100mg",
-     "shops": [
-      "northern-crown-cannabis"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "tasty gems|edible|100mg|amethyst double grape",
    "kept": {
     "name": "Tasty Gems Double Grape Amethyst Gummy 100mg THC (10 pack)",
@@ -3587,16 +3536,16 @@
    "shops_after": 3
   },
   {
-   "key": "campfire cannabis|pre-roll|1g|runtz",
+   "key": "tasty gems|edible|100mg|lemonade pink tourmaline",
    "kept": {
-    "name": "Runtz 1G Pre-roll",
+    "name": "Tasty Gems Pink Tourmaline Lemonade Gummy 100mg THC (10 pack)",
     "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "1G Preroll Campfire Cannabis Runtz",
+     "name": "Tasty Gems Gummies- Pink Tourmaline Lemonade 100mg",
      "shops": [
-      "high-fidelity"
+      "northern-crown-cannabis"
      ]
     }
    ],
@@ -3711,22 +3660,6 @@
    "shops_after": 2
   },
   {
-   "key": "marawanna|concentrate|0.5g|mintz octane",
-   "kept": {
-    "name": "Octane Mintz | 0.5g |",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Octane Mintz | 0.5g",
-     "shops": [
-      "legit-cannabis"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "float cannabis co.|flower|3.5g|blue dream",
    "kept": {
     "name": "Blue Dream | 3.5g |",
@@ -3737,6 +3670,22 @@
      "name": "Float | Blue Dream | 3.5g",
      "shops": [
       "bloom-wellness-dispensary-st-paul"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "float cannabis co.|flower|3.5g|crasher hippie",
+   "kept": {
+    "name": "Hippie Crasher | 3.5g |",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Hippie Crasher - 3.5g",
+     "shops": [
+      "lake-daze"
      ]
     }
    ],
@@ -3763,22 +3712,6 @@
     }
    ],
    "shops_after": 10
-  },
-  {
-   "key": "float cannabis co.|flower|3.5g|crasher hippie",
-   "kept": {
-    "name": "Hippie Crasher | 3.5g |",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Hippie Crasher - 3.5g",
-     "shops": [
-      "lake-daze"
-     ]
-    }
-   ],
-   "shops_after": 2
   },
   {
    "key": "redwood county weed management|flower|3.5g|block party",
@@ -4111,22 +4044,6 @@
    "shops_after": 4
   },
   {
-   "key": "fl\u00f6r|flower|3.5g|02 z",
-   "kept": {
-    "name": "Z02 - 3.5g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "FL\u00d6R | Z02 | 3.5g",
-     "shops": [
-      "irie-cannabis-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "campfire cannabis|flower|3.5g|bangkok purple",
    "kept": {
     "name": "Bangkok Purple - 3.5g",
@@ -4404,7 +4321,7 @@
    "key": "rythm|flower|14g|animal face",
    "kept": {
     "name": "Animal Face",
-    "shops_before": 12
+    "shops_before": 11
    },
    "absorbed": [
     {
@@ -4433,7 +4350,7 @@
      ]
     }
    ],
-   "shops_after": 17
+   "shops_after": 16
   },
   {
    "key": "rythm|flower|14g|bananaconda",
@@ -4474,8 +4391,7 @@
     {
      "name": "Gogurtz | 3.5g",
      "shops": [
-      "green-goods-woodbury",
-      "minnesota-medical-solutions-rochester"
+      "green-goods-woodbury"
      ]
     },
     {
@@ -4496,7 +4412,7 @@
      ]
     }
    ],
-   "shops_after": 18
+   "shops_after": 17
   },
   {
    "key": "unbound|flower|3.5g|illemonati",
@@ -4938,7 +4854,7 @@
    "key": "rythm|cartridge|0.5g|gas glue",
    "kept": {
     "name": "Gas & Glue",
-    "shops_before": 16
+    "shops_before": 15
    },
    "absorbed": [
     {
@@ -4948,13 +4864,13 @@
      ]
     }
    ],
-   "shops_after": 17
+   "shops_after": 16
   },
   {
    "key": "rythm|cartridge|0.5g|gogurtz",
    "kept": {
     "name": "Gogurtz",
-    "shops_before": 16
+    "shops_before": 15
    },
    "absorbed": [
     {
@@ -4976,7 +4892,7 @@
      ]
     }
    ],
-   "shops_after": 17
+   "shops_after": 16
   },
   {
    "key": "good green|flower|3.5g|delight jacks",
@@ -5077,14 +4993,14 @@
   {
    "key": "campfire cannabis|pre-roll|1g|octane purple",
    "kept": {
-    "name": "Purple Octane 1g Pre Roll - Campfire Cannabis",
+    "name": "Campfire Cannabis Prerolls- Purple Octane 1g",
     "shops_before": 1
    },
    "absorbed": [
     {
-     "name": "Campfire Cannabis Prerolls- Purple Octane 1g",
+     "name": "Purple Octane 1g Pre Roll - Campfire Cannabis",
      "shops": [
-      "northern-crown-cannabis"
+      "flame-flora"
      ]
     }
    ],
@@ -5123,32 +5039,39 @@
    "shops_after": 3
   },
   {
-   "key": "campfire cannabis|pre-roll|1g|soap",
+   "key": "(inc)ensored|edible|100mg|acting express fast pineapple",
    "kept": {
-    "name": "1G Preroll Campfire Cannabis Soap",
-    "shops_before": 1
+    "name": "Fast-Acting Pineapple Express [10pk] (100mg)",
+    "shops_before": 15
    },
    "absorbed": [
     {
-     "name": "Soap 1g Pre-roll",
+     "name": "Fast-Acting Pineapple Express [10pk] (100mg)",
      "shops": [
-      "my-dealer-bayport"
-     ]
-    },
-    {
-     "name": "Soap Preroll 1g - Campfire Cannabis",
-     "shops": [
-      "flame-flora"
+      "green-goods-blaine",
+      "green-goods-burnsville",
+      "green-goods-duluth",
+      "green-goods-woodbury",
+      "leafline-labs-eagan",
+      "leafline-labs-st-cloud",
+      "leafline-labs-st-paul",
+      "minnesota-medical-solutions",
+      "minnesota-medical-solutions-moorhead",
+      "minnesota-medical-solutions-rochester",
+      "rise-baxter",
+      "rise-mankato",
+      "rise-new-hope",
+      "rise-willmar"
      ]
     }
    ],
-   "shops_after": 3
+   "shops_after": 16
   },
   {
    "key": "beboe|edible|100mg|anytime blend huckleberry",
    "kept": {
     "name": "Anytime Blend Huckleberry [20pk] (100mg)",
-    "shops_before": 10
+    "shops_before": 9
    },
    "absorbed": [
     {
@@ -5164,7 +5087,7 @@
      ]
     }
    ],
-   "shops_after": 11
+   "shops_after": 10
   },
   {
    "key": "good green|flower|3.5g|omg",
@@ -5211,7 +5134,7 @@
    "key": "rythm|flower|3.5g|animal face",
    "kept": {
     "name": "Animal Face",
-    "shops_before": 13
+    "shops_before": 12
    },
    "absorbed": [
     {
@@ -5265,8 +5188,7 @@
      "name": "Bananaconda | 7g",
      "shops": [
       "green-goods-blaine",
-      "green-goods-duluth",
-      "minnesota-medical-solutions-rochester"
+      "green-goods-duluth"
      ]
     },
     {
@@ -5294,7 +5216,7 @@
    "key": "rythm|flower|7g|brownie scout",
    "kept": {
     "name": "Brownie Scout",
-    "shops_before": 15
+    "shops_before": 14
    },
    "absorbed": [
     {
@@ -5314,7 +5236,7 @@
      ]
     }
    ],
-   "shops_after": 16
+   "shops_after": 15
   },
   {
    "key": "rythm|flower|14g|brownie scout",
@@ -5371,7 +5293,7 @@
    "key": "vireo|flower|3.5g|death garlic",
    "kept": {
     "name": "Garlic Death",
-    "shops_before": 8
+    "shops_before": 7
    },
    "absorbed": [
     {
@@ -5441,8 +5363,7 @@
       "green-goods-blaine",
       "green-goods-woodbury",
       "minnesota-medical-solutions-bloomington",
-      "minnesota-medical-solutions-moorhead",
-      "minnesota-medical-solutions-rochester"
+      "minnesota-medical-solutions-moorhead"
      ]
     },
     {
@@ -5588,11 +5509,12 @@
      "name": "Brownie Scout",
      "shops": [
       "green-goods-blaine",
-      "minnesota-medical-solutions"
+      "minnesota-medical-solutions",
+      "rise-willmar"
      ]
     }
    ],
-   "shops_after": 9
+   "shops_after": 10
   },
   {
    "key": "rythm|flower|28g|velcroz",
@@ -5966,14 +5888,13 @@
    "key": "vireo|flower|7g|gmo punch",
    "kept": {
     "name": "GMO Punch | 7g",
-    "shops_before": 5
+    "shops_before": 6
    },
    "absorbed": [
     {
      "name": "GMO Punch",
      "shops": [
       "green-goods-blaine",
-      "green-goods-burnsville",
       "minnesota-medical-solutions"
      ]
     }
@@ -6036,6 +5957,24 @@
    "shops_after": 8
   },
   {
+   "key": "vireo|flower|3.5g|jack sour",
+   "kept": {
+    "name": "Sour Jack",
+    "shops_before": 4
+   },
+   "absorbed": [
+    {
+     "name": "Sour Jack | 3.5g",
+     "shops": [
+      "green-goods-duluth",
+      "minnesota-medical-solutions-bloomington",
+      "minnesota-medical-solutions-moorhead"
+     ]
+    }
+   ],
+   "shops_after": 7
+  },
+  {
    "key": "vireo|flower|7g|boof super",
    "kept": {
     "name": "Super Boof",
@@ -6072,7 +6011,7 @@
    "key": "minny grown|cartridge|1g|47 ak",
    "kept": {
     "name": "AK-47",
-    "shops_before": 10
+    "shops_before": 9
    },
    "absorbed": [
     {
@@ -6082,13 +6021,13 @@
      ]
     }
    ],
-   "shops_after": 11
+   "shops_after": 10
   },
   {
    "key": "minny grown|cartridge|1g|blue dream",
    "kept": {
     "name": "Blue Dream",
-    "shops_before": 10
+    "shops_before": 9
    },
    "absorbed": [
     {
@@ -6098,13 +6037,13 @@
      ]
     }
    ],
-   "shops_after": 11
+   "shops_after": 10
   },
   {
    "key": "minny grown|cartridge|1g|granddaddy purp",
    "kept": {
     "name": "Granddaddy Purp",
-    "shops_before": 10
+    "shops_before": 9
    },
    "absorbed": [
     {
@@ -6114,13 +6053,13 @@
      ]
     }
    ],
-   "shops_after": 11
+   "shops_after": 10
   },
   {
    "key": "minny grown|cartridge|1g|maui wowie",
    "kept": {
     "name": "Maui Wowie",
-    "shops_before": 11
+    "shops_before": 10
    },
    "absorbed": [
     {
@@ -6130,13 +6069,13 @@
      ]
     }
    ],
-   "shops_after": 12
+   "shops_after": 11
   },
   {
    "key": "minny grown|cartridge|1g|kush og",
    "kept": {
     "name": "OG Kush",
-    "shops_before": 10
+    "shops_before": 9
    },
    "absorbed": [
     {
@@ -6146,13 +6085,13 @@
      ]
     }
    ],
-   "shops_after": 11
+   "shops_after": 10
   },
   {
    "key": "rythm|flower|3.5g|apex orange",
    "kept": {
     "name": "Apex Orange",
-    "shops_before": 13
+    "shops_before": 12
    },
    "absorbed": [
     {
@@ -6162,7 +6101,7 @@
      ]
     }
    ],
-   "shops_after": 14
+   "shops_after": 13
   },
   {
    "key": "simple|flower|14g|cream fried ice",
@@ -6214,6 +6153,22 @@
    "shops_after": 6
   },
   {
+   "key": "simple|flower|28g|boof super",
+   "kept": {
+    "name": "Super Boof",
+    "shops_before": 2
+   },
+   "absorbed": [
+    {
+     "name": "Super Boof | 28g",
+     "shops": [
+      "green-goods-duluth"
+     ]
+    }
+   ],
+   "shops_after": 3
+  },
+  {
    "key": "vireo|flower|7g|cream fried ice",
    "kept": {
     "name": "Fried Ice Cream",
@@ -6235,24 +6190,6 @@
     }
    ],
    "shops_after": 8
-  },
-  {
-   "key": "vireo|flower|3.5g|jack sour",
-   "kept": {
-    "name": "Sour Jack",
-    "shops_before": 3
-   },
-   "absorbed": [
-    {
-     "name": "Sour Jack | 3.5g",
-     "shops": [
-      "green-goods-duluth",
-      "minnesota-medical-solutions-bloomington",
-      "minnesota-medical-solutions-moorhead"
-     ]
-    }
-   ],
-   "shops_after": 6
   },
   {
    "key": "vireo|flower|7g|flakes znow",
@@ -6359,22 +6296,6 @@
      "name": "Blueberry Sugar | 3.5g",
      "shops": [
       "my-dealer-bayport"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "simple|flower|28g|boof super",
-   "kept": {
-    "name": "Super Boof | 28g",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Super Boof",
-     "shops": [
-      "minnesota-medical-solutions-moorhead"
      ]
     }
    ],
@@ -6901,6 +6822,22 @@
    "shops_after": 2
   },
   {
+   "key": "campfire cannabis|pre-roll|1g|soap",
+   "kept": {
+    "name": "Soap 1g Pre-roll",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Soap Preroll 1g - Campfire Cannabis",
+     "shops": [
+      "flame-flora"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "blncd|beverage|5mg|ginger sparkling water yuzu",
    "kept": {
     "name": "Yuzu Ginger THC Sparkling Water - 5mg THC",
@@ -6981,22 +6918,6 @@
    "shops_after": 2
   },
   {
-   "key": "blncd|beverage|10mg|bee knees mocktail pear prickly",
-   "kept": {
-    "name": "Prickly Pear Bee\u2019s Knees Mocktail 10mg - BLNCD",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "BLNCD - 10mg THC Mocktail - PRICKLY PEAR BEE'S KNEES | 0.01g",
-     "shops": [
-      "off-the-path-cannabis-dispensary"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "nebula|cartridge|1g|disposable galaxy guava",
    "kept": {
     "name": "Guava Galaxy Disposable 1g - Nebula",
@@ -7013,22 +6934,6 @@
    "shops_after": 2
   },
   {
-   "key": "flor|pre-roll|1g|garlic jam",
-   "kept": {
-    "name": "Garlic Jam 1G Pre-Roll by Flor",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Garlic Jam | 1g",
-     "shops": [
-      "the-flower-shop-mn-llc"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
    "key": "grasslandz|edible|100mg|pineapple sour",
    "kept": {
     "name": "Sour Pineapple Gummies 100mg - Grasslandz",
@@ -7037,54 +6942,6 @@
    "absorbed": [
     {
      "name": "Grasslandz Sour Pineapple Gummies - 100mg THC",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "grasslandz|cartridge|1g|banana kush",
-   "kept": {
-    "name": "Banana Kush Cart - Grasslandz",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Grasslandz CART - Banana Kush (Indica) | 1g",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "grasslandz|pre-roll|2g|2 ember infused pk tropical",
-   "kept": {
-    "name": "Tropical Ember 1g Infused Pre-Rolls - 2pk (Hybrid) by Grasslandz",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Grasslandz Infused Preroll - Tropical Ember - 2pk (Hybrid) | 2g",
-     "shops": [
-      "island-pezi"
-     ]
-    }
-   ],
-   "shops_after": 2
-  },
-  {
-   "key": "nebula|cartridge|1g|disposable jelly strawberry",
-   "kept": {
-    "name": "Strawberry Jelly Disposable 1g - Nebula",
-    "shops_before": 1
-   },
-   "absorbed": [
-    {
-     "name": "Nebula Disposable Vape - Strawberry Jelly (Indica) | 1g",
      "shops": [
       "island-pezi"
      ]
@@ -7157,6 +7014,70 @@
    "shops_after": 2
   },
   {
+   "key": "nebula|cartridge|1g|disposable jelly strawberry",
+   "kept": {
+    "name": "Strawberry Jelly Disposable 1g - Nebula",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Nebula Disposable Vape - Strawberry Jelly (Indica) | 1g",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "grasslandz|pre-roll|2g|2 ember infused pk tropical",
+   "kept": {
+    "name": "Tropical Ember 1g Infused Pre-Rolls - 2pk (Hybrid) by Grasslandz",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Grasslandz Infused Preroll - Tropical Ember - 2pk (Hybrid) | 2g",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "blncd|beverage|10mg|bee knees mocktail pear prickly",
+   "kept": {
+    "name": "Prickly Pear Bee\u2019s Knees Mocktail 10mg - BLNCD",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "BLNCD - 10mg THC Mocktail - PRICKLY PEAR BEE'S KNEES | 0.01g",
+     "shops": [
+      "off-the-path-cannabis-dispensary"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "grasslandz|cartridge|1g|banana kush",
+   "kept": {
+    "name": "Banana Kush Cart - Grasslandz",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Grasslandz CART - Banana Kush (Indica) | 1g",
+     "shops": [
+      "island-pezi"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
    "key": "nebula|cartridge|1g|galaxy guava",
    "kept": {
     "name": "Guava Galaxy Cartridge 1g - Nebula",
@@ -7165,6 +7086,22 @@
    "absorbed": [
     {
      "name": "GUAVA GALAXY (Disposable) | 1g",
+     "shops": [
+      "the-flower-shop-mn-llc"
+     ]
+    }
+   ],
+   "shops_after": 2
+  },
+  {
+   "key": "flor|pre-roll|1g|garlic jam",
+   "kept": {
+    "name": "Garlic Jam 1G Pre-Roll by Flor",
+    "shops_before": 1
+   },
+   "absorbed": [
+    {
+     "name": "Garlic Jam | 1g",
      "shops": [
       "the-flower-shop-mn-llc"
      ]
