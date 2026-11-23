@@ -1474,27 +1474,28 @@ module.exports = [
   },
   {
     slug: 'mankato-dispensaries-minnesota',
-    title: 'Mankato dispensaries: two shops, opposite bargains, and a size ladder with one dead rung',
-    dek: 'Two shops you can walk into, and the cheaper one depends entirely on what you came for. Flower at one, edibles at the other, and a size ladder where one rung has quietly stopped paying.',
+    title: 'Mankato dispensaries: two shops, opposite bargains, and a microbusiness now undercutting the chain on pre-rolls by more than half',
+    dek: 'Two shops you can walk into, and the cheaper one depends entirely on what you came for. Flower at the chain, edibles and pre-rolls at the microbusiness, and a bulk ladder that has finally straightened itself out.',
     date: '2026-10-26',
-    updated: '2026-11-09',
+    updated: '2026-11-23',
     category: 'Buying smart',
     read: 7,
     // Checked on every build. A token fixes a number; these catch an argument
     // that has quietly reversed, which is what actually went wrong here.
     claims: [
-      ['title implies a wide eighth gap between the two shops', 'gapEighth:rise-mankato:voyager-cannabis-co', '>=', 15],
+      ['the eighth gap between the two shops is still worth the drive', 'gapEighth:rise-mankato:voyager-cannabis-co', '>=', 8],
       ['RISE is the cheaper shop on eighths', 'eighth:rise-mankato', '<', 'eighth:voyager-cannabis-co'],
       ['size ladder: the quarter beats the eighth per gram', 'pergram:rise-mankato:7', '<', 'pergram:rise-mankato:3.5'],
-      ['size ladder: the half ounce is the dead rung, dearer per gram than the quarter', 'pergram:rise-mankato:14', '>', 'pergram:rise-mankato:7'],
+      ['size ladder: the half ounce now beats the quarter per gram, the dead rung is gone', 'pergram:rise-mankato:14', '<', 'pergram:rise-mankato:7'],
       ['size ladder: the ounce is still the cheapest rung per gram', 'pergram:rise-mankato:28', '<', 'pergram:rise-mankato:7'],
       ['size ladder: the ounce beats the half ounce per gram', 'pergram:rise-mankato:28', '<', 'pergram:rise-mankato:14'],
       ['Voyager owns the edible shelf', 'cat:voyager-cannabis-co:edible', '<', 'cat:rise-mankato:edible'],
       ['even Voyager dearest topical undercuts RISE median', 'catHi:voyager-cannabis-co:topical', '<', 'cat:rise-mankato:topical'],
       ['RISE carries more drinks than Voyager', 'catN:rise-mankato:beverage', '>', 'catN:voyager-cannabis-co:beverage'],
-      ['both shops sit above the state median on pre-rolls', 'cat:rise-mankato:pre-roll', '>', 'stateCat:pre-roll'],
-      ['both shops sit above the state median on pre-rolls (Voyager)', 'cat:voyager-cannabis-co:pre-roll', '>', 'stateCat:pre-roll'],
-      ['the two Mankato shops still share no products', 'overlap:rise-mankato:voyager-cannabis-co', '==', 0],
+      ['RISE sits above the state median on pre-rolls', 'cat:rise-mankato:pre-roll', '>', 'stateCat:pre-roll'],
+      ['Voyager undercuts the state median on pre-rolls', 'cat:voyager-cannabis-co:pre-roll', '<', 'stateCat:pre-roll'],
+      ['Voyager is the cheaper shop on pre-rolls', 'cat:voyager-cannabis-co:pre-roll', '<', 'cat:rise-mankato:pre-roll'],
+      ['the two Mankato shops still overlap on almost nothing', 'overlap:rise-mankato:voyager-cannabis-co', '<', 5],
       ['RISE Mankato still the most reviewed shop south of the metro', 'reviews:rise-mankato', '>', 'reviews:minnesota-medical-solutions-rochester'],
     ],
     body: `
@@ -1506,13 +1507,13 @@ module.exports = [
 <p>There is a third entry on our <a href="/mankato-cannabis-dispensaries/">Mankato dispensary page</a>, Crafty Canna Mist LLC on Sioux Road. It shares Voyager's phone number and website, so it reads as the same operation under its license name rather than a third storefront. Shop Mankato as a two shop town.</p>
 
 <h2>Flower: a {{gapEighth:rise-mankato:voyager-cannabis-co|$20}} gap on the same unit</h2>
-<p>This is the headline. The eighths we have on file at RISE Mankato run a median of {{eighth:rise-mankato|around $45}} across {{eighthN:rise-mankato|forty odd}} listings, from {{eighthLo:rise-mankato|$25}} up to {{eighthHi:rise-mankato|$55}}. Voyager's eighths sit at a median of {{eighth:voyager-cannabis-co|around $65}}, from {{eighthLo:voyager-cannabis-co|$55}} up to {{eighthHi:voyager-cannabis-co|$70}}, though that is only {{eighthN:voyager-cannabis-co|three}} listings deep so treat it as a direction rather than a precise number.</p>
+<p>This is the headline. The eighths we have on file at RISE Mankato run a median of {{eighth:rise-mankato|around $45}} across {{eighthN:rise-mankato|forty odd}} listings, from {{eighthLo:rise-mankato|$25}} up to {{eighthHi:rise-mankato|$55}}. Voyager's eighths sit at a median of {{eighth:voyager-cannabis-co|around $65}}, from {{eighthLo:voyager-cannabis-co|$55}} up to {{eighthHi:voyager-cannabis-co|$70}}, across {{eighthN:voyager-cannabis-co|sixteen}} listings, which is a thinner shelf than RISE's {{eighthN:rise-mankato|forty five}} but deep enough to trust the direction.</p>
 <p>The median eighth across the {{shopCount|144}} dispensaries we track in Minnesota is {{stateEighth|$50}}. So RISE sits just under the state middle and Voyager runs well over it, in the same city. If flower is the errand, that is not a close call. Live numbers are on <a href="/cheapest-flower-mankato/">cheapest flower in Mankato</a>.</p>
 
-<h2>The quarter is the sweet spot, and the half ounce is a trap</h2>
-<p>This is the most useful arithmetic on the page. At RISE the ladder runs {{size:rise-mankato:3.5|$45}} for an eighth, a median of {{size:rise-mankato:7|$80}} for a seven gram, {{size:rise-mankato:14|$150}} for a half ounce and {{size:rise-mankato:28|$275}} for a full ounce.</p>
-<p>Per gram that is {{pergram:rise-mankato:3.5|$13.71}} at the eighth, {{pergram:rise-mankato:7|$10.00}} at the quarter, {{pergram:rise-mankato:14|$10.71}} at the half ounce and {{pergram:rise-mankato:28|$9.82}} at the ounce. Read that list twice, because it does not do what a size ladder is supposed to do. The big saving is the first step up, from an eighth to a quarter, and that is also the smallest commitment on the ladder. Then it stalls. The half ounce is currently dearer per gram than the quarter, so doubling what you spend buys you worse value, not better.</p>
-<p>So the honest advice at RISE right now is to buy the quarter. It captures most of the discount on offer for the least money down, and the rung above it actively costs you. The ounce is the cheapest per gram on the board, but it is barely under the quarter and it is eight eighths of commitment. Most dispensary ladders reward every step up; this one does not, and you would never know without doing the division.</p>
+<h2>The ladder has straightened out, and the quarter is still the easy win</h2>
+<p>This is the most useful arithmetic on the page, and it has changed since we first wrote it. At RISE the ladder runs {{size:rise-mankato:3.5|$44}} for an eighth, a median of {{size:rise-mankato:7|$80}} for a seven gram, {{size:rise-mankato:14|$150}} for a half ounce and {{size:rise-mankato:28|$275}} for a full ounce.</p>
+<p>Per gram that is {{pergram:rise-mankato:3.5|$12.57}} at the eighth, {{pergram:rise-mankato:7|$11.43}} at the quarter, {{pergram:rise-mankato:14|$10.71}} at the half ounce and {{pergram:rise-mankato:28|$9.82}} at the ounce. Every rung is now cheaper per gram than the one below it, which is what a size ladder is supposed to do and is not what this one was doing in October. For a stretch this autumn the half ounce here was dearer per gram than the quarter, so doubling your spend bought you worse value. A repricing fixed it. We are leaving that on the record rather than quietly deleting it, because that is exactly the kind of thing that comes back.</p>
+<p>The biggest single step is still the first one, eighth to quarter, and it is also the smallest commitment on the board. After that each step saves less per dollar you put down, so the quarter stays the easy answer unless you genuinely go through an ounce. You would never see any of this without doing the division, which is the whole job of this site.</p>
 <p>If you do go all the way up, the full ounce runs nearly four dollars a gram under the eighth, close to a third off, and it is also eight times as much flower sitting in your house through furnace season. Buy the size you will actually finish, not the size with the best per-gram number. The general version is in <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a>, and the keeping-it-fresh half is in the <a href="/blog/how-to-store-cannabis-minnesota/">storage guide</a>.</p>
 <p>One warning, and we mean it. This ladder moves. The quarter here has swung between $70 and $80 inside a month, which is enough to change which step is the smart one, and the half ounce and ounce listings are thin enough that a single new jar shifts the median. Do the division on the day, with the shelf in front of you, rather than trusting this paragraph.</p>
 
@@ -1523,10 +1524,10 @@ module.exports = [
 
 <h2>Carts and pre-rolls, shop by shop</h2>
 <p>RISE has {{catN:rise-mankato:cartridge|about thirty}} cartridges at a {{cat:rise-mankato:cartridge|$60}} median, against a {{stateCat:cartridge|$60}} state middle. Voyager has {{catN:voyager-cannabis-co:cartridge|four}}, all between {{catLo:voyager-cannabis-co:cartridge|$70}} and {{catHi:voyager-cannabis-co:cartridge|$75}}. So the cheaper cart in this town is at {{cheaper:rise-mankato:voyager-cannabis-co:cartridge|RISE}}, and Voyager's handful is a thin shelf to judge a shop on. Either way, ask whether it is a half or a full gram before you ask anything else, for the reasons in the <a href="/blog/vape-cartridges-minnesota/">cartridge guide</a>.</p>
-<p>Pre-rolls are the odd category. RISE lists {{catN:rise-mankato:pre-roll|dozens}} of them at a median of {{cat:rise-mankato:pre-roll|$24}} and Voyager {{catN:voyager-cannabis-co:pre-roll|a handful}} at {{cat:voyager-cannabis-co:pre-roll|$25}}, against a {{stateCat:pre-roll|$17}} median statewide. Both shops sit above the state middle on the one thing you would expect a college town to be cheap on. Which of the two is cheaper keeps changing: it has flipped direction three times since September, and as of this build it is {{cheaper:rise-mankato:voyager-cannabis-co:pre-roll|too close to call}}, by {{gap:rise-mankato:voyager-cannabis-co:pre-roll|a dollar or two}}. Look at the shelf rather than trusting this sentence. What you are actually buying is in the <a href="/blog/pre-rolls-minnesota/">pre-roll guide</a>.</p>
+<p>Pre-rolls have flipped, and hard. RISE lists {{catN:rise-mankato:pre-roll|dozens}} of them at a median of {{cat:rise-mankato:pre-roll|$24}}, well over the {{stateCat:pre-roll|$19}} median statewide. Voyager lists {{catN:voyager-cannabis-co:pre-roll|a handful}} at {{cat:voyager-cannabis-co:pre-roll|$10}}, about half the state middle and {{gap:rise-mankato:voyager-cannabis-co:pre-roll|fourteen dollars}} under the chain across town. This was too close to call in October and it is not close now. If pre-rolls are on the list, drive to Madison Avenue, and check the shelf before you buy a lot of them because a microbusiness shelf that thin can move overnight. What you are actually buying is in the <a href="/blog/pre-rolls-minnesota/">pre-roll guide</a>.</p>
 
-<h2>You cannot price match item for item</h2>
-<p>One honest limit on all of this. Across every product we track, these two shops do not stock a single identical item. Not one. So you cannot walk in with a screenshot from the other menu and ask them to match it, the way you can with two metro independents carrying the same Grasslandz gummies.</p>
+<h2>You basically cannot price match item for item</h2>
+<p>One honest limit on all of this. Across every product we track, these two shops overlap on {{overlap:rise-mankato:voyager-cannabis-co|two}} items. That is up from none at all and it is still effectively nothing, so you cannot walk in with a screenshot from the other menu and ask them to match it, the way you can with two metro independents carrying the same Grasslandz gummies.</p>
 <p>That is why the numbers above are medians by category rather than product by product. It also tells you something real: these two are not competing on price so much as stocking different shelves in the same town.</p>
 
 <h2>If you are willing to drive</h2>
@@ -1534,7 +1535,7 @@ module.exports = [
 <p>Forty six miles east is <a href="/albert-lea-cannabis-dispensaries/">Albert Lea</a>, which has six dispensaries serving 18,000 people and all the price pressure that comes with it. We wrote that town up in the <a href="/blog/albert-lea-dispensaries-minnesota/">Albert Lea guide</a>. If you are making a real trip of it, that is where the competition actually lives.</p>
 
 <h2>The short version</h2>
-<p>Flower at RISE, edibles and topicals at Voyager, pre-rolls at whichever one is cheaper on the day, call Voyager about hours first, and at RISE buy the quarter rather than the half ounce, because right now the half is the dearer of the two per gram and only the full ounce beats it. Prices move constantly, so look at the <a href="/mankato-cannabis-dispensaries/">Mankato page</a> the morning you go, and the <a href="/tax-calculator/">tax calculator</a> for the real out the door number.</p>
+<p>Flower at RISE, edibles, topicals and pre-rolls at Voyager, and on pre-rolls that is no longer a close call. Call Voyager about hours before you drive over. At RISE the quarter is still the easiest win on the flower ladder, though the half ounce no longer punishes you for taking it the way it did a month ago. Prices move constantly, so look at the <a href="/mankato-cannabis-dispensaries/">Mankato page</a> the morning you go, and the <a href="/tax-calculator/">tax calculator</a> for the real out the door number.</p>
 `,
     related: [
       { href: '/mankato-cannabis-dispensaries/', label: 'Mankato dispensaries' },
@@ -1853,7 +1854,9 @@ module.exports = [
       ['High Fidelity is cheapest in town on carts', 'cat:high-fidelity:cartridge', '<', 'cat:coastless:cartridge'],
       ['High Fidelity carts beat the state median', 'cat:high-fidelity:cartridge', '<', 'stateCat:cartridge'],
       ['High Fidelity drinks sit under the state middle', 'cat:high-fidelity:beverage', '<', 'stateCat:beverage'],
-      ['Coastless is cheaper than High Fidelity on concentrates', 'cat:coastless:concentrate', '<', 'cat:high-fidelity:concentrate'],
+      ['Coastless is at or under High Fidelity on concentrates', 'cat:coastless:concentrate', '<=', 'cat:high-fidelity:concentrate'],
+      ['Coastless concentrates beat the state median', 'cat:coastless:concentrate', '<', 'stateCat:concentrate'],
+      ['High Fidelity concentrates beat the state median', 'cat:high-fidelity:concentrate', '<', 'stateCat:concentrate'],
       ['High Fidelity and The Flower Shop still match on pre-rolls', 'cat:high-fidelity:pre-roll', '==', 'cat:the-flower-shop-mn-llc:pre-roll'],
       ['Coastless still the dearest in town on pre-rolls', 'cat:coastless:pre-roll', '>', 'cat:high-fidelity:pre-roll'],
     ],
@@ -1883,7 +1886,7 @@ module.exports = [
 <ul>
   <li><strong>Cartridges:</strong> High Fidelity, and by a clear margin. {{catN:high-fidelity:cartridge|Twenty odd}} listings at a {{cat:high-fidelity:cartridge|$60}} median, against Coastless at {{cat:coastless:cartridge|$70}} and The Flower Shop at {{cat:the-flower-shop-mn-llc:cartridge|$75}}. The state median is {{stateCat:cartridge|$65}}, so one shop here sits under the market and two sit over it.</li>
   <li><strong>Drinks:</strong> High Fidelity again, {{catN:high-fidelity:beverage|thirteen}} listings at {{cat:high-fidelity:beverage|$5}} against a {{stateCat:beverage|$7}} state middle. The Flower Shop carries the deepest drinks shelf in town at {{catN:the-flower-shop-mn-llc:beverage|25}} listings, but prices them at {{cat:the-flower-shop-mn-llc:beverage|$8}}.</li>
-  <li><strong>Concentrates:</strong> Coastless, {{catN:coastless:concentrate|eleven}} listings at {{cat:coastless:concentrate|$55}} against High Fidelity's {{cat:high-fidelity:concentrate|$60}}. The state median is {{stateCat:concentrate|$65}}, so the cheap end of this shelf in Luverne does beat the market.</li>
+  <li><strong>Concentrates:</strong> a dead heat. Coastless lists {{catN:coastless:concentrate|eleven}} at {{cat:coastless:concentrate|$55}} and High Fidelity now matches it at {{cat:high-fidelity:concentrate|$55}}, both under the {{stateCat:concentrate|$65}} state median. Buy them at whichever shop you are already standing in.</li>
   <li><strong>Pre-rolls:</strong> High Fidelity and The Flower Shop both land at {{cat:high-fidelity:pre-roll|$16}}, a dollar under the {{stateCat:pre-roll|$17}} state median. Coastless is the outlier at {{cat:coastless:pre-roll|$24}}, which makes it the one shelf where it is clearly the wrong stop.</li>
   <li><strong>Tinctures and topicals:</strong> Thin everywhere. The Flower Shop is the only shop in town with enough tinctures for us to put a median on, at {{cat:the-flower-shop-mn-llc:tincture|$50}}. Topicals we cannot price at any of the three. Call rather than drive.</li>
 </ul>
@@ -1894,7 +1897,7 @@ module.exports = [
 <p>If you are shopping Luverne as a visitor rather than a local, the <a href="/blog/first-time-dispensary-guide-minnesota/">first time guide</a> covers the ID and the counter conversation, and the <a href="/tax-calculator/">tax calculator</a> tells you what the shelf price actually becomes.</p>
 
 <h2>The short version</h2>
-<p>Carts and drinks at High Fidelity, plus the five dollar edible shelf, which is the cheapest entry point we have found outstate. Eighths and concentrates at Coastless. Anything bigger than an eighth at The Flower Shop, the only shop in town selling flower by the quarter, half and ounce, and the deepest menu in Luverne besides. Nobody in Luverne is cheap on flower and the ounce here costs real money, so if you are driving through on I-90 anyway, that is the purchase to make somewhere else. Call Green Grass rather than trusting any price for it, ours included. Check the <a href="/luverne-cannabis-dispensaries/">Luverne page</a> the morning you go.</p>
+<p>Carts and drinks at High Fidelity, plus the five dollar edible shelf, which is the cheapest entry point we have found outstate. Eighths at Coastless, and concentrates at either shop because the two are priced level. Anything bigger than an eighth at The Flower Shop, the only shop in town selling flower by the quarter, half and ounce, and the deepest menu in Luverne besides. Nobody in Luverne is cheap on flower and the ounce here costs real money, so if you are driving through on I-90 anyway, that is the purchase to make somewhere else. Call Green Grass rather than trusting any price for it, ours included. Check the <a href="/luverne-cannabis-dispensaries/">Luverne page</a> the morning you go.</p>
 `,
     related: [
       { href: '/luverne-cannabis-dispensaries/', label: 'Luverne dispensaries' },
@@ -2058,80 +2061,227 @@ module.exports = [
   },
   {
     slug: 'woodbury-oakdale-dispensaries-minnesota',
-    title: 'Woodbury, Oakdale and the east metro: the two cheapest cart shelves out here, and two shops that will not quote you anything',
-    dek: 'East of the river there are seven licensed dispensaries, and two of them publish no prices at all. Of the five that do, two beat the state median on cartridges by real money and the most loved shop in the east metro runs ten dollars over it.',
+    title: 'Woodbury, Oakdale and the east metro: a five star corner shop in Bayport now has the cheapest counter out here, and two shops still will not quote you anything',
+    dek: 'East of the river there are seven licensed dispensaries and two of them publish no prices at all. Of the five that do, the cheapest carts, drinks, edibles and topicals have all quietly moved to a town of three thousand people, and the most loved shop in the east metro is the dearest place out here to buy a cart.',
     date: '2026-12-14',
     updated: '2026-12-14',
-    category: 'Buying smart',
-    read: 7,
     claims: [
-      ['Woodbury carts beat the state median', 'cat:green-goods-woodbury:cartridge', '<', 'stateCat:cartridge'],
+      ['Bayport has the cheapest carts out here', 'cat:my-dealer-bayport:cartridge', '<', 'cat:terrace-high-dispensary:cartridge'],
+      ['Bayport carts beat the state median', 'cat:my-dealer-bayport:cartridge', '<', 'stateCat:cartridge'],
       ['Oakdale carts beat the state median', 'cat:terrace-high-dispensary:cartridge', '<', 'stateCat:cartridge'],
-      ['Woodbury is the cheaper of the two on carts', 'cat:green-goods-woodbury:cartridge', '<', 'cat:terrace-high-dispensary:cartridge'],
+      ['Woodbury carts now run over the state median', 'cat:green-goods-woodbury:cartridge', '>', 'stateCat:cartridge'],
       ['White Bear Lake carts run over the state median', 'cat:the-lakes-dispensary:cartridge', '>', 'stateCat:cartridge'],
-      ['Lakeland Shores carts run over the state median', 'cat:green-canopy-inc:cartridge', '>', 'stateCat:cartridge'],
+      ['White Bear Lake is the dearest cart shelf out here', 'cat:the-lakes-dispensary:cartridge', '>', 'cat:green-goods-woodbury:cartridge'],
       ['White Bear Lake is rated at or above Woodbury', 'rating:the-lakes-dispensary', '>=', 'rating:green-goods-woodbury'],
-      ['White Bear Lake has real review volume behind that rating', 'reviews:the-lakes-dispensary', '>', 'reviews:terrace-high-dispensary'],
       ['Woodbury is the most reviewed shop out here, over White Bear Lake', 'reviews:green-goods-woodbury', '>', 'reviews:the-lakes-dispensary'],
       ['Woodbury beats the state median eighth', 'eighth:green-goods-woodbury', '<', 'stateEighth'],
       ['Bayport beats the state median eighth', 'eighth:my-dealer-bayport', '<', 'stateEighth'],
+      ['Bayport is at or under Woodbury on the eighth', 'eighth:my-dealer-bayport', '<=', 'eighth:green-goods-woodbury'],
       ['Woodbury ladder: the quarter beats the eighth', 'pergram:green-goods-woodbury:7', '<', 'pergram:green-goods-woodbury:3.5'],
       ['Woodbury ladder: the half ounce beats the quarter', 'pergram:green-goods-woodbury:14', '<', 'pergram:green-goods-woodbury:7'],
       ['Woodbury ladder: the ounce beats the half ounce', 'pergram:green-goods-woodbury:28', '<', 'pergram:green-goods-woodbury:14'],
-      ['Bayport’s quarter beats its eighth per gram', 'pergram:my-dealer-bayport:7', '<', 'pergram:my-dealer-bayport:3.5'],
-      ['Oakdale’s quarter beats its eighth per gram', 'pergram:terrace-high-dispensary:7', '<', 'pergram:terrace-high-dispensary:3.5'],
+      ['Bayport quarter beats its eighth per gram', 'pergram:my-dealer-bayport:7', '<', 'pergram:my-dealer-bayport:3.5'],
+      ['Oakdale quarter beats its eighth per gram', 'pergram:terrace-high-dispensary:7', '<', 'pergram:terrace-high-dispensary:3.5'],
       ['Oakdale tinctures beat the state median', 'cat:terrace-high-dispensary:tincture', '<', 'stateCat:tincture'],
-      ['Lakeland Shores tinctures run over the state median', 'cat:green-canopy-inc:tincture', '>', 'stateCat:tincture'],
-      ['Woodbury tinctures run over the state median', 'cat:green-goods-woodbury:tincture', '>', 'stateCat:tincture'],
+      ['Woodbury tinctures sit at or over the state median', 'cat:green-goods-woodbury:tincture', '>=', 'stateCat:tincture'],
+      ['Bayport tinctures run over the state median', 'cat:my-dealer-bayport:tincture', '>', 'stateCat:tincture'],
       ['Oakdale edibles beat the state median', 'cat:terrace-high-dispensary:edible', '<', 'stateCat:edible'],
       ['Bayport edibles beat the state median', 'cat:my-dealer-bayport:edible', '<', 'stateCat:edible'],
+      ['Bayport has the cheapest edibles out here', 'cat:my-dealer-bayport:edible', '<', 'cat:terrace-high-dispensary:edible'],
       ['Woodbury edibles run over the state median', 'cat:green-goods-woodbury:edible', '>', 'stateCat:edible'],
-      ['Lakeland Shores edibles run over the state median', 'cat:green-canopy-inc:edible', '>', 'stateCat:edible'],
-      ['Lakeland Shores drinks sit at or under the state median', 'cat:green-canopy-inc:beverage', '<=', 'stateCat:beverage'],
+      ['Bayport drinks beat the state median', 'cat:my-dealer-bayport:beverage', '<', 'stateCat:beverage'],
+      ['Oakdale has the deepest cooler out here', 'catN:terrace-high-dispensary:beverage', '>', 'catN:my-dealer-bayport:beverage'],
       ['Woodbury pre-rolls beat the state median', 'cat:green-goods-woodbury:pre-roll', '<', 'stateCat:pre-roll'],
+      ['Woodbury has the cheapest pre-rolls out here', 'cat:green-goods-woodbury:pre-roll', '<', 'cat:terrace-high-dispensary:pre-roll'],
       ['Bayport pre-rolls run over the state median', 'cat:my-dealer-bayport:pre-roll', '>', 'stateCat:pre-roll'],
       ['Oakdale pre-rolls run over the state median', 'cat:terrace-high-dispensary:pre-roll', '>', 'stateCat:pre-roll'],
+      ['Bayport topicals beat the state median', 'cat:my-dealer-bayport:topical', '<', 'stateCat:topical'],
+      ['Woodbury topicals sit at or over the state median', 'cat:green-goods-woodbury:topical', '>=', 'stateCat:topical'],
     ],
+    category: 'Buying smart',
+    read: 8,
     body: `
 <p>If you live east of the river, you have been handed a worse version of the metro's cannabis map than people in Minneapolis got. Seven licensed dispensaries from Woodbury up to White Bear Lake and out to the St. Croix, and two of them publish nothing we can price. One of those two has {{reviews:legacy-cannabis|over 300}} Google reviews, so it is clearly doing business. It just is not doing it on a readable menu.</p>
-<p>What is left is still worth knowing, because the east metro quietly holds the two best cartridge shelves in this half of the Twin Cities, and the shop everybody loves is not one of them.</p>
+<p>What is left is still worth knowing, and it has moved since autumn. The cheapest counter in the east metro is now a corner shop in a river town of about three thousand people, and the big chain that used to own the cart price out here has given it up.</p>
 
 <h2>The shops you can price</h2>
 <ul>
-  <li><strong>Green Goods Woodbury</strong>, 803 Bielenberg Drive, (612) 260-1222. {{reviews:green-goods-woodbury|about 770}} reviews at {{rating:green-goods-woodbury|4.5}}, {{listings:green-goods-woodbury|over 200}} priced listings. Sun to Wed 10am to 8pm, Thu to Sat to 9pm.</li>
+  <li><strong>Green Goods Woodbury</strong>, 803 Bielenberg Drive, (612) 260-1222. {{reviews:green-goods-woodbury|about 780}} reviews at {{rating:green-goods-woodbury|4.5}}, {{listings:green-goods-woodbury|over 200}} priced listings. Sun to Wed 10am to 8pm, Thu to Sat to 9pm.</li>
   <li><strong>Terrace High Dispensary</strong>, 6211 Upper 51st St N in Oakdale, (651) 330-0581. {{rating:terrace-high-dispensary|4.9}} stars on only {{reviews:terrace-high-dispensary|27}} reviews, so read that rating as promising rather than proven, but {{listings:terrace-high-dispensary|over 150}} priced listings, which is a real menu.</li>
-  <li><strong>Green Canopy Craft Dispensary</strong>, 177 Saint Croix Trail South in Lakeland Shores, (651) 337-2661. {{reviews:green-canopy-inc|about 80}} reviews at {{rating:green-canopy-inc|4.7}}, {{listings:green-canopy-inc|over 160}} listings.</li>
-  <li><strong>My Dealer</strong>, 243 3rd St N in Bayport, (651) 323-1266. {{rating:my-dealer-bayport|5.0}} stars on {{reviews:my-dealer-bayport|22}} reviews, {{listings:my-dealer-bayport|around 130}} listings. Opens at noon, which is the thing to know.</li>
+  <li><strong>My Dealer</strong>, 243 3rd St N in Bayport, (651) 323-1266. {{rating:my-dealer-bayport|5.0}} stars on {{reviews:my-dealer-bayport|23}} reviews, {{listings:my-dealer-bayport|around 130}} listings. Opens at noon, which is the thing to know.</li>
   <li><strong>The Lakes Dispensary</strong>, 1599 E County Road E in White Bear Lake, (612) 469-7688. {{reviews:the-lakes-dispensary|over 700}} reviews at {{rating:the-lakes-dispensary|4.9}}, the highest rating out here that has real review volume behind it. Only {{listings:the-lakes-dispensary|about 65}} priced listings though, and no flower we can measure.</li>
 </ul>
-<p>And the two we cannot: <strong>Legacy Cannabis Woodbury</strong>, 9891 Hudson Pl, (651) 421-4088, and <strong>Silver Therapeutics</strong>, 1778 Greeley Street S in Stillwater, (651) 342-2412. Both are licensed, both are well reviewed, neither publishes a menu we can read. Call them. We are not going to invent prices for a shop that has not published any.</p>
+<p>Then the ones we cannot price. <strong>Green Canopy Craft Dispensary</strong>, 177 Saint Croix Trail South in Lakeland Shores, (651) 337-2661, {{reviews:green-canopy-inc|about 80}} reviews at {{rating:green-canopy-inc|4.7}}, used to publish a full menu and as of this build publishes nothing we can read. We have dropped its prices from this guide rather than quote you numbers from a menu that has gone quiet. <strong>Legacy Cannabis Woodbury</strong>, 9891 Hudson Pl, (651) 421-4088, and <strong>Silver Therapeutics</strong>, 1778 Greeley Street S in Stillwater, (651) 342-2412, have never published one. All three are licensed and well reviewed. Call them. We are not going to invent prices for a shop that has not published any.</p>
 
-<h2>Carts: the one thing the east metro is genuinely best at</h2>
-<p>Green Goods Woodbury runs a {{cat:green-goods-woodbury:cartridge|$50}} median cartridge across {{catN:green-goods-woodbury:cartridge|nearly thirty}} listings, against {{stateCat:cartridge|$65}} statewide. Terrace High in Oakdale is next at {{cat:terrace-high-dispensary:cartridge|$54.99}}. Those are the two cheapest cart shelves anywhere in this half of the metro, and fifteen dollars under the state middle is not a rounding error, it is a third of another cart.</p>
-<p>Then it falls apart fast. Green Canopy in Lakeland Shores runs {{cat:green-canopy-inc:cartridge|$70}} and The Lakes in White Bear Lake runs {{cat:the-lakes-dispensary:cartridge|$74.97}}, both over the state median. So the best rated shop out here is also the most expensive place in the east metro to buy a cart, by about {{gap:the-lakes-dispensary:green-goods-woodbury:cartridge|twenty five dollars}} against Woodbury, which has both the cheapest carts and the most reviews of any shop east of the river. A {{rating:the-lakes-dispensary|4.9}} rating is telling you about the staff and the room, and it is telling you nothing at all about the price. Live numbers on <a href="/cheapest-cartridge-woodbury/">cheapest carts in Woodbury</a> and <a href="/cheapest-cartridge-white-bear-lake/">White Bear Lake</a>, and <a href="/blog/vape-cartridges-minnesota/">the cart guide</a> covers what else to check.</p>
+<h2>Carts: the answer changed, and it is worth knowing why</h2>
+<p>For most of this year the cheapest cart shelf out here belonged to Green Goods Woodbury, and we said so. It does not any more. Woodbury now runs a {{cat:green-goods-woodbury:cartridge|$70}} median cartridge against {{stateCat:cartridge|$64}} statewide, which puts the chain over the market on the shelf it used to win.</p>
+<p>The cheapest carts in the east metro are now at <strong>My Dealer in Bayport</strong>, {{cat:my-dealer-bayport:cartridge|$50}} across {{catN:my-dealer-bayport:cartridge|a dozen}} listings, with <strong>Terrace High in Oakdale</strong> next at {{cat:terrace-high-dispensary:cartridge|$54.99}}. Both are comfortably under the state middle, and a twenty dollar gap between the cheapest and the dearest shelf in one half of a metro is not a rounding error, it is most of another cart.</p>
+<p>At the top end, The Lakes in White Bear Lake runs {{cat:the-lakes-dispensary:cartridge|$74.97}}, which makes the best rated shop out here also the dearest place in the east metro to buy a cart, by about {{gap:the-lakes-dispensary:my-dealer-bayport:cartridge|twenty five dollars}} against Bayport. A {{rating:the-lakes-dispensary|4.9}} rating is telling you about the staff and the room, and it is telling you nothing at all about the price. That was true when Woodbury was cheap and it is still true now that Woodbury is not.</p>
+<p>The useful lesson is the one underneath: a cart shelf can move twenty dollars in a season, so whichever shop was cheapest last time you looked is a guess, not a fact. Live numbers on <a href="/cheapest-cartridge-bayport/">Bayport</a>, <a href="/cheapest-cartridge-oakdale/">Oakdale</a>, <a href="/cheapest-cartridge-woodbury/">Woodbury</a> and <a href="/cheapest-cartridge-white-bear-lake/">White Bear Lake</a>, and <a href="/blog/vape-cartridges-minnesota/">the cart guide</a> covers what else to check before you pay for one.</p>
 
-<h2>Flower: two shops with a real ladder, and three without one</h2>
-<p>Green Goods Woodbury runs {{eighth:green-goods-woodbury|$40}} an eighth, under the {{stateEighth|$50}} state median, and the ladder descends the whole way: {{size:green-goods-woodbury:7|$70}} a quarter, {{size:green-goods-woodbury:14|$120}} a half, {{size:green-goods-woodbury:28|$220}} an ounce, or {{pergram:green-goods-woodbury:3.5|$11.43}} a gram down to {{pergram:green-goods-woodbury:28|$7.86}}. If you buy flower in bulk and you live east of the river, that is the answer and the rest of this section is detail.</p>
-<p>My Dealer in Bayport is the surprise. It is a tiny shop with {{reviews:my-dealer-bayport|22}} reviews, and it runs {{eighth:my-dealer-bayport|$42}} an eighth and {{size:my-dealer-bayport:7|$70}} a quarter, which is {{pergram:my-dealer-bayport:7|$10.00}} a gram and matches the big chain's quarter exactly. An independent in a town of three thousand holding chain prices on flower is not something we see often.</p>
-<p>Terrace High in Oakdale starts dearer at {{eighth:terrace-high-dispensary|$49.99}} but its quarter at {{size:terrace-high-dispensary:7|$69.99}} drops it to {{pergram:terrace-high-dispensary:7|$10.00}} a gram, the steepest single step out here. Buy the quarter or do not buy flower there. Green Canopy sits at {{eighth:green-canopy-inc|$50}}, right on the state median, with no bigger sizes we can price. The Lakes publishes no measurable flower at all. See <a href="/cheapest-flower-woodbury/">cheapest flower in Woodbury</a> and <a href="/cheapest-flower-bayport/">Bayport</a>.</p>
+<h2>Flower: two shops at the same eighth, and only one with a real ladder</h2>
+<p>Green Goods Woodbury runs {{eighth:green-goods-woodbury|$40}} an eighth, under the {{stateEighth|$50}} state median, and the ladder descends the whole way: {{size:green-goods-woodbury:7|$70}} a quarter, {{size:green-goods-woodbury:14|$120}} a half, {{size:green-goods-woodbury:28|$220}} an ounce, or {{pergram:green-goods-woodbury:3.5|$11.43}} a gram down to {{pergram:green-goods-woodbury:28|$7.86}}. Nothing on this side of the river comes close in bulk. If you buy flower by the half or the ounce, that is the answer and the rest of this section is detail.</p>
+<p>My Dealer in Bayport matches it at the entry size, {{eighth:my-dealer-bayport|$40}} an eighth and {{size:my-dealer-bayport:7|$70}} a quarter, which is {{pergram:my-dealer-bayport:7|$10.00}} a gram and exactly the chain's quarter. An independent with {{reviews:my-dealer-bayport|23}} reviews holding chain flower prices is not something we see often. It just stops there, with no half ounce or ounce we can price, so it is an eighth and quarter shop.</p>
+<p>Terrace High in Oakdale starts dearer at {{eighth:terrace-high-dispensary|$49.99}} but its quarter at {{size:terrace-high-dispensary:7|$62.99}} drops it to {{pergram:terrace-high-dispensary:7|$9.00}} a gram, the steepest single step out here and cheaper per gram than either of the other two at that size. Buy the quarter or do not buy flower there. The Lakes publishes no measurable flower at all. See <a href="/cheapest-flower-woodbury/">cheapest flower in Woodbury</a> and <a href="/cheapest-flower-bayport/">Bayport</a>.</p>
 
 <h2>Everything else, shop by shop</h2>
 <ul>
-  <li><strong>Edibles: Bayport and Oakdale.</strong> {{cat:my-dealer-bayport:edible|$18}} and {{cat:terrace-high-dispensary:edible|$18.99}} against {{stateCat:edible|$20}} statewide, and Oakdale's shelf is {{catN:terrace-high-dispensary:edible|over sixty}} listings deep. Skip Woodbury at {{cat:green-goods-woodbury:edible|$30}} and Lakeland Shores at {{cat:green-canopy-inc:edible|$29.99}}, both half again over the market. <a href="/blog/edibles-dosing-guide-minnesota/">Dosing guide</a> first if you are new.</li>
-  <li><strong>Tinctures: Oakdale, and it is the best deal in this guide.</strong> {{cat:terrace-high-dispensary:tincture|$12.99}} against {{stateCat:tincture|$35}} statewide, roughly a third of the market, while Woodbury runs {{cat:green-goods-woodbury:tincture|$59}} and Lakeland Shores {{cat:green-canopy-inc:tincture|$59.99}} on the same shelf. The shelf nobody checks is where the real gaps hide. <a href="/blog/cannabis-tinctures-minnesota/">What tinctures are for</a>.</li>
-  <li><strong>Drinks: Lakeland Shores.</strong> {{cat:green-canopy-inc:beverage|$6.97}} across {{catN:green-canopy-inc:beverage|about fifty}} listings, at or under the {{stateCat:beverage|$7}} state middle and the deepest cooler out here. <a href="/cheapest-beverage-lakeland-shores/">Live prices</a>, and <a href="/blog/thc-drinks-minnesota/">the drinks guide</a>.</li>
-  <li><strong>Pre-rolls: Woodbury.</strong> {{cat:green-goods-woodbury:pre-roll|$15}} against {{stateCat:pre-roll|$19}} statewide. Bayport at {{cat:my-dealer-bayport:pre-roll|$28.74}} and Oakdale at {{cat:terrace-high-dispensary:pre-roll|$27.99}} are both well over, which is a neat inversion: the two shops with the best edibles out here have the worst pre-rolls. <a href="/blog/pre-rolls-minnesota/">The pre-roll guide</a>.</li>
+  <li><strong>Edibles: Bayport, then Oakdale.</strong> {{cat:my-dealer-bayport:edible|$18}} and {{cat:terrace-high-dispensary:edible|$18.99}} against {{stateCat:edible|$23}} statewide, and Oakdale's shelf is {{catN:terrace-high-dispensary:edible|over sixty}} listings deep against Bayport's {{catN:my-dealer-bayport:edible|about fifty}}, so Bayport wins on price and Oakdale on choice. Skip Woodbury at {{cat:green-goods-woodbury:edible|$26}}. <a href="/cheapest-edible-bayport/">Live prices</a>, and the <a href="/blog/edibles-dosing-guide-minnesota/">dosing guide</a> first if you are new.</li>
+  <li><strong>Tinctures: Oakdale, and it is still the best deal in this guide.</strong> {{cat:terrace-high-dispensary:tincture|$12.99}} against {{stateCat:tincture|$44}} statewide, roughly a third of the market, while Woodbury sits right on the state median at {{cat:green-goods-woodbury:tincture|$45}} and Bayport runs {{cat:my-dealer-bayport:tincture|$60}}. The shelf nobody checks is where the real gaps hide. <a href="/blog/cannabis-tinctures-minnesota/">What tinctures are for</a>.</li>
+  <li><strong>Drinks: Bayport on price, Oakdale on depth.</strong> Bayport runs {{cat:my-dealer-bayport:beverage|$6}} across {{catN:my-dealer-bayport:beverage|about twenty}} listings, under the {{stateCat:beverage|$7}} state middle. Oakdale is a touch dearer at {{cat:terrace-high-dispensary:beverage|$7.99}} but carries {{catN:terrace-high-dispensary:beverage|more than thirty}}, the deepest cooler east of the river now that Lakeland Shores has gone quiet. <a href="/cheapest-beverage-bayport/">Bayport prices</a>, <a href="/cheapest-beverage-oakdale/">Oakdale prices</a>, and <a href="/blog/thc-drinks-minnesota/">the drinks guide</a>.</li>
+  <li><strong>Pre-rolls: Woodbury, by a mile.</strong> {{cat:green-goods-woodbury:pre-roll|$12}} against {{stateCat:pre-roll|$19}} statewide. Bayport at {{cat:my-dealer-bayport:pre-roll|$28.74}} and Oakdale at {{cat:terrace-high-dispensary:pre-roll|$27.99}} are both well over, which is a neat inversion: the two shops with the best edibles and drinks out here have the worst pre-rolls, and the chain that lost the cart price owns this one outright. <a href="/cheapest-pre-roll-woodbury/">Live prices</a> and <a href="/blog/pre-rolls-minnesota/">the pre-roll guide</a>.</li>
+  <li><strong>Topicals: Bayport.</strong> {{cat:my-dealer-bayport:topical|$25}} across {{catN:my-dealer-bayport:topical|ten}} listings against {{stateCat:topical|$39.95}} statewide, while Woodbury sits at {{cat:green-goods-woodbury:topical|$40}}, right on the market. <a href="/blog/cannabis-topicals-minnesota/">What topicals actually do</a>.</li>
 </ul>
 
 <h2>The short version</h2>
-<p>Green Goods Woodbury is the default for flower, carts and pre-rolls, and it is genuinely good at all three, so if you only want one stop east of the river that is it. Do not buy its edibles or its tinctures. Drive to Oakdale for tinctures, which are about a third of the state median there, and for edibles. Lakeland Shores for the cooler. Bayport if you are out that way and want chain flower prices from a five star corner shop, remembering it opens at noon. The Lakes in White Bear Lake is the best rated room out here and the dearest carts, which is a combination worth sitting with.</p>
-<p>And if you were planning on Legacy in Woodbury or Silver Therapeutics in Stillwater, call first, because nothing on this site can tell you what they charge. The same pattern shows up in <a href="/blog/burnsville-eagan-dispensaries-minnesota/">the south metro ring</a>, where two of six shops publish too little to recommend. <a href="/woodbury-cannabis-dispensaries/">Woodbury</a>, <a href="/oakdale-cannabis-dispensaries/">Oakdale</a> and <a href="/stillwater-cannabis-dispensaries/">Stillwater</a> have live hours, <a href="/open-now/">open now</a> saves a wasted drive, and the <a href="/tax-calculator/">tax calculator</a> turns a shelf price into the real one.</p>
+<p>My Dealer in Bayport is the surprise of this guide and the answer to most of it: cheapest carts, cheapest edibles, cheapest drinks, cheapest topicals, and it ties the chain on the eighth. It opens at noon and it is a small shop, so call if you want something specific, and do not go there for pre-rolls or tinctures.</p>
+<p>Green Goods Woodbury is still the only place out here to buy flower in bulk, and its pre-rolls at {{cat:green-goods-woodbury:pre-roll|$12}} are the single best price in this guide. It is no longer the cart answer. Terrace High in Oakdale is the one to drive to for tinctures at about a third of the state median, for the deepest cooler, and for the steepest flower quarter out here. The Lakes in White Bear Lake is the best rated room in the east metro and the dearest carts, which is a combination worth sitting with.</p>
+<p>And if you were planning on Legacy in Woodbury, Silver Therapeutics in Stillwater or Green Canopy in Lakeland Shores, call first, because nothing on this site can tell you what they charge today. The same pattern shows up in <a href="/blog/burnsville-eagan-dispensaries-minnesota/">the south metro ring</a>, where two of six shops publish too little to recommend. <a href="/woodbury-cannabis-dispensaries/">Woodbury</a>, <a href="/oakdale-cannabis-dispensaries/">Oakdale</a>, <a href="/bayport-cannabis-dispensaries/">Bayport</a> and <a href="/stillwater-cannabis-dispensaries/">Stillwater</a> have live hours, <a href="/open-now/">open now</a> saves a wasted drive, and the <a href="/tax-calculator/">tax calculator</a> turns a shelf price into the real one.</p>
 `,
     related: [
+      { href: '/bayport-cannabis-dispensaries/', label: 'Bayport dispensaries' },
       { href: '/woodbury-cannabis-dispensaries/', label: 'Woodbury dispensaries' },
       { href: '/oakdale-cannabis-dispensaries/', label: 'Oakdale dispensaries' },
-      { href: '/blog/burnsville-eagan-dispensaries-minnesota/', label: 'South metro ring guide' },
-      { href: '/cheapest-cartridge-woodbury/', label: 'Cheapest carts in Woodbury' },
+      { href: '/cheapest-cartridge-bayport/', label: 'Cheapest carts in Bayport' },
+    ],
+  },
+  {
+    slug: 'moorhead-dispensaries-minnesota',
+    title: 'Moorhead, Breckenridge and the North Dakota line: one shop holding metro flower prices, and forty miles to the next one',
+    dek: 'Fargo-Moorhead is a quarter million people and one licensed dispensary on the Minnesota side. It sells bulk flower at under eight dollars a gram and tinctures at well over the state median, which tells you exactly what to buy there and what to leave on the shelf.',
+    date: '2026-12-21',
+    updated: '2026-12-21',
+    category: 'Buying smart',
+    read: 7,
+    claims: [
+      ['Moorhead beats the state median eighth', 'eighth:minnesota-medical-solutions-moorhead', '<', 'stateEighth'],
+      ['Moorhead ladder: the quarter beats the eighth per gram', 'pergram:minnesota-medical-solutions-moorhead:7', '<', 'pergram:minnesota-medical-solutions-moorhead:3.5'],
+      ['Moorhead ladder: the half ounce beats the quarter', 'pergram:minnesota-medical-solutions-moorhead:14', '<', 'pergram:minnesota-medical-solutions-moorhead:7'],
+      ['Moorhead ladder: the ounce beats the half ounce', 'pergram:minnesota-medical-solutions-moorhead:28', '<', 'pergram:minnesota-medical-solutions-moorhead:14'],
+      ['Moorhead pre-rolls beat the state median', 'cat:minnesota-medical-solutions-moorhead:pre-roll', '<', 'stateCat:pre-roll'],
+      ['Moorhead carts run over the state median', 'cat:minnesota-medical-solutions-moorhead:cartridge', '>', 'stateCat:cartridge'],
+      ['Moorhead tinctures run over the state median', 'cat:minnesota-medical-solutions-moorhead:tincture', '>', 'stateCat:tincture'],
+      ['Moorhead edibles run over the state median', 'cat:minnesota-medical-solutions-moorhead:edible', '>', 'stateCat:edible'],
+      ['Moorhead topicals run over the state median', 'cat:minnesota-medical-solutions-moorhead:topical', '>', 'stateCat:topical'],
+      ['Breckenridge topicals beat the state median', 'cat:green-apple-cannabis:topical', '<', 'stateCat:topical'],
+      ['Breckenridge is the cheaper of the two on topicals', 'cat:green-apple-cannabis:topical', '<', 'cat:minnesota-medical-solutions-moorhead:topical'],
+      ['Breckenridge flower runs over the state median eighth', 'cat:green-apple-cannabis:flower', '>', 'stateEighth'],
+      ['Breckenridge pre-rolls run over the state median', 'cat:green-apple-cannabis:pre-roll', '>', 'stateCat:pre-roll'],
+      ['Breckenridge carts run over the state median', 'cat:green-apple-cannabis:cartridge', '>', 'stateCat:cartridge'],
+      ['Breckenridge drinks run just over the state median', 'cat:green-apple-cannabis:beverage', '>', 'stateCat:beverage'],
+      ['Breckenridge has the deeper cooler of the two', 'catN:green-apple-cannabis:beverage', '>', 'catN:minnesota-medical-solutions-moorhead:beverage'],
+      ['Breckenridge is rated above Moorhead', 'rating:green-apple-cannabis', '>', 'rating:minnesota-medical-solutions-moorhead'],
+      ['Moorhead has far more reviews behind its rating', 'reviews:minnesota-medical-solutions-moorhead', '>', 'reviews:green-apple-cannabis'],
+      ['Moorhead has the deeper priced menu of the two', 'listings:minnesota-medical-solutions-moorhead', '>', 'listings:green-apple-cannabis'],
+    ],
+    body: `
+<p>Fargo-Moorhead is the second biggest metro on Minnesota's border and about a quarter million people live in it, and the Minnesota half of it has exactly one licensed dispensary. Not one good one. One. After that the nearest shop on this site is about forty miles south in Breckenridge, and after that you are looking at ninety plus miles to Thief River Falls or Alexandria.</p>
+<p>That is a strange market, and it produces a strange pricing picture. The one shop in town is a statewide chain, so it holds chain flower prices that are genuinely good, and then it charges whatever it likes on the shelves nobody drives across a state line to compare. Here is how to shop it.</p>
+
+<h2>The only licensed shop in Moorhead</h2>
+<p><strong>Green Goods Moorhead</strong>, 800 30th Avenue S, (218) 206-6600. {{reviews:minnesota-medical-solutions-moorhead|625}} Google reviews at {{rating:minnesota-medical-solutions-moorhead|4.4}} and {{listings:minnesota-medical-solutions-moorhead|236}} priced listings, which is a real menu by any standard and a very deep one for a city this size. Sunday through Wednesday 10am to 8pm, Thursday through Saturday until 9pm. Medical and adult-use under one roof.</p>
+<p>A {{rating:minnesota-medical-solutions-moorhead|4.4}} with that many reviews behind it is an honest number. Read the one and two star reviews and they are almost all about the same thing: one register open on a Friday night and a line out the door. That is what a monopoly looks like from the customer side. Go on a weekday afternoon if you can.</p>
+
+<h2>Flower is the reason to go, and the ladder never stops descending</h2>
+<p>The eighth runs {{eighth:minnesota-medical-solutions-moorhead|$40}} against a {{stateEighth|$50}} state median, which already beats the market by a fifth. Then it keeps going: {{size:minnesota-medical-solutions-moorhead:7|$70}} a quarter, {{size:minnesota-medical-solutions-moorhead:14|$120}} a half, {{size:minnesota-medical-solutions-moorhead:28|$220}} an ounce. Per gram that is {{pergram:minnesota-medical-solutions-moorhead:3.5|$11.43}} at the eighth down to {{pergram:minnesota-medical-solutions-moorhead:28|$7.86}} at the ounce, and every single rung is cheaper per gram than the one below it.</p>
+<p>That matters more than it sounds. Plenty of shops put a bulk price on the board that is barely a discount, or worse, one rung that costs more per gram than the step under it. This ladder does not have a dead rung anywhere on it. If you smoke flower regularly and you live in the valley, buy the biggest size you will actually finish and you are paying under eight dollars a gram in a state where the median eighth works out to over fourteen. Live numbers on <a href="/cheapest-flower-moorhead/">cheapest flower in Moorhead</a>.</p>
+<p>Pre-rolls are the other win here, {{cat:minnesota-medical-solutions-moorhead:pre-roll|$15}} against {{stateCat:pre-roll|$19}} statewide. See <a href="/cheapest-pre-roll-moorhead/">live pre-roll prices</a> and <a href="/blog/pre-rolls-minnesota/">the pre-roll guide</a> for what separates a good one from a bad one.</p>
+
+<h2>What to leave on the shelf</h2>
+<p>This is where the lack of a competitor shows up. Carts run {{cat:minnesota-medical-solutions-moorhead:cartridge|$70}} against {{stateCat:cartridge|$64}} statewide, so you are paying a few dollars over market. Fine, not outrageous. <a href="/cheapest-cartridge-moorhead/">Check the live number</a> before you commit and read <a href="/blog/vape-cartridges-minnesota/">the cart guide</a>, because hardware and oil source matter more than price on that shelf.</p>
+<p>Tinctures are the one to actually avoid. {{cat:minnesota-medical-solutions-moorhead:tincture|$70}} here against {{stateCat:tincture|$44}} statewide is not a small gap, it is over half again the market for a product category that is mostly MCT oil and a dropper. If tinctures are your thing, and <a href="/blog/cannabis-tinctures-minnesota/">there are good reasons they should be</a>, order ahead somewhere else or wait for a sale.</p>
+<p>Edibles sit at {{cat:minnesota-medical-solutions-moorhead:edible|$26}} against {{stateCat:edible|$23}}, a few dollars over but close enough to not drive for. Topicals at {{cat:minnesota-medical-solutions-moorhead:topical|$50}} against {{stateCat:topical|$39.95}} statewide are a hard no, and we will get to why in a second. The cooler is barely a cooler, just a handful of drinks we can price, so if you want <a href="/blog/thc-drinks-minnesota/">a THC drink</a> do not plan your trip around it.</p>
+
+<h2>Breckenridge, forty miles south, where the Red River starts</h2>
+<p><strong>Green Apple Cannabis</strong>, 73 Minnesota Avenue in Breckenridge, (218) 420-0404, opens late morning and closes at 5pm, so check before you drive. It is a microbusiness sitting right across the water from Wahpeton, at the spot where the Bois de Sioux and the Otter Tail meet and become the Red River.</p>
+<p>It is the best liked cannabis shop in the valley at {{rating:green-apple-cannabis|4.8}} stars, though on only {{reviews:green-apple-cannabis|57}} reviews, so read that as a very promising small shop rather than a proven one. The reviews are almost entirely about one guy behind the counter knowing his inventory, which is the thing a microbusiness can actually beat a chain at.</p>
+<p>What it is not is cheap. Its flower shelf runs a {{cat:green-apple-cannabis:flower|$55}} median and nearly every listing on it is an eighth, so against the {{stateEighth|$50}} state median eighth you are paying over market, and well over Moorhead. Carts {{cat:green-apple-cannabis:cartridge|$69.99}}, pre-rolls {{cat:green-apple-cannabis:pre-roll|$23}}, edibles {{cat:green-apple-cannabis:edible|$24.95}}. All of that is at or above market. A {{listings:green-apple-cannabis|93}} listing menu cannot buy at chain volume, and the prices say so honestly.</p>
+<p>Two things are worth the drive anyway. Topicals are {{cat:green-apple-cannabis:topical|$19.95}} here against {{stateCat:topical|$39.95}} statewide, which is half the market and {{gap:minnesota-medical-solutions-moorhead:green-apple-cannabis:topical|thirty dollars}} under what Moorhead charges on the same shelf. That is the single biggest price gap in this guide and it is on the shelf nobody checks. <a href="/blog/cannabis-topicals-minnesota/">What topicals are actually for</a>. And the cooler is real, {{catN:green-apple-cannabis:beverage|about twenty}} drinks at {{cat:green-apple-cannabis:beverage|$7.45}}, barely over the {{stateCat:beverage|$7}} state middle and far deeper than anything in Moorhead. <a href="/cheapest-beverage-breckenridge/">Live drink prices</a>.</p>
+<p>See <a href="/moorhead-cannabis-dispensaries/">Moorhead</a> and <a href="/breckenridge-cannabis-dispensaries/">Breckenridge</a> for hours that update themselves, and <a href="/open-now/">open now</a> before you burn an hour of daylight.</p>
+
+<h2>If you live on the North Dakota side, read this part twice</h2>
+<p>A lot of the traffic through that Moorhead counter has North Dakota plates, and the counter is not going to explain the problem to you, so we will.</p>
+<p>Carrying cannabis across a state line is a federal matter, not a Minnesota one, and nothing on this site will tell you it is fine. Whatever North Dakota's own law happens to say in a given month, the drive home over the river is the part that puts you at risk, and the bridge is not a place where anybody splits hairs about which state you bought it in.</p>
+<p>The second problem is quieter and catches more people. Minnesota does not let you consume cannabis in public. Not in your car, not in a parking lot, not on a sidewalk. Legal consumption here means a private residence or a licensed on-site venue, and a hotel room is not automatically either of those. So if you live in Fargo, buying in Moorhead can leave you holding something you have nowhere legal to use. That is worth thinking through before you spend the money, not after. The full rules are on <a href="/minnesota-cannabis-laws/">Minnesota cannabis laws</a>, <a href="/blog/where-can-you-use-cannabis-minnesota/">where you can actually use it</a> goes deeper, and <a href="/blog/traveling-with-cannabis-minnesota/">traveling with cannabis</a> covers the rest.</p>
+
+<h2>The short version</h2>
+<p>Green Goods Moorhead is a flower shop with chain prices and a bulk ladder that genuinely descends the whole way, so buy flower and pre-rolls there and buy them big. Skip the tinctures, which run over half again the state median, and skip the topicals. Drive the forty minutes to Breckenridge for topicals at half the state median and a cooler worth browsing, and for a counter that will actually talk to you, as long as you are not expecting to save money on flower.</p>
+<p>And if you are crossing the river to get here, sort out where you are legally allowed to use it before you buy it. The same one shop pattern shows up in <a href="/blog/st-cloud-dispensaries-minnesota/">St. Cloud</a> and <a href="/blog/duluth-dispensaries-minnesota/">Duluth</a>, where a chain holds the flower price and gets lazy everywhere else. The <a href="/tax-calculator/">tax calculator</a> turns a shelf price into the real one, <a href="/weed-deals-twin-cities/">current deals</a> move weekly, and <a href="/blog/how-to-save-money-minnesota-dispensaries/">how to actually save money</a> is the method behind all of this.</p>
+`,
+    related: [
+      { href: '/moorhead-cannabis-dispensaries/', label: 'Moorhead dispensaries' },
+      { href: '/breckenridge-cannabis-dispensaries/', label: 'Breckenridge dispensaries' },
+      { href: '/cheapest-flower-moorhead/', label: 'Cheapest flower in Moorhead' },
+      { href: '/blog/how-to-save-money-minnesota-dispensaries/', label: 'How to actually save money' },
+    ],
+  },
+  {
+    slug: 'brainerd-baxter-dispensaries-minnesota',
+    title: 'Brainerd, Baxter and the drive up north: lake country has one real menu, and its half ounce is a trap',
+    dek: 'RISE in Baxter runs one of the deepest priced menus in the state and a flower ladder with a broken rung, where the half ounce costs more per gram than the quarter. Two more licensed shops up here publish nothing at all.',
+    date: '2026-12-28',
+    updated: '2026-12-28',
+    category: 'Buying smart',
+    read: 7,
+    claims: [
+      ['Baxter beats the state median eighth', 'eighth:rise-baxter', '<', 'stateEighth'],
+      ['Baxter ladder: the quarter beats the eighth per gram', 'pergram:rise-baxter:7', '<', 'pergram:rise-baxter:3.5'],
+      ['Baxter ladder: the half ounce is the dead rung, dearer per gram than the quarter', 'pergram:rise-baxter:14', '>', 'pergram:rise-baxter:7'],
+      ['Baxter ladder: the ounce is the cheapest rung on the board', 'pergram:rise-baxter:28', '<', 'pergram:rise-baxter:14'],
+      ['Baxter tinctures beat the state median', 'cat:rise-baxter:tincture', '<', 'stateCat:tincture'],
+      ['Baxter carts run over the state median', 'cat:rise-baxter:cartridge', '>', 'stateCat:cartridge'],
+      ['Baxter pre-rolls run over the state median', 'cat:rise-baxter:pre-roll', '>', 'stateCat:pre-roll'],
+      ['Baxter concentrates run over the state median', 'cat:rise-baxter:concentrate', '>', 'stateCat:concentrate'],
+      ['Baxter edibles run over the state median', 'cat:rise-baxter:edible', '>', 'stateCat:edible'],
+      ['Baxter drinks run well over the state median', 'cat:rise-baxter:beverage', '>', 'stateCat:beverage'],
+      ['Only one shop on the site has a deeper priced menu', 'listings:levitated-cannabis', '>', 'listings:rise-baxter'],
+      ['Baxter has a deeper priced menu than Willmar', 'listings:rise-baxter', '>', 'listings:rise-willmar'],
+      ['Hinckley pre-rolls beat the state median', 'cat:lake-leaf-cultivation-1:pre-roll', '<', 'stateCat:pre-roll'],
+      ['Onamia pre-rolls beat the state median', 'cat:lake-leaf-dispensary:pre-roll', '<', 'stateCat:pre-roll'],
+      ['Lake Leaf has no bulk discount: the quarter matches the eighth per gram', 'pergram:lake-leaf-cultivation-1:7', '==', 'pergram:lake-leaf-cultivation-1:3.5'],
+      ['Hinckley eighths run over the Baxter eighth', 'eighth:lake-leaf-cultivation-1', '>', 'eighth:rise-baxter'],
+      ['Hinckley edibles run well over the state median', 'cat:lake-leaf-cultivation-1:edible', '>', 'stateCat:edible'],
+      ['Baxter is rated above Hinckley', 'rating:rise-baxter', '>', 'rating:lake-leaf-cultivation-1'],
+      ['Baxter has real review volume behind that rating', 'reviews:rise-baxter', '>', 'reviews:lake-leaf-cultivation-1'],
+    ],
+    body: `
+<p>Lake country runs on people from somewhere else. Half the traffic through Baxter in a given year is a metro family with a boat behind the truck, and the week between Christmas and New Year is one of the busier stretches up there. So it is worth knowing that the Brainerd lakes area has four licensed dispensaries on this site and only one of them publishes a menu anybody can price.</p>
+<p>That one is very good at some things and quietly expensive at others, and its flower board has a rung on it that costs you money if you take it at face value.</p>
+
+<h2>The shop with the menu</h2>
+<p><strong>RISE Dispensary Baxter</strong>, 14091 Baxter Drive, (218) 421-6350, open daily 10am to 8pm. {{reviews:rise-baxter|995}} Google reviews at {{rating:rise-baxter|4.7}}, which is the strongest combination of rating and volume north of the metro, and {{listings:rise-baxter|354}} priced listings. Only one shop on this entire site has a deeper priced menu, and it is in Minneapolis. A store in a town of eight thousand carrying that much inventory tells you who it is really stocking for.</p>
+
+<h2>The half ounce is the dead rung</h2>
+<p>Start with the good news. The eighth runs {{eighth:rise-baxter|$42}} against a {{stateEighth|$50}} state median, so the entry price beats the market. Then the board goes {{size:rise-baxter:7|$70}} a quarter, {{size:rise-baxter:14|$150}} a half, {{size:rise-baxter:28|$275}} an ounce.</p>
+<p>Work it per gram and the shape of it changes. The eighth is {{pergram:rise-baxter:3.5|$12.00}} a gram. The quarter drops you to {{pergram:rise-baxter:7|$10.00}}, a real saving. Then the half ounce goes back up to {{pergram:rise-baxter:14|$10.71}} a gram, which is dearer than the quarter you just skipped. The ounce finally pays off at {{pergram:rise-baxter:28|$9.82}}.</p>
+<p>So the half ounce is the one rung on that ladder you should never buy. Two quarters cost you less than one half ounce and give you the same weight, and if you are going bigger than that, go all the way to the ounce. This is not a trick anybody is playing on you, it is just how bulk pricing gets set one jar at a time without anybody doing the division. Doing the division is the whole job of this site. <a href="/cheapest-flower-baxter/">Live flower prices in Baxter</a>, and <a href="/blog/how-much-does-weed-cost-minnesota/">what weed actually costs in Minnesota</a> has the per-gram math laid out properly.</p>
+
+<h2>Tinctures are the sleeper, carts are the tax</h2>
+<p>Tinctures here are {{cat:rise-baxter:tincture|$30}} against {{stateCat:tincture|$44}} statewide, comfortably under market on a shelf most people walk straight past. If you have been curious about them, this is the cheapest reason in the north to try one. <a href="/blog/cannabis-tinctures-minnesota/">What tinctures are for</a>.</p>
+<p>Carts are the opposite story. {{cat:rise-baxter:cartridge|$75}} across {{catN:rise-baxter:cartridge|about seventy five}} listings against {{stateCat:cartridge|$64}} statewide. That is eleven dollars over the state middle on the single biggest shelf in the store, and because it is also the deepest cart selection for a hundred miles, plenty of people pay it without ever seeing another number. Now you have seen another number. <a href="/cheapest-cartridge-baxter/">Live cart prices</a> and <a href="/blog/vape-cartridges-minnesota/">the cart guide</a>.</p>
+<p>The rest of the store runs over market too, and not by trivial amounts. Pre-rolls {{cat:rise-baxter:pre-roll|$24}} against {{stateCat:pre-roll|$19}}. Concentrates {{cat:rise-baxter:concentrate|$80}} against {{stateCat:concentrate|$65}}. Edibles {{cat:rise-baxter:edible|$25}} against {{stateCat:edible|$23}}, which is close. Drinks {{cat:rise-baxter:beverage|$15}} against a {{stateCat:beverage|$7}} state median, which is not close at all and is the worst single ratio in this guide. Buy your <a href="/blog/thc-drinks-minnesota/">drinks</a> before you leave town.</p>
+
+<h2>The two shops nobody can price</h2>
+<p><strong>Pine Mountain Ventures</strong>, 14203 Edgewood Drive in Baxter, is a newly licensed microbusiness with no phone number listed, no website and no reviews yet. It may turn into the best shop up there. Today there is nothing to tell you about it, and we are not going to pretend otherwise.</p>
+<p><strong>MN Roots in Crosslake</strong>, 34443 County Road 3, (218) 692-9333, 10am to around 6 or 7pm. {{reviews:hometown-grown-dba-mn-roots|about 57}} reviews at {{rating:hometown-grown-dba-mn-roots|4.6}} and its own listing advertises a large menu with online ordering, but none of it reaches us in a form we can price. If you are out on the Whitefish chain it is the closest shop by a long way, so call ahead and ask what an eighth costs. <a href="/crosslake-cannabis-dispensaries/">Crosslake hours</a> update themselves even when the prices do not.</p>
+
+<h2>The drive up: Hinckley and Onamia</h2>
+<p>Most of the metro gets to the lakes one of two ways, I-35 through Hinckley or 169 past Mille Lacs, and there is a Lake Leaf on both routes. <strong>Hinckley</strong> at 699 Lucky Trail, (320) 280-7361, {{rating:lake-leaf-cultivation-1|4.2}} on {{reviews:lake-leaf-cultivation-1|78}} reviews. <strong>Onamia</strong> at 16420 Ataage Dr, (320) 738-0822, {{rating:lake-leaf-dispensary|4.1}} on {{reviews:lake-leaf-dispensary|50}} reviews. Both run 11am to 7pm, which is the thing to know if you are driving up early.</p>
+<p>They are small menus, around {{listings:lake-leaf-cultivation-1|30}} priced listings each, and they price almost identically to each other. Pre-rolls are the buy: {{cat:lake-leaf-cultivation-1:pre-roll|$16}} at Hinckley and {{cat:lake-leaf-dispensary:pre-roll|$16}} at Onamia, both under the {{stateCat:pre-roll|$19}} state median and {{gap:rise-baxter:lake-leaf-cultivation-1:pre-roll|eight dollars}} under what Baxter charges. Grab those on the way through.</p>
+<p>Flower is where you should not. The eighth is {{eighth:lake-leaf-cultivation-1|$48}}, over the Baxter eighth, and here is the part that matters: the quarter at {{size:lake-leaf-cultivation-1:7|$96}} works out to {{pergram:lake-leaf-cultivation-1:7|$13.71}} a gram, which is exactly what the eighth costs per gram. There is no bulk discount at all. Buying the bigger bag there saves you nothing, so buy an eighth or buy pre-rolls. Edibles at {{cat:lake-leaf-cultivation-1:edible|$36}} against {{stateCat:edible|$23}} statewide are well over market, so leave those too. <a href="/cheapest-pre-roll-hinckley/">Hinckley pre-roll prices</a>, <a href="/cheapest-flower-onamia/">Onamia flower prices</a>, and <a href="/hinckley-cannabis-dispensaries/">Hinckley</a> and <a href="/onamia-cannabis-dispensaries/">Onamia</a> for live hours.</p>
+
+<h2>One thing about a cabin</h2>
+<p>Minnesota lets you use cannabis in a private residence. A cabin you own or rent counts. A resort unit, a campground site, a boat and a state park do not automatically, and plenty of resorts have written their own rules into the lease you signed without reading. Ask before you assume, because the fine for using in the wrong place is worse than the inconvenience of asking. <a href="/blog/where-can-you-use-cannabis-minnesota/">Where you can actually use it</a> and <a href="/minnesota-cannabis-laws/">the laws page</a> have the detail. And if you are up there in January, <a href="/blog/cannabis-winter-minnesota/">cannabis and a Minnesota winter</a> covers what the cold does to a cart and to a gummy left in the truck.</p>
+
+<h2>The short version</h2>
+<p>RISE Baxter is the only full menu in lake country and it is worth the stop. Buy flower in quarters or in a full ounce, never the half ounce, and buy a tincture while you are there because it is well under the state median. Do not buy its carts, its drinks or its concentrates without checking what you would pay at home first, because all three run meaningfully over market and the nearest competitor is a long way off.</p>
+<p>Grab pre-rolls on the drive at Hinckley or Onamia and nothing else. Call Crosslake if you are on that side of the lakes, because we cannot price it and it is close to a lot of cabins. The same one-chain-and-silence pattern runs through <a href="/blog/st-cloud-dispensaries-minnesota/">St. Cloud</a> and out to <a href="/blog/moorhead-dispensaries-minnesota/">Moorhead and the North Dakota line</a>. The <a href="/tax-calculator/">tax calculator</a> turns a shelf price into the real one before you decide, the <a href="/dispensaries/">full dispensary list</a> covers the rest of the state, and <a href="/open-now/">open now</a> saves a drive you did not need to make.</p>
+`,
+    related: [
+      { href: '/baxter-cannabis-dispensaries/', label: 'Baxter dispensaries' },
+      { href: '/crosslake-cannabis-dispensaries/', label: 'Crosslake dispensaries' },
+      { href: '/cheapest-flower-baxter/', label: 'Cheapest flower in Baxter' },
+      { href: '/blog/cannabis-winter-minnesota/', label: 'Cannabis and a Minnesota winter' },
     ],
   },
 ];
