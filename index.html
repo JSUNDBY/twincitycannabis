@@ -491,6 +491,48 @@
         </div>
     </section>
 
+    <!-- This Week on TCC — weekly editorial strip -->
+    <section class="section section-dark" id="this-week">
+        <style>
+        .tw-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem}
+        .tw-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.5rem;display:flex;flex-direction:column}
+        .tw-kicker{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#22c55e;margin:0 0 .5rem}
+        .tw-title{font-size:1.1rem;font-weight:700;line-height:1.25;margin:0 0 .75rem;letter-spacing:-.2px;color:var(--text-primary,#f5f6f8)}
+        .tw-body{font-size:.9rem;line-height:1.6;color:var(--text-secondary,#b8bcc4);flex:1;margin:0 0 1rem}
+        .tw-link{font-size:.82rem;font-weight:600;color:#22c55e;text-decoration:none}
+        .tw-link:hover{text-decoration:underline}
+        .tw-updated{font-size:.72rem;color:var(--text-muted,#6b7280);text-align:right;margin-top:1rem}
+        </style>
+        <div class="container">
+            <div class="section-label fade-in">This Week on TCC</div>
+            <div class="tw-strip stagger">
+
+                <article class="tw-card">
+                    <p class="tw-kicker">Brand Spotlight</p>
+                    <h3 class="tw-title">Crested River: A Minnesota Brand Worth Knowing</h3>
+                    <p class="tw-body">Crested River is a Minnesota-grown brand now tracked across 10 shops on TCC, with 48 products on the shelf. Consistent flower and pre-rolls make it a solid go-to when you want reliable quality without spending hours comparing options. Find it at shops near you.</p>
+                    <a href="/brands/crested-river/" class="tw-link">Explore Crested River &rarr;</a>
+                </article>
+
+                <article class="tw-card">
+                    <p class="tw-kicker">Shop Smart</p>
+                    <h3 class="tw-title">How to Pay Less at the Dispensary</h3>
+                    <p class="tw-body">Prices for the same product can swing 30% or more between shops in the same city. First-visit discounts, loyalty tiers, and daily specials add up fast &mdash; and stacking them is easier than it sounds. Our new guide breaks down the moves that actually save money in Minnesota.</p>
+                    <a href="/blog/how-to-save-money-minnesota-dispensaries/" class="tw-link">Read the guide &rarr;</a>
+                </article>
+
+                <article class="tw-card">
+                    <p class="tw-kicker">Heads Up</p>
+                    <h3 class="tw-title">Edible Rules Changing December 11</h3>
+                    <p class="tw-body">Minnesota&rsquo;s THC regulations for edibles and infused products are scheduled to shift on December 11, 2026. Potency labeling, packaging, and what&rsquo;s allowed in certain product types could all change. If you buy edibles regularly or are shopping for someone new to cannabis, it&rsquo;s worth knowing what&rsquo;s coming.</p>
+                    <a href="/minnesota-cannabis-laws/" class="tw-link">Read the full rules &rarr;</a>
+                </article>
+
+            </div>
+            <p class="tw-updated">Updated November 23, 2026</p>
+        </div>
+    </section>
+
     <!-- Featured Dispensaries — only renders when one or more shops have a paid tier.
          The "be the first" pitch fallback was removed in Phase 2: empty space beats
          a fake placeholder. /for-dispensaries handles the sales pitch. -->
