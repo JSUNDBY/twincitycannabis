@@ -205,7 +205,17 @@ def main():
         votes = prefix_votes.get(shop)
         return max(votes, key=votes.get) if votes else "other"
 
+    # Last cycle's offers per shop per platform (by product id prefix).
+    b_plat = defaultdict(lambda: defaultdict(int))
+    a_plat = defaultdict(lambda: defaultdict(int))
+    for side, prods in ((b_plat, before["products"]), (a_plat, after["products"])):
+        for p in prods:
+            for shop, v in (p.get("prices") or {}).items():
+                if v and float(v) > 0:
+                    side[shop][platform_of(p["id"])] += 1
+
     restore, strip = set(), set()
+    strip_plat = {}   # shop -> platforms whose rows for that shop are stale
     new_holds, released, expired = [], [], []
     for shop in sorted(set(b_off) | set(a_off)):
         b, a = b_off.get(shop, 0), a_off.get(shop, 0)
@@ -214,6 +224,17 @@ def main():
         # First run with no state: last cycle's menu was read when it published.
         rec.setdefault("observed_at", first_seen)
 
+        # One platform failed but another read the shop, and the failed one
+        # had no rows for this shop last cycle: nothing was lost, so this is a
+        # full read. (RISE Eagan still has a Weedmaps listing that 406s; its
+        # menu has come only from Jane since 2026-08.) Without this the shop
+        # re-enters a 72-hour hold every cycle after its first expiry.
+        plats = (status.get(shop) or {}).get("platforms") or {}
+        dead = {pl for pl, s in plats.items() if s == "failed"}
+        if st == "partial" and a > 0 and dead and len(dead) < len(plats) \
+                and not any(b_plat[shop].get(pl) for pl in dead) \
+                and all(s != "partial" for s in plats.values()):
+            st = "ok"
         failed = st in ("partial", "failed")
         dropped = b >= SHOP_MIN and a < b * SHOP_KEEP
         if not failed and not dropped:
@@ -236,7 +257,16 @@ def main():
                 showing = 0
             elif a > 0:
                 # A smaller menu was read this cycle; after 3 days it is the
-                # truth, and it was read now.
+                # truth, and it was read now. If one of the shop's platforms
+                # failed while another read it, that platform's rows can only
+                # be its old feed carried forward (direct_menu_scrape keeps
+                # last cycle's rows on a total outage), so drop those and
+                # publish what the working platform read.
+                dead = {pl for pl, s in ((status.get(shop) or {}).get("platforms") or {}).items()
+                        if s == "failed"}
+                if dead:
+                    strip_plat[shop] = dead
+                    showing = a - sum(a_plat[shop].get(pl, 0) for pl in dead)
                 rec["observed_at"] = now_s
             if rec.get("held_since"):
                 expired.append({"shop": shop, "since": rec["held_since"],
@@ -270,11 +300,13 @@ def main():
 
     restored = 0
     emptied = set()
-    if strip:
+    if strip or strip_plat:
         for i, e in enumerate(entries):
             pr = parse_prices(e)
-            if any(s in pr for s in strip):
-                pr = {k: v for k, v in pr.items() if k not in strip}
+            plat = platform_of(entry_id(e) or "")
+            gone = {s for s in pr if s in strip or plat in strip_plat.get(s, ())}
+            if gone:
+                pr = {k: v for k, v in pr.items() if k not in gone}
                 entries[i] = set_prices(e, pr)
                 if not pr:
                     emptied.add(i)
