@@ -75,8 +75,20 @@ _RANK = {"ok": 0, "partial": 1, "failed": 2}
 def cycle_status():
     """{shop: {platform, status, got}} for the current cycle.
 
-    A shop fetched more than once (Jane rec + med) keeps its worst status, so
-    one failed half is never hidden by a good other half."""
+    A shop fetched more than once on ONE platform (Jane rec + med) keeps that
+    platform's worst status, so one failed half is never hidden by a good
+    other half.
+
+    Across platforms the shop is only "failed" when every platform failed.
+    One platform failing while another read the shop is "partial": the shop
+    WAS read this cycle, just not completely. (Before 2026-11-25 the worst
+    status won across platforms too, so a Weedmaps 406 on RISE Eagan's old
+    listing marked the shop failed even though Jane read 617 items, and
+    after 72 hours the gate stripped the fresh Jane menu as a stale leak.
+    Same for Lake Daze with Meadow.)
+
+    Each row also carries `platforms` ({platform: status}) so the gate can
+    tell which platform's rows are the stale ones."""
     out = {}
     try:
         with open(_cycle_dir() / "status.jsonl") as f:
@@ -84,11 +96,22 @@ def cycle_status():
                 r = json.loads(line)
                 cur = out.get(r["shop"])
                 if cur is None:
+                    r["platforms"] = {r["platform"]: r["status"]}
                     out[r["shop"]] = r
                     continue
                 cur["got"] = (cur.get("got") or 0) + (r.get("got") or 0)
-                if _RANK.get(r["status"], 2) > _RANK.get(cur["status"], 2):
-                    cur["status"] = r["status"]
+                plats = cur["platforms"]
+                prev = plats.get(r["platform"])
+                if prev is None or _RANK.get(r["status"], 2) > _RANK.get(prev, 2):
+                    plats[r["platform"]] = r["status"]
     except Exception:
         pass
+    for r in out.values():
+        st = set(r["platforms"].values())
+        if st == {"failed"}:
+            r["status"] = "failed"
+        elif st == {"ok"}:
+            r["status"] = "ok"
+        else:
+            r["status"] = "partial"
     return out
